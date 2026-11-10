@@ -1,0 +1,25 @@
+{
+  "name": "하린이 공부 습관 플래너",
+  "short_name": "하린플래너",
+  "description": "하린이의 주간 공부 스케줄 & 닥달 코치 앱",
+  "start_url": "./harin.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#7c4dff",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

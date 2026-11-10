@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>하린이의 1주일 공부 플래너 & 닥달 코치</title>
+  <link rel="manifest" href="manifest-harin.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#7c4dff">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplestory-font@1.0.1/index.css">
+  <style>
+    :root {
+      --pri: #7c4dff;
+      --pri-light: #ede7f6;
+      --accent: #ff4081;
+      --accent-light: #fce4ec;
+      --warn: #ff9800;
+      --warn-light: #fff3e0;
+      --good: #00c853;
+      --good-light: #e8f5e9;
+      --bg: #f8f9fe;
+      --card: #ffffff;
+      --text: #212121;
+      --muted: #757575;
+      --border: #e0e0e0;
+      --coin: #ffb300;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      font-family: 'Pretendard', sans-serif;
+      color: var(--text);
+      display: flex; justify-content: center;
+    }
+    .wrap {
+      width: 100%; max-width: 480px; min-height: 100vh;
+      background: #ffffff;
+      padding-bottom: 80px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.06);
+    }
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #7c4dff, #b388ff);
+      color: white; padding: 20px 18px 24px;
+      border-bottom-left-radius: 24px; border-bottom-right-radius: 24px;
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.25);
+    }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; }
+    .title { font-family: 'Maplestory', sans-serif; font-size: 20px; font-weight: 700; }
+    .badge-mode {
+      background: rgba(255,255,255,0.25); padding: 4px 10px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .coin-box {
+      margin-top: 14px; background: rgba(0,0,0,0.15); border-radius: 16px;
+      padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .coin-val { font-family: 'Maplestory', sans-serif; font-size: 18px; color: #ffd54f; font-weight: 700; }
+    
+    /* Coach Nagging Box (Duolingo Style) */
+    .coach-card {
+      margin: -14px 16px 16px; background: white; border-radius: 20px;
+      padding: 14px 16px; border: 2.5px solid #ff4081;
+      box-shadow: 0 6px 18px rgba(255, 64, 129, 0.15);
+      display: flex; gap: 12px; align-items: center;
+    }
+    .coach-avatar {
+      font-size: 38px; line-height: 1; flex-shrink: 0;
+      animation: bounce 2s infinite ease-in-out;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .coach-content { flex: 1; }
+    .coach-name { font-size: 12px; color: var(--accent); font-weight: 700; }
+    .coach-msg { font-size: 13.5px; font-weight: 600; color: #333; margin-top: 2px; line-height: 1.4; }
+    .btn-nag {
+      background: var(--accent); color: white; border: none; border-radius: 10px;
+      padding: 6px 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+      margin-top: 6px; display: inline-flex; align-items: center; gap: 4px;
+    }
+
+    /* Day Selector Tabs */
+    .day-tabs {
+      display: flex; gap: 6px; padding: 0 16px 12px; overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .day-tabs::-webkit-scrollbar { display: none; }
+    .day-tab {
+      flex: 1; min-width: 50px; text-align: center; padding: 8px 4px;
+      border-radius: 12px; background: #f0f2f8; border: 1.5px solid transparent;
+      cursor: pointer; font-size: 13px; font-weight: 700; color: #555;
+    }
+    .day-tab.active {
+      background: var(--pri); color: white;
+      box-shadow: 0 3px 10px rgba(124, 77, 255, 0.3);
+    }
+    .day-tab.today-mark::after {
+      content: '●'; display: block; font-size: 6px; color: var(--accent); margin-top: 2px;
+    }
+    .day-tab.active.today-mark::after { color: #ffd54f; }
+
+    /* Section & Cards */
+    .sec-title {
+      font-family: 'Maplestory', sans-serif; font-size: 16px; color: #333;
+      padding: 12px 18px 8px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .sec-sub { font-size: 12px; color: var(--muted); font-family: 'Pretendard', sans-serif; font-weight: normal; }
+    
+    .card-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+    .item-card {
+      background: white; border-radius: 14px; border: 1.5px solid #eceff1;
+      padding: 12px 14px; display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: all 0.2s;
+    }
+    .item-card.done {
+      background: #f1f8e9; border-color: #c8e6c9; opacity: 0.85;
+    }
+    .item-card.done .item-text { text-decoration: line-through; color: #689f38; }
+    .check-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid #ccc; background: white;
+      display: grid; place-items: center; cursor: pointer; flex-shrink: 0;
+      font-size: 14px; font-weight: 700; color: transparent;
+      transition: all 0.2s;
+    }
+    .item-card.done .check-btn {
+      background: var(--good); border-color: var(--good); color: white;
+    }
+    .item-info { flex: 1; min-width: 0; }
+    .item-time { font-size: 11px; color: var(--pri); font-weight: 700; }
+    .item-text { font-size: 14px; font-weight: 600; color: #222; margin-top: 1px; }
+    .item-tag {
+      font-size: 10.5px; padding: 2px 6px; border-radius: 4px;
+      background: #f0f0f0; color: #666; margin-left: 6px; font-weight: normal;
+    }
+    .item-reward { font-size: 11px; font-weight: 700; color: var(--coin); flex-shrink: 0; }
+
+    /* Progress Banner */
+    .prog-box {
+      margin: 10px 16px 16px; padding: 14px 16px; background: #f3f0ff;
+      border-radius: 16px; border: 1px solid #d1c4e9;
+    }
+    .prog-head { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .prog-bar {
+      height: 10px; background: #e0e0e0; border-radius: 999px; overflow: hidden;
+    }
+    .prog-fill { height: 100%; background: linear-gradient(90deg, #7c4dff, #ff4081); width: 0%; transition: width 0.4s; }
+
+    /* Bottom Quick Action */
+    .voca-link {
+      margin: 16px; padding: 14px 16px; border-radius: 16px;
+      background: linear-gradient(135deg, #ff5c8a, #ff758c);
+      color: white; display: flex; justify-content: space-between; align-items: center;
+      text-decoration: none; box-shadow: 0 4px 14px rgba(255, 92, 138, 0.3);
+    }
+    .voca-text { font-family: 'Maplestory', sans-serif; font-size: 15px; font-weight: 700; }
+    .voca-sub { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+    .voca-arrow { font-size: 20px; font-weight: 700; }
+
+    /* Confetti Toast */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: #333; color: white; padding: 12px 22px; border-radius: 999px;
+      font-size: 14px; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1000; display: flex; align-items: center; gap: 8px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header -->
+    <div class="header">
+      <div class="top-bar">
+        <div class="title">⭐ 하린이 주간 공부 습관</div>
+        <div class="badge-mode" id="btn_toggle_mode">👧 하린이 모드</div>
+      </div>
+      <div class="coin-box">
+        <div style="font-size:13px;font-weight:600">🏆 내 보너스 코인</div>
+        <div class="coin-val" id="coin_display">🪙 350P</div>
+      </div>
+    </div>
+
+    <!-- Coach Nagging Card -->
+    <div class="coach-card">
+      <div class="coach-avatar" id="coach_emoji">🦉</div>
+      <div class="coach-content">
+        <div class="coach-name">📢 닥달 부엉이 코치</div>
+        <div class="coach-msg" id="coach_text">하린아! 누워있을 시간 없다! 지금 안 하면 밤 11시 반에 못 자! ⏰</div>
+        <button class="btn-nag" id="btn_speak_nag">🔊 잔소리 듣기</button>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="prog-box">
+      <div class="prog-head">
+        <span>오늘 공부 달성률</span>
+        <span id="prog_text" style="color:var(--pri)">0% (0/10)</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="prog_fill"></div></div>
+    </div>
+
+    <!-- Day Tabs -->
+    <div class="day-tabs" id="day_tabs">
+      <div class="day-tab" data-d="월">월</div>
+      <div class="day-tab" data-d="화">화</div>
+      <div class="day-tab" data-d="수">수</div>
+      <div class="day-tab" data-d="목">목</div>
+      <div class="day-tab" data-d="금">금</div>
+      <div class="day-tab" data-d="주말">토·일</div>
+    </div>
+
+    <!-- Today's Schedule -->
+    <div class="sec-title">
+      <span>⏰ 시간표 일정</span>
+      <span class="sec-sub" id="cur_day_label">수요일</span>
+    </div>
+    <div class="card-list" id="schedule_list"></div>
+
+    <!-- Everyday Quests -->
+    <div class="sec-title" style="margin-top:14px">
+      <span>🔥 매일 필수 7가지 (Everyday)</span>
+      <span class="sec-sub">매일매일 꼬박꼬박</span>
+    </div>
+    <div class="card-list" id="everyday_list"></div>
+
+    <!-- Link to English Vocab App -->
+    <a href="./" class="voca-link">
+      <div>
+        <div class="voca-text">📘 탑에듀 초5 영어 단어 앱 바로가기</div>
+        <div class="voca-sub">천재(함순애) 11과·12과 단어 암기 & 퀴즈 풀기</div>
+      </div>
+      <div class="voca-arrow">→</div>
+    </a>
+  </div>
+
+  <div class="toast" id="toast">🎉 +50 코인 획득! 훌륭해!</div>
+
+  <script>
+    // Weekly Master Data based on Harin's November Schedule
+    const SCHEDULE = {
+      '월': [
+        { time: '14:40~15:30', title: '휴식 & 간식 타임', tag: '휴식' },
+        { time: '15:10~15:30', title: '조이 예습', tag: '학원' },
+        { time: '15:30~16:00', title: '조이 수업', tag: '학원' },
+        { time: '16:00~16:40', title: '휴식 타임', tag: '휴식' },
+        { time: '16:40~17:20', title: '아라영문법', tag: '영어' },
+        { time: '17:30~18:10', title: '아라사회', tag: '사회' },
+        { time: '18:20~19:10', title: '맛있는 저녁 식사', tag: '식사' },
+        { time: '19:10~19:50', title: '아라수학', tag: '수학' },
+        { time: '20:00~21:00', title: 'TOP 수학 숙제 (40분 공부 / 20분 휴식)', tag: '숙제' },
+        { time: '21:00~22:00', title: '하늘 숙제 & 과학 공부', tag: '숙제' },
+        { time: '22:00~23:00', title: '엄마랑 영어 과외', tag: '영어' },
+        { time: '23:30', title: '샤워 후 꿀잠 취침', tag: '취침' }
+      ],
+      '화': [
+        { time: '14:40~16:00', title: '휴식 & 수학 숙제 (3:10~3:50)', tag: '수학' },
+        { time: '16:00~18:20', title: '수학학원', tag: '학원' },
+        { time: '18:30~20:00', title: '신나는 줄넘기 운동', tag: '운동' },
+        { time: '20:05~20:45', title: '저녁 식사 & 휴식', tag: '식사' },
+        { time: '20:50~21:30', title: '아라영어', tag: '영어' },
+        { time: '21:30~22:30', title: 'TOP 국어 숙제', tag: '숙제' },
+        { time: '22:30~23:30', title: '한자 숙제 / 영어 숙제', tag: '숙제' },
+        { time: '23:30', title: '샤워 후 취침', tag: '취침' }
+      ],
+      '수': [
+        { time: '13:50~14:20', title: '휴식 & 장원 숙제', tag: '숙제' },
+        { time: '14:20~15:00', title: '장원 한자', tag: '한자' },
+        { time: '15:30~16:00', title: '조이 수업', tag: '학원' },
+        { time: '16:10~17:30', title: '국어학원', tag: '학원' },
+        { time: '17:30~18:10', title: '아라사회', tag: '사회' },
+        { time: '18:20~19:10', title: '저녁 휴식 & 식사', tag: '식사' },
+        { time: '19:10~19:50', title: '아라수학', tag: '수학' },
+        { time: '20:00~21:00', title: 'TOP 수학 숙제 (40분 공부 / 20분 휴식)', tag: '숙제' },
+        { time: '21:00~22:00', title: '하늘 숙제', tag: '숙제' },
+        { time: '22:00~23:00', title: '엄마랑 영어 과외', tag: '영어' },
+        { time: '23:30', title: '샤워 후 취침 (엄마 8:30 퇴근)', tag: '취침' }
+      ],
+      '목': [
+        { time: '14:40~16:00', title: '휴식 & 수학 숙제 (3:10~3:50)', tag: '수학' },
+        { time: '16:00~18:20', title: '수학학원', tag: '학원' },
+        { time: '18:30~20:00', title: '줄넘기 운동', tag: '운동' },
+        { time: '20:05~20:45', title: '저녁 식사 & 휴식', tag: '식사' },
+        { time: '20:30', title: '아라샘 코칭', tag: '코칭' },
+        { time: '20:50~21:30', title: '아라영어', tag: '영어' },
+        { time: '21:30~22:30', title: '하늘 숙제 / 영어 숙제', tag: '숙제' },
+        { time: '22:30~23:30', title: '사회 공부', tag: '사회' },
+        { time: '23:30', title: '샤워 후 취침', tag: '취침' }
+      ],
+      '금': [
+        { time: '14:40~15:30', title: '휴식 타임', tag: '휴식' },
+        { time: '15:00~16:00', title: '하늘 숙제', tag: '숙제' },
+        { time: '16:10~17:00', title: '하늘수학', tag: '수학' },
+        { time: '17:00~18:00', title: '웅진하기', tag: '웅진' },
+        { time: '17:30~18:30', title: '웅진샘 코칭', tag: '코칭' },
+        { time: '18:30~20:00', title: '줄넘기 운동', tag: '운동' },
+        { time: '20:00~20:40', title: '아라특강', tag: '특강' },
+        { time: '21:00~22:00', title: '과학 & 사회 공부', tag: '숙제' },
+        { time: '22:00~23:00', title: '엄마랑 영어 과외', tag: '영어' },
+        { time: '23:30', title: '샤워 후 취침', tag: '취침' }
+      ],
+      '주말': [
+        { time: '주말 필수', title: '웅진 1 week 완료하기', tag: '웅진' },
+        { time: '주말 숙제', title: '영어 숙제 & 단어 외우기', tag: '영어' },
+        { time: '주말 숙제', title: '수학 숙제 & 하늘 숙제', tag: '수학' },
+        { time: '주말 숙제', title: '국어 숙제 & 단원평가 준비', tag: '국어' },
+        { time: '자유 시간', title: '할 일 먼저 끝내고 아이패드 2~3시간', tag: '자유' }
+      ]
+    };
+
+    const EVERYDAY_HABITS = [
+      { id: 'ev_smartall', title: '웅진 스마트올', tag: '매일' },
+      { id: 'ev_classcard', title: '클래스카드 (20분)', tag: '단어' },
+      { id: 'ev_readinggate', title: '리딩게이트 (20분)', tag: '독서' },
+      { id: 'ev_calc', title: '연산 1장 풀기 (30분)', tag: '수학' },
+      { id: 'ev_ort', title: 'ORT 영어 읽기', tag: '영어' },
+      { id: 'ev_social', title: '웅진특강 사회', tag: '사회' },
+      { id: 'ev_book_mom', title: '엄마와 1장씩 책 읽기', tag: '책' }
+    ];
+
+    const NAG_MESSAGES = [
+      "하린아! 누워있을 시간 없다! 지금 안 하면 밤 11시 반에 못 자! ⏰",
+      "웅진 스마트올 아직 체크 안 됐어! 빨리 끝내고 당당하게 쉬자! 🔥",
+      "클래스카드랑 리딩게이트 딱 20분씩만 집중하면 끝난다! 얼른 켜자! 📖",
+      "수학 연산 1장 얼른 풀고 코인 받아가! 오늘 아이패드 시간 지켜야지! 🎮",
+      "엄마 퇴근하기 전까지 오늘 할 일 올클리어 해두면 엄마 감동받아 기절한다! 🥳"
+    ];
+
+    // State
+    const WD_MAP = ['일', '월', '화', '수', '목', '금', '토'];
+    let todayDay = WD_MAP[new Date().getDay()];
+    if (todayDay === '토' || todayDay === '일') todayDay = '주말';
+    let curDay = todayDay;
+    let isMomMode = false;
+
+    // Storage
+    const LS_KEY = 'harin_study_planner_v1';
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { coins: 350, checks: {} };
+    }
+    let state = loadState();
+    function saveState() {
+      try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+      renderCoins();
+      renderProgress();
+    }
+
+    function renderCoins() {
+      document.getElementById('coin_display').textContent = '🪙 ' + (state.coins || 0) + 'P';
+    }
+
+    // TTS Speak
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ko-KR';
+        u.rate = 1.0;
+        u.pitch = 1.1;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // Render Day Tabs
+    function renderTabs() {
+      const tabsEl = document.getElementById('day_tabs');
+      tabsEl.querySelectorAll('.day-tab').forEach(tab => {
+        const d = tab.dataset.d;
+        tab.className = 'day-tab' + (d === curDay ? ' active' : '') + (d === todayDay ? ' today-mark' : '');
+        tab.onclick = () => { curDay = d; renderAll(); };
+      });
+    }
+
+    // Render Lists
+    function renderAll() {
+      renderTabs();
+      document.getElementById('cur_day_label').textContent = curDay === '주말' ? '토·일 주말' : curDay + '요일 스케줄';
+      
+      const schEl = document.getElementById('schedule_list');
+      const items = SCHEDULE[curDay] || [];
+      schEl.innerHTML = items.map((it, idx) => {
+        const key = curDay + '_sch_' + idx;
+        const done = !!state.checks[key];
+        return `
+          <div class="item-card ${done ? 'done' : ''}" data-k="${key}">
+            <div class="check-btn">${done ? '✔' : ''}</div>
+            <div class="item-info">
+              <div class="item-time">${it.time} <span class="item-tag">${it.tag}</span></div>
+              <div class="item-text">${it.title}</div>
+            </div>
+            <div class="item-reward">+50P</div>
+          </div>
+        `;
+      }).join('');
+
+      const evEl = document.getElementById('everyday_list');
+      evEl.innerHTML = EVERYDAY_HABITS.map(ev => {
+        const key = curDay + '_' + ev.id;
+        const done = !!state.checks[key];
+        return `
+          <div class="item-card ${done ? 'done' : ''}" data-k="${key}">
+            <div class="check-btn">${done ? '✔' : ''}</div>
+            <div class="item-info">
+              <div class="item-time">매일 필수 <span class="item-tag">${ev.tag}</span></div>
+              <div class="item-text">${ev.title}</div>
+            </div>
+            <div class="item-reward">+50P</div>
+          </div>
+        `;
+      }).join('');
+
+      // Bind Clicks
+      document.querySelectorAll('.item-card').forEach(card => {
+        card.onclick = () => {
+          const k = card.dataset.k;
+          const wasDone = !!state.checks[k];
+          state.checks[k] = !wasDone;
+          if (!wasDone) {
+            state.coins = (state.coins || 0) + 50;
+            showToast('🎉 +50 코인 획득! 참 잘했어요!');
+          } else {
+            state.coins = Math.max(0, (state.coins || 0) - 50);
+          }
+          saveState();
+          renderAll();
+        };
+      });
+
+      renderProgress();
+      updateCoach();
+    }
+
+    function renderProgress() {
+      const items = SCHEDULE[curDay] || [];
+      const total = items.length + EVERYDAY_HABITS.length;
+      let done = 0;
+      items.forEach((_, idx) => { if (state.checks[curDay + '_sch_' + idx]) done++; });
+      EVERYDAY_HABITS.forEach(ev => { if (state.checks[curDay + '_' + ev.id]) done++; });
+
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      document.getElementById('prog_fill').style.width = pct + '%';
+      document.getElementById('prog_text').textContent = pct + '% (' + done + '/' + total + ' 완료)';
+    }
+
+    function updateCoach() {
+      const items = SCHEDULE[curDay] || [];
+      const total = items.length + EVERYDAY_HABITS.length;
+      let done = 0;
+      items.forEach((_, idx) => { if (state.checks[curDay + '_sch_' + idx]) done++; });
+      EVERYDAY_HABITS.forEach(ev => { if (state.checks[curDay + '_' + ev.id]) done++; });
+      const pct = total ? Math.round((done / total) * 100) : 0;
+
+      const coachMsgEl = document.getElementById('coach_text');
+      const coachEmojiEl = document.getElementById('coach_emoji');
+
+      if (pct === 100) {
+        coachEmojiEl.textContent = '🏆';
+        coachMsgEl.textContent = '🎉 대박! 오늘 할 일 올클리어 완료! 오늘 밤에 엄마 오면 신나게 자랑하자! 💖';
+      } else if (pct >= 50) {
+        coachEmojiEl.textContent = '🔥';
+        coachMsgEl.textContent = '절반 넘었다, 하린아! 지금 기세로 남은 숙제 싹 끝내버리자!';
+      } else {
+        coachEmojiEl.textContent = '🦉';
+        const rand = NAG_MESSAGES[Math.floor(Math.random() * NAG_MESSAGES.length)];
+        coachMsgEl.textContent = rand;
+      }
+    }
+
+    document.getElementById('btn_speak_nag').onclick = () => {
+      speakText(document.getElementById('coach_text').textContent);
+    };
+
+    document.getElementById('btn_toggle_mode').onclick = () => {
+      isMomMode = !isMomMode;
+      const b = document.getElementById('btn_toggle_mode');
+      if (isMomMode) {
+        b.textContent = '👩‍🏫 엄마(원장님) 모드';
+        b.style.background = '#ff4081';
+        alert('엄마 모드: 하린이가 오늘 체크한 스케줄과 달성률을 실시간으로 확인하실 수 있어요!');
+      } else {
+        b.textContent = '👧 하린이 모드';
+        b.style.background = 'rgba(255,255,255,0.25)';
+      }
+    };
+
+    // Init
+    renderCoins();
+    renderAll();
+  </script>
+</body>
+</html>
