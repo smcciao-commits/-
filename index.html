@@ -639,6 +639,55 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .cal .cd.tod { border: 2px solid #ff5c8a !important; font-weight: 800; color: #ff5c8a; }
 .cal .cd.tod.stamp { background: #ff5c8a !important; color: white !important; border-color: #ff3366 !important; }
 
+
+/* ===== 발음 채점 & 따라 말하기 스타일 (Father Lee Speaking 기반) ===== */
+.speak-box {
+  background: #fff;
+  border: 2px dashed #ff758c;
+  border-radius: 16px;
+  padding: 12px;
+  margin: 12px auto;
+  max-width: 480px;
+  text-align: center;
+}
+.btn-speak {
+  background: linear-gradient(135deg, #ff5c8a, #ff758c);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 92, 138, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.btn-speak.recording {
+  background: #f44336 !important;
+  animation: pulseRec 1s infinite alternate;
+}
+@keyframes pulseRec {
+  from { transform: scale(1); box-shadow: 0 0 8px #f44336; }
+  to { transform: scale(1.05); box-shadow: 0 0 16px #f44336; }
+}
+.speak-score-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 8px;
+}
+.speak-score-badge.ok { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+.speak-score-badge.warn { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+.speak-score-badge.bad { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+.aligned-words { margin-top: 8px; font-size: 15px; line-height: 1.6; word-break: break-word; }
+.aligned-words .w.ok { color: #2e7d32; font-weight: bold; background: #e8f5e9; border-radius: 4px; padding: 2px 6px; margin: 0 2px; display: inline-block; }
+.aligned-words .w.miss { color: #c62828; text-decoration: line-through; background: #ffebee; border-radius: 4px; padding: 2px 6px; margin: 0 2px; display: inline-block; }
+
 </style>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -999,15 +1048,16 @@ function showWordMenu(){
   function tick(k){ return m[k]!==undefined?'<div class="tick">✔ '+(k==='짝맞추기'||k==='카드'?'완료':m[k]+'점')+'</div>':''; }
   app.innerHTML=topBar(W.set.name)+'<div class="sub">단어 '+W.words.length+'개 · ①부터 차례로 하면 쉬워요</div>'+
   '<div class="modes">'+
-  '<button class="mode" data-m="card">'+tick('카드')+'<div class="n">🃏</div><b>① 카드 외우기</b><span>뒤집어서 뜻 확인</span></button>'+
-  '<button class="mode" data-m="choice">'+tick('뜻고르기')+'<div class="n">✅</div><b>② 뜻 고르기</b><span>4개 중 정답 고르기</span></button>'+
-  '<button class="mode" data-m="spell">'+tick('스펠링')+'<div class="n">✏️</div><b>③ 스펠링 쓰기</b><span>뜻 보고 영어 쓰기</span></button>'+
-  '<button class="mode" data-m="match">'+tick('짝맞추기')+'<div class="n">🧩</div><b>④ 짝 맞추기</b><span>단어와 뜻 연결</span></button>'+
-  (W.words.some(clozeOf)?'<button class="mode" data-m="cloze" style="grid-column:1/3">'+tick('예문빈칸')+'<div class="n">📖</div><b>⑤ 예문 빈칸</b><span>예문 속 빈칸에 맞는 단어 고르기</span></button>':'')+
-  '<button class="mode final" data-m="test">'+tick('테스트')+'<div class="n">🏁</div><b>'+(W.words.some(clozeOf)?'⑥':'⑤')+' 마지막 테스트</b><span>이걸 해야 완료돼요 · 선생님께 점수가 가요</span></button>'+
+  '<button class="mode" data-m="card">'+tick('카드')+'<div class="n">🃏</div><b>① 카드 외우기</b><span>뒤집어서 뜻 확인 & 발음 채점</span></button>'+
+  '<button class="mode" data-m="speak">'+tick('말하기')+'<div class="n">🎙️</div><b>② 따라 말하기</b><span>원어민 듣고 발음 채점 · 80점 통과</span></button>'+
+  '<button class="mode" data-m="choice">'+tick('뜻고르기')+'<div class="n">✅</div><b>③ 뜻 고르기</b><span>4개 중 정답 고르기</span></button>'+
+  '<button class="mode" data-m="spell">'+tick('스펠링')+'<div class="n">✏️</div><b>④ 스펠링 쓰기</b><span>뜻 보고 영어 쓰기</span></button>'+
+  '<button class="mode" data-m="match">'+tick('짝맞추기')+'<div class="n">🧩</div><b>⑤ 짝 맞추기</b><span>단어와 뜻 연결</span></button>'+
+  (W.words.some(clozeOf)?'<button class="mode" data-m="cloze" style="grid-column:1/3">'+tick('예문빈칸')+'<div class="n">📖</div><b>⑥ 예문 빈칸</b><span>예문 속 빈칸에 맞는 단어 고르기</span></button>':'')+
+  '<button class="mode final" data-m="test">'+tick('테스트')+'<div class="n">🏁</div><b>'+(W.words.some(clozeOf)?'⑦':'⑥')+' 마지막 테스트</b><span>이걸 해야 완료돼요 · 선생님께 점수가 가요</span></button>'+
   '</div>';
   bindBack(function(){ refreshHome(); });
-  [].forEach.call(app.querySelectorAll('.mode'),function(b){ b.onclick=function(){ ({card:runCard,choice:runChoice,spell:runSpell,match:runMatch,cloze:runCloze,test:runTest})[b.dataset.m](W.words); }; });
+  [].forEach.call(app.querySelectorAll('.mode'),function(b){ b.onclick=function(){ ({card:runCard,speak:runSpeak,choice:runChoice,spell:runSpell,match:runMatch,cloze:runCloze,test:runTest})[b.dataset.m](W.words); }; });
 }
 function finish(mode,label,correct,total,wrong,extra){
   var sec=secs();
@@ -1076,6 +1126,124 @@ function runCloze(words){
   draw();
 }
 
+
+/* ===== Father Lee Speaking 발음 채점 & 음성 인식 엔진 ===== */
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+function normWord(w) {
+  return String(w || '').toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]/g, "");
+}
+function levDist(a, b) {
+  var m = a.length, n = b.length;
+  if (!m) return n; if (!n) return m;
+  var d = Array.from({length: n + 1}, function(_, j) { return j; });
+  for (var i = 1; i <= m; i++) {
+    var prev = d[0]; d[0] = i;
+    for (var j = 1; j <= n; j++) {
+      var t = d[j];
+      d[j] = Math.min(d[j] + 1, d[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = t;
+    }
+  }
+  return d[n];
+}
+function isSameWord(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  var L = Math.max(a.length, b.length);
+  if (L >= 4 && levDist(a, b) <= (L >= 7 ? 2 : 1)) return true;
+  return false;
+}
+
+function alignSpeech(target, spoken) {
+  var T = target.split(/\s+/).map(function(w) { return { disp: w, key: normWord(w) }; }).filter(function(x) { return x.key; });
+  var S = spoken.replace(/-/g, " ").split(/\s+/).map(normWord).filter(Boolean);
+  var n = T.length, m = S.length;
+  var dp = Array.from({length: n + 1}, function() { return new Array(m + 1).fill(0); });
+  for (var i = n - 1; i >= 0; i--) {
+    for (var j = m - 1; j >= 0; j--) {
+      dp[i][j] = isSameWord(T[i].key, S[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i + 1][j + 1]);
+    }
+  }
+  var i = 0, j = 0, st = new Array(n).fill("miss");
+  while (i < n && j < m) {
+    if (isSameWord(T[i].key, S[j])) { st[i] = "ok"; i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) i++;
+    else j++;
+  }
+  var okN = st.filter(function(x) { return x === "ok"; }).length;
+  var score = n ? Math.round(okN / n * 100) : 0;
+  return { T: T, st: st, score: score, spoken: spoken };
+}
+
+function coloredSpeechHTML(res) {
+  return '<div class="aligned-words">' + res.T.map(function(t, k) {
+    return '<span class="w ' + res.st[k] + '">' + esc(t.disp) + '</span>';
+  }).join(' ') + '</div>';
+}
+
+var ACTIVE_REC = null;
+function listenAndScore(targetText, btnEl, resEl, onPass) {
+  if (!SR) {
+    alert("이 브라우저는 음성 인식을 지원하지 않습니다. 크롬(Chrome)이나 사파리(Safari), 엣지(Edge)에서 이용해 주세요.");
+    return;
+  }
+  if (ACTIVE_REC) {
+    try { ACTIVE_REC.abort(); } catch(e){}
+    ACTIVE_REC = null;
+  }
+  try {
+    var rec = new SR();
+    rec.lang = 'en-US';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    ACTIVE_REC = rec;
+
+    btnEl.classList.add('recording');
+    btnEl.innerHTML = '🔴 듣고 있어요... 말씀하세요!';
+    resEl.innerHTML = '<div style="color:#ff5c8a;font-size:13px;margin-top:6px;">마이크에 대고 영어로 또박또박 말씀해 보세요 🎙️</div>';
+
+    rec.onresult = function(e) {
+      btnEl.classList.remove('recording');
+      btnEl.innerHTML = '🎤 다시 따라 말하기 (발음 채점)';
+      ACTIVE_REC = null;
+      var spoken = (e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
+      var a = alignSpeech(targetText, spoken);
+      var badgeClass = a.score >= 80 ? 'ok' : a.score >= 60 ? 'warn' : 'bad';
+      var msg = a.score >= 80 ? '👏 80점 통과! 완벽한 발음이에요!' : a.score >= 60 ? '👍 좋아요! 조금만 더 또박또박 해봐요.' : '빨간 단어를 잘 듣고 다시 도전해 봐요!';
+      resEl.innerHTML = '<div class="speak-score-badge ' + badgeClass + '">발음 정확도 ' + a.score + '점</div>' +
+        '<div style="font-weight:bold;margin-top:4px;color:' + (a.score>=80?'#2e7d32':'#c62828') + '">' + msg + '</div>' +
+        coloredSpeechHTML(a) +
+        '<div style="font-size:12px;color:#888;margin-top:4px;">인식된 말: “' + esc(spoken || '(인식 실패)') + '”</div>';
+      if (a.score >= 80 && onPass) {
+        onPass(a.score);
+      }
+    };
+
+    rec.onerror = function(e) {
+      btnEl.classList.remove('recording');
+      btnEl.innerHTML = '🎤 따라 말하기 (발음 채점)';
+      ACTIVE_REC = null;
+      resEl.innerHTML = '<div style="color:#c62828;font-size:13px;margin-top:6px;">마이크 권한을 허용했는지 확인해 주세요 (' + (e.error || '음성 인식 실패') + ')</div>';
+    };
+
+    rec.onend = function() {
+      btnEl.classList.remove('recording');
+      if (btnEl.innerHTML.indexOf('듣고') >= 0) {
+        btnEl.innerHTML = '🎤 따라 말하기 (발음 채점)';
+      }
+      ACTIVE_REC = null;
+    };
+
+    rec.start();
+  } catch(err) {
+    btnEl.classList.remove('recording');
+    btnEl.innerHTML = '🎤 따라 말하기 (발음 채점)';
+    ACTIVE_REC = null;
+    resEl.innerHTML = '<div style="color:#c62828;font-size:13px;margin-top:6px;">음성 인식 시작 실패: ' + err + '</div>';
+  }
+}
+
 /* ① 카드 */
 function runCard(words){
   var queue=shuffle(words), known=0, firstTry={}, total=words.length, flipped=false;
@@ -1086,10 +1254,24 @@ function runCard(words){
     app.innerHTML=topBar('① 카드 외우기')+'<div class="sub">남은 카드 '+queue.length+'장</div><div class="bar"><i style="width:'+((total-queue.length)/total*100)+'%"></i></div>'+
     '<div class="flip" id="fl"><div class="w">'+esc(c.w)+'</div><div class="m" id="mm" style="visibility:hidden">'+esc(c.m)+'</div>'+extraHtml(c)+'<div class="hint" id="hh">카드를 누르면 뜻이 보여요</div></div>'+
     '<div style="text-align:center"><button class="say" id="say">🔊 발음 듣기</button></div>'+
+    '<div class="speak-box" id="spk_box">'+
+      '<button class="btn-speak" id="btn_card_spk">🎤 따라 말하기 (발음 채점)</button>'+
+      '<div id="spk_res"></div>'+
+    '</div>'+
     '<div class="row"><button class="btn gray" id="no">😅 모르겠어요</button><button class="btn" id="yes">😀 알아요</button></div>';
     bindBack(showWordMenu);
     $('#fl').onclick=function(){ flipped=!flipped; $('#mm').style.visibility=flipped?'visible':'hidden'; var x=$('#xx'); if(x) x.hidden=!flipped; $('#hh').style.visibility=flipped?'hidden':'visible'; if(flipped&&x) speakList(cardReadList(c)); else stopSpeak(); };
     $('#say').onclick=function(){ speakList(cardReadList(c)); };
+    var bSpk=$('#btn_card_spk'), rSpk=$('#spk_res');
+    if(bSpk){
+      bSpk.onclick=function(){
+        stopSpeak();
+        var targetText = (flipped && c.e) ? c.e : c.w;
+        listenAndScore(targetText, bSpk, rSpk, function(score){
+          rSpk.innerHTML += '<div style="color:#2e7d32;font-size:13px;font-weight:bold;margin-top:4px;">🎉 발음 통과 완료!</div>';
+        });
+      };
+    }
     $('#yes').onclick=function(){ stopSpeak(); if(firstTry[c.w]===undefined){ firstTry[c.w]=true; known++; } queue.shift(); draw(); };
     $('#no').onclick=function(){ stopSpeak(); if(firstTry[c.w]===undefined) firstTry[c.w]=false; queue.push(queue.shift()); draw(); };
     speakList(cardReadList(c));
@@ -1097,7 +1279,79 @@ function runCard(words){
   draw();
 }
 
-/* ② 뜻 고르기 (retry=true 이면 틀린 단어 복습) */
+
+/* ② 따라 말하기 (Father Lee Speaking 방식) */
+function runSpeak(words) {
+  var list = [].concat(words), idx = 0, passedScores = {}, total = list.length;
+  startClock();
+
+  function draw() {
+    if (idx >= list.length) {
+      var avg = Math.round(Object.values(passedScores).reduce(function(a,b){return a+b;},0) / (total || 1));
+      finish('말하기', '따라 말하기 완벽 통과!', Object.keys(passedScores).length, total, [], {avgScore: avg});
+      return;
+    }
+    var c = list[idx];
+    app.innerHTML = topBar('🎙️ 따라 말하기') +
+      '<div class="sub">' + (idx + 1) + ' / ' + total + '번째 단어 · 80점 넘으면 통과!</div>' +
+      '<div class="bar"><i style="width:' + ((idx) / total * 100) + '%"></i></div>' +
+      '<div class="card" style="margin:16px auto;max-width:480px;text-align:center;padding:24px 16px;">' +
+        '<div style="font-size:28px;font-weight:900;color:#ff5c8a;margin-bottom:8px;">' + esc(c.w) + '</div>' +
+        '<div style="font-size:16px;color:#555;margin-bottom:12px;">' + esc(c.m) + '</div>' +
+        (c.e ? '<div style="background:#fff5f8;border-radius:12px;padding:12px;margin:12px 0;font-size:15px;color:#333;line-height:1.5;">' +
+          '“' + esc(c.e) + '”' +
+          (c.k ? '<div style="font-size:13px;color:#888;margin-top:4px;">👉 ' + esc(c.k) + '</div>' : '') +
+        '</div>' : '') +
+        '<div style="display:flex;gap:10px;justify-content:center;margin:16px 0;">' +
+          '<button class="say" id="btn_speak_listen">🔊 원어민 듣기</button>' +
+        '</div>' +
+        '<div class="speak-box" style="margin-top:16px;">' +
+          '<button class="btn-speak" id="btn_mic">🎤 마이크 누르고 따라 말하기</button>' +
+          '<div id="spk_eval_res" style="min-height:40px;"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="row">' +
+        '<button class="btn gray" id="btn_spk_prev" ' + (idx===0?'disabled style="opacity:0.4"':'') + '>이전</button>' +
+        '<button class="btn" id="btn_spk_next">다음 단어로 →</button>' +
+      '</div>';
+
+    bindBack(showWordMenu);
+
+    $('#btn_speak_listen').onclick = function() {
+      speakList(c.e ? [c.w, c.e] : [c.w]);
+    };
+
+    var bMic = $('#btn_mic'), rEval = $('#spk_eval_res');
+    bMic.onclick = function() {
+      stopSpeak();
+      listenAndScore(c.w, bMic, rEval, function(score) {
+        passedScores[c.w] = score;
+        rEval.innerHTML += '<div style="color:#2e7d32;font-size:14px;font-weight:bold;margin-top:8px;">🎉 통과! 1.5초 후 다음 단어로 넘어갑니다!</div>';
+        setTimeout(function() {
+          idx++;
+          draw();
+        }, 1500);
+      });
+    };
+
+    $('#btn_spk_prev').onclick = function() {
+      stopSpeak();
+      if (idx > 0) { idx--; draw(); }
+    };
+    $('#btn_spk_next').onclick = function() {
+      stopSpeak();
+      idx++;
+      draw();
+    };
+
+    // 진입 시 단어 자동 낭독
+    speak(c.w);
+  }
+
+  draw();
+}
+
+/* ③ 뜻 고르기 (retry=true 이면 틀린 단어 복습) */
 function options(c,pool,key){
   var others=shuffle(pool.filter(function(o){return o[key]!==c[key];})).slice(0,3);
   if(others.length<3){ others=others.concat(shuffle(W.words.filter(function(o){return o[key]!==c[key]&&others.indexOf(o)<0;})).slice(0,3-others.length)); }
