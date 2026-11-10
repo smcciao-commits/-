@@ -703,11 +703,18 @@ function mockCall(fn, args) {
   if (fn === 'studentLogin') {
     var ban = args[0].ban, name = args[0].name;
     var sets = [
-      { name: '[' + ban + '] 기말 대비 핵심 단어 세트 1', count: 20, progress: { modes: {}, test: null } },
-      { name: '[' + ban + '] 교재 및 외부지문 어휘 세트 2', count: 25, progress: { modes: {}, test: null } },
-      { name: '능률VOCA 어원편 Day 01', count: 23, progress: { modes: {}, test: null } }
+      { type: '단어', name: '[' + ban + '] 기말 대비 핵심 단어 세트 1', count: 20, progress: { modes: {}, test: null } },
+      { type: '단어', name: '[' + ban + '] 교재 및 외부지문 어휘 세트 2', count: 25, progress: { modes: {}, test: null } },
+      { type: '단어', name: '주니어 능률VOCA 실력 Day 01', count: 20, progress: { modes: {}, test: null } },
+      { type: '단어', name: '능률VOCA 어원편 Day 01', count: 23, progress: { modes: {}, test: null } }
     ];
     return { sets: sets, ban: ban, name: name, me: { ban: ban, name: name } };
+  }
+  if (fn === 'getProblemSet') {
+    return [
+      { no: 1, passage: 'Reading is essential for improving vocabulary and language comprehension.', q: '위 글의 중심 내용으로 가장 알맞은 것은?', choices: ['독서의 중요성', '단어 시험의 유용성', '문법 학습법', '발음 연습'], ans: '1', multi: false },
+      { no: 2, passage: 'Water is essential for all living creatures on Earth.', q: '밑줄 친 essential의 의미와 가장 가까운 것은?', choices: ['crucial', 'optional', 'mysterious', 'useless'], ans: '1', multi: false }
+    ];
   }
   if (fn === 'getWordSet') {
     var setName = args[1];
@@ -860,7 +867,7 @@ function showHome(){
   });
   html+='<button class="linkbtn" id="out">다른 사람으로 로그인</button>';
   app.innerHTML=html;
-  [].forEach.call(app.querySelectorAll('.set'),function(b){ b.onclick=function(){ var s=h.sets[+b.dataset.i]; s.type==='단어'?openWordSet(s):openProbSet(s); }; });
+  [].forEach.call(app.querySelectorAll('.set'),function(b){ b.onclick=function(){ var s=h.sets[+b.dataset.i]; (!s.type||s.type==='단어')?openWordSet(s):openProbSet(s); }; });
   $('#out').onclick=function(){ store('cred',null); S.cred=null; S.tf=''; showLogin(); };
   $('#bjoin').onclick=showBattleJoin;
   [].forEach.call(app.querySelectorAll('.tf'),function(b){ b.onclick=function(){ S.tf=b.dataset.b; showHome(); window.scrollTo(0,0); }; });
@@ -1093,6 +1100,7 @@ function openProbSet(s){
   call('getProblemSet',S.cred,s.name).then(function(list){ P.set=s; P.list=list; P.ans=list.map(function(){return '';}); P.cur=0; startClock(); drawProb(); }).catch(function(e){ alert(errMsg(e)); });
 }
 function drawProb(){
+  if(!P.list||!P.list.length||!P.list[P.cur]){ app.innerHTML=topBar(P.set?P.set.name:'문제 풀기')+'<div class="card">아직 등록된 문제가 없어요.<br><br><button class="btn" id="bprob_back">← 홈으로 돌아가기</button></div>'; $('#bprob_back').onclick=showHome; return; }
   var p=P.list[P.cur], n=P.list.length;
   var answered=P.ans.filter(function(a){return a!==''&&!(Array.isArray(a)&&!a.length);}).length;
   var html=topBar(P.set.name)+'<div class="sub">'+answered+' / '+n+' 문제 풀었어요</div>'+
