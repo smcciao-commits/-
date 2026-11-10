@@ -853,6 +853,34 @@ function login(c){
 
 /* ============ 홈 ============ */
 
+
+function drawTodayCard(){
+  var now = new Date();
+  var m = now.getMonth() + 1, d = now.getDate();
+  var WD = ["일", "월", "화", "수", "목", "금", "토"];
+  var wd = WD[now.getDay()];
+  var todayStr = m + "월 " + d + "일 (" + wd + ")";
+
+  return '<div class="card today" style="margin-top:10px;margin-bottom:12px;border:2.5px solid var(--pri);border-radius:18px;padding:16px;background:white;box-shadow:0 4px 14px rgba(255,92,138,0.18)">' +
+    '<div class="thead" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">' +
+      '<div><div class="tlab" style="font-weight:700;font-size:18.5px;color:var(--pri);font-family:Maplestory,sans-serif">🔥 오늘의 학습 (필수 미션)</div>' +
+      '<div class="tdate" style="font-size:12.5px;color:var(--muted);margin-top:2px">' + todayStr + ' · 오늘 꼭 끝내야 할 분량</div></div>' +
+      '<span class="dday" style="background:var(--pri);color:#fff;font-weight:700;border-radius:999px;padding:4px 12px;font-size:12.5px;font-family:Maplestory,sans-serif">D-15 기말</span>' +
+    '</div>' +
+    '<div class="tnums" style="display:grid;grid-template-columns:repeat(3,1fr);background:#fff0f4;border-radius:12px;margin-bottom:12px;text-align:center;padding:10px 4px">' +
+      '<div><b style="font-size:24px;color:var(--pri);font-family:Maplestory,sans-serif">15</b><div style="font-size:12px;color:var(--muted);margin-top:2px">오늘 새 단어</div></div>' +
+      '<div style="border-left:1px dashed #ffd1dc;border-right:1px dashed #ffd1dc"><b style="font-size:24px;color:#e8590c;font-family:Maplestory,sans-serif">5</b><div style="font-size:12px;color:var(--muted);margin-top:2px">에빙하우스 복습</div></div>' +
+      '<div><b style="font-size:24px;color:#ff3366;font-family:Maplestory,sans-serif">🔥3일</b><div style="font-size:12px;color:var(--muted);margin-top:2px">연속 출석</div></div>' +
+    '</div>' +
+    '<button class="btn" id="btn_daily_quest" style="width:100%;padding:14px;font-size:16.5px;font-weight:700;border-radius:14px;background:linear-gradient(135deg,#ff5c8a,#ff758c);box-shadow:0 4px 12px rgba(255,92,138,0.35);font-family:Maplestory,sans-serif;margin-bottom:10px">🚀 오늘의 학습 시작하기 (15단어+복습)</button>' +
+    '<div class="steps" style="display:flex;gap:6px;justify-content:space-around;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px">' +
+      '<span>1단계 <b style="color:var(--pri)">카드 암기</b></span>' +
+      '<span>2단계 <b style="color:var(--pri)">뜻 고르기</b></span>' +
+      '<span>3단계 <b style="color:var(--pri)">스펠링 쓰기</b></span>' +
+    '</div>' +
+  '</div>';
+}
+
 function drawAttendanceCalendar(){
   var now = new Date();
   var y = now.getFullYear(), m = now.getMonth() + 1, todayD = now.getDate();
@@ -896,6 +924,7 @@ function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ return s.progress.test===null||s.progress.test===undefined; }).length;
   var html='<h1>'+esc(me.name)+' 안녕! 👋</h1><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
+  html+=drawTodayCard();
   html+=drawAttendanceCalendar();
   html+='<button class="btn dark" id="bjoin" style="margin:4px 0 12px">⚔️ 단어 대결 참여</button>';
   if(!h.sets.length) html+='<div class="card">아직 올라온 학습이 없어요.</div>';
@@ -915,6 +944,7 @@ function showHome(){
   [].forEach.call(app.querySelectorAll('.set'),function(b){ b.onclick=function(){ var s=h.sets[+b.dataset.i]; (!s.type||s.type==='단어')?openWordSet(s):openProbSet(s); }; });
   $('#out').onclick=function(){ store('cred',null); S.cred=null; S.tf=''; showLogin(); };
   $('#bjoin').onclick=showBattleJoin;
+  var bDq=$('#btn_daily_quest'); if(bDq){ bDq.onclick=function(){ if(h.sets&&h.sets.length){ openWordSet(h.sets[0]); } }; }
   [].forEach.call(app.querySelectorAll('.tf'),function(b){ b.onclick=function(){ S.tf=b.dataset.b; showHome(); window.scrollTo(0,0); }; });
 }
 function refreshHome(){ return login(S.cred); }
