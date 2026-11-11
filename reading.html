@@ -2253,13 +2253,37 @@ function saveHwData(d) {
 
 function toggleHwItem(studentName, itemKey) {
   const d = getHwData();
-  if (!d[studentName]) d[studentName] = { book: 'done', print: 'done' };
-  const cur = d[studentName][itemKey] || 'done';
-  // Cycle: done -> undone -> fix -> done
-  const next = (cur === 'done') ? 'undone' : (cur === 'undone' ? 'fix' : 'done');
-  d[studentName][itemKey] = next;
+  if (!d[studentName]) d[studentName] = { book: 'done', print: 'done', attitude: 'normal' };
+  
+  if (itemKey === 'attitude') {
+    // Cycle: normal -> rushed -> ai -> both -> normal
+    const curAtt = d[studentName].attitude || 'normal';
+    const nextAtt = (curAtt === 'normal') ? 'rushed' : ((curAtt === 'rushed') ? 'ai' : ((curAtt === 'ai') ? 'both' : 'normal'));
+    d[studentName].attitude = nextAtt;
+  } else {
+    const cur = d[studentName][itemKey] || 'done';
+    const next = (cur === 'done') ? 'undone' : (cur === 'undone' ? 'fix' : 'done');
+    d[studentName][itemKey] = next;
+  }
   saveHwData(d);
   renderHomeworkBoardMode(document.getElementById('contentArea'));
+}
+
+
+function generateAlimtalkMsg(sName, ban, bLabel, pLabel, att) {
+  const today = new Date();
+  const md = `${today.getMonth() + 1}/${today.getDate()}`;
+  let examReport = `· 지문 변형모의 10제: 9/10 (풀이시간 4분 12초 / 정직한 풀이 확인)\n\n가정에서도 많은 칭찬과 격려 부탁드립니다. 감사합니다♡`;
+
+  if (att === 'rushed') {
+    examReport = `· 지문 변형모의 10제: 8/10\n※ [학습 태도 안내] 문제당 풀이 시간이 3초 미만으로 지문을 정독하지 않고 빠르게 찍어 푼 정황이 확인되었습니다. 단순 점수보다 문제를 깊이 읽고 고민하는 습관이 중요하므로, 학원과 가정에서 함께 지도가 필요합니다.\n\n가정에서도 따뜻한 격려와 지도 부탁드립니다. 감사합니다♡`;
+  } else if (att === 'ai') {
+    examReport = `· 지문 변형모의 10제: 10/10\n※ [시험 보안 안내] 시험 진행 중 다른 앱(ChatGPT, AI 번역기, 포털 검색 등)으로 화면을 전환한 이탈 기록(2회)이 감지되었습니다. 본인의 순수한 실력을 점검할 수 있도록 스스로 정직하게 풀도록 가정에서도 지도 부탁드립니다.\n\n가정에서도 따뜻한 지도와 관심 부탁드립니다. 감사합니다♡`;
+  } else if (att === 'both') {
+    examReport = `· 지문 변형모의 10제: 7/10\n※ [학습 태도 및 보안 안내] 문제 풀이 시간이 너무 짧아 찍은 정황이 확인되었으며, 시험 중 화면 이탈(AI 번역/검색 의심 2회)이 감지되었습니다. 실전 내신 대비를 위해 정직하고 꼼꼼한 풀이 태도를 갖추도록 가정에서도 각별한 지도 부탁드립니다.\n\n가정에서도 따뜻한 지도와 관심 부탁드립니다. 감사합니다♡`;
+  }
+
+  return `안녕하세요. 탑에듀학원입니다^^\n${md} [${sName}] 학생의 오늘 학습 결과입니다.\n\n· 종이 교재: ${bLabel}\n· 외부지문 프린트: ${pLabel}\n· 온라인 단어: 100/100 (통과)\n${examReport}`;
 }
 
 function renderHomeworkBoardMode(area) {
@@ -2305,17 +2329,28 @@ function renderHomeworkBoardMode(area) {
 
   filtered.forEach(st => {
     const sName = st.name;
-    const sData = hwData[sName] || { book: 'done', print: 'done' };
+    const sData = hwData[sName] || { book: 'done', print: 'done', attitude: 'normal' };
     const bState = sData.book || 'done';
     const pState = sData.print || 'done';
+    const attState = sData.attitude || 'normal';
 
-    const bLabel = (bState === 'done') ? '✅ 완료' : ((bState === 'undone') ? '❌ 미완료' : '🔺 보완 필요');
-    const pLabel = (pState === 'done') ? '✅ 완료' : ((pState === 'undone') ? '❌ 미완료' : '🔺 보완 필요');
+    const bLabel = (bState === 'done') ? '완료' : ((bState === 'undone') ? '미완료' : '보완 필요');
+    const pLabel = (pState === 'done') ? '완료' : ((pState === 'undone') ? '미완료' : '보완 필요');
 
-    // Generate Alimtalk Message
-    const today = new Date();
-    const md = `${today.getMonth() + 1}/${today.getDate()}`;
-    const alimtalkMsg = `안녕하세요. 탑에듀학원입니다^^\n${md} [${sName}] 학생의 오늘 학습 결과입니다.\n\n· 종이 교재: ${bLabel.slice(2)}\n· 외부지문 프린트: ${pLabel.slice(2)}\n· 온라인 단어: 100/100 (통과)\n· 지문 변형모의 10제: 9/10 (풀이시간 4분 12초 / 정직한 풀이 확인)\n\n가정에서도 많은 칭찬과 격려 부탁드립니다. 감사합니다♡`;
+    let attBadge = '<span style="color:#10b981; font-weight:700;">👍 정직한 풀이</span>';
+    let attBtnStyle = 'background:#f0fdf4; border-color:#86efac; color:#15803d;';
+    if (attState === 'rushed') {
+      attBadge = '<span style="color:#dc2626; font-weight:700;">⚠️ 찍기 의심 (3초 미만)</span>';
+      attBtnStyle = 'background:#fef2f2; border-color:#fca5a5; color:#b91c1c;';
+    } else if (attState === 'ai') {
+      attBadge = '<span style="color:#7c3aed; font-weight:700;">🚨 AI/화면이탈 의심 (2회)</span>';
+      attBtnStyle = 'background:#f5f3ff; border-color:#ddd6fe; color:#6d28d9;';
+    } else if (attState === 'both') {
+      attBadge = '<span style="color:#e11d48; font-weight:700;">💥 찍기+AI이탈 모두 적발</span>';
+      attBtnStyle = 'background:#fff1f2; border-color:#fecdd3; color:#be123c;';
+    }
+
+    const alimtalkMsg = generateAlimtalkMsg(sName, st.ban, bLabel, pLabel, attState);
 
     html += `
       <div class="hw-stu-card">
@@ -2325,11 +2360,11 @@ function renderHomeworkBoardMode(area) {
             <span class="hw-stu-ban">${st.ban}</span>
             <span style="font-size:12px; color:#94a3b8; margin-left:4px;">(뒷번호 ${st.pw})</span>
           </div>
-          <span style="font-size:12px; color:#10b981; font-weight:700;">🟢 정상 출석</span>
+          <div>${attBadge}</div>
         </div>
 
         <div style="font-size:12px; color:#64748b; margin-bottom:6px;">
-          📚 <b>실물 숙제 검사 (터치하여 변경):</b>
+          📚 <b>실물 숙제 검사 & 풀이 태도 (터치하여 변경):</b>
         </div>
         <div class="hw-toggle-row">
           <button class="hw-toggle-btn ${bState}" onclick="toggleHwItem('${sName}', 'book')">
@@ -2338,12 +2373,15 @@ function renderHomeworkBoardMode(area) {
           <button class="hw-toggle-btn ${pState}" onclick="toggleHwItem('${sName}', 'print')">
             📑 외부지문 프린트: <b>${pLabel}</b>
           </button>
+          <button class="hw-toggle-btn" style="${attBtnStyle}" onclick="toggleHwItem('${sName}', 'attitude')">
+            ⏱️ 시험 태도: <b>${attBadge}</b> (터치 시 변경)
+          </button>
         </div>
 
         <div style="font-size:12px; color:#64748b; margin-bottom:4px;">
           💻 <b>온라인 실시간 연동:</b>
           <span style="color:#2563eb; font-weight:600; margin-left:4px;">단어 100/100</span> |
-          <span style="color:#059669; font-weight:600; margin-left:4px;">변형모의 9/10 (소요 4분 12초 / 이탈 0회)</span>
+          <span style="color:#059669; font-weight:600; margin-left:4px;">변형모의 9/10</span>
         </div>
 
         <!-- Alimtalk Preview -->
@@ -2385,12 +2423,12 @@ function copyAllAlimtalk() {
   
   const allTexts = filtered.map(st => {
     const sName = st.name;
-    const sData = hwData[sName] || { book: 'done', print: 'done' };
+    const sData = hwData[sName] || { book: 'done', print: 'done', attitude: 'normal' };
     const bLabel = (sData.book === 'done') ? '완료' : ((sData.book === 'undone') ? '미완료' : '보완 필요');
     const pLabel = (sData.print === 'done') ? '완료' : ((sData.print === 'undone') ? '미완료' : '보완 필요');
-    const today = new Date();
-    const md = `${today.getMonth() + 1}/${today.getDate()}`;
-    return `[${sName} - ${st.ban}]\n안녕하세요. 탑에듀학원입니다^^ ${md} [${sName}] 학생 학습 결과입니다.\n· 종이 교재: ${bLabel}\n· 외부지문 프린트: ${pLabel}\n· 온라인 단어: 100/100 (통과)\n· 지문 변형모의 10제: 9/10 (소요 4분 12초 / 정직한 풀이 확인)\n감사합니다♡`;
+    const attState = sData.attitude || 'normal';
+    const msg = generateAlimtalkMsg(sName, st.ban, bLabel, pLabel, attState);
+    return `[${sName} - ${st.ban}]\n${msg}`;
   }).join('\n-------------------------------------\n\n');
 
   navigator.clipboard.writeText(allTexts).then(() => {
