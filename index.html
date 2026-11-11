@@ -160,6 +160,23 @@ label { display: block; font-weight: 700; margin: 14px 0 6px; }
 }
 .back:hover { background: rgba(255,255,255,0.3); }
 .top .grow { flex: 1; min-width: 0; }
+.sound-toggle {
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.35);
+  padding: 6px 10px;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  user-select: none;
+  flex-shrink: 0;
+}
+.sound-toggle:hover { background: rgba(255,255,255,0.35); }
+.sound-toggle:active { transform: scale(0.92); }
 .top .title {
   font-family: 'Maplestory', Pretendard, sans-serif;
   font-weight: 700;
@@ -910,8 +927,146 @@ function cardReadList(c){
   return out;
 }
 function norm(t){ return String(t||'').toLowerCase().replace(/[’‘]/g,"'").replace(/\s+/g,' ').trim(); }
+/* ============ 효과음 엔진 (Web Audio API: 띵동 / 삑~) ============ */
+var SOUND_ENABLED = true;
+try {
+  var savedSnd = localStorage.getItem('topedu_sound');
+  if (savedSnd === '0') SOUND_ENABLED = false;
+} catch(e){}
+function isSoundOn(){ return SOUND_ENABLED; }
+
+var _audioCtx = null;
+function getAudioCtx(){
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return null;
+    if(!_audioCtx) _audioCtx = new AC();
+    if(_audioCtx.state === 'suspended'){
+      _audioCtx.resume().catch(function(){});
+    }
+    return _audioCtx;
+  } catch(e){ return null; }
+}
+
+if(typeof window !== 'undefined'){
+  ['click', 'touchstart', 'touchend', 'keydown'].forEach(function(ev){
+    window.addEventListener(ev, function(){
+      var ctx = getAudioCtx();
+      if(ctx && ctx.state === 'suspended'){
+        ctx.resume().catch(function(){});
+      }
+    }, { passive: true, capture: true });
+  });
+}
+
+function toggleSound(){
+  SOUND_ENABLED = !SOUND_ENABLED;
+  try { localStorage.setItem('topedu_sound', SOUND_ENABLED ? '1' : '0'); } catch(e){}
+  var btns = document.querySelectorAll('#btn_sound_toggle, .sound-toggle');
+  btns.forEach(function(b){ b.textContent = SOUND_ENABLED ? '🔊' : '🔇'; });
+  if(SOUND_ENABLED) playCorrectSound();
+}
+
+document.addEventListener('click', function(e){
+  var btn = e.target && e.target.closest('#btn_sound_toggle, .sound-toggle');
+  if(btn){
+    e.preventDefault();
+    e.stopPropagation();
+    toggleSound();
+  }
+});
+
+/* 정답 사운드: 맑고 경쾌한 띵동 (G5 784Hz -> C6 1046.5Hz) */
+function playCorrectSound(){
+  if(!isSoundOn()) return;
+  var ctx = getAudioCtx();
+  if(!ctx) return;
+  try {
+    var now = ctx.currentTime;
+    // 띵 (G5)
+    var osc1 = ctx.createOscillator();
+    var gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(783.99, now);
+    gain1.gain.setValueAtTime(0.001, now);
+    gain1.gain.linearRampToValueAtTime(0.35, now + 0.015);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.18);
+
+    // 동 (C6)
+    var t2 = now + 0.10;
+    var osc2 = ctx.createOscillator();
+    var gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1046.50, t2);
+    gain2.gain.setValueAtTime(0.001, t2);
+    gain2.gain.linearRampToValueAtTime(0.40, t2 + 0.02);
+    gain2.gain.exponentialRampToValueAtTime(0.0001, t2 + 0.45);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(t2);
+    osc2.stop(t2 + 0.48);
+  } catch(e){}
+}
+
+/* 오답 사운드: 퀴즈 버저 삑~ (175Hz -> 140Hz sawtooth) */
+function playWrongSound(){
+  if(!isSoundOn()) return;
+  var ctx = getAudioCtx();
+  if(!ctx) return;
+  try {
+    var now = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(175, now);
+    osc.frequency.linearRampToValueAtTime(140, now + 0.25);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.24, now + 0.015);
+    gain.gain.setValueAtTime(0.24, now + 0.18);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.29);
+  } catch(e){}
+}
+
+/* 축하 팡파레: 100점 만점 / 완벽 통과 */
+function playFanfareSound(){
+  if(!isSoundOn()) return;
+  var ctx = getAudioCtx();
+  if(!ctx) return;
+  try {
+    var now = ctx.currentTime;
+    var notes = [
+      { f: 523.25, t: 0.00, d: 0.12 },
+      { f: 659.25, t: 0.11, d: 0.12 },
+      { f: 783.99, t: 0.22, d: 0.14 },
+      { f: 1046.50, t: 0.35, d: 0.48 }
+    ];
+    notes.forEach(function(n){
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(n.f, now + n.t);
+      gain.gain.setValueAtTime(0.001, now + n.t);
+      gain.gain.linearRampToValueAtTime(0.32, now + n.t + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + n.t + n.d);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + n.t);
+      osc.stop(now + n.t + n.d + 0.02);
+    });
+  } catch(e){}
+}
+
 function topBar(title, backFn){
-  return '<div class="top"><button class="back" id="back">← 뒤로</button><div class="grow"><div class="title">'+esc(title)+'</div></div></div>';
+  var snd = isSoundOn() ? '🔊' : '🔇';
+  return '<div class="top"><button class="back" id="back">← 뒤로</button><div class="grow"><div class="title">'+esc(title)+'</div></div><button class="sound-toggle" id="btn_sound_toggle" title="효과음 켜기/끄기">'+snd+'</button></div>';
 }
 function bindBack(fn){ var b=$('#back'); if(b) b.onclick=fn; }
 var timer0=0; function startClock(){ timer0=Date.now(); } function secs(){ return Math.round((Date.now()-timer0)/1000); }
@@ -1065,6 +1220,7 @@ function finish(mode,label,correct,total,wrong,extra){
     W.set.progress=W.set.progress||{modes:{},test:null};
     W.set.progress.modes[mode]=Math.max(W.set.progress.modes[mode]||0,r.score);
     if(mode==='테스트') W.set.progress.test=Math.max(W.set.progress.test==null?-1:W.set.progress.test,r.score);
+    if(r.score === 100) { playFanfareSound(); } else if(r.score >= 80) { playCorrectSound(); }
     var html=topBar(W.set.name)+'<div class="card" style="text-align:center"><div class="sub">'+label+'</div>'+
       (extra||'<div class="big">'+r.score+'점</div><div>'+total+'개 중 <b>'+correct+'개</b> 맞았어요'+(r.score===100?' 🎉':'')+'</div>')+'</div>';
     if(wrong.length){
@@ -1117,8 +1273,8 @@ function runCloze(words){
     [].forEach.call(app.querySelectorAll('.opt'),function(b){ b.onclick=function(){
       if(done) return; done=true;
       var ok=ops[+b.dataset.k]===c;
-      if(ok){ correct++; b.classList.add('ok'); $('#fb').className='fb ok'; $('#fb').textContent='정답! '+z.ans; }
-      else { wrong.push(c.w); b.classList.add('no'); app.querySelectorAll('.opt')[ops.indexOf(c)].classList.add('ok'); $('#fb').className='fb no'; $('#fb').textContent='정답: '+z.ans; }
+      if(ok){ playCorrectSound(); correct++; b.classList.add('ok'); $('#fb').className='fb ok'; $('#fb').textContent='정답! '+z.ans; }
+      else { playWrongSound(); wrong.push(c.w); b.classList.add('no'); app.querySelectorAll('.opt')[ops.indexOf(c)].classList.add('ok'); $('#fb').className='fb no'; $('#fb').textContent='정답: '+z.ans; }
       speak(z.s.replace('_____',z.ans));
       setTimeout(function(){ i++; draw(); }, ok?1200:2200);
     }; });
@@ -1210,6 +1366,7 @@ function listenAndScore(targetText, btnEl, resEl, onPass) {
       var spoken = (e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
       var a = alignSpeech(targetText, spoken);
       var badgeClass = a.score >= 80 ? 'ok' : a.score >= 60 ? 'warn' : 'bad';
+      if(a.score >= 80) { playCorrectSound(); } else { playWrongSound(); }
       var msg = a.score >= 80 ? '👏 80점 통과! 완벽한 발음이에요!' : a.score >= 60 ? '👍 좋아요! 조금만 더 또박또박 해봐요.' : '빨간 단어를 잘 듣고 다시 도전해 봐요!';
       resEl.innerHTML = '<div class="speak-score-badge ' + badgeClass + '">발음 정확도 ' + a.score + '점</div>' +
         '<div style="font-weight:bold;margin-top:4px;color:' + (a.score>=80?'#2e7d32':'#c62828') + '">' + msg + '</div>' +
@@ -1272,8 +1429,8 @@ function runCard(words){
         });
       };
     }
-    $('#yes').onclick=function(){ stopSpeak(); if(firstTry[c.w]===undefined){ firstTry[c.w]=true; known++; } queue.shift(); draw(); };
-    $('#no').onclick=function(){ stopSpeak(); if(firstTry[c.w]===undefined) firstTry[c.w]=false; queue.push(queue.shift()); draw(); };
+    $('#yes').onclick=function(){ stopSpeak(); playCorrectSound(); if(firstTry[c.w]===undefined){ firstTry[c.w]=true; known++; } queue.shift(); draw(); };
+    $('#no').onclick=function(){ stopSpeak(); playWrongSound(); if(firstTry[c.w]===undefined) firstTry[c.w]=false; queue.push(queue.shift()); draw(); };
     speakList(cardReadList(c));
   }
   draw();
@@ -1372,8 +1529,8 @@ function runChoice(words,retry){
     [].forEach.call(app.querySelectorAll('.opt'),function(b){ b.onclick=function(){
       if(done) return; done=true;
       var o=ops[+b.dataset.k], ok=o===c;
-      if(ok){ correct++; b.classList.add('ok'); $('#fb').className='fb ok'; $('#fb').textContent='정답! 👍'; }
-      else { wrong.push(c.w); b.classList.add('no'); app.querySelectorAll('.opt')[ops.indexOf(c)].classList.add('ok'); $('#fb').className='fb no'; $('#fb').textContent='아쉬워요! 정답을 확인하세요'; }
+      if(ok){ playCorrectSound(); correct++; b.classList.add('ok'); $('#fb').className='fb ok'; $('#fb').textContent='정답! 👍'; }
+      else { playWrongSound(); wrong.push(c.w); b.classList.add('no'); app.querySelectorAll('.opt')[ops.indexOf(c)].classList.add('ok'); $('#fb').className='fb no'; $('#fb').textContent='아쉬워요! 정답을 확인하세요'; }
       setTimeout(function(){ i++; draw(); }, ok?700:1600);
     }; });
   }
@@ -1399,8 +1556,8 @@ function runSpell(words){
     var done=false;
     function check(){
       if(done) return; done=true;
-      if(norm(inp.value)===norm(c.w)){ correct++; $('#fb').className='fb ok'; $('#fb').textContent='정답! 👍'; speak(c.w); setTimeout(function(){i++;draw();},800); }
-      else { wrong.push(c.w); $('#fb').className='fb no'; $('#fb').innerHTML='정답: <span style="color:var(--ink)">'+esc(c.w)+'</span>'; speak(c.w);
+      if(norm(inp.value)===norm(c.w)){ playCorrectSound(); correct++; $('#fb').className='fb ok'; $('#fb').textContent='정답! 👍'; speak(c.w); setTimeout(function(){i++;draw();},800); }
+      else { playWrongSound(); wrong.push(c.w); $('#fb').className='fb no'; $('#fb').innerHTML='정답: <span style="color:var(--ink)">'+esc(c.w)+'</span>'; speak(c.w);
         $('#ok').textContent='다음'; $('#ok').onclick=function(){ i++; draw(); }; inp.onkeydown=function(e){ if(e.key==='Enter'){ i++; draw(); } }; }
     }
     $('#ok').onclick=check; inp.onkeydown=function(e){ if(e.key==='Enter') check(); };
@@ -1429,8 +1586,8 @@ function runMatch(words){
       if(sel===null){ sel=+b.dataset.k; b.classList.add('sel'); if(x.en) speak(x.t); return; }
       var y=tiles[sel], bs=btns[sel];
       if(sel===+b.dataset.k){ b.classList.remove('sel'); sel=null; return; }
-      if(y.o===x.o && y.en!==x.en){ b.classList.add('gone'); bs.classList.add('gone'); sel=null; left--; if(!left){ r++; setTimeout(draw,300); } }
-      else { miss++; missed[(y.en?y:x).o.w]=1; b.classList.add('no'); bs.classList.remove('sel'); bs.classList.add('no'); sel=null;
+      if(y.o===x.o && y.en!==x.en){ playCorrectSound(); b.classList.add('gone'); bs.classList.add('gone'); sel=null; left--; if(!left){ r++; setTimeout(draw,300); } }
+      else { playWrongSound(); miss++; missed[(y.en?y:x).o.w]=1; b.classList.add('no'); bs.classList.remove('sel'); bs.classList.add('no'); sel=null;
         setTimeout(function(){ b.classList.remove('no'); bs.classList.remove('no'); },500); }
     }; });
   }
@@ -1451,15 +1608,39 @@ function runTest(words){
     function next(ok){ if(ok) correct++; else wrong.push(c.w); i++; draw(); }
     if(q.kind==='spell'){
       app.innerHTML=head+'<div class="q ko">'+esc(c.m)+'</div><div class="sub" style="text-align:center">영어로 쓰세요 ('+c.w.length+'글자)</div>'+
-      '<input id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:center;margin-top:12px"><button class="btn" id="ok">다음</button>';
+      '<input id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:center;margin-top:12px"><button class="btn" id="ok">확인</button>';
       var inp=$('#in'); inp.focus();
-      var go=function(){ next(norm(inp.value)===norm(c.w)); };
+      var answered = false;
+      var go=function(){
+        if(answered) return; answered = true;
+        var ok = norm(inp.value)===norm(c.w);
+        if(ok){
+          playCorrectSound();
+          inp.style.borderColor = '#00c853'; inp.style.backgroundColor = '#e8f5e9';
+        } else {
+          playWrongSound();
+          inp.style.borderColor = '#ff3b30'; inp.style.backgroundColor = '#ffebee';
+        }
+        setTimeout(function(){ next(ok); }, 380);
+      };
       $('#ok').onclick=go; inp.onkeydown=function(e){ if(e.key==='Enter') go(); };
     } else {
       var key=q.kind==='ko'?'m':'w', ops=options(c,W.words,key);
       app.innerHTML=head+'<div class="q'+(q.kind==='en'?' ko':'')+'">'+esc(q.kind==='ko'?c.w:c.m)+'</div>'+
         ops.map(function(o,k){return '<button class="opt" data-k="'+k+'">'+esc(o[key])+'</button>';}).join('');
-      [].forEach.call(app.querySelectorAll('.opt'),function(b){ b.onclick=function(){ b.classList.add('sel'); setTimeout(function(){ next(ops[+b.dataset.k]===c); },150); }; });
+      var answered = false;
+      [].forEach.call(app.querySelectorAll('.opt'),function(b){ b.onclick=function(){
+        if(answered) return; answered = true;
+        var ok = ops[+b.dataset.k]===c;
+        if(ok){
+          b.classList.add('ok');
+          playCorrectSound();
+        } else {
+          b.classList.add('no');
+          playWrongSound();
+        }
+        setTimeout(function(){ next(ok); }, 380);
+      }; });
     }
     bindBack(function(){ if(confirm('테스트를 그만할까요? 점수는 저장되지 않아요.')) showWordMenu(); });
   }
@@ -1926,8 +2107,8 @@ function nextQ(){
   [].forEach.call(app.querySelectorAll('#rtiles .bo'),function(b){ b.onclick=function(){
     if(R.busy||R.done) return; R.busy=true;
     var k=+b.dataset.k, ok=k===q.a;
-    if(ok){ R.c++; $('#rc').textContent=R.c; b.classList.add('hit'); setTimeout(nextQ,180); }
-    else { R.x++; R.wrong.push(q.w); b.classList.add('miss'); var r=app.querySelector('#rtiles .bo[data-k="'+q.a+'"]'); if(r) r.classList.add('hit');
+    if(ok){ playCorrectSound(); R.c++; $('#rc').textContent=R.c; b.classList.add('hit'); setTimeout(nextQ,180); }
+    else { playWrongSound(); R.x++; R.wrong.push(q.w); b.classList.add('miss'); var r=app.querySelector('#rtiles .bo[data-k="'+q.a+'"]'); if(r) r.classList.add('hit');
       [].forEach.call(app.querySelectorAll('#rtiles .bo'),function(x){ if(x!==b&&x!==r) x.classList.add('dim'); }); setTimeout(nextQ,1100); }
   }; });
 }
