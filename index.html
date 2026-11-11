@@ -773,20 +773,45 @@ function mockCall(fn, args) {
     return { classes: ['초5', '수지중2', '홍천고1', '예비고1', '수지중1', '풍덕초6', '한빛중2', '현암고1', '현암고2', '수지고2', '죽전고2', '선생님'] };
   }
   if (fn === 'adminLogin') {
+    var adminSets = [];
+    var allKeys = Object.keys(ALL_WORD_SETS);
+    for (var i = 0; i < allKeys.length; i++) {
+      var k = allKeys[i];
+      var s = ALL_WORD_SETS[k];
+      var type = '교재어휘';
+      if (k.indexOf('교과서') >= 0 || k.indexOf('동아') >= 0 || k.indexOf('천재') >= 0) type = '교과서';
+      else if (k.indexOf('외부') >= 0) type = '외부지문';
+      else if (k.indexOf('하린') >= 0 || k.indexOf('Insight') >= 0 || k.indexOf('Hand') >= 0 || k.indexOf('Grammar') >= 0) type = '초등교재';
+      adminSets.push({
+        type: type,
+        name: k,
+        target: s.target || '전체'
+      });
+    }
     return {
-      today: '2026-11-11',
-      classes: ['초5', '수지중2', '홍천고1', '예비고1', '수지중1', '풍덕초6', '한빛중2', '현암고1', '현암고2', '수지고2', '죽전고2'],
-      sets: [
-        { type: '교과서', name: '[수지중2] 2022개정 동아(윤) 7과 본문 어휘', target: '수지중2' },
-        { type: '교과서', name: '[수지중2] 2022개정 동아(윤) 8과 본문 어휘', target: '수지중2' },
-        { type: '외부지문', name: '[수지중2] 7과 외부 1번(축제)', target: '수지중2' },
-        { type: '외부지문', name: '[수지중2] 7과 외부 2번(문화기억)', target: '수지중2' },
-        { type: '교재어휘', name: '주니어 능률VOCA 실력 Day 01', target: '수지중2' },
-        { type: '외부지문', name: '홍천 외부1 동물상징 단어', target: '홍천고1' },
-        { type: '외부지문', name: '홍천 외부2 조선팝 단어', target: '홍천고1' },
-        { type: '교재어휘', name: '빠바 기초세우기 01 영문의 기본 구조', target: '예비고1' },
-        { type: '외부지문', name: 'Ahmed, the King of Marsabit', target: '한빛중2' }
-      ]
+      today: '2026-11-12',
+      classes: ['초5', '수지중1', '수지중2', '홍천고1', '예비고1', '풍덕초6', '한빛중2', '현암고1', '현암고2', '수지고2', '죽전고2'],
+      sets: adminSets
+    };
+  }
+  if (fn === 'adminSetReport') {
+    var ban = args[1], type = args[2], setName = args[3];
+    var filtered = TOPEDU_ALL_STUDENTS.filter(function(st) {
+      return !ban || st.ban === ban;
+    });
+    var repStudents = filtered.map(function(st) {
+      return {
+        name: st.name,
+        ban: st.ban,
+        done: st.tested || false,
+        count: st.correct || 0,
+        best: st.tested ? { score: st.score || 100, correct: st.correct || 15, total: 15, wrong: '' } : null,
+        last: st.lastTested || null
+      };
+    });
+    return {
+      students: repStudents,
+      missed: []
     };
   }
   if (fn === 'adminDashboard') {
