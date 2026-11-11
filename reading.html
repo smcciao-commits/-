@@ -853,6 +853,116 @@
       40%, 80% { transform: translateX(8px); }
     }
 
+  
+    /* Interactive Word Touch Dictionary */
+    .word-clickable {
+      cursor: pointer;
+      display: inline-block;
+      border-bottom: 1.5px dotted #ff6b9d;
+      transition: all 0.15s;
+      border-radius: 3px;
+      padding: 0 1px;
+    }
+    .word-clickable:hover, .word-clickable:active {
+      background: #ffe4ee;
+      color: #e11d48;
+    }
+    .dict-popover {
+      position: absolute;
+      background: #1e293b;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: auto;
+    }
+    .dict-popover::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0;
+      border-style: solid;
+      border-color: #1e293b transparent;
+      display: block;
+      width: 0;
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.8) translateY(5px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Looked up words vocabulary box */
+    .looked-up-box {
+      margin-top: 24px;
+      background: #fff;
+      border: 2px solid #ffd1dc;
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 15px rgba(255,107,157,0.1);
+    }
+    .looked-up-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .looked-up-title {
+      font-family: 'MaplestoryOTFBold';
+      font-size: 16.5px;
+      color: #e11d48;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .word-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .vocab-card-chip {
+      background: #fff0f5;
+      border: 1.5px solid #ffb6c1;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #2d3748;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .vocab-card-chip:hover {
+      background: #ffe4ee;
+      border-color: #ff6b9d;
+      transform: translateY(-1px);
+    }
+    .vocab-meaning {
+      color: #e11d48;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .vocab-del-btn {
+      color: #94a3b8;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .vocab-del-btn:hover {
+      color: #ef4444;
+    }
+
   </style>
 </head>
 <body>
@@ -1943,12 +2053,12 @@ function renderExamMode(p, area) {
           <span class="prob-type-badge">${ex.type}</span>
           Q${originalIdx + 1}. ${ex.q}
         </div>
-        <div class="prob-passage">${ex.passage}</div>
+        <div class="prob-passage">${makeWordsClickable(ex.passage)}</div>
         <div class="prob-choices" id="choices_${originalIdx}">
           ${ex.choices.map((c, cIdx) => `
             <button class="choice-btn" id="btn_${originalIdx}_${cIdx}" onclick="submitExamAns(${originalIdx}, ${cIdx})">
               <span class="choice-num">${cIdx + 1}</span>
-              <span>${c}</span>
+              <span>${makeWordsClickable(c)}</span>
             </button>
           `).join('')}
         </div>
@@ -1978,6 +2088,44 @@ function renderExamMode(p, area) {
       </div>
     `;
   });
+
+  // Looked-up Vocabulary Box (Student's custom flashcards)
+  const lookedWords = getLookedUpWords();
+  html += `
+    <div class="looked-up-box">
+      <div class="looked-up-header">
+        <div class="looked-up-title">
+          <span>📚 내가 문제 풀며 찾아본 단어</span>
+          <span class="badge" style="background:#ffe4ee; color:#e11d48;">총 ${lookedWords.length}개 수록</span>
+        </div>
+        <div style="font-size:12px; color:#64748b;">지문/선지 단어를 누르면 자동 저장됩니다!</div>
+      </div>
+  `;
+
+  if (lookedWords.length === 0) {
+    html += `
+      <div style="font-size:13.5px; color:#94a3b8; text-align:center; padding:15px 0;">
+        💡 선지나 지문에서 모르는 영단어를 톡 누르면 뜻이 뜨고, 여기에 자동으로 나만의 단어장이 만들어집니다!
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="word-chips-grid">
+        ${lookedWords.map(item => `
+          <div class="vocab-card-chip" onclick="speak('${item.word}')">
+            <span>${item.word}</span>
+            <span class="vocab-meaning">👉 ${item.meaning}</span>
+            <span class="vocab-del-btn" onclick="event.stopPropagation(); removeLookedUpWord('${item.word}')" title="외웠어요! 제거">✕</span>
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #ffd1dc; padding-top:10px;">
+        <span style="font-size:12.5px; color:#64748b;">단어를 누르면 발음(TTS)이 재생됩니다. 다 외운 단어는 ✕를 누르세요.</span>
+        <button class="tool-btn" style="background:#ff6b9d; color:#fff; border:none; padding:4px 12px; font-size:12px;" onclick="saveLookedUpWords([]); renderExamMode(PASSAGES[curPassage], document.getElementById('contentArea'));">단어장 전체 비우기</button>
+      </div>
+    `;
+  }
+  html += `</div>`;
 
   // Clinic bottom bar if there are wrong answers
   if (wrongList.length > 0 && !filterWrongOnly) {
@@ -2149,6 +2297,80 @@ function checkTF(sub, idx, choice) {
 }
 
 
+
+// === INTERACTIVE TOUCH VOCABULARY DICTIONARY ===
+const VOCAB_DICT = {"filled with": "~로 가득 찬; ~이 넘치는", "filled": "~로 가득 찬; ~이 넘치는", "with": "~로 가득 찬; ~이 넘치는", "community": "공동체, 지역사회", "monument": "기념물, 기념비; 역사적 건축물", "gratitude": "감사, 고마움", "represent": "나타내다, 대표하다", "bring together": "묶다, 합치다; 화합시키다, 모으다", "bring": "묶다, 합치다; 화합시키다, 모으다", "together": "묶다, 합치다; 화합시키다, 모으다", "generation": "세대", "connect with": "~와 연결하다; ~와 소통하다, 결속하다", "connect": "~와 연결하다; ~와 소통하다, 결속하다", "meet a need": "필요를 충족하다; 요구에 부응하다", "meet": "필요를 충족하다; 요구에 부응하다", "need": "필요를 충족하다; 요구에 부응하다", "what matters": "중요한 것; 본질적인 문제", "what": "중요한 것; 본질적인 문제", "matters": "중요한 것; 본질적인 문제", "present": "존재하는, 현재의; 현재, 선물; 주다, 제시하다", "festival": "축제; 기념 행사, 잔치", "matter": "중요하다; 문제, 물질, 일", "celebrate": "기념하다, 축하하다", "celebration": "축하, 기념행사", "tradition": "전통", "express": "표현하다, 나타내다; 고속의, 급행의", "feeling": "감정, 느낌; 기분", "value": "가치, 가치관; 소중히 여기다, 평가하다", "strengthen": "강화하다, 튼튼하게 하다", "bond": "유대, 결속; 결합; 채권", "take part in": "~에 참여하다, 참가하다", "take": "~에 참여하다, 참가하다", "part": "~에 참여하다, 참가하다", "decoration": "장식, 장식품; 훈장", "prepare": "준비하다, 대비하다; 마련하다", "neighbor": "이웃, 이웃사람; 인접한", "continue": "지속하다, 계속하다; 이어지다", "gather": "모이다, 모으다; 수집하다", "share": "공유하다, 나누다; 몫, 지분", "meaning": "의미, 뜻", "beginning": "시작", "colorful": "다채로운, 화려한; 색채가 풍부한", "powder": "가루, 분말; 파우더를 바르다", "joy": "기쁨, 환희; 기쁜 일", "welcome": "맞이하다, 환영하다; 환영받는; 환영", "experience": "경험; 겪다, 경험하다", "shared": "공유된, 함께하는; 공동의", "pass from a to b": "A에서 B로 전수되다, 전해지다", "pass": "A에서 B로 전수되다, 전해지다", "from": "A에서 B로 전수되다, 전해지다", "behind": "이면에, 배후에; 뒤에", "future": "미래, 장래; 미래의", "decide": "결정하다, 결심하다; 판결하다", "cultural": "문화적인", "constructed": "구성된, 만들어진", "construct": "구성하다, 건설하다; 세우다, 건조하다", "rite": "의식, 의례; 관례", "think of a as b": "A를 B로 생각하다, 여기다", "think": "A를 B로 생각하다, 여기다", "recollection": "기억, 회상; 회고", "recollect": "생각해내다, 회상하다; 기억하다", "enable": "~할 수 있게 하다, 가능하게 하다", "apply": "적용하다, 응용하다", "knowledge": "지식, 학식; 알고 있음", "circumstance": "상황, 형편; 주위 사정, 환경", "critical": "중요한, 결정적인; 비판적인, 위독한", "identity": "정체성, 독자성; 신원, 동일함", "specific": "특유의, 특정한; 구체적인, 명확한", "collective": "집단의, 공동의; 집합적인", "store": "저장하다, 보관하다; 가게, 상점", "access": "접근하다, 이용하다", "array": "집합, 배열", "vast": "방대한, 거대한", "artifact": "유물, 인공물; 문화 유물", "insight": "통찰력, 통찰; 안목, 깊은 이해", "seemingly": "겉보기에는, 보기에; 외견상", "infinite": "무한한", "indeed": "참으로, 정말; 사실은, 실로", "last": "지속하다, 계속되다; 마지막의, 지난", "memory": "기억", "understanding": "이해", "symbol": "상징, 기호; 부호", "typically": "전형적으로, 일반적으로; 보통", "historical": "역사적인, 역사상의; 역사에 기초한", "longest-lasting": "가장 오래 지속되는; 가장 영속적인", "painting": "그림, 회화", "museum": "박물관, 미술관", "amount": "양", "data": "데이터, 자료", "way of life": "삶의 방식, 생활 양식", "way": "삶의 방식, 생활 양식", "life": "삶의 방식, 생활 양식", "past": "과거, 지난날; 과거의, 지난; 지나서", "provide": "제공하다", "a vast array of": "방대한 배열의, 수많은", "group": "집단, 무리; 모이다, 분류하다", "commercialization": "상업화", "commercial": "상업적인, 광고", "evolving": "진화하는, 발전하는", "evolve": "진화하다, 발전하다", "nature": "본질, 자연, 특성", "diverse": "다양한", "functions": "기능들, 역할들", "economic": "경제적인", "impact": "영향, 충격", "origins": "기원, 출처", "religious": "종교적인", "harvest": "수확, 추수", "rituals": "의식, 의례", "modified": "수정된, 변경된", "modify": "수정하다, 바꾸다", "universal": "보편적인, 전 세계의", "elements": "요소들", "replaced": "대체된", "replace": "대체하다, 대신하다", "ancient": "고대의, 아주 오래된", "ceremonies": "의식, 행사", "refuse": "거부하다, 거절하다", "financial": "재정적인, 금전적인", "burden": "부담, 짐", "preserve": "보존하다, 지키다", "customs": "관습, 풍습", "modifications": "수정, 변경", "adapt": "적응시키다, 맞추다", "ongoing": "진행 중인, 지속적인", "completely": "완전히", "discard": "버리다, 폐기하다", "futuristic": "미래지향적인, 미래의", "separate": "분리하다, 떼어놓다", "influences": "영향들", "virtual": "가상의, 사실상의", "gathering": "모임, 집회", "gatherings": "모임들", "weaken": "약화시키다", "bonds": "유대, 결속", "compete": "경쟁하다", "aggressively": "공격적으로, 적극적으로", "foreign": "외국의, 낯선", "eliminate": "제거하다, 없애다", "isolate": "고립시키다, 격리하다", "themselves": "그들 자신", "neighboring": "이웃의, 인접한", "celebrations": "축하 행사들", "traditions": "전통들", "communities": "공동체들", "generations": "세대들", "represents": "나타내다", "beginnings": "시작들", "culture": "문화", "insights": "통찰력, 이해", "thousands": "수천의", "enables": "가능하게 하다"};
+
+function getLookedUpWords() {
+  try {
+    return JSON.parse(localStorage.getItem('topedu_looked_up_words') || '[]');
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveLookedUpWords(list) {
+  localStorage.setItem('topedu_looked_up_words', JSON.stringify(list));
+}
+
+function addLookedUpWord(word, meaning) {
+  let list = getLookedUpWords();
+  if (!list.some(item => item.word.toLowerCase() === word.toLowerCase())) {
+    list.push({ word, meaning, date: new Date().toISOString() });
+    saveLookedUpWords(list);
+    showToast(`📚 '${word}' (${meaning}) 단어가 [내 오답 단어장]에 쏙 담겼습니다!`);
+  }
+}
+
+function removeLookedUpWord(word) {
+  let list = getLookedUpWords();
+  list = list.filter(item => item.word.toLowerCase() !== word.toLowerCase());
+  saveLookedUpWords(list);
+  renderExamMode(PASSAGES[curPassage], document.getElementById('contentArea'));
+}
+
+// Helper: Wrap words in text with clickable spans
+function makeWordsClickable(text) {
+  // Match english words
+  return text.replace(/\b([a-zA-Z]{2,})\b/g, function(match) {
+    return `<span class="word-clickable" onclick="lookupWord(event, '${match}')">${match}</span>`;
+  });
+}
+
+let curPopover = null;
+function lookupWord(e, word) {
+  e.stopPropagation();
+  if (curPopover) curPopover.remove();
+
+  const clean = word.toLowerCase().trim();
+  const meaning = VOCAB_DICT[clean] || VOCAB_DICT[clean.replace(/s$|ed$|ing$/, '')] || '사전 검색 단어';
+
+  addLookedUpWord(word, meaning);
+
+  const pop = document.createElement('div');
+  pop.className = 'dict-popover';
+  pop.id = 'wordDictPopover';
+  pop.innerHTML = `
+    <span>${word}</span>
+    <span style="color:#fbcfe8;">👉 ${meaning}</span>
+    <span style="cursor:pointer; margin-left:4px;" onclick="speak('${word}')">🔊</span>
+  `;
+
+  document.body.appendChild(pop);
+  curPopover = pop;
+
+  const rect = e.target.getBoundingClientRect();
+  pop.style.left = (rect.left + window.scrollX + rect.width / 2 - pop.offsetWidth / 2) + 'px';
+  pop.style.top = (rect.top + window.scrollY - pop.offsetHeight - 8) + 'px';
+
+  setTimeout(() => {
+    document.addEventListener('click', function closePop() {
+      if (pop) pop.remove();
+      document.removeEventListener('click', closePop);
+    });
+  }, 100);
+}
+
 // === TOP EDU SMART SECURITY & DIRECTOR SUITE ===
 const ALL_STUDENTS = [{"ban": "초5", "name": "이하린", "pw": "1212"}, {"ban": "풍덕초6", "name": "서호준", "pw": "7494"}, {"ban": "수지중1", "name": "김수현", "pw": "3751"}, {"ban": "수지중1", "name": "남민준", "pw": "7590"}, {"ban": "수지중1", "name": "박도윤", "pw": "8219"}, {"ban": "수지중1", "name": "성아림", "pw": "5701"}, {"ban": "수지중1", "name": "이가은", "pw": "0907"}, {"ban": "수지중2", "name": "김영인", "pw": "7568"}, {"ban": "수지중2", "name": "김지안", "pw": "7399"}, {"ban": "수지중2", "name": "문지혁", "pw": "1808"}, {"ban": "수지중2", "name": "오정우", "pw": "1731"}, {"ban": "수지중2", "name": "이우진", "pw": "5718"}, {"ban": "수지중2", "name": "지시현", "pw": "3470"}, {"ban": "한빛중2", "name": "이유안", "pw": "9337"}, {"ban": "예비고1", "name": "오지민", "pw": "7134"}, {"ban": "예비고1", "name": "최수린", "pw": "7595"}, {"ban": "예비고1", "name": "남서연", "pw": "5195"}, {"ban": "예비고1", "name": "배정연", "pw": "5752"}, {"ban": "예비고1", "name": "손해준", "pw": "0980"}, {"ban": "예비고1", "name": "신유림", "pw": "0998"}, {"ban": "예비고1", "name": "이가현", "pw": "9990"}, {"ban": "예비고1", "name": "이다인", "pw": "2314"}, {"ban": "예비고1", "name": "이서연", "pw": "3784"}, {"ban": "예비고1", "name": "이혜원", "pw": "2362"}, {"ban": "예비고1", "name": "장하윤", "pw": "4806"}, {"ban": "예비고1", "name": "조윤아", "pw": "6454"}, {"ban": "홍천고1", "name": "여예진", "pw": "9007"}, {"ban": "홍천고1", "name": "한서은", "pw": "1737"}, {"ban": "현암고1", "name": "이여원", "pw": "3697"}, {"ban": "현암고2", "name": "정민기", "pw": "9103"}, {"ban": "수지고2", "name": "김승현", "pw": "9643"}, {"ban": "수지고2", "name": "박예원", "pw": "7023"}, {"ban": "죽전고2", "name": "박민서", "pw": "4322"}, {"ban": "선생님", "name": "조수민", "pw": "4653"}];
 
@@ -2283,7 +2505,14 @@ function generateAlimtalkMsg(sName, ban, bLabel, pLabel, att) {
     examReport = `· 지문 변형모의 10제: 7/10\n※ [학습 태도 및 보안 안내] 문제 풀이 시간이 너무 짧아 찍은 정황이 확인되었으며, 시험 중 화면 이탈(AI 번역/검색 의심 2회)이 감지되었습니다. 실전 내신 대비를 위해 정직하고 꼼꼼한 풀이 태도를 갖추도록 가정에서도 각별한 지도 부탁드립니다.\n\n가정에서도 따뜻한 지도와 관심 부탁드립니다. 감사합니다♡`;
   }
 
-  return `안녕하세요. 탑에듀학원입니다^^\n${md} [${sName}] 학생의 오늘 학습 결과입니다.\n\n· 종이 교재: ${bLabel}\n· 외부지문 프린트: ${pLabel}\n· 온라인 단어: 100/100 (통과)\n${examReport}`;
+  const lookedWords = getLookedUpWords();
+  let vocabNote = '';
+  if (lookedWords.length > 0) {
+    const wNames = lookedWords.slice(0, 4).map(w => w.word).join(', ');
+    vocabNote = `\n· 💡 어휘 자율 학습: 문제 속 모르는 단어(${wNames} 등 ${lookedWords.length}개) 스스로 힌트 확인 및 복습 완료`;
+  }
+
+  return `안녕하세요. 탑에듀학원입니다^^\n${md} [${sName}] 학생의 오늘 학습 결과입니다.\n\n· 종이 교재: ${bLabel}\n· 외부지문 프린트: ${pLabel}\n· 온라인 단어: 100/100 (통과)${vocabNote}\n${examReport}`;
 }
 
 function renderHomeworkBoardMode(area) {
