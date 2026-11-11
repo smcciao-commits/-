@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TOP EDU 지문·어법·변형 마스터</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    @font-face {
+      font-family: 'MaplestoryOTFLight';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFLight.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'MaplestoryOTFBold';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    :root {
+      --bg: #fff0f5;
+      --card-bg: #ffffff;
+      --primary: #ff6b9d;
+      --primary-hover: #ff528c;
+      --primary-light: #ffe4ee;
+      --mint: #38b2ac;
+      --mint-light: #e6fffa;
+      --text: #2d3748;
+      --text-sub: #718096;
+      --line: #ffd1dc;
+      --correct: #10b981;
+      --wrong: #ef4444;
+      --radius: 16px;
+      --shadow: 0 4px 20px rgba(255, 107, 157, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 2px solid var(--line);
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .logo-badge {
+      background: linear-gradient(135deg, #ff80ab, #ff4081);
+      color: #fff;
+      font-family: 'MaplestoryOTFBold', sans-serif;
+      font-size: 13px;
+      padding: 4px 9px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(255, 64, 129, 0.3);
+    }
+    .header-title {
+      font-family: 'MaplestoryOTFBold', sans-serif;
+      font-size: 16px;
+      color: #ff4081;
+      letter-spacing: -0.3px;
+    }
+    .header-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-btn {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .tool-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 14px auto;
+      padding: 0 16px;
+    }
+
+    /* Student Banner */
+    .student-banner {
+      background: #ffffff;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      box-shadow: 0 2px 8px rgba(255,107,157,0.08);
+    }
+    .stu-name-badge {
+      font-weight: 700;
+      color: #ff4081;
+      background: #ffe4ee;
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+
+    /* Passage Selector Tabs */
+    .passage-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .p-tab {
+      flex: 1;
+      background: #fff;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 210px;
+    }
+    .p-tab.active {
+      background: linear-gradient(135deg, #fff5f8, #ffeef3);
+      border-color: var(--primary);
+      box-shadow: 0 4px 14px rgba(255, 107, 157, 0.2);
+    }
+    .p-tab-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ff4081;
+      background: #ffe4ee;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+    .p-tab-title {
+      font-family: 'MaplestoryOTFBold', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Mode Navigation Tabs */
+    .mode-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 16px;
+      border: 1.5px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .m-btn {
+      background: transparent;
+      border: none;
+      padding: 8px 2px;
+      border-radius: 12px;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s;
+    }
+    .m-btn .icon { font-size: 17px; }
+    .m-btn.active {
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(255, 117, 140, 0.35);
+    }
+
+    /* Card Box */
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1.5px solid #fce4ec;
+      padding-bottom: 12px;
+    }
+    .card-title {
+      font-family: 'MaplestoryOTFBold', sans-serif;
+      font-size: 17px;
+      color: #ff4081;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Section 1: Passage Reading Styles */
+    .passage-box {
+      background: #fff8fa;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      line-height: 1.9;
+      font-size: 15.5px;
+    }
+    .p-para {
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .p-para:last-child { margin-bottom: 0; }
+    .p-para-ko {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed #ffd1dc;
+      color: #666;
+      font-size: 13.5px;
+      line-height: 1.7;
+    }
+    .tts-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ffe4ee;
+      color: #ff4081;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 6px;
+      border: none;
+    }
+    .tts-chip:hover { background: #ffccd9; }
+
+    /* Grammar Point Cards */
+    .syntax-card {
+      background: #fafafa;
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+    }
+    .syntax-card .title {
+      font-weight: 700;
+      color: #e91e63;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .syntax-card .desc {
+      color: #4a5568;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Section 2: Blank Memorization */
+    .blank-word {
+      display: inline-block;
+      background: #e2e8f0;
+      border: 1.5px dashed #94a3b8;
+      border-radius: 6px;
+      padding: 1px 7px;
+      min-width: 55px;
+      text-align: center;
+      color: transparent;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      margin: 0 2px;
+      transition: all 0.2s;
+    }
+    .blank-word.revealed {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #15803d;
+      border-style: solid;
+    }
+
+    /* Scramble builder */
+    .scramble-box {
+      background: #fdf2f8;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .scramble-target {
+      min-height: 48px;
+      background: #fff;
+      border: 2px dashed #f472b6;
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .scramble-source {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .word-chip {
+      background: #fff;
+      border: 1.5px solid #f472b6;
+      color: #be185d;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 6px 11px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      transition: all 0.15s;
+    }
+    .word-chip.used {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* Section 3: Exam Problem Solving */
+    .prob-box {
+      background: #fff;
+      border: 1.5px solid #ffd1dc;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+      transition: all 0.2s;
+    }
+    .prob-box.is-wrong {
+      border-color: #fca5a5;
+      background: #fffafa;
+    }
+    .prob-box.is-correct {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+    .prob-q {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .prob-type-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-right: 6px;
+    }
+    .prob-passage {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 14.5px;
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .prob-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .choice-btn {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      color: #334155;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+      transition: all 0.2s;
+    }
+    .choice-btn:hover:not(.locked) {
+      border-color: #f472b6;
+      background: #fdf2f8;
+    }
+    .choice-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
+      font-weight: 700;
+    }
+    .choice-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+      font-weight: 700;
+    }
+    .choice-num {
+      background: #f1f5f9;
+      color: #64748b;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .choice-btn.correct .choice-num {
+      background: #10b981;
+      color: #fff;
+    }
+    .choice-btn.wrong .choice-num {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    /* Detailed Explanation Box */
+    .explanation-box {
+      display: none;
+      background: #ffffff;
+      border: 2px solid #ffd1dc;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 14px;
+      font-size: 13.5px;
+      line-height: 1.7;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .explanation-box.show { display: block; animation: fadeIn 0.3s; }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px dashed #ffd1dc;
+    }
+    .exp-status {
+      font-family: 'MaplestoryOTFBold', sans-serif;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .exp-status.correct { color: #10b981; }
+    .exp-status.wrong { color: #ef4444; }
+
+    .exp-section {
+      background: #fdf2f8;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .exp-sec-title {
+      font-weight: 700;
+      color: #be185d;
+      margin-bottom: 4px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .exp-sec-body {
+      color: #334155;
+      font-size: 13px;
+    }
+
+    /* Retry Button */
+    .retry-btn {
+      background: #fff;
+      border: 1.5px solid #ef4444;
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .retry-btn:hover {
+      background: #fef2f2;
+      transform: translateY(-1px);
+    }
+
+    /* Clinic bar */
+    .clinic-bar {
+      background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+      border: 2px solid #fda4af;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 14px rgba(244,63,94,0.15);
+    }
+    .clinic-text {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #be123c;
+    }
+
+    /* T/F Quiz Box */
+    .tf-box {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .tf-q {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .tf-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .tf-btn {
+      flex: 1;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 8px;
+      font-weight: 700;
+      font-size: 14.5px;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.2s;
+    }
+    .tf-btn.selected-t {
+      background: #dbeafe;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+    }
+    .tf-btn.selected-f {
+      background: #fce7f3;
+      border-color: #ec4899;
+      color: #be185d;
+    }
+
+    /* Common Buttons */
+    .btn-main {
+      width: 100%;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 13px;
+      font-family: 'MaplestoryOTFBold', sans-serif;
+      font-size: 15.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255, 117, 140, 0.3);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(255, 117, 140, 0.4);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #ffe4ee;
+      color: #ff4081;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand" onclick="location.href='index.html'">
+      <div class="logo-badge">TOP EDU</div>
+      <div class="header-title">지문·어법 변형 마스터</div>
+    </div>
+    <div class="header-tools">
+      <button class="tool-btn" id="soundBtn" onclick="toggleMute()">🔊 소리</button>
+      <button class="tool-btn" onclick="location.href='index.html'">← 단어장</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Student Info Banner -->
+  <div class="student-banner">
+    <div>
+      <span class="stu-name-badge" id="studentBadge">👤 김영인 (수지중2)</span>
+      <span style="color:#64748b; margin-left:6px;" id="studyStatus">오답 집중 관리 모드 활성화</span>
+    </div>
+    <div style="font-weight:700; color:#ff4081;" id="scoreSummary">🎯 오답 0개</div>
+  </div>
+
+  <!-- Passage Selector Tabs -->
+  <div class="passage-tabs">
+    <div class="p-tab active" id="tabP1" onclick="switchPassage(1)">
+      <span class="p-tab-badge">수지중2 7과 외부 (1)</span>
+      <div class="p-tab-title">Why Does Festival Matter?</div>
+    </div>
+    <div class="p-tab" id="tabP2" onclick="switchPassage(2)">
+      <span class="p-tab-badge">수지중2 7과 외부 (2)</span>
+      <div class="p-tab-title">Cultural memory</div>
+    </div>
+  </div>
+
+  <!-- Mode Selector Navigation -->
+  <div class="mode-nav">
+    <button class="m-btn active" id="btnMode1" onclick="switchMode(1)">
+      <span class="icon">📖</span>
+      <span>지문 정독</span>
+    </button>
+    <button class="m-btn" id="btnMode2" onclick="switchMode(2)">
+      <span class="icon">✏️</span>
+      <span>빈칸 암기</span>
+    </button>
+    <button class="m-btn" id="btnMode3" onclick="switchMode(3)">
+      <span class="icon">🎯</span>
+      <span>변형 모의</span>
+    </button>
+    <button class="m-btn" id="btnMode4" onclick="switchMode(4)">
+      <span class="icon">📋</span>
+      <span>워크시트</span>
+    </button>
+  </div>
+
+  <!-- Content Container (Dynamic Injection) -->
+  <div id="contentArea"></div>
+</div>
+
+<script>
+// Web Audio API Sound Synthesizer
+let audioCtx = null;
+let isMuted = localStorage.getItem('topedu_mute') === '1';
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function playCorrectSound() {
+  if (isMuted) return;
+  try {
+    const ctx = getAudioContext();
+    const t = ctx.currentTime;
+    
+    // G5 (784Hz)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(783.99, t);
+    gain1.gain.setValueAtTime(0.28, t);
+    gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(t);
+    osc1.stop(t + 0.35);
+
+    // C6 (1046.5Hz)
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1046.50, t + 0.1);
+    gain2.gain.setValueAtTime(0.32, t + 0.1);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(t + 0.1);
+    osc2.stop(t + 0.5);
+  } catch(e) {}
+}
+
+function playWrongSound() {
+  if (isMuted) return;
+  try {
+    const ctx = getAudioContext();
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(175, t);
+    osc.frequency.linearRampToValueAtTime(140, t + 0.28);
+    gain.gain.setValueAtTime(0.25, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.28);
+  } catch(e) {}
+}
+
+function toggleMute() {
+  isMuted = !isMuted;
+  localStorage.setItem('topedu_mute', isMuted ? '1' : '0');
+  updateSoundBtn();
+}
+
+function updateSoundBtn() {
+  const btn = document.getElementById('soundBtn');
+  if (btn) btn.innerHTML = isMuted ? '🔇 무음' : '🔊 소리';
+}
+
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = 0.95;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+// Student Tracking
+let curStudent = '김영인';
+let curBan = '수지중2';
+try {
+  const saved = localStorage.getItem('topedu_student') || localStorage.getItem('last_user');
+  if (saved) {
+    const obj = JSON.parse(saved);
+    if (obj.name) curStudent = obj.name;
+    if (obj.ban) curBan = obj.ban;
+  }
+} catch(e) {}
+
+// Wrong answer database in localStorage
+function getWrongList(pId) {
+  const key = `topedu_wrong_${curStudent}_p${pId}`;
+  try {
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch(e) { return []; }
+}
+function saveWrongList(pId, list) {
+  const key = `topedu_wrong_${curStudent}_p${pId}`;
+  localStorage.setItem(key, JSON.stringify(list));
+}
+
+// Global App State
+let curPassage = 1; // 1 or 2
+let curMode = 1; // 1: Read, 2: Blank, 3: Exam, 4: Worksheet
+let filterWrongOnly = false; // clinic mode
+
+// Passage Data with ULTRA-DETAILED EXPLANATIONS & TRAP ANALYSES
+const PASSAGES = {
+  1: {
+    id: 1,
+    title: "Why Does Festival Matter?",
+    sub: "2학년 Lesson 7. Extra Reading (1)",
+    paragraphs: [
+      {
+        num: 1,
+        en: "Festivals are more than special days filled with music, food, and fun. They also tell us a lot about the culture of a community. Around the world, people celebrate festivals to remember important events, welcome new seasons, and share their traditions with others.",
+        ko: "축제는 음악, 음식, 즐거움으로 가득 찬 특별한 날 그 이상입니다. 그것들은 또한 한 지역사회의 문화에 대해 우리에게 많은 것을 말해줍니다. 전 세계적으로, 사람들은 중요한 사건을 기억하고, 새로운 계절을 맞이하며, 자신들의 전통을 다른 사람들과 나누기 위해 축제를 기념합니다.",
+        syntaxes: [
+          { title: "filled with ~", desc: "앞의 special days를 수식하는 과거분사구입니다. (filled with = full of). 관계대명사절 'which are filled with'에서 주격 관대+be동사가 생략된 구조입니다." },
+          { title: "tell us a lot about ~", desc: "4형식 변형 표현으로 '우리에게 ~에 대해 많은 것을 말해주다(알려주다)'라는 의미입니다." },
+          { title: "to remember ~, welcome ~, and share ~", desc: "to부정사의 부사적 용법(목적)으로 세 동사원형 remember, welcome, share가 and로 대등하게 병렬 연결되었습니다." }
+        ]
+      },
+      {
+        num: 2,
+        en: "For example, during Thanksgiving in the United States, families and friends gather to share a meal and express gratitude for what they have. In India, people celebrate Holi, the Festival of Colors, by throwing colorful powder and water at one another. Holi welcomes spring and represents joy and new beginnings. Although these festivals are different, both show how people express their feelings and values through celebrations.",
+        ko: "예를 들어, 미국의 추수감사절 동안에, 가족들과 친구들은 함께 모여 식사를 나누고 자신들이 가진 것에 대해 감사를 표합니다. 인도에서는 사람들이 서로에게 화려한 가루와 물을 던지며 '색채의 축제'인 홀리(Holi)를 기념합니다. 홀리는 봄을 맞이하고 기쁨과 새로운 시작을 나타냅니다. 비록 이 축제들은 다르지만, 둘 다 사람들이 축하 행사를 통해 자신들의 감정과 가치관을 어떻게 표현하는지 보여줍니다.",
+        syntaxes: [
+          { title: "to share ~ and express ~", desc: "to부정사의 병렬 구조로 to share와 (to) express가 and로 연결되어 '식사를 나누고 감사를 표하기 위해'를 뜻합니다." },
+          { title: "what they have", desc: "전치사 for의 목적어로 쓰인 관계대명사 what(= the things that)으로 '~하는 것(자신들이 가진 것)'을 뜻하는 명사절입니다." },
+          { title: "by throwing colorful powder...", desc: "'by + -ing' 구문으로 '~함으로써' 수단과 방법을 나타냅니다." },
+          { title: "how people express their feelings...", desc: "show의 목적어 역할을 하는 간접의문문으로 '의문사(how) + 주어(people) + 동사(express)'의 평서문 어순에 주의해야 합니다." }
+        ]
+      },
+      {
+        num: 3,
+        en: "Festivals also bring people together. Families, friends, and neighbors work together to prepare food, make decorations, and take part in special activities. These shared experiences help strengthen the bonds between people. By celebrating together, young people learn about their community's history and traditions. In this way, festivals help pass culture from one generation to the next.",
+        ko: "축제는 또한 사람들을 하나로 묶어줍니다. 가족, 친구, 이웃들이 함께 협력하여 음식을 준비하고, 장식을 만들며, 특별한 활동에 참여합니다. 이러한 공유된 경험들은 사람들 사이의 유대를 강화하는 데 도움이 됩니다. 함께 기념함으로써, 젊은 세대들은 자신들이 속한 지역사회의 역사와 전통에 대해 배웁니다. 이러한 방식으로, 축제는 문화가 한 세대에서 다음 세대로 전승되도록 돕습니다.",
+        syntaxes: [
+          { title: "bring people together", desc: "'사람들을 하나로 모으다/결속시키다'라는 핵심 숙어입니다." },
+          { title: "help strengthen the bonds", desc: "help 동사는 목적격 보어로 동사원형(strengthen) 또는 to부정사(to strengthen)를 모두 쓸 수 있습니다." },
+          { title: "pass culture from one generation to the next", desc: "'from A to B (A에서 B로)' 구문으로 문화를 한 세대에서 다음 세대로 전달하다는 전승의 의미입니다." }
+        ]
+      },
+      {
+        num: 4,
+        en: "However, culture is not something that never changes. As people's lives change, traditions may also change to meet new needs. What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities connect with the present and the future.",
+        ko: "그러나 문화는 결코 변하지 않는 것이 아닙니다. 사람들의 삶이 변함에 따라, 전통 또한 새로운 필요를 충족시키기 위해 변할 수 있습니다. 중요한 것은 사람들이 자신들의 전통 이면에 담긴 의미를 이해하고 그것들을 어떻게 이어나갈지 결정하는 것입니다. 축제는 단지 과거를 축하하는 것만에 관한 것이 아닙니다; 축제는 또한 지역사회가 현재와 미래를 연결하도록 돕습니다.",
+        syntaxes: [
+          { title: "not something that never changes", desc: "선행사 something을 수식하는 주격 관계대명사 that입니다. something은 단수 취급하므로 동사 changes(단수형)가 쓰였습니다." },
+          { title: "change to meet new needs", desc: "to부정사의 부사적 용법(목적)으로 '새로운 필요를 충족하기 위하여'로 해석됩니다." },
+          { title: "What matters is that...", desc: "What matters(= The thing that matters, 중요한 것)가 명사절 주어이며, that절 전체가 보어로 쓰인 핵심 내신 서술형 구문입니다." },
+          { title: "how to continue them", desc: "'의문사 + to부정사' 구문으로 '어떻게 그것들을 이어갈지(= how they should continue them)'를 뜻합니다." },
+          { title: "not just about ~; they also...", desc: "not only A but also B의 변형으로 'A뿐만 아니라 B도'의 뜻입니다." }
+        ]
+      }
+    ],
+    exams: [
+      {
+        type: "주제 추론",
+        q: "윗글의 주제로 가장 적절한 것은?",
+        passage: "Festivals are more than special days filled with music, food, and fun... Festivals are not just about celebrating the past; they also help communities connect with the present and the future.",
+        choices: [
+          "The commercialization of traditional holiday festivals",
+          "The diverse cultural functions and evolving nature of festivals",
+          "The economic impact of Thanksgiving celebrations in America",
+          "Historical origins of religious harvest rituals around the world",
+          "Reasons why cultural traditions should never be modified"
+        ],
+        ans: 1, // 2번
+        detail: {
+          core: "본문은 축제가 단순한 즐길 거리를 넘어 '지역사회의 문화 이해', '사람 간 유대 강화 및 문화 전승', 그리고 '시대 변화에 맞춘 전통의 진화와 미래 연결'이라는 다채로운 역할을 수행함을 다루고 있습니다. 따라서 ② '축제의 다양한 문화적 기능과 진화하는 본질'이 가장 정확합니다.",
+          traps: "① 상업화(commercialization)는 본문에 전혀 언급되지 않은 매력적인 오답입니다.<br>③ Thanksgiving은 2단락의 단순한 구체적 예시 중 하나일 뿐, 글 전체의 주제가 될 수 없습니다.<br>⑤ 본문 4단락에서 문화는 새로운 필요에 맞춰 변화할 수 있다고 했으므로, '결코 수정되어서는 안 된다'는 반대 진술입니다.",
+          point: "수능 및 내신 대의파악 문제는 '구체적 예시(일부 단락)'에 얽매이지 않고 글 전체를 포괄하는 종합적인 키워드(functions, evolving nature)를 찾아내는 것이 핵심입니다."
+        }
+      },
+      {
+        type: "글의 순서",
+        q: "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+        passage: "<b>[주어진 글]</b><br>Festivals are more than special days filled with music, food, and fun. They also tell us a lot about the culture of a community. Around the world, people celebrate festivals to remember important events, welcome new seasons, and share their traditions with others.<br><br>" +
+                 "<b>(A)</b> Festivals also bring people together. Families, friends, and neighbors work together to prepare food, make decorations, and take part in special activities. These shared experiences help strengthen the bonds between people...<br>" +
+                 "<b>(B)</b> For example, during Thanksgiving in the United States, families and friends gather to share a meal and express gratitude for what they have. In India, people celebrate Holi, the Festival of Colors...<br>" +
+                 "<b>(C)</b> However, culture is not something that never changes. As people's lives change, traditions may also change to meet new needs. What matters is that people understand the meaning behind their traditions...",
+        choices: [
+          "(A) - (C) - (B)",
+          "(B) - (A) - (C)",
+          "(B) - (C) - (A)",
+          "(C) - (A) - (B)",
+          "(C) - (B) - (A)"
+        ],
+        ans: 1, // (B)-(A)-(C)
+        detail: {
+          core: "주어진 글에서 '전 세계 사람들이 축제를 통해 전통을 나눈다'고 서술한 직후, (B)에서 연결사 'For example'과 함께 미국의 Thanksgiving과 인도의 Holi라는 구체적 사례를 제시합니다. 이어 (A)에서 'also(또한)'를 통해 사람들을 결속시키고 문화를 전승하는 기능을 덧붙인 뒤, 마지막 (C)에서 역접 'However'를 기점으로 문화의 변화와 미래 연결로 글을 마무리하는 (B)-(A)-(C)가 완벽한 흐름입니다.",
+          traps: "(A)를 먼저 배치하면 주어진 글 바로 뒤에 'also bring people together'가 오게 되어, 구체적 예시(For example)가 뒤로 밀려 문맥상 어색해집니다.",
+          point: "순서 배열 문제는 <b>연결사(For example, However)</b>와 <b>첨가사(also)</b>를 단서로 활용하여 [도입 ➔ 구체적 예시 ➔ 기능 추가 ➔ 반전 및 결론]의 논리적 뼈대를 잡아야 합니다."
+        }
+      },
+      {
+        type: "문장 삽입",
+        q: "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+        passage: "<b>[주어진 문장]</b><br><span style='color:#e11d48; font-weight:700;'>However, culture is not something that never changes.</span><br><br>" +
+                 "Festivals also bring people together. [ 1 ] Families, friends, and neighbors work together to prepare food, make decorations, and take part in special activities. [ 2 ] These shared experiences help strengthen the bonds between people. [ 3 ] In this way, festivals help pass culture from one generation to the next. [ 4 ] As people's lives change, traditions may also change to meet new needs. [ 5 ] What matters is that people understand the meaning behind their traditions and decide how to continue them.",
+        choices: [
+          "[ 1 ]",
+          "[ 2 ]",
+          "[ 3 ]",
+          "[ 4 ]",
+          "[ 5 ]"
+        ],
+        ans: 3, // [ 4 ]
+        detail: {
+          core: "[4] 바로 앞 문장까지는 축제가 문화를 한 세대에서 다음 세대로 전달(pass culture from one generation to the next)한다는 '전통의 전승'을 이야기합니다. 그러다 [4] 뒤 문장에서 '사람들의 삶이 변함에 따라 전통 또한 새로운 필요를 충족하기 위해 변할 수 있다'는 '변화'의 내용이 처음 등장하므로, 화제를 전환하는 주어진 문장(However, culture is not something that never changes)은 [4]에 반드시 들어가야 합니다.",
+          traps: "[3]에 넣으면 'In this way'로 앞 문장의 결속 경험을 요약하는 문맥의 흐름을 끊어버리게 됩니다.",
+          point: "문장 삽입의 결정적 단서는 <b>However</b>와 같은 역접 연결사입니다. 앞뒤 문장의 뉘앙스가 [불변/전승 ➔ 변화 가능성]으로 바뀌는 균열 지점을 찾는 것이 필승법입니다."
+        }
+      },
+      {
+        type: "함축 의미 추론",
+        q: "밑줄 친 <u>connect with the present and the future</u>가 윗글에서 의미하는 바로 가장 적절한 것은?",
+        passage: "What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities <u>connect with the present and the future</u>.",
+        choices: [
+          "preserve ancient customs without any modifications",
+          "adapt traditional meanings to meet modern lives and ongoing needs",
+          "completely discard past traditions and create futuristic rituals",
+          "separate local communities from outside influences",
+          "replace physical festival gatherings with virtual events"
+        ],
+        ans: 1, // 2번
+        detail: {
+          core: "축제가 과거를 기리는 것뿐만 아니라 '현재와 미래를 연결한다'는 것은, 바로 앞 문장의 '전통 이면에 담긴 의미를 이해하면서도 새로운 필요에 맞게 전통을 지속해 나가는 것'을 의미합니다. 즉, 전통의 본질을 살리면서 현대의 생활 방식과 새로운 요구에 유연하게 적응시키는 ②번이 정답입니다.",
+          traps: "① 아무런 수정 없이 고대 관습을 보존하는 것은 본문의 취지(변화 수용)와 정반대입니다.<br>③ 과거의 전통을 완전히 버린다(discard)는 극단적인 오답입니다.",
+          point: "함축의미 추론 문제는 밑줄 자체의 직역이 아니라, <b>앞뒤 문맥에서 글쓴이가 재진술(Paraphrasing)한 문맥적 정의</b>를 선택지에서 찾아야 합니다."
+        }
+      },
+      {
+        type: "어법상 틀린 것 고르기",
+        q: "다음 밑줄 친 ①~⑤ 중, 어법상 틀린 것은?",
+        passage: "Festivals are more than special days ① <u>filled with</u> music, food, and fun. Families and friends gather to share a meal and express gratitude for ② <u>what</u> they have. Both show how people express their feelings and values ③ <u>through</u> celebrations. These shared experiences help ④ <u>strengthen</u> the bonds between people. However, culture is not something that never ⑤ <u>change</u>.",
+        choices: [
+          "① filled with",
+          "② what",
+          "③ through",
+          "④ strengthen",
+          "⑤ change"
+        ],
+        ans: 4, // ⑤번
+        detail: {
+          core: "⑤ 선행사가 'something'이라는 부정대명사(단수 취급)입니다. 따라서 이를 수식하는 주격 관계대명사 that절 안의 동사는 3인칭 단수 현재형인 <b>changes</b>가 되어야 합니다.",
+          traps: "① special days 뒤에 과거분사구 filled with가 올바르게 수식하고 있습니다.<br>② for의 목적어로 불완전한 절(they have 뒤 목적어 없음)을 이끄는 관계대명사 what은 완벽히 맞습니다.<br>④ help는 준사역동사로 목적격 보어로 동사원형(strengthen)이나 to부정사를 모두 취할 수 있습니다.",
+          point: "<b>[내신 빈출 1순위]</b> 선행사-관계사절 동사의 수 일치: 선행사가 -thing, -one, -body로 끝나는 부정대명사일 때는 단수 취급하여 동사에 -s/-(e)s를 반드시 붙여야 합니다!"
+        }
+      },
+      {
+        type: "문맥상 어휘",
+        q: "다음 밑줄 친 ①~⑤ 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+        passage: "Holi welcomes spring and ① <u>represents</u> joy and new beginnings. Festivals also bring people together. Families, friends, and neighbors work together to prepare food and decorations. These shared experiences help ② <u>weaken</u> the bonds between people. In this way, festivals help ③ <u>pass</u> culture from one generation to the next. As people's lives change, traditions may also change to ④ <u>meet</u> new needs. Festivals help communities ⑤ <u>connect</u> with the present and the future.",
+        choices: [
+          "① represents",
+          "② weaken",
+          "③ pass",
+          "④ meet",
+          "⑤ connect"
+        ],
+        ans: 1, // ②번
+        detail: {
+          core: "② 가족, 친구, 이웃들이 함께 음식을 준비하고 장식을 만들며 축제에 참여하는 공유된 경험은 사람들 사이의 유대를 '약화시키는(weaken)' 것이 아니라 '강화하는(strengthen)' 역할을 합니다. 따라서 weaken은 문맥의 흐름과 정반대입니다.",
+          traps: "④ meet은 '만나다'라는 뜻 외에도 'meet needs/demands (~의 필요/요구를 충족시키다)'라는 매우 중요한 다의어로 쓰였으므로 올바른 쓰임입니다.",
+          point: "어휘 문제는 항상 <b>문맥의 순접과 역접</b>, 그리고 <b>반의어 관계(strengthen ↔ weaken)</b>를 확인하는 것이 출제자의 함정을 꿰뚫는 열쇠입니다."
+        }
+      }
+    ],
+    tf: [
+      {
+        no: 1,
+        q: "Festivals are important not only because they offer music, food, and fun, but also because they help people learn about the culture and traditions of a community.",
+        ans: "T",
+        exp: "참(T): 축제는 즐거움뿐만 아니라 지역사회의 문화와 전통을 배우게 해주므로 참입니다."
+      },
+      {
+        no: 2,
+        q: "Thanksgiving in the United States and Holi in India celebrate the same events and express the same values, even though people enjoy different activities during the festivals.",
+        ans: "F",
+        exp: "거짓(F): 미국의 추수감사절과 인도의 홀리는 서로 다른 사건을 기념하며(Thanksgiving은 감사, Holi는 봄맞이/새로운 시작), 동일한 사건을 기념하는 것이 아닙니다."
+      },
+      {
+        no: 3,
+        q: "Festivals help pass culture from one generation to the next, so people should keep all traditions exactly the same without changing them to meet new needs.",
+        ans: "F",
+        exp: "거짓(F): 본문 4단락에서 사람들의 삶이 변함에 따라 전통 또한 새로운 필요를 충족하기 위해 변할 수 있다고 명시했습니다."
+      }
+    ]
+  },
+  2: {
+    id: 2,
+    title: "Cultural memory",
+    sub: "2학년 Lesson 7. Extra Reading (2)",
+    paragraphs: [
+      {
+        num: 1,
+        en: "Cultural memory is the constructed understanding of the past that is passed from one generation to the next through text, paintings, monuments, rites, and other symbols.",
+        ko: "문화적 기억은 글, 그림, 기념비, 의식, 그리고 다른 상징물들을 통해 한 세대에서 다음 세대로 전승되는 과거에 대한 구성된 이해입니다.",
+        syntaxes: [
+          { title: "constructed understanding", desc: "과거분사 constructed(구성된)가 understanding을 수식합니다." },
+          { title: "that is passed from one generation to the next", desc: "주격 관계대명사 that과 수동태 is passed가 결합하여 '한 세대에서 다음 세대로 전승되는'을 나타냅니다." }
+        ]
+      },
+      {
+        num: 2,
+        en: "People may typically think of memory as the recollection of the past. Memory enables people to learn from past experiences and apply that knowledge in present circumstances. It is a critical part of our identity. So is culture, the way of life specific to a group of people. Cultural memory is a form of collective memory shared by a group of people. Cultural memory is often stored in objects, such as museums or historical monuments.",
+        ko: "사람들은 일반적으로 기억을 과거의 회상으로 생각할 수 있습니다. 기억은 사람들로 하여금 과거의 경험으로부터 배우고 그 지식을 현재의 상황에 적용할 수 있게 해줍니다. 그것은 우리의 정체성에 있어서 결정적인 부분입니다. 특정 집단의 고유한 생활 방식인 문화 또한 그러합니다. 문화적 기억은 한 집단의 사람들에 의해 공유되는 집단적 기억의 한 형태입니다. 문화적 기억은 종종 박물관이나 역사적 기념물과 같은 대상물에 저장됩니다.",
+        syntaxes: [
+          { title: "think of memory as ~", desc: "'think of A as B (A를 B로 생각하다)' 핵심 구문입니다." },
+          { title: "enables people to learn ... and apply", desc: "enable + 목적어 + to부정사 구조로, to learn과 and 뒤의 (to) apply가 병렬로 연결되어 있습니다." },
+          { title: "So is culture, the way of life...", desc: "'So + 동사 + 주어' 도치 구문으로 앞 문장(It is a critical part...)의 내용을 받아 '문화 또한 그러하다'를 뜻합니다." },
+          { title: "shared by a group of people", desc: "앞의 collective memory를 수식하는 과거분사구입니다." }
+        ]
+      },
+      {
+        num: 3,
+        en: "To understand culture, humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into where we came from. Libraries and the internet store a seemingly infinite amount of data about what it means to be part of a culture. Cultural memory is the longest-lasting form of memory. Indeed, cultural memory can last for thousands of years.",
+        ko: "문화를 이해하기 위해, 인간은 책과 같은 방대한 일련의 문화적 상징에 접근합니다. 과거의 유물들은 우리가 어디에서 왔는지에 대한 통찰을 제공합니다. 도서관과 인터넷은 문화의 일원이 된다는 것이 무엇을 의미하는지에 대해 겉보기에는 무한한 양의 데이터를 저장합니다. 문화적 기억은 가장 오래 지속되는 기억의 형태입니다. 참으로, 문화적 기억은 수천 년 동안 지속될 수 있습니다.",
+        syntaxes: [
+          { title: "humans access a vast array of...", desc: "access는 타동사이므로 전치사 to를 쓰지 않고 목적어를 바로 취합니다. (access to는 명사형일 때 사용)" },
+          { title: "insights into where we came from", desc: "into의 목적어로 쓰인 간접의문문 명사절 '의문사(where) + 주어(we) + 동사(came)'입니다." },
+          { title: "seemingly infinite amount of data", desc: "'부사(seemingly) + 형용사(infinite) + 명사(amount)' 어순으로 '겉보기에는 무한한 양의 데이터'를 뜻합니다." },
+          { title: "longest-lasting form of memory", desc: "최상급 표현으로 '가장 오래 지속되는 기억의 형태'입니다." },
+          { title: "can last for thousands of years", desc: "last는 '지속되다'라는 완전자동사이므로 수동태(be lasted)로 쓸 수 없습니다." }
+        ]
+      }
+    ],
+    exams: [
+      {
+        type: "제목 추론",
+        q: "What is the best title for the passage?",
+        passage: "Cultural memory is the constructed understanding of the past that is passed from one generation to the next... Indeed, cultural memory can last for thousands of years.",
+        choices: [
+          "The Difference Between Human Brain and Digital Memory",
+          "Cultural Memory: Meaning, Preservation, and Enduring Power",
+          "Why Modern Museums are Losing Their Visitors",
+          "The Limits of Artificial Intelligence in Storing History",
+          "How Personal Recollection Overpowers Cultural Heritage"
+        ],
+        ans: 1, // 2번
+        detail: {
+          core: "본문은 문화적 기억의 정의(글, 유물 등을 통해 전승되는 과거의 구성된 이해)와 그것이 저장되는 방식(박물관, 기념비, 책, 인터넷), 그리고 수천 년간 지속되는 영속적 가치를 총망라하고 있습니다. 따라서 ② '문화적 기억: 의미, 보존, 그리고 영속하는 힘'이 가장 적절합니다.",
+          traps: "① 인간 뇌와 디지털 메모리의 차이는 글의 초점이 아닙니다.<br>③ 현대 박물관이 관람객을 잃고 있다는 내용은 본문에 전혀 없습니다.<br>⑤ 개인의 회상이 문화유산을 압도한다는 진술은 본문과 반대입니다.",
+          point: "제목 추론 문제는 글 전체의 핵심 소재(Cultural Memory)가 명확히 포함되어 있는지, 지나치게 지엽적이거나 왜곡된 선지가 아닌지 확인해야 합니다."
+        }
+      },
+      {
+        type: "문장 삽입",
+        q: "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+        passage: "<b>[주어진 문장]</b><br><span style='color:#e11d48; font-weight:700;'>So is culture, the way of life specific to a group of people.</span><br><br>" +
+                 "People may typically think of memory as the recollection of the past. [ 1 ] Memory enables people to learn from past experiences and apply that knowledge in present circumstances. [ 2 ] It is a critical part of our identity. [ 3 ] Cultural memory is a form of collective memory shared by a group of people. [ 4 ] Cultural memory is often stored in objects, such as museums or historical monuments. [ 5 ]",
+        choices: [
+          "[ 1 ]",
+          "[ 2 ]",
+          "[ 3 ]",
+          "[ 4 ]",
+          "[ 5 ]"
+        ],
+        ans: 2, // [ 3 ]
+        detail: {
+          core: "[3] 앞 문장에서 개인의 기억이 우리 정체성의 결정적인 부분(It is a critical part of our identity)이라고 서술했습니다. 주어진 문장의 'So is culture(문화 또한 그러하다)'는 앞 문장의 be동사 서술어(is a critical part...)를 이어받아 문화 역시 정체성의 핵심임을 밝히며, [3] 뒤의 '집단적 기억인 문화적 기억'으로 논리적 다리를 놓아주는 역할을 합니다.",
+          traps: "[2]에 넣으면 기억이 현재 상황에 지식을 적용하게 해준다는 구체적 기능 설명 사이에 문화 이야기가 불쑥 끼어들어 흐름이 끊깁니다.",
+          point: "<b>[도치 구문]</b> 'So + be동사/조동사/do + 주어'는 앞 문장의 긍정 내용을 받아 '~도 또한 그러하다'를 뜻합니다. 반드시 앞 문장에 상응하는 내용이 존재해야 하므로 앞뒤 연결고리가 확고합니다."
+        }
+      },
+      {
+        type: "함축 의미 추론",
+        q: "밑줄 친 <u>the longest-lasting form of memory</u>가 의미하는 바로 가장 적절한 것은?",
+        passage: "Libraries and the internet store a seemingly infinite amount of data about what it means to be part of a culture. Cultural memory is <u>the longest-lasting form of memory</u>. Indeed, cultural memory can last for thousands of years.",
+        choices: [
+          "biological neurons stored in the living brain",
+          "shared cultural knowledge preserved for millennia through external records and artifacts",
+          "individual short-term memory used to solve daily problems",
+          "personal childhood memories that fade away with age",
+          "confidential government files protected from the public"
+        ],
+        ans: 1, // 2번
+        detail: {
+          core: "수천 년 동안 지속될 수 있는 '가장 오래 지속되는 기억의 형태'란 텍스트, 그림, 기념물, 유물, 도서관, 인터넷 등 외부 상징물에 저장되어 세대를 초월하여 수천 년간 전승되는 공동체의 집단적 문화 지식을 뜻하므로 ②번이 정확합니다.",
+          traps: "① 살아있는 뇌 속의 생물학적 뉴런은 인간이 사망하면 사라지므로 '가장 오래 지속되는 기억'이 될 수 없습니다.<br>③, ④는 모두 개인적 단기 기억에 불과합니다.",
+          point: "문화적 기억(Cultural memory)의 가장 독보적인 특성은 바로 <b>개인의 수명을 뛰어넘어 수천 년간 보존된다는 영속성(endurance)</b>입니다."
+        }
+      },
+      {
+        type: "어법상 틀린 것 고르기",
+        q: "다음 밑줄 친 ①~⑤ 중, 어법상 틀린 것은?",
+        passage: "Cultural memory is the constructed understanding of the past that is ① <u>passed</u> from one generation to the next. Memory enables people ② <u>learn</u> from past experiences and apply that knowledge in present circumstances. So ③ <u>is</u> culture, the way of life specific to a group of people. Humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into where we ④ <u>came</u> from. Indeed, cultural memory can ⑤ <u>last</u> for thousands of years.",
+        choices: [
+          "① passed",
+          "② learn",
+          "③ is",
+          "④ came",
+          "⑤ last"
+        ],
+        ans: 1, // ②번
+        detail: {
+          core: "② enable 동사는 5형식 문형에서 목적격 보어로 반드시 <b>to부정사</b>를 취합니다. 따라서 'enables people <b>to learn</b>'으로 고쳐야 올바른 어법입니다. (뒤의 apply도 to에 걸리는 병렬구조: to learn ... and (to) apply)",
+          traps: "① understanding은 전승되는 대상이므로 수동태 is passed가 정확합니다.<br>③ 앞 문장의 'It is a critical part...'를 받는 도치 구문이므로 be동사 is가 맞습니다.<br>⑤ last는 '지속되다'라는 완전자동사이므로 능동형 조동사 can 뒤에 동사원형으로 온 것이 맞습니다.",
+          point: "<b>[내신 단골 5형식 동사]</b> enable, allow, encourage, order, expect, cause 등은 목적격 보어로 반드시 to-v를 취합니다! (enable + O + to-v)"
+        }
+      },
+      {
+        type: "문맥상 어휘",
+        q: "다음 밑줄 친 ①~⑤ 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+        passage: "Memory enables people to learn from past experiences and apply that knowledge in ① <u>present</u> circumstances. It is a ② <u>critical</u> part of our identity. Cultural memory is a form of collective memory shared by a group of people. Artifacts of the past provide ③ <u>insights</u> into where we came from. Cultural memory is the ④ <u>shortest-lived</u> form of memory. Indeed, cultural memory can ⑤ <u>last</u> for thousands of years.",
+        choices: [
+          "① present",
+          "② critical",
+          "③ insights",
+          "④ shortest-lived",
+          "⑤ last"
+        ],
+        ans: 3, // ④번
+        detail: {
+          core: "④ 바로 뒤 문장에서 '참으로, 문화적 기억은 수천 년 동안 지속될 수 있다(can last for thousands of years)'고 서술하고 있습니다. 따라서 문화적 기억은 '가장 수명이 짧은(shortest-lived)' 것이 아니라 '가장 오래 지속되는(longest-lasting)' 형태의 기억이어야 문맥이 성립합니다.",
+          traps: "② critical은 '비판적인'이라는 뜻도 있지만 여기서는 '결정적인, 중대한(= crucial, vital)'이라는 핵심 의미로 쓰였습니다.",
+          point: "문맥 어휘 유형은 항상 <b>단어 바로 뒤에 이어지는 부연 설명 문장(Indeed, it can last for thousands of years)</b> 속에 정답의 결정적 단서가 들어 있습니다."
+        }
+      }
+    ],
+    tf: [
+      {
+        no: 1,
+        q: "Memory helps people learn from past experiences and use what they learn in present situations.",
+        ans: "T",
+        exp: "참(T): 본문에서 기억은 과거의 경험으로부터 배우고 현재 상황에 지식을 적용하게 해준다고 언급되었습니다."
+      },
+      {
+        no: 2,
+        q: "Culture refers to the way of life shared by people in a particular group.",
+        ans: "T",
+        exp: "참(T): 본문에서 culture를 'the way of life specific to a group of people'로 정의하고 있습니다."
+      },
+      {
+        no: 3,
+        q: "Cultural memory is only a personal memory that cannot be shared with others.",
+        ans: "F",
+        exp: "거짓(F): 문화적 기억은 한 집단이 공유하는 '집단적 기억(collective memory)'의 형태입니다."
+      },
+      {
+        no: 4,
+        q: "Museums and historical monuments can be places where cultural memory is stored.",
+        ans: "T",
+        exp: "참(T): 문화적 기억은 종종 박물관이나 역사적 기념물 같은 대상물에 저장된다고 명시되어 있습니다."
+      },
+      {
+        no: 5,
+        q: "The passage says that cultural memory usually disappears after one generation.",
+        ans: "F",
+        exp: "거짓(F): 문화적 기억은 수천 년 동안 지속될 수 있는 가장 오래 지속되는 기억 형태라고 설명되었습니다."
+      }
+    ]
+  }
+};
+
+// Sentence Scramble Data for Mode 2
+const SCRAMBLES = {
+  1: [
+    {
+      ko: "축제는 음악, 음식, 즐거움으로 가득 찬 특별한 날 그 이상이다.",
+      words: ["Festivals", "are", "more than", "special days", "filled with", "music,", "food,", "and fun."],
+      full: "Festivals are more than special days filled with music, food, and fun."
+    },
+    {
+      ko: "이러한 공유된 경험들은 사람들 사이의 유대를 강화하는 데 도움이 된다.",
+      words: ["These shared experiences", "help", "strengthen", "the bonds", "between", "people."],
+      full: "These shared experiences help strengthen the bonds between people."
+    },
+    {
+      ko: "중요한 것은 사람들이 자신들의 전통 이면에 담긴 의미를 이해하는 것이다.",
+      words: ["What matters is that", "people understand", "the meaning", "behind", "their traditions."],
+      full: "What matters is that people understand the meaning behind their traditions."
+    }
+  ],
+  2: [
+    {
+      ko: "문화적 기억은 한 세대에서 다음 세대로 전승되는 과거에 대한 구성된 이해이다.",
+      words: ["Cultural memory", "is the constructed understanding", "of the past", "that is passed", "from one generation", "to the next."],
+      full: "Cultural memory is the constructed understanding of the past that is passed from one generation to the next."
+    },
+    {
+      ko: "기억은 사람들이 과거의 경험으로부터 배우고 그 지식을 적용할 수 있게 해준다.",
+      words: ["Memory enables people", "to learn from", "past experiences", "and apply", "that knowledge."],
+      full: "Memory enables people to learn from past experiences and apply that knowledge."
+    },
+    {
+      ko: "과거의 유물들은 우리가 어디에서 왔는지에 대한 통찰을 제공한다.",
+      words: ["Artifacts of the past", "provide insights", "into", "where", "we came from."],
+      full: "Artifacts of the past provide insights into where we came from."
+    }
+  ]
+};
+
+// User answer state for Exam mode
+let examAnswers = {};
+
+function switchPassage(id) {
+  curPassage = id;
+  filterWrongOnly = false;
+  document.getElementById('tabP1').className = 'p-tab ' + (id === 1 ? 'active' : '');
+  document.getElementById('tabP2').className = 'p-tab ' + (id === 2 ? 'active' : '');
+  updateHeaderSummary();
+  render();
+}
+
+function switchMode(m) {
+  curMode = m;
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById('btnMode' + i).className = 'm-btn ' + (i === m ? 'active' : '');
+  }
+  render();
+}
+
+function updateHeaderSummary() {
+  const wrongList = getWrongList(curPassage);
+  const badge = document.getElementById('studentBadge');
+  const sum = document.getElementById('scoreSummary');
+  if (badge) badge.innerText = `👤 ${curStudent} (${curBan})`;
+  if (sum) {
+    if (wrongList.length === 0) {
+      sum.innerHTML = `🎯 <span style="color:#10b981;">오답 0개 (퍼펙트)</span>`;
+    } else {
+      sum.innerHTML = `🚨 <span style="color:#ef4444;">오답 ${wrongList.length}개 재도전 대기</span>`;
+    }
+  }
+}
+
+function render() {
+  const p = PASSAGES[curPassage];
+  const area = document.getElementById('contentArea');
+  updateHeaderSummary();
+  
+  if (curMode === 1) {
+    renderReadingMode(p, area);
+  } else if (curMode === 2) {
+    renderBlankMode(p, area);
+  } else if (curMode === 3) {
+    renderExamMode(p, area);
+  } else if (curMode === 4) {
+    renderWorksheetMode(p, area);
+  }
+}
+
+// 1. Reading Mode Renderer
+function renderReadingMode(p, area) {
+  let html = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📖 ${p.title}</div>
+        <span class="badge">${p.sub}</span>
+      </div>
+      <div class="passage-box">
+  `;
+
+  p.paragraphs.forEach(para => {
+    html += `
+      <div class="p-para">
+        <button class="tts-chip" onclick="speak('${para.en.replace(/'/g, "\'")}')">🔊 문단 낭독</button>
+        <div style="font-weight:500;">${para.en}</div>
+        <div class="p-para-ko">${para.ko}</div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+      <div style="margin-top:16px;">
+        <div style="font-family:'MaplestoryOTFBold'; font-size:15px; color:#ff4081; margin-bottom:10px;">💡 단락별 핵심 어법 & 구문 포인트</div>
+  `;
+
+  p.paragraphs.forEach(para => {
+    para.syntaxes.forEach(s => {
+      html += `
+        <div class="syntax-card">
+          <div class="title">📌 ${s.title}</div>
+          <div class="desc">${s.desc}</div>
+        </div>
+      `;
+    });
+  });
+
+  html += `
+      </div>
+      <div style="margin-top:20px;">
+        <button class="btn-main" onclick="switchMode(2)">✏️ 빈칸 암기 챌린지 시작하기 →</button>
+      </div>
+    </div>
+  `;
+  area.innerHTML = html;
+}
+
+// 2. Blank & Scramble Mode Renderer
+function renderBlankMode(p, area) {
+  const scrambles = SCRAMBLES[curPassage];
+  let html = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">✏️ 단계별 지문 빈칸 & 서술형 훈련</div>
+        <span class="badge">STEP 1 & 2</span>
+      </div>
+      <div style="font-size:14px; color:#64748b; margin-bottom:14px;">
+        💡 <b>1단계:</b> 회색 빈칸을 터치하면 가려진 핵심 단어가 열립니다.<br>
+        💡 <b>2단계:</b> 아래 단어 칩을 올바른 순서대로 터치하여 서술형 문장을 완성하세요!
+      </div>
+
+      <!-- Blank Passage -->
+      <div class="passage-box" style="margin-bottom:24px;">
+        <div style="font-weight:700; color:#ff4081; margin-bottom:10px;">[1단계] 핵심 키워드 빈칸 뚫기</div>
+  `;
+
+  p.paragraphs.forEach(para => {
+    let blankedEn = para.en;
+    const keywords = [
+      "filled with", "culture", "community", "traditions", "Thanksgiving", "gratitude",
+      "what they have", "represent", "celebrations", "strengthen", "bonds", "generation",
+      "never changes", "meet new needs", "What matters", "constructed", "recollection",
+      "enables", "identity", "collective memory", "access", "insights", "longest-lasting", "thousands of years"
+    ];
+    keywords.forEach(kw => {
+      const reg = new RegExp('\\b' + kw + '\\b', 'gi');
+      blankedEn = blankedEn.replace(reg, `<span class="blank-word" onclick="revealBlank(this)">${kw}</span>`);
+    });
+
+    html += `<div class="p-para" style="margin-bottom:12px;">${blankedEn}</div>`;
+  });
+
+  html += `
+      </div>
+
+      <!-- Scramble Sentence Section -->
+      <div style="margin-top:24px;">
+        <div style="font-family:'MaplestoryOTFBold'; font-size:16px; color:#ff4081; margin-bottom:12px;">[2단계] 내신 킬러 서술형 어순 배열 훈련</div>
+  `;
+
+  scrambles.forEach((sc, idx) => {
+    const shuffled = [...sc.words].sort(() => Math.random() - 0.5);
+    html += `
+      <div class="scramble-box" id="scBox_${idx}">
+        <div style="font-weight:700; font-size:14px; color:#be185d; margin-bottom:6px;">Q${idx+1}. ${sc.ko}</div>
+        <div class="scramble-target" id="scTarget_${idx}">
+          <span style="color:#94a3b8; font-size:13px;" id="scPlaceholder_${idx}">단어 칩을 순서대로 터치하세요...</span>
+        </div>
+        <div class="scramble-source" id="scSource_${idx}">
+          ${shuffled.map((w, wIdx) => `<button class="word-chip" data-idx="${idx}" data-word="${w}" onclick="pickWord(this, ${idx})">${w}</button>`).join('')}
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
+          <button class="tool-btn" style="padding:4px 10px; font-size:12px;" onclick="resetScramble(${idx})">↺ 초기화</button>
+          <button class="tool-btn" style="padding:4px 10px; font-size:12px; background:#ffe4ee; color:#ff4081;" onclick="checkScramble(${idx})">✓ 정답 확인</button>
+        </div>
+        <div id="scFeedback_${idx}" style="margin-top:8px; font-size:13px; font-weight:700;"></div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+      <div style="margin-top:20px;">
+        <button class="btn-main" onclick="switchMode(3)">🎯 내신 1등급 변형 모의고사 풀기 →</button>
+      </div>
+    </div>
+  `;
+  area.innerHTML = html;
+}
+
+function revealBlank(el) {
+  if (!el.classList.contains('revealed')) {
+    el.classList.add('revealed');
+    playCorrectSound();
+  }
+}
+
+// Scramble Interaction Logic
+const scrambleState = {};
+
+function pickWord(btn, idx) {
+  if (btn.classList.contains('used')) return;
+  if (!scrambleState[idx]) scrambleState[idx] = [];
+  
+  const word = btn.getAttribute('data-word');
+  scrambleState[idx].push({ word: word, btn: btn });
+  btn.classList.add('used');
+
+  const target = document.getElementById('scTarget_' + idx);
+  const ph = document.getElementById('scPlaceholder_' + idx);
+  if (ph) ph.style.display = 'none';
+
+  const span = document.createElement('span');
+  span.className = 'word-chip';
+  span.style.background = '#fdf2f8';
+  span.innerText = word;
+  span.onclick = function() {
+    target.removeChild(span);
+    btn.classList.remove('used');
+    scrambleState[idx] = scrambleState[idx].filter(item => item.btn !== btn);
+    if (scrambleState[idx].length === 0 && ph) ph.style.display = 'inline';
+  };
+  target.appendChild(span);
+}
+
+function resetScramble(idx) {
+  scrambleState[idx] = [];
+  const target = document.getElementById('scTarget_' + idx);
+  target.innerHTML = `<span style="color:#94a3b8; font-size:13px;" id="scPlaceholder_${idx}">단어 칩을 순서대로 터치하세요...</span>`;
+  const src = document.getElementById('scSource_' + idx);
+  const btns = src.querySelectorAll('.word-chip');
+  btns.forEach(b => b.classList.remove('used'));
+  const fb = document.getElementById('scFeedback_' + idx);
+  if (fb) fb.innerText = '';
+}
+
+function checkScramble(idx) {
+  const sc = SCRAMBLES[curPassage][idx];
+  const current = (scrambleState[idx] || []).map(item => item.word).join(' ');
+  const fb = document.getElementById('scFeedback_' + idx);
+  
+  if (current === sc.words.join(' ')) {
+    playCorrectSound();
+    fb.innerHTML = '<span style="color:#10b981;">🎉 완벽합니다! 100점 만점 서술형 완성!</span>';
+  } else {
+    playWrongSound();
+    fb.innerHTML = `<span style="color:#ef4444;">❌ 아쉬워요! 다시 해보거나 정답을 확인하세요.<br>👉 정답: <b>${sc.full}</b></span>`;
+  }
+}
+
+// 3. Exam Problem Solving Mode Renderer (WITH RETRY & ULTRA-DETAILED EXPLANATIONS)
+function renderExamMode(p, area) {
+  const wrongList = getWrongList(curPassage);
+  const questionsToRender = filterWrongOnly ? p.exams.filter((_, idx) => wrongList.includes(idx)) : p.exams;
+
+  let html = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          🎯 내신 1등급 변형 모의고사
+          ${filterWrongOnly ? '<span style="color:#ef4444; font-size:14px;">[오답 재도전 클리닉]</span>' : ''}
+        </div>
+        <span class="badge">총 ${questionsToRender.length}문항</span>
+      </div>
+      <div style="font-size:13.5px; color:#64748b; margin-bottom:16px;">
+        💡 틀리면 <b>[🔄 오답 즉시 재도전]</b> 버튼을 눌러 다시 풀어볼 수 있고, 왜 틀렸는지 <b>상세 오답 함정</b>까지 완벽히 분석해 드립니다!
+      </div>
+  `;
+
+  if (filterWrongOnly && questionsToRender.length === 0) {
+    html += `
+      <div style="text-align:center; padding:30px 10px;">
+        <div style="font-size:42px; margin-bottom:10px;">🎉</div>
+        <div style="font-family:'MaplestoryOTFBold'; font-size:18px; color:#10b981; margin-bottom:6px;">오답 0개! 모든 문제를 완벽히 정복했습니다!</div>
+        <div style="font-size:14px; color:#64748b; margin-bottom:20px;">김영인 학생의 실력이 1등급 수준으로 탄탄해졌어요.</div>
+        <button class="btn-main" onclick="filterWrongOnly=false; render();">전체 문제 다시 풀기</button>
+      </div>
+    `;
+    area.innerHTML = html;
+    return;
+  }
+
+  p.exams.forEach((ex, originalIdx) => {
+    if (filterWrongOnly && !wrongList.includes(originalIdx)) return;
+
+    html += `
+      <div class="prob-box" id="examQ_${originalIdx}">
+        <div class="prob-q">
+          <span class="prob-type-badge">${ex.type}</span>
+          Q${originalIdx + 1}. ${ex.q}
+        </div>
+        <div class="prob-passage">${ex.passage}</div>
+        <div class="prob-choices" id="choices_${originalIdx}">
+          ${ex.choices.map((c, cIdx) => `
+            <button class="choice-btn" id="btn_${originalIdx}_${cIdx}" onclick="submitExamAns(${originalIdx}, ${cIdx})">
+              <span class="choice-num">${cIdx + 1}</span>
+              <span>${c}</span>
+            </button>
+          `).join('')}
+        </div>
+
+        <!-- Ultra-Detailed Explanation & Retry Section -->
+        <div class="explanation-box" id="exp_${originalIdx}">
+          <div class="exp-header">
+            <div class="exp-status" id="expStatus_${originalIdx}"></div>
+            <button class="retry-btn" onclick="retryQuestion(${originalIdx})">🔄 이 문제 다시 풀어보기</button>
+          </div>
+          
+          <div class="exp-section">
+            <div class="exp-sec-title">🎯 정답 및 핵심 근거</div>
+            <div class="exp-sec-body">${ex.detail.core}</div>
+          </div>
+
+          <div class="exp-section" style="background:#fff1f2; border:1px solid #fecdd3;">
+            <div class="exp-sec-title" style="color:#e11d48;">⚠️ 학생들이 가장 많이 낚이는 오답 함정 분석</div>
+            <div class="exp-sec-body">${ex.detail.traps}</div>
+          </div>
+
+          <div class="exp-section" style="background:#f0fdf4; border:1px solid #bbf7d0;">
+            <div class="exp-sec-title" style="color:#16a34a;">📌 시험 직전 1초 킬러 공식 & 어법 포인트</div>
+            <div class="exp-sec-body">${ex.detail.point}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  // Clinic bottom bar if there are wrong answers
+  if (wrongList.length > 0 && !filterWrongOnly) {
+    html += `
+      <div class="clinic-bar">
+        <div>
+          <div class="clinic-text">🚨 틀린 문제 ${wrongList.length}개가 남아있습니다!</div>
+          <div style="font-size:12.5px; color:#e11d48; margin-top:2px;">틀린 문제만 집중적으로 모아서 100점 맞을 때까지 훈련하세요.</div>
+        </div>
+        <button class="tool-btn" style="background:#ef4444; color:#fff; border:none; padding:8px 14px; font-size:13.5px;" onclick="filterWrongOnly=true; render();">
+          오답만 다시 풀기 →
+        </button>
+      </div>
+    `;
+  }
+
+  html += `
+      <div style="margin-top:20px;">
+        <button class="btn-main" onclick="switchMode(4)">📋 학교 워크시트 T/F & 요약 풀기 →</button>
+      </div>
+    </div>
+  `;
+  area.innerHTML = html;
+}
+
+function submitExamAns(qIdx, cIdx) {
+  const p = PASSAGES[curPassage];
+  const ex = p.exams[qIdx];
+  const box = document.getElementById('choices_' + qIdx);
+  const btns = box.querySelectorAll('.choice-btn');
+  const expBox = document.getElementById('exp_' + qIdx);
+  const statusEl = document.getElementById('expStatus_' + qIdx);
+  const qCard = document.getElementById('examQ_' + qIdx);
+
+  btns.forEach((btn, idx) => {
+    btn.classList.add('locked');
+    btn.style.pointerEvents = 'none';
+    if (idx === ex.ans) {
+      btn.classList.add('correct');
+    } else if (idx === cIdx && cIdx !== ex.ans) {
+      btn.classList.add('wrong');
+    }
+  });
+
+  let wrongList = getWrongList(curPassage);
+
+  if (cIdx === ex.ans) {
+    playCorrectSound();
+    qCard.classList.remove('is-wrong');
+    qCard.classList.add('is-correct');
+    statusEl.className = 'exp-status correct';
+    statusEl.innerHTML = '🎉 <b>정답입니다! 완벽해요!</b>';
+    // Remove from wrong list if present
+    wrongList = wrongList.filter(id => id !== qIdx);
+  } else {
+    playWrongSound();
+    qCard.classList.remove('is-correct');
+    qCard.classList.add('is-wrong');
+    statusEl.className = 'exp-status wrong';
+    statusEl.innerHTML = '❌ <b>아쉬워요! 아래 오답 함정을 읽고 다시 풀어보세요.</b>';
+    // Add to wrong list if not present
+    if (!wrongList.includes(qIdx)) wrongList.push(qIdx);
+  }
+
+  saveWrongList(curPassage, wrongList);
+  updateHeaderSummary();
+  expBox.classList.add('show');
+}
+
+function retryQuestion(qIdx) {
+  const box = document.getElementById('choices_' + qIdx);
+  const btns = box.querySelectorAll('.choice-btn');
+  const expBox = document.getElementById('exp_' + qIdx);
+  const qCard = document.getElementById('examQ_' + qIdx);
+
+  btns.forEach(btn => {
+    btn.className = 'choice-btn';
+    btn.style.pointerEvents = 'auto';
+  });
+  expBox.classList.remove('show');
+  qCard.classList.remove('is-wrong', 'is-correct');
+}
+
+// 4. Worksheet Mode Renderer
+function renderWorksheetMode(p, area) {
+  let html = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📋 학교 배포 워크시트 실전 검증</div>
+        <span class="badge">T/F & 요약</span>
+      </div>
+      <div style="font-size:14px; color:#64748b; margin-bottom:16px;">
+        수지중2 학교 유인물 하단에 수록된 <b>[내용 일치 T/F]</b> 확인 문제입니다. 틀리면 즉시 해설을 보고 다시 선택할 수 있습니다!
+      </div>
+  `;
+
+  p.tf.forEach((item, idx) => {
+    html += `
+      <div class="tf-box" id="tfBox_${idx}">
+        <div class="tf-q">(${item.no}) ${item.q}</div>
+        <div class="tf-btns">
+          <button class="tf-btn" id="tfBtn_${idx}_T" onclick="checkTF(${idx}, 'T')">T (일치)</button>
+          <button class="tf-btn" id="tfBtn_${idx}_F" onclick="checkTF(${idx}, 'F')">F (불일치)</button>
+        </div>
+        <div id="tfExp_${idx}" style="display:none; margin-top:10px; font-size:13px; line-height:1.6; background:#fff8fa; border:1px solid #ffd1dc; border-radius:8px; padding:10px;"></div>
+      </div>
+    `;
+  });
+
+  html += `
+      <div style="margin-top:24px; padding-top:16px; border-top:1.5px dashed var(--line);">
+        <button class="btn-main" onclick="switchMode(1)">📖 처음 지문 정독으로 돌아가기</button>
+      </div>
+    </div>
+  `;
+  area.innerHTML = html;
+}
+
+function checkTF(idx, choice) {
+  const p = PASSAGES[curPassage];
+  const item = p.tf[idx];
+  const btnT = document.getElementById(`tfBtn_${idx}_T`);
+  const btnF = document.getElementById(`tfBtn_${idx}_F`);
+  const exp = document.getElementById(`tfExp_${idx}`);
+
+  btnT.classList.remove('selected-t', 'selected-f');
+  btnF.classList.remove('selected-t', 'selected-f');
+
+  if (choice === 'T') btnT.classList.add('selected-t');
+  if (choice === 'F') btnF.classList.add('selected-f');
+
+  exp.style.display = 'block';
+  if (choice === item.ans) {
+    playCorrectSound();
+    exp.innerHTML = `<span style="color:#10b981; font-weight:700;">✅ 완벽한 정답!</span> <br><span style="color:#334155;">${item.exp}</span>`;
+  } else {
+    playWrongSound();
+    exp.innerHTML = `
+      <span style="color:#ef4444; font-weight:700;">❌ 아쉬워요! 오답입니다.</span><br>
+      <span style="color:#334155;">${item.exp}</span><br>
+      <button class="tool-btn" style="margin-top:6px; font-size:12px; padding:4px 10px;" onclick="document.getElementById('tfExp_${idx}').style.display='none';">다시 선택하기</button>
+    `;
+  }
+}
+
+// Initial Boot
+window.onload = function() {
+  updateSoundBtn();
+  updateHeaderSummary();
+  render();
+};
+</script>
+</body>
+</html>
