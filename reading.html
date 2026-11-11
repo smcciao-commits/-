@@ -556,7 +556,31 @@
       color: #be123c;
     }
 
-    /* T/F Quiz Box */
+    /* Section 4: T/F Tabs & Questions */
+    .tf-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tf-tab-btn {
+      flex: 1;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .tf-tab-btn.active {
+      background: #ffe4ee;
+      border-color: #ff4081;
+      color: #ff4081;
+    }
+
     .tf-box {
       background: #fff;
       border: 1.5px solid var(--line);
@@ -686,11 +710,11 @@
     </button>
     <button class="m-btn" id="btnMode3" onclick="switchMode(3)">
       <span class="icon">🎯</span>
-      <span>변형 모의</span>
+      <span>변형 모의(10제)</span>
     </button>
     <button class="m-btn" id="btnMode4" onclick="switchMode(4)">
       <span class="icon">📋</span>
-      <span>워크시트</span>
+      <span>T/F(영5+한5)</span>
     </button>
   </div>
 
@@ -813,8 +837,9 @@ function saveWrongList(pId, list) {
 let curPassage = 1; // 1 or 2
 let curMode = 1; // 1: Read, 2: Blank, 3: Exam, 4: Worksheet
 let filterWrongOnly = false; // clinic mode
+let tfSubTab = 'en'; // 'en' or 'ko'
 
-// Passage Data with ULTRA-DETAILED EXPLANATIONS & TRAP ANALYSES
+// Passage Data with 10 EXAMS & 10 TFS (5 EN + 5 KO) EACH
 const PASSAGES = {
   1: {
     id: 1,
@@ -885,6 +910,42 @@ const PASSAGES = {
         }
       },
       {
+        type: "제목 추론",
+        q: "What is the best title for the passage?",
+        passage: "Festivals are more than special days filled with music, food, and fun... Festivals are not just about celebrating the past; they also help communities connect with the present and the future.",
+        choices: [
+          "Food and Dance: The Universal Elements of Modern Parties",
+          "More Than Just Fun: Why Festivals Matter to Culture and Future",
+          "How Holi Replaced Ancient Religious Ceremonies",
+          "Why New Generations Refuse to Follow Old Traditions",
+          "The Financial Burden of Holding Community Festivals"
+        ],
+        ans: 1, // 2번
+        detail: {
+          core: "첫 문장의 'more than special days filled with music, food, and fun'과 마지막 문장의 'connect with the present and the future'를 아우르는 제목은 ② 'More Than Just Fun: Why Festivals Matter to Culture and Future(단순한 즐거움 그 이상: 축제가 문화와 미래에 중요한 이유)'입니다.",
+          traps: "①은 단순 오락에만 국한된 편협한 제목입니다.<br>④는 신세대가 전통을 거부한다는 내용으로 본문과 정반대입니다.<br>⑤는 경제적 부담에 관한 이야기로 본문 내용에 없습니다.",
+          point: "영어 제목 문제는 지문의 첫 문장(도입부 화두)과 끝 문장(결론)의 핵심 키워드를 모두 관통하는 선지를 골라야 합니다."
+        }
+      },
+      {
+        type: "요지 파악",
+        q: "윗글의 요지로 가장 적절한 것은?",
+        passage: "What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities connect with the present and the future.",
+        choices: [
+          "축제는 전통의 의미를 되새기며 시대에 맞게 계승하여 미래로 나아가게 한다.",
+          "전통 축제의 원형을 조금이라도 변형하면 고유한 문화적 가치가 훼손된다.",
+          "미국의 추수감사절은 인도의 홀리 축제보다 가족 결속력이 더 뛰어나다.",
+          "현대 사회에서는 경제적 효율성을 위해 공동체 축제를 축소해야 한다.",
+          "축제의 주된 목적은 과거의 역사적 사건을 원형 그대로 암기하는 것이다."
+        ],
+        ans: 0, // 1번
+        detail: {
+          core: "글쓴이가 마지막 4단락에서 '중요한 것은 전통의 의미를 이해하고 이를 어떻게 이어나갈지 결정하며, 현재와 미래를 연결하는 것'이라고 강조했으므로 ①번이 정확한 요지입니다.",
+          traps: "②는 '전통의 변화 가능성'을 인정한 본문의 취지와 정면 배치됩니다.<br>③은 두 축제 간의 우열을 가리는 내용으로 본문 근거가 전혀 없습니다.<br>④는 축소 주장이므로 무관합니다.",
+          point: "글쓴이의 주장과 요지는 주로 <b>However</b> 뒤나 <b>What matters is that...</b>과 같은 강조 구문 뒤에 직접적으로 드러납니다."
+        }
+      },
+      {
         type: "글의 순서",
         q: "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
         passage: "<b>[주어진 글]</b><br>Festivals are more than special days filled with music, food, and fun. They also tell us a lot about the culture of a community. Around the world, people celebrate festivals to remember important events, welcome new seasons, and share their traditions with others.<br><br>" +
@@ -937,13 +998,13 @@ const PASSAGES = {
         ],
         ans: 1, // 2번
         detail: {
-          core: "축제가 과거를 기리는 것뿐만 아니라 '현재와 미래를 연결한다'는 것은, 바로 앞 문장의 '전통 이면에 담긴 의미를 이해하면서도 새로운 필요에 맞게 전통을 지속해 나가는 것'을 의미합니다. 즉, 전통의 본질을 살리면서 현대의 생활 방식과 새로운 요구에 유연하게 적응시키는 ②번이 정답입니다.",
+          core: "축제가 과거만을 기리는 것이 아니라 현재와 미래를 연결한다는 것은, 바로 앞 문장의 '전통 이면에 담긴 의미를 이해하면서도 새로운 필요에 맞게 전통을 지속해 나가는 것'을 의미합니다. 즉, 전통의 본질을 살리면서 현대의 생활 방식과 새로운 요구에 유연하게 적응시키는 ②번이 정답입니다.",
           traps: "① 아무런 수정 없이 고대 관습을 보존하는 것은 본문의 취지(변화 수용)와 정반대입니다.<br>③ 과거의 전통을 완전히 버린다(discard)는 극단적인 오답입니다.",
           point: "함축의미 추론 문제는 밑줄 자체의 직역이 아니라, <b>앞뒤 문맥에서 글쓴이가 재진술(Paraphrasing)한 문맥적 정의</b>를 선택지에서 찾아야 합니다."
         }
       },
       {
-        type: "어법상 틀린 것 고르기",
+        type: "어법 오류 찾기 1",
         q: "다음 밑줄 친 ①~⑤ 중, 어법상 틀린 것은?",
         passage: "Festivals are more than special days ① <u>filled with</u> music, food, and fun. Families and friends gather to share a meal and express gratitude for ② <u>what</u> they have. Both show how people express their feelings and values ③ <u>through</u> celebrations. These shared experiences help ④ <u>strengthen</u> the bonds between people. However, culture is not something that never ⑤ <u>change</u>.",
         choices: [
@@ -958,6 +1019,26 @@ const PASSAGES = {
           core: "⑤ 선행사가 'something'이라는 부정대명사(단수 취급)입니다. 따라서 이를 수식하는 주격 관계대명사 that절 안의 동사는 3인칭 단수 현재형인 <b>changes</b>가 되어야 합니다.",
           traps: "① special days 뒤에 과거분사구 filled with가 올바르게 수식하고 있습니다.<br>② for의 목적어로 불완전한 절(they have 뒤 목적어 없음)을 이끄는 관계대명사 what은 완벽히 맞습니다.<br>④ help는 준사역동사로 목적격 보어로 동사원형(strengthen)이나 to부정사를 모두 취할 수 있습니다.",
           point: "<b>[내신 빈출 1순위]</b> 선행사-관계사절 동사의 수 일치: 선행사가 -thing, -one, -body로 끝나는 부정대명사일 때는 단수 취급하여 동사에 -s/-(e)s를 반드시 붙여야 합니다!"
+        }
+      },
+      {
+        type: "어법 양자택일 2",
+        q: "다음 (A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?",
+        passage: "Families and friends gather to share a meal and <b>(A) [express / expressing]</b> gratitude for what they have.<br>" +
+                 "Although these festivals are different, both show how people <b>(B) [express / do they express]</b> their feelings and values.<br>" +
+                 "<b>(C) [What / That]</b> matters is that people understand the meaning behind their traditions.",
+        choices: [
+          "(A) express - (B) express - (C) What",
+          "(A) express - (B) do they express - (C) That",
+          "(A) expressing - (B) express - (C) What",
+          "(A) expressing - (B) do they express - (C) What",
+          "(A) express - (B) do they express - (C) What"
+        ],
+        ans: 0, // 1번
+        detail: {
+          core: "(A) to share a meal과 병렬 연결되어 to에 걸리는 동사원형 express가 맞습니다.<br>(B) 간접의문문 명사절은 '의문사 + 주어 + 동사'의 평서문 어순이므로 people express가 맞습니다.<br>(C) 뒤에 동사 matters의 주어가 빠져있는 불완전한 절을 이끌며 전체 문장의 주어 역할을 하는 관계대명사 What이 맞습니다. (What matters = 중요한 것)",
+          traps: "(A)에서 gathering과 병렬로 착각하여 expressing을 고르기 쉽습니다.<br>(B)에서 직접의문문 어순(do they express)에 낚이지 않도록 주의해야 합니다.",
+          point: "<b>병렬구조 + 간접의문문 어순 + 관계대명사 What</b>은 중2~고1 내신 시험에서 객관식/서술형을 불문하고 매년 100% 출제되는 3대 핵심 문법입니다."
         }
       },
       {
@@ -977,26 +1058,88 @@ const PASSAGES = {
           traps: "④ meet은 '만나다'라는 뜻 외에도 'meet needs/demands (~의 필요/요구를 충족시키다)'라는 매우 중요한 다의어로 쓰였으므로 올바른 쓰임입니다.",
           point: "어휘 문제는 항상 <b>문맥의 순접과 역접</b>, 그리고 <b>반의어 관계(strengthen ↔ weaken)</b>를 확인하는 것이 출제자의 함정을 꿰뚫는 열쇠입니다."
         }
+      },
+      {
+        type: "빈칸 추론",
+        q: "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?",
+        passage: "However, culture is not something that never changes. As people's lives change, traditions may also change to meet new needs. What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities ________________________.",
+        choices: [
+          "compete aggressively against other foreign cultures",
+          "connect with the present and the future",
+          "eliminate ancient cultural symbols to cut government spending",
+          "force young people to memorize all historical rituals",
+          "isolate themselves from neighboring towns"
+        ],
+        ans: 1, // 2번
+        detail: {
+          core: "글의 마지막 결론 문장으로, 축제가 단순히 과거의 유산을 기념하는 것에 그치지 않고, 변화하는 시대 속에서 공동체가 '현재와 미래를 연결하도록(connect with the present and the future)' 돕는다는 내용이 들어가야 합니다.",
+          traps: "① 다른 문화와 공격적으로 경쟁한다는 내용은 지문의 포용적 취지와 정반대입니다.<br>⑤ 이웃 마을로부터 고립시킨다는 오답입니다.",
+          point: "빈칸 추론은 앞 문장의 결론적 요약(전통의 의미를 이해하고 지속하는 법을 결정함)과 대구(not just A but also B)를 이루는 핵심 문맥을 완성해야 합니다."
+        }
       }
     ],
-    tf: [
+    tf_en: [
       {
         no: 1,
-        q: "Festivals are important not only because they offer music, food, and fun, but also because they help people learn about the culture and traditions of a community.",
-        ans: "T",
-        exp: "참(T): 축제는 즐거움뿐만 아니라 지역사회의 문화와 전통을 배우게 해주므로 참입니다."
+        q: "Festivals are meaningful only for entertaining people with music, food, and fun.",
+        ans: "F",
+        exp: "거짓(F): 본문 첫 문장에서 축제는 단순한 오락(music, food, fun) 그 이상이며, 공동체의 문화에 대해 많은 것을 알려준다고 했습니다."
       },
       {
         no: 2,
-        q: "Thanksgiving in the United States and Holi in India celebrate the same events and express the same values, even though people enjoy different activities during the festivals.",
-        ans: "F",
-        exp: "거짓(F): 미국의 추수감사절과 인도의 홀리는 서로 다른 사건을 기념하며(Thanksgiving은 감사, Holi는 봄맞이/새로운 시작), 동일한 사건을 기념하는 것이 아닙니다."
+        q: "During Thanksgiving in the United States, people gather to share a meal and express gratitude for what they have.",
+        ans: "T",
+        exp: "참(T): 미국의 추수감사절 동안 가족과 친구들이 모여 식사를 나누고 가진 것에 감사를 표한다고 명시되었습니다."
       },
       {
         no: 3,
-        q: "Festivals help pass culture from one generation to the next, so people should keep all traditions exactly the same without changing them to meet new needs.",
+        q: "Thanksgiving in the US and Holi in India celebrate the exact same events in identical ways.",
         ans: "F",
-        exp: "거짓(F): 본문 4단락에서 사람들의 삶이 변함에 따라 전통 또한 새로운 필요를 충족하기 위해 변할 수 있다고 명시했습니다."
+        exp: "거짓(F): 미국의 추수감사절과 인도의 홀리는 서로 다른 축제이며(Thanksgiving은 감사, Holi는 봄맞이/새로운 시작), 색가루 던지기 등 방식도 완전히 다릅니다."
+      },
+      {
+        no: 4,
+        q: "By preparing food and celebrating together, people strengthen the bonds within their community.",
+        ans: "T",
+        exp: "참(T): 함께 축제를 준비하고 기념하는 공유된 경험은 사람들 사이의 유대를 강화(strengthen the bonds)한다고 서술되었습니다."
+      },
+      {
+        no: 5,
+        q: "The author argues that cultural traditions should never be modified under any circumstances.",
+        ans: "F",
+        exp: "거짓(F): 글쓴이는 사람들의 삶이 변함에 따라 전통 또한 새로운 필요를 충족하기 위해 변할 수 있다고 설명했습니다."
+      }
+    ],
+    tf_ko: [
+      {
+        no: 1,
+        q: "축제는 사람들에게 즐거움을 주는 것 외에도 한 지역사회의 문화에 대해 많은 것을 알려준다.",
+        ans: "T",
+        exp: "참(T): 본문 1단락 'They also tell us a lot about the culture of a community'와 일치합니다."
+      },
+      {
+        no: 2,
+        q: "인도의 홀리 축제는 서로에게 색가루와 물을 던지며 봄을 맞이하고 기쁨과 새로운 시작을 나타낸다.",
+        ans: "T",
+        exp: "참(T): 본문 2단락에서 홀리는 봄을 환영하며 기쁨과 새로운 시작을 상징한다고 명시했습니다."
+      },
+      {
+        no: 3,
+        q: "젊은 세대들은 혼자 축제에 참여할 때보다 축제를 아예 열지 않을 때 지역사회의 역사를 더 잘 배운다.",
+        ans: "F",
+        exp: "거짓(F): 함께 축제를 기념함으로써(By celebrating together) 젊은이들이 공동체의 역사와 전통을 배운다고 했습니다."
+      },
+      {
+        no: 4,
+        q: "글쓴이에 따르면, 사람들의 삶이 변하더라도 문화와 전통은 새로운 필요에 맞춰 절대 변해서는 안 된다.",
+        ans: "F",
+        exp: "거짓(F): 본문 4단락 'As people's lives change, traditions may also change to meet new needs'에 따라 거짓입니다."
+      },
+      {
+        no: 5,
+        q: "전통에서 정말 중요한 것은 그 이면에 담긴 의미를 이해하고 그것을 어떻게 계승해 나갈지 결정하는 것이다.",
+        ans: "T",
+        exp: "참(T): 'What matters is that people understand the meaning behind their traditions and decide how to continue them'과 정확히 일치합니다."
       }
     ]
   },
@@ -1040,6 +1183,24 @@ const PASSAGES = {
     ],
     exams: [
       {
+        type: "주제 추론",
+        q: "What is the main topic of the passage?",
+        passage: "Cultural memory is the constructed understanding of the past that is passed from one generation to the next... Indeed, cultural memory can last for thousands of years.",
+        choices: [
+          "Technological developments in digital archiving systems",
+          "The definition, preservation, and enduring nature of cultural memory",
+          "Why biological brain memory is superior to written text",
+          "The negative influence of historical monuments on modern architecture",
+          "Methods for erasing unwanted collective memories in society"
+        ],
+        ans: 1, // 2번
+        detail: {
+          core: "본문은 문화적 기억의 개념적 정의, 텍스트·유물·박물관 등을 통한 보존 및 저장 방식, 그리고 수천 년간 지속되는 영속적 가치를 포괄적으로 다루고 있으므로 ②번이 주제로 가장 적절합니다.",
+          traps: "① 디지털 보관 기술은 3단락 인터넷 언급에 불과한 지엽적 내용입니다.<br>③ 생물학적 뇌 기억이 우월하다는 내용은 본문에 없습니다.<br>⑤ 원치 않는 기억을 지우는 방법은 본문과 무관합니다.",
+          point: "대의파악 문제는 글의 핵심 키워드(Cultural Memory)와 그 속성(preservation, enduring nature)이 균형 있게 결합된 선지를 찾아야 합니다."
+        }
+      },
+      {
         type: "제목 추론",
         q: "What is the best title for the passage?",
         passage: "Cultural memory is the constructed understanding of the past that is passed from one generation to the next... Indeed, cultural memory can last for thousands of years.",
@@ -1052,9 +1213,48 @@ const PASSAGES = {
         ],
         ans: 1, // 2번
         detail: {
-          core: "본문은 문화적 기억의 정의(글, 유물 등을 통해 전승되는 과거의 구성된 이해)와 그것이 저장되는 방식(박물관, 기념비, 책, 인터넷), 그리고 수천 년간 지속되는 영속적 가치를 총망라하고 있습니다. 따라서 ② '문화적 기억: 의미, 보존, 그리고 영속하는 힘'이 가장 적절합니다.",
-          traps: "① 인간 뇌와 디지털 메모리의 차이는 글의 초점이 아닙니다.<br>③ 현대 박물관이 관람객을 잃고 있다는 내용은 본문에 전혀 없습니다.<br>⑤ 개인의 회상이 문화유산을 압도한다는 진술은 본문과 반대입니다.",
-          point: "제목 추론 문제는 글 전체의 핵심 소재(Cultural Memory)가 명확히 포함되어 있는지, 지나치게 지엽적이거나 왜곡된 선지가 아닌지 확인해야 합니다."
+          core: "문화적 기억의 의미와 박물관·도서관을 통한 보존, 그리고 수천 년간 지속되는 영속적 힘을 가장 명쾌하게 요약한 제목은 ② 'Cultural Memory: Meaning, Preservation, and Enduring Power'입니다.",
+          traps: "① 인간 뇌와 디지털 메모리의 대조는 글의 핵심 논지가 아닙니다.<br>③ 박물관 관람객 감소는 본문에 전혀 언급되지 않았습니다.",
+          point: "글 전체의 중심 소재인 <b>Cultural Memory</b>가 반드시 제목의 주어로 포함되어 있어야 합니다."
+        }
+      },
+      {
+        type: "요지 파악",
+        q: "윗글의 요지로 가장 적절한 것은?",
+        passage: "Cultural memory is a form of collective memory shared by a group of people. Cultural memory is often stored in objects... Cultural memory is the longest-lasting form of memory. Indeed, cultural memory can last for thousands of years.",
+        choices: [
+          "문화적 기억은 유물과 상징물을 통해 전승되는 집단적 기억으로 수천 년간 지속된다.",
+          "개인의 주관적 기억은 문화적 상징보다 훨씬 더 오래 보존되는 특성이 있다.",
+          "인터넷의 발전으로 인해 박물관이나 유물 같은 물리적 기념물은 불필요해졌다.",
+          "문화적 기억은 오직 문자 기록으로만 전달되며 예술 작품으로는 전승될 수 없다.",
+          "한 세대가 지나면 과거의 집단적 기억은 완전히 소멸되는 것이 자연스럽다."
+        ],
+        ans: 0, // 1번
+        detail: {
+          core: "본문은 문화적 기억이 글, 유물, 의식 등의 상징물을 통해 집단적으로 공유되고 전승되며, 수천 년 동안 지속되는 가장 오래가는 기억 형태라고 설명하므로 ①번이 정확한 요지입니다.",
+          traps: "② 개인의 기억은 유한하며, 가장 오래 지속되는 것은 문화적 기억입니다.<br>④ 본문 1단락에서 paintings(그림), rites(의식)를 통해서도 전승된다고 명시했습니다.<br>⑤ 수천 년간 지속될 수 있다고 했으므로 정반대입니다.",
+          point: "요지 파악 문제는 <b>본문 1단락의 정의</b>와 <b>마지막 단락의 영속성(thousands of years)</b>을 종합한 문장을 선택해야 합니다."
+        }
+      },
+      {
+        type: "글의 순서",
+        q: "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+        passage: "<b>[주어진 글]</b><br>Cultural memory is the constructed understanding of the past that is passed from one generation to the next through text, paintings, monuments, rites, and other symbols.<br><br>" +
+                 "<b>(A)</b> To understand culture, humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into where we came from. Libraries and the internet store a seemingly infinite amount of data...<br>" +
+                 "<b>(B)</b> People may typically think of memory as the recollection of the past. Memory enables people to learn from past experiences and apply that knowledge in present circumstances. It is a critical part of our identity...<br>" +
+                 "<b>(C)</b> So is culture, the way of life specific to a group of people. Cultural memory is a form of collective memory shared by a group of people. Cultural memory is often stored in objects, such as museums or historical monuments...",
+        choices: [
+          "(A) - (C) - (B)",
+          "(B) - (A) - (C)",
+          "(B) - (C) - (A)",
+          "(C) - (A) - (B)",
+          "(C) - (B) - (A)"
+        ],
+        ans: 2, // (B)-(C)-(A)
+        detail: {
+          core: "주어진 글에서 문화적 기억의 정의를 내린 후, (B)에서 일반적인 기억(개인적 회상)의 기능과 정체성 형성을 설명합니다. 이어 (C)에서 'So is culture'로 기억에서 문화 및 집단적 기억으로 개념을 연결하고 박물관 등에 저장됨을 밝힌 뒤, 마지막 (A)에서 책, 유물, 도서관, 인터넷 등 구체적 매체와 수천 년 지속성으로 마무리하는 (B)-(C)-(A)가 가장 자연스럽습니다.",
+          traps: "(C)를 먼저 두면 'So is culture'가 받을 앞선 문장이 없어 어색해집니다.",
+          point: "도치 구문 <b>'So is culture'</b>는 반드시 앞선 긍정 서술(It is a critical part of our identity) 바로 뒤에 이어져야 합니다!"
         }
       },
       {
@@ -1071,7 +1271,7 @@ const PASSAGES = {
         ],
         ans: 2, // [ 3 ]
         detail: {
-          core: "[3] 앞 문장에서 개인의 기억이 우리 정체성의 결정적인 부분(It is a critical part of our identity)이라고 서술했습니다. 주어진 문장의 'So is culture(문화 또한 그러하다)'는 앞 문장의 be동사 서술어(is a critical part...)를 이어받아 문화 역시 정체성의 핵심임을 밝히며, [3] 뒤의 '집단적 기억인 문화적 기억'으로 논리적 다리를 놓아주는 역할을 합니다.",
+          core: "[3] 앞 문장에서 기억이 우리 정체성의 결정적인 부분(It is a critical part of our identity)이라고 서술했습니다. 주어진 문장의 'So is culture(문화 또한 그러하다)'는 앞 문장의 be동사 서술어(is a critical part...)를 이어받아 문화 역시 정체성의 핵심임을 밝히며, [3] 뒤의 '집단적 기억인 문화적 기억'으로 논리적 다리를 놓아주는 역할을 합니다.",
           traps: "[2]에 넣으면 기억이 현재 상황에 지식을 적용하게 해준다는 구체적 기능 설명 사이에 문화 이야기가 불쑥 끼어들어 흐름이 끊깁니다.",
           point: "<b>[도치 구문]</b> 'So + be동사/조동사/do + 주어'는 앞 문장의 긍정 내용을 받아 '~도 또한 그러하다'를 뜻합니다. 반드시 앞 문장에 상응하는 내용이 존재해야 하므로 앞뒤 연결고리가 확고합니다."
         }
@@ -1095,7 +1295,7 @@ const PASSAGES = {
         }
       },
       {
-        type: "어법상 틀린 것 고르기",
+        type: "어법 오류 찾기 1",
         q: "다음 밑줄 친 ①~⑤ 중, 어법상 틀린 것은?",
         passage: "Cultural memory is the constructed understanding of the past that is ① <u>passed</u> from one generation to the next. Memory enables people ② <u>learn</u> from past experiences and apply that knowledge in present circumstances. So ③ <u>is</u> culture, the way of life specific to a group of people. Humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into where we ④ <u>came</u> from. Indeed, cultural memory can ⑤ <u>last</u> for thousands of years.",
         choices: [
@@ -1110,6 +1310,26 @@ const PASSAGES = {
           core: "② enable 동사는 5형식 문형에서 목적격 보어로 반드시 <b>to부정사</b>를 취합니다. 따라서 'enables people <b>to learn</b>'으로 고쳐야 올바른 어법입니다. (뒤의 apply도 to에 걸리는 병렬구조: to learn ... and (to) apply)",
           traps: "① understanding은 전승되는 대상이므로 수동태 is passed가 정확합니다.<br>③ 앞 문장의 'It is a critical part...'를 받는 도치 구문이므로 be동사 is가 맞습니다.<br>⑤ last는 '지속되다'라는 완전자동사이므로 능동형 조동사 can 뒤에 동사원형으로 온 것이 맞습니다.",
           point: "<b>[내신 단골 5형식 동사]</b> enable, allow, encourage, order, expect, cause 등은 목적격 보어로 반드시 to-v를 취합니다! (enable + O + to-v)"
+        }
+      },
+      {
+        type: "어법 양자택일 2",
+        q: "다음 (A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?",
+        passage: "Cultural memory is the constructed understanding of the past that <b>(A) [passed / is passed]</b> from one generation to the next.<br>" +
+                 "To understand culture, humans <b>(B) [access / access to]</b> a vast array of cultural symbols.<br>" +
+                 "Libraries and the internet store a <b>(C) [seemingly / seeming]</b> infinite amount of data.",
+        choices: [
+          "(A) is passed - (B) access - (C) seemingly",
+          "(A) is passed - (B) access to - (C) seemingly",
+          "(A) passed - (B) access - (C) seeming",
+          "(A) passed - (B) access to - (C) seemingly",
+          "(A) is passed - (B) access - (C) seeming"
+        ],
+        ans: 0, // 1번
+        detail: {
+          core: "(A) understanding(이해)은 인간에 의해 전승되는 것이므로 수동태 is passed가 맞습니다.<br>(B) access는 완전타동사이므로 전치사 to를 쓰지 않고 목적어를 바로 취합니다.<br>(C) 뒤에 나오는 형용사 infinite(무한한)를 수식해야 하므로 부사 형태인 seemingly(겉보기에는)가 맞습니다.",
+          traps: "(B)에서 한국어로 '~에 접근하다'라고 해석되어 전치사 to를 붙이기 쉬우나, access는 타동사입니다! (명사일 때만 have access to 사용)",
+          point: "<b>수동태 + 타동사 목적어 수반 + 부사의 형용사 수식</b>은 수능특강 및 중·고등 어법 시험의 최빈출 킬러 포인트입니다."
         }
       },
       {
@@ -1129,38 +1349,88 @@ const PASSAGES = {
           traps: "② critical은 '비판적인'이라는 뜻도 있지만 여기서는 '결정적인, 중대한(= crucial, vital)'이라는 핵심 의미로 쓰였습니다.",
           point: "문맥 어휘 유형은 항상 <b>단어 바로 뒤에 이어지는 부연 설명 문장(Indeed, it can last for thousands of years)</b> 속에 정답의 결정적 단서가 들어 있습니다."
         }
+      },
+      {
+        type: "빈칸 추론",
+        q: "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?",
+        passage: "To understand culture, humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into ________________________. Libraries and the internet store a seemingly infinite amount of data about what it means to be part of a culture.",
+        choices: [
+          "where we came from",
+          "how to erase digital footprints completely",
+          "why ancient wars were inevitable",
+          "what our biological genes will look like in the future",
+          "how to sell antique objects for higher prices"
+        ],
+        ans: 0, // 1번
+        detail: {
+          core: "과거의 유물(Artifacts of the past)은 오늘날의 인간에게 과거의 뿌리와 정체성, 즉 '우리가 어디에서 왔는가(where we came from)'에 대한 통찰을 제공하므로 ①번이 정답입니다.",
+          traps: "② 디지털 발자국 지우기는 본문과 무관합니다.<br>⑤ 골동품을 비싸게 파는 법은 상업적 오답입니다.",
+          point: "빈칸 앞뒤의 'Artifacts of the past(과거의 유물)'와 'what it means to be part of a culture(문화의 일원이 된다는 것)'의 연결고리를 찾는 문제입니다."
+        }
       }
     ],
-    tf: [
+    tf_en: [
       {
         no: 1,
-        q: "Memory helps people learn from past experiences and use what they learn in present situations.",
-        ans: "T",
-        exp: "참(T): 본문에서 기억은 과거의 경험으로부터 배우고 현재 상황에 지식을 적용하게 해준다고 언급되었습니다."
+        q: "Cultural memory is strictly limited to biological memory passed down genetically through DNA.",
+        ans: "F",
+        exp: "거짓(F): 본문 1단락에서 문화적 기억은 생물학적 유전자가 아니라 텍스트, 그림, 기념물, 의식 등의 상징을 통해 전승된다고 명시했습니다."
       },
       {
         no: 2,
-        q: "Culture refers to the way of life shared by people in a particular group.",
+        q: "Memory enables people to learn from past experiences and apply that knowledge in present circumstances.",
         ans: "T",
-        exp: "참(T): 본문에서 culture를 'the way of life specific to a group of people'로 정의하고 있습니다."
+        exp: "참(T): 기억은 과거의 경험으로부터 배우고 현재 상황에 지식을 적용하게 해준다고 명시되었습니다."
       },
       {
         no: 3,
-        q: "Cultural memory is only a personal memory that cannot be shared with others.",
+        q: "Culture refers to a universal lifestyle that is completely identical for all human groups around the world.",
         ans: "F",
-        exp: "거짓(F): 문화적 기억은 한 집단이 공유하는 '집단적 기억(collective memory)'의 형태입니다."
+        exp: "거짓(F): 문화는 특정 집단에 고유한 생활 방식(the way of life specific to a group of people)입니다."
       },
       {
         no: 4,
-        q: "Museums and historical monuments can be places where cultural memory is stored.",
+        q: "Artifacts from the past help humans gain valuable insights into their origins and historical roots.",
         ans: "T",
-        exp: "참(T): 문화적 기억은 종종 박물관이나 역사적 기념물 같은 대상물에 저장된다고 명시되어 있습니다."
+        exp: "참(T): 과거의 유물들은 우리가 어디에서 왔는지에 대한 통찰을 제공한다(insights into where we came from)고 설명되었습니다."
       },
       {
         no: 5,
-        q: "The passage says that cultural memory usually disappears after one generation.",
+        q: "The passage states that cultural memory usually disappears completely within a single generation.",
         ans: "F",
-        exp: "거짓(F): 문화적 기억은 수천 년 동안 지속될 수 있는 가장 오래 지속되는 기억 형태라고 설명되었습니다."
+        exp: "거짓(F): 문화적 기억은 수천 년 동안 지속될 수 있는 가장 오래 지속되는 기억 형태(longest-lasting form)입니다."
+      }
+    ],
+    tf_ko: [
+      {
+        no: 1,
+        q: "문화적 기억은 글, 그림, 기념비, 의식 및 다른 상징물들을 통해 다음 세대로 전승된다.",
+        ans: "T",
+        exp: "참(T): 본문 1단락의 정의와 정확히 일치합니다."
+      },
+      {
+        no: 2,
+        q: "기억은 과거의 경험으로부터 배운 지식을 현재의 상황에 적용할 수 있도록 돕는다.",
+        ans: "T",
+        exp: "참(T): 2단락 'Memory enables people to learn from past experiences and apply that knowledge in present circumstances'와 일치합니다."
+      },
+      {
+        no: 3,
+        q: "문화적 기억은 개인이 혼자서만 간직하는 사적인 기억일 뿐, 집단이 공유할 수는 없다.",
+        ans: "F",
+        exp: "거짓(F): 문화적 기억은 한 집단의 사람들이 공유하는 '집단적 기억(collective memory)'의 형태입니다."
+      },
+      {
+        no: 4,
+        q: "과거의 유물들과 인터넷, 도서관은 우리가 어디에서 왔는지에 대한 통찰과 방대한 데이터를 제공한다.",
+        ans: "T",
+        exp: "참(T): 3단락에서 유물과 도서관, 인터넷의 역할을 명확히 설명하고 있습니다."
+      },
+      {
+        no: 5,
+        q: "문화적 기억은 인간이 만든 기억 형태 중 가장 수명이 짧아서 몇십 년 이상 지속되기 어렵다.",
+        ans: "F",
+        exp: "거짓(F): 가장 오래 지속되는 기억 형태(longest-lasting)이며 수천 년 동안 지속될 수 있다고 명시했습니다."
       }
     ]
   }
@@ -1203,9 +1473,6 @@ const SCRAMBLES = {
     }
   ]
 };
-
-// User answer state for Exam mode
-let examAnswers = {};
 
 function switchPassage(id) {
   curPassage = id;
@@ -1368,7 +1635,7 @@ function renderBlankMode(p, area) {
   html += `
       </div>
       <div style="margin-top:20px;">
-        <button class="btn-main" onclick="switchMode(3)">🎯 내신 1등급 변형 모의고사 풀기 →</button>
+        <button class="btn-main" onclick="switchMode(3)">🎯 내신 1등급 변형 모의고사(10제) 풀기 →</button>
       </div>
     </div>
   `;
@@ -1435,7 +1702,7 @@ function checkScramble(idx) {
   }
 }
 
-// 3. Exam Problem Solving Mode Renderer (WITH RETRY & ULTRA-DETAILED EXPLANATIONS)
+// 3. Exam Mode (10 Questions with Retry & Deep Analysis)
 function renderExamMode(p, area) {
   const wrongList = getWrongList(curPassage);
   const questionsToRender = filterWrongOnly ? p.exams.filter((_, idx) => wrongList.includes(idx)) : p.exams;
@@ -1447,7 +1714,7 @@ function renderExamMode(p, area) {
           🎯 내신 1등급 변형 모의고사
           ${filterWrongOnly ? '<span style="color:#ef4444; font-size:14px;">[오답 재도전 클리닉]</span>' : ''}
         </div>
-        <span class="badge">총 ${questionsToRender.length}문항</span>
+        <span class="badge">총 ${questionsToRender.length}문항 (10제 완비)</span>
       </div>
       <div style="font-size:13.5px; color:#64748b; margin-bottom:16px;">
         💡 틀리면 <b>[🔄 오답 즉시 재도전]</b> 버튼을 눌러 다시 풀어볼 수 있고, 왜 틀렸는지 <b>상세 오답 함정</b>까지 완벽히 분석해 드립니다!
@@ -1458,9 +1725,9 @@ function renderExamMode(p, area) {
     html += `
       <div style="text-align:center; padding:30px 10px;">
         <div style="font-size:42px; margin-bottom:10px;">🎉</div>
-        <div style="font-family:'MaplestoryOTFBold'; font-size:18px; color:#10b981; margin-bottom:6px;">오답 0개! 모든 문제를 완벽히 정복했습니다!</div>
+        <div style="font-family:'MaplestoryOTFBold'; font-size:18px; color:#10b981; margin-bottom:6px;">오답 0개! 10문제를 완벽히 정복했습니다!</div>
         <div style="font-size:14px; color:#64748b; margin-bottom:20px;">김영인 학생의 실력이 1등급 수준으로 탄탄해졌어요.</div>
-        <button class="btn-main" onclick="filterWrongOnly=false; render();">전체 문제 다시 풀기</button>
+        <button class="btn-main" onclick="filterWrongOnly=false; render();">전체 10문제 다시 풀기</button>
       </div>
     `;
     area.innerHTML = html;
@@ -1529,7 +1796,7 @@ function renderExamMode(p, area) {
 
   html += `
       <div style="margin-top:20px;">
-        <button class="btn-main" onclick="switchMode(4)">📋 학교 워크시트 T/F & 요약 풀기 →</button>
+        <button class="btn-main" onclick="switchMode(4)">📋 T/F 확인 문제(영5+한5) 풀기 →</button>
       </div>
     </div>
   `;
@@ -1563,7 +1830,6 @@ function submitExamAns(qIdx, cIdx) {
     qCard.classList.add('is-correct');
     statusEl.className = 'exp-status correct';
     statusEl.innerHTML = '🎉 <b>정답입니다! 완벽해요!</b>';
-    // Remove from wrong list if present
     wrongList = wrongList.filter(id => id !== qIdx);
   } else {
     playWrongSound();
@@ -1571,7 +1837,6 @@ function submitExamAns(qIdx, cIdx) {
     qCard.classList.add('is-wrong');
     statusEl.className = 'exp-status wrong';
     statusEl.innerHTML = '❌ <b>아쉬워요! 아래 오답 함정을 읽고 다시 풀어보세요.</b>';
-    // Add to wrong list if not present
     if (!wrongList.includes(qIdx)) wrongList.push(qIdx);
   }
 
@@ -1594,28 +1859,38 @@ function retryQuestion(qIdx) {
   qCard.classList.remove('is-wrong', 'is-correct');
 }
 
-// 4. Worksheet Mode Renderer
+// 4. Worksheet Mode Renderer (5 English + 5 Korean = 10 TF questions)
 function renderWorksheetMode(p, area) {
   let html = `
     <div class="card">
       <div class="card-header">
-        <div class="card-title">📋 학교 배포 워크시트 실전 검증</div>
-        <span class="badge">T/F & 요약</span>
+        <div class="card-title">📋 실전 T/F 내용 일치·불일치</div>
+        <span class="badge">총 10문항 (영어 5제 + 한글 5제)</span>
       </div>
       <div style="font-size:14px; color:#64748b; margin-bottom:16px;">
-        수지중2 학교 유인물 하단에 수록된 <b>[내용 일치 T/F]</b> 확인 문제입니다. 틀리면 즉시 해설을 보고 다시 선택할 수 있습니다!
+        원장님 요청대로 <b>영어 5문제 + 한글 5문제</b>로 구성했습니다. 탭을 눌러 영/한 문제를 각각 풀어보세요!
+      </div>
+
+      <div class="tf-tabs">
+        <button class="tf-tab-btn ${tfSubTab==='en'?'active':''}" onclick="tfSubTab='en'; render();">🔤 영어 T/F (5문항)</button>
+        <button class="tf-tab-btn ${tfSubTab==='ko'?'active':''}" onclick="tfSubTab='ko'; render();">🇰🇷 한글 T/F (5문항)</button>
       </div>
   `;
 
-  p.tf.forEach((item, idx) => {
+  const tfList = tfSubTab === 'en' ? p.tf_en : p.tf_ko;
+
+  tfList.forEach((item, idx) => {
     html += `
-      <div class="tf-box" id="tfBox_${idx}">
-        <div class="tf-q">(${item.no}) ${item.q}</div>
-        <div class="tf-btns">
-          <button class="tf-btn" id="tfBtn_${idx}_T" onclick="checkTF(${idx}, 'T')">T (일치)</button>
-          <button class="tf-btn" id="tfBtn_${idx}_F" onclick="checkTF(${idx}, 'F')">F (불일치)</button>
+      <div class="tf-box" id="tfBox_${tfSubTab}_${idx}">
+        <div class="tf-q">
+          <span class="badge" style="background:#f1f5f9; color:#475569; margin-right:6px;">Q${idx+1}</span>
+          ${item.q}
         </div>
-        <div id="tfExp_${idx}" style="display:none; margin-top:10px; font-size:13px; line-height:1.6; background:#fff8fa; border:1px solid #ffd1dc; border-radius:8px; padding:10px;"></div>
+        <div class="tf-btns">
+          <button class="tf-btn" id="tfBtn_${tfSubTab}_${idx}_T" onclick="checkTF('${tfSubTab}', ${idx}, 'T')">T (참 / 일치)</button>
+          <button class="tf-btn" id="tfBtn_${tfSubTab}_${idx}_F" onclick="checkTF('${tfSubTab}', ${idx}, 'F')">F (거짓 / 불일치)</button>
+        </div>
+        <div id="tfExp_${tfSubTab}_${idx}" style="display:none; margin-top:10px; font-size:13px; line-height:1.6; background:#fff8fa; border:1px solid #ffd1dc; border-radius:8px; padding:10px;"></div>
       </div>
     `;
   });
@@ -1629,12 +1904,13 @@ function renderWorksheetMode(p, area) {
   area.innerHTML = html;
 }
 
-function checkTF(idx, choice) {
+function checkTF(sub, idx, choice) {
   const p = PASSAGES[curPassage];
-  const item = p.tf[idx];
-  const btnT = document.getElementById(`tfBtn_${idx}_T`);
-  const btnF = document.getElementById(`tfBtn_${idx}_F`);
-  const exp = document.getElementById(`tfExp_${idx}`);
+  const list = sub === 'en' ? p.tf_en : p.tf_ko;
+  const item = list[idx];
+  const btnT = document.getElementById(`tfBtn_${sub}_${idx}_T`);
+  const btnF = document.getElementById(`tfBtn_${sub}_${idx}_F`);
+  const exp = document.getElementById(`tfExp_${sub}_${idx}`);
 
   btnT.classList.remove('selected-t', 'selected-f');
   btnF.classList.remove('selected-t', 'selected-f');
@@ -1651,7 +1927,7 @@ function checkTF(idx, choice) {
     exp.innerHTML = `
       <span style="color:#ef4444; font-weight:700;">❌ 아쉬워요! 오답입니다.</span><br>
       <span style="color:#334155;">${item.exp}</span><br>
-      <button class="tool-btn" style="margin-top:6px; font-size:12px; padding:4px 10px;" onclick="document.getElementById('tfExp_${idx}').style.display='none';">다시 선택하기</button>
+      <button class="tool-btn" style="margin-top:6px; font-size:12px; padding:4px 10px;" onclick="document.getElementById('tfExp_${sub}_${idx}').style.display='none';">다시 선택하기</button>
     `;
   }
 }
