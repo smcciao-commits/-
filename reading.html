@@ -2155,7 +2155,7 @@ const ALL_STUDENTS = [{"ban": "초5", "name": "이하린", "pw": "1212"}, {"ban"
 let tabLeaveCount = parseInt(localStorage.getItem('topedu_tab_leaves') || '0', 10);
 let qStartTimes = {};
 let passageStartTime = Date.now();
-let activeHwBan = '수지중2';
+let activeHwBan = '초·중등부(알림톡대상)';
 
 function ensurePassageTimer() {
   if (!window.totalTimerInterval) {
@@ -2288,9 +2288,21 @@ function generateAlimtalkMsg(sName, ban, bLabel, pLabel, att) {
 
 function renderHomeworkBoardMode(area) {
   const hwData = getHwData();
-  const bans = ['수지중2', '예비고1', '홍천고1', '수지중1', '풍덕초6', '초5', '현암고1', '수지고2', '전체'];
+  const bans = ['초·중등부(알림톡대상)', '수지중2', '예비고1(중3)', '수지중1', '한빛중2', '초등부', '고등부(제외)', '전체'];
 
-  const filtered = (activeHwBan === '전체') ? ALL_STUDENTS : ALL_STUDENTS.filter(s => s.ban === activeHwBan);
+  const highBans = ['홍천고1', '현암고1', '현암고2', '수지고2', '죽전고2'];
+  let filtered = ALL_STUDENTS;
+  if (activeHwBan === '초·중등부(알림톡대상)') {
+    filtered = ALL_STUDENTS.filter(s => !highBans.includes(s.ban) && s.ban !== '선생님');
+  } else if (activeHwBan === '예비고1(중3)') {
+    filtered = ALL_STUDENTS.filter(s => s.ban === '예비고1');
+  } else if (activeHwBan === '초등부') {
+    filtered = ALL_STUDENTS.filter(s => s.ban === '초5' || s.ban === '풍덕초6');
+  } else if (activeHwBan === '고등부(제외)') {
+    filtered = ALL_STUDENTS.filter(s => highBans.includes(s.ban));
+  } else if (activeHwBan !== '전체') {
+    filtered = ALL_STUDENTS.filter(s => s.ban === activeHwBan);
+  }
 
   let html = `
     <div class="card">
@@ -2419,7 +2431,19 @@ function copySingleAlimtalk(sName) {
 
 function copyAllAlimtalk() {
   const hwData = getHwData();
-  const filtered = (activeHwBan === '전체') ? ALL_STUDENTS : ALL_STUDENTS.filter(s => s.ban === activeHwBan);
+  const highBans = ['홍천고1', '현암고1', '현암고2', '수지고2', '죽전고2'];
+  let filtered = ALL_STUDENTS;
+  if (activeHwBan === '초·중등부(알림톡대상)') {
+    filtered = ALL_STUDENTS.filter(s => !highBans.includes(s.ban) && s.ban !== '선생님');
+  } else if (activeHwBan === '예비고1(중3)') {
+    filtered = ALL_STUDENTS.filter(s => s.ban === '예비고1');
+  } else if (activeHwBan === '초등부') {
+    filtered = ALL_STUDENTS.filter(s => s.ban === '초5' || s.ban === '풍덕초6');
+  } else if (activeHwBan === '고등부(제외)') {
+    filtered = ALL_STUDENTS.filter(s => highBans.includes(s.ban));
+  } else if (activeHwBan !== '전체') {
+    filtered = ALL_STUDENTS.filter(s => s.ban === activeHwBan);
+  }
   
   const allTexts = filtered.map(st => {
     const sName = st.name;
