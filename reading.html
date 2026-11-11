@@ -910,6 +910,10 @@
       <span class="icon">📋</span>
       <span>T/F(영5+한5)</span>
     </button>
+    <button class="m-btn" id="btnMode5" onclick="switchMode(5)" style="background:#fff0f5; border:1.5px solid #ff6b9d; color:#ff6b9d;">
+      <span class="icon">👑</span>
+      <span>원장님 숙제·알림톡</span>
+    </button>
   </div>
 
   <!-- Content Container (Dynamic Injection) -->
@@ -1680,7 +1684,7 @@ function switchPassage(id) {
 function switchMode(m) {
   curMode = m;
   for (let i = 1; i <= 5; i++) {
-    const btn = document.getElementById('modeBtn_' + i);
+    const btn = document.getElementById('btnMode' + i);
     if (btn) {
       if (i === m) btn.classList.add('active');
       else btn.classList.remove('active');
