@@ -1170,6 +1170,10 @@ function showHome(){
   var html='<h1>'+esc(me.name)+' 안녕! 👋</h1><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
   html+=drawTodayCard();
   html+=drawAttendanceCalendar();
+  html+='<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg, #fff5f8, #ffeef3);border:2px solid #ff758c;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(255,117,140,0.15)" onclick="location.href=\'reading.html\'">' +
+    '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#ff4081">📖 수지중2 외부지문 독해·어법 변형 마스터</div>' +
+    '<div style="font-size:12px;color:#718096;margin-top:2px">Lesson 7 외부 1·2번 지문 정독 & 7대 킬러 변형 모의 (오답 집중 클리닉)</div></div>' +
+    '<button style="background:#ff758c;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">풀러가기 →</button></div>';
   html+='<button class="btn dark" id="bjoin" style="margin:4px 0 12px">⚔️ 단어 대결 참여</button>';
   if(!h.sets.length) html+='<div class="card">아직 올라온 학습이 없어요.</div>';
   var teach=me.ban==='선생님', tf=S.tf||'';
