@@ -2092,7 +2092,7 @@ function renderExamMode(p, area) {
   // Looked-up Vocabulary Box (Student's custom flashcards)
   const lookedWords = getLookedUpWords();
   html += `
-    <div class="looked-up-box">
+    <div class="looked-up-box" id="lookedUpVocabBox">
       <div class="looked-up-header">
         <div class="looked-up-title">
           <span>📚 내가 문제 풀며 찾아본 단어</span>
@@ -2313,12 +2313,51 @@ function saveLookedUpWords(list) {
   localStorage.setItem('topedu_looked_up_words', JSON.stringify(list));
 }
 
+function updateLookedUpVocabBox() {
+  const box = document.getElementById('lookedUpVocabBox');
+  if (!box) return;
+  const lookedWords = getLookedUpWords();
+  let html = `
+    <div class="looked-up-header">
+      <div class="looked-up-title">
+        <span>📚 내가 문제 풀며 찾아본 단어</span>
+        <span class="badge" style="background:#ffe4ee; color:#e11d48;">총 ${lookedWords.length}개 수록</span>
+      </div>
+      <div style="font-size:12px; color:#64748b;">지문/선지 단어를 누르면 자동 저장됩니다!</div>
+    </div>
+  `;
+  if (lookedWords.length === 0) {
+    html += `
+      <div style="font-size:13.5px; color:#94a3b8; text-align:center; padding:15px 0;">
+        💡 선지나 지문에서 모르는 영단어를 톡 누르면 뜻이 뜨고, 여기에 자동으로 나만의 단어장이 만들어집니다!
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="word-chips-grid">
+        ${lookedWords.map(item => `
+          <div class="vocab-card-chip" onclick="speak('${item.word}')">
+            <span>${item.word}</span>
+            <span class="vocab-meaning">👉 ${item.meaning}</span>
+            <span class="vocab-del-btn" onclick="event.stopPropagation(); removeLookedUpWord('${item.word}')" title="외웠어요! 제거">✕</span>
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #ffd1dc; padding-top:10px;">
+        <span style="font-size:12.5px; color:#64748b;">단어를 누르면 발음(TTS)이 재생됩니다. 다 외운 단어는 ✕를 누르세요.</span>
+        <button class="tool-btn" style="background:#ff6b9d; color:#fff; border:none; padding:4px 12px; font-size:12px;" onclick="saveLookedUpWords([]); updateLookedUpVocabBox();">단어장 전체 비우기</button>
+      </div>
+    `;
+  }
+  box.innerHTML = html;
+}
 function addLookedUpWord(word, meaning) {
   let list = getLookedUpWords();
   if (!list.some(item => item.word.toLowerCase() === word.toLowerCase())) {
     list.push({ word, meaning, date: new Date().toISOString() });
     saveLookedUpWords(list);
     showToast(`📚 '${word}' (${meaning}) 단어가 [내 오답 단어장]에 쏙 담겼습니다!`);
+    updateLookedUpVocabBox();
   }
 }
 
@@ -2326,7 +2365,7 @@ function removeLookedUpWord(word) {
   let list = getLookedUpWords();
   list = list.filter(item => item.word.toLowerCase() !== word.toLowerCase());
   saveLookedUpWords(list);
-  renderExamMode(PASSAGES[curPassage], document.getElementById('contentArea'));
+  updateLookedUpVocabBox();
 }
 
 // Helper: Wrap words in text with clickable spans
