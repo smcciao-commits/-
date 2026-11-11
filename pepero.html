@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TOP EDU 11.11 빼빼로데이 행운의 룰렛 🍫🎡</title>
+  <style>
+    @font-face {
+      font-family: 'MaplestoryOTFBold';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+    body {
+      background: linear-gradient(135deg, #fff0f5 0%, #fde2e4 100%);
+      color: #2d3748;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 12px 40px;
+      overflow-x: hidden;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .badge {
+      display: inline-block;
+      background: #e11d48;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(225,29,72,0.25);
+    }
+    h1 {
+      font-family: 'MaplestoryOTFBold';
+      font-size: 26px;
+      color: #881337;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+      margin-bottom: 4px;
+    }
+    .sub {
+      font-size: 14px;
+      color: #9f1239;
+      font-weight: 600;
+    }
+
+    /* Top Control Bar */
+    .top-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      width: 100%;
+      max-width: 480px;
+      justify-content: center;
+    }
+    .student-select {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 2px solid #fda4af;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      color: #881337;
+      outline: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .icon-btn {
+      background: #fff;
+      border: 2px solid #fda4af;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #881337;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+    .icon-btn:hover { background: #ffe4e6; }
+
+    /* Roulette Container */
+    .roulette-box {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      margin: 10px auto 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #wheelCanvas {
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      box-shadow: 0 10px 30px rgba(136,19,55,0.25), inset 0 0 15px rgba(0,0,0,0.1);
+      border: 8px solid #be123c;
+    }
+    /* Pointer */
+    .pointer {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 32px solid #e11d48;
+      z-index: 10;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+    .center-pin {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #fff 30%, #be123c 100%);
+      border: 4px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      z-index: 8;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Spin Button */
+    .spin-btn {
+      width: 100%;
+      max-width: 340px;
+      padding: 16px;
+      font-family: 'MaplestoryOTFBold';
+      font-size: 22px;
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(190,18,60,0.4);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .spin-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(190,18,60,0.5);
+    }
+    .spin-btn:active {
+      transform: translateY(1px);
+    }
+    .spin-btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* History & Winner Board */
+    .history-card {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 24px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      border: 2px solid #ffe4e6;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px dashed #fecdd3;
+    }
+    .history-title {
+      font-family: 'MaplestoryOTFBold';
+      font-size: 16px;
+      color: #881337;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .history-list {
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff1f2;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      border-left: 4px solid #e11d48;
+    }
+    .history-name { font-weight: 800; color: #881337; }
+    .history-prize { font-weight: 700; color: #be123c; }
+    .history-time { font-size: 11px; color: #94a3b8; }
+
+    /* Win Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      background: #fff;
+      width: 90%;
+      max-width: 380px;
+      border-radius: 24px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 4px solid #fda4af;
+      position: relative;
+    }
+    .modal-overlay.active .modal-box { transform: scale(1); }
+    .modal-emoji { font-size: 54px; margin-bottom: 8px; animation: bounce 1s infinite alternate; }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+    .modal-stu { font-size: 17px; font-weight: 800; color: #e11d48; margin-bottom: 4px; }
+    .modal-prize { font-family: 'MaplestoryOTFBold'; font-size: 26px; color: #881337; margin: 10px 0 16px; word-break: keep-all; }
+    .modal-close-btn {
+      width: 100%;
+      padding: 14px;
+      background: #e11d48;
+      color: #fff;
+      font-family: 'MaplestoryOTFBold';
+      font-size: 18px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(225,29,72,0.35);
+    }
+
+    /* Confetti Canvas */
+    #confettiCanvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="header">
+    <div class="badge">11월 11일 빼빼로데이 스페셜 🎉</div>
+    <h1>수지탑에듀 행운의 룰렛 🎡</h1>
+    <div class="sub">열심히 공부한 탑에듀 학생들을 위한 달콤한 선물! 🍫</div>
+  </div>
+
+  <div class="top-bar">
+    <select id="studentSelect" class="student-select">
+      <option value="직접 도전">👤 도전할 학생 선택 (33명)</option>
+    </select>
+    <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊 소리 ON</button>
+  </div>
+
+  <div class="roulette-box">
+    <div class="pointer"></div>
+    <canvas id="wheelCanvas" width="680" height="680"></canvas>
+    <div class="center-pin" onclick="spinWheel()">🍫</div>
+  </div>
+
+  <button class="spin-btn" id="spinBtn" onclick="spinWheel()">
+    <span>🎡</span> 룰렛 힘차게 돌리기!
+  </button>
+
+  <div class="history-card">
+    <div class="history-header">
+      <div class="history-title">
+        <span>🏆 오늘 당첨된 탑에듀 친구들</span>
+        <span style="font-size:12px; color:#e11d48;" id="winCount">총 0명</span>
+      </div>
+      <button style="border:none; background:none; color:#94a3b8; font-size:12px; cursor:pointer;" onclick="clearHistory()">기록 비우기</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div style="font-size:13px; color:#94a3b8; text-align:center; padding:15px 0;">아직 돌린 친구가 없어요! 첫 번째 주인공은 누구? 🙋‍♂️</div>
+    </div>
+  </div>
+
+  <!-- Win Modal -->
+  <div class="modal-overlay" id="winModal">
+    <div class="modal-box">
+      <div class="modal-emoji" id="winEmoji">🎉</div>
+      <div class="modal-stu" id="winStudent">김영인 학생</div>
+      <div style="font-size:14px; color:#64748b;">축하합니다! 빼빼로데이 선물에 당첨되었어요!</div>
+      <div class="modal-prize" id="winPrize">🥜 아몬드 빼빼로</div>
+      <button class="modal-close-btn" onclick="closeModal()">달콤하게 맛있게 먹기! 😋</button>
+    </div>
+  </div>
+
+  <script>
+    // Audio engine using Web Audio API
+    let audioCtx = null;
+    let isMuted = false;
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    function playTick() {
+      if (isMuted) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+      } catch(e) {}
+    }
+    function playFanfare() {
+      if (isMuted) return;
+      initAudio();
+      try {
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, i) => {
+          setTimeout(() => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.45);
+          }, i * 110);
+        });
+      } catch(e) {}
+    }
+    function toggleSound() {
+      isMuted = !isMuted;
+      document.getElementById('soundBtn').innerText = isMuted ? '🔇 소리 OFF' : '🔊 소리 ON';
+    }
+
+    // Prizes list (8 items)
+    const PRIZES = [
+      { name: "아몬드 빼빼로", emoji: "🥜", color: "#fb7185", bg: "#fff1f2", weight: 20 },
+      { name: "오리지널 빼빼로", emoji: "🍫", color: "#e11d48", bg: "#ffe4e6", weight: 25 },
+      { name: "화이트쿠키 빼빼로", emoji: "🍪", color: "#f43f5e", bg: "#fecdd3", weight: 20 },
+      { name: "누드초코 빼빼로", emoji: "🥢", color: "#be123c", bg: "#ffe4e6", weight: 15 },
+      { name: "크런키 빼빼로", emoji: "⚡", color: "#fb7185", bg: "#fff1f2", weight: 10 },
+      { name: "딸기크림 빼빼로", emoji: "🍓", color: "#e11d48", bg: "#fecdd3", weight: 10 },
+      { name: "👑 [대박] 빼빼로 2개!", emoji: "👑", color: "#9f1239", bg: "#ffe4e6", weight: 5 },
+      { name: "초코필드 빼빼로", emoji: "✨", color: "#f43f5e", bg: "#fff1f2", weight: 15 }
+    ];
+
+    // Academy Students (33 students)
+    const STUDENTS = [
+      "이하린 (초5)", "서호준 (풍덕초6)", "김수현 (수지중1)", "남민준 (수지중1)", "박도윤 (수지중1)", "성아림 (수지중1)", "이가은 (수지중1)",
+      "김영인 (수지중2)", "김지안 (수지중2)", "문지혁 (수지중2)", "오정우 (수지중2)", "이우진 (수지중2)", "지시현 (수지중2)", "이유안 (한빛중2)",
+      "오지민 (예비고1)", "최수린 (예비고1)", "남서연 (예비고1)", "배정연 (예비고1)", "손해준 (예비고1)", "신유림 (예비고1)", "이가현 (예비고1)",
+      "이다인 (예비고1)", "이서연 (예비고1)", "이혜원 (예비고1)", "장하윤 (예비고1)", "조윤아 (예비고1)",
+      "여예진 (홍천고1)", "한서은 (홍천고1)", "이여원 (현암고1)", "정민기 (현암고2)", "김승현 (수지고2)", "박예원 (수지고2)", "박민서 (죽전고2)"
+    ];
+
+    // Populate Student Select
+    const sel = document.getElementById('studentSelect');
+    STUDENTS.forEach(st => {
+      const opt = document.createElement('option');
+      opt.value = st.split(' ')[0];
+      opt.innerText = st;
+      sel.appendChild(opt);
+    });
+
+    // Draw Roulette Wheel
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const numSlices = PRIZES.length;
+    const sliceAngle = (2 * Math.PI) / numSlices;
+    let currentAngle = 0;
+    let isSpinning = false;
+
+    function drawWheel() {
+      const w = canvas.width;
+      const h = canvas.height;
+      const r = w / 2;
+      ctx.clearRect(0, 0, w, h);
+
+      PRIZES.forEach((p, i) => {
+        const start = currentAngle + i * sliceAngle;
+        const end = start + sliceAngle;
+
+        // Slice background
+        ctx.beginPath();
+        ctx.moveTo(r, r);
+        ctx.arc(r, r, r, start, end);
+        ctx.fillStyle = (i % 2 === 0) ? '#fff' : '#ffe4e6';
+        ctx.fill();
+
+        ctx.strokeStyle = '#f43f5e';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Slice text & icon
+        ctx.save();
+        ctx.translate(r, r);
+        ctx.rotate(start + sliceAngle / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = p.color;
+        ctx.font = 'bold 30px "MaplestoryOTFBold", -apple-system, sans-serif';
+        ctx.fillText(p.emoji + ' ' + p.name, r - 35, 10);
+        ctx.restore();
+      });
+    }
+
+    drawWheel();
+
+    // Spin animation logic
+    function spinWheel() {
+      if (isSpinning) return;
+      initAudio();
+      isSpinning = true;
+      document.getElementById('spinBtn').disabled = true;
+
+      const pickIdx = Math.floor(Math.random() * numSlices);
+      const targetPrize = PRIZES[pickIdx];
+
+      // Need target slice at top (-PI/2)
+      // Slice center at: currentAngle + pickIdx * sliceAngle + sliceAngle / 2 = -PI/2 + 2*PI*N
+      const fullRotations = 6 + Math.floor(Math.random() * 4); // 6~9 full spins
+      const targetAngle = - (pickIdx * sliceAngle + sliceAngle / 2) - Math.PI / 2 + (Math.random() * 0.4 - 0.2);
+      const totalDelta = fullRotations * 2 * Math.PI + (targetAngle - (currentAngle % (2 * Math.PI)));
+
+      const duration = 4800; // 4.8 seconds
+      const startTime = performance.now();
+      const initialAngle = currentAngle;
+      let lastTickSlice = -1;
+
+      function animate(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Easing: easeOutCubic
+        const ease = 1 - Math.pow(1 - progress, 3.2);
+
+        currentAngle = initialAngle + totalDelta * ease;
+        drawWheel();
+
+        // Tick sound detection
+        const pointerPos = ( -Math.PI / 2 - currentAngle ) % (2 * Math.PI);
+        const norm = (pointerPos + 4 * Math.PI) % (2 * Math.PI);
+        const curSlice = Math.floor(norm / sliceAngle);
+        if (curSlice !== lastTickSlice) {
+          playTick();
+          lastTickSlice = curSlice;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          isSpinning = false;
+          document.getElementById('spinBtn').disabled = false;
+          onSpinEnd(targetPrize);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function onSpinEnd(prize) {
+      playFanfare();
+      fireConfetti();
+
+      const stuName = sel.value === '직접 도전' ? '탑에듀 학생' : sel.value;
+      document.getElementById('winStudent').innerText = `${stuName} 학생!`;
+      document.getElementById('winPrize').innerText = `${prize.emoji} ${prize.name}`;
+      document.getElementById('winEmoji').innerText = prize.emoji;
+
+      // Add to history
+      addHistory(stuName, prize.emoji + ' ' + prize.name);
+
+      setTimeout(() => {
+        document.getElementById('winModal').classList.add('active');
+      }, 300);
+    }
+
+    function closeModal() {
+      document.getElementById('winModal').classList.remove('active');
+    }
+
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem('topedu_pepero_history') || '[]');
+      } catch(e) { return []; }
+    }
+    function saveHistory(list) {
+      localStorage.setItem('topedu_pepero_history', JSON.stringify(list));
+    }
+    function addHistory(name, prize) {
+      const list = getHistory();
+      const now = new Date();
+      const timeStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+      list.unshift({ name, prize, time: timeStr });
+      saveHistory(list);
+      renderHistory();
+    }
+    function clearHistory() {
+      if (confirm('오늘의 당첨 기록을 모두 비울까요?')) {
+        saveHistory([]);
+        renderHistory();
+      }
+    }
+    function renderHistory() {
+      const list = getHistory();
+      document.getElementById('winCount').innerText = `총 ${list.length}명 당첨`;
+      const container = document.getElementById('historyList');
+      if (list.length === 0) {
+        container.innerHTML = '<div style="font-size:13px; color:#94a3b8; text-align:center; padding:15px 0;">아직 돌린 친구가 없어요! 첫 번째 주인공은 누구? 🙋‍♂️</div>';
+        return;
+      }
+      container.innerHTML = list.map(item => `
+        <div class="history-item">
+          <div>
+            <span class="history-name">${item.name}</span>
+            <span style="font-size:12px; color:#64748b; margin-left:4px;">학생</span>
+          </div>
+          <div class="history-prize">${item.prize}</div>
+          <div class="history-time">${item.time}</div>
+        </div>
+      `).join('');
+    }
+    renderHistory();
+
+    // Confetti Animation
+    function fireConfetti() {
+      const c = document.getElementById('confettiCanvas');
+      const ctx2 = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#e11d48', '#fda4af', '#f43f5e', '#fbbf24', '#38bdf8', '#a855f7', '#10b981'];
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: c.width / 2,
+          y: c.height / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.8) * 18,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 10,
+          opacity: 1
+        });
+      }
+
+      function renderConfetti() {
+        ctx2.clearRect(0, 0, c.width, c.height);
+        let alive = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.45; // gravity
+          p.rotation += p.vRot;
+          p.opacity -= 0.012;
+
+          if (p.opacity > 0) {
+            alive = true;
+            ctx2.save();
+            ctx2.translate(p.x, p.y);
+            ctx2.rotate((p.rotation * Math.PI) / 180);
+            ctx2.fillStyle = p.color;
+            ctx2.globalAlpha = Math.max(0, p.opacity);
+            ctx2.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx2.restore();
+          }
+        });
+        if (alive) requestAnimationFrame(renderConfetti);
+        else ctx2.clearRect(0, 0, c.width, c.height);
+      }
+      renderConfetti();
+    }
+  </script>
+</body>
+</html>
