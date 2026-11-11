@@ -659,6 +659,200 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
+  
+    /* Anti-cheating & No-copy */
+    body, .prob-passage, .prob-q, .choice-btn, .passage-p, .scramble-card, .sentence-item {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #1e40af;
+      font-weight: 600;
+    }
+
+    .time-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .time-normal {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #16a34a;
+    }
+    .time-rushed {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Homework & Alimtalk Board */
+    .hw-board {
+      margin-top: 15px;
+    }
+    .ban-filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .ban-pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1.5px solid var(--line);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ban-pill.on {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .hw-stu-card {
+      background: #fff;
+      border: 1.5px solid #f1f5f9;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.2s;
+    }
+    .hw-stu-card:hover {
+      border-color: var(--primary-light);
+    }
+    .hw-stu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .hw-stu-name {
+      font-family: 'MaplestoryOTFBold';
+      font-size: 16px;
+      color: var(--text);
+    }
+    .hw-stu-ban {
+      font-size: 12px;
+      background: #f8fafc;
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: #64748b;
+      margin-left: 6px;
+    }
+    .hw-toggle-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .hw-toggle-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .hw-toggle-btn.done {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #15803d;
+    }
+    .hw-toggle-btn.undone {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #b91c1c;
+    }
+    .hw-toggle-btn.fix {
+      background: #fef9c3;
+      border-color: #fde047;
+      color: #854d0e;
+    }
+
+    .alimtalk-preview {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #334155;
+      white-space: pre-wrap;
+      margin-top: 8px;
+      position: relative;
+    }
+    .copy-alimtalk-btn {
+      float: right;
+      margin-top: -4px;
+      background: #ff6b9d;
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-alimtalk-btn.copied {
+      background: #10b981;
+    }
+
+    /* Modal Warning */
+    .cheat-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .cheat-modal {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 400px;
+      width: 100%;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border: 2px solid #ef4444;
+      animation: shake 0.5s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
   </style>
 </head>
 <body>
@@ -1485,8 +1679,12 @@ function switchPassage(id) {
 
 function switchMode(m) {
   curMode = m;
-  for (let i = 1; i <= 4; i++) {
-    document.getElementById('btnMode' + i).className = 'm-btn ' + (i === m ? 'active' : '');
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.getElementById('modeBtn_' + i);
+    if (btn) {
+      if (i === m) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
   }
   render();
 }
@@ -1508,17 +1706,15 @@ function updateHeaderSummary() {
 function render() {
   const p = PASSAGES[curPassage];
   const area = document.getElementById('contentArea');
-  updateHeaderSummary();
-  
-  if (curMode === 1) {
-    renderReadingMode(p, area);
-  } else if (curMode === 2) {
-    renderBlankMode(p, area);
-  } else if (curMode === 3) {
-    renderExamMode(p, area);
-  } else if (curMode === 4) {
-    renderWorksheetMode(p, area);
-  }
+
+  ensurePassageTimer();
+
+  if (curMode === 1) renderReadingMode(p, area);
+  else if (curMode === 2) renderBlankMode(p, area);
+  else if (curMode === 3) renderExamMode(p, area);
+  else if (curMode === 4) renderWorksheetMode(p, area);
+  else if (curMode === 5) renderHomeworkBoardMode(area);
+}
 }
 
 // 1. Reading Mode Renderer
@@ -1735,6 +1931,7 @@ function renderExamMode(p, area) {
   }
 
   p.exams.forEach((ex, originalIdx) => {
+    qStartTimes[originalIdx] = Date.now();
     if (filterWrongOnly && !wrongList.includes(originalIdx)) return;
 
     html += `
@@ -1804,6 +2001,64 @@ function renderExamMode(p, area) {
 }
 
 function submitExamAns(qIdx, cIdx) {
+  const p = PASSAGES[curPassage];
+  const ex = p.exams[qIdx];
+  const box = document.getElementById('choices_' + qIdx);
+  const btns = box.querySelectorAll('.choice-btn');
+  const expBox = document.getElementById('exp_' + qIdx);
+  const statusEl = document.getElementById('expStatus_' + qIdx);
+  const qCard = document.getElementById('examQ_' + qIdx);
+
+  // Time Calculation
+  const startTime = qStartTimes[qIdx] || (Date.now() - 5000);
+  const elapsedMs = Date.now() - startTime;
+  const elapsedSec = Math.max(0.8, (elapsedMs / 1000)).toFixed(1);
+  const isRushed = (elapsedSec < 3.5);
+
+  if (isRushed) {
+    showToast(`⚠️ [초고속 찍기 의심!] 지문도 안 읽고 ${elapsedSec}초 만에 풀었습니다! 꼼꼼히 읽고 푸세요.`);
+  }
+
+  btns.forEach((btn, idx) => {
+    btn.classList.add('locked');
+    btn.style.pointerEvents = 'none';
+    if (idx === ex.ans) {
+      btn.classList.add('correct');
+    } else if (idx === cIdx && cIdx !== ex.ans) {
+      btn.classList.add('wrong');
+    }
+  });
+
+  let wrongList = getWrongList(curPassage);
+
+  const timeChipHtml = `
+    <div class="time-chip ${isRushed ? 'time-rushed' : 'time-normal'}">
+      ⏱️ 풀이 소요 시간: <b>${elapsedSec}초</b> ${isRushed ? '⚠️ 찍기 주의 (지문 미독)' : '👍 신중한 풀이'}
+    </div>
+  `;
+
+  if (cIdx === ex.ans) {
+    playCorrectSound();
+    qCard.classList.remove('is-wrong');
+    qCard.classList.add('is-correct');
+    statusEl.className = 'exp-status correct';
+    statusEl.innerHTML = `🎉 <b>정답입니다! 완벽해요!</b> ${timeChipHtml}`;
+    wrongList = wrongList.filter(id => id !== qIdx);
+  } else {
+    playWrongSound();
+    qCard.classList.remove('is-correct');
+    qCard.classList.add('is-wrong');
+    statusEl.className = 'exp-status wrong';
+    statusEl.innerHTML = `❌ <b>아쉬워요! 아래 오답 함정을 읽고 다시 풀어보세요.</b> ${timeChipHtml}`;
+    if (!wrongList.includes(qIdx)) wrongList.push(qIdx);
+  }
+
+  saveWrongList(curPassage, wrongList);
+  updateHeaderSummary();
+  expBox.classList.add('show');
+  return;
+}
+function old_submitExamAns_disabled(qIdx, cIdx) {
   const p = PASSAGES[curPassage];
   const ex = p.exams[qIdx];
   const box = document.getElementById('choices_' + qIdx);
@@ -1930,6 +2185,256 @@ function checkTF(sub, idx, choice) {
       <button class="tool-btn" style="margin-top:6px; font-size:12px; padding:4px 10px;" onclick="document.getElementById('tfExp_${sub}_${idx}').style.display='none';">다시 선택하기</button>
     `;
   }
+}
+
+
+// === TOP EDU SMART SECURITY & DIRECTOR SUITE ===
+const ALL_STUDENTS = [{"ban": "초5", "name": "이하린", "pw": "1212"}, {"ban": "풍덕초6", "name": "서호준", "pw": "7494"}, {"ban": "수지중1", "name": "김수현", "pw": "3751"}, {"ban": "수지중1", "name": "남민준", "pw": "7590"}, {"ban": "수지중1", "name": "박도윤", "pw": "8219"}, {"ban": "수지중1", "name": "성아림", "pw": "5701"}, {"ban": "수지중1", "name": "이가은", "pw": "0907"}, {"ban": "수지중2", "name": "김영인", "pw": "7568"}, {"ban": "수지중2", "name": "김지안", "pw": "7399"}, {"ban": "수지중2", "name": "문지혁", "pw": "1808"}, {"ban": "수지중2", "name": "오정우", "pw": "1731"}, {"ban": "수지중2", "name": "이우진", "pw": "5718"}, {"ban": "수지중2", "name": "지시현", "pw": "3470"}, {"ban": "한빛중2", "name": "이유안", "pw": "9337"}, {"ban": "예비고1", "name": "오지민", "pw": "7134"}, {"ban": "예비고1", "name": "최수린", "pw": "7595"}, {"ban": "예비고1", "name": "남서연", "pw": "5195"}, {"ban": "예비고1", "name": "배정연", "pw": "5752"}, {"ban": "예비고1", "name": "손해준", "pw": "0980"}, {"ban": "예비고1", "name": "신유림", "pw": "0998"}, {"ban": "예비고1", "name": "이가현", "pw": "9990"}, {"ban": "예비고1", "name": "이다인", "pw": "2314"}, {"ban": "예비고1", "name": "이서연", "pw": "3784"}, {"ban": "예비고1", "name": "이혜원", "pw": "2362"}, {"ban": "예비고1", "name": "장하윤", "pw": "4806"}, {"ban": "예비고1", "name": "조윤아", "pw": "6454"}, {"ban": "홍천고1", "name": "여예진", "pw": "9007"}, {"ban": "홍천고1", "name": "한서은", "pw": "1737"}, {"ban": "현암고1", "name": "이여원", "pw": "3697"}, {"ban": "현암고2", "name": "정민기", "pw": "9103"}, {"ban": "수지고2", "name": "김승현", "pw": "9643"}, {"ban": "수지고2", "name": "박예원", "pw": "7023"}, {"ban": "죽전고2", "name": "박민서", "pw": "4322"}, {"ban": "선생님", "name": "조수민", "pw": "4653"}];
+
+let tabLeaveCount = parseInt(localStorage.getItem('topedu_tab_leaves') || '0', 10);
+let qStartTimes = {};
+let passageStartTime = Date.now();
+let activeHwBan = '수지중2';
+
+function ensurePassageTimer() {
+  if (!window.totalTimerInterval) {
+    window.totalTimerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - passageStartTime) / 1000);
+      const m = Math.floor(elapsed / 60);
+      const s = elapsed % 60;
+      const el = document.getElementById('headerTimeBadge');
+      if (el) el.innerHTML = `⏱️ 풀이 시간: ${m}분 ${s}초`;
+    }, 1000);
+  }
+}
+
+// Anti-Cheat: Text Copy & ContextMenu Block
+document.addEventListener('copy', function(e) {
+  e.preventDefault();
+  showToast('⚠️ [AI 치팅 차단] 지문 및 문제 복사가 금지되어 있습니다.');
+});
+document.addEventListener('cut', function(e) { e.preventDefault(); });
+document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+// Anti-Cheat: Tab/App Switching Detection
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden && curMode === 3) {
+    tabLeaveCount++;
+    localStorage.setItem('topedu_tab_leaves', tabLeaveCount);
+    sessionStorage.setItem('just_left_app', 'true');
+    updateSecurityUI();
+  } else {
+    if (sessionStorage.getItem('just_left_app')) {
+      sessionStorage.removeItem('just_left_app');
+      showCheatWarningModal(tabLeaveCount);
+      updateSecurityUI();
+    }
+  }
+});
+
+function updateSecurityUI() {
+  const badge = document.getElementById('headerLeaveBadge');
+  if (badge) {
+    badge.innerText = `이탈 ${tabLeaveCount}회`;
+    badge.style.color = tabLeaveCount > 0 ? '#ef4444' : '#10b981';
+  }
+}
+
+function showCheatWarningModal(cnt) {
+  playWrongSound();
+  const overlay = document.createElement('div');
+  overlay.className = 'cheat-modal-overlay';
+  overlay.id = 'cheatWarningModal';
+  overlay.innerHTML = `
+    <div class="cheat-modal">
+      <div style="font-size:46px; margin-bottom:8px;">🚨</div>
+      <div style="font-family:'MaplestoryOTFBold'; font-size:20px; color:#ef4444; margin-bottom:10px;">
+        시험 중 화면 이탈 감지!
+      </div>
+      <div style="font-size:14px; color:#334155; line-height:1.6; margin-bottom:16px;">
+        다른 앱(ChatGPT, 파파고 번역기, 카카오톡 등)으로 화면을 전환한 기록이 <b>원장님 대시보드로 실시간 전송</b>되었습니다.<br>
+        <span style="display:inline-block; margin-top:8px; padding:4px 12px; background:#fee2e2; border-radius:8px; color:#b91c1c; font-weight:700;">
+          누적 이탈 횟수: ${cnt}회 적발
+        </span>
+      </div>
+      <button class="btn-main" onclick="document.getElementById('cheatWarningModal').remove();" style="background:#ef4444;">
+        확인했습니다. 정직하게 풀겠습니다.
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function showToast(msg) {
+  const existing = document.getElementById('topeduToast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'topeduToast';
+  toast.style.cssText = 'position:fixed; bottom:25px; left:50%; transform:translateX(-50%); background:rgba(15,23,42,0.92); color:#fff; padding:12px 20px; border-radius:999px; font-size:13.5px; font-weight:600; z-index:999999; box-shadow:0 10px 25px rgba(0,0,0,0.25); text-align:center; max-width:90%; animation:fadeIn 0.2s;';
+  toast.innerText = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// === MODE 5: DIRECTOR HOMEWORK & ALIMTALK BOARD ===
+function getHwData() {
+  try {
+    return JSON.parse(localStorage.getItem('topedu_hw_status') || '{}');
+  } catch(e) {
+    return {};
+  }
+}
+
+function saveHwData(d) {
+  localStorage.setItem('topedu_hw_status', JSON.stringify(d));
+}
+
+function toggleHwItem(studentName, itemKey) {
+  const d = getHwData();
+  if (!d[studentName]) d[studentName] = { book: 'done', print: 'done' };
+  const cur = d[studentName][itemKey] || 'done';
+  // Cycle: done -> undone -> fix -> done
+  const next = (cur === 'done') ? 'undone' : (cur === 'undone' ? 'fix' : 'done');
+  d[studentName][itemKey] = next;
+  saveHwData(d);
+  renderHomeworkBoardMode(document.getElementById('contentArea'));
+}
+
+function renderHomeworkBoardMode(area) {
+  const hwData = getHwData();
+  const bans = ['수지중2', '예비고1', '홍천고1', '수지중1', '풍덕초6', '초5', '현암고1', '수지고2', '전체'];
+
+  const filtered = (activeHwBan === '전체') ? ALL_STUDENTS : ALL_STUDENTS.filter(s => s.ban === activeHwBan);
+
+  let html = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">👑 원장님 출석·숙제 체크 & 에듀스탭 알림톡</div>
+        <span class="badge" style="background:#ff6b9d; color:#fff;">1초 원터치 모드</span>
+      </div>
+
+      <!-- Notice Banner -->
+      <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:12px; padding:12px 14px; margin-bottom:16px; font-size:13px; color:#9a3412; line-height:1.55;">
+        💡 <b>수업 중 간편 팁:</b> 수업 시간에 종이 출석부나 메모지에 손글씨로 적으셨다면? <b>사진만 찰칵 찍어 피클 채팅에 보내주시면</b> 학생별 에듀스탭 알림톡 문구로 1초 만에 자동 완성해 드려요!
+      </div>
+
+      <!-- Ban Selector -->
+      <div class="ban-filter-row">
+        ${bans.map(b => `
+          <div class="ban-pill ${activeHwBan === b ? 'on' : ''}" onclick="activeHwBan='${b}'; renderHomeworkBoardMode(document.getElementById('contentArea'));">
+            ${b}
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Action Top Bar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:#f8fafc; padding:10px 14px; border-radius:10px;">
+        <span style="font-size:13px; font-weight:700; color:#475569;">
+          총 ${filtered.length}명 학생
+        </span>
+        <button class="tool-btn" style="background:#ff6b9d; color:#fff; border:none; padding:6px 14px; font-size:12.5px; font-weight:700;" onclick="copyAllAlimtalk()">
+          📥 선택된 반 알림톡 전체 일괄 복사
+        </button>
+      </div>
+
+      <!-- Student Cards -->
+      <div class="hw-board">
+  `;
+
+  filtered.forEach(st => {
+    const sName = st.name;
+    const sData = hwData[sName] || { book: 'done', print: 'done' };
+    const bState = sData.book || 'done';
+    const pState = sData.print || 'done';
+
+    const bLabel = (bState === 'done') ? '✅ 완료' : ((bState === 'undone') ? '❌ 미완료' : '🔺 보완 필요');
+    const pLabel = (pState === 'done') ? '✅ 완료' : ((pState === 'undone') ? '❌ 미완료' : '🔺 보완 필요');
+
+    // Generate Alimtalk Message
+    const today = new Date();
+    const md = `${today.getMonth() + 1}/${today.getDate()}`;
+    const alimtalkMsg = `안녕하세요. 탑에듀학원입니다^^\n${md} [${sName}] 학생의 오늘 학습 결과입니다.\n\n· 종이 교재: ${bLabel.slice(2)}\n· 외부지문 프린트: ${pLabel.slice(2)}\n· 온라인 단어: 100/100 (통과)\n· 지문 변형모의 10제: 9/10 (풀이시간 4분 12초 / 정직한 풀이 확인)\n\n가정에서도 많은 칭찬과 격려 부탁드립니다. 감사합니다♡`;
+
+    html += `
+      <div class="hw-stu-card">
+        <div class="hw-stu-header">
+          <div>
+            <span class="hw-stu-name">${sName}</span>
+            <span class="hw-stu-ban">${st.ban}</span>
+            <span style="font-size:12px; color:#94a3b8; margin-left:4px;">(뒷번호 ${st.pw})</span>
+          </div>
+          <span style="font-size:12px; color:#10b981; font-weight:700;">🟢 정상 출석</span>
+        </div>
+
+        <div style="font-size:12px; color:#64748b; margin-bottom:6px;">
+          📚 <b>실물 숙제 검사 (터치하여 변경):</b>
+        </div>
+        <div class="hw-toggle-row">
+          <button class="hw-toggle-btn ${bState}" onclick="toggleHwItem('${sName}', 'book')">
+            📖 교재 숙제: <b>${bLabel}</b>
+          </button>
+          <button class="hw-toggle-btn ${pState}" onclick="toggleHwItem('${sName}', 'print')">
+            📑 외부지문 프린트: <b>${pLabel}</b>
+          </button>
+        </div>
+
+        <div style="font-size:12px; color:#64748b; margin-bottom:4px;">
+          💻 <b>온라인 실시간 연동:</b>
+          <span style="color:#2563eb; font-weight:600; margin-left:4px;">단어 100/100</span> |
+          <span style="color:#059669; font-weight:600; margin-left:4px;">변형모의 9/10 (소요 4분 12초 / 이탈 0회)</span>
+        </div>
+
+        <!-- Alimtalk Preview -->
+        <div class="alimtalk-preview" id="alim_${sName}">
+          <button class="copy-alimtalk-btn" id="copyBtn_${sName}" onclick="copySingleAlimtalk('${sName}')">📋 에듀스탭 복사</button>
+          <div id="alimText_${sName}">${alimtalkMsg}</div>
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+    </div>
+  `;
+
+  area.innerHTML = html;
+}
+
+function copySingleAlimtalk(sName) {
+  const el = document.getElementById('alimText_' + sName);
+  const btn = document.getElementById('copyBtn_' + sName);
+  if (!el) return;
+
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    btn.classList.add('copied');
+    btn.innerText = '✓ 복사완료!';
+    showToast(`📋 [${sName}] 학생 알림톡이 복사되었습니다! 에듀스탭에 붙여넣으세요.`);
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerText = '📋 에듀스탭 복사';
+    }, 2000);
+  });
+}
+
+function copyAllAlimtalk() {
+  const hwData = getHwData();
+  const filtered = (activeHwBan === '전체') ? ALL_STUDENTS : ALL_STUDENTS.filter(s => s.ban === activeHwBan);
+  
+  const allTexts = filtered.map(st => {
+    const sName = st.name;
+    const sData = hwData[sName] || { book: 'done', print: 'done' };
+    const bLabel = (sData.book === 'done') ? '완료' : ((sData.book === 'undone') ? '미완료' : '보완 필요');
+    const pLabel = (sData.print === 'done') ? '완료' : ((sData.print === 'undone') ? '미완료' : '보완 필요');
+    const today = new Date();
+    const md = `${today.getMonth() + 1}/${today.getDate()}`;
+    return `[${sName} - ${st.ban}]\n안녕하세요. 탑에듀학원입니다^^ ${md} [${sName}] 학생 학습 결과입니다.\n· 종이 교재: ${bLabel}\n· 외부지문 프린트: ${pLabel}\n· 온라인 단어: 100/100 (통과)\n· 지문 변형모의 10제: 9/10 (소요 4분 12초 / 정직한 풀이 확인)\n감사합니다♡`;
+  }).join('\n-------------------------------------\n\n');
+
+  navigator.clipboard.writeText(allTexts).then(() => {
+    showToast(`📥 [${activeHwBan}] 전체 ${filtered.length}명의 알림톡이 일괄 복사되었습니다!`);
+  });
 }
 
 // Initial Boot
