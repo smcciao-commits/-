@@ -1164,10 +1164,90 @@ function statusChip(s){
   if(Object.keys(p.modes).length) return '<span class="chip mid">하는 중</span>';
   return '<span class="chip todo">안 함</span>';
 }
+
+/* ============ 클래스카드형 실시간 인앱 쪽지 엔진 ============ */
+function getNoteDB(){
+  try{
+    var d = JSON.parse(localStorage.getItem('topedu_inapp_notes'));
+    if(d && typeof d === 'object') return d;
+  }catch(e){}
+  return {
+    "서호준": { teacherMsg: "호준아 오늘 단어 학습 100점 완료! 아주 멋져 최고야 👍", teacherTime: "어제", studentReply: "감사합니다! 내일도 100점 맞을게요 ❤️", replyTime: "어제", unread: false },
+    "이하린": { teacherMsg: "하린아 오늘 단어 15개 10분만 집중해서 외우고 자자! 화이팅 🌸", teacherTime: "방금 전", studentReply: "", replyTime: "", unread: true },
+    "하린": { teacherMsg: "하린아 오늘 단어 15개 10분만 집중해서 외우고 자자! 화이팅 🌸", teacherTime: "방금 전", studentReply: "", replyTime: "", unread: true },
+    "남민준": { teacherMsg: "민준아 오늘 첫 등원 단어 테스트 수고 많았어! 단어앱 꼭 1번 훑어보고 자자 👍", teacherTime: "어제", studentReply: "", replyTime: "", unread: true },
+    "김수현": { teacherMsg: "수현아 학습 시작한 거 봤어! 테스트까지 조금만 더 힘내자 🔥", teacherTime: "어제", studentReply: "지금 바로 다 풀게요! 🔥", replyTime: "어제", unread: false }
+  };
+}
+function saveNoteDB(db){
+  try{ localStorage.setItem('topedu_inapp_notes', JSON.stringify(db)); }catch(e){}
+}
+function sendTeacherNote(name, msg){
+  var db = getNoteDB();
+  db[name] = db[name] || {};
+  db[name].teacherMsg = msg;
+  db[name].teacherTime = '방금 전';
+  db[name].unread = true;
+  saveNoteDB(db);
+}
+function sendStudentReply(name, reply){
+  var db = getNoteDB();
+  db[name] = db[name] || {};
+  db[name].studentReply = reply;
+  db[name].replyTime = '방금 전';
+  db[name].unread = false;
+  saveNoteDB(db);
+}
+function clearStudentNote(name){
+  var db = getNoteDB();
+  if(db[name]){
+    delete db[name].teacherMsg;
+  }
+  saveNoteDB(db);
+  if(typeof showHome === 'function') showHome();
+}
+
+function drawStudentInAppNoteCard(name){
+  var db = getNoteDB();
+  var note = db[name];
+  if(!note || !note.teacherMsg) return '';
+  var replied = note.studentReply ? true : false;
+
+  var replyHtml = replied ? 
+    ('<div style="margin-top:10px;padding:8px 12px;background:#e6fcf5;border-radius:10px;font-size:12.5px;color:#0ca678;display:flex;justify-content:space-between;align-items:center">' +
+      '<span><b>내 답장:</b> "' + esc(note.studentReply) + '"</span>' +
+      '<button class="btn-sm" style="font-size:11px;padding:3px 8px;background:white;border:1px solid #20c997;color:#0ca678;cursor:pointer" onclick="clearStudentNote(\'' + esc(name) + '\')">확인 완료 ✕</button>' +
+     '</div>') :
+    ('<div style="margin-top:10px">' +
+      '<div style="font-size:12px;color:#718096;margin-bottom:6px;font-weight:600">원장님께 1초 즉시 답장 보내기:</div>' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap" id="stu_reply_chips">' +
+        '<button class="reply-chip" data-r="감사합니다! 내일도 100점 맞을게요 ❤️" style="background:white;border:1.5px solid #ff758c;color:#ff3366;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600">❤️ 감사해요!</button>' +
+        '<button class="reply-chip" data-r="지금 바로 단어 외우고 있어요! 🔥" style="background:white;border:1.5px solid #ff758c;color:#ff3366;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600">🔥 지금 외우는 중!</button>' +
+        '<button class="reply-chip" data-r="10분 만에 다 끝내고 잘게요! 🌸" style="background:white;border:1.5px solid #ff758c;color:#ff3366;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600">🌸 10분만 하고 잘게요!</button>' +
+        '<button class="reply-chip" data-r="오답 노트까지 복습 완료했어요! ✏️" style="background:white;border:1.5px solid #ff758c;color:#ff3366;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600">✏️ 복습 완료!</button>' +
+      '</div>' +
+     '</div>');
+
+  return '<div class="card teacher-note-card" id="card_note_' + esc(name) + '" style="border:2.5px solid #ff5c8a;background:linear-gradient(135deg, #fff5f8, #ffeef2);border-radius:18px;padding:14px 16px;box-shadow:0 4px 16px rgba(255,92,138,0.22);margin:10px 0 14px">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+      '<div style="display:flex;align-items:center;gap:6px">' +
+        '<span style="font-size:20px">💌</span>' +
+        '<b style="font-size:16px;color:#ff3366;font-family:Maplestory,sans-serif">조수민 원장님의 도착 쪽지</b>' +
+      '</div>' +
+      '<span style="font-size:11.5px;color:#888;">' + esc(note.teacherTime || '방금 전') + '</span>' +
+    '</div>' +
+    '<div style="font-size:14.5px;font-weight:600;color:#2d3748;background:white;padding:12px 14px;border-radius:12px;border:1.5px solid #ffd1dc;line-height:1.5;box-shadow:0 2px 6px rgba(0,0,0,0.04)">' +
+      esc(note.teacherMsg) +
+    '</div>' +
+    replyHtml +
+  '</div>';
+}
+
 function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ return s.progress.test===null||s.progress.test===undefined; }).length;
   var html='<h1>'+esc(me.name)+' 안녕! 👋</h1><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
+  html += drawStudentInAppNoteCard(me.name);
   html+=drawTodayCard();
   html+=drawAttendanceCalendar();
   html+='<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg, #fff5f8, #ffeef3);border:2px solid #ff758c;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(255,117,140,0.15)" onclick="location.href=\'reading.html\'">' +
@@ -1825,7 +1905,14 @@ function drawScienceTeacherDashboard(students){
       '<td>' + stBadge + '</td>' +
       '<td style="font-weight:700;color:#ff5c8a">' + streakText + '</td>' +
       '<td><div style="font-size:12px">' + esc(s.lastTime || '-') + '</div>' + (s.score ? '<b style="color:var(--pri)">' + s.score + '점</b>' : '') + '</td>' +
-      '<td><button class="btn-sm send-one" data-idx="' + idx + '">💬 코멘트</button></td>' +
+      '<td><button class="btn-sm send-one" data-idx="' + idx + '">💬 코멘트</button>' +
+      (function(){
+        var n = getNoteDB()[s.name];
+        if(n && n.studentReply) return '<div style="font-size:11px;color:#2b8a3e;margin-top:3px;font-weight:700">📬 답장: "' + esc(n.studentReply) + '"</div>';
+        if(n && n.teacherMsg) return '<div style="font-size:11px;color:#ff5c8a;margin-top:3px">💌 쪽지 보냄</div>';
+        return '';
+      })() +
+      '</td>' +
     '</tr>';
   });
 
@@ -1874,29 +1961,55 @@ function drawScienceTeacherDashboard(students){
 
 function openStudentCommentModal(s){
   var box = $('#stu_modal_box');
-  var defaultMsg = s.msg || (s.name + '야, 오늘 단어 학습 아직 시작 안 했네! 자기 전에 10분만 폰으로 꼭 외우고 자렴~ 🌸');
+  var n = getNoteDB()[s.name];
+  var defaultMsg = (n && n.teacherMsg) || s.msg || (s.name + '야, 오늘 단어 학습 아직 시작 안 했네! 자기 전에 10분만 폰으로 꼭 외우고 자렴~ 🌸');
+  
+  var replyBanner = '';
+  if(n && n.studentReply){
+    replyBanner = '<div style="background:#e6fcf5;border:1.5px solid #20c997;border-radius:10px;padding:8px 10px;margin-bottom:8px;font-size:12.5px;color:#0ca678;display:flex;justify-content:space-between;align-items:center">' +
+      '<span><b>📬 ' + esc(s.name) + ' 학생의 최근 답장:</b> "' + esc(n.studentReply) + '"</span>' +
+      '<span style="font-size:11px;color:#888">' + esc(n.replyTime || '최근') + '</span>' +
+    '</div>';
+  }
+
   box.innerHTML = '<div class="comment-box">' +
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
-      '<b>💬 ' + esc(s.name) + ' (' + esc(s.ban) + ') 학생 알림 코멘트</b>' +
+      '<b>💌 ' + esc(s.name) + ' (' + esc(s.ban) + ') 학생 실시간 인앱 쪽지함</b>' +
       '<button class="btn-sm" onclick="$(\'#stu_modal_box\').innerHTML=\'\'">닫기 ✕</button>' +
     '</div>' +
-    '<div style="font-size:12px;color:var(--muted);margin-bottom:6px">자주 쓰는 템플릿 클릭:</div>' +
+    replyBanner +
+    '<div style="font-size:12px;color:var(--muted);margin-bottom:6px">자주 쓰는 템플릿 클릭 (원터치 입력):</div>' +
     '<div>' +
       '<span class="tmpl-chip" data-t="오늘 단어 학습 100점 완료! 아주 멋져 최고야 👍">💯 100점 칭찬</span>' +
-      '<span class="tmpl-chip" data-t="' + s.name + '야, 오늘 단어 학습 아직 안 끝났어~ 자기 전에 10분만 꼭 완료하자! 🌸">🚨 미접속 독려</span>' +
+      '<span class="tmpl-chip" data-t="' + s.name + '야, 오늘 단어 학습 아직 안 끝났어~ 자기 전에 10분만 꼭 완료하자! 🌸">🚨 미접속 잔소리</span>' +
       '<span class="tmpl-chip" data-t="' + s.name + '야, 이번 주 매일 출석 중이네! 성실함이 실력이다 🔥">🔥 연속 출석 칭찬</span>' +
       '<span class="tmpl-chip" data-t="테스트 틀린 단어 오답 노트로 한 번만 다시 체크하고 자자!">✏️ 오답 복습 당부</span>' +
     '</div>' +
     '<textarea id="cmsg_text" style="width:100%;height:65px;margin-top:8px;padding:8px;border-radius:10px;border:1px solid var(--line);font-size:13.5px">' + esc(defaultMsg) + '</textarea>' +
-    '<div style="display:flex;gap:8px;margin-top:8px">' +
-      '<button class="btn" id="btn_cp_cmsg" style="padding:10px;font-size:13.5px">이 학생 카톡 문구 복사</button>' +
-      '<button class="btn gray" id="btn_bonus" style="padding:10px;font-size:13.5px">🎁 보너스 +10점 부여</button>' +
+    '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">' +
+      '<button class="btn" id="btn_send_app_note" style="flex:1;min-width:180px;padding:12px;font-size:14px;background:linear-gradient(135deg,#ff5c8a,#ff758c);font-weight:700">🚀 학생 앱으로 즉시 쪽지 전송</button>' +
+      '<button class="btn gray" id="btn_cp_cmsg" style="padding:12px;font-size:13px">📋 카톡 복사</button>' +
+      '<button class="btn gray" id="btn_bonus" style="padding:12px;font-size:13px">🎁 보너스 +10점</button>' +
     '</div>' +
   '</div>';
 
   [].forEach.call(box.querySelectorAll('.tmpl-chip'), function(chip){
     chip.onclick = function(){ $('#cmsg_text').value = this.dataset.t; };
   });
+
+  $('#btn_send_app_note').onclick = function(){
+    var msg = $('#cmsg_text').value.trim();
+    if(!msg){ alert('쪽지 내용을 입력해주세요.'); return; }
+    sendTeacherNote(s.name, msg);
+    if(typeof playCorrectSound === 'function') playCorrectSound();
+    this.textContent = '💌 쪽지 전송 완료! 학생 앱에 뜹니다 ✔';
+    this.style.background = '#2b8a3e';
+    setTimeout(function(){
+      if(typeof drawScienceTeacherDashboard === 'function' && typeof TOPEDU_ALL_STUDENTS !== 'undefined'){
+        drawScienceTeacherDashboard(TOPEDU_ALL_STUDENTS);
+      }
+    }, 800);
+  };
 
   $('#btn_cp_cmsg').onclick = function(){ copy($('#cmsg_text').value, this); };
   $('#btn_bonus').onclick = function(){ this.textContent = '보너스 지급 완료! (+10)'; this.disabled = true; };
