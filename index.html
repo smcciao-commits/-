@@ -1269,6 +1269,15 @@ function showHome(){
   });
   html+='<button class="linkbtn" id="out">다른 사람으로 로그인</button>';
   app.innerHTML=html;
+  [].forEach.call(app.querySelectorAll('.reply-chip'), function(btn){
+    btn.onclick = function(){
+      var r = this.dataset.r;
+      sendStudentReply(me.name, r);
+      if(typeof playCorrectSound === 'function') playCorrectSound();
+      alert('원장님께 쪽지 답장을 보냈습니다! ✉️\n"' + r + '"');
+      showHome();
+    };
+  });
   [].forEach.call(app.querySelectorAll('.set'),function(b){ b.onclick=function(){ var s=h.sets[+b.dataset.i]; (!s.type||s.type==='단어')?openWordSet(s):openProbSet(s); }; });
   $('#out').onclick=function(){ store('cred',null); S.cred=null; S.tf=''; showLogin(); };
   $('#bjoin').onclick=showBattleJoin;
