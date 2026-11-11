@@ -1719,7 +1719,6 @@ function render() {
   else if (curMode === 4) renderWorksheetMode(p, area);
   else if (curMode === 5) renderHomeworkBoardMode(area);
 }
-}
 
 // 1. Reading Mode Renderer
 function renderReadingMode(p, area) {
@@ -2062,48 +2061,6 @@ function submitExamAns(qIdx, cIdx) {
   expBox.classList.add('show');
   return;
 }
-function old_submitExamAns_disabled(qIdx, cIdx) {
-  const p = PASSAGES[curPassage];
-  const ex = p.exams[qIdx];
-  const box = document.getElementById('choices_' + qIdx);
-  const btns = box.querySelectorAll('.choice-btn');
-  const expBox = document.getElementById('exp_' + qIdx);
-  const statusEl = document.getElementById('expStatus_' + qIdx);
-  const qCard = document.getElementById('examQ_' + qIdx);
-
-  btns.forEach((btn, idx) => {
-    btn.classList.add('locked');
-    btn.style.pointerEvents = 'none';
-    if (idx === ex.ans) {
-      btn.classList.add('correct');
-    } else if (idx === cIdx && cIdx !== ex.ans) {
-      btn.classList.add('wrong');
-    }
-  });
-
-  let wrongList = getWrongList(curPassage);
-
-  if (cIdx === ex.ans) {
-    playCorrectSound();
-    qCard.classList.remove('is-wrong');
-    qCard.classList.add('is-correct');
-    statusEl.className = 'exp-status correct';
-    statusEl.innerHTML = '🎉 <b>정답입니다! 완벽해요!</b>';
-    wrongList = wrongList.filter(id => id !== qIdx);
-  } else {
-    playWrongSound();
-    qCard.classList.remove('is-correct');
-    qCard.classList.add('is-wrong');
-    statusEl.className = 'exp-status wrong';
-    statusEl.innerHTML = '❌ <b>아쉬워요! 아래 오답 함정을 읽고 다시 풀어보세요.</b>';
-    if (!wrongList.includes(qIdx)) wrongList.push(qIdx);
-  }
-
-  saveWrongList(curPassage, wrongList);
-  updateHeaderSummary();
-  expBox.classList.add('show');
-}
-
 function retryQuestion(qIdx) {
   const box = document.getElementById('choices_' + qIdx);
   const btns = box.querySelectorAll('.choice-btn');
