@@ -227,6 +227,19 @@
       </button>
     </div>
 
+    <!-- 15-Min Screen Time Reward Passcode Card (Active when study done) -->
+    <div class="reward-card" id="reward_passcode_card" style="display:none; margin: -6px 16px 14px; padding: 14px 16px; background: linear-gradient(135deg, #fef3c7, #fffbeb); border: 2.5px solid #f59e0b; border-radius: 20px; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2); text-align: center; animation: bounce 2s infinite;">
+      <div style="font-family:'Maplestory',sans-serif; font-size:16px; color:#b45309; font-weight:700;">
+        🏆 오늘 공부 올클리어! 15분 자유시간 해금!
+      </div>
+      <div style="font-size:12px; color:#92400e; margin: 4px 0 8px;">
+        아이패드 스크린타임 [시간 연장 요청] ➔ [암호 입력]에서 아래 암호를 넣으면 15분 해금!
+      </div>
+      <div style="display:inline-block; font-family:'Maplestory',sans-serif; font-size:24px; font-weight:700; color:#d97706; background:white; padding:6px 20px; border-radius:14px; border:2px dashed #f59e0b; letter-spacing:3px;">
+        ⭐ 1215 ⭐
+      </div>
+    </div>
+
     <!-- Day Tabs -->
     <div class="day-tabs" id="day_tabs">
       <div class="day-tab" data-d="월">월</div>
@@ -543,17 +556,22 @@
 
       const coachMsgEl = document.getElementById('coach_text');
       const coachEmojiEl = document.getElementById('coach_emoji');
+      const rewardCardEl = document.getElementById('reward_passcode_card');
 
       if (pct === 100) {
         coachEmojiEl.textContent = '🏆';
-        coachMsgEl.textContent = '🎉 대박! 오늘 할 일 올클리어 완료! 오늘 밤에 엄마 오면 신나게 자랑하자! 💖';
-      } else if (pct >= 50) {
-        coachEmojiEl.textContent = '🔥';
-        coachMsgEl.textContent = '절반 넘었다, 하린아! 지금 기세로 남은 숙제 싹 끝내버리자!';
+        coachMsgEl.textContent = '🎉 대박! 오늘 할 일 올클리어 완료! 아래 15분 스크린타임 암호로 신나게 쉬자! 💖';
+        if (rewardCardEl) rewardCardEl.style.display = 'block';
       } else {
-        coachEmojiEl.textContent = '🦉';
-        const rand = NAG_MESSAGES[Math.floor(Math.random() * NAG_MESSAGES.length)];
-        coachMsgEl.textContent = rand;
+        if (rewardCardEl) rewardCardEl.style.display = 'none';
+        if (pct >= 50) {
+          coachEmojiEl.textContent = '🔥';
+          coachMsgEl.textContent = '절반 넘었다, 하린아! 지금 기세로 남은 숙제 싹 끝내버리자!';
+        } else {
+          coachEmojiEl.textContent = '🦉';
+          const rand = NAG_MESSAGES[Math.floor(Math.random() * NAG_MESSAGES.length)];
+          coachMsgEl.textContent = rand;
+        }
       }
     }
 
