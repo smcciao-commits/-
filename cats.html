@@ -1637,33 +1637,36 @@
       <!-- Animated Interactive SVG Theatre Box -->
       <!-- YouTube HD Video Theatre -->
       
-      <!-- ORT Stage 5 (Sumin's E-Library Series) & Stage 4 Dual Selector -->
-      <div style="margin-bottom:12px;padding:12px 14px;background:#f0fdf4;border:2px solid #86efac;border-radius:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14px;color:#166534">📖 ORT 리딩트리 시리즈 영상관</span>
-            <span style="font-size:11px;color:#15803d;font-weight:700;" id="ort_total_badge">(5단계 넉넉한 10권 수록)</span>
-          </div>
-          <button onclick="openAddOrtModal()" style="font-size:11.5px;color:white;background:#059669;border:none;padding:5px 12px;border-radius:8px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(5,150,105,0.3);">
-            <span>➕</span> <span>영상 권수 추가하기</span>
+      <!-- 3대 교재 시리즈 통합 영상관 Hub -->
+      <div style="background:white;border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:0 4px 15px rgba(124,58,237,0.08);border:1.5px solid #ede9fe;">
+        <div style="font-size:12.5px;font-weight:700;color:#4b5563;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="display:flex;align-items:center;gap:5px;">🎬 <b>교재별 영상관 선택</b></span>
+          <span id="series_count_badge" style="font-size:11.5px;color:#7c3aed;font-weight:700;background:#f5f3ff;padding:3px 8px;border-radius:12px;border:1px solid #ddd6fe;">3대 교재 완비</span>
+        </div>
+
+        <!-- Series Main Tabs -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+          <button id="btnSeriesHandInHand" onclick="switchVideoSeries('handinhand')" style="flex:1;min-width:100px;padding:9px 8px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #2563eb;background:#2563eb;color:white;box-shadow:0 2px 6px rgba(37,99,235,0.25);transition:all 0.2s;">
+            📘 핸드인핸드 5<br><span style="font-size:10.5px;font-weight:400;">Unit 5~12 전단원</span>
+          </button>
+          <button id="btnSeriesOrt" onclick="switchVideoSeries('ort')" style="flex:1;min-width:100px;padding:9px 8px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #059669;background:white;color:#059669;transition:all 0.2s;">
+            📖 ORT 옥스포드<br><span style="font-size:10.5px;font-weight:400;">5단계 10권+</span>
+          </button>
+          <button id="btnSeriesInsight" onclick="switchVideoSeries('insight')" style="flex:1;min-width:100px;padding:9px 8px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #d97706;background:white;color:#d97706;transition:all 0.2s;">
+            📗 인사이트링크<br><span style="font-size:10.5px;font-weight:400;">L1~L3 리딩영상</span>
           </button>
         </div>
 
-        <!-- Level Toggle Tabs -->
-        <div style="display:flex;gap:6px;margin-bottom:10px;">
-          <button id="btnOrtLevel5" onclick="switchOrtLevel('ort5')" style="font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;border:1.5px solid #059669;background:#059669;color:white;font-weight:700;">
-            🌟 ORT 5단계 (원장님 추천 Rowing Boats 등 10권+)
-          </button>
-          <button id="btnOrtLevel4" onclick="switchOrtLevel('ort4')" style="font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6;">
-            📖 ORT 4단계 (기본 6권+)
-          </button>
+        <!-- Sub Controls Area -->
+        <div id="sub_selector_controls" style="margin-bottom:10px;">
+          <!-- Dynamically populated by renderVideoSeriesUI() -->
         </div>
 
-        <div style="display:flex;gap:6px;flex-wrap:wrap" id="ort_book_selector">
-          <!-- Dynamically populated by renderOrtChips() -->
+        <!-- Chips Area -->
+        <div id="video_series_chips" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <!-- Dynamically populated by renderVideoSeriesUI() -->
         </div>
       </div>
-
       <div class="youtube-player-container">
         <div class="youtube-frame-wrap" style="position:relative; overflow:hidden;">
           <iframe id="theatreYtIframe" 
@@ -2050,6 +2053,7 @@ window.addEventListener('DOMContentLoaded', function() {
   initJoySection();
   initMagicTouch();
   loadDay(0);
+  renderVideoSeriesUI();
   updateAlarmUI();
   updateSpeedUI();
   startAlarmTimer();
@@ -2074,302 +2078,7 @@ function selectDay(idx) {
 }
 
 
-/* ============ YOUTUBE HD VIDEO THEATRE SYSTEM ============ */
-var ORT_STAGE5_VIDEOS = [
-  {
-    "bookNum": 1,
-    "id": "z1QBjbs3w1o",
-    "title": "📖 ORT 5 - 1권: Rowing Boats (노 젓는 보트와 플로피)",
-    "sub": "원장님 추천 The E-Library 공식 영상! 플로피가 강물에 빠진 로프를 건져내는 감동 스토리!",
-    "shadow": [
-      {
-        "sentence": "We will take those rowing boats, said Dad.",
-        "ko": "우리는 저 노 젓는 보트를 탈 거란다, 아빠가 말씀하셨어요."
-      },
-      {
-        "sentence": "Suddenly, Floppy jumped into the river to help.",
-        "ko": "갑자기 플로피가 돕기 위해 강물로 뛰어들었습니다."
-      },
-      {
-        "sentence": "Floppy got the rope in his teeth! Good boy, Floppy!",
-        "ko": "플로피가 로프를 입으로 물었어요! 착하다, 플로피!"
-      }
-    ]
-  },
-  {
-    "bookNum": 2,
-    "id": "T5IFhvMKCWs",
-    "title": "📖 ORT 5 - 2권: Kipper and the Trolls (키퍼와 트롤들)",
-    "sub": "The E-Library 공식 영상! 키퍼가 숲속 트롤들과 친구가 되는 유쾌한 판타지 모험!",
-    "shadow": [
-      {
-        "sentence": "Kipper went on an adventure with the trolls.",
-        "ko": "키퍼는 트롤들과 함께 모험을 떠났습니다."
-      },
-      {
-        "sentence": "The big troll had a funny hat on his head.",
-        "ko": "큰 트롤은 머리에 우스꽝스러운 모자를 쓰고 있었습니다."
-      },
-      {
-        "sentence": "They made friends and laughed together happily.",
-        "ko": "그들은 친구가 되어 함께 행복하게 웃었습니다."
-      }
-    ]
-  },
-  {
-    "bookNum": 3,
-    "id": "vaEQhPb80yA",
-    "title": "📖 ORT 5 - 3권: Castle Adventure (성에서의 마녀 모험)",
-    "sub": "할머니(Gran)와 아이들이 마법의 성에 들어가 사악한 마녀를 물리치고 왕을 구출하는 명작!",
-    "shadow": [
-      {
-        "sentence": "The magic key took Gran and the children to a castle.",
-        "ko": "마법 열쇠가 할머니와 아이들을 성으로 데려갔습니다."
-      },
-      {
-        "sentence": "Good old Gran caught the nasty witch in the net!",
-        "ko": "용감한 우리 할머니가 못된 마녀를 그물로 잡았어요!"
-      },
-      {
-        "sentence": "The green frog turned back into the king!",
-        "ko": "초록 개구리가 다시 멋진 왕으로 변했습니다!"
-      }
-    ]
-  },
-  {
-    "bookNum": 4,
-    "id": "w4gqYg52is8",
-    "title": "📖 ORT 5 - 4권: Mirror Island (거울 섬과 캡틴 크로우)",
-    "sub": "칩의 거울 글씨로 해적 캡틴 크로우의 비밀 보물 지도를 해독하고 황금을 찾는 모험!",
-    "shadow": [
-      {
-        "sentence": "Chip used the mirror to read the secret treasure map.",
-        "ko": "칩은 비밀 보물 지도를 읽기 위해 거울을 사용했습니다."
-      },
-      {
-        "sentence": "Captain Crow found the big chest full of gold and silver!",
-        "ko": "캡틴 크로우는 금과 은으로 가득 찬 큰 상자를 찾았습니다!"
-      },
-      {
-        "sentence": "They flashed the mirror to call the rescue ship.",
-        "ko": "그들은 구조선을 부르기 위해 거울을 반짝였습니다."
-      }
-    ]
-  },
-  {
-    "bookNum": 5,
-    "id": "9yf-G9VDXro",
-    "title": "📖 ORT 5 - 5권: The Magic Paintbrush (마법의 붓)",
-    "sub": "The E-Library 공식 영상! 붓으로 그리는 모든 것이 진짜가 되는 전설의 마법 이야기!",
-    "shadow": [
-      {
-        "sentence": "Everything he painted with the brush became real!",
-        "ko": "그가 붓으로 그린 모든 것이 진짜가 되었습니다!"
-      },
-      {
-        "sentence": "He painted food and warm clothes for poor people.",
-        "ko": "그는 가난한 사람들을 위해 음식과 따뜻한 옷을 그렸습니다."
-      },
-      {
-        "sentence": "It was a wonderful magic paintbrush.",
-        "ko": "그것은 정말 놀라운 마법의 붓이었습니다."
-      }
-    ]
-  },
-  {
-    "bookNum": 6,
-    "id": "nlEwjr_fCaY",
-    "title": "📖 ORT 5 - 6권: A Monster Mistake (괴물 소동)",
-    "sub": "The E-Library 공식 영상! 초록 괴물 옷을 입고 벌어지는 유쾌한 학교 모험 이야기!",
-    "shadow": [
-      {
-        "sentence": "The children made a huge green monster costume.",
-        "ko": "아이들은 거대한 초록색 괴물 의상을 만들었습니다."
-      },
-      {
-        "sentence": "Everyone laughed at the funny monster mistake.",
-        "ko": "모두가 우스꽝스러운 괴물 실수에 웃음을 터뜨렸습니다."
-      },
-      {
-        "sentence": "It was the best school adventure ever!",
-        "ko": "역대 최고의 학교 모험이었습니다!"
-      }
-    ]
-  },
-  {
-    "bookNum": 7,
-    "id": "aZNp63Hfa4U",
-    "title": "📖 ORT 5 - 7권: Husky Adventure (허스키 썰매견 모험)",
-    "sub": "눈 덮인 숲속에서 플로피가 썰매견이 되어 아픈 아이를 병원으로 구출하는 감동 명작!",
-    "shadow": [
-      {
-        "sentence": "The magic key took Floppy to a cold snowy forest.",
-        "ko": "마법 열쇠가 플로피를 춥고 눈 덮인 숲으로 데려갔습니다."
-      },
-      {
-        "sentence": "Floppy pulled the sled fast to save the sick boy.",
-        "ko": "플로피는 아픈 소년을 구하기 위해 썰매를 빨리 끌었습니다."
-      },
-      {
-        "sentence": "You are not a floppy dog, you are a true hero!",
-        "ko": "너는 그냥 플로피가 아니라, 진정한 영웅이야!"
-      }
-    ]
-  },
-  {
-    "bookNum": 8,
-    "id": "tpenPh5d2v0",
-    "title": "📖 ORT 5 - 8권: The Orchid Thief (난초 도둑을 잡아라)",
-    "sub": "The E-Library 공식 영상! 온실의 희귀 난초를 훔치려는 도둑을 발자국으로 추적하는 탐정 모험!",
-    "shadow": [
-      {
-        "sentence": "Someone was trying to steal the rare orchid flower.",
-        "ko": "누군가 귀한 난초 꽃을 훔치려 하고 있었습니다."
-      },
-      {
-        "sentence": "The children found the muddy footprints in the garden.",
-        "ko": "아이들은 정원에서 진흙 묻은 발자국을 발견했습니다."
-      },
-      {
-        "sentence": "They caught the thief and saved the beautiful plant.",
-        "ko": "그들은 도둑을 잡고 아름다운 식물을 구했습니다."
-      }
-    ]
-  },
-  {
-    "bookNum": 9,
-    "id": "45A6EXZrptE",
-    "title": "📖 ORT 5 - 9권: The Stranger Beast (이상한 짐승)",
-    "sub": "The E-Library 공식 영상! 미지의 숲속에서 만난 신기하고 다정한 야수와의 우정 이야기!",
-    "shadow": [
-      {
-        "sentence": "They discovered a strange beast in the wild woods.",
-        "ko": "그들은 깊은 숲에서 이상한 짐승을 발견했습니다."
-      },
-      {
-        "sentence": "The beast was very friendly and wanted to play.",
-        "ko": "그 짐승은 매우 친절했고 함께 놀고 싶어 했습니다."
-      },
-      {
-        "sentence": "They had a wonderful time in the mystery forest.",
-        "ko": "그들은 신비한 숲에서 멋진 시간을 보냈습니다."
-      }
-    ]
-  },
-  {
-    "bookNum": 10,
-    "id": "DZzZqM8pDjc",
-    "title": "📖 ORT 5 - 10권: The Beast Feasts (야수의 만찬)",
-    "sub": "The E-Library 공식 영상! 숲속 친구들과 함께 차려 먹는 달콤하고 풍성한 만찬 파티!",
-    "shadow": [
-      {
-        "sentence": "The friendly beast invited everyone to a grand feast.",
-        "ko": "친절한 야수가 모두를 성대한 만찬에 초대했습니다."
-      },
-      {
-        "sentence": "There were sweet cakes and fresh fruits on the table.",
-        "ko": "식탁 위에는 달콤한 케이크와 신선한 과일이 가득했습니다."
-      },
-      {
-        "sentence": "Everyone cheered for the happiest feast ever.",
-        "ko": "모두가 가장 행복한 만찬에 환호했습니다."
-      }
-    ]
-  }
-];
-var ORT_SERIES_VIDEOS = [
-  {
-    bookNum: 1,
-    id: "dhenXGjGCF8",
-    title: "📖 ORT 4 - Book 1: House for Sale (팔려고 내놓은 집)",
-    sub: "키퍼 가족이 낡았지만 넓고 멋진 새 집을 보러 갔어요!",
-    shadow: [
-      {"sentence": "Dad and Mum liked the big house.", "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."},
-      {"sentence": "The children went in the tree house.", "ko": "아이들은 나무 위의 오두막으로 갔습니다."},
-      {"sentence": "Kipper pulled the old wallpaper.", "ko": "키퍼가 낡은 벽지를 잡아당겼습니다."}
-    ]
-  },
-  {
-    bookNum: 2,
-    id: "TMdp8Ky7ykM",
-    title: "📖 ORT 4 - Book 2: The New House (새 집으로 이사해요)",
-    sub: "커다란 이삿짐 밴이 오고, 신나게 짐을 싸서 새 집으로 출발!",
-    shadow: [
-      {"sentence": "A big van came to the house.", "ko": "큰 밴이 집으로 왔습니다."},
-      {"sentence": "Dad and the children packed the boxes.", "ko": "아빠와 아이들은 상자에 짐을 쌌습니다."},
-      {"sentence": "The van went to the new house.", "ko": "밴은 새 집으로 갔습니다."}
-    ]
-  },
-  {
-    bookNum: 3,
-    id: "5YY8-YRUtW0",
-    title: "📖 ORT 4 - Book 3: Come In! (들어와서 같이 놀자!)",
-    sub: "아빠가 문을 칠하는 동안 친구들이 찾아왔어요! 들어와서 놀자!",
-    shadow: [
-      {"sentence": "Dad was painting the front door.", "ko": "아빠는 현관문을 칠하고 있었습니다."},
-      {"sentence": "Come in and play with us, said Biff.", "ko": "들어와서 우리랑 놀자, 비프가 말했습니다."},
-      {"sentence": "Mum gave the children some biscuits.", "ko": "엄마는 아이들에게 비스킷을 주었습니다."}
-    ]
-  },
-  {
-    bookNum: 4,
-    id: "6PeL52MLUkE",
-    title: "📖 ORT 4 - Book 4: The Secret Room (비밀의 방의 발견)",
-    sub: "벽지를 뜯어내자 숨겨진 비밀 문과 미니어처 집이 나타났어요!",
-    shadow: [
-      {"sentence": "They found a secret door behind the wall.", "ko": "그들은 벽 뒤에서 비밀 문을 찾았습니다."},
-      {"sentence": "Inside was a miniature of their house.", "ko": "안에는 그들 집의 미니어처가 있었습니다."},
-      {"sentence": "It was an amazing secret room!", "ko": "그것은 놀라운 비밀의 방이었습니다!"}
-    ]
-  },
-  {
-    bookNum: 5,
-    id: "2rk_tRaTOck",
-    title: "📖 ORT 4 - Book 5: The Play (신나는 학교 연극)",
-    sub: "아이들이 멋진 의상을 입고 학교 무대에서 연극을 공연해요!",
-    shadow: [
-      {"sentence": "The children put on a school play.", "ko": "아이들은 학교 연극을 공연했습니다."},
-      {"sentence": "Kipper wore a funny pirate costume.", "ko": "키퍼는 우스꽝스러운 해적 옷을 입었습니다."},
-      {"sentence": "The audience clapped and cheered.", "ko": "관객들은 박수를 치고 환호했습니다."}
-    ]
-  },
-  {
-    bookNum: 6,
-    id: "tPnjWbxYKW4",
-    title: "📖 ORT 4 - Book 6: The Storm (폭풍과 마법 열쇠)",
-    sub: "거센 폭풍이 불어 나무가 쓰러지고, 그 밑에서 황금 마법 열쇠를 발견!",
-    shadow: [
-      {"sentence": "A big storm blew the giant tree down.", "ko": "거대한 폭풍이 큰 나무를 쓰러뜨렸습니다."},
-      {"sentence": "Floppy found a strange wooden box.", "ko": "플로피는 이상한 나무 상자를 발견했습니다."},
-      {"sentence": "Inside the box was a glowing magic key!", "ko": "상자 안에는 빛나는 마법 열쇠가 들어 있었습니다!"}
-    ]
-  }
-];
-
-var DAY_YOUTUBE_VIDEOS = {
-  0: {
-    id: "4Myovaplq4Y",
-    title: "🏃 Day 01: Hand in Hand 5 Unit 5 (School Field Day 애니메이션)",
-    sub: "신나는 이어달리기와 응원전! e-future 공식 Unit 5 영상!"
-  },
-  1: {
-    id: "dhenXGjGCF8",
-    title: "📖 Day 02: ORT 4 - House for Sale (팔려고 내놓은 집)",
-    sub: "옥스포드 리딩트리 4단계 1권 고화질 리드얼라우드 애니메이션!"
-  },
-  2: {
-    id: "5YY8-YRUtW0",
-    title: "📖 Day 03: ORT 4 - Come In! & The Secret Room",
-    sub: "옥스포드 리딩트리 4단계 3권 & 4권 연속 상영 애니메이션!"
-  },
-  3: {
-    id: "tPnjWbxYKW4",
-    title: "📖 Day 04: ORT 4 - The Storm (폭풍과 마법의 열쇠)",
-    sub: "옥스포드 리딩트리 4단계의 클라이맥스! 6권 폭풍과 마법열쇠!"
-  }
-};
-
-// --- YouTube IFrame API & Child-Safe Controls ---
+/* ============ YOUTUBE HD VIDEO THEATRE SYSTEM & 3-SERIES MULTI-HUB ============ */
 var ytPlayer = null;
 function onYouTubeIframeAPIReady() {
   initYtPlayer();
@@ -2397,248 +2106,1030 @@ function onYtStateChange(event) {
 function replayYoutubeVideo() {
   var cover = document.getElementById('ytEndCover');
   if (cover) cover.style.display = 'none';
-  if (ytPlayer && typeof ytPlayer.seekTo === 'function') {
-    try {
-      ytPlayer.seekTo(0);
-      ytPlayer.playVideo();
-      return;
-    } catch(e) {}
-  }
-  var iframe = document.getElementById('theatreYtIframe');
-  if (iframe) {
-    var s = iframe.src;
-    iframe.src = s;
+  if (ytPlayer && ytPlayer.seekTo && ytPlayer.playVideo) {
+    ytPlayer.seekTo(0);
+    ytPlayer.playVideo();
+  } else {
+    var iframe = document.getElementById('theatreYtIframe');
+    if (iframe) {
+      var src = iframe.src;
+      iframe.src = src;
+    }
   }
 }
 
-// --- Dynamic Expandable ORT Series Engine (Stage 5 Primary & Stage 4) ---
-var currentOrtLevel = 'ort5'; // Default to ORT Stage 5 (Sumin\'s Rowing Boats & E-Library)
-var currentOrtShadow = null;
+/* Datasets for 3 Major Textbook Series */
+var HANDINHAND_SERIES_VIDEOS = [
+  {
+    "unitNum": 5,
+    "id": "4Myovaplq4Y",
+    "chipLabel": "Unit 05 운동회",
+    "title": "📘 Hand in Hand 5 - Unit 05: School Field Day (운동회 날)",
+    "sub": "운동회 날 친구들과 이어달리기를 하고 훌라후프를 돌려요!",
+    "shadow": [
+      {
+        "sentence": "Hold the hoop with two hands and spin it like this.",
+        "ko": "양손으로 훌라후프를 잡고 이렇게 돌려봐."
+      },
+      {
+        "sentence": "I ran in the relay race with my team.",
+        "ko": "우리 팀과 함께 이어달리기를 했어요."
+      },
+      {
+        "sentence": "We cheered loudly and won a gold medal!",
+        "ko": "우리는 크게 응원하고 금메달을 땄어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 6,
+    "id": "OB2r2mLsrJA",
+    "chipLabel": "Unit 06 짐싸기",
+    "title": "📘 Hand in Hand 5 - Unit 06: Packing for a Trip (여행 짐 싸기)",
+    "sub": "여행을 떠나기 전 신나게 짐을 싸고 필요한 물건을 챙겨요!",
+    "shadow": [
+      {
+        "sentence": "It is time to pack our bags for the trip.",
+        "ko": "여행을 위해 가방을 쌀 시간이에요."
+      },
+      {
+        "sentence": "Did you pack your sunglasses and hat?",
+        "ko": "선글라스와 모자를 챙겼나요?"
+      },
+      {
+        "sentence": "I am so excited to go on vacation!",
+        "ko": "휴가를 떠나게 되어 너무 신나요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 7,
+    "id": "r5jG0-kZy18",
+    "chipLabel": "Unit 07 음식권하기",
+    "title": "📘 Hand in Hand 5 - Unit 07: Offering Food & Help (음식 권하기)",
+    "sub": "친구에게 음식을 권하고 예의 바르게 대답하는 법을 배워요!",
+    "shadow": [
+      {
+        "sentence": "Would you like some delicious snacks?",
+        "ko": "맛있는 간식 좀 드실래요?"
+      },
+      {
+        "sentence": "No, thank you. I am already full.",
+        "ko": "아니요, 괜찮습니다. 이미 배가 불러요."
+      },
+      {
+        "sentence": "Thank you for being so polite and kind.",
+        "ko": "친절하고 예의 바르게 말해줘서 고마워요."
+      }
+    ]
+  },
+  {
+    "unitNum": 8,
+    "id": "VseC0u4eYS8",
+    "chipLabel": "Unit 08 대청소",
+    "title": "📘 Hand in Hand 5 - Unit 08: Spring Cleaning (대청소의 날)",
+    "sub": "봄맞이 집안 대청소를 하며 방을 청소하고 정리해요!",
+    "shadow": [
+      {
+        "sentence": "Let us help clean the living room today.",
+        "ko": "오늘 거실 청소하는 것을 함께 도와요."
+      },
+      {
+        "sentence": "I can sweep the floor and wipe the table.",
+        "ko": "저는 바닥을 쓸고 식탁을 닦을 수 있어요."
+      },
+      {
+        "sentence": "Our house looks so clean and neat now!",
+        "ko": "이제 우리 집이 정말 깨끗하고 단정해 보여요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 9,
+    "id": "Y8JIR6xAjAs",
+    "chipLabel": "Unit 09 지하철",
+    "title": "📘 Hand in Hand 5 - Unit 09: Transportation (지하철과 교통수단)",
+    "sub": "박물관에 가기 위해 지하철을 타고 이동하는 대화!",
+    "shadow": [
+      {
+        "sentence": "We can take the subway to the museum.",
+        "ko": "우리는 박물관까지 지하철을 타고 갈 수 있어요."
+      },
+      {
+        "sentence": "Which station should we get off at?",
+        "ko": "어느 역에서 내려야 하나요?"
+      },
+      {
+        "sentence": "The subway is fast, clean, and convenient.",
+        "ko": "지하철은 빠르고 깨끗하며 편리해요."
+      }
+    ]
+  },
+  {
+    "unitNum": 10,
+    "id": "b9kpGxtOqPM",
+    "chipLabel": "Unit 10 기념일",
+    "title": "📘 Hand in Hand 5 - Unit 10: Special Days (특별한 기념일과 약속)",
+    "sub": "친구의 특별한 날과 파티에 초대받아 꼭 가겠다고 약속해요!",
+    "shadow": [
+      {
+        "sentence": "I am having a special birthday party this Saturday.",
+        "ko": "이번 주 토요일에 특별한 생일 파티를 열어요."
+      },
+      {
+        "sentence": "Do not worry, I will definitely be there!",
+        "ko": "걱정 마, 내가 꼭 갈게!"
+      },
+      {
+        "sentence": "We will have fun games and delicious cake.",
+        "ko": "우리는 재미있는 게임과 맛있는 케이크를 먹을 거야."
+      }
+    ]
+  },
+  {
+    "unitNum": 11,
+    "id": "B2Ob3W6k0ZI",
+    "chipLabel": "Unit 11 샌드위치",
+    "title": "📘 Hand in Hand 5 - Unit 11: Making Sandwiches (맛있는 샌드위치 만들기)",
+    "sub": "땅콩버터와 젤리로 맛있는 샌드위치를 만드는 레시피!",
+    "shadow": [
+      {
+        "sentence": "Spread the peanut butter on the bread.",
+        "ko": "식빵 위에 땅콩버터를 펴 바르세요."
+      },
+      {
+        "sentence": "Add sweet strawberry jelly on the other slice.",
+        "ko": "다른 빵에는 달콤한 딸기 젤리를 얹으세요."
+      },
+      {
+        "sentence": "This sandwich tastes so sweet and yummy!",
+        "ko": "이 샌드위치는 정말 달콤하고 맛있어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 12,
+    "id": "VCQe59TxR6I",
+    "chipLabel": "Unit 12 오감탐험",
+    "title": "📘 Hand in Hand 5 - Unit 12: Five Senses (오감으로 느끼는 세상 & 총정리)",
+    "sub": "보고, 듣고, 맛보고, 냄새 맡고, 만지는 신비한 오감 탐험!",
+    "shadow": [
+      {
+        "sentence": "We explore the world with our five senses.",
+        "ko": "우리는 오감으로 세상을 탐험해요."
+      },
+      {
+        "sentence": "I can see bright colors and hear sweet music.",
+        "ko": "나는 밝은 색을 보고 감미로운 음악을 들을 수 있어요."
+      },
+      {
+        "sentence": "It is wonderful to learn English together!",
+        "ko": "함께 영어를 배우는 것은 정말 멋져요!"
+      }
+    ]
+  }
+];
+var ORT4_SERIES_VIDEOS = [
+  {
+    "bookNum": 1,
+    "id": "dhenXGjGCF8",
+    "chipLabel": "1권 House for Sale",
+    "title": "📖 ORT 4 - Book 1: House for Sale (팔려고 내놓은 집)",
+    "sub": "키퍼 가족이 낡았지만 넓고 멋진 새 집을 보러 갔어요!",
+    "shadow": [
+      {
+        "sentence": "Dad and Mum liked the big house.",
+        "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."
+      },
+      {
+        "sentence": "The children went in the tree house.",
+        "ko": "아이들은 나무 위의 오두막으로 갔습니다."
+      },
+      {
+        "sentence": "Kipper pulled the old wallpaper.",
+        "ko": "키퍼가 낡은 벽지를 잡아당겼습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 2,
+    "id": "TMdp8Ky7ykM",
+    "chipLabel": "2권 The New House",
+    "title": "📖 ORT 4 - Book 2: The New House (새 집으로 이사해요)",
+    "sub": "커다란 이삿짐 밴이 오고, 신나게 짐을 싸서 새 집으로 출발!",
+    "shadow": [
+      {
+        "sentence": "A big van came to the house.",
+        "ko": "큰 밴이 집으로 왔습니다."
+      },
+      {
+        "sentence": "Dad and the children packed the boxes.",
+        "ko": "아빠와 아이들은 상자에 짐을 쌌습니다."
+      },
+      {
+        "sentence": "The van went to the new house.",
+        "ko": "밴은 새 집으로 갔습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 3,
+    "id": "5YY8-YRUtW0",
+    "chipLabel": "3권 Come In!",
+    "title": "📖 ORT 4 - Book 3: Come In! (들어와서 같이 놀자!)",
+    "sub": "아빠가 문을 칠하는 동안 친구들이 찾아왔어요! 들어와서 놀자!",
+    "shadow": [
+      {
+        "sentence": "Dad was painting the front door.",
+        "ko": "아빠는 현관문을 칠하고 있었습니다."
+      },
+      {
+        "sentence": "Come in and play with us, said Biff.",
+        "ko": "들어와서 우리랑 놀자, 비프가 말했습니다."
+      },
+      {
+        "sentence": "Mum gave the children some biscuits.",
+        "ko": "엄마는 아이들에게 비스킷을 주었습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 4,
+    "id": "6PeL52MLUkE",
+    "chipLabel": "4권 The Secret Room",
+    "title": "📖 ORT 4 - Book 4: The Secret Room (비밀의 방의 발견)",
+    "sub": "벽지를 뜯어내자 숨겨진 비밀 문과 미니어처 집이 나타났어요!",
+    "shadow": [
+      {
+        "sentence": "They pulled the wallpaper and found a door.",
+        "ko": "그들은 벽지를 뜯고 문을 발견했습니다."
+      },
+      {
+        "sentence": "The old door was stuck fast.",
+        "ko": "낡은 문이 꽉 끼어 있었습니다."
+      },
+      {
+        "sentence": "Inside was an amazing miniature house!",
+        "ko": "안에는 놀라운 미니어처 집이 있었습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 5,
+    "id": "2rk_tRaTOck",
+    "chipLabel": "5권 The Play",
+    "title": "📖 ORT 4 - Book 5: The Play (신나는 학교 연극)",
+    "sub": "무대 의상을 입고 관객들의 큰 환호를 받으며 연극을 펼쳐요!",
+    "shadow": [
+      {
+        "sentence": "The children put on a great play.",
+        "ko": "아이들은 멋진 연극을 무대에 올렸습니다."
+      },
+      {
+        "sentence": "Kipper wore a very funny costume.",
+        "ko": "키퍼는 아주 우스꽝스러운 옷을 입었습니다."
+      },
+      {
+        "sentence": "The audience clapped and cheered loudly.",
+        "ko": "관객들은 크게 박수를 치고 환호했습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 6,
+    "id": "tPnjWbxYKW4",
+    "chipLabel": "6권 The Storm",
+    "title": "📖 ORT 4 - Book 6: The Storm (폭풍우와 마법의 열쇠)",
+    "sub": "거센 폭풍우가 지나간 뒤, 플로피가 빛나는 마법 열쇠를 발견했어요!",
+    "shadow": [
+      {
+        "sentence": "A big storm blew the giant tree down.",
+        "ko": "거대한 폭풍이 거대한 나무를 쓰러뜨렸습니다."
+      },
+      {
+        "sentence": "Floppy found a secret glowing box.",
+        "ko": "플로피는 비밀의 빛나는 상자를 찾았습니다."
+      },
+      {
+        "sentence": "Inside was a wonderful magic key!",
+        "ko": "안에는 놀라운 마법 열쇠가 들어 있었습니다!"
+      }
+    ]
+  }
+];
+var ORT5_SERIES_VIDEOS = [
+  {
+    "bookNum": 1,
+    "id": "z1QBjbs3w1o",
+    "chipLabel": "1권 Rowing Boats",
+    "title": "📖 ORT 5 - Book 1: Rowing Boats (노 젓는 보트와 플로피의 구출)",
+    "sub": "가족들과 함께 강가에서 보트를 타다가 로프를 놓쳤지만, 똑똑한 플로피가 헤엄쳐 구해줬어요!",
+    "shadow": [
+      {
+        "sentence": "We will take those rowing boats, said Dad.",
+        "ko": "우리는 저 노 젓는 보트를 탈 거야, 아빠가 말씀하셨어요."
+      },
+      {
+        "sentence": "Floppy jumped into the water to save the rope.",
+        "ko": "플로피는 밧줄을 구하기 위해 물속으로 뛰어들었습니다."
+      },
+      {
+        "sentence": "Everyone cheered for the brave dog Floppy!",
+        "ko": "모두가 용감한 개 플로피를 향해 환호했습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 2,
+    "id": "T5IFhvMKCWs",
+    "chipLabel": "2권 Kipper & Trolls",
+    "title": "📖 ORT 5 - Book 2: Kipper and the Trolls (키퍼와 심술쟁이 트롤들)",
+    "sub": "마법의 열쇠가 빛나며 무시무시하고 우스꽝스러운 트롤들의 세상으로 날아갔어요!",
+    "shadow": [
+      {
+        "sentence": "The magic key began to glow brightly.",
+        "ko": "마법의 열쇠가 밝게 빛나기 시작했습니다."
+      },
+      {
+        "sentence": "The trolls were big, green, and very noisy.",
+        "ko": "트롤들은 덩치가 크고 초록색이며 매우 시끄러웠습니다."
+      },
+      {
+        "sentence": "Kipper ran across the magic wooden bridge.",
+        "ko": "키퍼는 마법의 나무다리를 건너 달렸습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 3,
+    "id": "vaEQhPb80yA",
+    "chipLabel": "3권 Castle Adventure",
+    "title": "📖 ORT 5 - Book 3: Castle Adventure (거대한 성에서의 마법 모험)",
+    "sub": "중세의 거대한 성으로 모험을 떠나 높은 탑과 비밀의 통로를 탐험해요!",
+    "shadow": [
+      {
+        "sentence": "They looked up at the giant castle walls.",
+        "ko": "그들은 거대한 성벽을 올려다보았습니다."
+      },
+      {
+        "sentence": "A friendly knight welcomed the children inside.",
+        "ko": "친절한 기사가 아이들을 안으로 맞이했습니다."
+      },
+      {
+        "sentence": "It was an exciting and unforgettable adventure!",
+        "ko": "정말 신나고 잊을 수 없는 모험이었습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 4,
+    "id": "w4gqYg52is8",
+    "chipLabel": "4권 Mirror Island",
+    "title": "📖 ORT 5 - Book 4: Mirror Island (거울 섬과 캡틴 크로우)",
+    "sub": "모든 것이 반대로 비치는 신비한 거울 섬에서 해적들과의 두뇌 싸움!",
+    "shadow": [
+      {
+        "sentence": "Everything on the island looked like a mirror.",
+        "ko": "섬에 있는 모든 것이 거울처럼 비쳤습니다."
+      },
+      {
+        "sentence": "Captain Crow searched for the hidden treasure.",
+        "ko": "크로우 선장은 숨겨진 보물을 찾아다녔습니다."
+      },
+      {
+        "sentence": "The clever children outsmarted the pirate crew.",
+        "ko": "영리한 아이들이 해적 선원들을 지혜로 이겼습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 5,
+    "id": "9yf-G9VDXro",
+    "chipLabel": "5권 Magic Paintbrush",
+    "title": "📖 ORT 5 - Book 5: The Magic Paintbrush (신비한 마법의 붓)",
+    "sub": "그림을 그리면 실제로 살아 움직이는 마법의 붓을 얻은 아이들의 모험!",
+    "shadow": [
+      {
+        "sentence": "Whatever she painted came to real life.",
+        "ko": "그녀가 그린 것은 무엇이든 진짜 살아 움직였습니다."
+      },
+      {
+        "sentence": "She painted delicious food for hungry people.",
+        "ko": "그녀는 배고픈 사람들을 위해 맛있는 음식을 그렸습니다."
+      },
+      {
+        "sentence": "The greedy king tried to steal the magic brush.",
+        "ko": "욕심쟁이 왕이 마법의 붓을 훔치려 했습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 6,
+    "id": "nlEwjr_fCaY",
+    "chipLabel": "6권 Monster Mistake",
+    "title": "📖 ORT 5 - Book 6: A Monster Mistake (괴물 소동과 진실)",
+    "sub": "숲속에 무서운 괴물이 나타났다고 생각했지만 사실은 귀여운 해프닝이었어요!",
+    "shadow": [
+      {
+        "sentence": "They heard a strange sound in the dark forest.",
+        "ko": "그들은 어두운 숲속에서 이상한 소리를 들었습니다."
+      },
+      {
+        "sentence": "Do not be afraid, it is just a friendly creature.",
+        "ko": "두려워하지 마, 그저 친절한 동물일 뿐이야."
+      },
+      {
+        "sentence": "Everyone laughed at the funny monster mistake.",
+        "ko": "모두가 우스꽝스러운 괴물 착각에 웃음을 터뜨렸습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 7,
+    "id": "aZNp63Hfa4U",
+    "chipLabel": "7권 Husky Adventure",
+    "title": "📖 ORT 5 - Book 7: Husky Adventure (허스키 썰매견과 눈 덮인 모험)",
+    "sub": "하얀 눈이 가득한 북극에서 용감하고 씩씩한 허스키 썰매견들과 함께 달려요!",
+    "shadow": [
+      {
+        "sentence": "The strong huskies pulled the wooden sled fast.",
+        "ko": "힘센 허스키들이 나무 썰매를 빠르게 끌었습니다."
+      },
+      {
+        "sentence": "Snow was falling gently over the cold mountains.",
+        "ko": "차가운 산 위로 눈이 부드럽게 내리고 있었습니다."
+      },
+      {
+        "sentence": "The sled ride was thrilling and super fast.",
+        "ko": "썰매 타기는 짜릿하고 정말 빨랐습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 8,
+    "id": "tpenPh5d2v0",
+    "chipLabel": "8권 Orchid Thief",
+    "title": "📖 ORT 5 - Book 8: The Orchid Thief (희귀한 난초 도둑을 찾아라)",
+    "sub": "식물원에서 가장 진귀한 무지개 난초가 사라졌어요! 탐정이 되어 도둑을 잡아요!",
+    "shadow": [
+      {
+        "sentence": "The rare purple orchid was gone from the garden.",
+        "ko": "희귀한 보라색 난초가 정원에서 사라졌습니다."
+      },
+      {
+        "sentence": "The children looked carefully for footprints.",
+        "ko": "아이들은 발자국을 주의 깊게 찾았습니다."
+      },
+      {
+        "sentence": "They solved the mystery and saved the flowers.",
+        "ko": "그들은 수수께끼를 풀고 꽃들을 구해냈습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 9,
+    "id": "45A6EXZrptE",
+    "chipLabel": "9권 Stranger Beast",
+    "title": "📖 ORT 5 - Book 9: The Stranger Beast (신비로운 미지의 야수)",
+    "sub": "안개 낀 계곡에서 마주친 신비한 야수와 우정을 쌓아가는 감동적인 이야기!",
+    "shadow": [
+      {
+        "sentence": "A gentle creature appeared through the morning mist.",
+        "ko": "아침 안개 사이로 온순한 생명체가 나타났습니다."
+      },
+      {
+        "sentence": "Kipper offered some fresh apples to the beast.",
+        "ko": "키퍼는 그 야수에게 신선한 사과를 건넸습니다."
+      },
+      {
+        "sentence": "Kindness makes friends across different worlds.",
+        "ko": "친절함은 서로 다른 세상 속에서도 친구를 만들어 줍니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 10,
+    "id": "DZzZqM8pDjc",
+    "chipLabel": "10권 The Beast Feasts",
+    "title": "📖 ORT 5 - Book 10: The Beast Feasts (야수와 함께하는 성대한 만찬)",
+    "sub": "새로운 친구가 된 야수와 함께 마을 사람들과 다 함께 즐기는 맛있는 파티!",
+    "shadow": [
+      {
+        "sentence": "The long dining table was full of delicious fruit.",
+        "ko": "긴 식탁은 맛있는 과일로 가득 차 있었습니다."
+      },
+      {
+        "sentence": "Everyone cheered and clapped their hands together.",
+        "ko": "모두가 다 함께 손뼉을 치며 환호했습니다."
+      },
+      {
+        "sentence": "It was the happiest day in the whole kingdom.",
+        "ko": "온 왕국에서 가장 행복한 날이었습니다."
+      }
+    ]
+  }
+];
+var INSIGHT_SERIES_VIDEOS = {
+  "l1": [
+    {
+      "unitNum": 1,
+      "id": "Gz7FvWNqzuo",
+      "chipLabel": "L1-U01 All About Me",
+      "title": "📗 Insight Link Starter L1 - Unit 01: All About Me",
+      "sub": "친구들과 흥미진진한 이야기를 함께 읽고 나눠요!",
+      "shadow": [
+        {
+          "sentence": "I like reading interesting books with my friends.",
+          "ko": "친구들과 재미있는 책 읽는 것을 좋아해요."
+        },
+        {
+          "sentence": "We share our favorite stories every day.",
+          "ko": "우리는 매일 좋아하는 이야기를 함께 나눠요."
+        },
+        {
+          "sentence": "Learning new things is always exciting.",
+          "ko": "새로운 것을 배우는 것은 항상 신나요."
+        }
+      ]
+    },
+    {
+      "unitNum": 2,
+      "id": "cMeZ9npiqd8",
+      "chipLabel": "L1-U02 Swan Lake",
+      "title": "📗 Insight Link Starter L1 - Unit 02: Swan Lake Story",
+      "sub": "호수 위에서 아름답게 펼쳐지는 백조의 호수 이야기!",
+      "shadow": [
+        {
+          "sentence": "The swan danced gracefully across the lake.",
+          "ko": "백조가 호수 위에서 우아하게 춤을 추었습니다."
+        },
+        {
+          "sentence": "The music was soft and beautiful.",
+          "ko": "음악이 부드럽고 아름다웠습니다."
+        },
+        {
+          "sentence": "Everyone clapped for the magical performance.",
+          "ko": "모두가 마법 같은 공연에 박수를 보냈습니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 3,
+      "id": "E6SopVElpVo",
+      "chipLabel": "L1-U03 Nature",
+      "title": "📗 Insight Link Starter L1 - Unit 03: Nature & Forest",
+      "sub": "맑은 공기와 푸른 숲, 자연이 주는 선물!",
+      "shadow": [
+        {
+          "sentence": "Big green trees grow tall in the forest.",
+          "ko": "큰 초록 나무들이 숲속에서 높게 자라요."
+        },
+        {
+          "sentence": "Birds sing sweet songs in the morning.",
+          "ko": "새들이 아침에 고운 노래를 불러요."
+        },
+        {
+          "sentence": "Nature gives us clean air and water.",
+          "ko": "자연은 우리에게 맑은 공기와 물을 줍니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 4,
+      "id": "orCJRfJXByE",
+      "chipLabel": "L1-U04 Animal Homes",
+      "title": "📗 Insight Link Starter L1 - Unit 04: Animal Habitats",
+      "sub": "동물들의 신비한 보금자리와 자연 서식지 탐험!",
+      "shadow": [
+        {
+          "sentence": "Animals live in different homes and habitats.",
+          "ko": "동물들은 다양한 보금자리와 서식지에 살아요."
+        },
+        {
+          "sentence": "Fish swim freely in the blue ocean.",
+          "ko": "물고기들은 푸른 바다에서 자유롭게 헤엄쳐요."
+        },
+        {
+          "sentence": "We must protect animal homes together.",
+          "ko": "우리는 동물들의 집을 함께 지켜야 해요."
+        }
+      ]
+    }
+  ],
+  "l2": [
+    {
+      "unitNum": 1,
+      "id": "kwi8bWPGRsw",
+      "chipLabel": "L2-U01 Daily Water",
+      "title": "📗 Insight Link Starter L2 - Unit 01: Daily Water Use",
+      "sub": "우리가 매일 쓰는 물의 소중함과 절약 습관!",
+      "shadow": [
+        {
+          "sentence": "We use water every day for drinking and washing.",
+          "ko": "우리는 마시고 씻기 위해 매일 물을 사용해요."
+        },
+        {
+          "sentence": "Saving water is important for our planet.",
+          "ko": "물을 아끼는 것은 우리 지구를 위해 중요합니다."
+        },
+        {
+          "sentence": "Turn off the faucet while brushing your teeth.",
+          "ko": "양치하는 동안 수도꼭지를 잠그세요."
+        }
+      ]
+    },
+    {
+      "unitNum": 2,
+      "id": "2xZEzV9Xq-k",
+      "chipLabel": "L2-U02 Helpers",
+      "title": "📗 Insight Link Starter L2 - Unit 02: Community Helpers",
+      "sub": "우리 동네를 안전하고 행복하게 지켜주는 이웃들!",
+      "shadow": [
+        {
+          "sentence": "Firefighters and doctors help people every day.",
+          "ko": "소방관과 의사는 매일 사람들을 도와요."
+        },
+        {
+          "sentence": "They work hard to keep our neighborhood safe.",
+          "ko": "그들은 우리 동네를 안전하게 지키기 위해 열심히 일해요."
+        },
+        {
+          "sentence": "We are thankful for their dedicated work.",
+          "ko": "우리는 그분들의 헌신적인 일에 감사해요."
+        }
+      ]
+    },
+    {
+      "unitNum": 3,
+      "id": "uYv4xMHLf3U",
+      "chipLabel": "L2-U03 Healthy Food",
+      "title": "📗 Insight Link Starter L2 - Unit 03: Healthy Eating Habits",
+      "sub": "신선한 채소와 과일로 튼튼한 몸 만들기!",
+      "shadow": [
+        {
+          "sentence": "Eating fresh vegetables makes our body strong.",
+          "ko": "신선한 채소를 먹으면 몸이 튼튼해져요."
+        },
+        {
+          "sentence": "Drink plenty of water throughout the day.",
+          "ko": "하루 종일 물을 충분히 마시세요."
+        },
+        {
+          "sentence": "Healthy food gives us good energy.",
+          "ko": "건강한 음식은 우리에게 좋은 에너지를 줍니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 4,
+      "id": "5iuxZnyfSZc",
+      "chipLabel": "L2-U04 Inventions",
+      "title": "📗 Insight Link Starter L2 - Unit 04: Incredible Inventions",
+      "sub": "세상을 바꾼 놀라운 발명품 이야기!",
+      "shadow": [
+        {
+          "sentence": "Inventions make our lives easier and better.",
+          "ko": "발명품들은 우리의 삶을 더 쉽고 편리하게 만들어요."
+        },
+        {
+          "sentence": "Great ideas can change the whole world.",
+          "ko": "위대한 아이디어는 온 세상을 바꿀 수 있습니다."
+        },
+        {
+          "sentence": "Anyone can become a creative thinker.",
+          "ko": "누구나 창의적인 생각가가 될 수 있어요."
+        }
+      ]
+    }
+  ],
+  "l3": [
+    {
+      "unitNum": 1,
+      "id": "lR2C9YB5Tlk",
+      "chipLabel": "L3-U01 Nile River",
+      "title": "📗 Insight Link Starter L3 - Unit 01: The Mighty Nile River",
+      "sub": "세계에서 가장 긴 나일강과 고대 문명의 신비!",
+      "shadow": [
+        {
+          "sentence": "The Nile River is the longest river in the world.",
+          "ko": "나일강은 세계에서 가장 긴 강이에요."
+        },
+        {
+          "sentence": "Ancient people built civilizations near the water.",
+          "ko": "고대 사람들은 물가 근처에 문명을 건설했습니다."
+        },
+        {
+          "sentence": "Rivers give life to plants and animals.",
+          "ko": "강은 식물과 동물에게 생명을 불어넣어 줘요."
+        }
+      ]
+    },
+    {
+      "unitNum": 3,
+      "id": "wdKQvtrpP_U",
+      "chipLabel": "L3-U03 Wonders",
+      "title": "📗 Insight Link Starter L3 - Unit 03: Wonders of the Earth",
+      "sub": "자연이 빚어낸 숨 막히게 웅장한 지구의 경이!",
+      "shadow": [
+        {
+          "sentence": "High mountains reach up to the clouds.",
+          "ko": "높은 산들은 구름까지 솟아올라 있어요."
+        },
+        {
+          "sentence": "Nature creates breathtaking landscapes everywhere.",
+          "ko": "자연은 곳곳에 숨 막히게 아름다운 풍경을 만듭니다."
+        },
+        {
+          "sentence": "We can explore many wonders around us.",
+          "ko": "우리는 우리 주변의 수많은 경이로움을 탐험할 수 있어요."
+        }
+      ]
+    },
+    {
+      "unitNum": 5,
+      "id": "z0Jke9wNx-k",
+      "chipLabel": "L3-U05 Weather",
+      "title": "📗 Insight Link Starter L3 - Unit 05: How Weather Changes",
+      "sub": "태양과 바람, 구름이 만드는 사계절 날씨의 변화!",
+      "shadow": [
+        {
+          "sentence": "The sun heats the land and creates wind.",
+          "ko": "태양이 땅을 데우고 바람을 만듭니다."
+        },
+        {
+          "sentence": "Clouds bring rain and snow to the earth.",
+          "ko": "구름은 땅에 비와 눈을 내려줘요."
+        },
+        {
+          "sentence": "The seasons bring different beauty each time.",
+          "ko": "계절은 매번 색다른 아름다움을 선사합니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 6,
+      "id": "4Xv6xWUNbh8",
+      "chipLabel": "L3-U06 Animal Feet",
+      "title": "📗 Insight Link Starter L3 - Unit 06: Amazing Animal Adaptations",
+      "sub": "추운 북극과 거친 자연에서 살아남는 동물들의 지혜!",
+      "shadow": [
+        {
+          "sentence": "Animals adapt to survive in harsh weather.",
+          "ko": "동물들은 혹독한 날씨에서 살아남기 위해 적응해요."
+        },
+        {
+          "sentence": "Polar bears have thick fur for freezing cold.",
+          "ko": "북극곰은 살을 에는 추위를 견디기 위해 두꺼운 털이 있어요."
+        },
+        {
+          "sentence": "Every living creature has unique strengths.",
+          "ko": "모든 살아있는 생명체는 고유한 장점을 지니고 있습니다."
+        }
+      ]
+    }
+  ]
+};
+
+var currentVideoSeries = 'handinhand'; // 'handinhand' | 'ort' | 'insight'
+var currentOrtLevel = 'ort5';         // 'ort5' | 'ort4'
+var currentInsightLevel = 'l1';       // 'l1' | 'l2' | 'l3'
+
+var activeItemIndices = {
+  'handinhand': 0,
+  'ort': 0,
+  'insight': 0
+};
+
+var currentOrtShadow = HANDINHAND_SERIES_VIDEOS[0].shadow;
+
+function switchVideoSeries(series) {
+  currentVideoSeries = series;
+  renderVideoSeriesUI();
+  var idx = activeItemIndices[series] || 0;
+  selectVideoItem(series, idx);
+}
+
+function switchOrtLevel(lvl) {
+  currentOrtLevel = lvl;
+  activeItemIndices['ort'] = 0;
+  renderVideoSeriesUI();
+  selectVideoItem('ort', 0);
+}
+
+function switchInsightLevel(lvl) {
+  currentInsightLevel = lvl;
+  activeItemIndices['insight'] = 0;
+  renderVideoSeriesUI();
+  selectVideoItem('insight', 0);
+}
 
 function getOrtListForCurrentLevel() {
   if (currentOrtLevel === 'ort5') {
     try {
       var s5 = localStorage.getItem('cats_ort5_custom_series_v1');
-      if (s5) {
-        var arr5 = JSON.parse(s5);
-        if (Array.isArray(arr5) && arr5.length > 0) return arr5;
-      }
+      if (s5) return JSON.parse(s5);
     } catch(e) {}
-    return ORT_STAGE5_VIDEOS;
+    return ORT5_SERIES_VIDEOS;
   } else {
     try {
       var s4 = localStorage.getItem('cats_ort_custom_series_v1');
-      if (s4) {
-        var arr4 = JSON.parse(s4);
-        if (Array.isArray(arr4) && arr4.length > 0) return arr4;
-      }
+      if (s4) return JSON.parse(s4);
     } catch(e) {}
-    return ORT_SERIES_VIDEOS;
+    return ORT4_SERIES_VIDEOS;
   }
 }
 
-function switchOrtLevel(level) {
-  currentOrtLevel = level;
-  var btn5 = document.getElementById('btnOrtLevel5');
-  var btn4 = document.getElementById('btnOrtLevel4');
-  if (btn5) {
-    btn5.style.background = (level === 'ort5' ? '#059669' : 'white');
-    btn5.style.color = (level === 'ort5' ? 'white' : '#065f46');
-    btn5.style.fontWeight = (level === 'ort5' ? 'bold' : 'normal');
-  }
-  if (btn4) {
-    btn4.style.background = (level === 'ort4' ? '#7c3aed' : 'white');
-    btn4.style.color = (level === 'ort4' ? 'white' : '#5b21b6');
-    btn4.style.fontWeight = (level === 'ort4' ? 'bold' : 'normal');
-  }
-  renderOrtChips();
-  selectOrtBook(0);
-}
+function renderVideoSeriesUI() {
+  var btnH = document.getElementById('btnSeriesHandInHand');
+  var btnO = document.getElementById('btnSeriesOrt');
+  var btnI = document.getElementById('btnSeriesInsight');
+  var badge = document.getElementById('series_count_badge');
 
-function saveOrtSeries(arr) {
-  try {
-    localStorage.setItem('cats_ort_custom_series_v1', JSON.stringify(arr));
-  } catch(e) {}
-}
+  if (btnH && btnO && btnI) {
+    btnH.style.background = (currentVideoSeries === 'handinhand' ? '#2563eb' : 'white');
+    btnH.style.color = (currentVideoSeries === 'handinhand' ? 'white' : '#2563eb');
+    btnH.style.boxShadow = (currentVideoSeries === 'handinhand' ? '0 2px 6px rgba(37,99,235,0.25)' : 'none');
 
-var currentActiveOrtList = loadOrtSeries();
+    btnO.style.background = (currentVideoSeries === 'ort' ? '#059669' : 'white');
+    btnO.style.color = (currentVideoSeries === 'ort' ? 'white' : '#059669');
+    btnO.style.boxShadow = (currentVideoSeries === 'ort' ? '0 2px 6px rgba(5,150,105,0.25)' : 'none');
 
-function renderOrtChips() {
-  var list = getOrtListForCurrentLevel();
-  var container = document.getElementById('ort_book_selector');
-  if (!container) return;
-  var badge = document.getElementById('ort_total_badge');
-  if (badge) {
-    var lvlName = (currentOrtLevel === 'ort5' ? '5단계 넉넉한 10권+' : '4단계 6권+');
-    badge.textContent = '(' + lvlName + ' · ' + list.length + '권 수록)';
+    btnI.style.background = (currentVideoSeries === 'insight' ? '#d97706' : 'white');
+    btnI.style.color = (currentVideoSeries === 'insight' ? 'white' : '#d97706');
+    btnI.style.boxShadow = (currentVideoSeries === 'insight' ? '0 2px 6px rgba(217,119,6,0.25)' : 'none');
   }
 
-  var activeBorderColor = (currentOrtLevel === 'ort5' ? '#059669' : '#7c3aed');
-  var activeTextColor = (currentOrtLevel === 'ort5' ? '#065f46' : '#5b21b6');
+  var subControls = document.getElementById('sub_selector_controls');
+  var chipsContainer = document.getElementById('video_series_chips');
+  if (!subControls || !chipsContainer) return;
 
-  container.innerHTML = list.map(function(b, idx) {
-    var shortTitle = b.title.split(':')[1] || b.title;
-    shortTitle = shortTitle.trim();
-    if (shortTitle.length > 20) shortTitle = shortTitle.substring(0, 20) + '...';
-    return '<button class="ort-chip" onclick="selectOrtBook(' + idx + ')" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid ' + activeBorderColor + ';background:white;color:' + activeTextColor + '">' + 
-      (idx + 1) + '권 ' + shortTitle + '</button>';
-  }).join('');
+  var currentIdx = activeItemIndices[currentVideoSeries] || 0;
+
+  if (currentVideoSeries === 'handinhand') {
+    if (badge) badge.textContent = 'Unit 5~12 (총 8개 단원 완비)';
+    subControls.innerHTML = '<div style="font-size:11.5px;color:#1e40af;font-weight:700;display:flex;align-items:center;gap:4px;">' +
+      '<span>🏃</span> <span>e-future 공식 애니메이션 & 실전 회화 쉐도잉</span>' +
+      '</div>';
+
+    chipsContainer.innerHTML = HANDINHAND_SERIES_VIDEOS.map(function(item, idx) {
+      var isActive = (idx === currentIdx);
+      var border = isActive ? '2px solid #2563eb' : '1px solid #bfdbfe';
+      var bg = isActive ? '#2563eb' : '#eff6ff';
+      var color = isActive ? 'white' : '#1e3a8a';
+      var weight = isActive ? '700' : '600';
+      return '<button class="series-chip" onclick="selectVideoItem(\'handinhand\', ' + idx + ')" style="font-size:12px;padding:7px 11px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? '0 2px 6px rgba(37,99,235,0.3)' : 'none') + ';">' +
+        item.chipLabel + '</button>';
+    }).join('');
+
+  } else if (currentVideoSeries === 'ort') {
+    var ortList = getOrtListForCurrentLevel();
+    if (badge) badge.textContent = (currentOrtLevel === 'ort5' ? '5단계 10권+' : '4단계 6권+') + ' (' + ortList.length + '권 수록)';
+
+    subControls.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">' +
+      '<div style="display:flex;gap:6px;">' +
+        '<button onclick="switchOrtLevel(\'ort5\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #059669;background:' + (currentOrtLevel === 'ort5' ? '#059669' : 'white') + ';color:' + (currentOrtLevel === 'ort5' ? 'white' : '#059669') + ';font-weight:700;">🌟 5단계 (10권+)</button>' +
+        '<button onclick="switchOrtLevel(\'ort4\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #7c3aed;background:' + (currentOrtLevel === 'ort4' ? '#7c3aed' : 'white') + ';color:' + (currentOrtLevel === 'ort4' ? 'white' : '#7c3aed') + ';font-weight:700;">📖 4단계 (6권+)</button>' +
+      '</div>' +
+      '<button onclick="openAddOrtModal()" style="font-size:11px;color:white;background:#059669;border:none;padding:5px 10px;border-radius:7px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px;box-shadow:0 2px 5px rgba(5,150,105,0.3);">' +
+        '<span>➕</span> <span>권수 추가</span>' +
+      '</button>' +
+    '</div>';
+
+    chipsContainer.innerHTML = ortList.map(function(item, idx) {
+      var isActive = (idx === currentIdx);
+      var activeColor = (currentOrtLevel === 'ort5' ? '#059669' : '#7c3aed');
+      var border = isActive ? ('2px solid ' + activeColor) : '#e5e7eb';
+      var bg = isActive ? activeColor : 'white';
+      var color = isActive ? 'white' : '#374151';
+      var weight = isActive ? '700' : '600';
+      return '<button class="series-chip" onclick="selectVideoItem(\'ort\', ' + idx + ')" style="font-size:12px;padding:7px 10px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? '0 2px 6px rgba(0,0,0,0.15)' : 'none') + ';">' +
+        item.chipLabel + '</button>';
+    }).join('');
+
+  } else if (currentVideoSeries === 'insight') {
+    var inList = INSIGHT_SERIES_VIDEOS[currentInsightLevel] || [];
+    if (badge) badge.textContent = '인사이트 ' + currentInsightLevel.toUpperCase() + ' (' + inList.length + '개 유닛)';
+
+    subControls.innerHTML = '<div style="display:flex;gap:6px;">' +
+      '<button onclick="switchInsightLevel(\'l1\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #d97706;background:' + (currentInsightLevel === 'l1' ? '#d97706' : 'white') + ';color:' + (currentInsightLevel === 'l1' ? 'white' : '#d97706') + ';font-weight:700;">📗 Starter L1</button>' +
+      '<button onclick="switchInsightLevel(\'l2\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #d97706;background:' + (currentInsightLevel === 'l2' ? '#d97706' : 'white') + ';color:' + (currentInsightLevel === 'l2' ? 'white' : '#d97706') + ';font-weight:700;">📗 Starter L2</button>' +
+      '<button onclick="switchInsightLevel(\'l3\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #d97706;background:' + (currentInsightLevel === 'l3' ? '#d97706' : 'white') + ';color:' + (currentInsightLevel === 'l3' ? 'white' : '#d97706') + ';font-weight:700;">📗 Starter L3</button>' +
+    '</div>';
+
+    chipsContainer.innerHTML = inList.map(function(item, idx) {
+      var isActive = (idx === currentIdx);
+      var border = isActive ? '2px solid #d97706' : '1px solid #fed7aa';
+      var bg = isActive ? '#d97706' : '#fffbeb';
+      var color = isActive ? 'white' : '#9a3412';
+      var weight = isActive ? '700' : '600';
+      return '<button class="series-chip" onclick="selectVideoItem(\'insight\', ' + idx + ')" style="font-size:12px;padding:7px 11px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? '0 2px 6px rgba(217,119,6,0.3)' : 'none') + ';">' +
+        item.chipLabel + '</button>';
+    }).join('');
+  }
 }
 
-function selectOrtBook(idx) {
-  var list = getOrtListForCurrentLevel();
-  var b = list[idx];
-  if (!b) return;
+function selectVideoItem(series, idx) {
+  activeItemIndices[series] = idx;
+  var item = null;
+
+  if (series === 'handinhand') {
+    item = HANDINHAND_SERIES_VIDEOS[idx];
+  } else if (series === 'ort') {
+    var list = getOrtListForCurrentLevel();
+    item = list[idx];
+  } else if (series === 'insight') {
+    var inList = INSIGHT_SERIES_VIDEOS[currentInsightLevel] || [];
+    item = inList[idx];
+  }
+
+  if (!item) return;
 
   var cover = document.getElementById('ytEndCover');
   if (cover) cover.style.display = 'none';
 
   var iframe = document.getElementById('theatreYtIframe');
   if (iframe) {
-    iframe.src = 'https://www.youtube-nocookie.com/embed/' + b.id + '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://smcciao-commits.github.io';
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + item.id + '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://smcciao-commits.github.io';
     setTimeout(initYtPlayer, 800);
   }
+
   var titleEl = document.getElementById('ytVideoTitle');
-  if (titleEl) titleEl.textContent = b.title;
+  if (titleEl) titleEl.textContent = item.title;
   var subEl = document.getElementById('ytVideoSub');
-  if (subEl) subEl.textContent = b.sub;
+  if (subEl) subEl.textContent = item.sub;
 
-  var chips = document.querySelectorAll('.ort-chip');
-  chips.forEach(function(c, i) {
-    if (i === idx) {
-      c.style.background = '#7c3aed';
-      c.style.color = '#ffffff';
-      c.style.fontWeight = 'bold';
-    } else {
-      c.style.background = '#ffffff';
-      c.style.color = '#5b21b6';
-      c.style.fontWeight = 'normal';
-    }
-  });
-
-  if (b.shadow && b.shadow.length) {
-    currentOrtShadow = b.shadow;
+  if (item.shadow && item.shadow.length) {
+    currentOrtShadow = item.shadow;
     S.shadowIdx = 0;
     renderShadowSentence();
   }
+
+  renderVideoSeriesUI();
 }
 
 function openAddOrtModal() {
   var m = document.getElementById('addOrtModal');
   if (m) m.style.display = 'flex';
 }
+
 function closeAddOrtModal() {
   var m = document.getElementById('addOrtModal');
   if (m) m.style.display = 'none';
 }
 
-function submitNewOrtBook() {
+function saveCustomOrtBook() {
   var title = document.getElementById('newOrtTitle').value.trim();
-  var urlOrId = document.getElementById('newOrtYtUrl').value.trim();
-  var sub = document.getElementById('newOrtSub').value.trim();
+  var ytInput = document.getElementById('newOrtYoutube').value.trim();
+  var summary = document.getElementById('newOrtSummary').value.trim();
   var s1 = document.getElementById('newOrtS1').value.trim();
+  var s1k = document.getElementById('newOrtS1k').value.trim();
   var s2 = document.getElementById('newOrtS2').value.trim();
+  var s2k = document.getElementById('newOrtS2k').value.trim();
   var s3 = document.getElementById('newOrtS3').value.trim();
+  var s3k = document.getElementById('newOrtS3k').value.trim();
 
-  if (!title || !urlOrId) {
-    alert('책 제목과 유튜브 주소(또는 영상 ID)는 필수입니다!');
+  if (!title || !ytInput) {
+    alert('책 제목과 유튜브 링크는 필수입니다!');
     return;
   }
 
-  var vid = urlOrId;
-  var match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-  if (match && match[1]) vid = match[1];
+  var vidId = extractYoutubeId(ytInput);
+  if (!vidId) {
+    alert('올바른 유튜브 링크 또는 영상 ID를 입력해 주세요.');
+    return;
+  }
 
+  var currentList = getOrtListForCurrentLevel();
   var newBook = {
-    bookNum: currentActiveOrtList.length + 1,
-    id: vid,
-    title: '📖 ORT 4 - ' + title,
-    sub: sub || '옥스포드 리딩트리 4단계 스토리 애니메이션!',
+    bookNum: currentList.length + 1,
+    id: vidId,
+    chipLabel: (currentList.length + 1) + '권 ' + title.substring(0, 10),
+    title: (currentOrtLevel === 'ort5' ? '📖 ORT 5: ' : '📖 ORT 4: ') + title,
+    sub: summary || '원장님께서 추가 등록하신 맞춤 모험 영상!',
     shadow: [
-      { sentence: s1 || "Biff and Chip liked the story.", ko: "비프와 칩은 그 이야기를 좋아했습니다." },
-      { sentence: s2 || "They had a great adventure together.", ko: "그들은 함께 멋진 모험을 했습니다." },
-      { sentence: s3 || "It was an exciting day!", ko: "정말 신나는 하루였습니다!" }
+      { sentence: s1 || 'We went on a magical reading adventure.', ko: s1k || '우리는 마법 같은 리딩 모험을 떠났습니다.' },
+      { sentence: s2 || 'The magic key glowed in the darkness.', ko: s2k || '마법의 열쇠가 어둠 속에서 빛났습니다.' },
+      { sentence: s3 || 'Everyone had a wonderful time together.', ko: s3k || '모두가 함께 즐거운 시간을 보냈습니다.' }
     ]
   };
 
-  var key = (currentOrtLevel === 'ort5' ? 'cats_ort5_custom_series_v1' : 'cats_ort_custom_series_v1');
-  var list = getOrtListForCurrentLevel();
-  list.push(newBook);
-  try { localStorage.setItem(key, JSON.stringify(list)); } catch(e) {}
-  renderOrtChips();
+  currentList.push(newBook);
+  var storageKey = (currentOrtLevel === 'ort5' ? 'cats_ort5_custom_series_v1' : 'cats_ort_custom_series_v1');
+  localStorage.setItem(storageKey, JSON.stringify(currentList));
+
   closeAddOrtModal();
-  selectOrtBook(list.length - 1);
-  alert('🎉 ' + title + ' 권이 성공적으로 추가되었습니다!');
+  renderVideoSeriesUI();
+  selectVideoItem('ort', currentList.length - 1);
+  alert('🎉 ' + title + ' 영상이 안전하게 추가되었습니다!');
 }
 
-function updateYoutubeVideoForDay(dayIdx) {
-  var videoData = DAY_YOUTUBE_VIDEOS[dayIdx] || DAY_YOUTUBE_VIDEOS[0];
-  var customId = localStorage.getItem('cats_yt_custom_' + dayIdx);
-  var videoId = customId || videoData.id;
-
-  var iframe = document.getElementById('theatreYtIframe');
-  if (iframe) {
-    iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?rel=0&modestbranding=1&playsinline=1';
-  }
-  var titleEl = document.getElementById('ytVideoTitle');
-  if (titleEl) {
-    titleEl.textContent = customId ? ('🎬 Day 0' + (dayIdx + 1) + ': 원장님 맞춤 등록 영상') : videoData.title;
-  }
-  var subEl = document.getElementById('ytVideoSub');
-  if (subEl) {
-    subEl.textContent = videoData.sub;
-  }
+function extractYoutubeId(url) {
+  if (!url) return null;
+  if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+  var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  return m ? m[1] : null;
 }
 
-function openYoutubeCustomizer() {
-  var curCustom = localStorage.getItem('cats_yt_custom_' + S.curDayIdx) || '';
-  var promptMsg = "Day 0" + (S.curDayIdx + 1) + "에 재생할 유튜브 영상 주소 또는 ID를 입력해 주세요. (핸드인핸드 영상이나 원하는 학습 영상 URL을 붙여넣으시면 즉시 변경됩니다)";
-  var input = prompt(promptMsg, curCustom ? ('https://youtu.be/' + curCustom) : '');
-  if (input === null) return;
-  input = input.trim();
-  if (!input) {
-    localStorage.removeItem('cats_yt_custom_' + S.curDayIdx);
-    alert("기본 추천 영상으로 복원했습니다!");
-    updateYoutubeVideoForDay(S.curDayIdx);
-    return;
-  }
-
-  var videoId = '';
-  if (input.indexOf('youtu.be/') !== -1) {
-    videoId = input.split('youtu.be/')[1].substring(0, 11);
-  } else if (input.indexOf('watch?v=') !== -1) {
-    videoId = input.split('watch?v=')[1].substring(0, 11);
-  } else if (input.indexOf('embed/') !== -1) {
-    videoId = input.split('embed/')[1].substring(0, 11);
-  } else if (input.length === 11) {
-    videoId = input;
-  }
-
-  if (videoId) {
-    localStorage.setItem('cats_yt_custom_' + S.curDayIdx, videoId);
-    alert("유튜브 영상이 성공적으로 등록되었습니다! 🎬");
-    updateYoutubeVideoForDay(S.curDayIdx);
-  } else {
-    alert("올바른 유튜브 링크나 11자리 영상 ID를 확인해 주세요.");
-  }
-}
-
-function loadDay(idx) {
-  var p = DAILY_PACKS[idx];
-  document.getElementById('currentBookLabel').textContent = p.book;
-  S.vocaIdx = 0;
-  S.shadowIdx = 0;
-  S.talkRound = 0;
-  S.quizIdx = 0;
-  S.quizScore = 0;
-
-  renderVocaCard();
-  initTheatreScene();
-  renderShadowSentence();
-  initCatTalk();
-  renderQuizQ();
-  switchStep(1);
-}
 
 /* ============ JOY ENGLISH SPECIAL SECTION ============ */
 function initJoySection() {
@@ -2936,8 +3427,8 @@ function switchStep(step) {
     if (view) view.style.display = (i === step ? 'flex' : 'none');
   }
   if (step === 2) {
-    updateYtPlayerForDay(S.curDayIdx);
-    renderOrtChips();
+    
+    renderVideoSeriesUI();
     initYtPlayer();
     renderShadowSentence();
   }
