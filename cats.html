@@ -2073,8 +2073,16 @@ function openYoutubeCustomizer() {
     return;
   }
 
-  var match = input.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-  var videoId = match ? match[1] : (input.length === 11 ? input : '');
+  var videoId = '';
+  if (input.indexOf('youtu.be/') !== -1) {
+    videoId = input.split('youtu.be/')[1].substring(0, 11);
+  } else if (input.indexOf('watch?v=') !== -1) {
+    videoId = input.split('watch?v=')[1].substring(0, 11);
+  } else if (input.indexOf('embed/') !== -1) {
+    videoId = input.split('embed/')[1].substring(0, 11);
+  } else if (input.length === 11) {
+    videoId = input;
+  }
 
   if (videoId) {
     localStorage.setItem('cats_yt_custom_' + S.curDayIdx, videoId);
