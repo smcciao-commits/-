@@ -886,7 +886,7 @@ function mockCall(fn, args) {
     return { score: Math.round((correct / (total || 1)) * 100) };
   }
 
-  /* ===== 단어 대결 (배틀) 실시간 엔진 (v31 bulletproof) ===== */
+  /* ===== 단어 대결 (배틀) 실시간 초경량 엔진 (v32 ultra-fast) ===== */
   if (fn === 'battleSets') {
     var sets = [];
     var allKeys = Object.keys(ALL_WORD_SETS);
@@ -908,15 +908,17 @@ function mockCall(fn, args) {
     var mins = Math.max(1, Math.min(30, Number(args[2]) || 3));
     var dir = args[3] === 'ko' ? 'ko' : 'en';
 
-    var qs = generateBattleQs('', dir, setNames);
     var code = String(Math.floor(1000 + Math.random() * 9000));
     var label = setNames.join(', ');
     if (label.length > 28) label = label.slice(0, 26) + '…';
+
+    var qs = generateBattleQs('', dir, setNames);
 
     var room = {
       code: code,
       status: 'lobby',
       set: label,
+      setNames: setNames,
       mins: mins,
       dir: dir,
       qs: qs,
@@ -932,11 +934,12 @@ function mockCall(fn, args) {
       localStorage.setItem('topedu_battle_latest', code);
     } catch(e){}
 
+    // Broadcast lightweight room announcement (no huge question array!)
     try {
       fetch('https://ntfy.sh/topedu_bt_' + code, {
         method: 'POST',
-        headers: { 'Title': 'battleCreate' },
-        body: JSON.stringify({ type: 'room', room: room })
+        headers: { 'Title': 'room' },
+        body: JSON.stringify({ type: 'room', code: code, status: 'lobby', set: label, setNames: setNames, mins: mins, dir: dir })
       }).catch(function(){});
     } catch(e){}
 
@@ -996,7 +999,7 @@ function mockCall(fn, args) {
       } catch(err){}
     }
 
-    // Also poll messages in background
+    // Fast poll fallback
     try {
       fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=5m')
         .then(function(res){ return res.text(); })
@@ -1039,10 +1042,17 @@ function mockCall(fn, args) {
       room.startAt = now + 3000;
       room.endAt = room.startAt + (room.mins * 60 * 1000);
       try {
+        // Send LIGHTWEIGHT start packet (NO questions payload so it is never an attachment!)
         fetch('https://ntfy.sh/topedu_bt_' + code, {
           method: 'POST',
           headers: { 'Title': 'start' },
-          body: JSON.stringify({ type: 'start', startAt: room.startAt, endAt: room.endAt, qs: room.qs })
+          body: JSON.stringify({
+            type: 'start',
+            startAt: room.startAt,
+            endAt: room.endAt,
+            dir: room.dir,
+            setNames: room.setNames || []
+          })
         }).catch(function(){});
       } catch(e){}
     } else if (action === 'end' && room.status !== 'end') {
@@ -1121,13 +1131,14 @@ function mockCall(fn, args) {
         code: code,
         status: 'lobby',
         set: '단어 대결',
+        setNames: [],
         names: [],
         players: {},
         qs: generateBattleQs(cred.ban || '', 'en')
       };
     }
     if (!room.qs || !room.qs.length) {
-      room.qs = generateBattleQs(cred.ban || '', 'en');
+      room.qs = generateBattleQs(cred.ban || '', 'en', room.setNames);
     }
 
     var pKey = (cred.ban || '') + ':' + (cred.name || '');
@@ -1149,21 +1160,27 @@ function mockCall(fn, args) {
           try {
             var data = JSON.parse(e.data);
             var m = typeof data.message === 'string' ? JSON.parse(data.message) : data.message;
-            if (m && m.type === 'room' && m.room) {
-              var r = m.room;
-              if (!r.qs || !r.qs.length) r.qs = generateBattleQs(cred.ban || '', 'en');
-              localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
-            } else if (m && m.type === 'start') {
+            if (m && m.type === 'start') {
               var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
               r.status = 'run';
-              r.startAt = m.startAt;
-              r.endAt = m.endAt;
-              if (m.qs && m.qs.length) r.qs = m.qs;
-              else if (!r.qs || !r.qs.length) r.qs = generateBattleQs(cred.ban || '', 'en');
+              r.startAt = m.startAt || (Date.now() + 3000);
+              r.endAt = m.endAt || (Date.now() + 180000);
+              r.dir = m.dir || 'en';
+              r.setNames = m.setNames || [];
+              r.qs = generateBattleQs(cred.ban || '', r.dir, r.setNames);
               localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
             } else if (m && m.type === 'end') {
               var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
               r.status = 'end';
+              localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+            } else if (m && m.type === 'room') {
+              var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+              r.status = r.status || 'lobby';
+              r.set = m.set || r.set;
+              r.setNames = m.setNames || r.setNames;
+              r.dir = m.dir || r.dir || 'en';
+              r.mins = m.mins || r.mins || 3;
+              if (!r.qs || !r.qs.length) r.qs = generateBattleQs(cred.ban || '', r.dir, r.setNames);
               localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
             }
           } catch(err){}
@@ -1171,7 +1188,7 @@ function mockCall(fn, args) {
       } catch(err){}
 
       try {
-        fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=30m')
+        fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=10m')
           .then(function(res){ return res.text(); })
           .then(function(txt){
             var lines = txt.trim().split('\n');
@@ -1179,16 +1196,19 @@ function mockCall(fn, args) {
               try {
                 var d = JSON.parse(l);
                 var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
-                if (m && m.type === 'room' && m.room) {
-                  var r = m.room;
-                  if (!r.qs || !r.qs.length) r.qs = generateBattleQs(cred.ban || '', 'en');
-                  localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
-                } else if (m && m.type === 'start') {
+                if (m && m.type === 'start') {
                   var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
                   r.status = 'run';
-                  r.startAt = m.startAt;
-                  r.endAt = m.endAt;
-                  if (m.qs && m.qs.length) r.qs = m.qs;
+                  r.startAt = m.startAt || (Date.now() + 3000);
+                  r.endAt = m.endAt || (Date.now() + 180000);
+                  r.dir = m.dir || 'en';
+                  r.setNames = m.setNames || [];
+                  r.qs = generateBattleQs(cred.ban || '', r.dir, r.setNames);
+                  localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+                } else if (m && m.type === 'room') {
+                  var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+                  r.set = m.set || r.set;
+                  r.setNames = m.setNames || r.setNames;
                   localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
                 }
               } catch(e){}
@@ -1226,17 +1246,18 @@ function mockCall(fn, args) {
         code: code,
         status: 'lobby',
         set: '단어 대결',
+        setNames: [],
         names: [cred.name],
         players: {},
         qs: generateBattleQs(cred.ban || '', 'en')
       };
     }
     if (!room.qs || !room.qs.length) {
-      room.qs = generateBattleQs(cred.ban || '', 'en');
+      room.qs = generateBattleQs(cred.ban || '', room.dir || 'en', room.setNames);
       try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
     }
 
-    // Background poll for start/end signals
+    // Fast background check for start event
     try {
       fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=5m')
         .then(function(res){ return res.text(); })
@@ -1250,9 +1271,11 @@ function mockCall(fn, args) {
               var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
               if (m && m.type === 'start') {
                 r.status = 'run';
-                r.startAt = m.startAt;
-                r.endAt = m.endAt;
-                if (m.qs && m.qs.length) r.qs = m.qs;
+                r.startAt = m.startAt || Date.now();
+                r.endAt = m.endAt || (Date.now() + 180000);
+                r.dir = m.dir || 'en';
+                r.setNames = m.setNames || [];
+                r.qs = generateBattleQs(cred.ban || '', r.dir, r.setNames);
                 changed = true;
               } else if (m && m.type === 'end') {
                 r.status = 'end';
@@ -1282,11 +1305,12 @@ function mockCall(fn, args) {
     if (room.status === 'lobby') {
       return { status: 'lobby', count: (room.names || []).length };
     } else if (room.status === 'run') {
+      var qsToSend = withQs ? (room.qs && room.qs.length ? room.qs : generateBattleQs(cred.ban || '', room.dir || 'en', room.setNames)) : undefined;
       return {
         status: 'run',
         startIn: Math.max(0, (room.startAt || now) - now),
         endIn: Math.max(0, (room.endAt || now) - now),
-        qs: withQs ? room.qs : undefined
+        qs: qsToSend
       };
     } else {
       return {
