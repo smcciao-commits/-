@@ -178,7 +178,7 @@
       gap: 14px;
     }
 
-    /* Alarm Banner Card */
+    /* Collapsible Alarm Card */
     .alarm-card {
       background: linear-gradient(135deg, #fff9c4, #fffde7);
       border: 2px solid #ffd54f;
@@ -243,7 +243,53 @@
       gap: 4px;
     }
 
-    /* Joy English Special Practice Card (NEW!) */
+    /* Mascot Hero */
+    .mascot-hero {
+      background: linear-gradient(135deg, #f3e8ff, #fce7f3);
+      border: 2px solid #e9d5ff;
+      border-radius: 22px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.08);
+      cursor: pointer;
+    }
+    .cat-avatar-wrap {
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 2px solid #f472b6;
+    }
+    .cat-avatar-wrap svg {
+      width: 58px;
+      height: 58px;
+    }
+    .cat-bubble {
+      flex: 1;
+      background: white;
+      border-radius: 16px;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #374151;
+      border: 1.5px solid #f472b6;
+    }
+    .cat-name {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 11.5px;
+      color: #ff4081;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    /* Joy English Special Practice Card */
     .joy-card {
       background: linear-gradient(135deg, #eef2ff, #fdf2f8);
       border: 2.5px solid #818cf8;
@@ -420,52 +466,6 @@
       box-shadow: 0 2px 8px rgba(124, 77, 255, 0.25);
     }
 
-    /* Mascot Hero */
-    .mascot-hero {
-      background: linear-gradient(135deg, #f3e8ff, #fce7f3);
-      border: 2px solid #e9d5ff;
-      border-radius: 22px;
-      padding: 14px 16px;
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.08);
-      cursor: pointer;
-    }
-    .cat-avatar-wrap {
-      width: 72px;
-      height: 72px;
-      flex-shrink: 0;
-      background: white;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border: 2px solid #f472b6;
-    }
-    .cat-avatar-wrap svg {
-      width: 58px;
-      height: 58px;
-    }
-    .cat-bubble {
-      flex: 1;
-      background: white;
-      border-radius: 16px;
-      padding: 10px 12px;
-      font-size: 13px;
-      line-height: 1.45;
-      color: #374151;
-      border: 1.5px solid #f472b6;
-    }
-    .cat-name {
-      font-family: 'Maplestory', sans-serif;
-      font-size: 11.5px;
-      color: #ff4081;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
     /* 4-Step Tab Navigation */
     .step-nav {
       display: grid;
@@ -637,63 +637,136 @@
       box-shadow: 0 4px 12px rgba(124, 77, 255, 0.25);
     }
 
-    /* Step 2: Animated Story Theatre */
+    /* ========================================= */
+    /* STEP 2: HIGH-GRADE ANIMATED SVG THEATRE   */
+    /* ========================================= */
     .theatre-box {
       width: 100%;
-      background: #111827;
-      border-radius: 16px;
+      height: 240px;
+      background: linear-gradient(180deg, #bae6fd 0%, #e0f2fe 60%, #bbf7d0 100%);
+      border-radius: 20px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-    }
-    .theatre-canvas {
-      width: 100%;
-      height: 220px;
-      display: block;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      border: 3px solid #7dd3fc;
       cursor: pointer;
+      user-select: none;
     }
+    .theatre-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .particles-layer {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .magic-sparkle {
+      position: absolute;
+      font-size: 24px;
+      pointer-events: none;
+      animation: burstFloat 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+      z-index: 20;
+    }
+    @keyframes burstFloat {
+      0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
+      50% { transform: translate(var(--tx), var(--ty)) scale(1.3) rotate(180deg); opacity: 1; }
+      100% { transform: translate(var(--tx2), var(--ty2)) scale(0.8) rotate(360deg); opacity: 0; }
+    }
+
+    /* CSS Animations for Characters */
+    @keyframes cloudDrift {
+      0% { transform: translateX(-30px); }
+      50% { transform: translateX(30px); }
+      100% { transform: translateX(-30px); }
+    }
+    .anim-cloud { animation: cloudDrift 14s infinite ease-in-out; }
+
+    @keyframes cheetahRun {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-8px) rotate(-3deg); }
+      50% { transform: translateY(0) rotate(2deg); }
+      75% { transform: translateY(-5px) rotate(-1deg); }
+    }
+    .anim-cheetah { animation: cheetahRun 0.8s infinite ease-in-out; }
+
+    @keyframes giraffeSway {
+      0%, 100% { transform: rotate(0deg); transform-origin: 350px 200px; }
+      50% { transform: rotate(4deg); transform-origin: 350px 200px; }
+    }
+    .anim-giraffe { animation: giraffeSway 3s infinite ease-in-out; }
+
+    @keyframes hippoBop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .anim-hippo { animation: hippoBop 2s infinite ease-in-out; }
+
+    @keyframes sunGlow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .anim-sun { animation: sunGlow 3s infinite ease-in-out; transform-origin: 430px 40px; }
+
     .theatre-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
-      background: #1f2937;
+      padding: 10px 14px;
+      background: #1e293b;
       color: white;
+      border-radius: 14px;
+      margin-top: 6px;
     }
     .theatre-btn {
-      background: #374151;
+      background: #334155;
       border: none;
       color: white;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 12px;
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
     .theatre-btn.play {
-      background: var(--mint);
-      color: #064e3b;
+      background: #10b981;
+      color: white;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
     }
     .subtitles-box {
       background: #faf5ff;
-      border: 1.5px solid #e9d5ff;
-      border-radius: 12px;
-      padding: 10px 12px;
-      min-height: 52px;
+      border: 2px solid #e9d5ff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-height: 58px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .sub-speaker {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 12px;
+      color: #9333ea;
+      font-weight: 700;
+      margin-bottom: 2px;
     }
     .sub-en {
-      font-size: 14px;
-      font-weight: 700;
-      color: #6b21a8;
+      font-size: 15px;
+      font-weight: 800;
+      color: #581c87;
       line-height: 1.4;
     }
     .sub-ko {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 2px;
+      font-size: 12.5px;
+      color: #4b5563;
+      margin-top: 3px;
     }
 
     /* Shadowing Practice */
@@ -701,19 +774,19 @@
       background: #f8fafc;
       border: 1.5px solid var(--border);
       border-radius: 16px;
-      padding: 12px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
     .shadow-target-en {
       font-family: 'Maplestory', sans-serif;
-      font-size: 15.5px;
+      font-size: 16px;
       color: #1e293b;
       line-height: 1.4;
     }
     .shadow-target-ko {
-      font-size: 12.5px;
+      font-size: 13px;
       color: var(--muted);
     }
     .shadow-mic-row {
@@ -932,7 +1005,7 @@
       cursor: pointer;
     }
 
-    /* Alarm Popup Modal */
+    /* Alarm Ringing Modal */
     .alarm-modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -1098,11 +1171,11 @@
       </div>
       <div class="cat-bubble">
         <div class="cat-name">🐱 캐츠 코치 밍키 (터치하면 야옹!)</div>
-        <div id="minkyDialogue">하린아 안녕! 🐱 필리핀 조이영어 선생님이랑 스몰토크할 때 멋지게 대답할 수 있게 오늘 하루 표현을 같이 연습해 볼까?</div>
+        <div id="minkyDialogue">하린아 안녕! 🐱 2단계 영상 시어터에서 진짜 귀여운 동물 친구들과 마법 터치 효과를 즐겨봐! ✨</div>
       </div>
     </div>
 
-    <!-- Joy English Special Practice Card (NEW!) -->
+    <!-- Joy English Special Practice Card -->
     <div class="joy-card">
       <div class="joy-header">
         <div class="joy-title">
@@ -1189,7 +1262,7 @@
       </div>
     </div>
 
-    <!-- STEP 2 VIEW -->
+    <!-- STEP 2 VIEW: HIGH-GRADE ANIMATED SVG THEATRE -->
     <div class="step-view" id="step2View" style="display:none;">
       <div class="step-header">
         <div class="step-title">
@@ -1198,23 +1271,165 @@
         <div class="step-counter" id="theatreStatusBadge">영상 준비됨</div>
       </div>
 
-      <div class="theatre-box">
-        <canvas class="theatre-canvas" id="theatreCanvas" width="480" height="220" onclick="interactCanvas()"></canvas>
-        <div class="theatre-controls">
-          <button class="theatre-btn play" id="btnPlayTheatre" onclick="toggleTheatrePlay()">▶️ 영상 재생</button>
-          <span style="font-size:11px; opacity:0.85;">화면을 터치하면 마법 효과! ✨</span>
-          <button class="theatre-btn" onclick="restartTheatre()">🔄 처음부터</button>
-        </div>
+      <!-- Animated Interactive SVG Theatre Box -->
+      <div class="theatre-box" id="theatreBox">
+        <div class="particles-layer" id="theatreParticles"></div>
+        <svg class="theatre-svg" id="theatreSvg" viewBox="0 0 500 240">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7dd3fc" />
+              <stop offset="60%" stop-color="#bae6fd" />
+              <stop offset="100%" stop-color="#fef08a" />
+            </linearGradient>
+            <linearGradient id="grassGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#86efac" />
+              <stop offset="100%" stop-color="#22c55e" />
+            </linearGradient>
+            <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#67e8f9" />
+              <stop offset="100%" stop-color="#0284c7" />
+            </linearGradient>
+          </defs>
+
+          <!-- Sky & Sun -->
+          <rect x="0" y="0" width="500" height="170" fill="url(#skyGrad)" />
+          <circle cx="440" cy="35" r="22" fill="#fde047" class="anim-sun" />
+          <circle cx="440" cy="35" r="30" fill="rgba(253, 224, 71, 0.35)" class="anim-sun" />
+
+          <!-- Clouds -->
+          <g class="anim-cloud" opacity="0.9">
+            <ellipse cx="90" cy="35" rx="25" ry="14" fill="#ffffff" />
+            <ellipse cx="110" cy="32" rx="20" ry="16" fill="#ffffff" />
+            <ellipse cx="75" cy="38" rx="16" ry="12" fill="#ffffff" />
+          </g>
+          <g class="anim-cloud" opacity="0.85" style="animation-delay: -7s;">
+            <ellipse cx="310" cy="45" rx="28" ry="15" fill="#ffffff" />
+            <ellipse cx="330" cy="40" rx="22" ry="17" fill="#ffffff" />
+            <ellipse cx="290" cy="48" rx="18" ry="12" fill="#ffffff" />
+          </g>
+
+          <!-- Rolling Hills & Acacia Tree -->
+          <ellipse cx="250" cy="220" rx="320" ry="80" fill="url(#grassGrad)" />
+          
+          <!-- Tree on left -->
+          <g id="sceneTree">
+            <path d="M 40 180 Q 50 130 55 100 Q 60 130 70 180 Z" fill="#854d0e" />
+            <ellipse cx="55" cy="90" rx="42" ry="22" fill="#15803d" />
+            <ellipse cx="40" cy="78" rx="28" ry="18" fill="#16a34a" />
+            <ellipse cx="70" cy="78" rx="30" ry="18" fill="#22c55e" />
+          </g>
+
+          <!-- Cool Blue Pond on Right for Hippo -->
+          <ellipse cx="410" cy="195" rx="70" ry="32" fill="url(#waterGrad)" />
+          <ellipse cx="410" cy="190" rx="58" ry="18" fill="#38bdf8" opacity="0.6" />
+
+          <!-- ================= CHARACTERS ================= -->
+          <!-- 1. Running Cheetah on Left/Center -->
+          <g id="charCheetah" class="anim-cheetah" style="cursor:pointer;">
+            <!-- Body -->
+            <ellipse cx="150" cy="155" rx="36" ry="18" fill="#f59e0b" />
+            <!-- Spots -->
+            <circle cx="140" cy="150" r="3" fill="#78350f" />
+            <circle cx="155" cy="158" r="2.5" fill="#78350f" />
+            <circle cx="165" cy="152" r="3" fill="#78350f" />
+            <circle cx="132" cy="158" r="2.5" fill="#78350f" />
+            <!-- Head & Cute Ears -->
+            <circle cx="180" cy="142" r="14" fill="#f59e0b" />
+            <polygon points="172,130 178,120 184,130" fill="#d97706" />
+            <polygon points="180,130 186,120 192,130" fill="#d97706" />
+            <!-- Face -->
+            <circle cx="184" cy="140" r="2.5" fill="#1e1b4b" />
+            <circle cx="189" cy="142" r="2" fill="#78350f" /> <!-- Nose -->
+            <path d="M 187 146 Q 192 149 194 146" stroke="#78350f" stroke-width="1.5" fill="none" />
+            <!-- Cheetah Tail -->
+            <path d="M 115 152 Q 100 140 102 125" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" fill="none" />
+            <circle cx="102" cy="125" r="3" fill="#78350f" />
+            <!-- Legs (Running motion) -->
+            <line x1="130" y1="168" x2="118" y2="185" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <line x1="140" y1="168" x2="135" y2="186" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <line x1="165" y1="168" x2="175" y2="186" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <line x1="172" y1="168" x2="188" y2="182" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <!-- Name tag -->
+            <rect x="130" y="190" width="46" height="15" rx="7" fill="#fef3c7" stroke="#f59e0b" />
+            <text x="153" y="201" font-size="10" font-weight="bold" fill="#b45309" text-anchor="middle">Cheetah 🐆</text>
+          </g>
+
+          <!-- 2. Tall Smiling Giraffe in Center/Right -->
+          <g id="charGiraffe" class="anim-giraffe" style="cursor:pointer;">
+            <!-- Body -->
+            <ellipse cx="270" cy="165" rx="30" ry="20" fill="#f59e0b" />
+            <circle cx="260" cy="162" r="4" fill="#b45309" />
+            <circle cx="278" cy="168" r="3.5" fill="#b45309" />
+            <!-- Long Neck -->
+            <path d="M 282 160 L 295 80 L 307 82 L 296 160 Z" fill="#f59e0b" />
+            <circle cx="292" cy="135" r="3" fill="#b45309" />
+            <circle cx="298" cy="108" r="3" fill="#b45309" />
+            <!-- Head & Horns (Ossicones) -->
+            <ellipse cx="304" cy="74" rx="14" ry="11" fill="#f59e0b" />
+            <line x1="300" y1="67" x2="298" y2="58" stroke="#b45309" stroke-width="3" stroke-linecap="round" />
+            <circle cx="298" cy="57" r="2.5" fill="#78350f" />
+            <line x1="306" y1="67" x2="306" y2="58" stroke="#b45309" stroke-width="3" stroke-linecap="round" />
+            <circle cx="306" cy="57" r="2.5" fill="#78350f" />
+            <!-- Eye & Big Smile -->
+            <circle cx="308" cy="72" r="2.5" fill="#1e1b4b" />
+            <path d="M 310 78 Q 314 82 316 77" stroke="#78350f" stroke-width="1.8" fill="none" />
+            <!-- Long Legs -->
+            <line x1="255" y1="180" x2="255" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <line x1="265" y1="180" x2="265" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <line x1="280" y1="180" x2="280" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <line x1="290" y1="180" x2="290" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
+            <!-- Name tag -->
+            <rect x="252" y="214" width="46" height="15" rx="7" fill="#fef3c7" stroke="#f59e0b" />
+            <text x="275" y="225" font-size="10" font-weight="bold" fill="#b45309" text-anchor="middle">Giraffe 🦒</text>
+          </g>
+
+          <!-- 3. Cute Hippo in Pond on Right -->
+          <g id="charHippo" class="anim-hippo" style="cursor:pointer;">
+            <!-- Hippo Head emerging from water -->
+            <ellipse cx="410" cy="178" rx="28" ry="20" fill="#94a3b8" />
+            <ellipse cx="410" cy="188" rx="34" ry="16" fill="#cbd5e1" />
+            <!-- Nostrils -->
+            <ellipse cx="402" cy="188" rx="4" ry="3" fill="#64748b" />
+            <ellipse cx="418" cy="188" rx="4" ry="3" fill="#64748b" />
+            <!-- Eyes on top -->
+            <circle cx="398" cy="168" r="5" fill="#ffffff" />
+            <circle cx="399" cy="168" r="2.5" fill="#1e1b4b" />
+            <circle cx="422" cy="168" r="5" fill="#ffffff" />
+            <circle cx="421" cy="168" r="2.5" fill="#1e1b4b" />
+            <!-- Tiny cute ears -->
+            <circle cx="390" cy="162" r="5" fill="#cbd5e1" />
+            <circle cx="430" cy="162" r="5" fill="#cbd5e1" />
+            <!-- Name tag -->
+            <rect x="388" y="214" width="44" height="15" rx="7" fill="#f1f5f9" stroke="#94a3b8" />
+            <text x="410" y="225" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">Hippo 🦛</text>
+          </g>
+        </svg>
       </div>
 
+      <!-- Video Controls -->
+      <div class="theatre-controls">
+        <button class="theatre-btn play" id="btnPlayTheatre" onclick="toggleTheatrePlay()">
+          <span>▶️</span> <span>영상 재생</span>
+        </button>
+        <span style="font-size:12px; color:#cbd5e1; font-weight:700;">
+          ✨ 화면 어디든 터치하면 마법 효과!
+        </span>
+        <button class="theatre-btn" onclick="restartTheatre()">
+          <span>🔄</span> <span>처음부터</span>
+        </button>
+      </div>
+
+      <!-- Synchronized Subtitles -->
       <div class="subtitles-box">
-        <div class="sub-en" id="subEn">The cheetah runs very fast.</div>
-        <div class="sub-ko" id="subKo">치타는 매우 빨리 달립니다.</div>
+        <div class="sub-speaker" id="subSpeaker">Minky:</div>
+        <div class="sub-en" id="subEn">Welcome to the sunny zoo! Look at all the animal friends.</div>
+        <div class="sub-ko" id="subKo">햇살 가득한 동물원에 온 걸 환영해! 동물 친구들을 봐.</div>
       </div>
 
+      <!-- Shadowing Practice -->
       <div class="shadowing-box">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-weight:700; font-size:13px; color:#475569;">🎙️ 따라 말하기 (Shadowing)</span>
+          <span style="font-weight:700; font-size:13.5px; color:#334155;">🎙️ 따라 말하기 (Shadowing)</span>
           <span style="font-size:11.5px; color:#6366f1; font-weight:700;" id="shadowCounter">1 / 3 문장</span>
         </div>
         <div class="shadow-target-en" id="shadowEn">The cheetah runs very fast.</div>
@@ -1348,7 +1563,7 @@ var S = {
   talkRound: 0,
   quizIdx: 0,
   quizScore: 0,
-  ttsRate: parseFloat(localStorage.getItem('topedu_cats_rate') || '0.72'), // Slow beginner default!
+  ttsRate: parseFloat(localStorage.getItem('topedu_cats_rate') || '0.72'),
   alarmTime: localStorage.getItem('topedu_cats_alarm_time') || '16:30',
   alarmActive: localStorage.getItem('topedu_cats_alarm_active') !== 'false',
   streak: parseInt(localStorage.getItem('topedu_cats_streak') || '3'),
@@ -1392,6 +1607,12 @@ function playChimeBell() {
   playTone(659.25, 'sine', 1.0, 0.75);
 }
 
+function playMagicTwinkleSound() {
+  playTone(587.33, 'triangle', 0.2, 0.0); // D5
+  playTone(880.00, 'triangle', 0.2, 0.08); // A5
+  playTone(1174.66, 'sine', 0.4, 0.16); // D6
+}
+
 function playCorrectSound() {
   playTone(523.25, 'triangle', 0.3, 0);
   playTone(659.25, 'triangle', 0.3, 0.12);
@@ -1422,22 +1643,39 @@ function playMeowSound() {
   } catch(e){}
 }
 
-/* ============ SPEECH SYNTHESIS (Slow, Beginner Friendly) ============ */
-function speakText(text, lang) {
-  if (!('speechSynthesis' in window)) return;
+/* ============ SPEECH SYNTHESIS ENGINE ============ */
+function speakText(text, lang, onDone) {
+  if (!('speechSynthesis' in window)) {
+    if (onDone) setTimeout(onDone, 1000);
+    return;
+  }
   window.speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(text);
   u.lang = lang || 'en-US';
-  u.rate = S.ttsRate; // Slow, crystal clear (0.72x)
-  u.pitch = 1.25; // Warm, friendly tone
+  u.rate = S.ttsRate;
+  u.pitch = 1.25;
+  
+  var finished = false;
+  function finish() {
+    if (finished) return;
+    finished = true;
+    if (onDone) onDone();
+  }
+  
+  u.onend = finish;
+  u.onerror = finish;
+  
+  // Safety timeout
+  setTimeout(finish, 7000);
+  
   window.speechSynthesis.speak(u);
 }
 
 function toggleTtsSpeed() {
   if (S.ttsRate <= 0.75) {
-    S.ttsRate = 0.85; // Normal
+    S.ttsRate = 0.85;
   } else {
-    S.ttsRate = 0.70; // Turtle Slow
+    S.ttsRate = 0.70;
   }
   localStorage.setItem('topedu_cats_rate', S.ttsRate);
   updateSpeedUI();
@@ -1461,6 +1699,7 @@ function updateSpeedUI() {
 window.addEventListener('DOMContentLoaded', function() {
   initDayChips();
   initJoySection();
+  initMagicTouch();
   loadDay(0);
   updateAlarmUI();
   updateSpeedUI();
@@ -1478,6 +1717,7 @@ function initDayChips() {
 }
 
 function selectDay(idx) {
+  stopTheatreAudio();
   S.curDayIdx = idx;
   initDayChips();
   loadDay(idx);
@@ -1555,15 +1795,15 @@ function shadowJoyExp(enText) {
 
 /* ============ STEP SWITCHING ============ */
 function switchStep(step) {
+  if (S.curStep === 2 && step !== 2) {
+    stopTheatreAudio();
+  }
   S.curStep = step;
   for (var i = 1; i <= 4; i++) {
     var tab = document.getElementById('tabStep' + i);
     var view = document.getElementById('step' + i + 'View');
     if (tab) tab.className = 'step-btn' + (i === step ? ' active' : '');
     if (view) view.style.display = (i === step ? 'flex' : 'none');
-  }
-  if (step === 2) {
-    setTimeout(drawCanvasFrame, 50);
   }
 }
 
@@ -1604,180 +1844,170 @@ function nextVocaWord() {
   }
 }
 
-/* ============ STEP 2: ANIMATED THEATRE & CANVAS ============ */
-var animTimer = null;
-var animTime = 0;
+/* ======================================================= */
+/* STEP 2: HIGH-GRADE ANIMATED SVG THEATRE & ROBUST AUDIO  */
+/* ======================================================= */
 var isTheatrePlaying = false;
-var sceneSparkles = [];
+var theatreTimer = null;
+var curLineIdx = 0;
 
 function initTheatreScene() {
-  animTime = 0;
+  stopTheatreAudio();
   isTheatrePlaying = false;
-  document.getElementById('btnPlayTheatre').textContent = '▶️ 영상 재생';
+  curLineIdx = 0;
+  document.getElementById('btnPlayTheatre').innerHTML = '<span>▶️</span> <span>영상 재생</span>';
+  document.getElementById('theatreStatusBadge').textContent = '영상 준비됨';
   var p = DAILY_PACKS[S.curDayIdx];
   if (p.story && p.story.lines && p.story.lines[0]) {
+    document.getElementById('subSpeaker').textContent = p.story.lines[0].speaker + ':';
     document.getElementById('subEn').textContent = p.story.lines[0].text;
     document.getElementById('subKo').textContent = p.story.lines[0].ko;
   }
 }
 
-function toggleTheatrePlay() {
-  isTheatrePlaying = !isTheatrePlaying;
+function stopTheatreAudio() {
+  isTheatrePlaying = false;
+  if (theatreTimer) {
+    clearTimeout(theatreTimer);
+    theatreTimer = null;
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
   var btn = document.getElementById('btnPlayTheatre');
+  if (btn) btn.innerHTML = '<span>▶️</span> <span>영상 재생</span>';
+  var badge = document.getElementById('theatreStatusBadge');
+  if (badge) badge.textContent = '일시 정지됨';
+}
+
+function toggleTheatrePlay() {
   if (isTheatrePlaying) {
-    btn.textContent = '⏸️ 일시정지';
-    playTheatreStory();
-    startCanvasLoop();
+    stopTheatreAudio();
   } else {
-    btn.textContent = '▶️ 영상 재생';
-    stopCanvasLoop();
+    startTheatrePlay();
   }
 }
 
 function restartTheatre() {
+  stopTheatreAudio();
+  curLineIdx = 0;
+  startTheatrePlay();
+}
+
+function startTheatrePlay() {
   isTheatrePlaying = true;
-  document.getElementById('btnPlayTheatre').textContent = '⏸️ 일시정지';
-  playTheatreStory();
-  startCanvasLoop();
+  document.getElementById('btnPlayTheatre').innerHTML = '<span>⏸️</span> <span>일시정지</span>';
+  document.getElementById('theatreStatusBadge').textContent = '▶️ 상영 중';
+  playNextTheatreLine();
 }
 
-function playTheatreStory() {
+function playNextTheatreLine() {
+  if (!isTheatrePlaying) return;
   var p = DAILY_PACKS[S.curDayIdx];
-  var lines = p.story.lines;
-  var curLine = 0;
-  function speakNextLine() {
-    if (!isTheatrePlaying || curLine >= lines.length) return;
-    var line = lines[curLine];
-    document.getElementById('subEn').textContent = line.text;
-    document.getElementById('subKo').textContent = line.ko;
-    speakText(line.text, 'en-US');
-    curLine++;
-    setTimeout(speakNextLine, 4500);
+  var lines = (p.story && p.story.lines) || [];
+  
+  if (curLineIdx >= lines.length) {
+    // Story finished!
+    isTheatrePlaying = false;
+    document.getElementById('btnPlayTheatre').innerHTML = '<span>🔄</span> <span>다시 보기</span>';
+    document.getElementById('theatreStatusBadge').textContent = '✅ 상영 완료';
+    minkySay('우와! 재미있는 애니메이션 영상을 다 봤어! 이제 아래 마이크를 누르고 문장을 따라 말해보자!');
+    playCorrectSound();
+    return;
   }
-  speakNextLine();
+
+  var line = lines[curLineIdx];
+  document.getElementById('subSpeaker').textContent = line.speaker + ':';
+  document.getElementById('subEn').textContent = line.text;
+  document.getElementById('subKo').textContent = line.ko;
+
+  // Animate the speaking character!
+  bounceSpeakerCharacter(line.speaker);
+
+  speakText(line.text, 'en-US', function() {
+    if (!isTheatrePlaying) return;
+    curLineIdx++;
+    theatreTimer = setTimeout(playNextTheatreLine, 1400); // Clean 1.4s gap
+  });
 }
 
-function startCanvasLoop() {
-  if (animTimer) cancelAnimationFrame(animTimer);
-  function loop() {
-    animTime += 0.03;
-    drawCanvasFrame();
-    if (isTheatrePlaying) animTimer = requestAnimationFrame(loop);
+function bounceSpeakerCharacter(speaker) {
+  var idMap = {
+    'Cheetah': 'charCheetah',
+    'Giraffe': 'charGiraffe',
+    'Hippo': 'charHippo'
+  };
+  var elemId = idMap[speaker];
+  if (elemId) {
+    var el = document.getElementById(elemId);
+    if (el) {
+      el.style.transform = 'scale(1.15) translateY(-8px)';
+      el.style.transition = 'transform 0.3s ease';
+      setTimeout(function() {
+        el.style.transform = 'scale(1) translateY(0)';
+      }, 500);
+    }
   }
-  loop();
 }
 
-function stopCanvasLoop() {
-  if (animTimer) cancelAnimationFrame(animTimer);
+/* ============ UNIVERSAL MAGIC TOUCH EFFECT ============ */
+function initMagicTouch() {
+  var box = document.getElementById('theatreBox');
+  if (!box) return;
+
+  function handleInteraction(e) {
+    var rect = box.getBoundingClientRect();
+    var clientX = e.clientX;
+    var clientY = e.clientY;
+    if (e.touches && e.touches[0]) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    }
+    if (clientX === undefined) return;
+
+    var x = clientX - rect.left;
+    var y = clientY - rect.top;
+    spawnMagicBurst(x, y);
+    playMagicTwinkleSound();
+  }
+
+  box.addEventListener('pointerdown', handleInteraction, { passive: true });
 }
 
-function interactCanvas() {
-  playMeowSound();
-  for (var i = 0; i < 8; i++) {
-    sceneSparkles.push({
-      x: 100 + Math.random() * 280,
-      y: 60 + Math.random() * 120,
-      r: 4 + Math.random() * 6,
-      c: ['#ffd54f', '#ff4081', '#00e676', '#c084fc'][Math.floor(Math.random() * 4)],
-      alpha: 1.0
-    });
+function spawnMagicBurst(x, y) {
+  var layer = document.getElementById('theatreParticles');
+  if (!layer) return;
+
+  var emojis = ['⭐', '✨', '💖', '🎉', '🐾', '🌟', '🌈', '🍭'];
+  for (var i = 0; i < 7; i++) {
+    var spark = document.createElement('div');
+    spark.className = 'magic-sparkle';
+    spark.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    var angle = Math.random() * Math.PI * 2;
+    var dist1 = 20 + Math.random() * 35;
+    var dist2 = 45 + Math.random() * 55;
+
+    var tx = Math.cos(angle) * dist1 + 'px';
+    var ty = Math.sin(angle) * dist1 - 15 + 'px';
+    var tx2 = Math.cos(angle) * dist2 + 'px';
+    var ty2 = Math.sin(angle) * dist2 - 35 + 'px';
+
+    spark.style.setProperty('--tx', tx);
+    spark.style.setProperty('--ty', ty);
+    spark.style.setProperty('--tx2', tx2);
+    spark.style.setProperty('--ty2', ty2);
+
+    spark.style.left = (x - 12) + 'px';
+    spark.style.top = (y - 12) + 'px';
+
+    layer.appendChild(spark);
+    (function(el) {
+      setTimeout(function() {
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      }, 850);
+    })(spark);
   }
-  drawCanvasFrame();
-}
-
-function drawCanvasFrame() {
-  var canvas = document.getElementById('theatreCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var W = canvas.width, H = canvas.height;
-  var p = DAILY_PACKS[S.curDayIdx];
-  var scene = (p.story && p.story.sceneType) || 'classroom';
-
-  ctx.clearRect(0, 0, W, H);
-
-  if (scene === 'forest_desert') {
-    // Sunny Zoo / Field Scene
-    var zooGrad = ctx.createLinearGradient(0, 0, 0, H);
-    zooGrad.addColorStop(0, '#bfdbfe');
-    zooGrad.addColorStop(0.6, '#e0f2fe');
-    zooGrad.addColorStop(1, '#86efac');
-    ctx.fillStyle = zooGrad;
-    ctx.fillRect(0, 0, W, H);
-
-    // Sun
-    ctx.fillStyle = '#fde047';
-    ctx.beginPath();
-    ctx.arc(W - 60, 45, 22, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Tall Giraffe (smiling on right)
-    var gX = W * 0.72;
-    var gY = H * 0.75;
-    ctx.fillStyle = '#f59e0b';
-    ctx.fillRect(gX, gY - 70, 16, 70); // Long neck
-    ctx.beginPath();
-    ctx.ellipse(gX + 8, gY, 28, 18, 0, 0, Math.PI * 2); // Body
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(gX + 8, gY - 75, 14, 0, Math.PI * 2); // Head
-    ctx.fill();
-
-    // Cheetah (running on left)
-    var cX = W * 0.28 + Math.sin(animTime * 3) * 12;
-    var cY = H * 0.78;
-    ctx.fillStyle = '#eab308';
-    ctx.beginPath();
-    ctx.ellipse(cX, cY, 32, 14, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(cX + 24, cY - 10, 12, 0, Math.PI * 2);
-    ctx.fill();
-
-  } else {
-    // Cheerful Classroom / Room Scene
-    var roomGrad = ctx.createLinearGradient(0, 0, 0, H);
-    roomGrad.addColorStop(0, '#fef08a');
-    roomGrad.addColorStop(0.5, '#fed7aa');
-    roomGrad.addColorStop(1, '#fde68a');
-    ctx.fillStyle = roomGrad;
-    ctx.fillRect(0, 0, W, H);
-
-    // Blackboard
-    ctx.fillStyle = '#065f46';
-    ctx.fillRect(W * 0.2, 20, W * 0.6, 110);
-    ctx.strokeStyle = '#92400e';
-    ctx.lineWidth = 6;
-    ctx.strokeRect(W * 0.2, 20, W * 0.6, 110);
-
-    // Blackboard text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '16px Maplestory, sans-serif';
-    ctx.fillText('English is Fun! 🌟', W * 0.32, 65);
-    ctx.font = '12px Pretendard, sans-serif';
-    ctx.fillText('Joy English Small Talk Coach', W * 0.3, 95);
-
-    // Cute bouncing Cat Coach Minky on table
-    var catX = W * 0.5;
-    var catY = H * 0.8 + Math.sin(animTime * 3) * 5;
-    ctx.fillStyle = '#f472b6';
-    ctx.beginPath();
-    ctx.arc(catX, catY - 20, 20, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // Touch sparkles
-  for (var s = sceneSparkles.length - 1; s >= 0; s--) {
-    var sp = sceneSparkles[s];
-    ctx.fillStyle = sp.c;
-    ctx.globalAlpha = sp.alpha;
-    ctx.beginPath();
-    ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
-    ctx.fill();
-    sp.y -= 1.5;
-    sp.alpha -= 0.04;
-    if (sp.alpha <= 0) sceneSparkles.splice(s, 1);
-  }
-  ctx.globalAlpha = 1.0;
 }
 
 /* ============ SHADOWING ENGINE ============ */
