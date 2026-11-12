@@ -886,7 +886,7 @@ function mockCall(fn, args) {
     return { score: Math.round((correct / (total || 1)) * 100) };
   }
 
-  /* ===== 단어 대결 (배틀) 실시간 초경량 엔진 (v32 ultra-fast) ===== */
+  /* ===== 단어 대결 (배틀) 무결점 실시간 엔진 (v33 bulletproof) ===== */
   if (fn === 'battleSets') {
     var sets = [];
     var allKeys = Object.keys(ALL_WORD_SETS);
@@ -934,7 +934,6 @@ function mockCall(fn, args) {
       localStorage.setItem('topedu_battle_latest', code);
     } catch(e){}
 
-    // Broadcast lightweight room announcement (no huge question array!)
     try {
       fetch('https://ntfy.sh/topedu_bt_' + code, {
         method: 'POST',
@@ -978,8 +977,13 @@ function mockCall(fn, args) {
               var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
               r.players = r.players || {};
               r.names = r.names || [];
-              var k = (m.ban || '') + ':' + (m.name || '');
-              if (!r.players[k]) {
+              var found = false;
+              var pKeys = Object.keys(r.players);
+              for (var i = 0; i < pKeys.length; i++) {
+                if (r.players[pKeys[i]].name === m.name) { found = true; break; }
+              }
+              if (!found) {
+                var k = (m.ban || '') + ':' + (m.name || '');
                 r.players[k] = { name: m.name, ban: m.ban, c: 0, x: 0, wrong: [] };
                 if (r.names.indexOf(m.name) < 0) r.names.push(m.name);
                 localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
@@ -987,12 +991,23 @@ function mockCall(fn, args) {
             } else if (m && m.type === 'report') {
               var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
               r.players = r.players || {};
-              var k = (m.ban || '') + ':' + (m.name || '');
-              if (r.players[k]) {
-                r.players[k].c = m.c || 0;
-                r.players[k].x = m.x || 0;
-                localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+              r.names = r.names || [];
+              var found = false;
+              var pKeys = Object.keys(r.players);
+              for (var i = 0; i < pKeys.length; i++) {
+                if (r.players[pKeys[i]].name === m.name) {
+                  r.players[pKeys[i]].c = Math.max(r.players[pKeys[i]].c || 0, m.c || 0);
+                  r.players[pKeys[i]].x = Math.max(r.players[pKeys[i]].x || 0, m.x || 0);
+                  found = true;
+                  break;
+                }
               }
+              if (!found) {
+                var k = (m.ban || '') + ':' + (m.name || '');
+                r.players[k] = { name: m.name, ban: m.ban, c: m.c || 0, x: m.x || 0 };
+                if (r.names.indexOf(m.name) < 0) r.names.push(m.name);
+              }
+              localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
             }
           } catch(err){}
         };
@@ -1014,17 +1029,37 @@ function mockCall(fn, args) {
               var d = JSON.parse(l);
               var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
               if (m && m.type === 'join') {
-                var k = (m.ban || '') + ':' + (m.name || '');
-                if (!r.players[k]) {
+                var found = false;
+                var pKeys = Object.keys(r.players);
+                for (var i = 0; i < pKeys.length; i++) {
+                  if (r.players[pKeys[i]].name === m.name) { found = true; break; }
+                }
+                if (!found) {
+                  var k = (m.ban || '') + ':' + (m.name || '');
                   r.players[k] = { name: m.name, ban: m.ban, c: 0, x: 0, wrong: [] };
                   if (r.names.indexOf(m.name) < 0) r.names.push(m.name);
                   changed = true;
                 }
               } else if (m && m.type === 'report') {
-                var k = (m.ban || '') + ':' + (m.name || '');
-                if (r.players[k]) {
-                  r.players[k].c = m.c || 0;
-                  r.players[k].x = m.x || 0;
+                var found = false;
+                var pKeys = Object.keys(r.players);
+                for (var i = 0; i < pKeys.length; i++) {
+                  if (r.players[pKeys[i]].name === m.name) {
+                    var newC = Math.max(r.players[pKeys[i]].c || 0, m.c || 0);
+                    var newX = Math.max(r.players[pKeys[i]].x || 0, m.x || 0);
+                    if (r.players[pKeys[i]].c !== newC || r.players[pKeys[i]].x !== newX) {
+                      r.players[pKeys[i]].c = newC;
+                      r.players[pKeys[i]].x = newX;
+                      changed = true;
+                    }
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  var k = (m.ban || '') + ':' + (m.name || '');
+                  r.players[k] = { name: m.name, ban: m.ban, c: m.c || 0, x: m.x || 0 };
+                  if (r.names.indexOf(m.name) < 0) r.names.push(m.name);
                   changed = true;
                 }
               }
@@ -1042,7 +1077,6 @@ function mockCall(fn, args) {
       room.startAt = now + 3000;
       room.endAt = room.startAt + (room.mins * 60 * 1000);
       try {
-        // Send LIGHTWEIGHT start packet (NO questions payload so it is never an attachment!)
         fetch('https://ntfy.sh/topedu_bt_' + code, {
           method: 'POST',
           headers: { 'Title': 'start' },
@@ -1205,11 +1239,6 @@ function mockCall(fn, args) {
                   r.setNames = m.setNames || [];
                   r.qs = generateBattleQs(cred.ban || '', r.dir, r.setNames);
                   localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
-                } else if (m && m.type === 'room') {
-                  var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
-                  r.set = m.set || r.set;
-                  r.setNames = m.setNames || r.setNames;
-                  localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
                 }
               } catch(e){}
             });
@@ -1257,7 +1286,6 @@ function mockCall(fn, args) {
       try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
     }
 
-    // Fast background check for start event
     try {
       fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=5m')
         .then(function(res){ return res.text(); })
@@ -1299,7 +1327,7 @@ function mockCall(fn, args) {
 
     var myObj = { rank: 1, c: 0, x: 0 };
     rankList.forEach(function(r) {
-      if (r.name === cred.name && r.ban === cred.ban) myObj = r;
+      if (r.name === cred.name) myObj = r;
     });
 
     if (room.status === 'lobby') {
@@ -1327,29 +1355,8 @@ function mockCall(fn, args) {
     var c = Number(args[2]) || 0;
     var x = Number(args[3]) || 0;
     var wrong = args[4] || [];
-    var room = null;
-    try {
-      var raw = localStorage.getItem('topedu_battle_' + code);
-      if (raw) room = JSON.parse(raw);
-    } catch(e){}
-    if (!room) {
-      return { rank: 1, count: 1, status: 'run' };
-    }
 
-    var pKey = (cred.ban || '') + ':' + (cred.name || '');
-    room.players = room.players || {};
-    if (!room.players[pKey]) {
-      room.players[pKey] = { name: cred.name, ban: cred.ban, c: c, x: x, wrong: wrong };
-      if (room.names.indexOf(cred.name) < 0) room.names.push(cred.name);
-    } else {
-      room.players[pKey].c = c;
-      room.players[pKey].x = x;
-      room.players[pKey].wrong = wrong;
-    }
-    try {
-      localStorage.setItem('topedu_battle_' + code, JSON.stringify(room));
-    } catch(e){}
-
+    // 1. ALWAYS SEND NETWORK REPORT TO NTFY FIRST (unconditional, never blocked by local room state!)
     try {
       fetch('https://ntfy.sh/topedu_bt_' + code, {
         method: 'POST',
@@ -1358,20 +1365,25 @@ function mockCall(fn, args) {
       }).catch(function(){});
     } catch(e){}
 
-    var pKeys = Object.keys(room.players || {});
-    var rankList = pKeys.map(function(k) {
-      var p = room.players[k];
-      return { name: p.name, ban: p.ban, c: p.c || 0, x: p.x || 0 };
-    }).sort(function(a, b) { return (b.c - a.c) || (a.x - b.x); });
-    var myRank = 1;
-    rankList.forEach(function(r, idx) {
-      if (r.name === cred.name && r.ban === cred.ban) myRank = idx + 1;
-    });
+    // 2. Also update local storage if room exists on this device
+    var room = null;
+    try {
+      var raw = localStorage.getItem('topedu_battle_' + code);
+      if (raw) room = JSON.parse(raw);
+    } catch(e){}
+
+    if (room) {
+      room.players = room.players || {};
+      var pKey = (cred.ban || '') + ':' + (cred.name || '');
+      room.players[pKey] = { name: cred.name, ban: cred.ban, c: c, x: x, wrong: wrong };
+      if ((room.names || []).indexOf(cred.name) < 0) room.names.push(cred.name);
+      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
+    }
 
     return {
-      rank: myRank,
-      count: rankList.length,
-      status: room.status
+      rank: 1,
+      count: 1,
+      status: (room ? room.status : 'run')
     };
   }
 
@@ -2905,31 +2917,49 @@ function showBattleJoin(){
   };
   $('#bcode').onkeydown=function(e){ if(e.key==='Enter') $('#bgo').click(); };
 }
-function playerExit(){ bStop(); refreshHome(); }
+function playerExit(){
+  if(R && !R.done && R.startAt && Date.now() < R.endAt){
+    if(!confirm('대결이 진행 중입니다. 정말 나가시겠습니까?')) return;
+  }
+  bStop(); refreshHome();
+}
 function playerEnter(v){
   bStop(); B.code=v.code; var g=B.gen;
-  R={c:0,x:0,wrong:[],order:[],i:0,qs:null,rank:0,done:false,busy:false,sent:-1};
+  var prevC = (R && R.c) ? R.c : 0;
+  var prevX = (R && R.x) ? R.x : 0;
+  R={c:prevC,x:prevX,wrong:[],order:[],i:0,qs:null,rank:0,done:false,busy:false,sent:-1};
   pWait(v);
   (function loop(){ setTimeout(function(){ if(g!==B.gen) return;
-    if(R.qs&&!R.done) return loop(); // 푸는 중에는 report가 대신 확인
+    if(R.qs&&R.qs.length&&!R.done) return loop();
     callq('battleState',S.cred,B.code,!R.qs).then(function(r){ if(g!==B.gen) return;
-      if(r.status==='run'&&!R.qs){ R.qs=r.qs||[]; raceStart(r,g); }
+      if(r.status==='run'&&(!R.qs || !R.qs.length)){
+        R.qs = (r.qs && r.qs.length) ? r.qs : generateBattleQs(S.cred ? S.cred.ban : '', 'en', r.setNames);
+        raceStart(r,g);
+      }
       else if(r.status==='end'){ pEnd(r); return; }
       else if(r.status==='lobby'){ var c=$('#bcnt'); if(c) c.textContent=r.count+'명 참여 중'; }
       loop();
-    }).catch(function(){ if(g===B.gen) loop(); }); },1500); })();
+    }).catch(function(){ if(g===B.gen) loop(); }); },1000); })();
 }
 function pWait(v){
   app.innerHTML=topBar('⚔️ 대결 '+v.code)+'<div class="mres"><div class="e">🙌</div><div class="t">'+esc(S.cred.name)+' 참여 완료!</div><div class="s">선생님이 시작하면 바로 문제가 나와요.<br><span id="bcnt">'+v.count+'명 참여 중</span></div></div>';
   bindBack(playerExit);
 }
 function raceStart(v,g){
+  if(!R.qs || !R.qs.length){
+    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
+  }
   R.startAt=Date.now()+v.startIn; R.endAt=Date.now()+v.endIn;
   app.innerHTML=topBar('⚔️ 대결 '+B.code)+
-    '<div class="rbar"><span>✅ <b id="rc">0</b></span><span id="rrk"></span><span>⏱ <b id="rt">'+mmss(v.endIn)+'</b></span></div>'+
+    '<div class="rbar"><span>✅ <b id="rc">'+R.c+'</b></span><span id="rrk"></span><span>⏱ <b id="rt">'+mmss(v.endIn)+'</b></span></div>'+
     '<div id="rdy" class="ready" style="padding:40px 0"><div class="n" id="rdn" style="font-size:110px">3</div><div class="t" style="font-size:22px">준비!</div></div>'+
     '<div id="qbox" style="display:none"><div class="q" id="rq"></div><div class="bt mbt" id="rtiles"></div></div>';
-  bindBack(playerExit);
+  var bBack = $('#back');
+  if(bBack){
+    bBack.onclick = function(){
+      if(confirm('대결이 진행 중입니다. 정말 나가시겠습니까?')) playerExit();
+    };
+  }
   bClock(function(){
     var now=Date.now();
     if(now<R.startAt){ var n=$('#rdn'); if(n) n.textContent=Math.ceil((R.startAt-now)/1000); return; }
@@ -2937,7 +2967,7 @@ function raceStart(v,g){
     var t=$('#rt'); if(t) t.textContent=mmss(R.endAt-now);
     if(now>=R.endAt&&!R.done){ R.done=true; report(g,true); app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">⏰</div><div class="t">시간 끝!</div><div class="s">'+R.c+'개 맞혔어요. 결과를 기다리는 중…</div></div>'; bindBack(playerExit); }
   });
-  (function rep(){ setTimeout(function(){ if(g!==B.gen||R.done) return; report(g,false); rep(); },2000); })();
+  (function rep(){ setTimeout(function(){ if(g!==B.gen||R.done) return; report(g,false); rep(); },1500); })();
 }
 function report(g,fin){
   callq('battleReport',S.cred,B.code,R.c,R.x,R.wrong).then(function(r){
@@ -2945,90 +2975,49 @@ function report(g,fin){
     if(r.status==='end'&&!R.done){ R.done=true; }
   }).catch(function(){ if(fin&&g===B.gen) setTimeout(function(){ report(g,true); },1000); });
 }
-function generateBattleQs(ban, dir, setNames) {
-  dir = dir === 'ko' ? 'ko' : 'en';
-  var want = {};
-  if (Array.isArray(setNames) && setNames.length) {
-    for (var i = 0; i < setNames.length; i++) want[setNames[i]] = 1;
-  }
-  var seen = {}, words = [];
-  var allKeys = Object.keys(ALL_WORD_SETS || {});
-  for (var i = 0; i < allKeys.length; i++) {
-    var sName = allKeys[i];
-    var sData = ALL_WORD_SETS[sName];
-    if (Object.keys(want).length > 0 && !want[sName]) continue;
-    if (Object.keys(want).length === 0 && ban && sData.target && sData.target !== '전체' && sData.target.indexOf(ban) < 0 && sName.indexOf(ban) < 0) continue;
-    var wList = sData.words || [];
-    for (var j = 0; j < wList.length; j++) {
-      var wObj = wList[j];
-      var w = wObj.w;
-      var m = (wObj.m || '').split(';')[0].split(',')[0].trim();
-      if (w && m && !seen[w]) {
-        seen[w] = 1;
-        words.push({ w: w, m: m });
-      }
-    }
-  }
-  if (words.length < 4) {
-    for (var i = 0; i < allKeys.length; i++) {
-      var wList = (ALL_WORD_SETS[allKeys[i]] && ALL_WORD_SETS[allKeys[i]].words) || [];
-      for (var j = 0; j < wList.length; j++) {
-        var wObj = wList[j];
-        var w = wObj.w, m = (wObj.m || '').split(';')[0].split(',')[0].trim();
-        if (w && m && !seen[w]) {
-          seen[w] = 1;
-          words.push({ w: w, m: m });
-          if (words.length >= 30) break;
-        }
-      }
-      if (words.length >= 30) break;
-    }
-  }
-
-  function shuf(arr) {
-    var a = arr.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
-    }
-    return a;
-  }
-
-  return shuf(words).slice(0, 200).map(function(q) {
-    var ansText = dir === 'en' ? q.m : q.w;
-    var used = {}; used[ansText] = 1;
-    var wrong = [];
-    shuf(words).forEach(function(o) {
-      var t = dir === 'en' ? o.m : o.w;
-      if (wrong.length < 3 && !used[t]) { used[t] = 1; wrong.push(t); }
-    });
-    var opts = shuf([ansText].concat(wrong));
-    return {
-      w: q.w,
-      p: dir === 'en' ? q.w : q.m,
-      o: opts,
-      a: opts.indexOf(ansText)
-    };
-  }).filter(function(q) { return q.o.length === 4; });
-}
-
 function nextQ(){
   if(R.done) return;
   if(!R.qs || !R.qs.length){
     R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
   }
-  if(R.i>=R.order.length){ var o=R.qs.map(function(_,i){return i;}); R.order=shuffle(o); R.i=0; if(R.order.length>1&&R.order[0]===R.last){ R.order.push(R.order.shift()); } }
-  var q=R.qs[R.order[R.i++]]; R.last=R.order[R.i-1]; R.q=q; R.busy=false;
-  if(!q) return;
+  if(!R.order || !R.order.length || R.i>=R.order.length){
+    var o=R.qs.map(function(_,i){return i;});
+    R.order=shuffle(o);
+    R.i=0;
+    if(R.order.length>1&&R.order[0]===R.last){ R.order.push(R.order.shift()); }
+  }
+  var q=R.qs[R.order[R.i++]];
+  R.last=R.order[R.i-1];
+  R.q=q;
+  R.busy=false;
+  if(!q){
+    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
+    q = R.qs[0];
+  }
   var qe=$('#rq'); if(!qe) return;
   qe.className='q'+(/[가-힣]/.test(q.p)?' ko':''); qe.textContent=q.p;
   $('#rtiles').innerHTML=tilesHtml(q);
   [].forEach.call(app.querySelectorAll('#rtiles .bo'),function(b){ b.onclick=function(){
     if(R.busy||R.done) return; R.busy=true;
     var k=+b.dataset.k, ok=k===q.a;
-    if(ok){ playCorrectSound(); R.c++; $('#rc').textContent=R.c; b.classList.add('hit'); setTimeout(nextQ,180); }
-    else { playWrongSound(); R.x++; R.wrong.push(q.w); b.classList.add('miss'); var r=app.querySelector('#rtiles .bo[data-k="'+q.a+'"]'); if(r) r.classList.add('hit');
-      [].forEach.call(app.querySelectorAll('#rtiles .bo'),function(x){ if(x!==b&&x!==r) x.classList.add('dim'); }); setTimeout(nextQ,1100); }
+    if(ok){
+      playCorrectSound();
+      R.c++;
+      $('#rc').textContent=R.c;
+      b.classList.add('hit');
+      report(B.gen,false);
+      setTimeout(nextQ,180);
+    } else {
+      playWrongSound();
+      R.x++;
+      R.wrong.push(q.w);
+      b.classList.add('miss');
+      report(B.gen,false);
+      var r=app.querySelector('#rtiles .bo[data-k="'+q.a+'"]');
+      if(r) r.classList.add('hit');
+      [].forEach.call(app.querySelectorAll('#rtiles .bo'),function(x){ if(x!==b&&x!==r) x.classList.add('dim'); });
+      setTimeout(nextQ,1100);
+    }
   }; });
 }
 function pEnd(v){
