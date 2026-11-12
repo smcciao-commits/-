@@ -713,11 +713,25 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
   <meta name="apple-mobile-web-app-title" content="TOP EDU">
   <meta name="theme-color" content="#ff5c8a">
 <script>
+// Auto cache buster & error safety net
+window.onerror = function(msg, url, line) {
+  console.error('Global Error:', msg, line);
+  var ap = document.getElementById('app');
+  var ld = document.getElementById('load');
+  if (ld) ld.classList.remove('on');
+  if (ap && !ap.innerHTML.trim()) {
+    if (typeof showLogin === 'function') showLogin();
+  }
+};
+
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').catch(function(e) {
-      console.log('SW reg error', e);
-    });
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    for (var reg of regs) reg.unregister();
+  });
+}
+if ('caches' in window) {
+  caches.keys().then(function(names) {
+    for (var name of names) caches.delete(name);
   });
 }
 </script>
@@ -3637,6 +3651,15 @@ function start(){
   if(c&&c.ban&&c.name&&c.pw) login(c); else showLogin();
 }
 start();
+// Safety net: ensure app never stays blank
+setTimeout(function() {
+  var ap = document.getElementById('app');
+  var ld = document.getElementById('load');
+  if (ld) ld.classList.remove('on');
+  if (ap && !ap.innerHTML.trim()) {
+    showLogin();
+  }
+}, 300);
 </script>
 </body>
 </html>
