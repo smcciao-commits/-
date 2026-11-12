@@ -280,17 +280,17 @@
     // Weekly Master Data based on Harin's November Schedule
     const SCHEDULE = {
       '월': [
-        { time: '14:40~15:30', title: '휴식 & 간식 타임', tag: '휴식' },
-        { time: '15:10~15:30', title: '조이 예습', tag: '학원' },
-        { time: '15:30~16:00', title: '조이 수업', tag: '학원' },
-        { time: '16:00~16:40', title: '휴식 타임', tag: '휴식' },
+        { time: '14:40~15:10', title: '휴식 & 간식 타임', tag: '휴식' },
+        { time: '15:10~15:30', title: '조이 화상영어 예습 (캐츠 스피킹 스튜디오)', tag: '화상영어' },
+        { time: '15:30~16:00', title: '조이 화상영어 1:1 수업 (필리핀 선생님)', tag: '화상영어' },
+        { time: '16:00~16:40', title: '📘 Hand in Hand 5 (Unit 5) [단어·영상·퀴즈·테스트]', tag: '핸드인핸드' },
         { time: '16:40~17:20', title: '아라영문법', tag: '영어' },
         { time: '17:30~18:10', title: '아라사회', tag: '사회' },
         { time: '18:20~19:10', title: '맛있는 저녁 식사', tag: '식사' },
         { time: '19:10~19:50', title: '아라수학', tag: '수학' },
         { time: '20:00~21:00', title: 'TOP 수학 숙제 (40분 공부 / 20분 휴식)', tag: '숙제' },
         { time: '21:00~22:00', title: '하늘 숙제 & 과학 공부', tag: '숙제' },
-        { time: '22:00~23:00', title: '엄마랑 영어 과외', tag: '영어' },
+        { time: '22:00~23:00', title: '엄마랑 영어 과외 & 복습', tag: '영어' },
         { time: '23:30', title: '샤워 후 꿀잠 취침', tag: '취침' }
       ],
       '화': [
@@ -306,57 +306,62 @@
       '수': [
         { time: '13:50~14:20', title: '휴식 & 장원 숙제', tag: '숙제' },
         { time: '14:20~15:00', title: '장원 한자', tag: '한자' },
-        { time: '15:30~16:00', title: '조이 수업', tag: '학원' },
-        { time: '16:10~17:30', title: '국어학원', tag: '학원' },
-        { time: '17:30~18:10', title: '아라사회', tag: '사회' },
-        { time: '18:20~19:10', title: '저녁 휴식 & 식사', tag: '식사' },
+        { time: '15:10~15:30', title: '조이 화상영어 예습', tag: '화상영어' },
+        { time: '15:30~16:00', title: '조이 화상영어 1:1 수업 (필리핀 선생님)', tag: '화상영어' },
+        { time: '16:00~16:40', title: '📘 Hand in Hand 5 (Unit 5) [단어·영상·퀴즈·테스트]', tag: '핸드인핸드' },
+        { time: '16:40~17:20', title: '수학 숙제', tag: '수학' },
+        { time: '17:20~18:20', title: '아라국어', tag: '국어' },
+        { time: '18:20~19:10', title: '저녁 식사 & 휴식', tag: '식사' },
         { time: '19:10~19:50', title: '아라수학', tag: '수학' },
         { time: '20:00~21:00', title: 'TOP 수학 숙제 (40분 공부 / 20분 휴식)', tag: '숙제' },
-        { time: '21:00~22:00', title: '하늘 숙제', tag: '숙제' },
+        { time: '21:00~22:00', title: '하늘 숙제 & 과학', tag: '숙제' },
         { time: '22:00~23:00', title: '엄마랑 영어 과외', tag: '영어' },
-        { time: '23:30', title: '샤워 후 취침 (엄마 8:30 퇴근)', tag: '취침' }
+        { time: '23:30', title: '샤워 후 취침', tag: '취침' }
       ],
       '목': [
-        { time: '14:40~16:00', title: '휴식 & 수학 숙제 (3:10~3:50)', tag: '수학' },
+        { time: '14:40~16:00', title: '휴식 & 간식 타임', tag: '휴식' },
         { time: '16:00~18:20', title: '수학학원', tag: '학원' },
-        { time: '18:30~20:00', title: '줄넘기 운동', tag: '운동' },
+        { time: '18:30~20:00', title: '신나는 줄넘기 운동', tag: '운동' },
         { time: '20:05~20:45', title: '저녁 식사 & 휴식', tag: '식사' },
-        { time: '20:30', title: '아라샘 코칭', tag: '코칭' },
         { time: '20:50~21:30', title: '아라영어', tag: '영어' },
-        { time: '21:30~22:30', title: '하늘 숙제 / 영어 숙제', tag: '숙제' },
-        { time: '22:30~23:30', title: '사회 공부', tag: '사회' },
+        { time: '21:30~22:30', title: '장원 국어 / 사회', tag: '학습' },
+        { time: '22:30~23:30', title: '한자 숙제 / 영어 숙제', tag: '숙제' },
         { time: '23:30', title: '샤워 후 취침', tag: '취침' }
       ],
       '금': [
-        { time: '14:40~15:30', title: '휴식 타임', tag: '휴식' },
-        { time: '15:00~16:00', title: '하늘 숙제', tag: '숙제' },
-        { time: '16:10~17:00', title: '하늘수학', tag: '수학' },
-        { time: '17:00~18:00', title: '웅진하기', tag: '웅진' },
-        { time: '17:30~18:30', title: '웅진샘 코칭', tag: '코칭' },
-        { time: '18:30~20:00', title: '줄넘기 운동', tag: '운동' },
-        { time: '20:00~20:40', title: '아라특강', tag: '특강' },
-        { time: '21:00~22:00', title: '과학 & 사회 공부', tag: '숙제' },
-        { time: '22:00~23:00', title: '엄마랑 영어 과외', tag: '영어' },
+        { time: '14:40~15:20', title: '휴식 & 간식 타임', tag: '휴식' },
+        { time: '15:20~16:00', title: '아라사회', tag: '사회' },
+        { time: '16:00~16:40', title: '아라영문법', tag: '영어' },
+        { time: '16:50~17:50', title: '피아노 학원', tag: '음악' },
+        { time: '18:00~19:00', title: '저녁 식사', tag: '식사' },
+        { time: '19:10~19:50', title: '아라수학', tag: '수학' },
+        { time: '20:00~21:00', title: 'TOP 수학 숙제', tag: '숙제' },
+        { time: '21:00~22:00', title: '하늘 숙제 & 복습', tag: '숙제' },
+        { time: '22:00~23:00', title: '엄마랑 영어 복습', tag: '영어' },
         { time: '23:30', title: '샤워 후 취침', tag: '취침' }
       ],
       '주말': [
-        { time: '주말 필수', title: '웅진 1 week 완료하기', tag: '웅진' },
-        { time: '주말 숙제', title: '영어 숙제 & 단어 외우기', tag: '영어' },
-        { time: '주말 숙제', title: '수학 숙제 & 하늘 숙제', tag: '수학' },
-        { time: '주말 숙제', title: '국어 숙제 & 단원평가 준비', tag: '국어' },
-        { time: '자유 시간', title: '할 일 먼저 끝내고 아이패드 2~3시간', tag: '자유' }
+        { time: '10:00~11:30', title: '주말 늦잠 & 맛있는 아침 식사', tag: '주말' },
+        { time: '11:30~13:00', title: '주말 자유 시간 & 보드게임', tag: '휴식' },
+        { time: '13:00~14:00', title: '점심 식사', tag: '식사' },
+        { time: '14:00~15:00', title: '📘 [일요 집중] Hand in Hand 5 (Unit 5) [단어·영상·퀴즈·테스트]', tag: '핸드인핸드' },
+        { time: '15:00~16:30', title: '주말 가족 나들이 / 야외 활동', tag: '가족' },
+        { time: '17:00~18:30', title: '주말 수학 & 국어 밀린 숙제', tag: '숙제' },
+        { time: '18:30~19:30', title: '가족 저녁 외식', tag: '식사' },
+        { time: '20:00~21:30', title: '하린이 자유 시간 (아이패드 15분 보상)', tag: '자유' },
+        { time: '22:00', title: '주말 정리 & 취침', tag: '취침' }
       ]
     };
 
     const EVERYDAY_HABITS = [
-      { id: 'ev_cats_english', title: '🐱 캐츠잉글리시 4단계 훈련 (20분)', tag: '영어훈련', link: 'cats.html' },
-      { id: 'ev_smartall', title: '웅진 스마트올', tag: '매일' },
-      { id: 'ev_classcard', title: '클래스카드 (20분)', tag: '단어' },
+      { id: 'ev_cats_unit5', title: '🐱 캐츠 잉글리시: Unit 5 운동회 & 조이영어 회화 [단어·영상·퀴즈]', tag: '조이영어', link: 'cats.html' },
+      { id: 'ev_ort_daily', title: '📖 ORT 4단계 매일 1권씩 [고화질 영상·마이크 쉐도잉·어휘 테스트]', tag: 'ORT매일1권', link: 'cats.html' },
+      { id: 'ev_insight_reading', title: '📗 인사이트리딩 매일 1개씩 [QR 공식 오디오 청독 + 어휘 시험]', tag: '인사이트매일', link: 'index.html' },
+      { id: 'ev_handinhand_full', title: '📘 핸드인핸드 5권 완전정복 (월·수·일 집중: 단어·영상·퀴즈·테스트)', tag: '핸드인핸드', link: 'cats.html' },
+      { id: 'ev_smartall', title: '웅진 스마트올 (30분)', tag: '스마트올' },
+      { id: 'ev_calc', title: '연산 1장 풀기 (30분)', tag: '수학연산' },
       { id: 'ev_readinggate', title: '리딩게이트 (20분)', tag: '독서' },
-      { id: 'ev_calc', title: '연산 1장 풀기 (30분)', tag: '수학' },
-      { id: 'ev_ort', title: 'ORT 영어 읽기', tag: '영어' },
-      { id: 'ev_social', title: '웅진특강 사회', tag: '사회' },
-      { id: 'ev_book_mom', title: '엄마와 1장씩 책 읽기', tag: '책' }
+      { id: 'ev_book_mom', title: '엄마와 1장씩 책 읽기', tag: '모녀독서' }
     ];
 
     const NAG_MESSAGES = [

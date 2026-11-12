@@ -1454,6 +1454,7 @@
         <span>←</span> <span>탑에듀 단어앱 홈</span>
       </button>
       <div class="badge-class">초5 하린반 👑</div>
+      <button onclick="openQrAudioModal()" style="background:#2563eb;color:white;font-size:12px;padding:6px 10px;border:none;border-radius:8px;cursor:pointer;font-weight:700">🎧 교재 QR 음원</button>
     </div>
 
     <div class="nav-row">
@@ -1634,6 +1635,23 @@
 
       <!-- Animated Interactive SVG Theatre Box -->
       <!-- YouTube HD Video Theatre -->
+      
+      <!-- ORT Stage 4 Series Quick Selector -->
+      <div style="margin-bottom:12px;padding:12px 14px;background:#f5f3ff;border:2px solid #c4b5fd;border-radius:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14px;color:#5b21b6">📖 ORT 4 전 시리즈 (1~6권 완결 순서대로)</span>
+          <span style="font-size:11px;color:#7c3aed;background:white;padding:3px 8px;border-radius:6px;font-weight:700;border:1px solid #ddd6fe">6권 전편 수록</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap" id="ort_book_selector">
+          <button class="ort-chip" onclick="selectOrtBook(0)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">1권 House for Sale</button>
+          <button class="ort-chip" onclick="selectOrtBook(1)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">2권 The New House</button>
+          <button class="ort-chip" onclick="selectOrtBook(2)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">3권 Come In!</button>
+          <button class="ort-chip" onclick="selectOrtBook(3)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">4권 The Secret Room</button>
+          <button class="ort-chip" onclick="selectOrtBook(4)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">5권 The Play</button>
+          <button class="ort-chip" onclick="selectOrtBook(5)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">6권 The Storm</button>
+        </div>
+      </div>
+
       <div class="youtube-player-container">
         <div class="youtube-frame-wrap">
           <iframe id="theatreYtIframe" 
@@ -1843,7 +1861,7 @@
 
 <script>
 /* ============ DATA & STATE ============ */
-var DAILY_PACKS = [{"id": "day01", "title": "Hand in Hand 5 - Day 01: 신나는 동물 친구들 (Zoo Animals)", "book": "Hand in Hand 5", "theme": "Zoo Animals & Comparing", "words": [{"w": "cheetah", "m": "치타", "engDef": "a very fast wild cat with spots", "engDefKo": "점무늬가 있는 매우 빠른 고양잇과 동물", "e": "The cheetah runs very fast.", "k": "치타는 매우 빨리 달립니다.", "p": "/ˈtʃiːtə/"}, {"w": "giraffe", "m": "기린", "engDef": "a tall animal with a very long neck", "engDefKo": "목이 아주 긴 키가 큰 동물", "e": "A giraffe has a long neck.", "k": "기린은 긴 목을 가지고 있습니다.", "p": "/dʒəˈræf/"}, {"w": "hippo", "m": "하마", "engDef": "a large heavy animal that likes water", "engDefKo": "물을 좋아하는 크고 무거운 동물", "e": "The hippo opens its mouth wide.", "k": "하마가 입을 쩍 벌립니다.", "p": "/ˈhɪpoʊ/"}, {"w": "fast", "m": "빠른", "engDef": "moving at high speed; not slow", "engDefKo": "속도가 빠른; 느리지 않은", "e": "Cheetahs are fast animals.", "k": "치타는 빠른 동물입니다.", "p": "/fæst/"}, {"w": "slow", "m": "느린", "engDef": "not moving quickly", "engDefKo": "빠르게 움직이지 않는, 느릿느릿한", "e": "Turtles walk in a slow way.", "k": "거북이는 느린 걸음으로 걷습니다.", "p": "/sloʊ/"}, {"w": "tall", "m": "키가 큰", "engDef": "higher than normal; not short", "engDefKo": "키나 높이가 높은; 키가 큰", "e": "Giraffes are very tall animals.", "k": "기린은 아주 키가 큰 동물입니다.", "p": "/tɔːl/"}], "story": {"title": "Fast Cheetah and Tall Giraffe", "titleKo": "빠른 치타와 키 큰 기린", "sceneType": "forest_desert", "lines": [{"speaker": "Minky", "text": "Welcome to the sunny zoo! Look at all the animal friends.", "ko": "햇살 가득한 동물원에 온 걸 환영해! 동물 친구들을 봐."}, {"speaker": "Cheetah", "text": "Hello! I am a cheetah. I run very fast!", "ko": "안녕! 난 치타야. 난 정말 빨리 달려!"}, {"speaker": "Giraffe", "text": "Hi! I am a giraffe. I am the tallest animal here.", "ko": "안녕! 난 기린이야. 난 여기서 키가 제일 크단다."}, {"speaker": "Hippo", "text": "I love cool water. I can open my big mouth wide!", "ko": "난 시원한 물이 좋아. 큰 입을 쩍 벌릴 수 있어!"}]}, "shadowing": [{"sentence": "The cheetah runs very fast.", "ko": "치타는 매우 빨리 달립니다."}, {"sentence": "A giraffe has a long neck.", "ko": "기린은 긴 목을 가지고 있습니다."}, {"sentence": "The hippo likes cool water.", "ko": "하마는 시원한 물을 좋아합니다."}], "talk": [{"q": "Hi Harin! 🐱 Which animal is your favorite? Cheetah or giraffe?", "qKo": "안녕 하린아! 치타랑 기린 중에 어떤 동물이 더 좋아?", "options": [{"t": "I like the fast cheetah! 🐆", "rep": "Cheetahs run super fast, zoom!"}, {"t": "I like the tall giraffe! 🦒", "rep": "Giraffes have such cute long necks!"}, {"t": "I like the cute hippo! 🦛", "rep": "Hippos love playing in the water, meow!"}]}, {"q": "Is a turtle fast or slow?", "qKo": "거북이는 빠를까, 느릴까?", "options": [{"t": "A turtle is slow! 🐢", "rep": "Yes! Slow and steady wins the race!"}, {"t": "It walks slowly and cute! 💚", "rep": "You are so smart, Harin!"}]}, {"q": "Great job! Ready for the easy 5-question quiz?", "qKo": "아주 잘했어! 쉬운 5문제 퀴즈 풀고 선물 받을까?", "options": [{"t": "Yes! Let's get 100 points! 🚀", "rep": "Here comes the fun quiz, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. '기린'을 뜻하는 영어 단어는 무엇일까요?", "opts": ["giraffe", "cheetah", "hippo", "ostrich"], "ans": 0, "hint": "목이 아주 길고 키가 큰 동물!"}, {"type": "choice", "q": "Q2. 'fast(빠른)'의 반대말인 '느린'은 무엇일까요?", "opts": ["slow", "tall", "heavy", "cheap"], "ans": 0, "hint": "거북이처럼 느릿느릿한!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\nThe ______ runs very fast across the field.", "opts": ["cheetah", "laptop", "flute", "apple"], "ans": 0, "hint": "세상에서 가장 빨리 달리는 동물!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[very / runs / cheetah / The / fast]", "words": ["The", "cheetah", "runs", "very", "fast"], "ansStr": "The cheetah runs very fast"}, {"type": "tf", "q": "Q5. True or False?\n'A giraffe has a long neck.'\n(기린은 긴 목을 가지고 있다.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "기린의 목은 길쭉해요!"}]}, {"id": "day02", "title": "Hand in Hand 5 - Day 02: 내 가방과 공부 도구 (My School Things)", "book": "Hand in Hand 5", "theme": "School Things & Technology", "words": [{"w": "tablet", "m": "태블릿", "engDef": "a flat mobile computer with a touch screen", "engDefKo": "터치 화면이 있는 얇은 휴대용 컴퓨터", "e": "Harin studies English on her tablet.", "k": "하린이는 태블릿으로 영어를 공부합니다.", "p": "/ˈtæblət/"}, {"w": "laptop", "m": "노트북 컴퓨터", "engDef": "a small computer you can carry", "engDefKo": "가지고 다닐 수 있는 작은 휴대용 컴퓨터", "e": "I use my laptop to do homework.", "k": "나는 숙제를 하기 위해 노트북을 씁니다.", "p": "/ˈlæptɑːp/"}, {"w": "smartphone", "m": "스마트폰", "engDef": "a mobile phone that connects to the internet", "engDefKo": "인터넷이 되는 스마트 전화기", "e": "Mom called me on her smartphone.", "k": "엄마는 스마트폰으로 전화를 하셨습니다.", "p": "/ˈsmɑːrtfoʊn/"}, {"w": "backpack", "m": "책가방, 배낭", "engDef": "a bag you carry on your back", "engDefKo": "등에 메는 가방", "e": "My backpack is pink and light.", "k": "내 책가방은 분홍색이고 가볍습니다.", "p": "/ˈbækpæk/"}, {"w": "heavy", "m": "무거운", "engDef": "weighing a lot; not light", "engDefKo": "무게가 많이 나가는; 가볍지 않은", "e": "This big box is very heavy.", "k": "이 큰 상자는 매우 무겁습니다.", "p": "/ˈhevi/"}, {"w": "light", "m": "가벼운", "engDef": "easy to lift; not heavy", "engDefKo": "들기 쉬운; 무겁지 않은", "e": "A feather is soft and light.", "k": "깃털은 부드럽고 가볍습니다.", "p": "/laɪt/"}], "story": {"title": "Ready for School", "titleKo": "학교 갈 준비 완료!", "sceneType": "classroom", "lines": [{"speaker": "Minky", "text": "Good morning! Time to pack your backpack for school.", "ko": "좋은 아침! 학교 갈 가방을 챙길 시간이야."}, {"speaker": "Harin", "text": "My backpack is light and pretty. I have my pencils ready!", "ko": "내 가방은 가볍고 예뻐. 연필도 다 준비했어!"}, {"speaker": "Mom", "text": "Did you take your tablet for English study?", "ko": "영어 공부할 태블릿 챙겼니?"}, {"speaker": "Harin", "text": "Yes, Mom! I study English on my tablet every day!", "ko": "네, 엄마! 난 매일 태블릿으로 영어를 공부해요!"}]}, "shadowing": [{"sentence": "I study English on my tablet.", "ko": "나는 태블릿으로 영어를 공부합니다."}, {"sentence": "My backpack is light and pretty.", "ko": "내 책가방은 가볍고 예쁩니다."}, {"sentence": "Mom has a smartphone.", "ko": "엄마는 스마트폰을 가지고 계십니다."}], "talk": [{"q": "Hi Harin! Do you like studying English on a tablet?", "qKo": "하린아! 태블릿(아이패드)으로 영어 공부하는 거 좋아해?", "options": [{"t": "Yes! It is so fun on my tablet! 📱", "rep": "Tablet study is colorful and exciting!"}, {"t": "Yes, I like touching the screen! ✨", "rep": "You can learn words with one touch!"}]}, {"q": "What color is your favorite backpack?", "qKo": "가장 좋아하는 가방 색깔은 뭐야?", "options": [{"t": "I love pink backpacks! 🎒💖", "rep": "Pink is so lovely and bright!"}, {"t": "I love purple backpacks! 💜", "rep": "Purple is very stylish and pretty!"}]}, {"q": "You are speaking so well! Ready for the quiz?", "qKo": "말하기 정말 잘하네! Day 2 퀴즈 도전할까?", "options": [{"t": "Yes! Give me the quiz! 🏆", "rep": "Let's get another 100 points, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. 등에 메는 '책가방, 배낭'을 뜻하는 단어는?", "opts": ["backpack", "cheetah", "guitar", "laptop"], "ans": 0, "hint": "back(등) + pack(가방)!"}, {"type": "choice", "q": "Q2. 'heavy(무거운)'의 반대말인 '가벼운'은?", "opts": ["light", "tall", "slow", "fast"], "ans": 0, "hint": "들기 쉬운, 무게가 적게 나가는!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\nHarin studies English on her ______.", "opts": ["tablet", "giraffe", "drums", "hippo"], "ans": 0, "hint": "아이패드 같은 터치 화면 기기!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[English / tablet / my / on / study / I]", "words": ["I", "study", "English", "on", "my", "tablet"], "ansStr": "I study English on my tablet"}, {"type": "tf", "q": "Q5. True or False?\n'A feather is soft and light.'\n(깃털은 부드럽고 가볍다.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "light = 가벼운"}]}, {"id": "day03", "title": "Hand in Hand 5 - Day 03: 신나는 악기 연주와 취미 (Music & Hobbies)", "book": "Hand in Hand 5", "theme": "Musical Instruments & Practice", "words": [{"w": "guitar", "m": "기타", "engDef": "a musical instrument with six strings", "engDefKo": "여섯 개의 줄이 달린 악기", "e": "She can play the guitar.", "k": "그녀는 기타를 칠 수 있습니다.", "p": "/ɡɪˈtɑːr/"}, {"w": "flute", "m": "플루트", "engDef": "a long thin musical instrument you blow into", "engDefKo": "입으로 바람을 불어 연주하는 가늘고 긴 악기", "e": "She practices the flute every day.", "k": "그녀는 매일 플루트를 연습합니다.", "p": "/fluːt/"}, {"w": "drums", "m": "드럼", "engDef": "musical instruments you hit with sticks", "engDefKo": "스틱으로 두드려 소리를 내는 타악기", "e": "He plays the drums in a band.", "k": "그는 밴드에서 드럼을 연주합니다.", "p": "/drʌmz/"}, {"w": "music", "m": "음악", "engDef": "pleasant sounds made by instruments or voices", "engDefKo": "악기나 목소리로 내는 아름다운 소리", "e": "Listening to music makes me happy.", "k": "음악을 듣는 것은 나를 행복하게 합니다.", "p": "/ˈmjuːzɪk/"}, {"w": "practice", "m": "연습하다", "engDef": "to do something many times to get better", "engDefKo": "더 잘하기 위해 반복해서 해보다", "e": "Practice English every single day.", "k": "매일매일 영어를 연습하세요.", "p": "/ˈpræktɪs/"}, {"w": "play", "m": "연주하다; 놀다", "engDef": "to make music with an instrument", "engDefKo": "악기로 음악을 연주하거나 재미있게 놀다", "e": "Can you play the piano?", "k": "피아노를 연주할 수 있나요?", "p": "/pleɪ/"}], "story": {"title": "The Happy Music Band", "titleKo": "신나는 음악 밴드", "sceneType": "classroom", "lines": [{"speaker": "Minky", "text": "Listen! Sweet music is coming from the music room.", "ko": "들어봐! 음악실에서 아름다운 음악 소리가 들려."}, {"speaker": "Girl", "text": "I play the flute. Its sound is clear and sweet.", "ko": "난 플루트를 불어. 소리가 맑고 고와."}, {"speaker": "Boy", "text": "I can play the acoustic guitar. Strum strum!", "ko": "난 어쿠스틱 기타를 칠 수 있어. 징징~"}, {"speaker": "Minky", "text": "Practice every day, and you will become a wonderful musician!", "ko": "매일 연습하면 멋진 음악가가 될 수 있단다!"}]}, "shadowing": [{"sentence": "She can play the guitar.", "ko": "그녀는 기타를 칠 수 있습니다."}, {"sentence": "Practice English every single day.", "ko": "매일매일 영어를 연습하세요."}, {"sentence": "Listening to music makes me happy.", "ko": "음악을 듣는 것은 나를 행복하게 합니다."}], "talk": [{"q": "Hi Harin! Can you play any musical instrument?", "qKo": "하린아! 악기 연주할 수 있는 거 있어? 피아노나 플루트?", "options": [{"t": "I can play the piano! 🎹", "rep": "Piano music is so beautiful and lovely!"}, {"t": "I want to learn the guitar! 🎸", "rep": "Guitar is so cool! Strum strum!"}, {"t": "I love listening to music! 🎵", "rep": "Singing and listening is so much fun!"}]}, {"q": "What happens when you practice every day?", "qKo": "매일매일 연습하면 어떻게 될까?", "options": [{"t": "I get better and better! ⭐", "rep": "Yes! Practice makes perfect!"}, {"t": "English becomes super easy! 💯", "rep": "You are absolutely right, meow!"}]}, {"q": "You are a music star today! Ready for the quiz?", "qKo": "오늘 음악 스타네! 퀴즈 시작해 볼까?", "options": [{"t": "Yes! Let's start the quiz! 🚀", "rep": "Here it comes, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. 여섯 개의 줄을 튕겨 소리 내는 악기 '기타'는?", "opts": ["guitar", "flute", "drums", "tablet"], "ans": 0, "hint": "기타 = guitar!"}, {"type": "choice", "q": "Q2. 'practice'의 올바른 우리말 뜻은?", "opts": ["연습하다", "잠자다", "달리다", "먹다"], "ans": 0, "hint": "실력을 키우기 위해 매일매일 해보는 것!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\nListening to ______ makes me happy.", "opts": ["music", "cheetah", "backpack", "hippo"], "ans": 0, "hint": "즐겁게 듣는 노래나 악기 소리!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[play / She / guitar / the / can]", "words": ["She", "can", "play", "the", "guitar"], "ansStr": "She can play the guitar"}, {"type": "tf", "q": "Q5. True or False?\n'Practice English every single day.'\n(매일매일 영어를 연습하세요.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "every single day = 매일매일"}]}, {"id": "day04", "title": "Hand in Hand 5 - Day 04: 맛있는 과일과 간식 (Fruits & Snacks)", "book": "Hand in Hand 5", "theme": "Healthy Fruits & Sweet Snacks", "words": [{"w": "sweet", "m": "달콤한", "engDef": "tasting pleasant like sugar", "engDefKo": "설탕처럼 달콤하고 맛있는", "e": "Ripe oranges are very sweet.", "k": "잘 익은 오렌지는 매우 달콤합니다.", "p": "/swiːt/"}, {"w": "fruit", "m": "과일", "engDef": "sweet food that grows on trees or plants", "engDefKo": "나무나 식물에서 열리는 달콤한 열매", "e": "Fresh fruit gives you vitamins.", "k": "신선한 과일은 비타민을 줍니다.", "p": "/fruːt/"}, {"w": "snack", "m": "간식", "engDef": "a small amount of food between meals", "engDefKo": "식사 사이에 먹는 간단한 군것질", "e": "I eat an apple as a snack.", "k": "나는 간식으로 사과를 먹습니다.", "p": "/snæk/"}, {"w": "delicious", "m": "맛있는", "engDef": "having a very good taste", "engDefKo": "맛이 아주 훌륭한, 맛있는", "e": "This strawberry ice cream is delicious.", "k": "이 딸기 아이스크림은 맛있습니다.", "p": "/dɪˈlɪʃəs/"}, {"w": "share", "m": "나누다, 함께 쓰다", "engDef": "to give some of what you have to others", "engDefKo": "내가 가진 것을 다른 사람과 나누다", "e": "Let's share this sweet cake together.", "k": "이 달콤한 케이크를 함께 나누어 먹자.", "p": "/ʃer/"}, {"w": "thank", "m": "고마워하다", "engDef": "to tell someone you are grateful", "engDefKo": "고마운 마음을 전하다", "e": "Thank you for the delicious snack.", "k": "맛있는 간식 고마워요.", "p": "/θæŋk/"}], "story": {"title": "A Sweet Afternoon Snack", "titleKo": "달콤한 오후의 간식 시간", "sceneType": "classroom", "lines": [{"speaker": "Minky", "text": "Mmm, it smells so good! What is for afternoon snack?", "ko": "음~ 맛있는 냄새! 오후 간식은 뭘까?"}, {"speaker": "Mom", "text": "I prepared sweet strawberries and fresh apples for you!", "ko": "달콤한 딸기와 신선한 사과를 준비했단다!"}, {"speaker": "Harin", "text": "Thank you, Mom! These fruits are so sweet and delicious!", "ko": "고마워요 엄마! 과일들이 정말 달콤하고 맛있어요!"}, {"speaker": "Minky", "text": "Eating healthy fruit keeps you strong and happy, meow!", "ko": "건강한 과일을 먹으면 몸도 튼튼해지고 기분도 좋아져!"}]}, "shadowing": [{"sentence": "Fresh fruit gives you vitamins.", "ko": "신선한 과일은 비타민을 줍니다."}, {"sentence": "Thank you for the delicious snack.", "ko": "맛있는 간식 고마워요."}, {"sentence": "Let's share this cake together.", "ko": "이 케이크를 함께 나누어 먹자."}], "talk": [{"q": "Hi Harin! What is your favorite fruit in the world?", "qKo": "하린아! 세상에서 제일 좋아하는 과일이 뭐야?", "options": [{"t": "I love sweet strawberries! 🍓", "rep": "Strawberries are red, juicy and sweet!"}, {"t": "I love fresh apples! 🍎", "rep": "Apples are crisp and delicious!"}, {"t": "I love sweet oranges! 🍊", "rep": "Oranges give you lots of vitamins, yum!"}]}, {"q": "What do you say when Mom gives you a snack?", "qKo": "엄마가 맛있는 간식을 주실 때 뭐라고 말할까?", "options": [{"t": "Thank you, Mom! I love you! 💖", "rep": "Aww, you are such a sweet polite girl!"}, {"t": "Thank you for the delicious snack! 😋", "rep": "Perfect manners! You are amazing!"}]}, {"q": "All clear for today's talk! Ready for the Day 4 quiz?", "qKo": "오늘 대화 완벽해! 마지막 퀴즈 풀고 15분 암호 받을까?", "options": [{"t": "Yes! Let's get the 15-minute reward! 🏆", "rep": "Here is the final quiz, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. '달콤한'을 뜻하는 영어 단어는 무엇일까요?", "opts": ["sweet", "heavy", "fast", "slow"], "ans": 0, "hint": "설탕처럼 달콤하고 맛있는!"}, {"type": "choice", "q": "Q2. 'delicious'의 올바른 뜻은?", "opts": ["맛있는", "무거운", "느린", "비싼"], "ans": 0, "hint": "음식이 정말 맛있을 때!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\n______ you for the delicious snack, Mom!", "opts": ["Thank", "Cheetah", "Guitar", "Tablet"], "ans": 0, "hint": "고마워요! = Thank you!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[fruit / gives / Fresh / vitamins / you]", "words": ["Fresh", "fruit", "gives", "you", "vitamins"], "ansStr": "Fresh fruit gives you vitamins"}, {"type": "tf", "q": "Q5. True or False?\n'Let's share this cake together.'\n(이 케이크를 함께 나누어 먹자.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "share = 함께 나누다"}]}];
+var DAILY_PACKS = [{"id": "day01", "title": "Hand in Hand 5 - Unit 05: School Field Day (운동회 날)", "book": "Hand in Hand 5", "theme": "School Field Day & Sports", "words": [{"w": "field day", "m": "운동회, 체육대회", "engDef": "a special day for outdoor sports at school", "engDefKo": "학교에서 야외 운동과 경기를 하는 특별한 날", "e": "We had a fun field day at school.", "k": "우리는 학교에서 재미있는 운동회를 했습니다.", "p": "/fiːld deɪ/"}, {"w": "relay race", "m": "이어달리기, 계주", "engDef": "a running race between teams with a baton", "engDefKo": "바통을 넘겨주는 팀 달리기 경기", "e": "My team won the relay race!", "k": "우리 팀이 이어달리기에서 이겼어요!", "p": "/ˈriːleɪ reɪs/"}, {"w": "cheer", "m": "응원하다, 환호하다", "engDef": "to shout loudly to encourage someone", "engDefKo": "누군가를 격려하기 위해 크게 소리치다", "e": "We cheered for our classmates loudly.", "k": "우리는 친구들을 크게 응원했습니다.", "p": "/tʃɪr/"}, {"w": "win", "m": "이기다, 승리하다", "engDef": "to be the best in a game or contest", "engDefKo": "경기나 경쟁에서 1등을 하다", "e": "Who will win the game today?", "k": "오늘 경기에서 누가 이길까요?", "p": "/wɪn/"}, {"w": "prize", "m": "상, 상품", "engDef": "a reward given to the winner", "engDefKo": "대회의 승자에게 주어지는 보상", "e": "She got a prize for running fast.", "k": "그녀는 빨리 달려서 상을 받았습니다.", "p": "/praɪz/"}, {"w": "medal", "m": "메달, 훈장", "engDef": "a metal award worn around the neck", "engDefKo": "목에 거는 금속 상패", "e": "He was proud of his gold medal.", "k": "그는 자신의 금메달을 자랑스러워했습니다.", "p": "/ˈmed.əl/"}, {"w": "fast", "m": "빠른, 빨리", "engDef": "moving or happening with great speed", "engDefKo": "아주 빠른 속도로 움직이는", "e": "Run as fast as you can!", "k": "가능한 한 빨리 달리세요!", "p": "/fæst/"}, {"w": "exciting", "m": "신나는, 흥미진진한", "engDef": "causing great enthusiasm", "engDefKo": "큰 열정과 신남을 불러일으키는", "e": "The sports day was so exciting.", "k": "운동회는 정말 신났습니다.", "p": "/ɪkˈsaɪ.tɪŋ/"}], "theatreStory": null, "shadowing": [{"sentence": "Today was our School Field Day!", "ko": "오늘 학교에서 운동회를 했습니다!"}, {"sentence": "I ran in the relay race with my friends.", "ko": "친구들과 이어달리기를 했습니다."}, {"sentence": "Our team cheered and won a gold medal!", "ko": "우리 팀은 응원하고 금메달을 땄습니다!"}]}, {"id": "day02", "title": "ORT Stage 4 - Book 1 & 2: House for Sale & The New House", "book": "Oxford Reading Tree", "theme": "Moving to a New House", "words": [{"w": "bedroom", "m": "침실, 방", "engDef": "a room used for sleeping", "engDefKo": "잠을 자기 위해 사용하는 방", "e": "Biff liked her new bedroom.", "k": "비프는 그녀의 새 침실을 좋아했습니다.", "p": "/ˈbed.ruːm/"}, {"w": "chimney", "m": "굴뚝", "engDef": "a pipe for smoke from a fire", "engDefKo": "불에서 나는 연기를 내보내는 관", "e": "Kipper looked up the chimney.", "k": "키퍼는 굴뚝을 올려다보았습니다.", "p": "/ˈtʃɪm.ni/"}, {"w": "tree house", "m": "나무 위의 오두막", "engDef": "a small house built in a tree", "engDefKo": "나무 위에 지은 작은 오두막", "e": "They played in the tree house.", "k": "그들은 나무 위의 집에서 놀았습니다.", "p": "/triː haʊs/"}, {"w": "move", "m": "이사하다, 옮기다", "engDef": "to go live in a different house", "engDefKo": "다른 집으로 거주지를 옮기다", "e": "The family moved to a new house.", "k": "그 가족은 새 집으로 이사했습니다.", "p": "/muːv/"}, {"w": "van", "m": "짐차, 밴", "engDef": "a vehicle used for carrying goods", "engDefKo": "물건을 실어 나르는 차", "e": "A big van came to the house.", "k": "큰 밴이 집으로 왔습니다.", "p": "/væn/"}, {"w": "pack", "m": "짐을 싸다, 포장하다", "engDef": "to put things into boxes", "engDefKo": "상자에 짐을 넣다", "e": "Dad helped pack the boxes.", "k": "아빠가 상자를 포장하는 것을 도왔습니다.", "p": "/pæk/"}, {"w": "wallpaper", "m": "벽지", "engDef": "thick paper pasted on walls", "engDefKo": "벽에 바르는 두꺼운 종이", "e": "Kipper pulled the old wallpaper.", "k": "키퍼가 낡은 벽지를 잡아당겼습니다.", "p": "/ˈwɑːlˌpeɪ.pɚ/"}, {"w": "go-kart", "m": "고카트 (소형 경주차)", "engDef": "a small racing car with open wheels", "engDefKo": "바퀴가 드러난 작은 경주차", "e": "Chip put the go-kart in the van.", "k": "칩이 고카트를 밴에 실었습니다.", "p": "/ˈɡoʊ.kɑːrt/"}], "theatreStory": null, "shadowing": [{"sentence": "Dad and Mum liked the big house.", "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."}, {"sentence": "A big van came to pack our boxes.", "ko": "우리 상자를 실을 큰 밴이 왔습니다."}, {"sentence": "We said goodbye and drove to our new home.", "ko": "우리는 작별 인사를 하고 새 집으로 차를 몰았습니다."}]}, {"id": "day03", "title": "ORT Stage 4 - Book 3 & 4: Come In! & The Secret Room", "book": "Oxford Reading Tree", "theme": "The Secret Room Discovery", "words": [{"w": "door", "m": "문", "engDef": "a hinged sliding barrier", "engDefKo": "여닫는 출입문", "e": "Dad was painting the front door.", "k": "아빠는 앞문을 칠하고 있었습니다.", "p": "/dɔːr/"}, {"w": "biscuits", "m": "비스킷, 과자", "engDef": "small crisp sweet baked goods", "engDefKo": "바삭하고 달콤한 구운 과자", "e": "Mum gave the children biscuits.", "k": "엄마는 아이들에게 비스킷을 주었습니다.", "p": "/ˈbɪs.kɪts/"}, {"w": "secret", "m": "비밀의, 숨겨진", "engDef": "kept hidden from others", "engDefKo": "다른 사람에게 숨겨진", "e": "They found a secret door.", "k": "그들은 비밀 문을 발견했습니다.", "p": "/ˈsiː.krət/"}, {"w": "room", "m": "방, 공간", "engDef": "a part of the inside of a building", "engDefKo": "건물 안의 방", "e": "The secret room had a little house.", "k": "비밀 방에는 작은 집이 있었습니다.", "p": "/ruːm/"}, {"w": "stuck", "m": "끼인, 꼼짝 못하는", "engDef": "unable to move", "engDefKo": "움직일 수 없게 꽉 낀", "e": "The old door was stuck.", "k": "낡은 문이 꽉 끼어 있었습니다.", "p": "/stʌk/"}, {"w": "miniature", "m": "축소 모형", "engDef": "a much smaller copy of something", "engDefKo": "어떤 것의 아주 작은 모형", "e": "It was a miniature of their house.", "k": "그것은 그들 집의 축소 모형이었습니다.", "p": "/ˈmɪn.i.ə.tʃɚ/"}, {"w": "tiny", "m": "아주 작은", "engDef": "extremely small in size", "engDefKo": "크기가 몹시 작은", "e": "There were tiny figures inside.", "k": "안에는 아주 작은 인형들이 있었습니다.", "p": "/ˈtaɪ.ni/"}, {"w": "dream", "m": "꿈꾸다, 꿈", "engDef": "to see pictures in sleep", "engDefKo": "잠잘 때 생각을 경험하다", "e": "Biff dreamed about the children.", "k": "비프는 그 아이들에 대한 꿈을 꾸었습니다.", "p": "/driːm/"}], "theatreStory": null, "shadowing": [{"sentence": "Come in and play with us, said Biff.", "ko": "들어와서 우리랑 놀자, 비프가 말했습니다."}, {"sentence": "They pulled the wallpaper and found a secret door.", "ko": "그들은 벽지를 뜯고 비밀의 문을 발견했습니다."}, {"sentence": "Inside was an amazing miniature house!", "ko": "안에는 놀라운 미니어처 집이 있었습니다!"}]}, {"id": "day04", "title": "ORT Stage 4 - Book 5 & 6: The Play & The Storm", "book": "Oxford Reading Tree", "theme": "The Play & The Magic Key", "words": [{"w": "play", "m": "연극, 공연", "engDef": "a dramatic performance on a stage", "engDefKo": "무대에서 하는 연극 공연", "e": "The children put on a great play.", "k": "아이들은 멋진 연극을 무대에 올렸습니다.", "p": "/pleɪ/"}, {"w": "stage", "m": "무대", "engDef": "a raised floor for actors", "engDefKo": "배우들이 공연하는 높은 무대", "e": "Everyone walked onto the stage.", "k": "모두가 무대 위로 올라갔습니다.", "p": "/steɪdʒ/"}, {"w": "costume", "m": "의상, 분장복", "engDef": "clothes worn by actors", "engDefKo": "배우가 입는 의상", "e": "Kipper wore a funny costume.", "k": "키퍼는 우스꽝스러운 옷을 입었습니다.", "p": "/ˈkɑː.stuːm/"}, {"w": "audience", "m": "관객, 청중", "engDef": "people who watch a play", "engDefKo": "연극을 보는 사람들", "e": "The audience clapped loudly.", "k": "관객들이 크게 손뼉을 쳤습니다.", "p": "/ˈɑː.di.əns/"}, {"w": "storm", "m": "폭풍우", "engDef": "violent weather with strong wind", "engDefKo": "강한 바람과 비를 동반한 날씨", "e": "A huge storm came that night.", "k": "그날 밤 거대한 폭풍이 몰아쳤습니다.", "p": "/stɔːrm/"}, {"w": "wind", "m": "바람", "engDef": "natural movement of air", "engDefKo": "공기의 자연스러운 움직임", "e": "What a strong wind it was!", "k": "정말 강한 바람이었어요!", "p": "/wɪnd/"}, {"w": "mend", "m": "고치다, 수리하다", "engDef": "to repair something broken", "engDefKo": "부서진 것을 고치다", "e": "They mended the tree house roof.", "k": "그들은 오두막 지붕을 고쳤습니다.", "p": "/mend/"}, {"w": "magic key", "m": "마법 열쇠", "engDef": "a key that starts magical journeys", "engDefKo": "마법의 모험을 시작하게 하는 열쇠", "e": "Inside the box was a glowing magic key!", "k": "상자 안에는 빛나는 마법 열쇠가 들어 있었습니다!", "p": "/ˈmædʒ.ɪk kiː/"}], "theatreStory": null, "shadowing": [{"sentence": "The audience clapped and cheered for our school play.", "ko": "관객들은 우리 학교 연극에 박수를 치고 환호했습니다."}, {"sentence": "A big storm blew the giant tree down.", "ko": "거대한 폭풍이 거대한 나무를 쓰러뜨렸습니다."}, {"sentence": "Floppy found a secret box with a glowing magic key!", "ko": "플로피는 빛나는 마법 열쇠가 든 비밀 상자를 찾았습니다!"}]}];
 var JOY_CATS = [{"catId": "great", "catName": "🌟 기분 최고 & 신나는 날", "expressions": [{"en": "I had a wonderful day! I played with my friends.", "ko": "오늘 정말 멋진 하루였어요! 친구들이랑 재미있게 놀았거든요.", "tip": "선생님께 단순한 'I'm happy' 대신, '친구랑 놀았다'는 이유를 덧붙이면 필리핀 선생님이 폭풍 칭찬해 주세요!", "level": "왕초보 필수 ⭐"}, {"en": "I'm feeling great today! I got 100 points on my test.", "ko": "오늘 기분 최고예요! 시험에서 100점 맞았거든요.", "tip": "좋은 일이 있었을 때는 'I am feeling great!'이라고 신나게 말해보세요!", "level": "칭찬 유발 ⭐"}, {"en": "Today was super fun! I ate delicious strawberry ice cream.", "ko": "오늘 완전 신났어요! 맛있는 딸기 아이스크림을 먹었거든요.", "tip": "간식이나 음식을 먹은 이야기를 덧붙이면 대화가 훨씬 길고 자연스러워져요!", "level": "일상 회화 ⭐"}]}, {"catId": "busy", "catName": "🎒 바쁘고 보람찬 날", "expressions": [{"en": "I was a little busy with my homework today.", "ko": "오늘 학교 숙제하느라 조금 바빴어요.", "tip": "숙제가 많았던 날 'I was busy with my homework'라고 하면 선생님이 공감해 주셔요.", "level": "자연스러운 표현 ⭐"}, {"en": "I had swimming class today, so I'm a bit hungry!", "ko": "오늘 수영 수업을 하고 와서 조금 배고파요!", "tip": "운동이나 학원 다녀온 뒤 'I am a bit hungry(조금 배고파요)'라고 하면 리액션이 빵 터져요!", "level": "생생한 표현 ⭐"}, {"en": "I studied math and English hard today.", "ko": "오늘 수학이랑 영어를 열심히 공부했어요.", "tip": "열심히 공부했다고 자랑스럽게 말할 때 딱 좋은 모범생 표현!", "level": "열공 모드 ⭐"}]}, {"catId": "tired", "catName": "😴 피곤하지만 파이팅", "expressions": [{"en": "I'm a little tired, but I'm ready for English class!", "ko": "조금 피곤하지만 영어 수업 준비는 완료됐어요!", "tip": "맨날 'I'm tired'만 하지 말고, 'But I'm ready(하지만 준비됐어요)!'를 붙이면 선생님이 감동받으셔요!", "level": "특급 센스 ⭐⭐⭐"}, {"en": "I had a long day at school, but I'm happy now.", "ko": "학교에서 긴 하루를 보냈지만 지금은 기분 좋아요.", "tip": "'I had a long day'는 원어민들이 정말 자주 쓰는 자연스러운 하루 표현이에요!", "level": "원어민 자연스러움 ⭐"}]}, {"catId": "weekend", "catName": "🎈 주말 이야기 (Weekend)", "expressions": [{"en": "I had a great weekend! I went to a big shopping mall with my mom.", "ko": "주말 정말 즐겁게 보냈어요! 엄마랑 큰 쇼핑몰에 갔거든요.", "tip": "선생님이 'How was your weekend?'라고 물어보실 때 엄마와 어디 다녀왔는지 말하는 마법의 문장!", "level": "주말 필수 ⭐"}, {"en": "I went to the park and rode my bicycle.", "ko": "공원에 가서 자전거를 탔어요.", "tip": "야외 활동이나 산책 이야기를 할 때 가장 쉽고 당당하게 말할 수 있어요.", "level": "주말 필수 ⭐"}, {"en": "I stayed home, ate delicious food, and relaxed.", "ko": "집에서 맛있는 음식 먹으면서 푹 쉬었어요.", "tip": "주말에 집에서 푹 쉬었을 때 'relaxed(편하게 쉬었다)'라고 대답해 보세요!", "level": "집콕 휴식 ⭐"}]}];
 
 var S = {
@@ -2018,28 +2036,130 @@ function selectDay(idx) {
 
 
 /* ============ YOUTUBE HD VIDEO THEATRE SYSTEM ============ */
+var ORT_SERIES_VIDEOS = [
+  {
+    bookNum: 1,
+    id: "dhenXGjGCF8",
+    title: "📖 ORT 4 - Book 1: House for Sale (팔려고 내놓은 집)",
+    sub: "키퍼 가족이 낡았지만 넓고 멋진 새 집을 보러 갔어요!",
+    shadow: [
+      {"sentence": "Dad and Mum liked the big house.", "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."},
+      {"sentence": "The children went in the tree house.", "ko": "아이들은 나무 위의 오두막으로 갔습니다."},
+      {"sentence": "Kipper pulled the old wallpaper.", "ko": "키퍼가 낡은 벽지를 잡아당겼습니다."}
+    ]
+  },
+  {
+    bookNum: 2,
+    id: "TMdp8Ky7ykM",
+    title: "📖 ORT 4 - Book 2: The New House (새 집으로 이사해요)",
+    sub: "커다란 이삿짐 밴이 오고, 신나게 짐을 싸서 새 집으로 출발!",
+    shadow: [
+      {"sentence": "A big van came to the house.", "ko": "큰 밴이 집으로 왔습니다."},
+      {"sentence": "Dad and the children packed the boxes.", "ko": "아빠와 아이들은 상자에 짐을 쌌습니다."},
+      {"sentence": "The van went to the new house.", "ko": "밴은 새 집으로 갔습니다."}
+    ]
+  },
+  {
+    bookNum: 3,
+    id: "5YY8-YRUtW0",
+    title: "📖 ORT 4 - Book 3: Come In! (들어와서 같이 놀자!)",
+    sub: "아빠가 문을 칠하는 동안 친구들이 찾아왔어요! 들어와서 놀자!",
+    shadow: [
+      {"sentence": "Dad was painting the front door.", "ko": "아빠는 현관문을 칠하고 있었습니다."},
+      {"sentence": "Come in and play with us, said Biff.", "ko": "들어와서 우리랑 놀자, 비프가 말했습니다."},
+      {"sentence": "Mum gave the children some biscuits.", "ko": "엄마는 아이들에게 비스킷을 주었습니다."}
+    ]
+  },
+  {
+    bookNum: 4,
+    id: "6PeL52MLUkE",
+    title: "📖 ORT 4 - Book 4: The Secret Room (비밀의 방의 발견)",
+    sub: "벽지를 뜯어내자 숨겨진 비밀 문과 미니어처 집이 나타났어요!",
+    shadow: [
+      {"sentence": "They found a secret door behind the wall.", "ko": "그들은 벽 뒤에서 비밀 문을 찾았습니다."},
+      {"sentence": "Inside was a miniature of their house.", "ko": "안에는 그들 집의 미니어처가 있었습니다."},
+      {"sentence": "It was an amazing secret room!", "ko": "그것은 놀라운 비밀의 방이었습니다!"}
+    ]
+  },
+  {
+    bookNum: 5,
+    id: "2rk_tRaTOck",
+    title: "📖 ORT 4 - Book 5: The Play (신나는 학교 연극)",
+    sub: "아이들이 멋진 의상을 입고 학교 무대에서 연극을 공연해요!",
+    shadow: [
+      {"sentence": "The children put on a school play.", "ko": "아이들은 학교 연극을 공연했습니다."},
+      {"sentence": "Kipper wore a funny pirate costume.", "ko": "키퍼는 우스꽝스러운 해적 옷을 입었습니다."},
+      {"sentence": "The audience clapped and cheered.", "ko": "관객들은 박수를 치고 환호했습니다."}
+    ]
+  },
+  {
+    bookNum: 6,
+    id: "tPnjWbxYKW4",
+    title: "📖 ORT 4 - Book 6: The Storm (폭풍과 마법 열쇠)",
+    sub: "거센 폭풍이 불어 나무가 쓰러지고, 그 밑에서 황금 마법 열쇠를 발견!",
+    shadow: [
+      {"sentence": "A big storm blew the giant tree down.", "ko": "거대한 폭풍이 큰 나무를 쓰러뜨렸습니다."},
+      {"sentence": "Floppy found a strange wooden box.", "ko": "플로피는 이상한 나무 상자를 발견했습니다."},
+      {"sentence": "Inside the box was a glowing magic key!", "ko": "상자 안에는 빛나는 마법 열쇠가 들어 있었습니다!"}
+    ]
+  }
+];
+
 var DAY_YOUTUBE_VIDEOS = {
   0: {
-    id: "B1YAM6rsbao",
-    title: "🐆 Day 01: 치타와 동물 친구들 애니메이션 (Meet the Animals)",
-    sub: "빠른 치타와 키 큰 기린의 생생한 고화질 동물 스토리 애니메이션!"
+    id: "4Myovaplq4Y",
+    title: "🏃 Day 01: Hand in Hand 5 Unit 5 (School Field Day 애니메이션)",
+    sub: "신나는 이어달리기와 응원전! e-future 공식 Unit 5 영상!"
   },
   1: {
-    id: "qaCoOINxNFk",
-    title: "💻 Day 02: 태블릿과 컴퓨터 전자기기 탐험 스토리",
-    sub: "스마트폰, 태블릿, 노트북을 쉽고 재미있게 배우는 IT 스토리!"
+    id: "dhenXGjGCF8",
+    title: "📖 Day 02: ORT 4 - House for Sale (팔려고 내놓은 집)",
+    sub: "옥스포드 리딩트리 4단계 1권 고화질 리드얼라우드 애니메이션!"
   },
   2: {
-    id: "S_DCLvqBSa8",
-    title: "🎸 Day 03: 신나는 악기 연주 밴드 스토리 (Instruments Song)",
-    sub: "기타, 플루트, 드럼 연주를 즐겁게 노래로 배우는 밴드 애니메이션!"
+    id: "5YY8-YRUtW0",
+    title: "📖 Day 03: ORT 4 - Come In! & The Secret Room",
+    sub: "옥스포드 리딩트리 4단계 3권 & 4권 연속 상영 애니메이션!"
   },
   3: {
-    id: "PPcdahmn3uk",
-    title: "🍎 Day 04: 달콤한 과일과 맛있는 간식 파티 (Yummy Snacks)",
-    sub: "맛있고 달콤한 과일과 간식을 나누어 먹는 신나는 이야기!"
+    id: "tPnjWbxYKW4",
+    title: "📖 Day 04: ORT 4 - The Storm (폭풍과 마법의 열쇠)",
+    sub: "옥스포드 리딩트리 4단계의 클라이맥스! 6권 폭풍과 마법열쇠!"
   }
 };
+
+var currentOrtShadow = null;
+function selectOrtBook(idx) {
+  var b = ORT_SERIES_VIDEOS[idx];
+  if (!b) return;
+  var iframe = document.getElementById('theatreYtIframe');
+  if (iframe) {
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + b.id + '?rel=0&modestbranding=1&playsinline=1';
+  }
+  var titleEl = document.getElementById('ytVideoTitle');
+  if (titleEl) titleEl.textContent = b.title;
+  var subEl = document.getElementById('ytVideoSub');
+  if (subEl) subEl.textContent = b.sub;
+
+  var chips = document.querySelectorAll('.ort-chip');
+  chips.forEach(function(c, i) {
+    if (i === idx) {
+      c.style.background = '#7c3aed';
+      c.style.color = '#ffffff';
+      c.style.fontWeight = 'bold';
+    } else {
+      c.style.background = '#ffffff';
+      c.style.color = '#5b21b6';
+      c.style.fontWeight = 'normal';
+    }
+  });
+
+  if (b.shadow && b.shadow.length) {
+    currentOrtShadow = b.shadow;
+    S.shadowIdx = 0;
+    renderShadowSentence();
+  }
+}
 
 function updateYoutubeVideoForDay(dayIdx) {
   var videoData = DAY_YOUTUBE_VIDEOS[dayIdx] || DAY_YOUTUBE_VIDEOS[0];
@@ -2615,9 +2735,9 @@ var isMicListening = false;
 var speechRec = null;
 
 function renderShadowSentence() {
-  var p = DAILY_PACKS[S.curDayIdx];
-  var s = p.shadowing[S.shadowIdx];
-  document.getElementById('shadowCounter').textContent = (S.shadowIdx + 1) + ' / ' + p.shadowing.length + ' 문장';
+  var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : DAILY_PACKS[S.curDayIdx].shadowing;
+  var s = list[S.shadowIdx] || list[0];
+  document.getElementById('shadowCounter').textContent = (S.shadowIdx + 1) + ' / ' + list.length + ' 문장';
   document.getElementById('shadowEn').textContent = s.sentence;
   document.getElementById('shadowKo').textContent = s.ko;
   document.getElementById('shadowScorePill').textContent = '마이크를 누르고 말해보세요!';
@@ -2625,8 +2745,9 @@ function renderShadowSentence() {
 }
 
 function speakShadowTarget() {
-  var p = DAILY_PACKS[S.curDayIdx];
-  speakText(p.shadowing[S.shadowIdx].sentence, 'en-US');
+  var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : DAILY_PACKS[S.curDayIdx].shadowing;
+  var s = list[S.shadowIdx] || list[0];
+  speakText(s.sentence, 'en-US');
 }
 
 var currentShadowRec = null;
@@ -2673,7 +2794,8 @@ function toggleShadowMic() {
       document.getElementById('btnMicLabel').textContent = '말하기 시작';
       var transcript = (e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
       var p = DAILY_PACKS[S.curDayIdx];
-      var targetSentence = p.shadowing[S.shadowIdx].sentence;
+      var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : p.shadowing;
+      var targetSentence = list[S.shadowIdx].sentence;
       var res = alignSpeech(targetSentence, transcript);
 
       var badgesHtml = res.T.map(function(t, k) {
@@ -2722,7 +2844,8 @@ function toggleShadowMic() {
 
 function nextShadowSentence() {
   var p = DAILY_PACKS[S.curDayIdx];
-  if (S.shadowIdx < p.shadowing.length - 1) {
+  var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : p.shadowing;
+  if (S.shadowIdx < list.length - 1) {
     S.shadowIdx++;
     renderShadowSentence();
     playCorrectSound();
@@ -2982,6 +3105,55 @@ function minkySay(txt, speakVoice) {
   if (speakVoice === true) {
     speakText(txt, 'ko-KR');
   }
+}
+</script>
+
+
+<!-- QR Audio & E-Book Modal -->
+<div id="qrAudioModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;justify-content:center;align-items:center;padding:16px;">
+  <div style="background:white;border-radius:20px;max-width:440px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div style="font-family:Maplestory,sans-serif;font-size:16px;font-weight:700;color:#1e3a8a;">🎧 출판사 공식 QR 오디오 & E-Book</div>
+      <button onclick="closeQrAudioModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#64748b;">✕</button>
+    </div>
+    <div style="font-size:12.5px;color:#475569;margin-bottom:14px;line-height:1.4;">
+      스마트폰이나 태블릿으로 책을 보며 터치 한 번으로 공식 출판사 원어민 음원과 전자책을 바로 들을 수 있습니다.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="padding:10px 12px;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#1e40af;margin-bottom:4px;">📗 Insight Link Starter L1 (기린)</div>
+        <div style="display:flex;gap:6px;">
+          <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=63U92V6C11RH1GOYLXOR91YU86L1HLIQ&view=1" target="_blank" style="text-decoration:none;background:#2563eb;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 공식 MP3 음원</a>
+          <a href="https://netutor-m.neflow.ai/pages/QRcode/sendmail.asp?bookcode=BA03040013" target="_blank" style="text-decoration:none;background:white;border:1px solid #2563eb;color:#2563eb;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">📖 전자 E-Book</a>
+        </div>
+      </div>
+      <div style="padding:10px 12px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#c2410c;margin-bottom:4px;">📙 Insight Link Starter L2 (물고기)</div>
+        <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=5ETU185OZCQ4ZSEKKJNC8CX77HKLGX83&view=1" target="_blank" style="text-decoration:none;background:#ea580c;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 공식 MP3 음원</a>
+      </div>
+      <div style="padding:10px 12px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#b91c1c;margin-bottom:4px;">📕 Insight Link Starter L3 (달팽이)</div>
+        <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=PMESMFPWKKB2K19I7I9BTKJERP6K263A&view=1" target="_blank" style="text-decoration:none;background:#dc2626;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 공식 MP3 음원</a>
+      </div>
+      <div style="padding:10px 12px;background:#faf5ff;border:1.5px solid #e9d5ff;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#6b21a8;margin-bottom:4px;">📘 Hand in Hand 5 (e-future)</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <a href="https://www.e-future.co.kr/audio/info.do?bookkey=1026&cd_num=1" target="_blank" style="text-decoration:none;background:#7c3aed;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 전체 오디오</a>
+          <a href="https://www.e-future.co.kr/audio/track/info?bookkey=1026&cd_num=1&unit_idx=102" target="_blank" style="text-decoration:none;background:#9333ea;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🏃 Unit 5 트랙</a>
+          <a href="https://www.e-future.co.kr/app/handinhand/index" target="_blank" style="text-decoration:none;background:white;border:1px solid #7c3aed;color:#7c3aed;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">📱 무료 학습 앱</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function openQrAudioModal() {
+  var m = document.getElementById('qrAudioModal');
+  if (m) m.style.display = 'flex';
+}
+function closeQrAudioModal() {
+  var m = document.getElementById('qrAudioModal');
+  if (m) m.style.display = 'none';
 }
 </script>
 
