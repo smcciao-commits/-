@@ -1637,17 +1637,28 @@
       <!-- Animated Interactive SVG Theatre Box -->
       <!-- YouTube HD Video Theatre -->
       
-      <!-- ORT Stage 4 Series Quick Selector (Infinite Expandable) -->
-      <div style="margin-bottom:12px;padding:12px 14px;background:#f5f3ff;border:2px solid #c4b5fd;border-radius:16px;">
+      <!-- ORT Stage 5 (Sumin's E-Library Series) & Stage 4 Dual Selector -->
+      <div style="margin-bottom:12px;padding:12px 14px;background:#f0fdf4;border:2px solid #86efac;border-radius:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
-          <div>
-            <span style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14px;color:#5b21b6">📖 ORT 4단계 시리즈 학습관</span>
-            <span style="font-size:11px;color:#6b21a8;margin-left:4px;font-weight:600;" id="ort_total_badge">(기본 6권 + 무제한 확장)</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14px;color:#166534">📖 ORT 리딩트리 시리즈 영상관</span>
+            <span style="font-size:11px;color:#15803d;font-weight:700;" id="ort_total_badge">(5단계 넉넉한 10권 수록)</span>
           </div>
-          <button onclick="openAddOrtModal()" style="font-size:11.5px;color:white;background:#7c3aed;border:none;padding:5px 12px;border-radius:8px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(124,58,237,0.3);">
-            <span>➕</span> <span>ORT 권수 추가하기</span>
+          <button onclick="openAddOrtModal()" style="font-size:11.5px;color:white;background:#059669;border:none;padding:5px 12px;border-radius:8px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(5,150,105,0.3);">
+            <span>➕</span> <span>영상 권수 추가하기</span>
           </button>
         </div>
+
+        <!-- Level Toggle Tabs -->
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+          <button id="btnOrtLevel5" onclick="switchOrtLevel('ort5')" style="font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;border:1.5px solid #059669;background:#059669;color:white;font-weight:700;">
+            🌟 ORT 5단계 (원장님 추천 Rowing Boats 등 10권+)
+          </button>
+          <button id="btnOrtLevel4" onclick="switchOrtLevel('ort4')" style="font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6;">
+            📖 ORT 4단계 (기본 6권+)
+          </button>
+        </div>
+
         <div style="display:flex;gap:6px;flex-wrap:wrap" id="ort_book_selector">
           <!-- Dynamically populated by renderOrtChips() -->
         </div>
@@ -2064,6 +2075,208 @@ function selectDay(idx) {
 
 
 /* ============ YOUTUBE HD VIDEO THEATRE SYSTEM ============ */
+var ORT_STAGE5_VIDEOS = [
+  {
+    "bookNum": 1,
+    "id": "z1QBjbs3w1o",
+    "title": "📖 ORT 5 - 1권: Rowing Boats (노 젓는 보트와 플로피)",
+    "sub": "원장님 추천 The E-Library 공식 영상! 플로피가 강물에 빠진 로프를 건져내는 감동 스토리!",
+    "shadow": [
+      {
+        "sentence": "We will take those rowing boats, said Dad.",
+        "ko": "우리는 저 노 젓는 보트를 탈 거란다, 아빠가 말씀하셨어요."
+      },
+      {
+        "sentence": "Suddenly, Floppy jumped into the river to help.",
+        "ko": "갑자기 플로피가 돕기 위해 강물로 뛰어들었습니다."
+      },
+      {
+        "sentence": "Floppy got the rope in his teeth! Good boy, Floppy!",
+        "ko": "플로피가 로프를 입으로 물었어요! 착하다, 플로피!"
+      }
+    ]
+  },
+  {
+    "bookNum": 2,
+    "id": "T5IFhvMKCWs",
+    "title": "📖 ORT 5 - 2권: Kipper and the Trolls (키퍼와 트롤들)",
+    "sub": "The E-Library 공식 영상! 키퍼가 숲속 트롤들과 친구가 되는 유쾌한 판타지 모험!",
+    "shadow": [
+      {
+        "sentence": "Kipper went on an adventure with the trolls.",
+        "ko": "키퍼는 트롤들과 함께 모험을 떠났습니다."
+      },
+      {
+        "sentence": "The big troll had a funny hat on his head.",
+        "ko": "큰 트롤은 머리에 우스꽝스러운 모자를 쓰고 있었습니다."
+      },
+      {
+        "sentence": "They made friends and laughed together happily.",
+        "ko": "그들은 친구가 되어 함께 행복하게 웃었습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 3,
+    "id": "vaEQhPb80yA",
+    "title": "📖 ORT 5 - 3권: Castle Adventure (성에서의 마녀 모험)",
+    "sub": "할머니(Gran)와 아이들이 마법의 성에 들어가 사악한 마녀를 물리치고 왕을 구출하는 명작!",
+    "shadow": [
+      {
+        "sentence": "The magic key took Gran and the children to a castle.",
+        "ko": "마법 열쇠가 할머니와 아이들을 성으로 데려갔습니다."
+      },
+      {
+        "sentence": "Good old Gran caught the nasty witch in the net!",
+        "ko": "용감한 우리 할머니가 못된 마녀를 그물로 잡았어요!"
+      },
+      {
+        "sentence": "The green frog turned back into the king!",
+        "ko": "초록 개구리가 다시 멋진 왕으로 변했습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 4,
+    "id": "w4gqYg52is8",
+    "title": "📖 ORT 5 - 4권: Mirror Island (거울 섬과 캡틴 크로우)",
+    "sub": "칩의 거울 글씨로 해적 캡틴 크로우의 비밀 보물 지도를 해독하고 황금을 찾는 모험!",
+    "shadow": [
+      {
+        "sentence": "Chip used the mirror to read the secret treasure map.",
+        "ko": "칩은 비밀 보물 지도를 읽기 위해 거울을 사용했습니다."
+      },
+      {
+        "sentence": "Captain Crow found the big chest full of gold and silver!",
+        "ko": "캡틴 크로우는 금과 은으로 가득 찬 큰 상자를 찾았습니다!"
+      },
+      {
+        "sentence": "They flashed the mirror to call the rescue ship.",
+        "ko": "그들은 구조선을 부르기 위해 거울을 반짝였습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 5,
+    "id": "9yf-G9VDXro",
+    "title": "📖 ORT 5 - 5권: The Magic Paintbrush (마법의 붓)",
+    "sub": "The E-Library 공식 영상! 붓으로 그리는 모든 것이 진짜가 되는 전설의 마법 이야기!",
+    "shadow": [
+      {
+        "sentence": "Everything he painted with the brush became real!",
+        "ko": "그가 붓으로 그린 모든 것이 진짜가 되었습니다!"
+      },
+      {
+        "sentence": "He painted food and warm clothes for poor people.",
+        "ko": "그는 가난한 사람들을 위해 음식과 따뜻한 옷을 그렸습니다."
+      },
+      {
+        "sentence": "It was a wonderful magic paintbrush.",
+        "ko": "그것은 정말 놀라운 마법의 붓이었습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 6,
+    "id": "nlEwjr_fCaY",
+    "title": "📖 ORT 5 - 6권: A Monster Mistake (괴물 소동)",
+    "sub": "The E-Library 공식 영상! 초록 괴물 옷을 입고 벌어지는 유쾌한 학교 모험 이야기!",
+    "shadow": [
+      {
+        "sentence": "The children made a huge green monster costume.",
+        "ko": "아이들은 거대한 초록색 괴물 의상을 만들었습니다."
+      },
+      {
+        "sentence": "Everyone laughed at the funny monster mistake.",
+        "ko": "모두가 우스꽝스러운 괴물 실수에 웃음을 터뜨렸습니다."
+      },
+      {
+        "sentence": "It was the best school adventure ever!",
+        "ko": "역대 최고의 학교 모험이었습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 7,
+    "id": "aZNp63Hfa4U",
+    "title": "📖 ORT 5 - 7권: Husky Adventure (허스키 썰매견 모험)",
+    "sub": "눈 덮인 숲속에서 플로피가 썰매견이 되어 아픈 아이를 병원으로 구출하는 감동 명작!",
+    "shadow": [
+      {
+        "sentence": "The magic key took Floppy to a cold snowy forest.",
+        "ko": "마법 열쇠가 플로피를 춥고 눈 덮인 숲으로 데려갔습니다."
+      },
+      {
+        "sentence": "Floppy pulled the sled fast to save the sick boy.",
+        "ko": "플로피는 아픈 소년을 구하기 위해 썰매를 빨리 끌었습니다."
+      },
+      {
+        "sentence": "You are not a floppy dog, you are a true hero!",
+        "ko": "너는 그냥 플로피가 아니라, 진정한 영웅이야!"
+      }
+    ]
+  },
+  {
+    "bookNum": 8,
+    "id": "tpenPh5d2v0",
+    "title": "📖 ORT 5 - 8권: The Orchid Thief (난초 도둑을 잡아라)",
+    "sub": "The E-Library 공식 영상! 온실의 희귀 난초를 훔치려는 도둑을 발자국으로 추적하는 탐정 모험!",
+    "shadow": [
+      {
+        "sentence": "Someone was trying to steal the rare orchid flower.",
+        "ko": "누군가 귀한 난초 꽃을 훔치려 하고 있었습니다."
+      },
+      {
+        "sentence": "The children found the muddy footprints in the garden.",
+        "ko": "아이들은 정원에서 진흙 묻은 발자국을 발견했습니다."
+      },
+      {
+        "sentence": "They caught the thief and saved the beautiful plant.",
+        "ko": "그들은 도둑을 잡고 아름다운 식물을 구했습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 9,
+    "id": "45A6EXZrptE",
+    "title": "📖 ORT 5 - 9권: The Stranger Beast (이상한 짐승)",
+    "sub": "The E-Library 공식 영상! 미지의 숲속에서 만난 신기하고 다정한 야수와의 우정 이야기!",
+    "shadow": [
+      {
+        "sentence": "They discovered a strange beast in the wild woods.",
+        "ko": "그들은 깊은 숲에서 이상한 짐승을 발견했습니다."
+      },
+      {
+        "sentence": "The beast was very friendly and wanted to play.",
+        "ko": "그 짐승은 매우 친절했고 함께 놀고 싶어 했습니다."
+      },
+      {
+        "sentence": "They had a wonderful time in the mystery forest.",
+        "ko": "그들은 신비한 숲에서 멋진 시간을 보냈습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 10,
+    "id": "DZzZqM8pDjc",
+    "title": "📖 ORT 5 - 10권: The Beast Feasts (야수의 만찬)",
+    "sub": "The E-Library 공식 영상! 숲속 친구들과 함께 차려 먹는 달콤하고 풍성한 만찬 파티!",
+    "shadow": [
+      {
+        "sentence": "The friendly beast invited everyone to a grand feast.",
+        "ko": "친절한 야수가 모두를 성대한 만찬에 초대했습니다."
+      },
+      {
+        "sentence": "There were sweet cakes and fresh fruits on the table.",
+        "ko": "식탁 위에는 달콤한 케이크와 신선한 과일이 가득했습니다."
+      },
+      {
+        "sentence": "Everyone cheered for the happiest feast ever.",
+        "ko": "모두가 가장 행복한 만찬에 환호했습니다."
+      }
+    ]
+  }
+];
 var ORT_SERIES_VIDEOS = [
   {
     bookNum: 1,
@@ -2198,17 +2411,48 @@ function replayYoutubeVideo() {
   }
 }
 
-// --- Dynamic Expandable ORT Series Engine ---
+// --- Dynamic Expandable ORT Series Engine (Stage 5 Primary & Stage 4) ---
+var currentOrtLevel = 'ort5'; // Default to ORT Stage 5 (Sumin\'s Rowing Boats & E-Library)
 var currentOrtShadow = null;
-function loadOrtSeries() {
-  try {
-    var saved = localStorage.getItem('cats_ort_custom_series_v1');
-    if (saved) {
-      var arr = JSON.parse(saved);
-      if (Array.isArray(arr) && arr.length > 0) return arr;
-    }
-  } catch(e) {}
-  return ORT_SERIES_VIDEOS;
+
+function getOrtListForCurrentLevel() {
+  if (currentOrtLevel === 'ort5') {
+    try {
+      var s5 = localStorage.getItem('cats_ort5_custom_series_v1');
+      if (s5) {
+        var arr5 = JSON.parse(s5);
+        if (Array.isArray(arr5) && arr5.length > 0) return arr5;
+      }
+    } catch(e) {}
+    return ORT_STAGE5_VIDEOS;
+  } else {
+    try {
+      var s4 = localStorage.getItem('cats_ort_custom_series_v1');
+      if (s4) {
+        var arr4 = JSON.parse(s4);
+        if (Array.isArray(arr4) && arr4.length > 0) return arr4;
+      }
+    } catch(e) {}
+    return ORT_SERIES_VIDEOS;
+  }
+}
+
+function switchOrtLevel(level) {
+  currentOrtLevel = level;
+  var btn5 = document.getElementById('btnOrtLevel5');
+  var btn4 = document.getElementById('btnOrtLevel4');
+  if (btn5) {
+    btn5.style.background = (level === 'ort5' ? '#059669' : 'white');
+    btn5.style.color = (level === 'ort5' ? 'white' : '#065f46');
+    btn5.style.fontWeight = (level === 'ort5' ? 'bold' : 'normal');
+  }
+  if (btn4) {
+    btn4.style.background = (level === 'ort4' ? '#7c3aed' : 'white');
+    btn4.style.color = (level === 'ort4' ? 'white' : '#5b21b6');
+    btn4.style.fontWeight = (level === 'ort4' ? 'bold' : 'normal');
+  }
+  renderOrtChips();
+  selectOrtBook(0);
 }
 
 function saveOrtSeries(arr) {
@@ -2220,22 +2464,30 @@ function saveOrtSeries(arr) {
 var currentActiveOrtList = loadOrtSeries();
 
 function renderOrtChips() {
+  var list = getOrtListForCurrentLevel();
   var container = document.getElementById('ort_book_selector');
   if (!container) return;
   var badge = document.getElementById('ort_total_badge');
-  if (badge) badge.textContent = '(' + currentActiveOrtList.length + '권 수록 중)';
+  if (badge) {
+    var lvlName = (currentOrtLevel === 'ort5' ? '5단계 넉넉한 10권+' : '4단계 6권+');
+    badge.textContent = '(' + lvlName + ' · ' + list.length + '권 수록)';
+  }
 
-  container.innerHTML = currentActiveOrtList.map(function(b, idx) {
+  var activeBorderColor = (currentOrtLevel === 'ort5' ? '#059669' : '#7c3aed');
+  var activeTextColor = (currentOrtLevel === 'ort5' ? '#065f46' : '#5b21b6');
+
+  container.innerHTML = list.map(function(b, idx) {
     var shortTitle = b.title.split(':')[1] || b.title;
     shortTitle = shortTitle.trim();
-    if (shortTitle.length > 18) shortTitle = shortTitle.substring(0, 18) + '...';
-    return '<button class="ort-chip" onclick="selectOrtBook(' + idx + ')" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">' + 
+    if (shortTitle.length > 20) shortTitle = shortTitle.substring(0, 20) + '...';
+    return '<button class="ort-chip" onclick="selectOrtBook(' + idx + ')" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid ' + activeBorderColor + ';background:white;color:' + activeTextColor + '">' + 
       (idx + 1) + '권 ' + shortTitle + '</button>';
   }).join('');
 }
 
 function selectOrtBook(idx) {
-  var b = currentActiveOrtList[idx];
+  var list = getOrtListForCurrentLevel();
+  var b = list[idx];
   if (!b) return;
 
   var cover = document.getElementById('ytEndCover');
@@ -2309,11 +2561,13 @@ function submitNewOrtBook() {
     ]
   };
 
-  currentActiveOrtList.push(newBook);
-  saveOrtSeries(currentActiveOrtList);
+  var key = (currentOrtLevel === 'ort5' ? 'cats_ort5_custom_series_v1' : 'cats_ort_custom_series_v1');
+  var list = getOrtListForCurrentLevel();
+  list.push(newBook);
+  try { localStorage.setItem(key, JSON.stringify(list)); } catch(e) {}
   renderOrtChips();
   closeAddOrtModal();
-  selectOrtBook(currentActiveOrtList.length - 1);
+  selectOrtBook(list.length - 1);
   alert('🎉 ' + title + ' 권이 성공적으로 추가되었습니다!');
 }
 
