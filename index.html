@@ -885,15 +885,436 @@ function mockCall(fn, args) {
     var correct = args[3], total = args[4];
     return { score: Math.round((correct / (total || 1)) * 100) };
   }
-  if (fn === 'getProblemSet') {
-    return [];
-  }
-  if (fn === 'adminLogin') {
-    return { today: '2026-11-10', bans: ['홍천고1', '수지중3', '체험반'] };
-  }
+
+  /* ===== 단어 대결 (배틀) 실시간 엔진 ===== */
   if (fn === 'battleSets') {
-    return ['홍천 외부1 동물상징 단어', '예시 단어 세트'];
+    var sets = [];
+    var allKeys = Object.keys(ALL_WORD_SETS);
+    for (var i = 0; i < allKeys.length; i++) {
+      var k = allKeys[i];
+      var s = ALL_WORD_SETS[k];
+      sets.push({
+        name: k,
+        count: (s.words || []).length,
+        target: s.target || '전체'
+      });
+    }
+    return sets;
   }
+
+  if (fn === 'battleCreate') {
+    var setNames = args[1] || [];
+    if (!Array.isArray(setNames)) setNames = [setNames];
+    var mins = Math.max(1, Math.min(30, Number(args[2]) || 3));
+    var dir = args[3] === 'ko' ? 'ko' : 'en';
+
+    var want = {};
+    for (var i = 0; i < setNames.length; i++) want[setNames[i]] = 1;
+    var seen = {}, words = [];
+    var allKeys = Object.keys(ALL_WORD_SETS);
+    for (var i = 0; i < allKeys.length; i++) {
+      var sName = allKeys[i];
+      if (!want[sName]) continue;
+      var wList = (ALL_WORD_SETS[sName] && ALL_WORD_SETS[sName].words) || [];
+      for (var j = 0; j < wList.length; j++) {
+        var wObj = wList[j];
+        var w = wObj.w;
+        var m = (wObj.m || '').split(';')[0].split(',')[0].trim();
+        if (w && m && !seen[w]) {
+          seen[w] = 1;
+          words.push({ w: w, m: m });
+        }
+      }
+    }
+    if (words.length < 4) {
+      for (var i = 0; i < allKeys.length; i++) {
+        var wList = ALL_WORD_SETS[allKeys[i]].words || [];
+        for (var j = 0; j < wList.length; j++) {
+          var wObj = wList[j];
+          var w = wObj.w, m = (wObj.m || '').split(';')[0].split(',')[0].trim();
+          if (w && m && !seen[w]) {
+            seen[w] = 1;
+            words.push({ w: w, m: m });
+            if (words.length >= 4) break;
+          }
+        }
+        if (words.length >= 4) break;
+      }
+    }
+
+    function shuf(arr) {
+      var a = arr.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
+    var qs = shuf(words).slice(0, 200).map(function(q) {
+      var ansText = dir === 'en' ? q.m : q.w;
+      var used = {}; used[ansText] = 1;
+      var wrong = [];
+      shuf(words).forEach(function(o) {
+        var t = dir === 'en' ? o.m : o.w;
+        if (wrong.length < 3 && !used[t]) { used[t] = 1; wrong.push(t); }
+      });
+      var opts = shuf([ansText].concat(wrong));
+      return {
+        w: q.w,
+        p: dir === 'en' ? q.w : q.m,
+        o: opts,
+        a: opts.indexOf(ansText)
+      };
+    }).filter(function(q) { return q.o.length === 4; });
+
+    var code = String(Math.floor(1000 + Math.random() * 9000));
+    var label = setNames.join(', ');
+    if (label.length > 28) label = label.slice(0, 26) + '…';
+
+    var room = {
+      code: code,
+      status: 'lobby',
+      set: label,
+      mins: mins,
+      dir: dir,
+      qs: qs,
+      names: [],
+      players: {},
+      startAt: 0,
+      endAt: 0,
+      createdAt: Date.now()
+    };
+
+    try {
+      localStorage.setItem('topedu_battle_' + code, JSON.stringify(room));
+      localStorage.setItem('topedu_battle_latest', code);
+    } catch(e){}
+
+    try {
+      fetch('https://ntfy.sh/topedu_bt_' + code, {
+        method: 'POST',
+        headers: { 'Title': 'battleCreate' },
+        body: JSON.stringify({ type: 'room', room: room })
+      }).catch(function(){});
+    } catch(e){}
+
+    return {
+      code: code,
+      status: 'lobby',
+      set: label,
+      mins: mins,
+      dir: dir,
+      names: [],
+      count: 0
+    };
+  }
+
+  if (fn === 'battleHost') {
+    var code = String(args[1] || '');
+    var action = args[2];
+    var room = null;
+    try {
+      var raw = localStorage.getItem('topedu_battle_' + code);
+      if (raw) room = JSON.parse(raw);
+    } catch(e){}
+    if (!room) {
+      return { code: code, status: 'end', set: '대결', rank: [] };
+    }
+
+    if (!window._ntfy_host_code || window._ntfy_host_code !== code) {
+      window._ntfy_host_code = code;
+      try {
+        var es = new EventSource('https://ntfy.sh/topedu_bt_' + code + '/sse');
+        es.onmessage = function(e) {
+          try {
+            var data = JSON.parse(e.data);
+            var m = typeof data.message === 'string' ? JSON.parse(data.message) : data.message;
+            if (m && m.type === 'join') {
+              var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+              r.players = r.players || {};
+              r.names = r.names || [];
+              var k = (m.ban || '') + ':' + (m.name || '');
+              if (!r.players[k]) {
+                r.players[k] = { name: m.name, ban: m.ban, c: 0, x: 0, wrong: [] };
+                if (r.names.indexOf(m.name) < 0) r.names.push(m.name);
+                localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+              }
+            } else if (m && m.type === 'report') {
+              var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+              r.players = r.players || {};
+              var k = (m.ban || '') + ':' + (m.name || '');
+              if (r.players[k]) {
+                r.players[k].c = m.c || 0;
+                r.players[k].x = m.x || 0;
+                localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+              }
+            }
+          } catch(err){}
+        };
+      } catch(err){}
+    }
+
+    var now = Date.now();
+    if (action === 'start' && room.status === 'lobby') {
+      room.status = 'run';
+      room.startAt = now + 3000;
+      room.endAt = room.startAt + (room.mins * 60 * 1000);
+      try {
+        fetch('https://ntfy.sh/topedu_bt_' + code, {
+          method: 'POST',
+          headers: { 'Title': 'start' },
+          body: JSON.stringify({ type: 'start', startAt: room.startAt, endAt: room.endAt })
+        }).catch(function(){});
+      } catch(e){}
+    } else if (action === 'end' && room.status !== 'end') {
+      room.status = 'end';
+      try {
+        fetch('https://ntfy.sh/topedu_bt_' + code, {
+          method: 'POST',
+          headers: { 'Title': 'end' },
+          body: JSON.stringify({ type: 'end' })
+        }).catch(function(){});
+      } catch(e){}
+    } else if (room.status === 'run' && now > room.endAt + 2000) {
+      room.status = 'end';
+    }
+
+    try {
+      localStorage.setItem('topedu_battle_' + code, JSON.stringify(room));
+    } catch(e){}
+
+    var pKeys = Object.keys(room.players || {});
+    var rankList = pKeys.map(function(k) {
+      var p = room.players[k];
+      return {
+        name: p.name,
+        ban: p.ban,
+        c: p.c || 0,
+        x: p.x || 0
+      };
+    }).sort(function(a, b) {
+      return (b.c - a.c) || (a.x - b.x);
+    });
+    rankList.forEach(function(r, idx) { r.rank = idx + 1; });
+
+    if (room.status === 'lobby') {
+      return {
+        code: code,
+        status: 'lobby',
+        set: room.set,
+        mins: room.mins,
+        dir: room.dir,
+        names: room.names || [],
+        count: (room.names || []).length
+      };
+    } else if (room.status === 'run') {
+      return {
+        code: code,
+        status: 'run',
+        set: room.set,
+        mins: room.mins,
+        dir: room.dir,
+        startIn: Math.max(0, (room.startAt || now) - now),
+        endIn: Math.max(0, (room.endAt || now) - now),
+        rank: rankList
+      };
+    } else {
+      return {
+        code: code,
+        status: 'end',
+        set: room.set,
+        rank: rankList
+      };
+    }
+  }
+
+  if (fn === 'battleJoin') {
+    var cred = args[0] || {};
+    var code = String(args[1] || '').trim();
+    var room = null;
+    try {
+      var raw = localStorage.getItem('topedu_battle_' + code);
+      if (raw) room = JSON.parse(raw);
+    } catch(e){}
+
+    if (!room) {
+      room = {
+        code: code,
+        status: 'lobby',
+        set: '단어 대결',
+        names: [],
+        players: {},
+        qs: []
+      };
+    }
+
+    var pKey = (cred.ban || '') + ':' + (cred.name || '');
+    room.players = room.players || {};
+    room.names = room.names || [];
+    if (!room.players[pKey]) {
+      room.players[pKey] = { name: cred.name, ban: cred.ban, c: 0, x: 0, wrong: [] };
+      if (room.names.indexOf(cred.name) < 0) room.names.push(cred.name);
+      try {
+        localStorage.setItem('topedu_battle_' + code, JSON.stringify(room));
+      } catch(e){}
+    }
+
+    if (!window._ntfy_stu_code || window._ntfy_stu_code !== code) {
+      window._ntfy_stu_code = code;
+      try {
+        var es = new EventSource('https://ntfy.sh/topedu_bt_' + code + '/sse');
+        es.onmessage = function(e) {
+          try {
+            var data = JSON.parse(e.data);
+            var m = typeof data.message === 'string' ? JSON.parse(data.message) : data.message;
+            if (m && m.type === 'room' && m.room) {
+              localStorage.setItem('topedu_battle_' + code, JSON.stringify(m.room));
+            } else if (m && m.type === 'start') {
+              var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+              r.status = 'run';
+              r.startAt = m.startAt;
+              r.endAt = m.endAt;
+              localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+            } else if (m && m.type === 'end') {
+              var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+              r.status = 'end';
+              localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+            }
+          } catch(err){}
+        };
+      } catch(err){}
+
+      try {
+        fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=30m')
+          .then(function(res){ return res.text(); })
+          .then(function(txt){
+            var lines = txt.trim().split('\n');
+            lines.forEach(function(l){
+              try {
+                var d = JSON.parse(l);
+                var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
+                if (m && m.type === 'room' && m.room) {
+                  localStorage.setItem('topedu_battle_' + code, JSON.stringify(m.room));
+                }
+              } catch(e){}
+            });
+          }).catch(function(){});
+      } catch(e){}
+    }
+
+    try {
+      fetch('https://ntfy.sh/topedu_bt_' + code, {
+        method: 'POST',
+        headers: { 'Title': 'join' },
+        body: JSON.stringify({ type: 'join', name: cred.name, ban: cred.ban })
+      }).catch(function(){});
+    } catch(e){}
+
+    return {
+      code: code,
+      count: room.names.length
+    };
+  }
+
+  if (fn === 'battleState') {
+    var cred = args[0] || {};
+    var code = String(args[1] || '').trim();
+    var withQs = !!args[2];
+    var room = null;
+    try {
+      var raw = localStorage.getItem('topedu_battle_' + code);
+      if (raw) room = JSON.parse(raw);
+    } catch(e){}
+    if (!room) {
+      return { status: 'lobby', count: 1 };
+    }
+
+    var now = Date.now();
+    var pKeys = Object.keys(room.players || {});
+    var rankList = pKeys.map(function(k) {
+      var p = room.players[k];
+      return { name: p.name, ban: p.ban, c: p.c || 0, x: p.x || 0 };
+    }).sort(function(a, b) { return (b.c - a.c) || (a.x - b.x); });
+    rankList.forEach(function(r, idx) { r.rank = idx + 1; });
+
+    var myObj = { rank: 1, c: 0, x: 0 };
+    rankList.forEach(function(r) {
+      if (r.name === cred.name && r.ban === cred.ban) myObj = r;
+    });
+
+    if (room.status === 'lobby') {
+      return { status: 'lobby', count: (room.names || []).length };
+    } else if (room.status === 'run') {
+      return {
+        status: 'run',
+        startIn: Math.max(0, (room.startAt || now) - now),
+        endIn: Math.max(0, (room.endAt || now) - now),
+        qs: withQs ? room.qs : undefined
+      };
+    } else {
+      return {
+        status: 'end',
+        top: rankList.slice(0, 3),
+        me: myObj
+      };
+    }
+  }
+
+  if (fn === 'battleReport') {
+    var cred = args[0] || {};
+    var code = String(args[1] || '').trim();
+    var c = Number(args[2]) || 0;
+    var x = Number(args[3]) || 0;
+    var wrong = args[4] || [];
+    var room = null;
+    try {
+      var raw = localStorage.getItem('topedu_battle_' + code);
+      if (raw) room = JSON.parse(raw);
+    } catch(e){}
+    if (!room) {
+      return { rank: 1, count: 1, status: 'run' };
+    }
+
+    var pKey = (cred.ban || '') + ':' + (cred.name || '');
+    room.players = room.players || {};
+    if (!room.players[pKey]) {
+      room.players[pKey] = { name: cred.name, ban: cred.ban, c: c, x: x, wrong: wrong };
+      if (room.names.indexOf(cred.name) < 0) room.names.push(cred.name);
+    } else {
+      room.players[pKey].c = c;
+      room.players[pKey].x = x;
+      room.players[pKey].wrong = wrong;
+    }
+    try {
+      localStorage.setItem('topedu_battle_' + code, JSON.stringify(room));
+    } catch(e){}
+
+    try {
+      fetch('https://ntfy.sh/topedu_bt_' + code, {
+        method: 'POST',
+        headers: { 'Title': 'report' },
+        body: JSON.stringify({ type: 'report', name: cred.name, ban: cred.ban, c: c, x: x })
+      }).catch(function(){});
+    } catch(e){}
+
+    var pKeys = Object.keys(room.players || {});
+    var rankList = pKeys.map(function(k) {
+      var p = room.players[k];
+      return { name: p.name, ban: p.ban, c: p.c || 0, x: p.x || 0 };
+    }).sort(function(a, b) { return (b.c - a.c) || (a.x - b.x); });
+    var myRank = 1;
+    rankList.forEach(function(r, idx) {
+      if (r.name === cred.name && r.ban === cred.ban) myRank = idx + 1;
+    });
+
+    return {
+      rank: myRank,
+      count: rankList.length,
+      status: room.status
+    };
+  }
+
   return {};
 }
 
@@ -2382,7 +2803,7 @@ function hostRender(v){
   if(B.tick){ clearInterval(B.tick); B.tick=null; }
   var html='';
   if(v.status==='lobby'){
-    html=hostHead(v)+'<div class="bguide">폰에서 <b>tinyurl.com/topedu-word</b> → <b>⚔️ 단어 대결 참여</b> → 방 번호 입력</div>'+
+    html=hostHead(v)+'<div class="bguide">폰에서 <b>tinyurl.com/topedu-voca</b> → <b>⚔️ 단어 대결 참여</b> → 방 번호 입력</div>'+
       '<div class="bcode">'+esc(v.code)+'</div><div class="bguide">게임 '+v.mins+'분 · '+(v.dir==='ko'?'뜻 보고 영어 고르기':'영어 보고 뜻 고르기')+' · 각자 자기 속도로 풀어요</div>'+
       '<div class="names" id="names"></div><button class="btn" id="bstart" style="max-width:480px;margin:10px auto;font-size:24px;padding:20px">시작하기</button>';
     app.innerHTML=html; lobbyNames(v);
