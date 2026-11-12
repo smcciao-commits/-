@@ -985,7 +985,7 @@
   <!-- Student Info Banner -->
   <div class="student-banner">
     <div>
-      <span class="stu-name-badge" id="studentBadge">👤 김영인 (수지중2)</span>
+      <span class="stu-name-badge" id="studentBadge">👤 학생 정보 불러오는 중...</span>
       <span style="color:#64748b; margin-left:6px;" id="studyStatus">오답 집중 관리 모드 활성화</span>
     </div>
     <div style="font-weight:700; color:#ff4081;" id="scoreSummary">🎯 오답 0개</div>
@@ -1130,25 +1130,58 @@ function updateSoundBtn() {
 }
 
 function speak(text) {
+  if (!text) return;
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    u.rate = 0.82; // 원장님 요청: 듣기 편안한 또박또박 속도로 최적화 (0.95 -> 0.82)
-    window.speechSynthesis.speak(u);
+    try {
+      window.speechSynthesis.cancel();
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.82; // 원장님 요청: 듣기 편안한 또박또박 속도로 최적화
+      window.speechSynthesis.speak(u);
+    } catch(e) {
+      console.error('Speech synthesis error:', e);
+    }
   }
 }
 
-// Student Tracking
+function speakParagraph(pIdx) {
+  const p = PASSAGES[curPassage];
+  if (p && p.paragraphs && p.paragraphs[pIdx]) {
+    speak(p.paragraphs[pIdx].en);
+  }
+}
+
+// Student Tracking with URL Parameter Priority & Cross-App Sync
+const urlParams = new URLSearchParams(window.location.search);
+const qStudent = urlParams.get('student');
+const qBan = urlParams.get('ban');
+const qCourse = urlParams.get('course');
+const qPassage = urlParams.get('passage');
+
 let curStudent = '김영인';
 let curBan = '수지중2';
+
+if (qStudent) curStudent = decodeURIComponent(qStudent);
+if (qBan) curBan = decodeURIComponent(qBan);
+
+if (!qStudent || !qBan) {
+  try {
+    const credSaved = localStorage.getItem('cred') || localStorage.getItem('topedu_student') || localStorage.getItem('last_user');
+    if (credSaved) {
+      const obj = JSON.parse(credSaved);
+      if (obj.name && !qStudent) curStudent = obj.name;
+      if (obj.ban && !qBan) curBan = obj.ban;
+    }
+  } catch(e) {}
+}
+
+// Always persist resolved student credentials so they don't get lost
 try {
-  const saved = localStorage.getItem('topedu_student') || localStorage.getItem('last_user');
-  if (saved) {
-    const obj = JSON.parse(saved);
-    if (obj.name) curStudent = obj.name;
-    if (obj.ban) curBan = obj.ban;
-  }
+  localStorage.setItem('topedu_student', JSON.stringify({ name: curStudent, ban: curBan }));
+  localStorage.setItem('last_user', JSON.stringify({ name: curStudent, ban: curBan }));
 } catch(e) {}
 
 // Wrong answer database in localStorage
@@ -1164,7 +1197,11 @@ function saveWrongList(pId, list) {
 }
 
 // Global App State
-let curPassage = 1; // 1 or 2
+let curCourseFilter = (qCourse) ? decodeURIComponent(qCourse) : ((curBan === '예비고1') ? '예비고1' : ((curBan === '수지중2') ? '수지중2' : 'all'));
+let curPassage = (curCourseFilter === '예비고1') ? 3 : 1;
+if (qPassage) {
+  curPassage = parseInt(qPassage, 10);
+}
 let curMode = 1; // 1: Read, 2: Blank, 3: Exam, 4: Worksheet
 let filterWrongOnly = false; // clinic mode
 let tfSubTab = 'en'; // 'en' or 'ko'
@@ -3118,7 +3155,40 @@ const SCRAMBLES = {
 ]
 };
 
-let curCourseFilter = 'all';
+// curCourseFilter initialized above
+
+
+function initCourseFiltersUI() {
+  const btnAll = document.getElementById('courseFilterAll');
+  const btnSuji = document.getElementById('courseFilterSuji');
+  const btnBbaba = document.getElementById('courseFilterBbaba');
+
+  if (curBan === '예비고1') {
+    if (btnAll) btnAll.style.display = 'none';
+    if (btnSuji) btnSuji.style.display = 'none';
+    if (btnBbaba) {
+      btnBbaba.style.display = 'inline-block';
+      btnBbaba.className = 'dash-chip on';
+      btnBbaba.innerHTML = '📘 예비고1 빠바 기초세우기 01강 (4개 지문 전편)';
+    }
+    curCourseFilter = '예비고1';
+  } else if (curBan === '수지중2') {
+    if (btnAll) btnAll.style.display = 'none';
+    if (btnBbaba) btnBbaba.style.display = 'none';
+    if (btnSuji) {
+      btnSuji.style.display = 'inline-block';
+      btnSuji.className = 'dash-chip on';
+      btnSuji.innerHTML = '🏫 수지중2 7과 외부지문 (2개 지문 전편)';
+    }
+    curCourseFilter = '수지중2';
+  } else {
+    if (btnAll) btnAll.style.display = 'inline-block';
+    if (btnSuji) btnSuji.style.display = 'inline-block';
+    if (btnBbaba) btnBbaba.style.display = 'inline-block';
+  }
+
+  setCourseFilter(curCourseFilter);
+}
 
 function setCourseFilter(cf) {
   curCourseFilter = cf;
@@ -3210,10 +3280,10 @@ function renderReadingMode(p, area) {
       <div class="passage-box">
   `;
 
-  p.paragraphs.forEach(para => {
+  p.paragraphs.forEach((para, pIdx) => {
     html += `
       <div class="p-para">
-        <button class="tts-chip" onclick="speak('${para.en.replace(/'/g, "\'")}')">🔊 문단 낭독</button>
+        <button class="tts-chip" onclick="speakParagraph(${pIdx})">🔊 문단 낭독</button>
         <div style="font-weight:500;">${para.en}</div>
         <div class="p-para-ko">${para.ko}</div>
       </div>
@@ -3226,7 +3296,7 @@ function renderReadingMode(p, area) {
         <div style="font-family:'MaplestoryOTFBold'; font-size:15px; color:#ff4081; margin-bottom:10px;">💡 단락별 핵심 어법 & 구문 포인트</div>
   `;
 
-  p.paragraphs.forEach(para => {
+  p.paragraphs.forEach((para, pIdx) => {
     para.syntaxes.forEach(s => {
       html += `
         <div class="syntax-card">
@@ -3266,7 +3336,7 @@ function renderBlankMode(p, area) {
         <div style="font-weight:700; color:#ff4081; margin-bottom:10px;">[1단계] 핵심 키워드 빈칸 뚫기</div>
   `;
 
-  p.paragraphs.forEach(para => {
+  p.paragraphs.forEach((para, pIdx) => {
     let blankedEn = para.en;
     const keywords = [
       "filled with", "culture", "community", "traditions", "Thanksgiving", "gratitude",
@@ -4125,6 +4195,9 @@ function copyAllAlimtalk() {
 window.onload = function() {
   updateSoundBtn();
   updateHeaderSummary();
+  if (typeof initCourseFiltersUI === 'function') {
+    initCourseFiltersUI();
+  }
   render();
 };
 </script>
