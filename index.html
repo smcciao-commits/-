@@ -2667,7 +2667,10 @@ function showAdmin(){
   var A = S.admin, I = A.info;
   if(!A.tab) A.tab = 'dash';
   var html = '<div class="top"><button class="back" id="back">← 나가기</button><div class="grow"><div class="title">선생님 관리 화면 🌸</div></div></div>'+
-    '<button class="btn dark" id="bnew" style="margin:6px 0 10px">⚔️ 단어 대결 열기 (전자칠판)</button>'+
+    '<div style="display:flex;gap:8px;margin:6px 0 10px">'+
+    '<button class="btn dark" id="bnew" style="flex:1;margin:0">⚔️ 단어 대결 (칠판)</button>'+
+    '<button class="btn" id="blive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 화상수업 열기</button>'+
+    '</div>'+
     '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#ff3366;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button></div>';
 
   if(A.tab === 'dash'){
