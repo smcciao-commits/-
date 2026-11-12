@@ -1703,7 +1703,7 @@
                 🔒 딴짓 방지 안심 모드 ON (외부 유튜브·앱 이탈 원천 차단)
               </span>
             </div>
-            <div class="yt-title-badge" id="ytVideoTitle">🐆 Day 01: 치타와 동물 친구들 애니메이션</div>
+            <div class="yt-title-badge" id="ytVideoTitle">🏃 Day 01: Hand in Hand 5 Unit 5 (School Field Day 애니메이션)</div>
             <button class="btn-yt-change" onclick="openYoutubeCustomizer()">🔗 다른 유튜브 영상 넣기</button>
           </div>
           <div class="yt-subtitle" id="ytVideoSub">고화질 애니메이션 영상을 시청한 뒤 아래에서 마이크로 따라 말해보세요!</div>
@@ -2936,6 +2936,7 @@ function switchStep(step) {
     if (view) view.style.display = (i === step ? 'flex' : 'none');
   }
   if (step === 2) {
+    updateYtPlayerForDay(S.curDayIdx);
     renderOrtChips();
     initYtPlayer();
     renderShadowSentence();
