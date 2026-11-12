@@ -2080,6 +2080,13 @@ function drawStudentInAppNoteCard(name){
   '</div>';
 }
 
+function openReadingApp() {
+  var b = (S.cred ? S.cred.ban : (S.home && S.home.me ? S.home.me.ban : ''));
+  var n = (S.cred ? S.cred.name : (S.home && S.home.me ? S.home.me.name : ''));
+  var p = (b === '예비고1' ? '3' : '1');
+  location.href = 'reading.html?course=' + encodeURIComponent(b) + '&passage=' + p + '&student=' + encodeURIComponent(n) + '&ban=' + encodeURIComponent(b);
+}
+
 function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ return s.progress.test===null||s.progress.test===undefined; }).length;
@@ -2119,7 +2126,7 @@ function showHome(){
     rSub = '외부지문 & 빠바 6대 핵심 지문 정독, 서술형 Scramble & 10제 모의';
   }
 
-  html += '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg, #fff5f8, #ffeef3);border:2px solid #ff758c;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(255,117,140,0.15)" onclick="(function(){ var b = me.ban || ''; var n = me.name || ''; var p = (b === '예비고1' ? '3' : '1'); location.href = 'reading.html?course=' + encodeURIComponent(b) + '&passage=' + p + '&student=' + encodeURIComponent(n) + '&ban=' + encodeURIComponent(b); })()">' +
+  html += '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg, #fff5f8, #ffeef3);border:2px solid #ff758c;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(255,117,140,0.15)" onclick="openReadingApp()">' +
     '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#ff4081">' + rTitle + '</div>' +
     '<div style="font-size:12px;color:#718096;margin-top:2px">' + rSub + '</div></div>' +
     '<button style="background:#ff758c;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">풀러가기 →</button></div>';
@@ -2764,7 +2771,7 @@ function drawSpecialHwCard(ban) {
     '</div>' +
     '<div style="font-size:16px;font-weight:700;color:#2d3748;margin:10px 0 4px;font-family:Maplestory,sans-serif">' + esc(hw.title) + '</div>' +
     '<div style="font-size:13px;color:#4a5568;line-height:1.5;margin-bottom:12px">' + esc(hw.desc) + '</div>' +
-    '<button class="btn" style="background:#ff4081;color:white;font-weight:700;padding:10px;font-size:14px;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(255,64,129,0.3)" onclick="(function(){ var b = ban || (S.cred ? S.cred.ban : ''); var n = (S.cred ? S.cred.name : ''); var p = (b === '예비고1' ? '3' : '1'); var u = (hw.link || 'reading.html'); if(u.indexOf('reading.html') >= 0) u = 'reading.html?course=' + encodeURIComponent(b) + '&passage=' + p + '&student=' + encodeURIComponent(n) + '&ban=' + encodeURIComponent(b); location.href = u; })()">🚀 지금 바로 숙제하러 가기 →</button>' +
+    '<button class="btn" style="background:#ff4081;color:white;font-weight:700;padding:10px;font-size:14px;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(255,64,129,0.3)" onclick="openReadingApp()">🚀 지금 바로 숙제하러 가기 →</button>' +
   '</div>';
 }
 
