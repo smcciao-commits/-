@@ -725,6 +725,66 @@
       cursor: pointer;
     }
 
+
+    /* YouTube Player Container */
+    .youtube-player-container {
+      background: white;
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+    }
+    .youtube-frame-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000;
+    }
+    .youtube-frame-wrap iframe {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: none;
+    }
+    .youtube-meta-bar {
+      padding: 12px 14px;
+      background: #faf5ff;
+      border-top: 1.5px solid #e9d5ff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .yt-title-badge {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 14px;
+      color: #6b21a8;
+      font-weight: 700;
+    }
+    .yt-subtitle {
+      font-size: 11.5px;
+      color: #6b7280;
+      line-height: 1.35;
+    }
+    .btn-yt-change {
+      background: #f3e8ff;
+      border: 1.5px solid #c084fc;
+      color: #7e22ce;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-yt-change:hover {
+      background: #e9d5ff;
+    }
+
     /* Day Pack Selector */
     .day-selector-card {
       background: white;
@@ -1573,158 +1633,24 @@
       </div>
 
       <!-- Animated Interactive SVG Theatre Box -->
-      <div class="theatre-box" id="theatreBox">
-        <div class="particles-layer" id="theatreParticles"></div>
-        <svg class="theatre-svg" id="theatreSvg" viewBox="0 0 500 240">
-          <defs>
-            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#7dd3fc" />
-              <stop offset="60%" stop-color="#bae6fd" />
-              <stop offset="100%" stop-color="#fef08a" />
-            </linearGradient>
-            <linearGradient id="grassGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#86efac" />
-              <stop offset="100%" stop-color="#22c55e" />
-            </linearGradient>
-            <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#67e8f9" />
-              <stop offset="100%" stop-color="#0284c7" />
-            </linearGradient>
-          </defs>
-
-          <!-- Sky & Sun -->
-          <rect x="0" y="0" width="500" height="170" fill="url(#skyGrad)" />
-          <circle cx="440" cy="35" r="22" fill="#fde047" class="anim-sun" />
-          <circle cx="440" cy="35" r="30" fill="rgba(253, 224, 71, 0.35)" class="anim-sun" />
-
-          <!-- Clouds -->
-          <g class="anim-cloud" opacity="0.9">
-            <ellipse cx="90" cy="35" rx="25" ry="14" fill="#ffffff" />
-            <ellipse cx="110" cy="32" rx="20" ry="16" fill="#ffffff" />
-            <ellipse cx="75" cy="38" rx="16" ry="12" fill="#ffffff" />
-          </g>
-          <g class="anim-cloud" opacity="0.85" style="animation-delay: -7s;">
-            <ellipse cx="310" cy="45" rx="28" ry="15" fill="#ffffff" />
-            <ellipse cx="330" cy="40" rx="22" ry="17" fill="#ffffff" />
-            <ellipse cx="290" cy="48" rx="18" ry="12" fill="#ffffff" />
-          </g>
-
-          <!-- Rolling Hills & Acacia Tree -->
-          <ellipse cx="250" cy="220" rx="320" ry="80" fill="url(#grassGrad)" />
-          
-          <!-- Tree on left -->
-          <g id="sceneTree">
-            <path d="M 40 180 Q 50 130 55 100 Q 60 130 70 180 Z" fill="#854d0e" />
-            <ellipse cx="55" cy="90" rx="42" ry="22" fill="#15803d" />
-            <ellipse cx="40" cy="78" rx="28" ry="18" fill="#16a34a" />
-            <ellipse cx="70" cy="78" rx="30" ry="18" fill="#22c55e" />
-          </g>
-
-          <!-- Cool Blue Pond on Right for Hippo -->
-          <ellipse cx="410" cy="195" rx="70" ry="32" fill="url(#waterGrad)" />
-          <ellipse cx="410" cy="190" rx="58" ry="18" fill="#38bdf8" opacity="0.6" />
-
-          <!-- ================= CHARACTERS ================= -->
-          <!-- 1. Running Cheetah on Left/Center -->
-          <g id="charCheetah" class="anim-cheetah" style="cursor:pointer;">
-            <!-- Body -->
-            <ellipse cx="150" cy="155" rx="36" ry="18" fill="#f59e0b" />
-            <!-- Spots -->
-            <circle cx="140" cy="150" r="3" fill="#78350f" />
-            <circle cx="155" cy="158" r="2.5" fill="#78350f" />
-            <circle cx="165" cy="152" r="3" fill="#78350f" />
-            <circle cx="132" cy="158" r="2.5" fill="#78350f" />
-            <!-- Head & Cute Ears -->
-            <circle cx="180" cy="142" r="14" fill="#f59e0b" />
-            <polygon points="172,130 178,120 184,130" fill="#d97706" />
-            <polygon points="180,130 186,120 192,130" fill="#d97706" />
-            <!-- Face -->
-            <circle cx="184" cy="140" r="2.5" fill="#1e1b4b" />
-            <circle cx="189" cy="142" r="2" fill="#78350f" /> <!-- Nose -->
-            <path d="M 187 146 Q 192 149 194 146" stroke="#78350f" stroke-width="1.5" fill="none" />
-            <!-- Cheetah Tail -->
-            <path d="M 115 152 Q 100 140 102 125" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" fill="none" />
-            <circle cx="102" cy="125" r="3" fill="#78350f" />
-            <!-- Legs (Running motion) -->
-            <line x1="130" y1="168" x2="118" y2="185" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <line x1="140" y1="168" x2="135" y2="186" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <line x1="165" y1="168" x2="175" y2="186" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <line x1="172" y1="168" x2="188" y2="182" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <!-- Name tag -->
-            <rect x="130" y="190" width="46" height="15" rx="7" fill="#fef3c7" stroke="#f59e0b" />
-            <text x="153" y="201" font-size="10" font-weight="bold" fill="#b45309" text-anchor="middle">Cheetah 🐆</text>
-          </g>
-
-          <!-- 2. Tall Smiling Giraffe in Center/Right -->
-          <g id="charGiraffe" class="anim-giraffe" style="cursor:pointer;">
-            <!-- Body -->
-            <ellipse cx="270" cy="165" rx="30" ry="20" fill="#f59e0b" />
-            <circle cx="260" cy="162" r="4" fill="#b45309" />
-            <circle cx="278" cy="168" r="3.5" fill="#b45309" />
-            <!-- Long Neck -->
-            <path d="M 282 160 L 295 80 L 307 82 L 296 160 Z" fill="#f59e0b" />
-            <circle cx="292" cy="135" r="3" fill="#b45309" />
-            <circle cx="298" cy="108" r="3" fill="#b45309" />
-            <!-- Head & Horns (Ossicones) -->
-            <ellipse cx="304" cy="74" rx="14" ry="11" fill="#f59e0b" />
-            <line x1="300" y1="67" x2="298" y2="58" stroke="#b45309" stroke-width="3" stroke-linecap="round" />
-            <circle cx="298" cy="57" r="2.5" fill="#78350f" />
-            <line x1="306" y1="67" x2="306" y2="58" stroke="#b45309" stroke-width="3" stroke-linecap="round" />
-            <circle cx="306" cy="57" r="2.5" fill="#78350f" />
-            <!-- Eye & Big Smile -->
-            <circle cx="308" cy="72" r="2.5" fill="#1e1b4b" />
-            <path d="M 310 78 Q 314 82 316 77" stroke="#78350f" stroke-width="1.8" fill="none" />
-            <!-- Long Legs -->
-            <line x1="255" y1="180" x2="255" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <line x1="265" y1="180" x2="265" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <line x1="280" y1="180" x2="280" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <line x1="290" y1="180" x2="290" y2="210" stroke="#d97706" stroke-width="4" stroke-linecap="round" />
-            <!-- Name tag -->
-            <rect x="252" y="214" width="46" height="15" rx="7" fill="#fef3c7" stroke="#f59e0b" />
-            <text x="275" y="225" font-size="10" font-weight="bold" fill="#b45309" text-anchor="middle">Giraffe 🦒</text>
-          </g>
-
-          <!-- 3. Cute Hippo in Pond on Right -->
-          <g id="charHippo" class="anim-hippo" style="cursor:pointer;">
-            <!-- Hippo Head emerging from water -->
-            <ellipse cx="410" cy="178" rx="28" ry="20" fill="#94a3b8" />
-            <ellipse cx="410" cy="188" rx="34" ry="16" fill="#cbd5e1" />
-            <!-- Nostrils -->
-            <ellipse cx="402" cy="188" rx="4" ry="3" fill="#64748b" />
-            <ellipse cx="418" cy="188" rx="4" ry="3" fill="#64748b" />
-            <!-- Eyes on top -->
-            <circle cx="398" cy="168" r="5" fill="#ffffff" />
-            <circle cx="399" cy="168" r="2.5" fill="#1e1b4b" />
-            <circle cx="422" cy="168" r="5" fill="#ffffff" />
-            <circle cx="421" cy="168" r="2.5" fill="#1e1b4b" />
-            <!-- Tiny cute ears -->
-            <circle cx="390" cy="162" r="5" fill="#cbd5e1" />
-            <circle cx="430" cy="162" r="5" fill="#cbd5e1" />
-            <!-- Name tag -->
-            <rect x="388" y="214" width="44" height="15" rx="7" fill="#f1f5f9" stroke="#94a3b8" />
-            <text x="410" y="225" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">Hippo 🦛</text>
-          </g>
-        </svg>
-      </div>
-
-      <!-- Video Controls -->
-      <div class="theatre-controls">
-        <button class="theatre-btn play" id="btnPlayTheatre" onclick="toggleTheatrePlay()">
-          <span>▶️</span> <span>영상 재생</span>
-        </button>
-        <span style="font-size:12px; color:#cbd5e1; font-weight:700;">
-          ✨ 화면 어디든 터치하면 마법 효과!
-        </span>
-        <button class="theatre-btn" onclick="restartTheatre()">
-          <span>🔄</span> <span>처음부터</span>
-        </button>
-      </div>
-
-      <!-- Synchronized Subtitles -->
-      <div class="subtitles-box">
-        <div class="sub-speaker" id="subSpeaker">Minky:</div>
-        <div class="sub-en" id="subEn">Welcome to the sunny zoo! Look at all the animal friends.</div>
-        <div class="sub-ko" id="subKo">햇살 가득한 동물원에 온 걸 환영해! 동물 친구들을 봐.</div>
+      <!-- YouTube HD Video Theatre -->
+      <div class="youtube-player-container">
+        <div class="youtube-frame-wrap">
+          <iframe id="theatreYtIframe" 
+                  src="https://www.youtube-nocookie.com/embed/B1YAM6rsbao?rel=0&modestbranding=1&playsinline=1" 
+                  title="Hand in Hand Daily English Video" 
+                  frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+          </iframe>
+        </div>
+        <div class="youtube-meta-bar">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div class="yt-title-badge" id="ytVideoTitle">🐆 Day 01: 치타와 동물 친구들 애니메이션</div>
+            <button class="btn-yt-change" onclick="openYoutubeCustomizer()">🔗 다른 유튜브 영상 넣기</button>
+          </div>
+          <div class="yt-subtitle" id="ytVideoSub">고화질 애니메이션 영상을 시청한 뒤 아래에서 마이크로 따라 말해보세요!</div>
+        </div>
       </div>
 
       <!-- Shadowing Practice -->
@@ -2085,8 +2011,78 @@ function initDayChips() {
 function selectDay(idx) {
   stopTheatreAudio();
   S.curDayIdx = idx;
+  updateYoutubeVideoForDay(idx);
   initDayChips();
   loadDay(idx);
+}
+
+
+/* ============ YOUTUBE HD VIDEO THEATRE SYSTEM ============ */
+var DAY_YOUTUBE_VIDEOS = {
+  0: {
+    id: "B1YAM6rsbao",
+    title: "🐆 Day 01: 치타와 동물 친구들 애니메이션 (Meet the Animals)",
+    sub: "빠른 치타와 키 큰 기린의 생생한 고화질 동물 스토리 애니메이션!"
+  },
+  1: {
+    id: "qaCoOINxNFk",
+    title: "💻 Day 02: 태블릿과 컴퓨터 전자기기 탐험 스토리",
+    sub: "스마트폰, 태블릿, 노트북을 쉽고 재미있게 배우는 IT 스토리!"
+  },
+  2: {
+    id: "S_DCLvqBSa8",
+    title: "🎸 Day 03: 신나는 악기 연주 밴드 스토리 (Instruments Song)",
+    sub: "기타, 플루트, 드럼 연주를 즐겁게 노래로 배우는 밴드 애니메이션!"
+  },
+  3: {
+    id: "PPcdahmn3uk",
+    title: "🍎 Day 04: 달콤한 과일과 맛있는 간식 파티 (Yummy Snacks)",
+    sub: "맛있고 달콤한 과일과 간식을 나누어 먹는 신나는 이야기!"
+  }
+};
+
+function updateYoutubeVideoForDay(dayIdx) {
+  var videoData = DAY_YOUTUBE_VIDEOS[dayIdx] || DAY_YOUTUBE_VIDEOS[0];
+  var customId = localStorage.getItem('cats_yt_custom_' + dayIdx);
+  var videoId = customId || videoData.id;
+
+  var iframe = document.getElementById('theatreYtIframe');
+  if (iframe) {
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?rel=0&modestbranding=1&playsinline=1';
+  }
+  var titleEl = document.getElementById('ytVideoTitle');
+  if (titleEl) {
+    titleEl.textContent = customId ? ('🎬 Day 0' + (dayIdx + 1) + ': 원장님 맞춤 등록 영상') : videoData.title;
+  }
+  var subEl = document.getElementById('ytVideoSub');
+  if (subEl) {
+    subEl.textContent = videoData.sub;
+  }
+}
+
+function openYoutubeCustomizer() {
+  var curCustom = localStorage.getItem('cats_yt_custom_' + S.curDayIdx) || '';
+  var input = prompt("Day 0" + (S.curDayIdx + 1) + "에 재생할 유튜브 영상 주소(또는 영상 ID)를 입력해 주세요:
+(핸드인핸드 영상이나 원하는 학습 영상 URL을 붙여넣으시면 즉시 변경됩니다)", curCustom ? ('https://youtu.be/' + curCustom) : '');
+  if (input === null) return;
+  input = input.trim();
+  if (!input) {
+    localStorage.removeItem('cats_yt_custom_' + S.curDayIdx);
+    alert("기본 추천 영상으로 복원했습니다!");
+    updateYoutubeVideoForDay(S.curDayIdx);
+    return;
+  }
+
+  var match = input.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+  var videoId = match ? match[1] : (input.length === 11 ? input : '');
+
+  if (videoId) {
+    localStorage.setItem('cats_yt_custom_' + S.curDayIdx, videoId);
+    alert("유튜브 영상이 성공적으로 등록되었습니다! 🎬");
+    updateYoutubeVideoForDay(S.curDayIdx);
+  } else {
+    alert("올바른 유튜브 링크나 11자리 영상 ID를 확인해 주세요.");
+  }
 }
 
 function loadDay(idx) {
