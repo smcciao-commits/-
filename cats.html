@@ -424,6 +424,307 @@
       gap: 4px;
     }
 
+
+    /* Joy English Speaking Studio Modal */
+    .speaking-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      padding: 16px;
+    }
+    .speaking-modal-overlay.show {
+      display: flex;
+    }
+    .speaking-modal-card {
+      background: white;
+      border-radius: 26px;
+      padding: 22px 20px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .speaking-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid #f1f5f9;
+      padding-bottom: 10px;
+    }
+    .speaking-modal-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 16.5px;
+      color: #1e1b4b;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .speaking-badge-tag {
+      background: #e0e7ff;
+      color: #4338ca;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .btn-speaking-close {
+      background: #f1f5f9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-speaking-close:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .speaking-target-box {
+      background: linear-gradient(135deg, #f5f3ff, #fdf2f8);
+      border: 2px solid #c7d2fe;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .speaking-target-en {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 17.5px;
+      color: #1e1b4b;
+      line-height: 1.45;
+    }
+    .speaking-target-ko {
+      font-size: 13px;
+      color: #4338ca;
+      font-weight: 600;
+    }
+    .speaking-target-tip {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      color: #92400e;
+      line-height: 1.4;
+    }
+    .btn-listen-target {
+      background: white;
+      border: 1.5px solid #818cf8;
+      color: #4338ca;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.12);
+      align-self: center;
+      transition: all 0.2s;
+    }
+    .btn-listen-target:hover {
+      background: #eef2ff;
+    }
+    .mic-action-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+    }
+    .btn-studio-mic {
+      width: 100%;
+      max-width: 320px;
+      height: 52px;
+      border-radius: 26px;
+      border: none;
+      font-family: 'Maplestory', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s;
+    }
+    .btn-studio-mic.idle {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      box-shadow: 0 6px 18px rgba(236, 72, 153, 0.35);
+    }
+    .btn-studio-mic.idle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(236, 72, 153, 0.45);
+    }
+    .btn-studio-mic.listening {
+      background: linear-gradient(135deg, #ef4444, #f43f5e);
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      animation: studioMicPulse 1.5s infinite;
+    }
+    @keyframes studioMicPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    .mic-status-hint {
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.4;
+      min-height: 20px;
+    }
+    .speech-result-card {
+      background: #f8fafc;
+      border: 2px solid #e0e7ff;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: slideUp 0.3s ease-out;
+    }
+    @keyframes slideUp {
+      0% { transform: translateY(12px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .score-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .score-stars {
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+    .score-badge {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+    .score-badge.pass {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1.5px solid #34d399;
+    }
+    .score-badge.retry {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1.5px solid #f59e0b;
+    }
+    .spoken-transcript-box {
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #1e293b;
+      font-style: italic;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .aligned-words-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .aligned-words-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .aligned-words-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .w-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .w-badge.ok {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .w-badge.miss {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+    .minky-fb-card {
+      background: #fffbeb;
+      border: 1.5px dashed #fde68a;
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .minky-fb-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 2px;
+    }
+    .minky-fb-msg {
+      font-size: 12px;
+      color: #78350f;
+      line-height: 1.4;
+    }
+    .result-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .btn-res-retry {
+      flex: 1;
+      background: #eef2ff;
+      border: 1.5px solid #c7d2fe;
+      color: #4338ca;
+      border-radius: 12px;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-res-done {
+      flex: 1;
+      background: #4f46e5;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
     /* Day Pack Selector */
     .day-selector-card {
       background: white;
@@ -1528,6 +1829,71 @@
     </div>
   </div>
 
+
+  <!-- Joy English Speaking Studio Modal -->
+  <div class="speaking-modal-overlay" id="speakingModalOverlay">
+    <div class="speaking-modal-card">
+      <div class="speaking-modal-header">
+        <div class="speaking-modal-title">
+          <span>🗣️</span> <span>조이영어 따라 말하기</span>
+          <span class="speaking-badge-tag">1:1 스피킹</span>
+        </div>
+        <button class="btn-speaking-close" onclick="closeJoySpeakingModal()">✕</button>
+      </div>
+
+      <div class="speaking-target-box">
+        <div class="speaking-target-en" id="speakTargetEn">I had a wonderful day! I played with my friends.</div>
+        <div class="speaking-target-ko" id="speakTargetKo">👉 오늘 정말 멋진 하루였어요! 친구들이랑 재미있게 놀았거든요.</div>
+        <div class="speaking-target-tip" id="speakTargetTip">💡 <b>꿀팁:</b> 선생님께 단순한 'I'm happy' 대신, '친구랑 놀았다'는 이유를 덧붙이면 필리핀 선생님이 폭풍 칭찬해 주세요!</div>
+        <div style="text-align:center; margin-top:4px;">
+          <button class="btn-listen-target" onclick="listenJoyTarget()">
+            <span>🔊</span> <span>원어민 천천히 발음 듣기</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mic Interaction Area -->
+      <div class="mic-action-panel">
+        <button class="btn-studio-mic idle" id="btnStudioMic" onclick="toggleStudioMic()">
+          <span id="studioMicIcon">🎙️</span>
+          <span id="studioMicText">마이크 누르고 말하기</span>
+        </button>
+        <div class="mic-status-hint" id="studioMicHint">
+          버튼을 누르고 아이패드/스마트폰에 대고 영어로 읽어보세요!
+        </div>
+      </div>
+
+      <!-- Real Result Scoring Card -->
+      <div class="speech-result-card" id="speechResultCard" style="display:none;">
+        <div class="score-header-row">
+          <span class="score-stars" id="speechScoreStars">⭐⭐⭐</span>
+          <span class="score-badge pass" id="speechScoreBadge">100점! Perfect!</span>
+        </div>
+        
+        <div>
+          <div class="aligned-words-label">🗣️ 내가 말한 문장:</div>
+          <div class="spoken-transcript-box" id="spokenTranscriptBox">"..."</div>
+        </div>
+
+        <div class="aligned-words-wrap">
+          <div class="aligned-words-label">📝 단어별 발음 일치도:</div>
+          <div class="aligned-words-list" id="alignedWordsBox">
+            <!-- Dynamic badges -->
+          </div>
+        </div>
+
+        <div class="minky-fb-card" id="minkyFeedbackBox">
+          <!-- Dynamic Minky feedback -->
+        </div>
+
+        <div class="result-actions-row">
+          <button class="btn-res-retry" onclick="retryStudioMic()">🔄 다시 도전하기</button>
+          <button class="btn-res-done" onclick="closeJoySpeakingModal()">완료 👍</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bottom Dock Bar -->
   <div class="bottom-bar">
     <button class="dock-btn active" onclick="location.reload()">
@@ -1774,7 +2140,7 @@ function renderJoyList() {
         '<button class="btn-joy-speak" onclick="speakJoyExp(\'' + exp.en.replace(/'/g, "\\'") + '\')">' +
           '<span>🔊</span> <span>천천히 발음 듣기</span>' +
         '</button>' +
-        '<button class="btn-joy-shadow" onclick="shadowJoyExp(\'' + exp.en.replace(/'/g, "\\'") + '\')">' +
+        '<button class="btn-joy-shadow" onclick="openJoySpeakingModal(' + S.curJoyCatIdx + ', ' + idx + ')">' +
           '<span>🎙️</span> <span>따라 말해보기</span>' +
         '</button>' +
       '</div>' +
@@ -1787,10 +2153,240 @@ function speakJoyExp(enText) {
   speakText(enText, 'en-US');
 }
 
-function shadowJoyExp(enText) {
-  speakText(enText, 'en-US');
-  minkySay('정말 잘했어! 조이영어 선생님께 "How was your day?" 질문을 들으면 바로 이 문장으로 대답해 봐!');
-  playCorrectSound();
+/* ============ SPEECH EVALUATION ENGINE (ALIGN & LEVENSHTEIN) ============ */
+function normWord(w) {
+  return String(w || '').toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]/g, "");
+}
+function levDist(a, b) {
+  var m = a.length, n = b.length;
+  if (!m) return n; if (!n) return m;
+  var d = Array.from({length: n + 1}, function(_, j) { return j; });
+  for (var i = 1; i <= m; i++) {
+    var prev = d[0]; d[0] = i;
+    for (var j = 1; j <= n; j++) {
+      var t = d[j];
+      d[j] = Math.min(d[j] + 1, d[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = t;
+    }
+  }
+  return d[n];
+}
+function isSameWord(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  var L = Math.max(a.length, b.length);
+  if (L >= 4 && levDist(a, b) <= (L >= 7 ? 2 : 1)) return true;
+  return false;
+}
+function alignSpeech(target, spoken) {
+  var T = target.split(/\s+/).map(function(w) { return { disp: w, key: normWord(w) }; }).filter(function(x) { return x.key; });
+  var S = spoken.replace(/-/g, " ").split(/\s+/).map(normWord).filter(Boolean);
+  var n = T.length, m = S.length;
+  var dp = Array.from({length: n + 1}, function() { return new Array(m + 1).fill(0); });
+  for (var i = n - 1; i >= 0; i--) {
+    for (var j = m - 1; j >= 0; j--) {
+      dp[i][j] = isSameWord(T[i].key, S[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i + 1][j + 1]);
+    }
+  }
+  var i = 0, j = 0, st = new Array(n).fill("miss");
+  while (i < n && j < m) {
+    if (isSameWord(T[i].key, S[j])) { st[i] = "ok"; i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) i++;
+    else j++;
+  }
+  var okN = st.filter(function(x) { return x === "ok"; }).length;
+  var score = n ? Math.round(okN / n * 100) : 0;
+  return { T: T, st: st, score: score, spoken: spoken };
+}
+
+/* ============ JOY ENGLISH SPEAKING STUDIO MODAL LOGIC ============ */
+var currentJoyTarget = null;
+var currentStudioRec = null;
+var isStudioListening = false;
+
+function openJoySpeakingModal(catIdx, expIdx) {
+  stopTheatreAudio();
+  window.speechSynthesis.cancel();
+  var cat = JOY_CATS[catIdx];
+  if (!cat || !cat.expressions[expIdx]) return;
+  var exp = cat.expressions[expIdx];
+  currentJoyTarget = exp;
+
+  document.getElementById('speakTargetEn').textContent = exp.en;
+  document.getElementById('speakTargetKo').textContent = '👉 ' + exp.ko;
+  document.getElementById('speakTargetTip').innerHTML = '💡 <b>꿀팁:</b> ' + exp.tip;
+
+  document.getElementById('speechResultCard').style.display = 'none';
+  setStudioMicUI('idle');
+  clearStudioError();
+
+  document.getElementById('speakingModalOverlay').classList.add('show');
+}
+
+function closeJoySpeakingModal() {
+  stopStudioMic();
+  window.speechSynthesis.cancel();
+  document.getElementById('speakingModalOverlay').classList.remove('show');
+}
+
+function listenJoyTarget() {
+  if (!currentJoyTarget) return;
+  speakText(currentJoyTarget.en, 'en-US');
+}
+
+function toggleStudioMic() {
+  if (isStudioListening) {
+    stopStudioMic();
+  } else {
+    startStudioMic();
+  }
+}
+
+function retryStudioMic() {
+  document.getElementById('speechResultCard').style.display = 'none';
+  startStudioMic();
+}
+
+function startStudioMic() {
+  window.speechSynthesis.cancel();
+  var SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecClass) {
+    showStudioError("이 브라우저는 실시간 음성 인식을 지원하지 않습니다. 사파리(Safari) 또는 크롬(Chrome)에서 마이크를 이용해 보세요! [원어민 발음 듣기]로 직접 소리 내어 연습할 수 있습니다.");
+    return;
+  }
+
+  try {
+    if (currentStudioRec) {
+      try { currentStudioRec.abort(); } catch(e){}
+      currentStudioRec = null;
+    }
+
+    var rec = new SpeechRecClass();
+    rec.lang = 'en-US';
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    currentStudioRec = rec;
+
+    rec.onstart = function() {
+      isStudioListening = true;
+      setStudioMicUI('listening');
+      clearStudioError();
+    };
+
+    rec.onresult = function(e) {
+      isStudioListening = false;
+      setStudioMicUI('idle');
+      var transcript = (e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
+      handleStudioSpeechResult(transcript);
+    };
+
+    rec.onerror = function(e) {
+      isStudioListening = false;
+      setStudioMicUI('idle');
+      var err = e.error || '';
+      if (err === 'not-allowed') {
+        showStudioError("⚠️ 마이크 권한이 꺼져 있습니다. 사파리/크롬 설정에서 마이크를 '허용'해 주세요!");
+      } else if (err === 'no-speech') {
+        showStudioError("목소리가 감지되지 않았어요. 마이크 가까이에서 조금 더 큰 소리로 읽어보세요!");
+      } else if (err === 'network') {
+        showStudioError("음성 인식 네트워크 연결을 확인해 주세요.");
+      } else {
+        showStudioError("음성을 인식하지 못했어요. [마이크 누르고 말하기]를 다시 눌러보세요.");
+      }
+    };
+
+    rec.onend = function() {
+      isStudioListening = false;
+      var card = document.getElementById('speechResultCard');
+      if (!card || card.style.display === 'none') {
+        setStudioMicUI('idle');
+      }
+    };
+
+    rec.start();
+  } catch(err) {
+    showStudioError("마이크를 시작할 수 없습니다: " + (err.message || err));
+  }
+}
+
+function stopStudioMic() {
+  if (currentStudioRec) {
+    try { currentStudioRec.stop(); } catch(e){}
+  }
+  isStudioListening = false;
+  setStudioMicUI('idle');
+}
+
+function setStudioMicUI(state) {
+  var btn = document.getElementById('btnStudioMic');
+  var icon = document.getElementById('studioMicIcon');
+  var label = document.getElementById('studioMicText');
+  var hint = document.getElementById('studioMicHint');
+
+  if (state === 'listening') {
+    btn.className = 'btn-studio-mic listening';
+    icon.textContent = '🔴';
+    label.textContent = '듣고 있어요... 영어로 말씀하세요!';
+    hint.innerHTML = '<span style="color:#ef4444; font-weight:700;">🎙️ 귀 기울여 듣고 있어요!</span> 또박또박 말씀하시면 자동으로 채점해요.';
+  } else {
+    btn.className = 'btn-studio-mic idle';
+    icon.textContent = '🎙️';
+    label.textContent = '마이크 누르고 말하기';
+    hint.innerHTML = '버튼을 누르고 아이패드/스마트폰 마이크에 대고 영어로 읽어보세요!';
+  }
+}
+
+function showStudioError(msg) {
+  var hint = document.getElementById('studioMicHint');
+  if (hint) {
+    hint.innerHTML = '<span style="color:#dc2626; font-weight:700;">' + msg + '</span>';
+  }
+}
+
+function clearStudioError() {
+  var hint = document.getElementById('studioMicHint');
+  if (hint) hint.textContent = '버튼을 누르고 아이패드/스마트폰 마이크에 대고 영어로 읽어보세요!';
+}
+
+function handleStudioSpeechResult(transcript) {
+  if (!transcript || !transcript.trim()) {
+    showStudioError("목소리가 감지되지 않았어요. 마이크 가까이에서 조금 더 큰 소리로 말씀해 보세요!");
+    return;
+  }
+  var targetText = currentJoyTarget ? currentJoyTarget.en : '';
+  var res = alignSpeech(targetText, transcript);
+
+  document.getElementById('speechResultCard').style.display = 'flex';
+  document.getElementById('spokenTranscriptBox').textContent = '"' + transcript + '"';
+
+  var wordsHtml = '';
+  res.T.forEach(function(t, k) {
+    var isOk = (res.st[k] === 'ok');
+    wordsHtml += '<span class="w-badge ' + (isOk ? 'ok' : 'miss') + '">' +
+      (isOk ? '✓ ' : '✕ ') + t.disp + '</span>';
+  });
+  document.getElementById('alignedWordsBox').innerHTML = wordsHtml;
+
+  var starsEl = document.getElementById('speechScoreStars');
+  var badgeEl = document.getElementById('speechScoreBadge');
+  var feedbackEl = document.getElementById('minkyFeedbackBox');
+
+  if (res.score >= 80) {
+    playCorrectSound();
+    starsEl.textContent = (res.score === 100) ? '⭐⭐⭐' : '⭐⭐';
+    badgeEl.className = 'score-badge pass';
+    badgeEl.textContent = '🎉 ' + res.score + '점! 통과!';
+    feedbackEl.innerHTML = '<div class="minky-fb-title">🐱 밍키 칭찬:</div>' +
+      '<div class="minky-fb-msg">우와 하린아! 발음이 정말 훌륭해! 조이영어 화상 수업 때 필리핀 선생님께 이렇게 말하면 칭찬 폭풍을 받을 거야! ✨</div>';
+  } else {
+    playWrongSound();
+    starsEl.textContent = '⭐';
+    badgeEl.className = 'score-badge retry';
+    badgeEl.textContent = '💪 ' + res.score + '점! 다시 도전!';
+    feedbackEl.innerHTML = '<div class="minky-fb-title">🐱 밍키 힌트:</div>' +
+      '<div class="minky-fb-msg">빨간 단어를 조금 더 크고 또박또박 발음해 볼까? [다시 도전하기]를 눌러서 한 번 더 연습해 보자! 🐾</div>';
+  }
 }
 
 /* ============ STEP SWITCHING ============ */
@@ -2029,59 +2625,94 @@ function speakShadowTarget() {
   speakText(p.shadowing[S.shadowIdx].sentence, 'en-US');
 }
 
+var currentShadowRec = null;
+
 function toggleShadowMic() {
   var btn = document.getElementById('btnShadowMic');
   var pill = document.getElementById('shadowScorePill');
 
-  var SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecClass) {
-    pill.textContent = '⭐⭐⭐ 100점! Perfect 발음!';
-    playCorrectSound();
-    return;
-  }
-
   if (isMicListening) {
-    if (speechRec) speechRec.stop();
+    if (currentShadowRec) {
+      try { currentShadowRec.stop(); } catch(e){}
+    }
     isMicListening = false;
     btn.classList.remove('listening');
     document.getElementById('btnMicLabel').textContent = '말하기 시작';
     return;
   }
 
-  try {
-    speechRec = new SpeechRecClass();
-    speechRec.lang = 'en-US';
-    speechRec.continuous = false;
-    speechRec.interimResults = false;
+  window.speechSynthesis.cancel();
+  var SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecClass) {
+    pill.innerHTML = '<span style="color:#dc2626;">이 브라우저는 실시간 음성 인식을 지원하지 않습니다. 사파리/크롬을 이용해 주세요.</span>';
+    return;
+  }
 
-    speechRec.onstart = function() {
+  try {
+    var rec = new SpeechRecClass();
+    rec.lang = 'en-US';
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    currentShadowRec = rec;
+
+    rec.onstart = function() {
       isMicListening = true;
       btn.classList.add('listening');
       document.getElementById('btnMicLabel').textContent = '듣고 있어요...';
-      pill.textContent = '🎙️ 귀 기울여 듣고 있어요!';
+      pill.innerHTML = '<span style="color:#ef4444; font-weight:700;">🎙️ 귀 기울여 듣고 있어요!</span> 또박또박 말씀하세요.';
     };
 
-    speechRec.onresult = function(e) {
-      var transcript = e.results[0][0].transcript;
-      pill.textContent = '⭐⭐⭐ 100점! Perfect! ("' + transcript + '")';
-      playCorrectSound();
+    rec.onresult = function(e) {
+      isMicListening = false;
+      btn.classList.remove('listening');
+      document.getElementById('btnMicLabel').textContent = '말하기 시작';
+      var transcript = (e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
+      var p = DAILY_PACKS[S.curDayIdx];
+      var targetSentence = p.shadowing[S.shadowIdx].sentence;
+      var res = alignSpeech(targetSentence, transcript);
+
+      var badgesHtml = res.T.map(function(t, k) {
+        var isOk = (res.st[k] === 'ok');
+        return '<span style="display:inline-block; padding:2px 7px; margin:2px; border-radius:999px; font-size:12px; font-weight:700; background:' + (isOk ? '#d1fae5; color:#065f46;' : '#fee2e2; color:#991b1b;') + '">' + (isOk ? '✓ ' : '✕ ') + t.disp + '</span>';
+      }).join(' ');
+
+      if (res.score >= 80) {
+        pill.innerHTML = '<div style="color:#059669; font-weight:700; font-size:14px; margin-bottom:4px;">🎉 ' + res.score + '점! Perfect!</div>' +
+          '<div style="font-size:12px; color:#4b5563; margin-bottom:4px;">내가 말한 문장: "' + transcript + '"</div>' +
+          '<div>' + badgesHtml + '</div>';
+        playCorrectSound();
+      } else {
+        pill.innerHTML = '<div style="color:#d97706; font-weight:700; font-size:14px; margin-bottom:4px;">💪 ' + res.score + '점! 다시 도전!</div>' +
+          '<div style="font-size:12px; color:#4b5563; margin-bottom:4px;">내가 말한 문장: "' + transcript + '"</div>' +
+          '<div>' + badgesHtml + '</div>';
+        playWrongSound();
+      }
     };
 
-    speechRec.onerror = function() {
-      pill.textContent = '⭐⭐⭐ 95점! Very Good!';
-      playCorrectSound();
+    rec.onerror = function(e) {
+      isMicListening = false;
+      btn.classList.remove('listening');
+      document.getElementById('btnMicLabel').textContent = '말하기 시작';
+      var err = e.error || '';
+      if (err === 'not-allowed') {
+        pill.innerHTML = '<span style="color:#dc2626;">⚠️ 마이크 권한이 꺼져 있습니다. 브라우저 설정에서 마이크를 허용해 주세요!</span>';
+      } else if (err === 'no-speech') {
+        pill.innerHTML = '<span style="color:#d97706;">목소리가 들리지 않았어요. 마이크 가까이에서 조금 더 크게 읽어주세요!</span>';
+      } else {
+        pill.innerHTML = '<span style="color:#d97706;">음성을 잘 인식하지 못했어요. 다시 마이크를 눌러보세요!</span>';
+      }
     };
 
-    speechRec.onend = function() {
+    rec.onend = function() {
       isMicListening = false;
       btn.classList.remove('listening');
       document.getElementById('btnMicLabel').textContent = '말하기 시작';
     };
 
-    speechRec.start();
+    rec.start();
   } catch(e) {
-    pill.textContent = '⭐⭐⭐ 100점! Perfect 발음!';
-    playCorrectSound();
+    pill.innerHTML = '<span style="color:#dc2626;">마이크를 시작할 수 없습니다: ' + (e.message || e) + '</span>';
   }
 }
 
@@ -2341,9 +2972,12 @@ function petMinky() {
   minkySay(q);
 }
 
-function minkySay(txt) {
-  document.getElementById('minkyDialogue').textContent = txt;
-  speakText(txt, 'ko-KR');
+function minkySay(txt, speakVoice) {
+  var el = document.getElementById('minkyDialogue');
+  if (el) el.textContent = txt;
+  if (speakVoice === true) {
+    speakText(txt, 'ko-KR');
+  }
 }
 </script>
 
