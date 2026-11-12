@@ -886,7 +886,7 @@ function mockCall(fn, args) {
     return { score: Math.round((correct / (total || 1)) * 100) };
   }
 
-  /* ===== 단어 대결 (배틀) 실시간 엔진 ===== */
+  /* ===== 단어 대결 (배틀) 실시간 엔진 (v31 bulletproof) ===== */
   if (fn === 'battleSets') {
     var sets = [];
     var allKeys = Object.keys(ALL_WORD_SETS);
@@ -908,66 +908,7 @@ function mockCall(fn, args) {
     var mins = Math.max(1, Math.min(30, Number(args[2]) || 3));
     var dir = args[3] === 'ko' ? 'ko' : 'en';
 
-    var want = {};
-    for (var i = 0; i < setNames.length; i++) want[setNames[i]] = 1;
-    var seen = {}, words = [];
-    var allKeys = Object.keys(ALL_WORD_SETS);
-    for (var i = 0; i < allKeys.length; i++) {
-      var sName = allKeys[i];
-      if (!want[sName]) continue;
-      var wList = (ALL_WORD_SETS[sName] && ALL_WORD_SETS[sName].words) || [];
-      for (var j = 0; j < wList.length; j++) {
-        var wObj = wList[j];
-        var w = wObj.w;
-        var m = (wObj.m || '').split(';')[0].split(',')[0].trim();
-        if (w && m && !seen[w]) {
-          seen[w] = 1;
-          words.push({ w: w, m: m });
-        }
-      }
-    }
-    if (words.length < 4) {
-      for (var i = 0; i < allKeys.length; i++) {
-        var wList = ALL_WORD_SETS[allKeys[i]].words || [];
-        for (var j = 0; j < wList.length; j++) {
-          var wObj = wList[j];
-          var w = wObj.w, m = (wObj.m || '').split(';')[0].split(',')[0].trim();
-          if (w && m && !seen[w]) {
-            seen[w] = 1;
-            words.push({ w: w, m: m });
-            if (words.length >= 4) break;
-          }
-        }
-        if (words.length >= 4) break;
-      }
-    }
-
-    function shuf(arr) {
-      var a = arr.slice();
-      for (var i = a.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var t = a[i]; a[i] = a[j]; a[j] = t;
-      }
-      return a;
-    }
-
-    var qs = shuf(words).slice(0, 200).map(function(q) {
-      var ansText = dir === 'en' ? q.m : q.w;
-      var used = {}; used[ansText] = 1;
-      var wrong = [];
-      shuf(words).forEach(function(o) {
-        var t = dir === 'en' ? o.m : o.w;
-        if (wrong.length < 3 && !used[t]) { used[t] = 1; wrong.push(t); }
-      });
-      var opts = shuf([ansText].concat(wrong));
-      return {
-        w: q.w,
-        p: dir === 'en' ? q.w : q.m,
-        o: opts,
-        a: opts.indexOf(ansText)
-      };
-    }).filter(function(q) { return q.o.length === 4; });
-
+    var qs = generateBattleQs('', dir, setNames);
     var code = String(Math.floor(1000 + Math.random() * 9000));
     var label = setNames.join(', ');
     if (label.length > 28) label = label.slice(0, 26) + '…';
@@ -1055,6 +996,43 @@ function mockCall(fn, args) {
       } catch(err){}
     }
 
+    // Also poll messages in background
+    try {
+      fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=5m')
+        .then(function(res){ return res.text(); })
+        .then(function(txt){
+          var lines = txt.trim().split('\n');
+          var changed = false;
+          var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+          r.players = r.players || {};
+          r.names = r.names || [];
+          lines.forEach(function(l){
+            try {
+              var d = JSON.parse(l);
+              var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
+              if (m && m.type === 'join') {
+                var k = (m.ban || '') + ':' + (m.name || '');
+                if (!r.players[k]) {
+                  r.players[k] = { name: m.name, ban: m.ban, c: 0, x: 0, wrong: [] };
+                  if (r.names.indexOf(m.name) < 0) r.names.push(m.name);
+                  changed = true;
+                }
+              } else if (m && m.type === 'report') {
+                var k = (m.ban || '') + ':' + (m.name || '');
+                if (r.players[k]) {
+                  r.players[k].c = m.c || 0;
+                  r.players[k].x = m.x || 0;
+                  changed = true;
+                }
+              }
+            } catch(e){}
+          });
+          if (changed) {
+            localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+          }
+        }).catch(function(){});
+    } catch(e){}
+
     var now = Date.now();
     if (action === 'start' && room.status === 'lobby') {
       room.status = 'run';
@@ -1064,7 +1042,7 @@ function mockCall(fn, args) {
         fetch('https://ntfy.sh/topedu_bt_' + code, {
           method: 'POST',
           headers: { 'Title': 'start' },
-          body: JSON.stringify({ type: 'start', startAt: room.startAt, endAt: room.endAt })
+          body: JSON.stringify({ type: 'start', startAt: room.startAt, endAt: room.endAt, qs: room.qs })
         }).catch(function(){});
       } catch(e){}
     } else if (action === 'end' && room.status !== 'end') {
@@ -1145,8 +1123,11 @@ function mockCall(fn, args) {
         set: '단어 대결',
         names: [],
         players: {},
-        qs: []
+        qs: generateBattleQs(cred.ban || '', 'en')
       };
+    }
+    if (!room.qs || !room.qs.length) {
+      room.qs = generateBattleQs(cred.ban || '', 'en');
     }
 
     var pKey = (cred.ban || '') + ':' + (cred.name || '');
@@ -1169,12 +1150,16 @@ function mockCall(fn, args) {
             var data = JSON.parse(e.data);
             var m = typeof data.message === 'string' ? JSON.parse(data.message) : data.message;
             if (m && m.type === 'room' && m.room) {
-              localStorage.setItem('topedu_battle_' + code, JSON.stringify(m.room));
+              var r = m.room;
+              if (!r.qs || !r.qs.length) r.qs = generateBattleQs(cred.ban || '', 'en');
+              localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
             } else if (m && m.type === 'start') {
               var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
               r.status = 'run';
               r.startAt = m.startAt;
               r.endAt = m.endAt;
+              if (m.qs && m.qs.length) r.qs = m.qs;
+              else if (!r.qs || !r.qs.length) r.qs = generateBattleQs(cred.ban || '', 'en');
               localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
             } else if (m && m.type === 'end') {
               var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
@@ -1195,7 +1180,16 @@ function mockCall(fn, args) {
                 var d = JSON.parse(l);
                 var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
                 if (m && m.type === 'room' && m.room) {
-                  localStorage.setItem('topedu_battle_' + code, JSON.stringify(m.room));
+                  var r = m.room;
+                  if (!r.qs || !r.qs.length) r.qs = generateBattleQs(cred.ban || '', 'en');
+                  localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+                } else if (m && m.type === 'start') {
+                  var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+                  r.status = 'run';
+                  r.startAt = m.startAt;
+                  r.endAt = m.endAt;
+                  if (m.qs && m.qs.length) r.qs = m.qs;
+                  localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
                 }
               } catch(e){}
             });
@@ -1226,9 +1220,51 @@ function mockCall(fn, args) {
       var raw = localStorage.getItem('topedu_battle_' + code);
       if (raw) room = JSON.parse(raw);
     } catch(e){}
+
     if (!room) {
-      return { status: 'lobby', count: 1 };
+      room = {
+        code: code,
+        status: 'lobby',
+        set: '단어 대결',
+        names: [cred.name],
+        players: {},
+        qs: generateBattleQs(cred.ban || '', 'en')
+      };
     }
+    if (!room.qs || !room.qs.length) {
+      room.qs = generateBattleQs(cred.ban || '', 'en');
+      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
+    }
+
+    // Background poll for start/end signals
+    try {
+      fetch('https://ntfy.sh/topedu_bt_' + code + '/json?poll=1&since=5m')
+        .then(function(res){ return res.text(); })
+        .then(function(txt){
+          var lines = txt.trim().split('\n');
+          var changed = false;
+          var r = JSON.parse(localStorage.getItem('topedu_battle_' + code) || '{}');
+          lines.forEach(function(l){
+            try {
+              var d = JSON.parse(l);
+              var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
+              if (m && m.type === 'start') {
+                r.status = 'run';
+                r.startAt = m.startAt;
+                r.endAt = m.endAt;
+                if (m.qs && m.qs.length) r.qs = m.qs;
+                changed = true;
+              } else if (m && m.type === 'end') {
+                r.status = 'end';
+                changed = true;
+              }
+            } catch(e){}
+          });
+          if (changed) {
+            localStorage.setItem('topedu_battle_' + code, JSON.stringify(r));
+          }
+        }).catch(function(){});
+    } catch(e){}
 
     var now = Date.now();
     var pKeys = Object.keys(room.players || {});
@@ -2885,10 +2921,81 @@ function report(g,fin){
     if(r.status==='end'&&!R.done){ R.done=true; }
   }).catch(function(){ if(fin&&g===B.gen) setTimeout(function(){ report(g,true); },1000); });
 }
+function generateBattleQs(ban, dir, setNames) {
+  dir = dir === 'ko' ? 'ko' : 'en';
+  var want = {};
+  if (Array.isArray(setNames) && setNames.length) {
+    for (var i = 0; i < setNames.length; i++) want[setNames[i]] = 1;
+  }
+  var seen = {}, words = [];
+  var allKeys = Object.keys(ALL_WORD_SETS || {});
+  for (var i = 0; i < allKeys.length; i++) {
+    var sName = allKeys[i];
+    var sData = ALL_WORD_SETS[sName];
+    if (Object.keys(want).length > 0 && !want[sName]) continue;
+    if (Object.keys(want).length === 0 && ban && sData.target && sData.target !== '전체' && sData.target.indexOf(ban) < 0 && sName.indexOf(ban) < 0) continue;
+    var wList = sData.words || [];
+    for (var j = 0; j < wList.length; j++) {
+      var wObj = wList[j];
+      var w = wObj.w;
+      var m = (wObj.m || '').split(';')[0].split(',')[0].trim();
+      if (w && m && !seen[w]) {
+        seen[w] = 1;
+        words.push({ w: w, m: m });
+      }
+    }
+  }
+  if (words.length < 4) {
+    for (var i = 0; i < allKeys.length; i++) {
+      var wList = (ALL_WORD_SETS[allKeys[i]] && ALL_WORD_SETS[allKeys[i]].words) || [];
+      for (var j = 0; j < wList.length; j++) {
+        var wObj = wList[j];
+        var w = wObj.w, m = (wObj.m || '').split(';')[0].split(',')[0].trim();
+        if (w && m && !seen[w]) {
+          seen[w] = 1;
+          words.push({ w: w, m: m });
+          if (words.length >= 30) break;
+        }
+      }
+      if (words.length >= 30) break;
+    }
+  }
+
+  function shuf(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  return shuf(words).slice(0, 200).map(function(q) {
+    var ansText = dir === 'en' ? q.m : q.w;
+    var used = {}; used[ansText] = 1;
+    var wrong = [];
+    shuf(words).forEach(function(o) {
+      var t = dir === 'en' ? o.m : o.w;
+      if (wrong.length < 3 && !used[t]) { used[t] = 1; wrong.push(t); }
+    });
+    var opts = shuf([ansText].concat(wrong));
+    return {
+      w: q.w,
+      p: dir === 'en' ? q.w : q.m,
+      o: opts,
+      a: opts.indexOf(ansText)
+    };
+  }).filter(function(q) { return q.o.length === 4; });
+}
+
 function nextQ(){
   if(R.done) return;
+  if(!R.qs || !R.qs.length){
+    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
+  }
   if(R.i>=R.order.length){ var o=R.qs.map(function(_,i){return i;}); R.order=shuffle(o); R.i=0; if(R.order.length>1&&R.order[0]===R.last){ R.order.push(R.order.shift()); } }
   var q=R.qs[R.order[R.i++]]; R.last=R.order[R.i-1]; R.q=q; R.busy=false;
+  if(!q) return;
   var qe=$('#rq'); if(!qe) return;
   qe.className='q'+(/[가-힣]/.test(q.p)?' ko':''); qe.textContent=q.p;
   $('#rtiles').innerHTML=tilesHtml(q);
