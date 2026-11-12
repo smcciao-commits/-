@@ -54,10 +54,30 @@
     .top-nav {
       background: linear-gradient(135deg, #7c4dff, #ff4081);
       color: white;
-      padding: 16px 18px 20px;
+      padding: 14px 16px 18px;
       border-bottom-left-radius: 26px;
       border-bottom-right-radius: 26px;
       box-shadow: 0 6px 20px rgba(124, 77, 255, 0.25);
+    }
+    .nav-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .btn-back-home {
+      background: rgba(255,255,255,0.25);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: white;
+      border-radius: 12px;
+      padding: 5px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      backdrop-filter: blur(4px);
     }
     .nav-row {
       display: flex;
@@ -83,7 +103,7 @@
       gap: 6px;
     }
     .app-title-box .sub {
-      font-size: 12px;
+      font-size: 11.5px;
       opacity: 0.92;
       margin-top: 1px;
     }
@@ -97,53 +117,65 @@
       backdrop-filter: blur(4px);
     }
 
-    /* Stats & Alarm Ribbon */
+    /* Stats & Speed Ribbon */
     .stats-ribbon {
       display: flex;
-      gap: 8px;
-      margin-top: 14px;
+      gap: 6px;
+      margin-top: 12px;
+      flex-wrap: wrap;
     }
     .stat-pill {
       flex: 1;
+      min-width: 80px;
       background: rgba(0,0,0,0.18);
-      border-radius: 14px;
-      padding: 8px 12px;
+      border-radius: 12px;
+      padding: 7px 10px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 12.5px;
+      gap: 6px;
+      font-size: 12px;
       font-weight: 700;
     }
     .stat-pill .val {
       color: #ffd54f;
       font-family: 'Maplestory', sans-serif;
-      font-size: 14px;
+      font-size: 13.5px;
+    }
+    .btn-speed-toggle {
+      background: #e0e7ff;
+      color: #3730a3;
+      border: none;
+      border-radius: 12px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .btn-alarm-toggle {
       background: #ffd54f;
       color: #3e2723;
       border: none;
-      border-radius: 14px;
-      padding: 8px 14px;
-      font-size: 12.5px;
+      border-radius: 12px;
+      padding: 7px 12px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      transition: all 0.2s;
-    }
-    .btn-alarm-toggle:active {
-      transform: scale(0.96);
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    /* Main Content */
+    /* Content Area */
     .content {
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     /* Alarm Banner Card */
@@ -203,7 +235,142 @@
       border: none;
       border-radius: 10px;
       padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Joy English Special Practice Card (NEW!) */
+    .joy-card {
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      border: 2.5px solid #818cf8;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .joy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .joy-title-badge {
+      background: #4f46e5;
+      color: white;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .joy-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 16px;
+      color: #1e1b4b;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .joy-sub {
+      font-size: 12px;
+      color: #4b5563;
+      line-height: 1.45;
+    }
+    .joy-cat-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .joy-cat-tabs::-webkit-scrollbar { display: none; }
+    .joy-tab-btn {
+      flex-shrink: 0;
+      background: white;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4338ca;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .joy-tab-btn.active {
+      background: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    }
+    .joy-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .joy-item {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1.5px solid #e0e7ff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .joy-en-text {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 15px;
+      color: #1e1b4b;
+      line-height: 1.4;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .joy-ko-text {
       font-size: 12.5px;
+      color: #4338ca;
+      font-weight: 600;
+    }
+    .joy-tip-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 11.5px;
+      color: #92400e;
+      line-height: 1.35;
+    }
+    .joy-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .btn-joy-speak {
+      background: #eef2ff;
+      border: 1.5px solid #c7d2fe;
+      color: #4338ca;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-joy-shadow {
+      background: #ec4899;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -215,12 +382,12 @@
     .day-selector-card {
       background: white;
       border-radius: var(--radius);
-      padding: 14px 16px;
+      padding: 12px 14px;
       border: 1.5px solid var(--border);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
     .day-selector-label {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--muted);
       margin-bottom: 8px;
@@ -230,19 +397,18 @@
     }
     .day-chips {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       overflow-x: auto;
-      padding-bottom: 4px;
       scrollbar-width: none;
     }
     .day-chips::-webkit-scrollbar { display: none; }
     .day-chip {
       flex-shrink: 0;
-      padding: 7px 14px;
-      border-radius: 12px;
+      padding: 6px 12px;
+      border-radius: 10px;
       border: 1.5px solid var(--border);
       background: #f8fafc;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -251,69 +417,53 @@
       background: var(--primary);
       color: white;
       border-color: var(--primary);
-      box-shadow: 0 3px 10px rgba(124, 77, 255, 0.25);
+      box-shadow: 0 2px 8px rgba(124, 77, 255, 0.25);
     }
 
-    /* Minky the Cat Mascot Hero */
+    /* Mascot Hero */
     .mascot-hero {
       background: linear-gradient(135deg, #f3e8ff, #fce7f3);
       border: 2px solid #e9d5ff;
-      border-radius: 24px;
-      padding: 18px 20px;
+      border-radius: 22px;
+      padding: 14px 16px;
       display: flex;
-      gap: 16px;
+      gap: 14px;
       align-items: center;
-      box-shadow: 0 6px 20px rgba(124, 77, 255, 0.08);
-      position: relative;
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.08);
       cursor: pointer;
     }
     .cat-avatar-wrap {
-      width: 78px;
-      height: 78px;
+      width: 72px;
+      height: 72px;
       flex-shrink: 0;
       background: white;
-      border-radius: 22px;
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       border: 2px solid #f472b6;
-      position: relative;
     }
     .cat-avatar-wrap svg {
-      width: 64px;
-      height: 64px;
+      width: 58px;
+      height: 58px;
     }
     .cat-bubble {
       flex: 1;
       background: white;
       border-radius: 16px;
-      padding: 12px 14px;
-      font-size: 13.5px;
+      padding: 10px 12px;
+      font-size: 13px;
       line-height: 1.45;
       color: #374151;
       border: 1.5px solid #f472b6;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      position: relative;
-    }
-    .cat-bubble::before {
-      content: '';
-      position: absolute;
-      left: -8px;
-      top: 24px;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-right: 8px solid white;
     }
     .cat-name {
       font-family: 'Maplestory', sans-serif;
-      font-size: 12px;
+      font-size: 11.5px;
       color: #ff4081;
       font-weight: 700;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      margin-bottom: 2px;
     }
 
     /* 4-Step Tab Navigation */
@@ -322,55 +472,51 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 6px;
       background: #edf2f7;
-      padding: 6px;
-      border-radius: 18px;
+      padding: 5px;
+      border-radius: 16px;
     }
     .step-btn {
       border: none;
       background: transparent;
-      padding: 10px 4px;
-      border-radius: 14px;
-      font-size: 12px;
+      padding: 8px 4px;
+      border-radius: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: #718096;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      transition: all 0.2s;
+      gap: 3px;
     }
-    .step-btn .step-ico { font-size: 18px; }
+    .step-btn .step-ico { font-size: 17px; }
     .step-btn.active {
       background: white;
       color: var(--primary);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .step-btn.done .step-ico {
-      filter: drop-shadow(0 0 4px #00e676);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
     /* Step Card Container */
     .step-view {
       background: white;
-      border-radius: 24px;
-      padding: 20px 18px;
+      border-radius: 22px;
+      padding: 18px 16px;
       border: 1.5px solid var(--border);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
     .step-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1.5px solid #edf2f7;
-      padding-bottom: 12px;
+      padding-bottom: 10px;
     }
     .step-title {
       font-family: 'Maplestory', sans-serif;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--text);
       display: flex;
@@ -378,11 +524,11 @@
       gap: 6px;
     }
     .step-counter {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--primary);
       background: #f3e8ff;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 999px;
     }
 
@@ -390,7 +536,7 @@
     .voca-flip-box {
       perspective: 1000px;
       width: 100%;
-      height: 220px;
+      height: 200px;
       cursor: pointer;
     }
     .voca-card-inner {
@@ -399,7 +545,7 @@
       position: relative;
       transform-style: preserve-3d;
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 20px;
+      border-radius: 18px;
     }
     .voca-card-inner.flipped {
       transform: rotateY(180deg);
@@ -409,14 +555,14 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 20px;
-      padding: 22px;
+      border-radius: 18px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      box-shadow: 0 6px 20px rgba(124, 77, 255, 0.12);
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.12);
     }
     .voca-card-front {
       background: linear-gradient(135deg, #ffffff, #faf5ff);
@@ -435,30 +581,30 @@
       letter-spacing: 0.5px;
     }
     .voca-phonetic {
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--muted);
-      margin-top: 4px;
+      margin-top: 3px;
     }
     .voca-meaning {
       font-family: 'Maplestory', sans-serif;
       font-size: 24px;
       font-weight: 700;
       color: #be185d;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .voca-engdef {
-      font-size: 13.5px;
+      font-size: 13px;
       color: #4b5563;
-      line-height: 1.45;
+      line-height: 1.4;
       background: rgba(255,255,255,0.7);
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      margin-top: 4px;
     }
     .voca-example {
       font-size: 13px;
       color: #6b7280;
-      margin-top: 10px;
+      margin-top: 8px;
       font-style: italic;
     }
     .voca-actions {
@@ -469,9 +615,9 @@
       background: #f3e8ff;
       border: 1.5px solid #c084fc;
       color: var(--primary);
-      border-radius: 14px;
-      padding: 10px 18px;
-      font-size: 14px;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -483,9 +629,9 @@
       background: var(--primary);
       border: none;
       color: white;
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 10px;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(124, 77, 255, 0.25);
@@ -495,14 +641,14 @@
     .theatre-box {
       width: 100%;
       background: #111827;
-      border-radius: 18px;
+      border-radius: 16px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
     }
     .theatre-canvas {
       width: 100%;
-      height: 240px;
+      height: 220px;
       display: block;
       cursor: pointer;
     }
@@ -518,9 +664,9 @@
       background: #374151;
       border: none;
       color: white;
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 6px 12px;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -531,62 +677,62 @@
     .subtitles-box {
       background: #faf5ff;
       border: 1.5px solid #e9d5ff;
-      border-radius: 14px;
-      padding: 12px 14px;
-      min-height: 58px;
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-height: 52px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
     .sub-en {
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 700;
       color: #6b21a8;
       line-height: 1.4;
     }
     .sub-ko {
-      font-size: 12.5px;
+      font-size: 12px;
       color: #6b7280;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     /* Shadowing Practice */
     .shadowing-box {
       background: #f8fafc;
       border: 1.5px solid var(--border);
-      border-radius: 18px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     .shadow-target-en {
       font-family: 'Maplestory', sans-serif;
-      font-size: 16px;
+      font-size: 15.5px;
       color: #1e293b;
       line-height: 1.4;
     }
     .shadow-target-ko {
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--muted);
     }
     .shadow-mic-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
     }
     .btn-mic {
       background: #ef4444;
       color: white;
       border: none;
-      border-radius: 14px;
-      padding: 12px 20px;
-      font-size: 14px;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
     }
     .btn-mic.listening {
@@ -595,11 +741,11 @@
     }
     .shadow-result-pill {
       flex: 1;
-      padding: 10px 14px;
+      padding: 8px 12px;
       background: white;
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1.5px solid var(--border);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: #059669;
       text-align: center;
@@ -609,22 +755,22 @@
     .chat-container {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      min-height: 220px;
+      gap: 10px;
+      min-height: 200px;
     }
     .chat-bubble-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: flex-start;
     }
     .chat-bubble-row.user {
       flex-direction: row-reverse;
     }
     .chat-msg {
-      max-width: 80%;
-      padding: 12px 14px;
-      border-radius: 18px;
-      font-size: 14px;
+      max-width: 82%;
+      padding: 10px 12px;
+      border-radius: 16px;
+      font-size: 13.5px;
       line-height: 1.45;
     }
     .chat-msg.cat {
@@ -643,14 +789,14 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 6px;
     }
     .reply-chip {
       background: white;
       border: 2px solid #c084fc;
       border-radius: 14px;
-      padding: 10px 14px;
-      font-size: 13.5px;
+      padding: 10px 12px;
+      font-size: 13px;
       font-weight: 700;
       color: #6b21a8;
       cursor: pointer;
@@ -662,15 +808,15 @@
       transform: scale(0.98);
     }
 
-    /* Step 4: Quiz & Celebration */
+    /* Step 4: Quiz */
     .quiz-card {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
     .quiz-q-title {
       font-family: 'Maplestory', sans-serif;
-      font-size: 16px;
+      font-size: 15.5px;
       line-height: 1.45;
       color: #1f2937;
     }
@@ -682,14 +828,13 @@
     .quiz-opt-btn {
       background: #f8fafc;
       border: 2px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-size: 14px;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #334155;
       cursor: pointer;
       text-align: left;
-      transition: all 0.2s;
     }
     .quiz-opt-btn.correct {
       background: #ecfdf5;
@@ -703,17 +848,12 @@
     }
 
     /* Scramble builder */
-    .scramble-box {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
     .scramble-slots {
-      min-height: 48px;
+      min-height: 44px;
       background: #f1f5f9;
       border: 2px dashed #cbd5e1;
-      border-radius: 14px;
-      padding: 8px 10px;
+      border-radius: 12px;
+      padding: 6px 8px;
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
@@ -722,18 +862,18 @@
     .scramble-pool {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
+      margin-top: 8px;
     }
     .word-token {
       background: white;
       border: 1.5px solid var(--primary);
       color: var(--primary);
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 14px;
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
     /* Reward Celebration Modal */
@@ -748,63 +888,48 @@
       z-index: 9999;
       padding: 20px;
     }
-    .celebration-overlay.show {
-      display: flex;
-    }
+    .celebration-overlay.show { display: flex; }
     .celebration-card {
       background: white;
-      border-radius: 28px;
-      padding: 26px 22px;
+      border-radius: 26px;
+      padding: 24px 20px;
       width: 100%;
       max-width: 440px;
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      position: relative;
-      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: popIn 0.35s ease;
     }
     .trophy-badge {
-      font-size: 64px;
-      margin-bottom: -6px;
+      font-size: 60px;
       animation: trophyBounce 1.5s infinite;
-    }
-    .celebration-title {
-      font-family: 'Maplestory', sans-serif;
-      font-size: 22px;
-      color: #1f2937;
     }
     .reward-passcode-box {
       background: linear-gradient(135deg, #fef3c7, #fde68a);
       border: 2.5px dashed #f59e0b;
-      border-radius: 20px;
-      padding: 16px;
-      margin: 6px 0;
-    }
-    .reward-passcode-label {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #92400e;
+      border-radius: 18px;
+      padding: 14px;
+      margin: 4px 0;
     }
     .reward-passcode-val {
       font-family: 'Maplestory', sans-serif;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 700;
       color: #b45309;
       letter-spacing: 4px;
-      margin-top: 4px;
+      margin-top: 3px;
     }
     .btn-close-reward {
       background: linear-gradient(135deg, var(--primary), var(--accent));
       color: white;
       border: none;
-      border-radius: 16px;
-      padding: 14px;
-      font-size: 15px;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14.5px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(124, 77, 255, 0.3);
     }
 
     /* Alarm Popup Modal */
@@ -822,21 +947,17 @@
     .alarm-modal-overlay.show { display: flex; }
     .alarm-modal-card {
       background: white;
-      border-radius: 28px;
-      padding: 24px;
+      border-radius: 26px;
+      padding: 22px;
       width: 100%;
       max-width: 400px;
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       border: 3px solid #ffd54f;
       box-shadow: 0 0 30px rgba(255, 213, 79, 0.5);
       animation: popIn 0.35s ease;
-    }
-    .alarm-bell-icon {
-      font-size: 60px;
-      animation: bellShake 0.8s infinite;
     }
 
     /* Bottom Dock Bar */
@@ -870,7 +991,6 @@
     .dock-btn.active { color: var(--primary); }
     .dock-btn .dock-ico { font-size: 20px; }
 
-    /* Animations */
     @keyframes catWiggle {
       0%, 100% { transform: rotate(0deg); }
       25% { transform: rotate(-8deg); }
@@ -880,20 +1000,13 @@
       0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
       50% { transform: scale(1.05); box-shadow: 0 0 16px rgba(239, 68, 68, 0.8); }
     }
-    @keyframes bellShake {
-      0%, 100% { transform: rotate(0); }
-      20% { transform: rotate(15deg); }
-      40% { transform: rotate(-15deg); }
-      60% { transform: rotate(10deg); }
-      80% { transform: rotate(-10deg); }
-    }
     @keyframes popIn {
       0% { transform: scale(0.85); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
     @keyframes trophyBounce {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-8px); }
     }
   </style>
 </head>
@@ -902,18 +1015,24 @@
 <div class="app-container">
   <!-- Top Navigation -->
   <div class="top-nav">
+    <div class="nav-top-row">
+      <button class="btn-back-home" onclick="location.href='index.html'">
+        <span>←</span> <span>탑에듀 단어앱 홈</span>
+      </button>
+      <div class="badge-class">초5 하린반 👑</div>
+    </div>
+
     <div class="nav-row">
       <div class="app-brand">
         <div class="app-logo">🐱</div>
         <div class="app-title-box">
           <h1>캐츠 잉글리시 <span>CATS</span></h1>
-          <div class="sub">초5 하린이의 4단계 매일 훈련관 & 알람</div>
+          <div class="sub">핸드인핸드 5권 맞춤 회화 & 매일 알람</div>
         </div>
       </div>
-      <div class="badge-class">초5 하린반 👑</div>
     </div>
 
-    <!-- Stats & Alarm Ribbon -->
+    <!-- Stats & Speed Ribbon -->
     <div class="stats-ribbon">
       <div class="stat-pill">
         <span>🔥</span> <span>출석:</span> <span class="val" id="streakVal">3일째</span>
@@ -921,6 +1040,9 @@
       <div class="stat-pill">
         <span>⭐</span> <span>포인트:</span> <span class="val" id="starVal">250P</span>
       </div>
+      <button class="btn-speed-toggle" id="btnSpeedToggle" onclick="toggleTtsSpeed()">
+        <span id="speedIcon">🐢</span> <span id="speedLabel">느리게 (0.7x)</span>
+      </button>
       <button class="btn-alarm-toggle" id="btnTopAlarm" onclick="toggleAlarmCard()">
         <span>🔔</span> <span id="alarmTimeBadge">16:30 ON</span>
       </button>
@@ -929,15 +1051,15 @@
 
   <div class="content">
     <!-- Collapsible Daily Alarm Setting Card -->
-    <div class="alarm-card" id="alarmCard">
+    <div class="alarm-card" id="alarmCard" style="display:none;">
       <div class="alarm-card-header">
         <div class="alarm-title">
           <span>⏰</span> <span>하린이의 매일 공부 알람</span>
         </div>
         <span class="alarm-status-badge" id="alarmStatusBadge">켜짐 (ON)</span>
       </div>
-      <div style="font-size: 12.5px; color: #7f6a00; line-height: 1.4;">
-        설정된 시간에 경쾌한 차임벨과 냥이 알람이 울려 매일 20분 공부 루틴을 챙겨줘요!
+      <div style="font-size: 12px; color: #7f6a00; line-height: 1.4;">
+        설정된 시간에 경쾌한 학교 종소리 멜로디와 알람이 울려 매일 20분 공부 루틴을 챙겨줘요!
       </div>
       <div class="alarm-controls">
         <input type="time" class="alarm-time-input" id="alarmTimeInput" value="16:30" onchange="saveAlarmSettings()">
@@ -950,54 +1072,65 @@
       </div>
     </div>
 
-    <!-- Day Pack Selector -->
-    <div class="day-selector-card">
-      <div class="day-selector-label">
-        <span>📚 오늘의 교재 & 학습 세트</span>
-        <span style="color:var(--primary); font-size:12px;" id="currentBookLabel">Insight Link Starter 1</span>
-      </div>
-      <div class="day-chips" id="dayChips">
-        <!-- Rendered by JS -->
-      </div>
-    </div>
-
     <!-- Mascot Minky Coach Hero -->
     <div class="mascot-hero" onclick="petMinky()">
       <div class="cat-avatar-wrap">
-        <!-- Cute Vector Cat SVG -->
         <svg viewBox="0 0 100 100">
           <circle cx="50" cy="52" r="38" fill="#fbcfe8" />
-          <!-- Cat Ears -->
           <polygon points="20,28 32,8 44,24" fill="#f472b6" />
           <polygon points="24,25 32,13 40,24" fill="#fce7f3" />
           <polygon points="80,28 68,8 56,24" fill="#f472b6" />
           <polygon points="76,25 68,13 60,24" fill="#fce7f3" />
-          <!-- Cat Face -->
           <ellipse cx="50" cy="54" rx="32" ry="28" fill="#ffffff" />
-          <!-- Big Anime Eyes -->
           <circle cx="38" cy="48" r="6" fill="#1e1b4b" />
           <circle cx="40" cy="46" r="2" fill="#ffffff" />
           <circle cx="62" cy="48" r="6" fill="#1e1b4b" />
           <circle cx="64" cy="46" r="2" fill="#ffffff" />
-          <!-- Nose and Mouth -->
           <polygon points="50,56 47,53 53,53" fill="#f43f5e" />
           <path d="M46,58 Q50,62 54,58" stroke="#f43f5e" stroke-width="2" fill="none" />
-          <!-- Whiskers -->
           <line x1="22" y1="52" x2="10" y2="48" stroke="#cbd5e1" stroke-width="2" />
           <line x1="22" y1="56" x2="10" y2="58" stroke="#cbd5e1" stroke-width="2" />
           <line x1="78" y1="52" x2="90" y2="48" stroke="#cbd5e1" stroke-width="2" />
           <line x1="78" y1="56" x2="90" y2="58" stroke="#cbd5e1" stroke-width="2" />
-          <!-- Bell collar -->
           <rect x="36" y="74" width="28" height="6" rx="3" fill="#ec4899" />
           <circle cx="50" cy="80" r="5" fill="#f59e0b" />
         </svg>
       </div>
       <div class="cat-bubble">
-        <div class="cat-name">
-          <span>🐱 캐츠 코치 밍키</span>
-          <span style="font-size:10px; color:#9ca3af; font-family:sans-serif">(터치하면 야옹!)</span>
+        <div class="cat-name">🐱 캐츠 코치 밍키 (터치하면 야옹!)</div>
+        <div id="minkyDialogue">하린아 안녕! 🐱 필리핀 조이영어 선생님이랑 스몰토크할 때 멋지게 대답할 수 있게 오늘 하루 표현을 같이 연습해 볼까?</div>
+      </div>
+    </div>
+
+    <!-- Joy English Special Practice Card (NEW!) -->
+    <div class="joy-card">
+      <div class="joy-header">
+        <div class="joy-title">
+          <span>🗣️</span> <span>조이 화상영어 특급 대비!</span>
         </div>
-        <div id="minkyDialogue">하린아 안녕! 🐱 오늘도 나랑 같이 재미있게 20분 영어 놀이해 볼까?</div>
+        <span class="joy-title-badge">How was your day?</span>
+      </div>
+      <div class="joy-sub">
+        필리핀 선생님이 <b>"오늘 하루 어땠어?", "기분 어때?"</b> 물어보실 때 맨날 <i>"I'm happy", "I'm tired"</i>만 하지 않고 센스 있게 대답하는 마법의 표현들!
+      </div>
+
+      <div class="joy-cat-tabs" id="joyCatTabs">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="joy-card-list" id="joyCardList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Day Pack Selector -->
+    <div class="day-selector-card">
+      <div class="day-selector-label">
+        <span>📚 핸드인핸드 5권 데일리 학습 세트</span>
+        <span style="color:var(--primary); font-size:12px;" id="currentBookLabel">Hand in Hand 5</span>
+      </div>
+      <div class="day-chips" id="dayChips">
+        <!-- Rendered by JS -->
       </div>
     </div>
 
@@ -1034,21 +1167,21 @@
         <div class="voca-card-inner" id="vocaCardInner">
           <div class="voca-card-front">
             <div style="font-size:11.5px; color:#a855f7; font-weight:700; margin-bottom:6px">탭해서 뜻 확인하기 🔄</div>
-            <div class="voca-word" id="vWord">swan</div>
-            <div class="voca-phonetic" id="vPhone">/swɑːn/</div>
-            <div class="voca-example" id="vEg">"The ballerina dances like a white swan."</div>
+            <div class="voca-word" id="vWord">cheetah</div>
+            <div class="voca-phonetic" id="vPhone">/ˈtʃiːtə/</div>
+            <div class="voca-example" id="vEg">"The cheetah runs very fast."</div>
           </div>
           <div class="voca-card-back">
-            <div class="voca-meaning" id="vMean">백조</div>
-            <div class="voca-engdef" id="vEngDef">a large white water bird with a long neck</div>
-            <div style="font-size:12px; color:#be185d; margin-top:4px" id="vEngDefKo">목이 긴 크고 하얀 물새</div>
+            <div class="voca-meaning" id="vMean">치타</div>
+            <div class="voca-engdef" id="vEngDef">a very fast wild cat with spots</div>
+            <div style="font-size:12px; color:#be185d; margin-top:4px" id="vEngDefKo">점무늬가 있는 매우 빠른 고양잇과 동물</div>
           </div>
         </div>
       </div>
 
       <div class="voca-actions">
         <button class="btn-audio-speak" onclick="speakCurrentWord()">
-          <span>🔊</span> <span>원어민 발음</span>
+          <span>🔊</span> <span>원어민 발음 (느리게)</span>
         </button>
         <button class="btn-next-word" onclick="nextVocaWord()">
           <span>다음 단어로 넘어가기 →</span>
@@ -1065,36 +1198,33 @@
         <div class="step-counter" id="theatreStatusBadge">영상 준비됨</div>
       </div>
 
-      <!-- Animated 2D Canvas Theatre -->
       <div class="theatre-box">
-        <canvas class="theatre-canvas" id="theatreCanvas" width="480" height="240" onclick="interactCanvas()"></canvas>
+        <canvas class="theatre-canvas" id="theatreCanvas" width="480" height="220" onclick="interactCanvas()"></canvas>
         <div class="theatre-controls">
           <button class="theatre-btn play" id="btnPlayTheatre" onclick="toggleTheatrePlay()">▶️ 영상 재생</button>
-          <span style="font-size:11.5px; opacity:0.85;">화면을 터치하면 마법 효과! ✨</span>
+          <span style="font-size:11px; opacity:0.85;">화면을 터치하면 마법 효과! ✨</span>
           <button class="theatre-btn" onclick="restartTheatre()">🔄 처음부터</button>
         </div>
       </div>
 
-      <!-- Subtitles -->
       <div class="subtitles-box">
-        <div class="sub-en" id="subEn">The ballerina raises her arms like a white swan.</div>
-        <div class="sub-ko" id="subKo">발레리나는 흰 백조처럼 팔을 들어 올립니다.</div>
+        <div class="sub-en" id="subEn">The cheetah runs very fast.</div>
+        <div class="sub-ko" id="subKo">치타는 매우 빨리 달립니다.</div>
       </div>
 
-      <!-- Shadowing Exercise -->
       <div class="shadowing-box">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-weight:700; font-size:13px; color:#475569;">🎙️ 따라 말하기 (Shadowing)</span>
           <span style="font-size:11.5px; color:#6366f1; font-weight:700;" id="shadowCounter">1 / 3 문장</span>
         </div>
-        <div class="shadow-target-en" id="shadowEn">The swan swims in the quiet lake.</div>
-        <div class="shadow-target-ko" id="shadowKo">백조가 조용한 호수에서 수영합니다.</div>
+        <div class="shadow-target-en" id="shadowEn">The cheetah runs very fast.</div>
+        <div class="shadow-target-ko" id="shadowKo">치타는 매우 빨리 달립니다.</div>
 
         <div class="shadow-mic-row">
           <button class="btn-mic" id="btnShadowMic" onclick="toggleShadowMic()">
             <span>🎙️</span> <span id="btnMicLabel">말하기 시작</span>
           </button>
-          <button class="btn-audio-speak" style="padding:11px 14px;" onclick="speakShadowTarget()">
+          <button class="btn-audio-speak" style="padding:10px 14px;" onclick="speakShadowTarget()">
             <span>🔊</span>
           </button>
           <div class="shadow-result-pill" id="shadowScorePill">
@@ -1148,15 +1278,14 @@
     <div class="celebration-card">
       <div class="trophy-badge">🏆</div>
       <div class="celebration-title">오늘의 캐츠 잉글리시 완료!</div>
-      <div style="font-size:14px; color:#4b5563; line-height:1.5;">
-        하린아, 오늘 4단계 완전학습을 완벽하게 끝냈어! 냥이와 엄마가 너무너무 자랑스러워해! 🐱💖
+      <div style="font-size:13.5px; color:#4b5563; line-height:1.5;">
+        하린아, 오늘 4단계 완전학습을 완벽하게 끝냈어! 조이영어 선생님이랑도 자신 있게 대화하자! 🐱💖
       </div>
 
-      <!-- iPad 15-Minute Unlock Passcode -->
       <div class="reward-passcode-box">
         <div class="reward-passcode-label">🎁 오늘의 아이패드 15분 자유시간 보상 암호</div>
         <div class="reward-passcode-val" id="rewardPasscodeVal">⭐ 1215 ⭐</div>
-        <div style="font-size:11.5px; color:#b45309; margin-top:4px;">엄마에게 이 암호를 보여주면 15분 해금 완료!</div>
+        <div style="font-size:11.5px; color:#b45309; margin-top:3px;">엄마에게 이 암호를 보여주면 15분 해금 완료!</div>
       </div>
 
       <button class="btn-close-reward" onclick="closeRewardModal()">
@@ -1168,11 +1297,11 @@
   <!-- Alarm Ringing Modal -->
   <div class="alarm-modal-overlay" id="alarmModalOverlay">
     <div class="alarm-modal-card">
-      <div class="alarm-bell-icon">🔔</div>
+      <div style="font-size:54px;">🔔</div>
       <div style="font-family:'Maplestory',sans-serif; font-size:22px; color:#b45309;">
         하린아! 캐츠 잉글리시 시간이야! 🐱
       </div>
-      <div style="font-size:14px; color:#4b5563; line-height:1.5;">
+      <div style="font-size:13.5px; color:#4b5563; line-height:1.5;">
         매일 20분 꾸준히 하면 영어가 술술 나와요! 냥이 밍키가 기다리고 있어~
       </div>
       <button class="btn-close-reward" style="background:#f59e0b;" onclick="dismissAlarmAndStart()">
@@ -1207,22 +1336,26 @@
 
 <script>
 /* ============ DATA & STATE ============ */
-var DAILY_PACKS = [{"id": "day01", "title": "Insight Link 1 - Day 01: 백조의 호수와 마법의 발레", "book": "Insight Link Starter 1", "theme": "Swan Lake Ballet", "words": [{"w": "swan", "m": "백조", "engDef": "a large white water bird with a long neck", "engDefKo": "목이 긴 크고 하얀 물새", "e": "The ballerina dances like a white swan.", "k": "발레리나는 흰 백조처럼 춤을 춥니다.", "p": "/swɑːn/"}, {"w": "ballet", "m": "발레", "engDef": "a beautiful dance that tells a story with music", "engDefKo": "음악과 함께 이야기를 들려주는 아름다운 춤", "e": "Swan Lake is a very popular ballet.", "k": "백조의 호수는 매우 인기 있는 발레입니다.", "p": "/bæˈleɪ/"}, {"w": "lake", "m": "호수", "engDef": "a large area of water surrounded by land", "engDefKo": "육지로 둘러싸인 넓은 물가", "e": "The swans swim together in the lake.", "k": "백조들이 호수에서 함께 수영합니다.", "p": "/leɪk/"}, {"w": "feather", "m": "깃털", "engDef": "one of the soft light things on a bird's body", "engDefKo": "새의 몸을 덮고 있는 부드러운 깃털", "e": "Her dress is covered with white feathers.", "k": "그녀의 드레스는 하얀 깃털로 덮여 있습니다.", "p": "/ˈfeðər/"}, {"w": "wing", "m": "날개", "engDef": "one of the parts of a bird used for flying", "engDefKo": "새가 날기 위해 사용하는 몸의 부분", "e": "Birds use their wings to fly high.", "k": "새들은 높이 날기 위해 날개를 사용합니다.", "p": "/wɪŋ/"}, {"w": "spread", "m": "펼치다, 벌리다", "engDef": "to open your arms or wings wide", "engDefKo": "팔이나 날개를 활짝 펴다", "e": "She spreads her arms like wings.", "k": "그녀는 날개처럼 팔을 활짝 벌립니다.", "p": "/spred/"}], "story": {"title": "The Magic of Swan Lake", "titleKo": "백조의 호수의 마법", "sceneType": "lake", "lines": [{"speaker": "Minky", "text": "Welcome to the magical lake! Look at the graceful swan.", "ko": "마법의 호수에 온 걸 환영해! 우아한 백조를 봐."}, {"speaker": "Narrator", "text": "A beautiful white swan swims smoothly across the quiet water.", "ko": "아름다운 흰 백조가 조용한 물 위를 부드럽게 헤엄칩니다."}, {"speaker": "Ballerina", "text": "I can spread my arms just like swan wings!", "ko": "나도 백조 날개처럼 팔을 활짝 펼칠 수 있어!"}, {"speaker": "Minky", "text": "Music fills the night air as they dance together under the moon.", "ko": "달빛 아래서 함께 춤을 출 때 음악이 밤하늘을 채웁니다."}]}, "shadowing": [{"sentence": "The swan swims in the quiet lake.", "ko": "백조가 조용한 호수에서 수영합니다."}, {"sentence": "She spreads her arms like wings.", "ko": "그녀는 날개처럼 팔을 활짝 벌립니다."}, {"sentence": "Swan Lake is a beautiful ballet.", "ko": "백조의 호수는 아름다운 발레입니다."}], "talk": [{"q": "Hi Harin! 🐱 I'm Minky! Do you like dancing or swimming?", "qKo": "안녕 하린아! 난 밍키야! 춤추는 게 좋아, 수영하는 게 좋아?", "options": [{"t": "I like dancing like a ballerina! 🩰", "rep": "Wow, you must dance gracefully!"}, {"t": "I like swimming in the water! 🏊‍♀️", "rep": "Swimming is so refreshing and fun!"}, {"t": "I like watching beautiful swans! 🦢", "rep": "Swans are truly elegant animals!"}]}, {"q": "Where does a swan live? In a lake, or in a tree?", "qKo": "백조는 어디에 살까? 호수일까, 나무 위일까?", "options": [{"t": "A swan lives in a lake! 💧", "rep": "Bingo! You are super smart!"}, {"t": "It swims on the quiet water! 🌊", "rep": "That's exactly right, meow!"}]}, {"q": "Awesome job, Harin! Ready to test your English with today's quiz?", "qKo": "정말 잘했어 하린아! 오늘 퀴즈 풀 준비 됐어?", "options": [{"t": "Yes! I am ready for the quiz! 🚀", "rep": "Let's go! You can get 100 points!"}]}], "quiz": [{"type": "choice", "q": "Q1. '백조'를 뜻하는 영어 단어는 무엇일까요?", "opts": ["swan", "forest", "desert", "wrist"], "ans": 0, "hint": "힌트: 호수에서 우아하게 헤엄치는 흰 새!"}, {"type": "choice", "q": "Q2. 'spread'의 올바른 우리말 뜻은?", "opts": ["구부리다", "펼치다, 벌리다", "들어 올리다", "씹다"], "ans": 1, "hint": "힌트: 팔이나 날개를 양옆으로 활짝!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\nBirds use their ______ to fly high in the sky.", "opts": ["feathers", "wings", "lakes", "wrists"], "ans": 1, "hint": "힌트: 하늘을 날기 위해 펄럭이는 부위!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치해 문장을 완성하세요:\n[swims / The / lake / in / the / swan]", "words": ["The", "swan", "swims", "in", "the", "lake"], "ansStr": "The swan swims in the lake"}, {"type": "tf", "q": "Q5. True or False?\n'Swan Lake is a very popular ballet.'\n(백조의 호수는 매우 인기 있는 발레이다.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "교재 본문 예문을 기억해 보세요!"}]}, {"id": "day02", "title": "Insight Link 1 - Day 02: 숲과 사막 동물들의 신비", "book": "Insight Link Starter 1", "theme": "Forest and Desert Animals", "words": [{"w": "forest", "m": "숲, 삼림", "engDef": "a place with many trees and wild animals", "engDefKo": "많은 나무와 야생 동물이 있는 곳", "e": "Bears live in the deep forest.", "k": "곰은 깊은 숲속에 삽니다.", "p": "/ˈfɔːrɪst/"}, {"w": "desert", "m": "사막", "engDef": "a hot, dry place with lots of sand", "engDefKo": "모래가 많고 비가 거의 안 오는 덥고 건조한 곳", "e": "It is very hot and dry in the desert.", "k": "사막은 매우 덥고 건조합니다.", "p": "/ˈdezərt/"}, {"w": "sunlight", "m": "햇빛", "engDef": "the light that comes from the sun", "engDefKo": "태양에서 비치는 빛", "e": "Plants need water and sunlight to grow.", "k": "식물은 자라기 위해 물과 햇빛이 필요합니다.", "p": "/ˈsʌnlaɪt/"}, {"w": "without", "m": "~없이", "engDef": "not having something", "engDefKo": "무언가를 가지지 않고", "e": "Camels can live without water for days.", "k": "낙타는 며칠 동안 물 없이도 살 수 있습니다.", "p": "/wɪðˈaʊt/"}, {"w": "grass", "m": "풀, 잔디", "engDef": "a green plant that covers the ground", "engDefKo": "땅을 덮고 있는 초록색 식물", "e": "Cows and sheep eat green grass.", "k": "소와 양은 초록색 풀을 먹습니다.", "p": "/ɡræs/"}, {"w": "sharp", "m": "날카로운", "engDef": "having a thin edge that cuts easily", "engDefKo": "쉽게 자를 수 있는 날카로운 끝을 가진", "e": "Lions have sharp teeth to eat meat.", "k": "사자는 고기를 먹기 위한 날카로운 이를 가지고 있습니다.", "p": "/ʃɑːrp/"}], "story": {"title": "Adventures in the Wild", "titleKo": "야생 동물들의 모험", "sceneType": "forest_desert", "lines": [{"speaker": "Minky", "text": "Look! On the left is a cool green forest, and on the right is a sunny desert!", "ko": "봐! 왼쪽은 시원한 초록 숲이고, 오른쪽은 햇빛 쨍쨍한 사막이야!"}, {"speaker": "Camel", "text": "I can walk across the hot sand without water for days!", "ko": "난 며칠 동안 물 없이도 뜨거운 모래밭을 걸을 수 있어!"}, {"speaker": "Deer", "text": "In the forest, we have plenty of green grass and cool water.", "ko": "숲속에는 맛있는 풀과 시원한 물이 가득해."}, {"speaker": "Minky", "text": "Every animal has a special body to live in their home!", "ko": "모든 동물은 자기 집에 맞게 특별한 몸을 가졌단다!"}]}, "shadowing": [{"sentence": "Plants need sunlight and water.", "ko": "식물은 햇빛과 물이 필요합니다."}, {"sentence": "Bears live in the deep forest.", "ko": "곰은 깊은 숲속에 삽니다."}, {"sentence": "Camels can live without water.", "ko": "낙타는 물 없이도 살 수 있습니다."}], "talk": [{"q": "Harin! Would you rather visit a green forest or a warm desert?", "qKo": "하린아! 시원한 초록 숲에 가볼래, 따뜻한 사막에 가볼래?", "options": [{"t": "I want to visit the cool forest! 🌲", "rep": "The forest smells so fresh with tall trees!"}, {"t": "I want to ride a camel in the desert! 🐪", "rep": "Riding a camel would be such a cool adventure!"}]}, {"q": "What do plants need to grow big and tall?", "qKo": "식물이 무럭무럭 자라려면 무엇이 필요할까?", "options": [{"t": "They need sunlight and water! ☀️💧", "rep": "Perfect answer! You are a nature master!"}, {"t": "Lots of fresh air and love! 💚", "rep": "Aww, plants love that too, meow!"}]}, {"q": "You are doing fantastic! Ready for the Day 2 quiz?", "qKo": "정말 훌륭해! Day 2 퀴즈 도전해 볼까?", "options": [{"t": "Yes! Let's get 100 points! 💯", "rep": "Here comes the quiz, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. '태양에서 비치는 빛(햇빛)'의 영어 단어는?", "opts": ["sunlight", "desert", "feather", "wrist"], "ans": 0, "hint": "sun + light 합성어!"}, {"type": "choice", "q": "Q2. 'without'의 올바른 뜻은?", "opts": ["~와 함께", "~없이", "~덕분에", "~동안에"], "ans": 1, "hint": "with의 반대말!"}, {"type": "choice", "q": "Q3. 사막을 뜻하는 단어는 무엇일까요?", "opts": ["lake", "forest", "desert", "grass"], "ans": 2, "hint": "모래가 많고 매우 건조한 곳!"}, {"type": "scramble", "q": "Q4. 단어를 순서대로 터치해 문장을 완성하세요:\n[need / Plants / sunlight / water / and]", "words": ["Plants", "need", "sunlight", "and", "water"], "ansStr": "Plants need sunlight and water"}, {"type": "tf", "q": "Q5. True or False?\n'Lions have sharp teeth to eat meat.'\n(사자는 고기를 먹기 위한 날카로운 이를 가지고 있다.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "sharp = 날카로운"}]}, {"id": "day03", "title": "Insight Link 2 - 바닷속 착한 거인, 고래상어", "book": "Insight Link Starter 2", "theme": "Gentle Whale Sharks", "words": [{"w": "aquarium", "m": "수족관", "engDef": "a large glass building where water animals live", "engDefKo": "물속 동물들이 모여 사는 큰 수족관", "e": "The Georgia Aquarium is very famous.", "k": "조지아 수족관은 매우 유명합니다.", "p": "/əˈkweriəm/"}, {"w": "shark", "m": "상어", "engDef": "a large ocean fish with sharp teeth", "engDefKo": "날카로운 이를 가진 커다란 바다 물고기", "e": "Whale sharks are gentle and eat tiny plankton.", "k": "고래상어는 온순하며 아주 작은 플랑크톤을 먹습니다.", "p": "/ʃɑːrk/"}, {"w": "swallow", "m": "삼키다", "engDef": "to make food go down your throat into stomach", "engDefKo": "목구멍을 통해 꿀꺽 삼키다", "e": "They swallow plankton with their huge mouths.", "k": "그들은 커다란 입으로 플랑크톤을 삼킵니다.", "p": "/ˈswɑːloʊ/"}, {"w": "bright", "m": "밝은", "engDef": "having lots of light or strong color", "engDefKo": "빛이 환하거나 색이 뚜렷한", "e": "The sun is shining bright today.", "k": "오늘 해가 밝게 빛나고 있습니다.", "p": "/braɪt/"}, {"w": "danger", "m": "위험", "engDef": "the possibility of getting hurt", "engDefKo": "다치거나 해를 입을 수 있는 상황", "e": "The guard whistles when it sees danger.", "k": "보초는 위험을 보면 휘파람 소리를 냅니다.", "p": "/ˈdeɪndʒər/"}, {"w": "health", "m": "건강", "engDef": "being well and free from sickness", "engDefKo": "아프지 않고 튼튼한 몸 상태", "e": "Drinking water is good for your health.", "k": "물을 마시는 것은 당신의 건강에 좋습니다.", "p": "/helθ/"}], "story": {"title": "The Gentle Giant of the Ocean", "titleKo": "바다의 온순한 거인", "sceneType": "ocean", "lines": [{"speaker": "Minky", "text": "Dive into the deep blue ocean! Look at that huge shadow.", "ko": "깊고 푸른 바닷속으로 풍덩! 저 커다란 그림자를 봐."}, {"speaker": "Whale Shark", "text": "Hello! I am a whale shark. Don't be afraid, I am very gentle!", "ko": "안녕! 난 고래상어야. 무서워하지 마, 난 아주 순하단다!"}, {"speaker": "Minky", "text": "It opens its giant mouth to swallow tiny plankton with water!", "ko": "물과 함께 아주 작은 플랑크톤을 삼키려고 거대한 입을 벌려요!"}, {"speaker": "Whale Shark", "text": "Swimming with friends in the clear ocean keeps me healthy and happy.", "ko": "맑은 바다에서 친구들과 헤엄치면 건강하고 행복해져요."}]}, "shadowing": [{"sentence": "Whale sharks are very gentle.", "ko": "고래상어는 매우 온순합니다."}, {"sentence": "They swallow tiny plankton.", "ko": "그들은 아주 작은 플랑크톤을 삼킵니다."}, {"sentence": "The aquarium is large and bright.", "ko": "수족관은 크고 밝습니다."}], "talk": [{"q": "Hi Harin! Have you ever been to a big aquarium?", "qKo": "하린아! 커다란 수족관(아쿠아리움)에 가본 적 있어?", "options": [{"t": "Yes, I saw colorful fish there! 🐠", "rep": "Aquariums are so magical and pretty!"}, {"t": "I want to go see whale sharks! 🦈", "rep": "Whale sharks are as big as a school bus!"}]}, {"q": "What does a whale shark eat? Huge fish, or tiny plankton?", "qKo": "고래상어는 무엇을 먹을까? 큰 물고기일까, 아주 작은 플랑크톤일까?", "options": [{"t": "It eats tiny plankton! 🦐", "rep": "That's right! Even though it is huge!"}, {"t": "It swallows water and plankton! 🌊", "rep": "Smart girl! Exactly correct, meow!"}]}, {"q": "You are speaking like a real English pro! Ready for the quiz?", "qKo": "진짜 영어 실력자처럼 말하네! 퀴즈 시작해 볼까?", "options": [{"t": "I'm ready! Bring on the quiz! ⭐", "rep": "You can get an all-clear reward today!"}]}], "quiz": [{"type": "choice", "q": "Q1. 물속 동물들이 모여 사는 '수족관'을 뜻하는 영어 단어는?", "opts": ["aquarium", "forest", "desert", "burrow"], "ans": 0, "hint": "aqua(물)로 시작하는 단어!"}, {"type": "choice", "q": "Q2. 'swallow'의 올바른 우리말 뜻은?", "opts": ["삼키다", "뱉다", "헤엄치다", "달리다"], "ans": 0, "hint": "목구멍으로 꿀꺽!"}, {"type": "choice", "q": "Q3. 'bright'의 반대말(어두운)은 무엇일까요?", "opts": ["dark", "sharp", "thick", "safe"], "ans": 0, "hint": "밝은 ↔ 어두운"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[gentle / Whale / sharks / are / very]", "words": ["Whale", "sharks", "are", "very", "gentle"], "ansStr": "Whale sharks are very gentle"}, {"type": "tf", "q": "Q5. True or False?\n'Drinking water is good for your health.'\n(물을 마시는 것은 당신의 건강에 좋다.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "health = 건강"}]}, {"id": "day04", "title": "Hand in Hand 5 - 원어민 1:1 대화 & 일상 표현", "book": "Hand in Hand 5", "theme": "Daily Fun & Conversation", "words": [{"w": "favorite", "m": "가장 좋아하는", "engDef": "liked more than all others", "engDefKo": "다른 모든 것보다 가장 좋아하는", "e": "English is my favorite subject.", "k": "영어는 내가 가장 좋아하는 과목입니다.", "p": "/ˈfeɪvərɪt/"}, {"w": "hobby", "m": "취미", "engDef": "an activity done regularly in free time for pleasure", "engDefKo": "여가 시간에 즐겨 하는 활동", "e": "My hobby is drawing pictures.", "k": "내 취미는 그림 그리기입니다.", "p": "/ˈhɑːbi/"}, {"w": "practice", "m": "연습하다", "engDef": "to do something repeatedly to get better", "engDefKo": "더 잘하기 위해 반복해서 해보다", "e": "Practice speaking English every day.", "k": "매일 영어로 말하기를 연습하세요.", "p": "/ˈpræktɪs/"}, {"w": "proud", "m": "자랑스러운, 뿌듯한", "engDef": "feeling pleased about an achievement", "engDefKo": "스스로 해낸 일에 대해 기쁘고 당당한", "e": "Mom is so proud of you.", "k": "엄마는 네가 정말 자랑스럽단다.", "p": "/praʊd/"}, {"w": "together", "m": "함께, 같이", "engDef": "with or near to someone else", "engDefKo": "다른 사람과 함께 모여서", "e": "Let's study English together.", "k": "우리 함께 영어를 공부하자.", "p": "/təˈɡeðər/"}, {"w": "wonderful", "m": "멋진, 훌륭한", "engDef": "extremely good; fantastic", "engDefKo": "아주 좋고 대단한, 환상적인", "e": "You did a wonderful job today!", "k": "오늘 정말 훌륭하게 잘했어!", "p": "/ˈwʌndərfʊl/"}], "story": {"title": "Harin's Happy English Day", "titleKo": "하린이의 신나는 영어의 날", "sceneType": "classroom", "lines": [{"speaker": "Minky", "text": "Knock knock! Today we practice our favorite hobbies!", "ko": "똑똑! 오늘은 우리가 가장 좋아하는 취미를 연습하는 날이야!"}, {"speaker": "Harin", "text": "I practice reading and speaking English every single day.", "ko": "난 매일매일 영어 읽기와 말하기를 연습해."}, {"speaker": "Mom", "text": "I am so proud of you, Harin! You are doing wonderful!", "ko": "하린아, 엄마는 네가 정말 자랑스럽단다! 정말 훌륭하게 잘하고 있어!"}, {"speaker": "Minky", "text": "Practice makes perfect! Together, English is super fun!", "ko": "연습이 완벽을 만들어! 함께하면 영어가 정말 재미있어!"}]}, "shadowing": [{"sentence": "English is my favorite subject.", "ko": "영어는 내가 가장 좋아하는 과목입니다."}, {"sentence": "Practice speaking English every day.", "ko": "매일 영어로 말하기를 연습하세요."}, {"sentence": "Mom is so proud of you.", "ko": "엄마는 네가 정말 자랑스럽단다."}], "talk": [{"q": "Hi Harin! What is your favorite hobby when you are home?", "qKo": "하린아! 집에 있을 때 가장 좋아하는 취미가 뭐야?", "options": [{"t": "I love drawing and coloring! 🎨", "rep": "You must be a creative artist!"}, {"t": "I love listening to music! 🎵", "rep": "Music makes every day so happy!"}, {"t": "I love playing with my iPad! 📱", "rep": "Playing after studying is the best!"}]}, {"q": "Who is super proud of you when you study hard?", "qKo": "네가 열심히 공부할 때 널 가장 자랑스러워하시는 분은?", "options": [{"t": "My wonderful mom! 💖", "rep": "Yes! Mom loves you so much!"}, {"t": "My cute cat coach Minky! 🐱", "rep": "Aww, Minky is ALWAYS proud of Harin!"}]}, {"q": "You are shining like a star! Ready for the Day 4 quiz?", "qKo": "별처럼 반짝반짝 빛나네! 퀴즈 풀고 선물 받을까?", "options": [{"t": "Let's do it! Give me the quiz! 🏆", "rep": "Here it comes, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. '가장 좋아하는'을 뜻하는 영어 단어는?", "opts": ["favorite", "practice", "together", "proud"], "ans": 0, "hint": "Best of the best!"}, {"type": "choice", "q": "Q2. '자랑스러운, 뿌듯한'의 올바른 영어 단어는?", "opts": ["proud", "hobby", "wonderful", "without"], "ans": 0, "hint": "I am so proud of you!"}, {"type": "choice", "q": "Q3. 'together'의 뜻은 무엇일까요?", "opts": ["함께, 같이", "혼자서", "멀리", "빨리"], "ans": 0, "hint": "친구와 둘이서 손잡고!"}, {"type": "scramble", "q": "Q4. 단어를 순서대로 터치하세요:\n[proud / of / Mom / so / is / you]", "words": ["Mom", "is", "so", "proud", "of", "you"], "ansStr": "Mom is so proud of you"}, {"type": "tf", "q": "Q5. True or False?\n'Practice speaking English every day.'\n(매일 영어로 말하기를 연습하세요.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "practice = 연습하다"}]}];
+var DAILY_PACKS = [{"id": "day01", "title": "Hand in Hand 5 - Day 01: 신나는 동물 친구들 (Zoo Animals)", "book": "Hand in Hand 5", "theme": "Zoo Animals & Comparing", "words": [{"w": "cheetah", "m": "치타", "engDef": "a very fast wild cat with spots", "engDefKo": "점무늬가 있는 매우 빠른 고양잇과 동물", "e": "The cheetah runs very fast.", "k": "치타는 매우 빨리 달립니다.", "p": "/ˈtʃiːtə/"}, {"w": "giraffe", "m": "기린", "engDef": "a tall animal with a very long neck", "engDefKo": "목이 아주 긴 키가 큰 동물", "e": "A giraffe has a long neck.", "k": "기린은 긴 목을 가지고 있습니다.", "p": "/dʒəˈræf/"}, {"w": "hippo", "m": "하마", "engDef": "a large heavy animal that likes water", "engDefKo": "물을 좋아하는 크고 무거운 동물", "e": "The hippo opens its mouth wide.", "k": "하마가 입을 쩍 벌립니다.", "p": "/ˈhɪpoʊ/"}, {"w": "fast", "m": "빠른", "engDef": "moving at high speed; not slow", "engDefKo": "속도가 빠른; 느리지 않은", "e": "Cheetahs are fast animals.", "k": "치타는 빠른 동물입니다.", "p": "/fæst/"}, {"w": "slow", "m": "느린", "engDef": "not moving quickly", "engDefKo": "빠르게 움직이지 않는, 느릿느릿한", "e": "Turtles walk in a slow way.", "k": "거북이는 느린 걸음으로 걷습니다.", "p": "/sloʊ/"}, {"w": "tall", "m": "키가 큰", "engDef": "higher than normal; not short", "engDefKo": "키나 높이가 높은; 키가 큰", "e": "Giraffes are very tall animals.", "k": "기린은 아주 키가 큰 동물입니다.", "p": "/tɔːl/"}], "story": {"title": "Fast Cheetah and Tall Giraffe", "titleKo": "빠른 치타와 키 큰 기린", "sceneType": "forest_desert", "lines": [{"speaker": "Minky", "text": "Welcome to the sunny zoo! Look at all the animal friends.", "ko": "햇살 가득한 동물원에 온 걸 환영해! 동물 친구들을 봐."}, {"speaker": "Cheetah", "text": "Hello! I am a cheetah. I run very fast!", "ko": "안녕! 난 치타야. 난 정말 빨리 달려!"}, {"speaker": "Giraffe", "text": "Hi! I am a giraffe. I am the tallest animal here.", "ko": "안녕! 난 기린이야. 난 여기서 키가 제일 크단다."}, {"speaker": "Hippo", "text": "I love cool water. I can open my big mouth wide!", "ko": "난 시원한 물이 좋아. 큰 입을 쩍 벌릴 수 있어!"}]}, "shadowing": [{"sentence": "The cheetah runs very fast.", "ko": "치타는 매우 빨리 달립니다."}, {"sentence": "A giraffe has a long neck.", "ko": "기린은 긴 목을 가지고 있습니다."}, {"sentence": "The hippo likes cool water.", "ko": "하마는 시원한 물을 좋아합니다."}], "talk": [{"q": "Hi Harin! 🐱 Which animal is your favorite? Cheetah or giraffe?", "qKo": "안녕 하린아! 치타랑 기린 중에 어떤 동물이 더 좋아?", "options": [{"t": "I like the fast cheetah! 🐆", "rep": "Cheetahs run super fast, zoom!"}, {"t": "I like the tall giraffe! 🦒", "rep": "Giraffes have such cute long necks!"}, {"t": "I like the cute hippo! 🦛", "rep": "Hippos love playing in the water, meow!"}]}, {"q": "Is a turtle fast or slow?", "qKo": "거북이는 빠를까, 느릴까?", "options": [{"t": "A turtle is slow! 🐢", "rep": "Yes! Slow and steady wins the race!"}, {"t": "It walks slowly and cute! 💚", "rep": "You are so smart, Harin!"}]}, {"q": "Great job! Ready for the easy 5-question quiz?", "qKo": "아주 잘했어! 쉬운 5문제 퀴즈 풀고 선물 받을까?", "options": [{"t": "Yes! Let's get 100 points! 🚀", "rep": "Here comes the fun quiz, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. '기린'을 뜻하는 영어 단어는 무엇일까요?", "opts": ["giraffe", "cheetah", "hippo", "ostrich"], "ans": 0, "hint": "목이 아주 길고 키가 큰 동물!"}, {"type": "choice", "q": "Q2. 'fast(빠른)'의 반대말인 '느린'은 무엇일까요?", "opts": ["slow", "tall", "heavy", "cheap"], "ans": 0, "hint": "거북이처럼 느릿느릿한!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\nThe ______ runs very fast across the field.", "opts": ["cheetah", "laptop", "flute", "apple"], "ans": 0, "hint": "세상에서 가장 빨리 달리는 동물!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[very / runs / cheetah / The / fast]", "words": ["The", "cheetah", "runs", "very", "fast"], "ansStr": "The cheetah runs very fast"}, {"type": "tf", "q": "Q5. True or False?\n'A giraffe has a long neck.'\n(기린은 긴 목을 가지고 있다.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "기린의 목은 길쭉해요!"}]}, {"id": "day02", "title": "Hand in Hand 5 - Day 02: 내 가방과 공부 도구 (My School Things)", "book": "Hand in Hand 5", "theme": "School Things & Technology", "words": [{"w": "tablet", "m": "태블릿", "engDef": "a flat mobile computer with a touch screen", "engDefKo": "터치 화면이 있는 얇은 휴대용 컴퓨터", "e": "Harin studies English on her tablet.", "k": "하린이는 태블릿으로 영어를 공부합니다.", "p": "/ˈtæblət/"}, {"w": "laptop", "m": "노트북 컴퓨터", "engDef": "a small computer you can carry", "engDefKo": "가지고 다닐 수 있는 작은 휴대용 컴퓨터", "e": "I use my laptop to do homework.", "k": "나는 숙제를 하기 위해 노트북을 씁니다.", "p": "/ˈlæptɑːp/"}, {"w": "smartphone", "m": "스마트폰", "engDef": "a mobile phone that connects to the internet", "engDefKo": "인터넷이 되는 스마트 전화기", "e": "Mom called me on her smartphone.", "k": "엄마는 스마트폰으로 전화를 하셨습니다.", "p": "/ˈsmɑːrtfoʊn/"}, {"w": "backpack", "m": "책가방, 배낭", "engDef": "a bag you carry on your back", "engDefKo": "등에 메는 가방", "e": "My backpack is pink and light.", "k": "내 책가방은 분홍색이고 가볍습니다.", "p": "/ˈbækpæk/"}, {"w": "heavy", "m": "무거운", "engDef": "weighing a lot; not light", "engDefKo": "무게가 많이 나가는; 가볍지 않은", "e": "This big box is very heavy.", "k": "이 큰 상자는 매우 무겁습니다.", "p": "/ˈhevi/"}, {"w": "light", "m": "가벼운", "engDef": "easy to lift; not heavy", "engDefKo": "들기 쉬운; 무겁지 않은", "e": "A feather is soft and light.", "k": "깃털은 부드럽고 가볍습니다.", "p": "/laɪt/"}], "story": {"title": "Ready for School", "titleKo": "학교 갈 준비 완료!", "sceneType": "classroom", "lines": [{"speaker": "Minky", "text": "Good morning! Time to pack your backpack for school.", "ko": "좋은 아침! 학교 갈 가방을 챙길 시간이야."}, {"speaker": "Harin", "text": "My backpack is light and pretty. I have my pencils ready!", "ko": "내 가방은 가볍고 예뻐. 연필도 다 준비했어!"}, {"speaker": "Mom", "text": "Did you take your tablet for English study?", "ko": "영어 공부할 태블릿 챙겼니?"}, {"speaker": "Harin", "text": "Yes, Mom! I study English on my tablet every day!", "ko": "네, 엄마! 난 매일 태블릿으로 영어를 공부해요!"}]}, "shadowing": [{"sentence": "I study English on my tablet.", "ko": "나는 태블릿으로 영어를 공부합니다."}, {"sentence": "My backpack is light and pretty.", "ko": "내 책가방은 가볍고 예쁩니다."}, {"sentence": "Mom has a smartphone.", "ko": "엄마는 스마트폰을 가지고 계십니다."}], "talk": [{"q": "Hi Harin! Do you like studying English on a tablet?", "qKo": "하린아! 태블릿(아이패드)으로 영어 공부하는 거 좋아해?", "options": [{"t": "Yes! It is so fun on my tablet! 📱", "rep": "Tablet study is colorful and exciting!"}, {"t": "Yes, I like touching the screen! ✨", "rep": "You can learn words with one touch!"}]}, {"q": "What color is your favorite backpack?", "qKo": "가장 좋아하는 가방 색깔은 뭐야?", "options": [{"t": "I love pink backpacks! 🎒💖", "rep": "Pink is so lovely and bright!"}, {"t": "I love purple backpacks! 💜", "rep": "Purple is very stylish and pretty!"}]}, {"q": "You are speaking so well! Ready for the quiz?", "qKo": "말하기 정말 잘하네! Day 2 퀴즈 도전할까?", "options": [{"t": "Yes! Give me the quiz! 🏆", "rep": "Let's get another 100 points, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. 등에 메는 '책가방, 배낭'을 뜻하는 단어는?", "opts": ["backpack", "cheetah", "guitar", "laptop"], "ans": 0, "hint": "back(등) + pack(가방)!"}, {"type": "choice", "q": "Q2. 'heavy(무거운)'의 반대말인 '가벼운'은?", "opts": ["light", "tall", "slow", "fast"], "ans": 0, "hint": "들기 쉬운, 무게가 적게 나가는!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\nHarin studies English on her ______.", "opts": ["tablet", "giraffe", "drums", "hippo"], "ans": 0, "hint": "아이패드 같은 터치 화면 기기!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[English / tablet / my / on / study / I]", "words": ["I", "study", "English", "on", "my", "tablet"], "ansStr": "I study English on my tablet"}, {"type": "tf", "q": "Q5. True or False?\n'A feather is soft and light.'\n(깃털은 부드럽고 가볍다.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "light = 가벼운"}]}, {"id": "day03", "title": "Hand in Hand 5 - Day 03: 신나는 악기 연주와 취미 (Music & Hobbies)", "book": "Hand in Hand 5", "theme": "Musical Instruments & Practice", "words": [{"w": "guitar", "m": "기타", "engDef": "a musical instrument with six strings", "engDefKo": "여섯 개의 줄이 달린 악기", "e": "She can play the guitar.", "k": "그녀는 기타를 칠 수 있습니다.", "p": "/ɡɪˈtɑːr/"}, {"w": "flute", "m": "플루트", "engDef": "a long thin musical instrument you blow into", "engDefKo": "입으로 바람을 불어 연주하는 가늘고 긴 악기", "e": "She practices the flute every day.", "k": "그녀는 매일 플루트를 연습합니다.", "p": "/fluːt/"}, {"w": "drums", "m": "드럼", "engDef": "musical instruments you hit with sticks", "engDefKo": "스틱으로 두드려 소리를 내는 타악기", "e": "He plays the drums in a band.", "k": "그는 밴드에서 드럼을 연주합니다.", "p": "/drʌmz/"}, {"w": "music", "m": "음악", "engDef": "pleasant sounds made by instruments or voices", "engDefKo": "악기나 목소리로 내는 아름다운 소리", "e": "Listening to music makes me happy.", "k": "음악을 듣는 것은 나를 행복하게 합니다.", "p": "/ˈmjuːzɪk/"}, {"w": "practice", "m": "연습하다", "engDef": "to do something many times to get better", "engDefKo": "더 잘하기 위해 반복해서 해보다", "e": "Practice English every single day.", "k": "매일매일 영어를 연습하세요.", "p": "/ˈpræktɪs/"}, {"w": "play", "m": "연주하다; 놀다", "engDef": "to make music with an instrument", "engDefKo": "악기로 음악을 연주하거나 재미있게 놀다", "e": "Can you play the piano?", "k": "피아노를 연주할 수 있나요?", "p": "/pleɪ/"}], "story": {"title": "The Happy Music Band", "titleKo": "신나는 음악 밴드", "sceneType": "classroom", "lines": [{"speaker": "Minky", "text": "Listen! Sweet music is coming from the music room.", "ko": "들어봐! 음악실에서 아름다운 음악 소리가 들려."}, {"speaker": "Girl", "text": "I play the flute. Its sound is clear and sweet.", "ko": "난 플루트를 불어. 소리가 맑고 고와."}, {"speaker": "Boy", "text": "I can play the acoustic guitar. Strum strum!", "ko": "난 어쿠스틱 기타를 칠 수 있어. 징징~"}, {"speaker": "Minky", "text": "Practice every day, and you will become a wonderful musician!", "ko": "매일 연습하면 멋진 음악가가 될 수 있단다!"}]}, "shadowing": [{"sentence": "She can play the guitar.", "ko": "그녀는 기타를 칠 수 있습니다."}, {"sentence": "Practice English every single day.", "ko": "매일매일 영어를 연습하세요."}, {"sentence": "Listening to music makes me happy.", "ko": "음악을 듣는 것은 나를 행복하게 합니다."}], "talk": [{"q": "Hi Harin! Can you play any musical instrument?", "qKo": "하린아! 악기 연주할 수 있는 거 있어? 피아노나 플루트?", "options": [{"t": "I can play the piano! 🎹", "rep": "Piano music is so beautiful and lovely!"}, {"t": "I want to learn the guitar! 🎸", "rep": "Guitar is so cool! Strum strum!"}, {"t": "I love listening to music! 🎵", "rep": "Singing and listening is so much fun!"}]}, {"q": "What happens when you practice every day?", "qKo": "매일매일 연습하면 어떻게 될까?", "options": [{"t": "I get better and better! ⭐", "rep": "Yes! Practice makes perfect!"}, {"t": "English becomes super easy! 💯", "rep": "You are absolutely right, meow!"}]}, {"q": "You are a music star today! Ready for the quiz?", "qKo": "오늘 음악 스타네! 퀴즈 시작해 볼까?", "options": [{"t": "Yes! Let's start the quiz! 🚀", "rep": "Here it comes, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. 여섯 개의 줄을 튕겨 소리 내는 악기 '기타'는?", "opts": ["guitar", "flute", "drums", "tablet"], "ans": 0, "hint": "기타 = guitar!"}, {"type": "choice", "q": "Q2. 'practice'의 올바른 우리말 뜻은?", "opts": ["연습하다", "잠자다", "달리다", "먹다"], "ans": 0, "hint": "실력을 키우기 위해 매일매일 해보는 것!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\nListening to ______ makes me happy.", "opts": ["music", "cheetah", "backpack", "hippo"], "ans": 0, "hint": "즐겁게 듣는 노래나 악기 소리!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[play / She / guitar / the / can]", "words": ["She", "can", "play", "the", "guitar"], "ansStr": "She can play the guitar"}, {"type": "tf", "q": "Q5. True or False?\n'Practice English every single day.'\n(매일매일 영어를 연습하세요.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "every single day = 매일매일"}]}, {"id": "day04", "title": "Hand in Hand 5 - Day 04: 맛있는 과일과 간식 (Fruits & Snacks)", "book": "Hand in Hand 5", "theme": "Healthy Fruits & Sweet Snacks", "words": [{"w": "sweet", "m": "달콤한", "engDef": "tasting pleasant like sugar", "engDefKo": "설탕처럼 달콤하고 맛있는", "e": "Ripe oranges are very sweet.", "k": "잘 익은 오렌지는 매우 달콤합니다.", "p": "/swiːt/"}, {"w": "fruit", "m": "과일", "engDef": "sweet food that grows on trees or plants", "engDefKo": "나무나 식물에서 열리는 달콤한 열매", "e": "Fresh fruit gives you vitamins.", "k": "신선한 과일은 비타민을 줍니다.", "p": "/fruːt/"}, {"w": "snack", "m": "간식", "engDef": "a small amount of food between meals", "engDefKo": "식사 사이에 먹는 간단한 군것질", "e": "I eat an apple as a snack.", "k": "나는 간식으로 사과를 먹습니다.", "p": "/snæk/"}, {"w": "delicious", "m": "맛있는", "engDef": "having a very good taste", "engDefKo": "맛이 아주 훌륭한, 맛있는", "e": "This strawberry ice cream is delicious.", "k": "이 딸기 아이스크림은 맛있습니다.", "p": "/dɪˈlɪʃəs/"}, {"w": "share", "m": "나누다, 함께 쓰다", "engDef": "to give some of what you have to others", "engDefKo": "내가 가진 것을 다른 사람과 나누다", "e": "Let's share this sweet cake together.", "k": "이 달콤한 케이크를 함께 나누어 먹자.", "p": "/ʃer/"}, {"w": "thank", "m": "고마워하다", "engDef": "to tell someone you are grateful", "engDefKo": "고마운 마음을 전하다", "e": "Thank you for the delicious snack.", "k": "맛있는 간식 고마워요.", "p": "/θæŋk/"}], "story": {"title": "A Sweet Afternoon Snack", "titleKo": "달콤한 오후의 간식 시간", "sceneType": "classroom", "lines": [{"speaker": "Minky", "text": "Mmm, it smells so good! What is for afternoon snack?", "ko": "음~ 맛있는 냄새! 오후 간식은 뭘까?"}, {"speaker": "Mom", "text": "I prepared sweet strawberries and fresh apples for you!", "ko": "달콤한 딸기와 신선한 사과를 준비했단다!"}, {"speaker": "Harin", "text": "Thank you, Mom! These fruits are so sweet and delicious!", "ko": "고마워요 엄마! 과일들이 정말 달콤하고 맛있어요!"}, {"speaker": "Minky", "text": "Eating healthy fruit keeps you strong and happy, meow!", "ko": "건강한 과일을 먹으면 몸도 튼튼해지고 기분도 좋아져!"}]}, "shadowing": [{"sentence": "Fresh fruit gives you vitamins.", "ko": "신선한 과일은 비타민을 줍니다."}, {"sentence": "Thank you for the delicious snack.", "ko": "맛있는 간식 고마워요."}, {"sentence": "Let's share this cake together.", "ko": "이 케이크를 함께 나누어 먹자."}], "talk": [{"q": "Hi Harin! What is your favorite fruit in the world?", "qKo": "하린아! 세상에서 제일 좋아하는 과일이 뭐야?", "options": [{"t": "I love sweet strawberries! 🍓", "rep": "Strawberries are red, juicy and sweet!"}, {"t": "I love fresh apples! 🍎", "rep": "Apples are crisp and delicious!"}, {"t": "I love sweet oranges! 🍊", "rep": "Oranges give you lots of vitamins, yum!"}]}, {"q": "What do you say when Mom gives you a snack?", "qKo": "엄마가 맛있는 간식을 주실 때 뭐라고 말할까?", "options": [{"t": "Thank you, Mom! I love you! 💖", "rep": "Aww, you are such a sweet polite girl!"}, {"t": "Thank you for the delicious snack! 😋", "rep": "Perfect manners! You are amazing!"}]}, {"q": "All clear for today's talk! Ready for the Day 4 quiz?", "qKo": "오늘 대화 완벽해! 마지막 퀴즈 풀고 15분 암호 받을까?", "options": [{"t": "Yes! Let's get the 15-minute reward! 🏆", "rep": "Here is the final quiz, meow!"}]}], "quiz": [{"type": "choice", "q": "Q1. '달콤한'을 뜻하는 영어 단어는 무엇일까요?", "opts": ["sweet", "heavy", "fast", "slow"], "ans": 0, "hint": "설탕처럼 달콤하고 맛있는!"}, {"type": "choice", "q": "Q2. 'delicious'의 올바른 뜻은?", "opts": ["맛있는", "무거운", "느린", "비싼"], "ans": 0, "hint": "음식이 정말 맛있을 때!"}, {"type": "choice", "q": "Q3. 다음 빈칸에 알맞은 단어는?\n______ you for the delicious snack, Mom!", "opts": ["Thank", "Cheetah", "Guitar", "Tablet"], "ans": 0, "hint": "고마워요! = Thank you!"}, {"type": "scramble", "q": "Q4. 단어를 올바른 순서로 터치하세요:\n[fruit / gives / Fresh / vitamins / you]", "words": ["Fresh", "fruit", "gives", "you", "vitamins"], "ansStr": "Fresh fruit gives you vitamins"}, {"type": "tf", "q": "Q5. True or False?\n'Let's share this cake together.'\n(이 케이크를 함께 나누어 먹자.)", "opts": ["True (참)", "False (거짓)"], "ans": 0, "hint": "share = 함께 나누다"}]}];
+var JOY_CATS = [{"catId": "great", "catName": "🌟 기분 최고 & 신나는 날", "expressions": [{"en": "I had a wonderful day! I played with my friends.", "ko": "오늘 정말 멋진 하루였어요! 친구들이랑 재미있게 놀았거든요.", "tip": "선생님께 단순한 'I'm happy' 대신, '친구랑 놀았다'는 이유를 덧붙이면 필리핀 선생님이 폭풍 칭찬해 주세요!", "level": "왕초보 필수 ⭐"}, {"en": "I'm feeling great today! I got 100 points on my test.", "ko": "오늘 기분 최고예요! 시험에서 100점 맞았거든요.", "tip": "좋은 일이 있었을 때는 'I am feeling great!'이라고 신나게 말해보세요!", "level": "칭찬 유발 ⭐"}, {"en": "Today was super fun! I ate delicious strawberry ice cream.", "ko": "오늘 완전 신났어요! 맛있는 딸기 아이스크림을 먹었거든요.", "tip": "간식이나 음식을 먹은 이야기를 덧붙이면 대화가 훨씬 길고 자연스러워져요!", "level": "일상 회화 ⭐"}]}, {"catId": "busy", "catName": "🎒 바쁘고 보람찬 날", "expressions": [{"en": "I was a little busy with my homework today.", "ko": "오늘 학교 숙제하느라 조금 바빴어요.", "tip": "숙제가 많았던 날 'I was busy with my homework'라고 하면 선생님이 공감해 주셔요.", "level": "자연스러운 표현 ⭐"}, {"en": "I had swimming class today, so I'm a bit hungry!", "ko": "오늘 수영 수업을 하고 와서 조금 배고파요!", "tip": "운동이나 학원 다녀온 뒤 'I am a bit hungry(조금 배고파요)'라고 하면 리액션이 빵 터져요!", "level": "생생한 표현 ⭐"}, {"en": "I studied math and English hard today.", "ko": "오늘 수학이랑 영어를 열심히 공부했어요.", "tip": "열심히 공부했다고 자랑스럽게 말할 때 딱 좋은 모범생 표현!", "level": "열공 모드 ⭐"}]}, {"catId": "tired", "catName": "😴 피곤하지만 파이팅", "expressions": [{"en": "I'm a little tired, but I'm ready for English class!", "ko": "조금 피곤하지만 영어 수업 준비는 완료됐어요!", "tip": "맨날 'I'm tired'만 하지 말고, 'But I'm ready(하지만 준비됐어요)!'를 붙이면 선생님이 감동받으셔요!", "level": "특급 센스 ⭐⭐⭐"}, {"en": "I had a long day at school, but I'm happy now.", "ko": "학교에서 긴 하루를 보냈지만 지금은 기분 좋아요.", "tip": "'I had a long day'는 원어민들이 정말 자주 쓰는 자연스러운 하루 표현이에요!", "level": "원어민 자연스러움 ⭐"}]}, {"catId": "weekend", "catName": "🎈 주말 이야기 (Weekend)", "expressions": [{"en": "I had a great weekend! I went to a big shopping mall with my mom.", "ko": "주말 정말 즐겁게 보냈어요! 엄마랑 큰 쇼핑몰에 갔거든요.", "tip": "선생님이 'How was your weekend?'라고 물어보실 때 엄마와 어디 다녀왔는지 말하는 마법의 문장!", "level": "주말 필수 ⭐"}, {"en": "I went to the park and rode my bicycle.", "ko": "공원에 가서 자전거를 탔어요.", "tip": "야외 활동이나 산책 이야기를 할 때 가장 쉽고 당당하게 말할 수 있어요.", "level": "주말 필수 ⭐"}, {"en": "I stayed home, ate delicious food, and relaxed.", "ko": "집에서 맛있는 음식 먹으면서 푹 쉬었어요.", "tip": "주말에 집에서 푹 쉬었을 때 'relaxed(편하게 쉬었다)'라고 대답해 보세요!", "level": "집콕 휴식 ⭐"}]}];
+
 var S = {
   curDayIdx: 0,
   curStep: 1,
+  curJoyCatIdx: 0,
   vocaIdx: 0,
   shadowIdx: 0,
   talkRound: 0,
   quizIdx: 0,
   quizScore: 0,
+  ttsRate: parseFloat(localStorage.getItem('topedu_cats_rate') || '0.72'), // Slow beginner default!
   alarmTime: localStorage.getItem('topedu_cats_alarm_time') || '16:30',
   alarmActive: localStorage.getItem('topedu_cats_alarm_active') !== 'false',
   streak: parseInt(localStorage.getItem('topedu_cats_streak') || '3'),
   points: parseInt(localStorage.getItem('topedu_cats_points') || '250')
 };
 
-/* ============ AUDIO SYNTHESIS ENGINE (Web Audio API) ============ */
+/* ============ AUDIO SYNTHESIS ENGINE ============ */
 var audioCtx = null;
 function getAudioCtx() {
   if (!audioCtx) {
@@ -1252,7 +1385,6 @@ function playTone(freq, type, duration, delay) {
   }, (delay || 0) * 1000);
 }
 
-// Cheerful School Chime Bell (Arpeggio: E4 - G#4 - B4 - E5)
 function playChimeBell() {
   playTone(329.63, 'sine', 0.6, 0.0);
   playTone(415.30, 'sine', 0.6, 0.25);
@@ -1290,22 +1422,48 @@ function playMeowSound() {
   } catch(e){}
 }
 
-/* ============ SPEECH SYNTHESIS (Cute Voice) ============ */
+/* ============ SPEECH SYNTHESIS (Slow, Beginner Friendly) ============ */
 function speakText(text, lang) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(text);
   u.lang = lang || 'en-US';
-  u.rate = 0.92;
-  u.pitch = 1.35; // Cute kid/cat mascot pitch!
+  u.rate = S.ttsRate; // Slow, crystal clear (0.72x)
+  u.pitch = 1.25; // Warm, friendly tone
   window.speechSynthesis.speak(u);
+}
+
+function toggleTtsSpeed() {
+  if (S.ttsRate <= 0.75) {
+    S.ttsRate = 0.85; // Normal
+  } else {
+    S.ttsRate = 0.70; // Turtle Slow
+  }
+  localStorage.setItem('topedu_cats_rate', S.ttsRate);
+  updateSpeedUI();
+  playCorrectSound();
+  speakText("Speed set to " + (S.ttsRate < 0.8 ? "slow" : "normal"), 'en-US');
+}
+
+function updateSpeedUI() {
+  var icon = document.getElementById('speedIcon');
+  var label = document.getElementById('speedLabel');
+  if (S.ttsRate <= 0.75) {
+    icon.textContent = '🐢';
+    label.textContent = '느리게 (0.7x)';
+  } else {
+    icon.textContent = '🐰';
+    label.textContent = '보통 (0.85x)';
+  }
 }
 
 /* ============ INIT APP ============ */
 window.addEventListener('DOMContentLoaded', function() {
   initDayChips();
+  initJoySection();
   loadDay(0);
   updateAlarmUI();
+  updateSpeedUI();
   startAlarmTimer();
 });
 
@@ -1340,6 +1498,59 @@ function loadDay(idx) {
   initCatTalk();
   renderQuizQ();
   switchStep(1);
+}
+
+/* ============ JOY ENGLISH SPECIAL SECTION ============ */
+function initJoySection() {
+  var tabsEl = document.getElementById('joyCatTabs');
+  var tabsHtml = '';
+  JOY_CATS.forEach(function(cat, idx) {
+    tabsHtml += '<button class="joy-tab-btn ' + (idx === S.curJoyCatIdx ? 'active' : '') + '" onclick="switchJoyCat(' + idx + ')">' +
+      cat.catName + '</button>';
+  });
+  tabsEl.innerHTML = tabsHtml;
+  renderJoyList();
+}
+
+function switchJoyCat(idx) {
+  S.curJoyCatIdx = idx;
+  initJoySection();
+  playCorrectSound();
+}
+
+function renderJoyList() {
+  var listEl = document.getElementById('joyCardList');
+  var cat = JOY_CATS[S.curJoyCatIdx];
+  var html = '';
+  cat.expressions.forEach(function(exp, idx) {
+    html += '<div class="joy-item">' +
+      '<div class="joy-en-text">' +
+        '<span>' + exp.en + '</span>' +
+        '<span style="font-size:11px; color:#4f46e5; background:#e0e7ff; padding:2px 8px; border-radius:999px; white-space:nowrap;">' + exp.level + '</span>' +
+      '</div>' +
+      '<div class="joy-ko-text">👉 ' + exp.ko + '</div>' +
+      '<div class="joy-tip-box">💡 <b>꿀팁:</b> ' + exp.tip + '</div>' +
+      '<div class="joy-actions">' +
+        '<button class="btn-joy-speak" onclick="speakJoyExp(\'' + exp.en.replace(/'/g, "\\'") + '\')">' +
+          '<span>🔊</span> <span>천천히 발음 듣기</span>' +
+        '</button>' +
+        '<button class="btn-joy-shadow" onclick="shadowJoyExp(\'' + exp.en.replace(/'/g, "\\'") + '\')">' +
+          '<span>🎙️</span> <span>따라 말해보기</span>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+  });
+  listEl.innerHTML = html;
+}
+
+function speakJoyExp(enText) {
+  speakText(enText, 'en-US');
+}
+
+function shadowJoyExp(enText) {
+  speakText(enText, 'en-US');
+  minkySay('정말 잘했어! 조이영어 선생님께 "How was your day?" 질문을 들으면 바로 이 문장으로 대답해 봐!');
+  playCorrectSound();
 }
 
 /* ============ STEP SWITCHING ============ */
@@ -1441,7 +1652,7 @@ function playTheatreStory() {
     document.getElementById('subKo').textContent = line.ko;
     speakText(line.text, 'en-US');
     curLine++;
-    setTimeout(speakNextLine, 4200);
+    setTimeout(speakNextLine, 4500);
   }
   speakNextLine();
 }
@@ -1480,132 +1691,81 @@ function drawCanvasFrame() {
   var ctx = canvas.getContext('2d');
   var W = canvas.width, H = canvas.height;
   var p = DAILY_PACKS[S.curDayIdx];
-  var scene = (p.story && p.story.sceneType) || 'lake';
+  var scene = (p.story && p.story.sceneType) || 'classroom';
 
   ctx.clearRect(0, 0, W, H);
 
-  if (scene === 'lake') {
-    // Moonlight lake scene
-    var skyGrad = ctx.createLinearGradient(0, 0, 0, H);
-    skyGrad.addColorStop(0, '#0f172a');
-    skyGrad.addColorStop(0.6, '#1e1b4b');
-    skyGrad.addColorStop(1, '#0284c7');
-    ctx.fillStyle = skyGrad;
+  if (scene === 'forest_desert') {
+    // Sunny Zoo / Field Scene
+    var zooGrad = ctx.createLinearGradient(0, 0, 0, H);
+    zooGrad.addColorStop(0, '#bfdbfe');
+    zooGrad.addColorStop(0.6, '#e0f2fe');
+    zooGrad.addColorStop(1, '#86efac');
+    ctx.fillStyle = zooGrad;
     ctx.fillRect(0, 0, W, H);
 
-    // Glowing Moon
-    ctx.fillStyle = '#fef08a';
+    // Sun
+    ctx.fillStyle = '#fde047';
     ctx.beginPath();
-    ctx.arc(W - 70, 50, 24, 0, Math.PI * 2);
+    ctx.arc(W - 60, 45, 22, 0, Math.PI * 2);
     ctx.fill();
 
-    // Water ripples
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    for (var i = 0; i < 5; i++) {
-      var rx = (W * 0.2 + (i * 65 + animTime * 20) % W);
-      var ry = H * 0.65 + (i * 12);
-      ctx.fillRect(rx, ry, 50, 3);
-    }
-
-    // Swan Character (swimming with gentle bobbing)
-    var swanY = H * 0.62 + Math.sin(animTime * 3) * 4;
-    var swanX = W * 0.35 + Math.sin(animTime * 1.2) * 15;
-    ctx.fillStyle = '#ffffff';
-    // Body
+    // Tall Giraffe (smiling on right)
+    var gX = W * 0.72;
+    var gY = H * 0.75;
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillRect(gX, gY - 70, 16, 70); // Long neck
     ctx.beginPath();
-    ctx.ellipse(swanX, swanY, 28, 16, 0, 0, Math.PI * 2);
+    ctx.ellipse(gX + 8, gY, 28, 18, 0, 0, Math.PI * 2); // Body
     ctx.fill();
-    // Neck & Head
     ctx.beginPath();
-    ctx.moveTo(swanX + 16, swanY - 4);
-    ctx.quadraticCurveTo(swanX + 28, swanY - 24, swanX + 22, swanY - 34);
+    ctx.arc(gX + 8, gY - 75, 14, 0, Math.PI * 2); // Head
+    ctx.fill();
+
+    // Cheetah (running on left)
+    var cX = W * 0.28 + Math.sin(animTime * 3) * 12;
+    var cY = H * 0.78;
+    ctx.fillStyle = '#eab308';
+    ctx.beginPath();
+    ctx.ellipse(cX, cY, 32, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cX + 24, cY - 10, 12, 0, Math.PI * 2);
+    ctx.fill();
+
+  } else {
+    // Cheerful Classroom / Room Scene
+    var roomGrad = ctx.createLinearGradient(0, 0, 0, H);
+    roomGrad.addColorStop(0, '#fef08a');
+    roomGrad.addColorStop(0.5, '#fed7aa');
+    roomGrad.addColorStop(1, '#fde68a');
+    ctx.fillStyle = roomGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Blackboard
+    ctx.fillStyle = '#065f46';
+    ctx.fillRect(W * 0.2, 20, W * 0.6, 110);
+    ctx.strokeStyle = '#92400e';
     ctx.lineWidth = 6;
-    ctx.strokeStyle = '#ffffff';
-    ctx.stroke();
-    // Beak
-    ctx.fillStyle = '#f97316';
-    ctx.beginPath();
-    ctx.moveTo(swanX + 24, swanY - 32);
-    ctx.lineTo(swanX + 32, swanY - 30);
-    ctx.lineTo(swanX + 24, swanY - 28);
-    ctx.fill();
+    ctx.strokeRect(W * 0.2, 20, W * 0.6, 110);
 
-    // Ballerina Silhouette / Dancer
-    var dancerX = W * 0.72;
-    var dancerY = H * 0.58 + Math.cos(animTime * 2.5) * 3;
+    // Blackboard text
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '16px Maplestory, sans-serif';
+    ctx.fillText('English is Fun! 🌟', W * 0.32, 65);
+    ctx.font = '12px Pretendard, sans-serif';
+    ctx.fillText('Joy English Small Talk Coach', W * 0.3, 95);
+
+    // Cute bouncing Cat Coach Minky on table
+    var catX = W * 0.5;
+    var catY = H * 0.8 + Math.sin(animTime * 3) * 5;
     ctx.fillStyle = '#f472b6';
     ctx.beginPath();
-    ctx.arc(dancerX, dancerY - 36, 8, 0, Math.PI * 2); // head
-    ctx.fill();
-    // Dress (tutu)
-    ctx.beginPath();
-    ctx.moveTo(dancerX - 18, dancerY);
-    ctx.lineTo(dancerX + 18, dancerY);
-    ctx.lineTo(dancerX, dancerY - 20);
-    ctx.fill();
-
-  } else if (scene === 'ocean') {
-    // Deep Ocean scene
-    var oceanGrad = ctx.createLinearGradient(0, 0, 0, H);
-    oceanGrad.addColorStop(0, '#0284c7');
-    oceanGrad.addColorStop(1, '#0c4a6e');
-    ctx.fillStyle = oceanGrad;
-    ctx.fillRect(0, 0, W, H);
-
-    // Whale Shark (swimming across)
-    var wsX = (animTime * 40) % (W + 160) - 80;
-    var wsY = H * 0.5 + Math.sin(animTime * 2) * 8;
-    ctx.fillStyle = '#0284c7';
-    // Body
-    ctx.beginPath();
-    ctx.ellipse(wsX, wsY, 55, 24, 0, 0, Math.PI * 2);
-    ctx.fill();
-    // Tail fin
-    ctx.beginPath();
-    ctx.moveTo(wsX - 50, wsY);
-    ctx.lineTo(wsX - 75, wsY - 20);
-    ctx.lineTo(wsX - 75, wsY + 20);
-    ctx.fill();
-    // White polka dots on whale shark!
-    ctx.fillStyle = '#ffffff';
-    for (var d = 0; d < 8; d++) {
-      ctx.beginPath();
-      ctx.arc(wsX - 25 + d * 7, wsY - 8 + (d % 3) * 6, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Air bubbles
-    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-    ctx.lineWidth = 1.5;
-    for (var b = 0; b < 6; b++) {
-      var by = (H - ((animTime * 40 + b * 45) % H));
-      var bx = 40 + b * 70 + Math.sin(animTime + b) * 10;
-      ctx.beginPath();
-      ctx.arc(bx, by, 4 + (b % 4), 0, Math.PI * 2);
-      ctx.stroke();
-    }
-  } else {
-    // Forest / Desert split
-    ctx.fillStyle = '#86efac';
-    ctx.fillRect(0, 0, W * 0.5, H);
-    ctx.fillStyle = '#fde047';
-    ctx.fillRect(W * 0.5, 0, W * 0.5, H);
-
-    // Trees on left
-    ctx.fillStyle = '#15803d';
-    ctx.beginPath();
-    ctx.arc(W * 0.25, H * 0.5, 36, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Camel on right
-    ctx.fillStyle = '#b45309';
-    var camX = W * 0.72 + Math.sin(animTime * 2) * 5;
-    ctx.beginPath();
-    ctx.ellipse(camX, H * 0.6, 32, 18, 0, 0, Math.PI * 2);
+    ctx.arc(catX, catY - 20, 20, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // Draw touch sparkles
+  // Touch sparkles
   for (var s = sceneSparkles.length - 1; s >= 0; s--) {
     var sp = sceneSparkles[s];
     ctx.fillStyle = sp.c;
@@ -1645,7 +1805,6 @@ function toggleShadowMic() {
 
   var SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecClass) {
-    // Graceful fallback for browsers without webkitSpeechRecognition
     pill.textContent = '⭐⭐⭐ 100점! Perfect 발음!';
     playCorrectSound();
     return;
@@ -1724,7 +1883,7 @@ function renderCatTurn() {
   var container = document.getElementById('chatContainer');
   var catBubble = document.createElement('div');
   catBubble.className = 'chat-bubble-row';
-  catBubble.innerHTML = '<div style="font-size:26px">🐱</div><div class="chat-msg cat"><b>Minky:</b><br>' +
+  catBubble.innerHTML = '<div style="font-size:24px">🐱</div><div class="chat-msg cat"><b>Minky:</b><br>' +
     t.q + '<div style="font-size:11.5px; opacity:0.8; margin-top:2px;">' + t.qKo + '</div></div>';
   container.appendChild(catBubble);
   speakText(t.q, 'en-US');
@@ -1745,13 +1904,13 @@ function userReplyTalk(optIdx) {
   var container = document.getElementById('chatContainer');
   var userBubble = document.createElement('div');
   userBubble.className = 'chat-bubble-row user';
-  userBubble.innerHTML = '<div style="font-size:26px">👑</div><div class="chat-msg user">' + picked.t + '</div>';
+  userBubble.innerHTML = '<div style="font-size:24px">👑</div><div class="chat-msg user">' + picked.t + '</div>';
   container.appendChild(userBubble);
   playCorrectSound();
 
   var catReaction = document.createElement('div');
   catReaction.className = 'chat-bubble-row';
-  catReaction.innerHTML = '<div style="font-size:26px">🐱</div><div class="chat-msg cat"><b>Minky:</b><br>' + picked.rep + '</div>';
+  catReaction.innerHTML = '<div style="font-size:24px">🐱</div><div class="chat-msg cat"><b>Minky:</b><br>' + picked.rep + '</div>';
   setTimeout(function() {
     container.appendChild(catReaction);
     speakText(picked.rep, 'en-US');
@@ -1860,7 +2019,6 @@ function showCelebrationReward() {
   document.getElementById('starVal').textContent = S.points + 'P';
   document.getElementById('streakVal').textContent = S.streak + '일째';
 
-  // Generate today's passcode (e.g. ⭐ 1215 ⭐)
   var pass = '⭐ ' + (new Date().getDate() * 100 + 15) + ' ⭐';
   document.getElementById('rewardPasscodeVal').textContent = pass;
   document.getElementById('celebrationOverlay').classList.add('show');
@@ -1944,10 +2102,10 @@ function startAlarmTimer() {
 function petMinky() {
   playMeowSound();
   var quotes = [
-    '야옹! 하린아 오늘 기분 어때? 공부 힘차게 해보자! 🐾',
+    '야옹! 하린아 오늘 기분 어때? 조이영어 필리핀 선생님께 멋지게 말해보자! 🐾',
     '하린이는 영어를 진짜 빠르게 배우는 천재야! 🐱⭐',
     '궁금한 단어가 있으면 언제든 나 밍키한테 물어봐!',
-    '골골송 부르는 중... 하린이 최고! 💖'
+    'How was your day? 오늘 하루 어땠어, 하린아? 💖'
   ];
   var q = quotes[Math.floor(Math.random() * quotes.length)];
   minkySay(q);
