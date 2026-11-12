@@ -2062,8 +2062,8 @@ function updateYoutubeVideoForDay(dayIdx) {
 
 function openYoutubeCustomizer() {
   var curCustom = localStorage.getItem('cats_yt_custom_' + S.curDayIdx) || '';
-  var input = prompt("Day 0" + (S.curDayIdx + 1) + "에 재생할 유튜브 영상 주소(또는 영상 ID)를 입력해 주세요:
-(핸드인핸드 영상이나 원하는 학습 영상 URL을 붙여넣으시면 즉시 변경됩니다)", curCustom ? ('https://youtu.be/' + curCustom) : '');
+  var promptMsg = "Day 0" + (S.curDayIdx + 1) + "에 재생할 유튜브 영상 주소 또는 ID를 입력해 주세요. (핸드인핸드 영상이나 원하는 학습 영상 URL을 붙여넣으시면 즉시 변경됩니다)";
+  var input = prompt(promptMsg, curCustom ? ('https://youtu.be/' + curCustom) : '');
   if (input === null) return;
   input = input.trim();
   if (!input) {
