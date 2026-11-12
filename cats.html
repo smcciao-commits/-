@@ -1443,6 +1443,7 @@
       50% { transform: translateY(-8px); }
     }
   </style>
+<script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 
@@ -1636,34 +1637,61 @@
       <!-- Animated Interactive SVG Theatre Box -->
       <!-- YouTube HD Video Theatre -->
       
-      <!-- ORT Stage 4 Series Quick Selector -->
+      <!-- ORT Stage 4 Series Quick Selector (Infinite Expandable) -->
       <div style="margin-bottom:12px;padding:12px 14px;background:#f5f3ff;border:2px solid #c4b5fd;border-radius:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14px;color:#5b21b6">📖 ORT 4 전 시리즈 (1~6권 완결 순서대로)</span>
-          <span style="font-size:11px;color:#7c3aed;background:white;padding:3px 8px;border-radius:6px;font-weight:700;border:1px solid #ddd6fe">6권 전편 수록</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <div>
+            <span style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14px;color:#5b21b6">📖 ORT 4단계 시리즈 학습관</span>
+            <span style="font-size:11px;color:#6b21a8;margin-left:4px;font-weight:600;" id="ort_total_badge">(기본 6권 + 무제한 확장)</span>
+          </div>
+          <button onclick="openAddOrtModal()" style="font-size:11.5px;color:white;background:#7c3aed;border:none;padding:5px 12px;border-radius:8px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(124,58,237,0.3);">
+            <span>➕</span> <span>ORT 권수 추가하기</span>
+          </button>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap" id="ort_book_selector">
-          <button class="ort-chip" onclick="selectOrtBook(0)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">1권 House for Sale</button>
-          <button class="ort-chip" onclick="selectOrtBook(1)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">2권 The New House</button>
-          <button class="ort-chip" onclick="selectOrtBook(2)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">3권 Come In!</button>
-          <button class="ort-chip" onclick="selectOrtBook(3)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">4권 The Secret Room</button>
-          <button class="ort-chip" onclick="selectOrtBook(4)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">5권 The Play</button>
-          <button class="ort-chip" onclick="selectOrtBook(5)" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">6권 The Storm</button>
+          <!-- Dynamically populated by renderOrtChips() -->
         </div>
       </div>
 
       <div class="youtube-player-container">
-        <div class="youtube-frame-wrap">
+        <div class="youtube-frame-wrap" style="position:relative; overflow:hidden;">
           <iframe id="theatreYtIframe" 
-                  src="https://www.youtube-nocookie.com/embed/B1YAM6rsbao?rel=0&modestbranding=1&playsinline=1" 
-                  title="Hand in Hand Daily English Video" 
+                  src="https://www.youtube-nocookie.com/embed/4Myovaplq4Y?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://smcciao-commits.github.io" 
+                  title="Top Edu Safe English Video Player" 
                   frameborder="0" 
+                  sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                   allowfullscreen>
           </iframe>
+
+          <!-- Child-Safe Touch Shield: Blocks clicks on YouTube top bar (Title, Avatar, Share) -->
+          <div class="yt-guard-top" style="position:absolute; top:0; left:0; width:100%; height:58px; z-index:15; background:transparent; cursor:default;" onclick="event.stopPropagation(); event.preventDefault();"></div>
+
+          <!-- Child-Safe Touch Shield: Blocks clicks on bottom-right YouTube Logo / Watch on YouTube link -->
+          <div class="yt-guard-bottom-right" style="position:absolute; bottom:0; right:0; width:115px; height:45px; z-index:15; background:transparent; cursor:default;" onclick="event.stopPropagation(); event.preventDefault();"></div>
+
+          <!-- Child-Safe End Cover: Pops up when video ends or can be triggered, preventing related video clicks -->
+          <div id="ytEndCover" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.92); z-index:25; flex-direction:column; justify-content:center; align-items:center; color:white; padding:20px; text-align:center;">
+            <div style="font-size:36px; margin-bottom:8px;">🎉</div>
+            <div style="font-family:'Maplestory',sans-serif; font-size:18px; font-weight:700; color:#38bdf8; margin-bottom:6px;">영상 시청 완료! 참 잘했어요!</div>
+            <div style="font-size:13px; color:#cbd5e1; margin-bottom:16px;">다른 영상으로 넘어가지 않고, 이제 아래에서 마이크로 따라 말해볼까요? 🎙️</div>
+            <div style="display:flex; gap:8px;">
+              <button onclick="replayYoutubeVideo()" style="background:#4f46e5; color:white; border:none; padding:10px 18px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer;">
+                🔄 영상 다시 보기
+              </button>
+              <button onclick="document.getElementById('ytEndCover').style.display='none'" style="background:#334155; color:#cbd5e1; border:none; padding:10px 14px; border-radius:10px; font-size:12.5px; font-weight:600; cursor:pointer;">
+                화면 닫기
+              </button>
+            </div>
+          </div>
         </div>
         <div class="youtube-meta-bar">
           <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div style="margin-bottom:4px;">
+              <span style="display:inline-flex; align-items:center; gap:4px; background:#ecfdf5; border:1px solid #a7f3d0; padding:2px 8px; border-radius:6px; font-size:11px; color:#065f46; font-weight:700;">
+                🔒 딴짓 방지 안심 모드 ON (외부 유튜브·앱 이탈 원천 차단)
+              </span>
+            </div>
             <div class="yt-title-badge" id="ytVideoTitle">🐆 Day 01: 치타와 동물 친구들 애니메이션</div>
             <button class="btn-yt-change" onclick="openYoutubeCustomizer()">🔗 다른 유튜브 영상 넣기</button>
           </div>
@@ -2128,13 +2156,95 @@ var DAY_YOUTUBE_VIDEOS = {
   }
 };
 
-var currentOrtShadow = null;
-function selectOrtBook(idx) {
-  var b = ORT_SERIES_VIDEOS[idx];
-  if (!b) return;
+// --- YouTube IFrame API & Child-Safe Controls ---
+var ytPlayer = null;
+function onYouTubeIframeAPIReady() {
+  initYtPlayer();
+}
+
+function initYtPlayer() {
+  try {
+    if (window.YT && YT.Player) {
+      ytPlayer = new YT.Player('theatreYtIframe', {
+        events: {
+          'onStateChange': onYtStateChange
+        }
+      });
+    }
+  } catch(e) {}
+}
+
+function onYtStateChange(event) {
+  if (event && event.data === 0) {
+    var cover = document.getElementById('ytEndCover');
+    if (cover) cover.style.display = 'flex';
+  }
+}
+
+function replayYoutubeVideo() {
+  var cover = document.getElementById('ytEndCover');
+  if (cover) cover.style.display = 'none';
+  if (ytPlayer && typeof ytPlayer.seekTo === 'function') {
+    try {
+      ytPlayer.seekTo(0);
+      ytPlayer.playVideo();
+      return;
+    } catch(e) {}
+  }
   var iframe = document.getElementById('theatreYtIframe');
   if (iframe) {
-    iframe.src = 'https://www.youtube-nocookie.com/embed/' + b.id + '?rel=0&modestbranding=1&playsinline=1';
+    var s = iframe.src;
+    iframe.src = s;
+  }
+}
+
+// --- Dynamic Expandable ORT Series Engine ---
+var currentOrtShadow = null;
+function loadOrtSeries() {
+  try {
+    var saved = localStorage.getItem('cats_ort_custom_series_v1');
+    if (saved) {
+      var arr = JSON.parse(saved);
+      if (Array.isArray(arr) && arr.length > 0) return arr;
+    }
+  } catch(e) {}
+  return ORT_SERIES_VIDEOS;
+}
+
+function saveOrtSeries(arr) {
+  try {
+    localStorage.setItem('cats_ort_custom_series_v1', JSON.stringify(arr));
+  } catch(e) {}
+}
+
+var currentActiveOrtList = loadOrtSeries();
+
+function renderOrtChips() {
+  var container = document.getElementById('ort_book_selector');
+  if (!container) return;
+  var badge = document.getElementById('ort_total_badge');
+  if (badge) badge.textContent = '(' + currentActiveOrtList.length + '권 수록 중)';
+
+  container.innerHTML = currentActiveOrtList.map(function(b, idx) {
+    var shortTitle = b.title.split(':')[1] || b.title;
+    shortTitle = shortTitle.trim();
+    if (shortTitle.length > 18) shortTitle = shortTitle.substring(0, 18) + '...';
+    return '<button class="ort-chip" onclick="selectOrtBook(' + idx + ')" style="font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1.5px solid #7c3aed;background:white;color:#5b21b6">' + 
+      (idx + 1) + '권 ' + shortTitle + '</button>';
+  }).join('');
+}
+
+function selectOrtBook(idx) {
+  var b = currentActiveOrtList[idx];
+  if (!b) return;
+
+  var cover = document.getElementById('ytEndCover');
+  if (cover) cover.style.display = 'none';
+
+  var iframe = document.getElementById('theatreYtIframe');
+  if (iframe) {
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + b.id + '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://smcciao-commits.github.io';
+    setTimeout(initYtPlayer, 800);
   }
   var titleEl = document.getElementById('ytVideoTitle');
   if (titleEl) titleEl.textContent = b.title;
@@ -2159,6 +2269,52 @@ function selectOrtBook(idx) {
     S.shadowIdx = 0;
     renderShadowSentence();
   }
+}
+
+function openAddOrtModal() {
+  var m = document.getElementById('addOrtModal');
+  if (m) m.style.display = 'flex';
+}
+function closeAddOrtModal() {
+  var m = document.getElementById('addOrtModal');
+  if (m) m.style.display = 'none';
+}
+
+function submitNewOrtBook() {
+  var title = document.getElementById('newOrtTitle').value.trim();
+  var urlOrId = document.getElementById('newOrtYtUrl').value.trim();
+  var sub = document.getElementById('newOrtSub').value.trim();
+  var s1 = document.getElementById('newOrtS1').value.trim();
+  var s2 = document.getElementById('newOrtS2').value.trim();
+  var s3 = document.getElementById('newOrtS3').value.trim();
+
+  if (!title || !urlOrId) {
+    alert('책 제목과 유튜브 주소(또는 영상 ID)는 필수입니다!');
+    return;
+  }
+
+  var vid = urlOrId;
+  var match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  if (match && match[1]) vid = match[1];
+
+  var newBook = {
+    bookNum: currentActiveOrtList.length + 1,
+    id: vid,
+    title: '📖 ORT 4 - ' + title,
+    sub: sub || '옥스포드 리딩트리 4단계 스토리 애니메이션!',
+    shadow: [
+      { sentence: s1 || "Biff and Chip liked the story.", ko: "비프와 칩은 그 이야기를 좋아했습니다." },
+      { sentence: s2 || "They had a great adventure together.", ko: "그들은 함께 멋진 모험을 했습니다." },
+      { sentence: s3 || "It was an exciting day!", ko: "정말 신나는 하루였습니다!" }
+    ]
+  };
+
+  currentActiveOrtList.push(newBook);
+  saveOrtSeries(currentActiveOrtList);
+  renderOrtChips();
+  closeAddOrtModal();
+  selectOrtBook(currentActiveOrtList.length - 1);
+  alert('🎉 ' + title + ' 권이 성공적으로 추가되었습니다!');
 }
 
 function updateYoutubeVideoForDay(dayIdx) {
@@ -2524,6 +2680,10 @@ function switchStep(step) {
     var view = document.getElementById('step' + i + 'View');
     if (tab) tab.className = 'step-btn' + (i === step ? ' active' : '');
     if (view) view.style.display = (i === step ? 'flex' : 'none');
+  }
+  if (step === 2) {
+    renderOrtChips();
+    initYtPlayer();
   }
 }
 
@@ -3156,6 +3316,51 @@ function closeQrAudioModal() {
   if (m) m.style.display = 'none';
 }
 </script>
+
+
+<!-- Add ORT Book Modal -->
+<div id="addOrtModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;justify-content:center;align-items:center;padding:16px;">
+  <div style="background:white;border-radius:20px;max-width:440px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div style="font-family:'Maplestory',sans-serif;font-size:16px;font-weight:700;color:#5b21b6;">➕ ORT 4단계 권수 추가하기</div>
+      <button onclick="closeAddOrtModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#64748b;">✕</button>
+    </div>
+    <div style="font-size:12.5px;color:#475569;margin-bottom:14px;line-height:1.4;">
+      ORT 4단계의 추가 권수(More Stories, Sparrows 등) 유튜브 영상과 쉐도잉 문장을 자유롭게 등록해 계속 늘려갈 수 있습니다.
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <label style="font-size:12px;font-weight:700;color:#334155;display:block;margin-bottom:4px;">책 제목 (권수 & 영어제목)</label>
+        <input type="text" id="newOrtTitle" placeholder="예: 7권: Nobody Got Wet" style="width:100%;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;color:#334155;display:block;margin-bottom:4px;">유튜브 링크 또는 영상 ID</label>
+        <input type="text" id="newOrtYtUrl" placeholder="예: https://youtu.be/... 또는 영상ID" style="width:100%;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;color:#334155;display:block;margin-bottom:4px;">줄거리 한 줄 설명</label>
+        <input type="text" id="newOrtSub" placeholder="예: 비프와 친구들이 빗속에서 신나는 모험을 해요!" style="width:100%;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+
+      <div style="padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
+        <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">🎙️ 쉐도잉 따라 말하기 문장 3개 (선택)</div>
+        <input type="text" id="newOrtS1" placeholder="문장 1 (예: Nobody got wet in the rain.)" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;margin-bottom:6px;box-sizing:border-box;">
+        <input type="text" id="newOrtS2" placeholder="문장 2 (예: They ran into the little hut.)" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;margin-bottom:6px;box-sizing:border-box;">
+        <input type="text" id="newOrtS3" placeholder="문장 3 (예: It was a very lucky day!)" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;box-sizing:border-box;">
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <button onclick="submitNewOrtBook()" style="flex:1;background:#7c3aed;color:white;border:none;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">
+          🚀 저장 및 즉시 등록
+        </button>
+        <button onclick="closeAddOrtModal()" style="background:#e2e8f0;color:#475569;border:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">
+          취소
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
