@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>🐱 탑에듀 캐츠 잉글리시 (CATS Daily Studio) - 초5 하린이반</title>
+  <title>🎒 수지탑에듀 에듀키즈 (TOP EDU KIDS)</title>
+  <link rel="manifest" href="manifest-edukids.json">
   <link rel="apple-touch-icon" href="harin-icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -35,12 +36,18 @@
       font-family: 'Pretendard', -apple-system, sans-serif;
       color: var(--text);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
     }
     .app-container {
       width: 100%;
       max-width: 520px;
+      margin: 0 auto;
       background: #ffffff;
       min-height: 100vh;
       display: flex;
@@ -48,6 +55,8 @@
       box-shadow: 0 0 30px rgba(124, 77, 255, 0.12);
       position: relative;
       padding-bottom: 90px;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     /* Top Navigation */
@@ -1443,7 +1452,19 @@
       50% { transform: translateY(-8px); }
     }
   </style>
-<script src="https://www.youtube.com/iframe_api"></script>
+<script src="https://www.youtube.com/iframe_api">function forceAppRefresh() {
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      return Promise.all(names.map(function(name) { return caches.delete(name); }));
+    }).then(function() {
+      window.location.reload(true);
+    });
+  } else {
+    window.location.reload(true);
+  }
+}
+
+</script>
 </head>
 <body>
 
@@ -1452,18 +1473,18 @@
   <div class="top-nav">
     <div class="nav-top-row">
       <button class="btn-back-home" onclick="location.href='index.html'">
-        <span>←</span> <span>탑에듀 단어앱 홈</span>
+        <span>←</span> <span>단어앱 홈</span>
       </button>
-      <div class="badge-class">초5 하린반 👑</div>
-      <button onclick="openQrAudioModal()" style="background:#2563eb;color:white;font-size:12px;padding:6px 10px;border:none;border-radius:8px;cursor:pointer;font-weight:700">🎧 교재 QR 음원</button>
+      <button onclick="forceAppRefresh()" style="background:linear-gradient(135deg, #10b981, #059669);color:white;font-size:12.5px;padding:6px 12px;border:none;border-radius:10px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(16,185,129,0.28);">🔄 최신 새로고침</button>
+      <button onclick="openQrAudioModal()" style="background:#2563eb;color:white;font-size:12px;padding:6px 10px;border:none;border-radius:8px;cursor:pointer;font-weight:700">🎧 교재 QR</button>
     </div>
 
     <div class="nav-row">
       <div class="app-brand">
-        <div class="app-logo">🐱</div>
+        <div class="app-logo">🎒</div>
         <div class="app-title-box">
-          <h1>캐츠 잉글리시 <span>CATS</span></h1>
-          <div class="sub">핸드인핸드 5권 맞춤 회화 & 매일 알람</div>
+          <h1 style="font-size:24px;color:#4c1d95;">탑에듀 에듀키즈 <span style="background:#7c4dff;color:white;font-size:12px;padding:2px 8px;border-radius:8px;">edukids</span></h1>
+          <div class="sub" style="font-size:13px;color:#6b21a8;font-weight:600;">초등 전용 영어 놀이터 · 캐츠 스튜디오 & 교재 영상관 & 초등 단어장</div>
         </div>
       </div>
     </div>
@@ -1736,6 +1757,11 @@
             마이크를 누르고 말해보세요!
           </div>
         </div>
+
+        <button type="button" class="btn-self-pass" onclick="passShadowDirectly()" style="width:100%;padding:11px 14px;margin:8px 0 6px;background:linear-gradient(135deg, #10b981, #059669);color:#ffffff;border:none;border-radius:14px;font-family:'Maplestory',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 10px rgba(16,185,129,0.22);">
+          <span>🗣️</span> <span>소리 내어 직접 읽었어요 (100점 통과) 👍</span>
+        </button>
+
         <button class="btn-next-word" style="background:#4f46e5; margin-top:4px;" onclick="nextShadowSentence()">
           다음 문장 쉐도잉 →
         </button>
@@ -1850,6 +1876,13 @@
         <div class="mic-status-hint" id="studioMicHint">
           버튼을 누르고 아이패드/스마트폰에 대고 영어로 읽어보세요!
         </div>
+
+        <button type="button" id="btnJoySelfPass" class="btn-self-pass" onclick="passJoySpeakingDirectly()" style="width:100%;max-width:320px;height:52px;background:linear-gradient(135deg, #10b981, #059669);color:#ffffff;border:none;border-radius:26px;font-family:'Maplestory',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(16,185,129,0.28);transition:all 0.15s ease;">
+          <span>🗣️</span> <span>소리 내어 직접 읽었어요 (100점 통과) 👍</span>
+        </button>
+        <div style="font-size:12px;color:#64748b;text-align:center;">
+          ※ 아이패드 마이크 오류나 권한 걱정 없이 100점으로 즉시 통과됩니다!
+        </div>
       </div>
 
       <!-- Real Result Scoring Card -->
@@ -1883,23 +1916,82 @@
     </div>
   </div>
 
+
+    <!-- 📘 에듀키즈 초등 전용 단어장 센터 (1단 세로 스크롤 카드) -->
+    <div id="sec_voca_hub" class="card" style="margin:20px 0 16px;padding:18px 16px;background:#ffffff;border:2.5px solid #f472b6;border-radius:20px;box-shadow:0 4px 14px rgba(244,114,182,0.15);box-sizing:border-box;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:26px;">📘</span>
+          <div>
+            <div style="font-family:Maplestory,sans-serif;font-size:16.5px;font-weight:800;color:#be185d;">에듀키즈 초등 전용 단어장</div>
+            <div style="font-size:12px;color:#9d174d;margin-top:2px;">Hand in Hand · ORT · 인사이트 링크 · 능률 초등필수</div>
+          </div>
+        </div>
+        <span style="background:#db2777;color:white;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap;">4대 필수</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <a href="index.html" style="text-decoration:none;display:block;background:#fdf2f8;border:1.5px solid #fbcfe8;padding:12px 10px;border-radius:14px;color:#831843;box-sizing:border-box;">
+          <div style="font-size:20px;">📘</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">Hand in Hand 5</div>
+          <div style="font-size:11px;color:#9d174d;">Unit 1~12 전단원 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f5f3ff;border:1.5px solid #ddd6fe;padding:12px 10px;border-radius:14px;color:#4c1d95;box-sizing:border-box;">
+          <div style="font-size:20px;">📗</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">ORT Stage 4 & 5</div>
+          <div style="font-size:11px;color:#6b21a8;">Rowing Boats 외 핵심 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#eff6ff;border:1.5px solid #bfdbfe;padding:12px 10px;border-radius:14px;color:#1e40af;box-sizing:border-box;">
+          <div style="font-size:20px;">📙</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">Insight Link 1·2·3</div>
+          <div style="font-size:11px;color:#1d4ed8;">Day별 실전문맥 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f0fdf4;border:1.5px solid #bbf7d0;padding:12px 10px;border-radius:14px;color:#166534;box-sizing:border-box;">
+          <div style="font-size:20px;">📕</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">능률VOCA 초등필수</div>
+          <div style="font-size:11px;color:#15803d;">Day 01~39 초등 필수 800</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#fffbeb;border:1.5px solid #fef3c7;padding:12px 10px;border-radius:14px;color:#92400e;box-sizing:border-box;">
+          <div style="font-size:20px;">✏️</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">Let's Go Grammar 1</div>
+          <div style="font-size:11px;color:#b45309;">초등 기초 문법 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f8fafc;border:1.5px solid #e2e8f0;padding:12px 10px;border-radius:14px;color:#334155;box-sizing:border-box;">
+          <div style="font-size:20px;">🏫</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">천재(함) 초5 교과서</div>
+          <div style="font-size:11px;color:#475569;">11·12과 교과 어휘</div>
+        </a>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button onclick="location.href='index.html'" style="flex:1;background:linear-gradient(135deg,#db2777,#f43f5e);color:white;border:none;padding:11px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(219,39,119,0.25);">
+          🚀 클래스카드형 단어 풀러가기 →
+        </button>
+        <button onclick="location.href='harin.html'" style="background:#f3e8ff;border:1.5px solid #c084fc;color:#6b21a8;padding:11px 14px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">
+          📅 주간 플래너
+        </button>
+      </div>
+    </div>
+
   <!-- Bottom Dock Bar -->
   <div class="bottom-bar">
     <button class="dock-btn active" onclick="location.reload()">
-      <span class="dock-ico">🐱</span>
-      <span>캐츠 훈련관</span>
+      <span class="dock-ico">🎒</span>
+      <span>에듀키즈</span>
     </button>
-    <button class="dock-btn" onclick="location.href='index.html'">
+    <button class="dock-btn" onclick="document.getElementById('sec_voca_hub').scrollIntoView({behavior:'smooth'})">
       <span class="dock-ico">📘</span>
-      <span>탑에듀 단어앱</span>
+      <span>초등 단어장</span>
+    </button>
+    <button class="dock-btn" onclick="openQrAudioModal()">
+      <span class="dock-ico">🎧</span>
+      <span>QR 음원</span>
     </button>
     <button class="dock-btn" onclick="location.href='harin.html'">
       <span class="dock-ico">⭐</span>
       <span>하린 플래너</span>
     </button>
-    <button class="dock-btn" onclick="location.href='reading.html'">
-      <span class="dock-ico">📖</span>
-      <span>독해 모의고사</span>
+    <button class="dock-btn" onclick="location.href='index.html'">
+      <span class="dock-ico">🏫</span>
+      <span>학원 단어앱</span>
     </button>
   </div>
 </div>
@@ -1997,8 +2089,36 @@ var DAILY_PACKS = [
         "ko": "우리 팀과 함께 이어달리기를 했어요."
       },
       {
-        "sentence": "We cheered loudly and won a gold medal!",
-        "ko": "우리는 크게 응원하고 금메달을 땄어요!"
+        "sentence": "We cheered loudly and won a shiny gold medal!",
+        "ko": "우리는 크게 응원하고 반짝이는 금메달을 땄어요!"
+      },
+      {
+        "sentence": "Field day is the most exciting festival at our school.",
+        "ko": "운동회는 우리 학교에서 가장 신나는 축제예요."
+      },
+      {
+        "sentence": "Keep moving your hips to keep the hula hoop spinning.",
+        "ko": "훌라후프가 계속 돌 수 있도록 허리를 계속 움직여봐."
+      },
+      {
+        "sentence": "Pass the wooden baton smoothly to the next runner.",
+        "ko": "다음 주자에게 나무 바통을 부드럽게 넘겨줘."
+      },
+      {
+        "sentence": "The white team and the blue team played a fair game.",
+        "ko": "백팀과 청팀은 정정당당한 경기를 펼쳤습니다."
+      },
+      {
+        "sentence": "Our classmates waved colorful banners in the stadium.",
+        "ko": "우리 반 친구들은 경기장에서 화려한 응원 깃발을 흔들었어요."
+      },
+      {
+        "sentence": "Eating a delicious boxed lunch with friends was wonderful.",
+        "ko": "친구들과 맛있는 도시락을 나눠 먹는 것은 정말 멋졌어요."
+      },
+      {
+        "sentence": "Everyone had big happy smiles on field day.",
+        "ko": "운동회 날에는 모두가 환하고 행복한 미소를 지었습니다."
       }
     ],
     "talk": [
@@ -2164,12 +2284,40 @@ var DAILY_PACKS = [
         "ko": "우리는 저 노 젓는 보트를 탈 거야, 아빠가 말씀하셨어요."
       },
       {
-        "sentence": "Floppy jumped into the water to save the rope.",
-        "ko": "플로피는 밧줄을 구하기 위해 물속으로 뛰어들었습니다."
+        "sentence": "Dad took the wooden oars and began to row across the river.",
+        "ko": "아빠는 나무 노를 잡고 강을 건너 노를 젓기 시작하셨습니다."
       },
       {
-        "sentence": "Everyone cheered for the brave dog Floppy!",
-        "ko": "모두가 용감한 개 플로피를 향해 환호했습니다!"
+        "sentence": "Floppy sat at the front of the boat and looked at the water.",
+        "ko": "플로피는 보트 앞자리에 앉아 물을 바라보았습니다."
+      },
+      {
+        "sentence": "The children smiled and watched the ducks swimming happily.",
+        "ko": "아이들은 미소 지으며 행복하게 헤엄치는 오리들을 바라보았습니다."
+      },
+      {
+        "sentence": "Suddenly, the rope slipped out of Dad's hands.",
+        "ko": "갑자기 밧줄이 아빠의 손에서 미끄러져 빠져나갔습니다."
+      },
+      {
+        "sentence": "Oh no! The rope is floating away down the fast river!",
+        "ko": "안 돼! 밧줄이 빠른 강물 아래로 떠내려가고 있어!"
+      },
+      {
+        "sentence": "Floppy barked loudly and jumped into the cool water.",
+        "ko": "플로피는 크게 짖으며 시원한 물속으로 뛰어들었습니다."
+      },
+      {
+        "sentence": "The brave dog swam fast and caught the rope with his teeth.",
+        "ko": "용감한 개는 빠르게 헤엄쳐 이빨로 밧줄을 잡았습니다."
+      },
+      {
+        "sentence": "Dad pulled Floppy and the rope safely back into the boat.",
+        "ko": "아빠는 플로피와 밧줄을 안전하게 보트 안으로 다시 끌어올렸습니다."
+      },
+      {
+        "sentence": "Everyone cheered loudly for the brave dog Floppy!",
+        "ko": "모두가 용감한 개 플로피를 향해 크게 환호했습니다!"
       }
     ],
     "talk": [
@@ -2331,16 +2479,44 @@ var DAILY_PACKS = [
     "theatreStory": null,
     "shadowing": [
       {
-        "sentence": "Dad and Mum liked the big house.",
-        "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."
+        "sentence": "Dad and Mum wanted to find a bigger house for the family.",
+        "ko": "아빠와 엄마는 가족을 위해 더 큰 집을 찾고 싶어 하셨습니다."
       },
       {
-        "sentence": "They pulled the wallpaper and found a door.",
-        "ko": "그들은 벽지를 뜯고 문을 발견했습니다."
+        "sentence": "An agent put up a large wooden sign that said House for Sale.",
+        "ko": "부동산 중개인이 '팔려고 내놓은 집'이라는 큰 나무 표지판을 세웠습니다."
       },
       {
-        "sentence": "Inside was an amazing miniature house!",
-        "ko": "안에는 놀라운 미니어처 집이 있었습니다!"
+        "sentence": "Dad and Mum liked the big house with its wide garden.",
+        "ko": "아빠와 엄마는 넓은 정원이 있는 그 큰 집을 마음에 들어 하셨습니다."
+      },
+      {
+        "sentence": "The children ran into the overgrown garden to look around.",
+        "ko": "아이들은 주위를 둘러보기 위해 무성한 정원으로 달려갔습니다."
+      },
+      {
+        "sentence": "Biff and Chip climbed up into the sturdy wooden tree house.",
+        "ko": "비프와 칩은 튼튼한 나무 위의 오두막으로 올라갔습니다."
+      },
+      {
+        "sentence": "Kipper saw some peeling wallpaper inside the small hall.",
+        "ko": "키퍼는 작은 복도 안에서 벗겨지는 낡은 벽지를 보았습니다."
+      },
+      {
+        "sentence": "Kipper pulled the old wallpaper and heard a soft creak.",
+        "ko": "키퍼가 낡은 벽지를 잡아당기자 삐걱하는 작은 소리가 났습니다."
+      },
+      {
+        "sentence": "Look at this secret spot in the wall, called out Kipper.",
+        "ko": "벽 속에 숨겨진 이 특별한 곳 좀 봐, 키퍼가 외쳤습니다."
+      },
+      {
+        "sentence": "Mum and Dad agreed that this was the perfect dream home.",
+        "ko": "엄마와 아빠는 이곳이 완벽한 꿈의 보금자리라는 데 동의하셨습니다."
+      },
+      {
+        "sentence": "The family was so excited to move into their wonderful new house.",
+        "ko": "가족들은 멋진 새 집으로 이사하게 되어 무척 신이 났습니다."
       }
     ],
     "talk": [
@@ -2502,16 +2678,44 @@ var DAILY_PACKS = [
     "theatreStory": null,
     "shadowing": [
       {
-        "sentence": "I like reading interesting books with my friends.",
-        "ko": "친구들과 재미있는 책 읽는 것을 좋아해요."
+        "sentence": "The gazelle runs very fast across the grass.",
+        "ko": "가젤은 풀밭을 가로질러 아주 빠르게 달려요."
       },
       {
-        "sentence": "We share our favorite stories every day.",
-        "ko": "우리는 매일 좋아하는 이야기를 함께 나눠요."
+        "sentence": "Which animal is the fastest runner in the world?",
+        "ko": "세상에서 어떤 동물이 가장 빠르게 달릴까요?"
       },
       {
-        "sentence": "Learning new things is always exciting.",
-        "ko": "새로운 것을 배우는 것은 항상 신나요."
+        "sentence": "Look at the animals running together happily.",
+        "ko": "행복하게 함께 달리는 동물들을 보세요."
+      },
+      {
+        "sentence": "Cheetahs can run faster than gazelles.",
+        "ko": "치타는 가젤보다 더 빠르게 달릴 수 있어요."
+      },
+      {
+        "sentence": "The cheetah has sharp eyes and strong legs.",
+        "ko": "치타는 날카로운 눈과 튼튼한 다리를 가지고 있어요."
+      },
+      {
+        "sentence": "A tiny rabbit hops quickly through the bushes.",
+        "ko": "작은 토끼가 덤불 사이로 재빠르게 깡충 뛰어요."
+      },
+      {
+        "sentence": "I want to run as fast as the wild wind.",
+        "ko": "나는 거친 바람처럼 빠르게 달리고 싶어요."
+      },
+      {
+        "sentence": "Running outdoors gives us energy and strength.",
+        "ko": "야외에서 달리는 것은 우리에게 활력과 힘을 줘요."
+      },
+      {
+        "sentence": "Animals enjoy playing freely on the sunny savanna.",
+        "ko": "동물들은 햇살 가득한 사바나에서 자유롭게 노는 것을 즐겨요."
+      },
+      {
+        "sentence": "Let us cheer for our favorite animal friends!",
+        "ko": "우리가 좋아하는 동물 친구들을 응원해요!"
       }
     ],
     "talk": [
@@ -2801,6 +3005,7 @@ function loadDay(idx) {
   S.quizScore = 0;
 
   renderVocaCard();
+  initCatTalk(true);
 
   // Sync 3-series video hub to the Day pack
   if (idx === 0) {
@@ -2878,12 +3083,40 @@ var HANDINHAND_SERIES_VIDEOS = [
         "ko": "가젤은 풀밭을 가로질러 아주 빠르게 달려요."
       },
       {
-        "sentence": "Which animal is the fastest in the world?",
-        "ko": "세상에서 어떤 동물이 가장 빠를까요?"
+        "sentence": "Which animal is the fastest runner in the world?",
+        "ko": "세상에서 어떤 동물이 가장 빠르게 달릴까요?"
       },
       {
         "sentence": "Look at the animals running together happily.",
         "ko": "행복하게 함께 달리는 동물들을 보세요."
+      },
+      {
+        "sentence": "Cheetahs can run faster than gazelles.",
+        "ko": "치타는 가젤보다 더 빠르게 달릴 수 있어요."
+      },
+      {
+        "sentence": "The cheetah has sharp eyes and strong legs.",
+        "ko": "치타는 날카로운 눈과 튼튼한 다리를 가지고 있어요."
+      },
+      {
+        "sentence": "A tiny rabbit hops quickly through the bushes.",
+        "ko": "작은 토끼가 덤불 사이로 재빠르게 깡충 뛰어요."
+      },
+      {
+        "sentence": "I want to run as fast as the wild wind.",
+        "ko": "나는 거친 바람처럼 빠르게 달리고 싶어요."
+      },
+      {
+        "sentence": "Running outdoors gives us energy and strength.",
+        "ko": "야외에서 달리는 것은 우리에게 활력과 힘을 줘요."
+      },
+      {
+        "sentence": "Animals enjoy playing freely on the sunny savanna.",
+        "ko": "동물들은 햇살 가득한 사바나에서 자유롭게 노는 것을 즐겨요."
+      },
+      {
+        "sentence": "Let us cheer for our favorite animal friends!",
+        "ko": "우리가 좋아하는 동물 친구들을 응원해요!"
       }
     ]
   },
@@ -2905,6 +3138,34 @@ var HANDINHAND_SERIES_VIDEOS = [
       {
         "sentence": "This blue jacket fits me perfectly!",
         "ko": "이 파란색 재킷이 나에게 딱 맞아요!"
+      },
+      {
+        "sentence": "How much is that lovely striped winter sweater?",
+        "ko": "저 사랑스러운 줄무늬 겨울 스웨터는 얼마인가요?"
+      },
+      {
+        "sentence": "I like wearing comfortable clothes every day.",
+        "ko": "나는 매일 편안한 옷을 입는 것을 좋아해요."
+      },
+      {
+        "sentence": "She chose a pretty red hat for the sunny picnic.",
+        "ko": "그녀는 화창한 소풍을 위해 예쁜 빨간 모자를 골랐어요."
+      },
+      {
+        "sentence": "These soft sneakers are great for running fast.",
+        "ko": "이 푹신한 운동화는 빠르게 달릴 때 아주 좋아요."
+      },
+      {
+        "sentence": "The shop assistant was very kind and helpful.",
+        "ko": "매장 점원분은 매우 친절하고 도움이 되었어요."
+      },
+      {
+        "sentence": "We found warm gloves for the cold winter days.",
+        "ko": "우리는 추운 겨울날을 위한 따뜻한 장갑을 찾았어요."
+      },
+      {
+        "sentence": "Shopping with my family is always fun and exciting.",
+        "ko": "가족과 함께 쇼핑하는 것은 언제나 재미있고 신나요."
       }
     ]
   },
@@ -2926,6 +3187,34 @@ var HANDINHAND_SERIES_VIDEOS = [
       {
         "sentence": "Everyone clapped and cheered for our performance.",
         "ko": "모두가 우리 공연에 박수를 치고 환호했어요."
+      },
+      {
+        "sentence": "He plays the shiny brass trumpet loudly and clearly.",
+        "ko": "그는 반짝이는 황동 트럼펫을 크고 맑게 연주해요."
+      },
+      {
+        "sentence": "Our music teacher guided us with a gentle smile.",
+        "ko": "우리 음악 선생님은 다정한 미소로 우리를 이끌어 주셨어요."
+      },
+      {
+        "sentence": "The harmonious melody filled the entire school auditorium.",
+        "ko": "조화로운 멜로디가 학교 강당 전체를 가득 채웠어요."
+      },
+      {
+        "sentence": "I practiced my piano piece every afternoon at home.",
+        "ko": "나는 집에서 매일 오후 피아노 곡을 연습했어요."
+      },
+      {
+        "sentence": "Music brings happiness and joyful smiles to everyone.",
+        "ko": "음악은 모든 사람에게 행복과 즐거운 미소를 가져다줘요."
+      },
+      {
+        "sentence": "Parents took photos of their children on stage.",
+        "ko": "부모님들은 무대 위 아이들의 사진을 찍으셨어요."
+      },
+      {
+        "sentence": "It was the most memorable concert of the school year.",
+        "ko": "올 학년도 중 가장 기억에 남는 멋진 음악회였습니다."
       }
     ]
   },
@@ -2947,6 +3236,34 @@ var HANDINHAND_SERIES_VIDEOS = [
       {
         "sentence": "It is a home run, and the crowd goes wild!",
         "ko": "홈런이에요, 관중들이 열광해요!"
+      },
+      {
+        "sentence": "The pitcher threw a blazing fast fastball.",
+        "ko": "투수가 불타오르는 빠른 직구를 던졌습니다."
+      },
+      {
+        "sentence": "Matt gripped the wooden bat tightly with both hands.",
+        "ko": "맷은 양손으로 나무 배트를 꽉 쥐었습니다."
+      },
+      {
+        "sentence": "Crack! The ball flew high up into the clear blue sky.",
+        "ko": "딱! 공이 맑고 푸른 하늘 높이 날아갔습니다."
+      },
+      {
+        "sentence": "Run to first base, then sprint quickly to second!",
+        "ko": "1루로 달리고, 그다음 2루로 빠르게 전력 질주해!"
+      },
+      {
+        "sentence": "Our team scored three important winning runs.",
+        "ko": "우리 팀은 중요한 승리의 3점을 득점했습니다."
+      },
+      {
+        "sentence": "Good teamwork makes every sports game enjoyable.",
+        "ko": "좋은 팀워크는 모든 스포츠 경기를 즐겁게 만들어요."
+      },
+      {
+        "sentence": "We shared high fives and drank cold fresh lemonade.",
+        "ko": "우리는 하이파이브를 나누고 시원한 레모네이드를 마셨습니다."
       }
     ]
   },
@@ -2966,8 +3283,36 @@ var HANDINHAND_SERIES_VIDEOS = [
         "ko": "우리 팀과 함께 이어달리기를 했어요."
       },
       {
-        "sentence": "We cheered loudly and won a gold medal!",
-        "ko": "우리는 크게 응원하고 금메달을 땄어요!"
+        "sentence": "We cheered loudly and won a shiny gold medal!",
+        "ko": "우리는 크게 응원하고 반짝이는 금메달을 땄어요!"
+      },
+      {
+        "sentence": "Field day is the most exciting festival at our school.",
+        "ko": "운동회는 우리 학교에서 가장 신나는 축제예요."
+      },
+      {
+        "sentence": "Keep moving your hips to keep the hula hoop spinning.",
+        "ko": "훌라후프가 계속 돌 수 있도록 허리를 계속 움직여봐."
+      },
+      {
+        "sentence": "Pass the wooden baton smoothly to the next runner.",
+        "ko": "다음 주자에게 나무 바통을 부드럽게 넘겨줘."
+      },
+      {
+        "sentence": "The white team and the blue team played a fair game.",
+        "ko": "백팀과 청팀은 정정당당한 경기를 펼쳤습니다."
+      },
+      {
+        "sentence": "Our classmates waved colorful banners in the stadium.",
+        "ko": "우리 반 친구들은 경기장에서 화려한 응원 깃발을 흔들었어요."
+      },
+      {
+        "sentence": "Eating a delicious boxed lunch with friends was wonderful.",
+        "ko": "친구들과 맛있는 도시락을 나눠 먹는 것은 정말 멋졌어요."
+      },
+      {
+        "sentence": "Everyone had big happy smiles on field day.",
+        "ko": "운동회 날에는 모두가 환하고 행복한 미소를 지었습니다."
       }
     ]
   },
@@ -2983,12 +3328,40 @@ var HANDINHAND_SERIES_VIDEOS = [
         "ko": "여행을 위해 가방을 쌀 시간이에요."
       },
       {
-        "sentence": "Did you pack your sunglasses and hat?",
+        "sentence": "Did you pack your sunglasses and sunny hat?",
         "ko": "선글라스와 모자를 챙겼나요?"
       },
       {
-        "sentence": "I am so excited to go on vacation!",
-        "ko": "휴가를 떠나게 되어 너무 신나요!"
+        "sentence": "I am so excited to go on vacation with family!",
+        "ko": "가족과 함께 휴가를 떠나게 되어 너무 신나요!"
+      },
+      {
+        "sentence": "Make a checklist so you do not forget anything.",
+        "ko": "아무것도 잊어버리지 않도록 체크리스트를 만드세요."
+      },
+      {
+        "sentence": "Put comfortable shoes and light clothes in the suitcase.",
+        "ko": "여행 가방에 편안한 신발과 가벼운 옷을 넣으세요."
+      },
+      {
+        "sentence": "Do not forget to pack your toothbrush and toothpaste.",
+        "ko": "칫솔과 치약 챙기는 것을 잊지 마세요."
+      },
+      {
+        "sentence": "We are traveling to a beautiful sunny beach tomorrow.",
+        "ko": "우리는 내일 아름답고 화창한 바닷가로 여행을 떠나요."
+      },
+      {
+        "sentence": "I will take lots of wonderful photos during our trip.",
+        "ko": "여행하는 동안 멋진 사진을 많이 찍을 거예요."
+      },
+      {
+        "sentence": "Zip up your backpack and check the plane tickets.",
+        "ko": "배낭 지퍼를 닫고 비행기 표를 확인하세요."
+      },
+      {
+        "sentence": "Have a safe and happy trip, everyone!",
+        "ko": "모두 안전하고 행복한 여행 되세요!"
       }
     ]
   },
@@ -3000,16 +3373,44 @@ var HANDINHAND_SERIES_VIDEOS = [
     "sub": "친구에게 음식을 권하고 예의 바르게 대답하는 법을 배워요!",
     "shadow": [
       {
-        "sentence": "Would you like some delicious snacks?",
-        "ko": "맛있는 간식 좀 드실래요?"
+        "sentence": "Would you like some delicious snacks and fruit?",
+        "ko": "맛있는 간식과 과일 좀 드실래요?"
       },
       {
-        "sentence": "No, thank you. I am already full.",
-        "ko": "아니요, 괜찮습니다. 이미 배가 불러요."
+        "sentence": "No, thank you. I am already completely full.",
+        "ko": "아니요, 괜찮습니다. 이미 배가 완전히 불러요."
       },
       {
-        "sentence": "Thank you for being so polite and kind.",
-        "ko": "친절하고 예의 바르게 말해줘서 고마워요."
+        "sentence": "Thank you for being so polite and very kind.",
+        "ko": "친절하고 예의 바르게 말해줘서 정말 고마워요."
+      },
+      {
+        "sentence": "Can I get you a cool glass of fresh water?",
+        "ko": "시원한 물 한 잔 가져다 드릴까요?"
+      },
+      {
+        "sentence": "Yes, please! That would be very wonderful.",
+        "ko": "네, 부탁드려요! 정말 감사하겠습니다."
+      },
+      {
+        "sentence": "Sharing good food with friends creates joyful moments.",
+        "ko": "친구들과 좋은 음식을 나누는 것은 즐거운 시간을 만들어 줘요."
+      },
+      {
+        "sentence": "Always remember to say please and thank you politely.",
+        "ko": "항상 정중하게 부탁합니다와 감사합니다라고 말하세요."
+      },
+      {
+        "sentence": "These homemade chocolate muffins smell so delicious.",
+        "ko": "직접 구운 이 초콜릿 머핀 냄새가 정말 맛있겠어요."
+      },
+      {
+        "sentence": "Would you like another slice of sweet apple pie?",
+        "ko": "달콤한 사과 파이 한 조각 더 드시겠어요?"
+      },
+      {
+        "sentence": "Polite manners make everyone feel happy and respected.",
+        "ko": "예의 바른 태도는 모두가 존중받고 행복하게 느끼게 해요."
       }
     ]
   },
@@ -3021,16 +3422,44 @@ var HANDINHAND_SERIES_VIDEOS = [
     "sub": "봄맞이 집안 대청소를 하며 방을 청소하고 정리해요!",
     "shadow": [
       {
-        "sentence": "Let us help clean the living room today.",
+        "sentence": "Let us help clean the living room together today.",
         "ko": "오늘 거실 청소하는 것을 함께 도와요."
       },
       {
-        "sentence": "I can sweep the floor and wipe the table.",
-        "ko": "저는 바닥을 쓸고 식탁을 닦을 수 있어요."
+        "sentence": "I can sweep the floor and wipe the dusty table.",
+        "ko": "저는 바닥을 쓸고 먼지 쌓인 식탁을 닦을 수 있어요."
       },
       {
-        "sentence": "Our house looks so clean and neat now!",
-        "ko": "이제 우리 집이 정말 깨끗하고 단정해 보여요!"
+        "sentence": "Our house looks so clean and very neat now!",
+        "ko": "이제 우리 집이 정말 깨끗하고 아주 단정해 보여요!"
+      },
+      {
+        "sentence": "Open the windows to let the fresh spring air inside.",
+        "ko": "신선한 봄바람이 들어오도록 창문을 활짝 여세요."
+      },
+      {
+        "sentence": "Put old books back neatly onto the wooden bookshelf.",
+        "ko": "오래된 책들을 나무 책장 위에 가지런히 꽂아 두세요."
+      },
+      {
+        "sentence": "Let us sort out our old clothes for recycling.",
+        "ko": "재활용을 위해 낡은 옷들을 함께 분류해요."
+      },
+      {
+        "sentence": "Cleaning our rooms makes our minds feel fresh and bright.",
+        "ko": "방을 청소하면 마음도 상쾌하고 밝아져요."
+      },
+      {
+        "sentence": "My little brother picked up all his building blocks.",
+        "ko": "남동생은 흩어진 블록 장난감을 모두 주워 담았어요."
+      },
+      {
+        "sentence": "Mum smiled and thanked us for our wonderful hard work.",
+        "ko": "엄마는 미소 지으며 우리의 멋진 노력에 고마워하셨어요."
+      },
+      {
+        "sentence": "Working as a team makes house chores easy and fun.",
+        "ko": "팀으로 일하면 집안일도 쉽고 재미있어져요."
       }
     ]
   },
@@ -3042,16 +3471,44 @@ var HANDINHAND_SERIES_VIDEOS = [
     "sub": "박물관에 가기 위해 지하철을 타고 이동하는 대화!",
     "shadow": [
       {
-        "sentence": "We can take the subway to the museum.",
-        "ko": "우리는 박물관까지 지하철을 타고 갈 수 있어요."
+        "sentence": "We can take the subway to the history museum.",
+        "ko": "우리는 역사 박물관까지 지하철을 타고 갈 수 있어요."
       },
       {
-        "sentence": "Which station should we get off at?",
-        "ko": "어느 역에서 내려야 하나요?"
+        "sentence": "Which station should we get off at for the park?",
+        "ko": "공원에 가려면 어느 역에서 내려야 하나요?"
       },
       {
-        "sentence": "The subway is fast, clean, and convenient.",
-        "ko": "지하철은 빠르고 깨끗하며 편리해요."
+        "sentence": "The subway is fast, clean, safe, and convenient.",
+        "ko": "지하철은 빠르고 깨끗하며 안전하고 편리해요."
+      },
+      {
+        "sentence": "Check the colorful subway map near the ticket gate.",
+        "ko": "개찰구 근처에 있는 알록달록한 지하철 노선도를 확인하세요."
+      },
+      {
+        "sentence": "Please stand behind the yellow safety line on the platform.",
+        "ko": "승강장의 노란색 안전선 뒤로 물러서 주세요."
+      },
+      {
+        "sentence": "The silver train arrived smoothly at platform three.",
+        "ko": "은빛 기차가 3번 승강장에 부드럽게 도착했습니다."
+      },
+      {
+        "sentence": "Hold onto the handrail while the train is moving.",
+        "ko": "기차가 움직이는 동안 손잡이를 꼭 잡으세요."
+      },
+      {
+        "sentence": "Many people travel across the city by electric train.",
+        "ko": "많은 사람들이 전철을 타고 도시 곳곳을 이동해요."
+      },
+      {
+        "sentence": "We arrived right on time without any traffic delay.",
+        "ko": "우리는 교통 체증 없이 제시간에 딱 도착했어요."
+      },
+      {
+        "sentence": "Taking public transit helps protect our blue planet.",
+        "ko": "대중교통을 이용하는 것은 푸른 지구를 지키는 데 도움이 돼요."
       }
     ]
   },
@@ -3067,12 +3524,40 @@ var HANDINHAND_SERIES_VIDEOS = [
         "ko": "이번 주 토요일에 특별한 생일 파티를 열어요."
       },
       {
-        "sentence": "Do not worry, I will definitely be there!",
-        "ko": "걱정 마, 내가 꼭 갈게!"
+        "sentence": "Do not worry, I will definitely be there on time!",
+        "ko": "걱정 마, 내가 제시간에 꼭 갈게!"
       },
       {
-        "sentence": "We will have fun games and delicious cake.",
-        "ko": "우리는 재미있는 게임과 맛있는 케이크를 먹을 거야."
+        "sentence": "We will have fun party games and delicious cake.",
+        "ko": "우리는 재미있는 파티 게임과 맛있는 케이크를 먹을 거야."
+      },
+      {
+        "sentence": "I wrote a lovely invitation card for my best friend.",
+        "ko": "나는 가장 친한 친구를 위해 예쁜 초대장을 썼어요."
+      },
+      {
+        "sentence": "We decorated the living room with bright colorful balloons.",
+        "ko": "우리는 밝고 알록달록한 풍선으로 거실을 꾸몄어요."
+      },
+      {
+        "sentence": "Blow out all the candles and make a secret wish!",
+        "ko": "촛불을 모두 끄고 마음속으로 비밀 소원을 빌어봐!"
+      },
+      {
+        "sentence": "Singing happy birthday together made everyone smile.",
+        "ko": "다 함께 생일 축하 노래를 부르며 모두가 활짝 웃었어요."
+      },
+      {
+        "sentence": "I prepared a special surprise gift wrapped in shiny ribbon.",
+        "ko": "반짝이는 리본으로 포장한 특별한 깜짝 선물을 준비했어요."
+      },
+      {
+        "sentence": "Celebrating special occasions creates golden memories.",
+        "ko": "특별한 날을 축하하는 것은 황금빛 추억을 만들어 줘요."
+      },
+      {
+        "sentence": "Thank you so much for coming to celebrate with me!",
+        "ko": "나와 함께 축하해 주러 와줘서 정말 고마워!"
       }
     ]
   },
@@ -3084,16 +3569,44 @@ var HANDINHAND_SERIES_VIDEOS = [
     "sub": "땅콩버터와 젤리로 맛있는 샌드위치를 만드는 레시피!",
     "shadow": [
       {
-        "sentence": "Spread the peanut butter on the bread.",
-        "ko": "식빵 위에 땅콩버터를 펴 바르세요."
+        "sentence": "Spread the peanut butter smoothly on the fresh bread.",
+        "ko": "신선한 식빵 위에 땅콩버터를 부드럽게 펴 바르세요."
       },
       {
-        "sentence": "Add sweet strawberry jelly on the other slice.",
-        "ko": "다른 빵에는 달콤한 딸기 젤리를 얹으세요."
+        "sentence": "Add sweet strawberry jelly on the other bread slice.",
+        "ko": "다른 빵 조각에는 달콤한 딸기 젤리를 얹으세요."
       },
       {
-        "sentence": "This sandwich tastes so sweet and yummy!",
-        "ko": "이 샌드위치는 정말 달콤하고 맛있어요!"
+        "sentence": "This sandwich tastes so sweet, nutty, and yummy!",
+        "ko": "이 샌드위치는 정말 달콤하고 고소하며 맛있어요!"
+      },
+      {
+        "sentence": "You can also add sliced bananas and honey on top.",
+        "ko": "그 위에 얇게 썬 바나나와 꿀을 얹어도 좋아요."
+      },
+      {
+        "sentence": "Cut the sandwich diagonally into neat triangular shapes.",
+        "ko": "샌드위치를 대각선으로 잘라 깔끔한 삼각형 모양을 만드세요."
+      },
+      {
+        "sentence": "Making sandwiches is a fun and easy kitchen recipe.",
+        "ko": "샌드위치를 만드는 것은 재미있고 쉬운 요리법이에요."
+      },
+      {
+        "sentence": "Wash your hands thoroughly before preparing any meal.",
+        "ko": "음식을 준비하기 전에 손을 깨끗이 씻으세요."
+      },
+      {
+        "sentence": "I packed two homemade sandwiches for our school picnic.",
+        "ko": "나는 학교 소풍을 위해 직접 만든 샌드위치 두 개를 쌌어요."
+      },
+      {
+        "sentence": "Fresh lettuce and juicy tomatoes make sandwiches healthy.",
+        "ko": "신선한 양상추와 육즙 가득한 토마토는 샌드위치를 건강하게 해요."
+      },
+      {
+        "sentence": "Bon appetit! Enjoy your delicious lunchtime snack!",
+        "ko": "맛있게 드세요! 맛있는 점심 간식을 즐기세요!"
       }
     ]
   },
@@ -3105,16 +3618,44 @@ var HANDINHAND_SERIES_VIDEOS = [
     "sub": "보고, 듣고, 맛보고, 냄새 맡고, 만지는 신비한 오감 탐험!",
     "shadow": [
       {
-        "sentence": "We explore the world with our five senses.",
-        "ko": "우리는 오감으로 세상을 탐험해요."
+        "sentence": "We explore the wonderful world with our five senses.",
+        "ko": "우리는 오감으로 놀라운 세상을 탐험해요."
       },
       {
-        "sentence": "I can see bright colors and hear sweet music.",
+        "sentence": "I can see bright colors and hear sweet melodic music.",
         "ko": "나는 밝은 색을 보고 감미로운 음악을 들을 수 있어요."
       },
       {
-        "sentence": "It is wonderful to learn English together!",
-        "ko": "함께 영어를 배우는 것은 정말 멋져요!"
+        "sentence": "I smell fragrant flowers and taste sweet ripe apples.",
+        "ko": "나는 향기로운 꽃 냄새를 맡고 달콤한 사과를 맛봐요."
+      },
+      {
+        "sentence": "My hands can touch soft wool and rough tree bark.",
+        "ko": "내 손은 부드러운 양털과 거친 나무껍질을 만질 수 있어요."
+      },
+      {
+        "sentence": "Our eyes help us read fascinating English books.",
+        "ko": "우리의 눈은 흥미진진한 영어 책을 읽도록 도와줘요."
+      },
+      {
+        "sentence": "Our ears listen carefully to the sounds of nature.",
+        "ko": "우리의 귀는 자연의 소리를 주의 깊게 들어요."
+      },
+      {
+        "sentence": "Using all five senses makes learning exciting and memorable.",
+        "ko": "오감을 모두 활용하면 학습이 신나고 기억에 오래 남아요."
+      },
+      {
+        "sentence": "We have completed all twelve units of Hand in Hand 5!",
+        "ko": "우리는 핸드인핸드 5권의 12개 전 단원을 모두 마쳤어요!"
+      },
+      {
+        "sentence": "Speaking English with confidence is our superpower.",
+        "ko": "자신감 있게 영어를 말하는 것은 우리의 멋진 능력이에요."
+      },
+      {
+        "sentence": "Congratulations on your amazing English learning journey!",
+        "ko": "놀라운 영어 학습 여정을 완주한 것을 진심으로 축하해요!"
       }
     ]
   }
@@ -3139,6 +3680,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "Yes, I can run very fast!",
         "ko": "응, 나는 아주 빠르게 달릴 수 있어!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3160,6 +3729,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "I like my brand new sneakers!",
         "ko": "나는 내 새 운동화가 마음에 들어요!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3181,6 +3778,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "We can sing and play instruments together.",
         "ko": "우리는 함께 노래하고 악기를 연주할 수 있어요."
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3202,6 +3827,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "Run to first base, run to home plate!",
         "ko": "1루로 달려라, 홈플레이트로 달려라!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3223,6 +3876,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "Hula hooping is so much fun on field day!",
         "ko": "운동회 날 훌라후프 돌리기는 정말 신나요!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3244,6 +3925,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "We are ready for an exciting journey!",
         "ko": "우리는 신나는 여행을 떠날 준비가 됐어요!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3265,6 +3974,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "Thank you for asking so politely.",
         "ko": "예의 바르게 물어봐 줘서 고마워요."
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3286,6 +4023,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "Working together makes our home shine!",
         "ko": "함께 일하면 우리 집이 반짝반짝 빛나요!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3307,6 +4072,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "The train is moving fast on the track.",
         "ko": "기차가 선로 위를 빠르게 달리고 있어요."
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3328,6 +4121,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "We will celebrate and have a great time.",
         "ko": "우리는 축하하며 멋진 시간을 보낼 거야."
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3349,6 +4170,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "It is the best snack for lunch!",
         "ko": "점심으로 먹기 가장 좋은 최고의 간식이에요!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   },
@@ -3370,6 +4219,34 @@ var HANDINHAND_SONG_VIDEOS = [
       {
         "sentence": "Use your senses every single day!",
         "ko": "매일매일 너의 감각들을 사용해 봐!"
+      },
+      {
+        "sentence": "Sing out loud and clap your hands to the beat!",
+        "ko": "큰 소리로 노래하고 박자에 맞춰 손뼉을 쳐요!"
+      },
+      {
+        "sentence": "Listen to the happy rhythm and dance along.",
+        "ko": "신나는 리듬을 듣고 함께 춤을 춰요."
+      },
+      {
+        "sentence": "English songs make learning so joyful and fun.",
+        "ko": "영어 노래는 공부를 아주 즐겁고 신나게 만들어 줘요."
+      },
+      {
+        "sentence": "Follow the melody and practice your pronunciation.",
+        "ko": "멜로디를 따라 하며 발음을 연습해 보세요."
+      },
+      {
+        "sentence": "Sing with your friends in a clear, happy voice.",
+        "ko": "맑고 행복한 목소리로 친구들과 함께 노래해요."
+      },
+      {
+        "sentence": "Music makes every word shine like a star.",
+        "ko": "음악은 모든 단어를 별처럼 빛나게 해 줘요."
+      },
+      {
+        "sentence": "Let us sing this wonderful song one more time!",
+        "ko": "이 멋진 노래를 한 번 더 신나게 불러봐요!"
       }
     ]
   }
@@ -3384,16 +4261,44 @@ var ORT4_SERIES_VIDEOS = [
     "sub": "키퍼 가족이 낡았지만 넓고 멋진 새 집을 보러 갔어요!",
     "shadow": [
       {
-        "sentence": "Dad and Mum liked the big house.",
-        "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."
+        "sentence": "Dad and Mum wanted to find a bigger house for the family.",
+        "ko": "아빠와 엄마는 가족을 위해 더 큰 집을 찾고 싶어 하셨습니다."
       },
       {
-        "sentence": "The children went in the tree house.",
-        "ko": "아이들은 나무 위의 오두막으로 갔습니다."
+        "sentence": "An agent put up a large wooden sign that said House for Sale.",
+        "ko": "부동산 중개인이 '팔려고 내놓은 집'이라는 큰 나무 표지판을 세웠습니다."
       },
       {
-        "sentence": "Kipper pulled the old wallpaper.",
-        "ko": "키퍼가 낡은 벽지를 잡아당겼습니다."
+        "sentence": "Dad and Mum liked the big house with its wide garden.",
+        "ko": "아빠와 엄마는 넓은 정원이 있는 그 큰 집을 마음에 들어 하셨습니다."
+      },
+      {
+        "sentence": "The children ran into the overgrown garden to look around.",
+        "ko": "아이들은 주위를 둘러보기 위해 무성한 정원으로 달려갔습니다."
+      },
+      {
+        "sentence": "Biff and Chip climbed up into the sturdy wooden tree house.",
+        "ko": "비프와 칩은 튼튼한 나무 위의 오두막으로 올라갔습니다."
+      },
+      {
+        "sentence": "Kipper saw some peeling wallpaper inside the small hall.",
+        "ko": "키퍼는 작은 복도 안에서 벗겨지는 낡은 벽지를 보았습니다."
+      },
+      {
+        "sentence": "Kipper pulled the old wallpaper and heard a soft creak.",
+        "ko": "키퍼가 낡은 벽지를 잡아당기자 삐걱하는 작은 소리가 났습니다."
+      },
+      {
+        "sentence": "Look at this secret spot in the wall, called out Kipper.",
+        "ko": "벽 속에 숨겨진 이 특별한 곳 좀 봐, 키퍼가 외쳤습니다."
+      },
+      {
+        "sentence": "Mum and Dad agreed that this was the perfect dream home.",
+        "ko": "엄마와 아빠는 이곳이 완벽한 꿈의 보금자리라는 데 동의하셨습니다."
+      },
+      {
+        "sentence": "The family was so excited to move into their wonderful new house.",
+        "ko": "가족들은 멋진 새 집으로 이사하게 되어 무척 신이 났습니다."
       }
     ]
   },
@@ -3405,16 +4310,44 @@ var ORT4_SERIES_VIDEOS = [
     "sub": "커다란 이삿짐 밴이 오고, 신나게 짐을 싸서 새 집으로 출발!",
     "shadow": [
       {
-        "sentence": "A big van came to the house.",
-        "ko": "큰 밴이 집으로 왔습니다."
+        "sentence": "Moving day had finally arrived for the happy family.",
+        "ko": "행복한 가족에게 마침내 이삿날이 다가왔습니다."
       },
       {
-        "sentence": "Dad and the children packed the boxes.",
-        "ko": "아빠와 아이들은 상자에 짐을 쌌습니다."
+        "sentence": "A big blue moving van arrived outside the old front door.",
+        "ko": "커다란 파란색 이삿짐 밴이 낡은 현관문 밖에 도착했습니다."
       },
       {
-        "sentence": "The van went to the new house.",
-        "ko": "밴은 새 집으로 갔습니다."
+        "sentence": "Dad and the children packed all their toys into cardboard boxes.",
+        "ko": "아빠와 아이들은 모든 장난감을 판지 상자에 쌌습니다."
+      },
+      {
+        "sentence": "Floppy barked with excitement around the open moving boxes.",
+        "ko": "플로피는 열려 있는 이삿짐 상자 주변을 돌며 신나서 짖었습니다."
+      },
+      {
+        "sentence": "The strong movers loaded the heavy wooden furniture into the van.",
+        "ko": "힘센 이삿짐 기사님들이 무거운 목재 가구를 밴에 실었습니다."
+      },
+      {
+        "sentence": "The van drove through the town and arrived at the new house.",
+        "ko": "밴은 마을을 지나 새 집에 도착했습니다."
+      },
+      {
+        "sentence": "Mum carried in the kettle to make hot cups of tea for everyone.",
+        "ko": "엄마는 모두를 위한 따뜻한 차를 끓이기 위해 주전자를 들고 오셨습니다."
+      },
+      {
+        "sentence": "Chip chose the bright bedroom that looked over the garden.",
+        "ko": "칩은 정원이 내려다보이는 밝은 침실을 골랐습니다."
+      },
+      {
+        "sentence": "The children helped unpack their favorite bedtime storybooks.",
+        "ko": "아이들은 좋아하는 잠자리 동화책들을 푸는 것을 도왔습니다."
+      },
+      {
+        "sentence": "Everyone felt cozy, comfortable, and happy in their new home.",
+        "ko": "모두가 새 보금자리에서 아늑하고 편안하며 행복함을 느꼈습니다."
       }
     ]
   },
@@ -3426,16 +4359,44 @@ var ORT4_SERIES_VIDEOS = [
     "sub": "아빠가 문을 칠하는 동안 친구들이 찾아왔어요! 들어와서 놀자!",
     "shadow": [
       {
-        "sentence": "Dad was painting the front door.",
-        "ko": "아빠는 현관문을 칠하고 있었습니다."
+        "sentence": "Dad bought a big can of bright red paint at the hardware store.",
+        "ko": "아빠는 철물점에서 밝은 빨간색 페인트 한 통을 사 오셨습니다."
       },
       {
-        "sentence": "Come in and play with us, said Biff.",
-        "ko": "들어와서 우리랑 놀자, 비프가 말했습니다."
+        "sentence": "Dad was busy painting the new front door on a sunny afternoon.",
+        "ko": "아빠는 화창한 오후에 새 현관문을 칠하느라 바쁘셨습니다."
       },
       {
-        "sentence": "Mum gave the children some biscuits.",
-        "ko": "엄마는 아이들에게 비스킷을 주었습니다."
+        "sentence": "Biff and Chip were playing games on the front lawn.",
+        "ko": "비프와 칩은 앞마당 잔디밭에서 게임을 하고 있었습니다."
+      },
+      {
+        "sentence": "Their school friends Wilf and Wilma walked up the driveway.",
+        "ko": "학교 친구인 윌프와 윌마가 진입로를 따라 걸어왔습니다."
+      },
+      {
+        "sentence": "Come in and play with us! shouted Biff with a cheerful wave.",
+        "ko": "들어와서 우리랑 놀자! 비프가 밝게 손을 흔들며 외쳤습니다."
+      },
+      {
+        "sentence": "Floppy ran out wagging his tail to greet the visitors warmly.",
+        "ko": "플로피는 방문객들을 반갑게 맞이하기 위해 꼬리를 흔들며 뛰어나왔습니다."
+      },
+      {
+        "sentence": "Mum brought out a plate of crispy chocolate biscuits and cold juice.",
+        "ko": "엄마는 바삭한 초콜릿 비스킷과 시원한 주스 접시를 가져오셨습니다."
+      },
+      {
+        "sentence": "The children played tag and showed off the secret tree house.",
+        "ko": "아이들은 술래잡기를 하고 비밀 나무 오두막을 자랑했습니다."
+      },
+      {
+        "sentence": "Dad finished painting the shiny door and wiped his hands.",
+        "ko": "아빠는 반짝이는 문 칠하기를 마치고 손을 닦으셨습니다."
+      },
+      {
+        "sentence": "Playing with good friends made the new house feel like home.",
+        "ko": "좋은 친구들과 노는 것은 새 집을 진짜 우리 집처럼 느끼게 해 주었습니다."
       }
     ]
   },
@@ -3447,16 +4408,44 @@ var ORT4_SERIES_VIDEOS = [
     "sub": "벽지를 뜯어내자 숨겨진 비밀 문과 미니어처 집이 나타났어요!",
     "shadow": [
       {
-        "sentence": "They pulled the wallpaper and found a door.",
-        "ko": "그들은 벽지를 뜯고 문을 발견했습니다."
+        "sentence": "Chip was peeling the old floral wallpaper in his new bedroom.",
+        "ko": "칩은 새 침실에서 낡은 꽃무늬 벽지를 벗겨내고 있었습니다."
       },
       {
-        "sentence": "The old door was stuck fast.",
-        "ko": "낡은 문이 꽉 끼어 있었습니다."
+        "sentence": "Biff and Kipper came into the room to help him pull the paper.",
+        "ko": "비프와 키퍼도 벽지를 뜯는 것을 돕기 위해 방으로 들어왔습니다."
       },
       {
-        "sentence": "Inside was an amazing miniature house!",
-        "ko": "안에는 놀라운 미니어처 집이 있었습니다!"
+        "sentence": "Behind a thick layer of paper, they discovered an old wooden door.",
+        "ko": "두꺼운 종이 층 뒤에서 그들은 낡은 나무 문을 발견했습니다."
+      },
+      {
+        "sentence": "The small wooden door was stuck fast with old rusty latches.",
+        "ko": "작은 나무 문은 낡고 녹슨 걸쇠로 꽉 끼어 있었습니다."
+      },
+      {
+        "sentence": "Dad brought a metal crowbar and gently opened the secret door.",
+        "ko": "아빠는 쇠지렛대를 가져와 조심스럽게 비밀의 문을 여셨습니다."
+      },
+      {
+        "sentence": "Inside the hidden room, the dust danced in the warm sunbeam.",
+        "ko": "숨겨진 방 안에서 먼지가 따스한 햇살 속에 춤추고 있었습니다."
+      },
+      {
+        "sentence": "On a small wooden table, they found a beautiful miniature dollhouse!",
+        "ko": "작은 나무 탁자 위에서 그들은 아름다운 미니어처 인형의 집을 발견했습니다!"
+      },
+      {
+        "sentence": "The miniature house looked exactly like their own real house.",
+        "ko": "그 미니어처 집은 그들의 진짜 집과 똑같이 생겼습니다."
+      },
+      {
+        "sentence": "This hidden room is full of historical wonders, gasped Mum.",
+        "ko": "이 숨겨진 방은 역사적인 경이로움으로 가득 차 있구나, 엄마가 감탄하셨습니다."
+      },
+      {
+        "sentence": "Finding the secret room made their new home feel truly magical.",
+        "ko": "비밀의 방을 찾은 것은 그들의 새 보금자리를 정말 마법처럼 느끼게 해 주었습니다."
       }
     ]
   },
@@ -3468,16 +4457,44 @@ var ORT4_SERIES_VIDEOS = [
     "sub": "무대 의상을 입고 관객들의 큰 환호를 받으며 연극을 펼쳐요!",
     "shadow": [
       {
-        "sentence": "The children put on a great play.",
-        "ko": "아이들은 멋진 연극을 무대에 올렸습니다."
+        "sentence": "The school was putting on an exciting theater play on stage.",
+        "ko": "학교는 무대 위에서 신나는 연극을 올리기로 했습니다."
       },
       {
-        "sentence": "Kipper wore a very funny costume.",
-        "ko": "키퍼는 아주 우스꽝스러운 옷을 입었습니다."
+        "sentence": "Mum and the teacher helped sew colorful medieval costumes.",
+        "ko": "엄마와 선생님은 화려한 중세 시대 무대 의상을 꿰매는 것을 도와주셨습니다."
       },
       {
-        "sentence": "The audience clapped and cheered loudly.",
-        "ko": "관객들은 크게 박수를 치고 환호했습니다."
+        "sentence": "Chip was dressed up as a brave royal king with a golden crown.",
+        "ko": "칩은 금빛 왕관을 쓴 용감한 왕으로 분장했습니다."
+      },
+      {
+        "sentence": "Biff played the role of an adventurous and clever princess.",
+        "ko": "비프는 모험심 강하고 영리한 공주 역할을 맡았습니다."
+      },
+      {
+        "sentence": "Kipper wore a very funny fluffy rabbit costume with long floppy ears.",
+        "ko": "키퍼는 긴 늘어진 귀가 달린 아주 우스꽝스럽고 푹신한 토끼 옷을 입었습니다."
+      },
+      {
+        "sentence": "The theater curtains opened slowly, and the bright stage lights turned on.",
+        "ko": "극장 커튼이 천천히 열리고 밝은 무대 조명이 켜졌습니다."
+      },
+      {
+        "sentence": "The children spoke their lines clearly and danced to the music.",
+        "ko": "아이들은 대사를 또박또박 말하고 음악에 맞춰 춤을 췄습니다."
+      },
+      {
+        "sentence": "Kipper hopped across the stage and made everyone giggle with joy.",
+        "ko": "키퍼가 무대 위를 깡충깡충 뛰어다니자 모두가 기쁨에 웃음을 터뜨렸습니다."
+      },
+      {
+        "sentence": "The large audience clapped their hands and cheered loudly for them.",
+        "ko": "수많은 관객들이 손뼉을 치며 그들을 향해 크게 환호했습니다."
+      },
+      {
+        "sentence": "The school play was a huge success, and the children took a bow.",
+        "ko": "학교 연극은 큰 성공을 거두었고, 아이들은 무대 인사를 올렸습니다."
       }
     ]
   },
@@ -3489,16 +4506,44 @@ var ORT4_SERIES_VIDEOS = [
     "sub": "거센 폭풍우가 지나간 뒤, 플로피가 빛나는 마법 열쇠를 발견했어요!",
     "shadow": [
       {
-        "sentence": "A big storm blew the giant tree down.",
-        "ko": "거대한 폭풍이 거대한 나무를 쓰러뜨렸습니다."
+        "sentence": "Dark grey clouds gathered quickly across the stormy evening sky.",
+        "ko": "어두운 먹구름이 폭풍우 치는 저녁 하늘에 빠르게 모여들었습니다."
       },
       {
-        "sentence": "Floppy found a secret glowing box.",
-        "ko": "플로피는 비밀의 빛나는 상자를 찾았습니다."
+        "sentence": "The wind blew fiercely and heavy raindrops hammered on the window.",
+        "ko": "바람이 거세게 불고 굵은 빗방울이 창문을 두드렸습니다."
       },
       {
-        "sentence": "Inside was a wonderful magic key!",
-        "ko": "안에는 놀라운 마법 열쇠가 들어 있었습니다!"
+        "sentence": "Suddenly, with a loud crack, the ancient tree in the garden fell over.",
+        "ko": "갑자기 쾅 하는 소리와 함께 정원의 오래된 큰 나무가 쓰러졌습니다."
+      },
+      {
+        "sentence": "The children looked out of the window with wide, startled eyes.",
+        "ko": "아이들은 눈을 크게 뜨고 깜짝 놀라 창밖을 내다보았습니다."
+      },
+      {
+        "sentence": "The next morning, the bright sun came out and the storm was over.",
+        "ko": "다음 날 아침, 밝은 해가 떠오르고 폭풍은 지나갔습니다."
+      },
+      {
+        "sentence": "The family went out into the yard to inspect the fallen tree.",
+        "ko": "가족들은 쓰러진 나무를 살펴보기 위해 마당으로 나갔습니다."
+      },
+      {
+        "sentence": "Floppy started digging energetically beneath the exposed wooden roots.",
+        "ko": "플로피는 드러난 나무뿌리 아래를 열심히 파헤치기 시작했습니다."
+      },
+      {
+        "sentence": "Floppy uncovered a small, dusty carved box wrapped in velvet.",
+        "ko": "플로피는 벨벳에 싸인 작고 먼지 낀 조각 상자를 발견했습니다."
+      },
+      {
+        "sentence": "Inside the mysterious box lay an antique, glowing magic key!",
+        "ko": "신비로운 상자 안에는 빛을 내는 골동품 마법 열쇠가 들어 있었습니다!"
+      },
+      {
+        "sentence": "The magic key was ready to take them on countless adventures.",
+        "ko": "마법의 열쇠는 그들을 수많은 모험으로 데려갈 준비가 되어 있었습니다."
       }
     ]
   }
@@ -3516,12 +4561,40 @@ var ORT5_SERIES_VIDEOS = [
         "ko": "우리는 저 노 젓는 보트를 탈 거야, 아빠가 말씀하셨어요."
       },
       {
-        "sentence": "Floppy jumped into the water to save the rope.",
-        "ko": "플로피는 밧줄을 구하기 위해 물속으로 뛰어들었습니다."
+        "sentence": "Dad took the wooden oars and began to row across the river.",
+        "ko": "아빠는 나무 노를 잡고 강을 건너 노를 젓기 시작하셨습니다."
       },
       {
-        "sentence": "Everyone cheered for the brave dog Floppy!",
-        "ko": "모두가 용감한 개 플로피를 향해 환호했습니다!"
+        "sentence": "Floppy sat at the front of the boat and looked at the water.",
+        "ko": "플로피는 보트 앞자리에 앉아 물을 바라보았습니다."
+      },
+      {
+        "sentence": "The children smiled and watched the ducks swimming happily.",
+        "ko": "아이들은 미소 지으며 행복하게 헤엄치는 오리들을 바라보았습니다."
+      },
+      {
+        "sentence": "Suddenly, the rope slipped out of Dad's hands.",
+        "ko": "갑자기 밧줄이 아빠의 손에서 미끄러져 빠져나갔습니다."
+      },
+      {
+        "sentence": "Oh no! The rope is floating away down the fast river!",
+        "ko": "안 돼! 밧줄이 빠른 강물 아래로 떠내려가고 있어!"
+      },
+      {
+        "sentence": "Floppy barked loudly and jumped into the cool water.",
+        "ko": "플로피는 크게 짖으며 시원한 물속으로 뛰어들었습니다."
+      },
+      {
+        "sentence": "The brave dog swam fast and caught the rope with his teeth.",
+        "ko": "용감한 개는 빠르게 헤엄쳐 이빨로 밧줄을 잡았습니다."
+      },
+      {
+        "sentence": "Dad pulled Floppy and the rope safely back into the boat.",
+        "ko": "아빠는 플로피와 밧줄을 안전하게 보트 안으로 다시 끌어올렸습니다."
+      },
+      {
+        "sentence": "Everyone cheered loudly for the brave dog Floppy!",
+        "ko": "모두가 용감한 개 플로피를 향해 크게 환호했습니다!"
       }
     ]
   },
@@ -3533,16 +4606,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "마법의 열쇠가 빛나며 무시무시하고 우스꽝스러운 트롤들의 세상으로 날아갔어요!",
     "shadow": [
       {
-        "sentence": "The magic key began to glow brightly.",
-        "ko": "마법의 열쇠가 밝게 빛나기 시작했습니다."
+        "sentence": "The magic key began to glow brightly in the box.",
+        "ko": "마법의 열쇠가 상자 안에서 밝게 빛나기 시작했습니다."
+      },
+      {
+        "sentence": "The magic took Biff, Chip, and Kipper to a strange forest.",
+        "ko": "마법은 비프, 칩, 키퍼를 이상한 숲으로 데려갔습니다."
       },
       {
         "sentence": "The trolls were big, green, and very noisy.",
         "ko": "트롤들은 덩치가 크고 초록색이며 매우 시끄러웠습니다."
       },
       {
-        "sentence": "Kipper ran across the magic wooden bridge.",
-        "ko": "키퍼는 마법의 나무다리를 건너 달렸습니다."
+        "sentence": "The nasty trolls lived under an old wooden bridge.",
+        "ko": "못된 트롤들은 낡은 나무다리 아래에 살고 있었습니다."
+      },
+      {
+        "sentence": "Kipper ran across the magic wooden bridge to explore.",
+        "ko": "키퍼는 탐험을 하기 위해 마법의 나무다리를 건너 달렸습니다."
+      },
+      {
+        "sentence": "Stop! shouted the grumpy troll with a loud growl.",
+        "ko": "멈춰라! 심술쟁이 트롤이 커다란 으르렁 소리와 함께 외쳤습니다."
+      },
+      {
+        "sentence": "Floppy barked bravely at the scary green monsters.",
+        "ko": "플로피가 무서운 초록색 괴물들을 향해 용감하게 짖었습니다."
+      },
+      {
+        "sentence": "Biff and Chip threw small pebbles into the muddy stream.",
+        "ko": "비프와 칩은 진흙탕 개울 속으로 작은 조약돌을 던졌습니다."
+      },
+      {
+        "sentence": "The clumsy trolls slipped on the wet moss and tumbled down.",
+        "ko": "서투른 트롤들은 젖은 이끼에 미끄러져 굴러떨어졌습니다."
+      },
+      {
+        "sentence": "The children laughed happily as the magic key took them home.",
+        "ko": "마법의 열쇠가 그들을 집으로 데려가자 아이들은 기쁘게 웃었습니다."
       }
     ]
   },
@@ -3554,16 +4655,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "중세의 거대한 성으로 모험을 떠나 높은 탑과 비밀의 통로를 탐험해요!",
     "shadow": [
       {
-        "sentence": "They looked up at the giant castle walls.",
-        "ko": "그들은 거대한 성벽을 올려다보았습니다."
+        "sentence": "The magic key began to glow and sparkle in the bedroom.",
+        "ko": "마법의 열쇠가 침실에서 반짝반짝 빛나기 시작했습니다."
       },
       {
-        "sentence": "A friendly knight welcomed the children inside.",
-        "ko": "친절한 기사가 아이들을 안으로 맞이했습니다."
+        "sentence": "They arrived in front of a giant stone castle.",
+        "ko": "그들은 거대한 돌로 된 성 앞에 도착했습니다."
       },
       {
-        "sentence": "It was an exciting and unforgettable adventure!",
-        "ko": "정말 신나고 잊을 수 없는 모험이었습니다!"
+        "sentence": "They looked up at the high castle walls and tall towers.",
+        "ko": "그들은 높은 성벽과 우뚝 솟은 탑들을 올려다보았습니다."
+      },
+      {
+        "sentence": "A friendly knight wearing shiny silver armor welcomed them.",
+        "ko": "반짝이는 은빛 갑옷을 입은 친절한 기사가 그들을 맞이했습니다."
+      },
+      {
+        "sentence": "Welcome to the grand castle, young travelers, said the knight.",
+        "ko": "위대한 성에 오신 것을 환영합니다, 어린 여행자들, 기사가 말했습니다."
+      },
+      {
+        "sentence": "They walked through the great stone hall and saw royal shields.",
+        "ko": "그들은 거대한 석조 홀을 걸으며 왕실의 방패들을 보았습니다."
+      },
+      {
+        "sentence": "Kipper found a secret passage behind a colorful tapestry.",
+        "ko": "키퍼는 화려한 벽걸이 융단 뒤에서 비밀 통로를 발견했습니다."
+      },
+      {
+        "sentence": "The friendly cook in the kitchen gave them warm sweet bread.",
+        "ko": "주방의 친절한 요리사가 그들에게 따뜻하고 달콤한 빵을 주었습니다."
+      },
+      {
+        "sentence": "Everyone enjoyed the exciting tournament and festive music.",
+        "ko": "모두가 신나는 마상 시합과 축제 음악을 즐겼습니다."
+      },
+      {
+        "sentence": "It was an exciting and unforgettable adventure for all of them.",
+        "ko": "그들 모두에게 정말 신나고 잊을 수 없는 모험이었습니다."
       }
     ]
   },
@@ -3575,16 +4704,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "모든 것이 반대로 비치는 신비한 거울 섬에서 해적들과의 두뇌 싸움!",
     "shadow": [
       {
-        "sentence": "Everything on the island looked like a mirror.",
-        "ko": "섬에 있는 모든 것이 거울처럼 비쳤습니다."
+        "sentence": "The magic key took the children to a mysterious sandy island.",
+        "ko": "마법의 열쇠가 아이들을 신비로운 모래섬으로 데려갔습니다."
       },
       {
-        "sentence": "Captain Crow searched for the hidden treasure.",
-        "ko": "크로우 선장은 숨겨진 보물을 찾아다녔습니다."
+        "sentence": "Everything on the island looked shiny and bright like a mirror.",
+        "ko": "섬에 있는 모든 것이 거울처럼 반짝이고 밝게 비쳤습니다."
       },
       {
-        "sentence": "The clever children outsmarted the pirate crew.",
-        "ko": "영리한 아이들이 해적 선원들을 지혜로 이겼습니다."
+        "sentence": "The rocks, trees, and water showed their clear reflections.",
+        "ko": "바위와 나무, 물이 그들의 모습을 선명하게 비추었습니다."
+      },
+      {
+        "sentence": "Captain Crow searched the island for the hidden treasure chest.",
+        "ko": "크로우 선장은 숨겨진 보물 상자를 찾아 섬을 뒤졌습니다."
+      },
+      {
+        "sentence": "Where is the secret gold? growled the angry pirate captain.",
+        "ko": "숨겨진 황금은 어디 있느냐? 화난 해적 선장이 으르렁거렸습니다."
+      },
+      {
+        "sentence": "Biff used a small hand mirror to reflect the bright sunshine.",
+        "ko": "비프는 눈부신 햇빛을 반사하기 위해 작은 손거울을 사용했습니다."
+      },
+      {
+        "sentence": "The bright flash of sunlight shone right into the pirates' eyes.",
+        "ko": "눈부신 햇빛 번쩍임이 해적들의 눈을 똑바로 비추었습니다."
+      },
+      {
+        "sentence": "The confused pirates dropped their map and ran away in fear.",
+        "ko": "당황한 해적들은 지도를 떨어뜨리고 겁에 질려 달아났습니다."
+      },
+      {
+        "sentence": "The clever children outsmarted the tricky pirate crew.",
+        "ko": "영리한 아이들이 교활한 해적 선원들을 지혜로 물리쳤습니다."
+      },
+      {
+        "sentence": "The magic key glowed again and brought them safely home.",
+        "ko": "마법의 열쇠가 다시 빛나며 그들을 안전하게 집으로 데려왔습니다."
       }
     ]
   },
@@ -3596,16 +4753,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "그림을 그리면 실제로 살아 움직이는 마법의 붓을 얻은 아이들의 모험!",
     "shadow": [
       {
-        "sentence": "Whatever she painted came to real life.",
-        "ko": "그녀가 그린 것은 무엇이든 진짜 살아 움직였습니다."
+        "sentence": "An old woman gave Shen a wonderful magic paintbrush.",
+        "ko": "한 할머니가 셴에게 놀라운 마법의 붓을 주었습니다."
       },
       {
-        "sentence": "She painted delicious food for hungry people.",
-        "ko": "그녀는 배고픈 사람들을 위해 맛있는 음식을 그렸습니다."
+        "sentence": "The brush had soft brown hair and a golden wooden handle.",
+        "ko": "그 붓은 부드러운 갈색 털과 황금빛 나무 손잡이를 가지고 있었습니다."
       },
       {
-        "sentence": "The greedy king tried to steal the magic brush.",
-        "ko": "욕심쟁이 왕이 마법의 붓을 훔치려 했습니다."
+        "sentence": "Whatever she painted with the brush came to real life.",
+        "ko": "그녀가 붓으로 그린 것은 무엇이든 진짜 살아 움직였습니다."
+      },
+      {
+        "sentence": "She painted a big basket of delicious melons for poor villagers.",
+        "ko": "그녀는 가난한 마을 사람들을 위해 맛있는 멜론 한 바구니를 그렸습니다."
+      },
+      {
+        "sentence": "The fresh green melon rolled out of the paper onto the table.",
+        "ko": "신선한 초록색 멜론이 종이 밖으로 굴러 식탁 위로 나왔습니다."
+      },
+      {
+        "sentence": "The greedy emperor heard about the amazing magic brush.",
+        "ko": "욕심 많은 황제가 그 놀라운 마법의 붓에 대한 소문을 들었습니다."
+      },
+      {
+        "sentence": "Paint me a mountain of shiny gold coins, ordered the emperor.",
+        "ko": "나에게 반짝이는 금화 산을 그려라, 황제가 명령했습니다."
+      },
+      {
+        "sentence": "Shen cleverly painted a giant blue sea and a tiny sailing boat.",
+        "ko": "셴은 영리하게 거대한 푸른 바다와 작은 돛배를 그렸습니다."
+      },
+      {
+        "sentence": "The strong sea wind blew the greedy emperor far away.",
+        "ko": "강한 바닷바람이 욕심쟁이 황제를 멀리 날려버렸습니다."
+      },
+      {
+        "sentence": "Shen continued to use the magic brush to help kind people.",
+        "ko": "셴은 착한 사람들을 돕기 위해 계속해서 마법의 붓을 사용했습니다."
       }
     ]
   },
@@ -3617,16 +4802,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "숲속에 무서운 괴물이 나타났다고 생각했지만 사실은 귀여운 해프닝이었어요!",
     "shadow": [
       {
-        "sentence": "They heard a strange sound in the dark forest.",
-        "ko": "그들은 어두운 숲속에서 이상한 소리를 들었습니다."
+        "sentence": "The children were playing in the garden near the dark woods.",
+        "ko": "아이들은 어두운 숲 근처 정원에서 놀고 있었습니다."
       },
       {
-        "sentence": "Do not be afraid, it is just a friendly creature.",
-        "ko": "두려워하지 마, 그저 친절한 동물일 뿐이야."
+        "sentence": "The glowing magic key whisked them away into an ancient forest.",
+        "ko": "빛나는 마법 열쇠가 그들을 고대 숲속으로 휙 데려갔습니다."
       },
       {
-        "sentence": "Everyone laughed at the funny monster mistake.",
-        "ko": "모두가 우스꽝스러운 괴물 착각에 웃음을 터뜨렸습니다."
+        "sentence": "They heard a deep rumbling noise behind the tall bushes.",
+        "ko": "그들은 키 큰 덤불 뒤에서 낮게 으르렁거리는 소리를 들었습니다."
+      },
+      {
+        "sentence": "Look over there! Is that a giant monster? whispered Chip.",
+        "ko": "저기 봐! 저거 거대한 괴물 아니야? 칩이 속삭였습니다."
+      },
+      {
+        "sentence": "Floppy hid behind Dad's legs and whined softly in fear.",
+        "ko": "플로피는 아빠 다리 뒤에 숨어 무서워서 낑낑거렸습니다."
+      },
+      {
+        "sentence": "A huge furry shadow moved slowly across the green grass.",
+        "ko": "거대한 털북숭이 그림자가 초록 풀밭 위를 천천히 지나갔습니다."
+      },
+      {
+        "sentence": "The creature stepped into the sunlight and smiled happily.",
+        "ko": "그 생명체는 햇빛 속으로 걸어 나와 행복하게 미소 지었습니다."
+      },
+      {
+        "sentence": "It was not a scary monster, but a friendly forest panda bear!",
+        "ko": "무서운 괴물이 아니라 그저 친절한 숲속 판다 곰이었습니다!"
+      },
+      {
+        "sentence": "The cute creature gave Kipper a sweet red forest berry.",
+        "ko": "귀여운 생명체는 키퍼에게 달콤한 빨간 산딸기를 건넸습니다."
+      },
+      {
+        "sentence": "Everyone laughed out loud at the funny monster mistake.",
+        "ko": "모두가 그 우스꽝스러운 괴물 착각에 크게 웃음을 터뜨렸습니다."
       }
     ]
   },
@@ -3638,16 +4851,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "하얀 눈이 가득한 북극에서 용감하고 씩씩한 허스키 썰매견들과 함께 달려요!",
     "shadow": [
       {
-        "sentence": "The strong huskies pulled the wooden sled fast.",
-        "ko": "힘센 허스키들이 나무 썰매를 빠르게 끌었습니다."
+        "sentence": "The magic key glowed icy blue and took them to the Arctic.",
+        "ko": "마법의 열쇠가 얼음빛 파란색으로 빛나며 그들을 북극으로 데려갔습니다."
       },
       {
-        "sentence": "Snow was falling gently over the cold mountains.",
-        "ko": "차가운 산 위로 눈이 부드럽게 내리고 있었습니다."
+        "sentence": "Thick white snow covered the ground and frozen hills.",
+        "ko": "두꺼운 하얀 눈이 땅과 얼어붙은 언덕을 뒤덮고 있었습니다."
       },
       {
-        "sentence": "The sled ride was thrilling and super fast.",
-        "ko": "썰매 타기는 짜릿하고 정말 빨랐습니다."
+        "sentence": "A friendly guide introduced them to twelve beautiful husky dogs.",
+        "ko": "친절한 안내원이 그들에게 열두 마리의 아름다운 허스키 개들을 소개해 주었습니다."
+      },
+      {
+        "sentence": "The strong huskies had thick grey fur and bright blue eyes.",
+        "ko": "힘센 허스키들은 두꺼운 회색 털과 밝은 파란 눈을 가지고 있었습니다."
+      },
+      {
+        "sentence": "Are you ready for the great sled ride? asked the cheerful guide.",
+        "ko": "신나는 썰매 타기 준비되셨나요? 명랑한 안내원이 물었습니다."
+      },
+      {
+        "sentence": "The huskies pulled the wooden sled fast across the crisp white snow.",
+        "ko": "허스키들은 뽀드득거리는 하얀 눈 위로 나무 썰매를 빠르게 끌었습니다."
+      },
+      {
+        "sentence": "The cold winter wind blew gently on their warm rosy cheeks.",
+        "ko": "차가운 겨울바람이 그들의 따뜻하고 발그레한 뺨 위로 부드럽게 불었습니다."
+      },
+      {
+        "sentence": "Kipper held on tight to the sled rail and smiled with delight.",
+        "ko": "키퍼는 썰매 난간을 꽉 잡고 기쁨에 넘쳐 미소 지었습니다."
+      },
+      {
+        "sentence": "The dogs barked with joy as they reached the warm cozy cabin.",
+        "ko": "개들은 따뜻하고 아늑한 오두막에 도착하자 기쁨에 겨워 짖었습니다."
+      },
+      {
+        "sentence": "The husky sled adventure was thrilling, joyful, and super fast!",
+        "ko": "허스키 썰매 모험은 짜릿하고 즐겁고 정말 빨랐습니다!"
       }
     ]
   },
@@ -3659,16 +4900,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "식물원에서 가장 진귀한 무지개 난초가 사라졌어요! 탐정이 되어 도둑을 잡아요!",
     "shadow": [
       {
-        "sentence": "The rare purple orchid was gone from the garden.",
-        "ko": "희귀한 보라색 난초가 정원에서 사라졌습니다."
+        "sentence": "The magic key transported the children to a giant glass greenhouse.",
+        "ko": "마법의 열쇠가 아이들을 거대한 유리 온실로 데려다주었습니다."
       },
       {
-        "sentence": "The children looked carefully for footprints.",
-        "ko": "아이들은 발자국을 주의 깊게 찾았습니다."
+        "sentence": "Hundreds of colorful tropical flowers were blooming everywhere.",
+        "ko": "수백 송이의 화려한 열대 꽃들이 사방에서 피어나고 있었습니다."
       },
       {
-        "sentence": "They solved the mystery and saved the flowers.",
-        "ko": "그들은 수수께끼를 풀고 꽃들을 구해냈습니다."
+        "sentence": "In the center stood the rare and famous glowing purple orchid.",
+        "ko": "중앙에는 진귀하고 유명한 빛나는 보라색 난초가 서 있었습니다."
+      },
+      {
+        "sentence": "Suddenly, the greenhouse keeper shouted, The purple orchid is gone!",
+        "ko": "갑자기 온실 관리인이 보라색 난초가 사라졌어요!라고 외쳤습니다."
+      },
+      {
+        "sentence": "Chip looked closely at the damp soil and found muddy footprints.",
+        "ko": "칩은 축축한 흙을 자세히 살피다가 진흙 묻은 발자국을 발견했습니다."
+      },
+      {
+        "sentence": "The thief ran towards the back garden gate, said Biff.",
+        "ko": "도둑이 뒷마당 문 쪽으로 도망쳤어, 비프가 말했습니다."
+      },
+      {
+        "sentence": "Floppy sniffed the ground eagerly and followed the scent trail.",
+        "ko": "플로피는 바닥의 냄새를 열심히 맡으며 자취를 따라갔습니다."
+      },
+      {
+        "sentence": "They caught the clumsy flower thief hiding behind a green hedge.",
+        "ko": "그들은 초록색 울타리 뒤에 숨어 있던 어설픈 꽃 도둑을 붙잡았습니다."
+      },
+      {
+        "sentence": "The precious orchid was returned safely to its sunny flowerbed.",
+        "ko": "귀중한 난초는 햇살이 잘 드는 화단으로 무사히 돌아왔습니다."
+      },
+      {
+        "sentence": "The grateful keeper gave each child a lovely miniature sunflower.",
+        "ko": "고마워하는 관리인은 아이들에게 예쁜 미니 해바라기를 하나씩 선물했습니다."
       }
     ]
   },
@@ -3680,16 +4949,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "안개 낀 계곡에서 마주친 신비한 야수와 우정을 쌓아가는 감동적인 이야기!",
     "shadow": [
       {
-        "sentence": "A gentle creature appeared through the morning mist.",
-        "ko": "아침 안개 사이로 온순한 생명체가 나타났습니다."
+        "sentence": "The magic key began to shimmer softly in Kipper's small hand.",
+        "ko": "마법의 열쇠가 키퍼의 작은 손에서 은은하게 반짝이기 시작했습니다."
       },
       {
-        "sentence": "Kipper offered some fresh apples to the beast.",
-        "ko": "키퍼는 그 야수에게 신선한 사과를 건넸습니다."
+        "sentence": "They found themselves standing in a quiet, foggy green valley.",
+        "ko": "그들은 조용하고 안개 낀 초록빛 계곡에 서 있는 자신들을 발견했습니다."
       },
       {
-        "sentence": "Kindness makes friends across different worlds.",
-        "ko": "친절함은 서로 다른 세상 속에서도 친구를 만들어 줍니다."
+        "sentence": "A tall gentle creature appeared slowly through the morning mist.",
+        "ko": "아침 안개 사이로 키가 크고 온순한 생명체가 천천히 나타났습니다."
+      },
+      {
+        "sentence": "The beast had soft velvety horns and giant purple ears.",
+        "ko": "그 야수는 부드러운 벨벳 같은 뿔과 거대한 보라색 귀를 가지고 있었습니다."
+      },
+      {
+        "sentence": "It looked lonely and shy as it stepped near the crystal stream.",
+        "ko": "수정처럼 맑은 개울가로 다가올 때 그 야수는 외롭고 수줍어 보였습니다."
+      },
+      {
+        "sentence": "Kipper took a fresh red apple from his bag and held it out gently.",
+        "ko": "키퍼는 가방에서 신선한 빨간 사과를 꺼내 부드럽게 내밀었습니다."
+      },
+      {
+        "sentence": "The friendly beast sniffed the sweet apple and ate it happily.",
+        "ko": "친절한 야수는 달콤한 사과 냄새를 맡고 맛있게 먹었습니다."
+      },
+      {
+        "sentence": "It bowed its big gentle head so Kipper could stroke its soft fur.",
+        "ko": "키퍼가 부드러운 털을 쓰다듬을 수 있도록 큰 머리를 다정하게 숙였습니다."
+      },
+      {
+        "sentence": "The children and the gentle beast played together all afternoon.",
+        "ko": "아이들과 온순한 야수는 오후 내내 함께 즐겁게 놀았습니다."
+      },
+      {
+        "sentence": "True kindness creates wonderful friendships across different worlds.",
+        "ko": "진정한 친절은 서로 다른 세상 속에서도 멋진 우정을 만들어 줍니다."
       }
     ]
   },
@@ -3701,16 +4998,44 @@ var ORT5_SERIES_VIDEOS = [
     "sub": "새로운 친구가 된 야수와 함께 마을 사람들과 다 함께 즐기는 맛있는 파티!",
     "shadow": [
       {
-        "sentence": "The long dining table was full of delicious fruit.",
-        "ko": "긴 식탁은 맛있는 과일로 가득 차 있었습니다."
+        "sentence": "The magic key brought the children to a magnificent castle courtyard.",
+        "ko": "마법의 열쇠가 아이들을 웅장한 성의 안마당으로 데려왔습니다."
       },
       {
-        "sentence": "Everyone cheered and clapped their hands together.",
-        "ko": "모두가 다 함께 손뼉을 치며 환호했습니다."
+        "sentence": "The gentle beast was invited to the royal banquet as a guest of honor.",
+        "ko": "온순한 야수가 귀빈으로서 왕실의 봄맞이 연회에 초대되었습니다."
       },
       {
-        "sentence": "It was the happiest day in the whole kingdom.",
-        "ko": "온 왕국에서 가장 행복한 날이었습니다."
+        "sentence": "A very long dining table was decorated with fresh flowers and ribbons.",
+        "ko": "아주 긴 식탁이 신선한 꽃과 리본으로 화려하게 장식되어 있었습니다."
+      },
+      {
+        "sentence": "The royal cooks carried out huge platters of roasted corn and berries.",
+        "ko": "왕실 요리사들이 구운 옥수수와 베리가 담긴 거대한 접시들을 날랐습니다."
+      },
+      {
+        "sentence": "The beast sat politely on a giant wooden chair and used a large napkin.",
+        "ko": "야수는 커다란 나무 의자에 예의 바르게 앉아 큰 냅킨을 둘렀습니다."
+      },
+      {
+        "sentence": "Please enjoy this wonderful feast, announced the friendly queen.",
+        "ko": "이 멋진 만찬을 마음껏 즐겨주세요, 친절한 왕비님이 발표했습니다."
+      },
+      {
+        "sentence": "Everyone laughed happily as the beast balanced a big watermelon on its nose.",
+        "ko": "야수가 코 위에 커다란 수박을 올려 균형을 잡자 모두가 즐겁게 웃었습니다."
+      },
+      {
+        "sentence": "Biff and Chip danced joyful circles to the lively music.",
+        "ko": "비프와 칩은 경쾌한 음악에 맞춰 신나게 원을 그리며 춤을 추었습니다."
+      },
+      {
+        "sentence": "The villagers gave three big cheers for their beloved animal friend.",
+        "ko": "마을 사람들은 사랑하는 동물 친구를 위해 세 번의 큰 환호를 보냈습니다."
+      },
+      {
+        "sentence": "It was truly the happiest and most delicious celebration in the kingdom.",
+        "ko": "온 왕국에서 참으로 가장 행복하고 가장 맛있는 축제였습니다."
       }
     ]
   }
@@ -3735,6 +5060,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Learning new things is always exciting.",
           "ko": "새로운 것을 배우는 것은 항상 신나요."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3756,6 +5109,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Everyone clapped for the magical performance.",
           "ko": "모두가 마법 같은 공연에 박수를 보냈습니다."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3777,6 +5158,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Nature gives us clean air and water.",
           "ko": "자연은 우리에게 맑은 공기와 물을 줍니다."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3798,6 +5207,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "We must protect animal homes together.",
           "ko": "우리는 동물들의 집을 함께 지켜야 해요."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     }
@@ -3821,6 +5258,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Turn off the faucet while brushing your teeth.",
           "ko": "양치하는 동안 수도꼭지를 잠그세요."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3842,6 +5307,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "We are thankful for their dedicated work.",
           "ko": "우리는 그분들의 헌신적인 일에 감사해요."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3863,6 +5356,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Healthy food gives us good energy.",
           "ko": "건강한 음식은 우리에게 좋은 에너지를 줍니다."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3884,6 +5405,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Anyone can become a creative thinker.",
           "ko": "누구나 창의적인 생각가가 될 수 있어요."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     }
@@ -3907,6 +5456,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Rivers give life to plants and animals.",
           "ko": "강은 식물과 동물에게 생명을 불어넣어 줘요."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3928,6 +5505,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "We can explore many wonders around us.",
           "ko": "우리는 우리 주변의 수많은 경이로움을 탐험할 수 있어요."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3949,6 +5554,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "The seasons bring different beauty each time.",
           "ko": "계절은 매번 색다른 아름다움을 선사합니다."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     },
@@ -3970,6 +5603,34 @@ var INSIGHT_SERIES_VIDEOS = {
         {
           "sentence": "Every living creature has unique strengths.",
           "ko": "모든 살아있는 생명체는 고유한 장점을 지니고 있습니다."
+        },
+        {
+          "sentence": "Reading non-fiction expands our knowledge every day.",
+          "ko": "비문학 읽기는 매일 우리의 지식을 넓혀 줘요."
+        },
+        {
+          "sentence": "Ask questions to understand the main ideas deeply.",
+          "ko": "핵심 주제를 깊이 이해하기 위해 질문을 던져보세요."
+        },
+        {
+          "sentence": "We can find many interesting facts in this article.",
+          "ko": "우리는 이 글에서 많은 흥미로운 사실들을 찾을 수 있어요."
+        },
+        {
+          "sentence": "Look at the colorful diagrams and clear photographs.",
+          "ko": "화려한 도표와 선명한 사진들을 살펴보세요."
+        },
+        {
+          "sentence": "Sharing what we read helps us remember better.",
+          "ko": "우리가 읽은 것을 나누면 더 잘 기억할 수 있어요."
+        },
+        {
+          "sentence": "Think about how this topic connects to our daily life.",
+          "ko": "이 주제가 우리의 일상생활과 어떻게 연결되는지 생각해 보세요."
+        },
+        {
+          "sentence": "Great readers become great thinkers in the future.",
+          "ko": "책을 잘 읽는 사람은 미래에 훌륭한 생각의 리더가 됩니다."
         }
       ]
     }
@@ -4480,7 +6141,60 @@ function setStudioMicUI(state) {
 function showStudioError(msg) {
   var hint = document.getElementById('studioMicHint');
   if (hint) {
-    hint.innerHTML = '<span style="color:#dc2626; font-weight:700;">' + msg + '</span>';
+    hint.innerHTML = '<div style="color:#dc2626; font-weight:700; margin-bottom:6px;">⚠️ ' + msg + '</div>' +
+      '<div style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:12px; padding:10px; color:#065f46; font-size:12.5px; font-weight:600; text-align:center;">' +
+      '💡 아이패드 마이크 권한과 상관없이 바로 아래 <b>[🗣️ 소리 내어 직접 읽었어요]</b> 버튼을 누르면 100점으로 통과됩니다!</div>';
+  }
+}
+
+function passJoySpeakingDirectly() {
+  if (currentStudioRec) {
+    try { currentStudioRec.abort(); } catch(e){}
+    currentStudioRec = null;
+  }
+  isStudioListening = false;
+  setStudioMicUI('idle');
+
+  var targetText = currentJoyTarget ? currentJoyTarget.en : 'I had a wonderful day! I played with my friends.';
+  document.getElementById('speechResultCard').style.display = 'flex';
+  document.getElementById('spokenTranscriptBox').textContent = '"' + targetText + '"';
+
+  var words = targetText.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+  var wordsHtml = '';
+  words.forEach(function(w) {
+    wordsHtml += '<span class="w-badge ok">✓ ' + esc(w) + '</span> ';
+  });
+  document.getElementById('alignedWordsBox').innerHTML = wordsHtml;
+
+  var starsEl = document.getElementById('speechScoreStars');
+  var badgeEl = document.getElementById('speechScoreBadge');
+  var feedbackEl = document.getElementById('minkyFeedbackBox');
+
+  playCorrectSound();
+  starsEl.textContent = '⭐⭐⭐';
+  badgeEl.className = 'score-badge pass';
+  badgeEl.textContent = '🎉 100점! 완벽 통과!';
+  feedbackEl.innerHTML = '<div class="minky-fb-title">🐱 밍키 칭찬:</div>' +
+    '<div class="minky-fb-msg">우와 하린아! 영어로 소리 내어 정말 또박또박 멋지게 잘 읽었어! 조이영어 화상 수업 때 필리핀 선생님께 이렇게 말하면 칭찬 폭풍을 받을 거야! ✨</div>';
+
+  clearStudioError();
+}
+
+function passShadowDirectly() {
+  if (currentShadowRec) {
+    try { currentShadowRec.stop(); } catch(e){}
+    currentShadowRec = null;
+  }
+  isMicListening = false;
+  var btn = document.getElementById('btnShadowMic');
+  if (btn) btn.classList.remove('listening');
+  var label = document.getElementById('btnMicLabel');
+  if (label) label.textContent = '말하기 시작';
+
+  playCorrectSound();
+  var pill = document.getElementById('shadowScorePill');
+  if (pill) {
+    pill.innerHTML = '<span style="color:#059669; font-weight:800;">🎉 100점! 완벽 통과! (소리 내어 읽기 완료)</span>';
   }
 }
 
@@ -4541,9 +6255,16 @@ function switchStep(step) {
     if (tab) tab.className = 'step-btn' + (i === step ? ' active' : '');
     if (view) view.style.display = (i === step ? 'flex' : 'none');
   }
-  if (step === 2) {
+  if (step === 1) {
+    renderVocaCard();
+  } else if (step === 2) {
     selectVideoItem(currentVideoSeries, activeItemIndices[currentVideoSeries]);
     initYtPlayer();
+    renderShadowSentence();
+  } else if (step === 3) {
+    initCatTalk(false);
+  } else if (step === 4) {
+    renderQuizQ();
   }
 }
 
@@ -4877,10 +6598,13 @@ function nextShadowSentence() {
 }
 
 /* ============ STEP 3: AI CAT TALK ============ */
-function initCatTalk() {
-  S.talkRound = 0;
-  document.getElementById('chatContainer').innerHTML = '';
-  renderCatTurn();
+function initCatTalk(forceReset) {
+  var container = document.getElementById('chatContainer');
+  if (forceReset || !container || container.innerHTML.trim() === '') {
+    S.talkRound = 0;
+    if (container) container.innerHTML = '';
+    renderCatTurn();
+  }
 }
 
 function renderCatTurn() {
@@ -5178,7 +6902,8 @@ function closeQrAudioModal() {
 </script>
 
 
-<!-- Add ORT Book Modal -->
+
+    <!-- Add ORT Book Modal -->
 <div id="addOrtModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;justify-content:center;align-items:center;padding:16px;">
   <div style="background:white;border-radius:20px;max-width:440px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
