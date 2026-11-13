@@ -1545,6 +1545,7 @@ function drawTodayCard(){
       '<span>① <b style="color:#10b981">카드 (필수)</b></span>' +
       '<span>③ <b style="color:#10b981">뜻고르기 (필수)</b></span>' +
       '<span>⑤ <b style="color:#10b981">짝맞추기 (필수)</b></span>' +
+      '<span>⑥ <b style="color:#10b981">예문 (필수)</b></span>' +
       '<span>⑦ <b style="color:#ff3366">테스트 (필수)</b></span>' +
       '<span style="color:#64748b;">(②·④ 자율)</span>' +
     '</div>' +
@@ -1584,27 +1585,42 @@ function drawAttendanceCalendar(){
   '</div>';
 }
 
+function setHasCloze(s){
+  if (!s || !s.name) return false;
+  if (typeof W !== 'undefined' && W.set && W.set.name === s.name && W.words && W.words.length) {
+    return W.words.some(clozeOf);
+  }
+  var sData = (typeof ALL_WORD_SETS !== 'undefined') ? ALL_WORD_SETS[s.name] : null;
+  if (!sData) return false;
+  var wList = Array.isArray(sData) ? sData : (sData.words || []);
+  return wList.some(clozeOf);
+}
+
 function getWordSetCompletion(s){
   var p = (s && s.progress) || { modes: {}, test: null };
   var m = p.modes || {};
-  // 클래스카드 기준 필수 모드: 1. 카드, 3. 뜻고르기, 5. 짝맞추기, 7. 테스트
-  // (2. 말하기, 4. 스펠링, 6. 예문빈칸은 '자율' 모드로 학습 완료를 가로막지 않음)
+  var hasClozeMode = setHasCloze(s);
+
   var hasCard = (m['카드'] !== undefined);
   var hasChoice = (m['뜻고르기'] !== undefined);
   var hasMatch = (m['짝맞추기'] !== undefined);
+  var hasCloze = hasClozeMode ? (m['예문빈칸'] !== undefined) : true;
   var hasTest = (p.test !== null && p.test !== undefined) || (m['테스트'] !== undefined);
 
-  var doneCount = (hasCard ? 1 : 0) + (hasChoice ? 1 : 0) + (hasMatch ? 1 : 0) + (hasTest ? 1 : 0);
-  var isComplete = (doneCount === 4);
+  var doneCount = (hasCard ? 1 : 0) + (hasChoice ? 1 : 0) + (hasMatch ? 1 : 0) + (hasClozeMode ? (m['예문빈칸'] !== undefined ? 1 : 0) : 0) + (hasTest ? 1 : 0);
+  var reqTotal = hasClozeMode ? 5 : 4;
+  var isComplete = (hasCard && hasChoice && hasMatch && hasCloze && hasTest);
   var testScore = (p.test !== null && p.test !== undefined) ? p.test : (m['테스트'] !== undefined ? m['테스트'] : null);
 
   return {
     isComplete: isComplete,
     doneCount: doneCount,
-    reqTotal: 4,
+    reqTotal: reqTotal,
+    hasClozeMode: hasClozeMode,
     hasCard: hasCard,
     hasChoice: hasChoice,
     hasMatch: hasMatch,
+    hasCloze: (m['예문빈칸'] !== undefined),
     hasTest: hasTest,
     testScore: testScore
   };
@@ -1973,21 +1989,24 @@ function showWordMenu(){
   function tick(k){ return m[k]!==undefined?'<div class="tick">✔ '+(k==='짝맞추기'||k==='카드'?'완료':m[k]+'점')+'</div>':''; }
 
   var statusBanner = '';
+  var reqModesDesc = comp.hasClozeMode ? '① 카드, ③ 뜻고르기, ⑤ 짝맞추기, ⑥ 예문빈칸, ⑦ 테스트 필수 (②·④는 자율)' : '① 카드, ③ 뜻고르기, ⑤ 짝맞추기, ⑦ 테스트 필수 (②·④는 자율)';
+  var reqTitleDesc = comp.hasClozeMode ? '필수 5개(①·③·⑤·⑥·⑦)' : '필수 4개(①·③·⑤·⑦)';
+
   if (comp.isComplete) {
     statusBanner = '<div style="margin:10px 0 14px;padding:12px 14px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:2px solid #10b981;border-radius:14px;color:#065f46;display:flex;align-items:center;justify-content:space-between;">' +
-      '<div><b style="font-size:14px;">🎉 클래스카드 기준 필수 학습 완료!</b><div style="font-size:12px;color:#047857;margin-top:2px;">필수 4개(①·③·⑤·⑦) 완벽 통과 · 테스트 ' + (comp.testScore != null ? comp.testScore + '점' : '완료') + '</div></div>' +
+      '<div><b style="font-size:14px;">🎉 클래스카드 기준 필수 학습 완료!</b><div style="font-size:12px;color:#047857;margin-top:2px;">' + reqTitleDesc + ' 완벽 통과 · 테스트 ' + (comp.testScore != null ? comp.testScore + '점' : '완료') + '</div></div>' +
       '<span class="chip done" style="font-size:12px;padding:4px 10px;">완료</span>' +
     '</div>';
   } else {
     statusBanner = '<div style="margin:10px 0 14px;padding:10px 14px;background:#fff5f8;border:1.5px solid #ffccd8;border-radius:14px;display:flex;align-items:center;justify-content:space-between;">' +
-      '<div><b style="font-size:13.5px;color:#e11d48;">📌 클래스카드 방식 필수 4단계 학습</b><div style="font-size:12px;color:#881337;margin-top:2px;">① 카드, ③ 뜻고르기, ⑤ 짝맞추기, ⑦ 테스트 필수 (②·④는 자율)</div></div>' +
-      '<span style="font-size:13px;font-weight:800;color:var(--pri);background:#fff;padding:4px 10px;border-radius:999px;border:1px solid #fda4af;">필수 ' + comp.doneCount + ' / 4</span>' +
+      '<div><b style="font-size:13.5px;color:#e11d48;">📌 클래스카드 방식 필수 ' + comp.reqTotal + '단계 학습</b><div style="font-size:12px;color:#881337;margin-top:2px;">' + reqModesDesc + '</div></div>' +
+      '<span style="font-size:13px;font-weight:800;color:var(--pri);background:#fff;padding:4px 10px;border-radius:999px;border:1px solid #fda4af;">필수 ' + comp.doneCount + ' / ' + comp.reqTotal + '</span>' +
     '</div>';
   }
 
   var clozeBtn = W.words.some(clozeOf) ? 
     '<button class="mode" data-m="cloze" style="grid-column:1/3">' + tick('예문빈칸') +
-      '<div class="n">📖</div><b>⑥ 예문 빈칸 <span class="badge-tag opt">자율</span></b>' +
+      '<div class="n">📖</div><b>⑥ 예문 빈칸 <span class="badge-tag req">필수</span></b>' +
       '<span>예문 속 빈칸에 맞는 단어 고르기</span>' +
     '</button>' : '';
 
