@@ -36,12 +36,18 @@
       font-family: 'Pretendard', -apple-system, sans-serif;
       color: var(--text);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
     }
     .app-container {
       width: 100%;
       max-width: 520px;
+      margin: 0 auto;
       background: #ffffff;
       min-height: 100vh;
       display: flex;
@@ -49,6 +55,8 @@
       box-shadow: 0 0 30px rgba(124, 77, 255, 0.12);
       position: relative;
       padding-bottom: 90px;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     /* Top Navigation */
@@ -1884,23 +1892,82 @@
     </div>
   </div>
 
+
+    <!-- 📘 에듀키즈 초등 전용 단어장 센터 (1단 세로 스크롤 카드) -->
+    <div id="sec_voca_hub" class="card" style="margin:20px 0 16px;padding:18px 16px;background:#ffffff;border:2.5px solid #f472b6;border-radius:20px;box-shadow:0 4px 14px rgba(244,114,182,0.15);box-sizing:border-box;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:26px;">📘</span>
+          <div>
+            <div style="font-family:Maplestory,sans-serif;font-size:16.5px;font-weight:800;color:#be185d;">에듀키즈 초등 전용 단어장</div>
+            <div style="font-size:12px;color:#9d174d;margin-top:2px;">Hand in Hand · ORT · 인사이트 링크 · 능률 초등필수</div>
+          </div>
+        </div>
+        <span style="background:#db2777;color:white;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap;">4대 필수</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <a href="index.html" style="text-decoration:none;display:block;background:#fdf2f8;border:1.5px solid #fbcfe8;padding:12px 10px;border-radius:14px;color:#831843;box-sizing:border-box;">
+          <div style="font-size:20px;">📘</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">Hand in Hand 5</div>
+          <div style="font-size:11px;color:#9d174d;">Unit 1~12 전단원 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f5f3ff;border:1.5px solid #ddd6fe;padding:12px 10px;border-radius:14px;color:#4c1d95;box-sizing:border-box;">
+          <div style="font-size:20px;">📗</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">ORT Stage 4 & 5</div>
+          <div style="font-size:11px;color:#6b21a8;">Rowing Boats 외 핵심 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#eff6ff;border:1.5px solid #bfdbfe;padding:12px 10px;border-radius:14px;color:#1e40af;box-sizing:border-box;">
+          <div style="font-size:20px;">📙</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">Insight Link 1·2·3</div>
+          <div style="font-size:11px;color:#1d4ed8;">Day별 실전문맥 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f0fdf4;border:1.5px solid #bbf7d0;padding:12px 10px;border-radius:14px;color:#166534;box-sizing:border-box;">
+          <div style="font-size:20px;">📕</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">능률VOCA 초등필수</div>
+          <div style="font-size:11px;color:#15803d;">Day 01~39 초등 필수 800</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#fffbeb;border:1.5px solid #fef3c7;padding:12px 10px;border-radius:14px;color:#92400e;box-sizing:border-box;">
+          <div style="font-size:20px;">✏️</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">Let's Go Grammar 1</div>
+          <div style="font-size:11px;color:#b45309;">초등 기초 문법 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f8fafc;border:1.5px solid #e2e8f0;padding:12px 10px;border-radius:14px;color:#334155;box-sizing:border-box;">
+          <div style="font-size:20px;">🏫</div>
+          <div style="font-weight:800;font-size:13.5px;margin-top:4px;word-break:keep-all;">천재(함) 초5 교과서</div>
+          <div style="font-size:11px;color:#475569;">11·12과 교과 어휘</div>
+        </a>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button onclick="location.href='index.html'" style="flex:1;background:linear-gradient(135deg,#db2777,#f43f5e);color:white;border:none;padding:11px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(219,39,119,0.25);">
+          🚀 클래스카드형 단어 풀러가기 →
+        </button>
+        <button onclick="location.href='harin.html'" style="background:#f3e8ff;border:1.5px solid #c084fc;color:#6b21a8;padding:11px 14px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">
+          📅 주간 플래너
+        </button>
+      </div>
+    </div>
+
   <!-- Bottom Dock Bar -->
   <div class="bottom-bar">
     <button class="dock-btn active" onclick="location.reload()">
-      <span class="dock-ico">🐱</span>
-      <span>캐츠 훈련관</span>
+      <span class="dock-ico">🎒</span>
+      <span>에듀키즈</span>
     </button>
-    <button class="dock-btn" onclick="location.href='index.html'">
+    <button class="dock-btn" onclick="document.getElementById('sec_voca_hub').scrollIntoView({behavior:'smooth'})">
       <span class="dock-ico">📘</span>
-      <span>탑에듀 단어앱</span>
+      <span>초등 단어장</span>
+    </button>
+    <button class="dock-btn" onclick="openQrAudioModal()">
+      <span class="dock-ico">🎧</span>
+      <span>QR 음원</span>
     </button>
     <button class="dock-btn" onclick="location.href='harin.html'">
       <span class="dock-ico">⭐</span>
       <span>하린 플래너</span>
     </button>
-    <button class="dock-btn" onclick="location.href='reading.html'">
-      <span class="dock-ico">📖</span>
-      <span>독해 모의고사</span>
+    <button class="dock-btn" onclick="location.href='index.html'">
+      <span class="dock-ico">🏫</span>
+      <span>학원 단어앱</span>
     </button>
   </div>
 </div>
@@ -5180,92 +5247,7 @@ function closeQrAudioModal() {
 
 
 
-    <!-- 📘 에듀키즈 초등 전용 단어장 센터 -->
-    <div class="card" style="margin:20px 0;padding:18px 16px;background:#ffffff;border:2.5px solid #f472b6;border-radius:20px;box-shadow:0 4px 14px rgba(244,114,182,0.15);">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:28px;">📘</span>
-          <div>
-            <div style="font-family:Maplestory,sans-serif;font-size:17px;font-weight:800;color:#be185d;">에듀키즈 초등 전용 단어장</div>
-            <div style="font-size:12px;color:#9d174d;margin-top:2px;">Hand in Hand · ORT · 인사이트 링크 · 능률 초등필수</div>
-          </div>
-        </div>
-        <span style="background:#db2777;color:white;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;">클래스카드형 4대 필수</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <a href="index.html" style="text-decoration:none;display:block;background:#fdf2f8;border:1.5px solid #fbcfe8;padding:12px;border-radius:14px;color:#831843;">
-          <div style="font-size:22px;">📘</div>
-          <div style="font-weight:800;font-size:14px;margin-top:4px;">Hand in Hand 5</div>
-          <div style="font-size:11.5px;color:#9d174d;">Unit 1~12 전단원 어휘</div>
-        </a>
-        <a href="index.html" style="text-decoration:none;display:block;background:#f5f3ff;border:1.5px solid #ddd6fe;padding:12px;border-radius:14px;color:#4c1d95;">
-          <div style="font-size:22px;">📗</div>
-          <div style="font-weight:800;font-size:14px;margin-top:4px;">ORT Stage 4 & 5</div>
-          <div style="font-size:11.5px;color:#6b21a8;">Rowing Boats 외 핵심 어휘</div>
-        </a>
-        <a href="index.html" style="text-decoration:none;display:block;background:#eff6ff;border:1.5px solid #bfdbfe;padding:12px;border-radius:14px;color:#1e40af;">
-          <div style="font-size:22px;">📙</div>
-          <div style="font-weight:800;font-size:14px;margin-top:4px;">Insight Link 1·2·3</div>
-          <div style="font-size:11.5px;color:#1d4ed8;">Day별 실전문맥 어휘</div>
-        </a>
-        <a href="index.html" style="text-decoration:none;display:block;background:#f0fdf4;border:1.5px solid #bbf7d0;padding:12px;border-radius:14px;color:#166534;">
-          <div style="font-size:22px;">📕</div>
-          <div style="font-weight:800;font-size:14px;margin-top:4px;">능률VOCA 초등필수</div>
-          <div style="font-size:11.5px;color:#15803d;">Day 01~39 초등 필수 800</div>
-        </a>
-        <a href="index.html" style="text-decoration:none;display:block;background:#fffbeb;border:1.5px solid #fef3c7;padding:12px;border-radius:14px;color:#92400e;">
-          <div style="font-size:22px;">✏️</div>
-          <div style="font-weight:800;font-size:14px;margin-top:4px;">Let's Go Grammar 1</div>
-          <div style="font-size:11.5px;color:#b45309;">초등 기초 문법 어휘</div>
-        </a>
-        <a href="index.html" style="text-decoration:none;display:block;background:#f8fafc;border:1.5px solid #e2e8f0;padding:12px;border-radius:14px;color:#334155;">
-          <div style="font-size:22px;">🏫</div>
-          <div style="font-weight:800;font-size:14px;margin-top:4px;">천재(함) 초5 교과서</div>
-          <div style="font-size:11.5px;color:#475569;">11·12과 교과 어휘</div>
-        </a>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:12px;">
-        <button onclick="location.href='index.html'" style="flex:1;background:linear-gradient(135deg,#db2777,#f43f5e);color:white;border:none;padding:11px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(219,39,119,0.25);">
-          🚀 클래스카드형 단어 풀러가기 →
-        </button>
-        <button onclick="location.href='harin.html'" style="background:#f3e8ff;border:1.5px solid #c084fc;color:#6b21a8;padding:11px 14px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
-          📅 주간 플래너
-        </button>
-      </div>
-    </div>
-
-
-<!-- QR Audio Modal -->
-<div id="qrAudioModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;padding:16px;">
-  <div style="background:white;border-radius:20px;padding:22px;max-width:480px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-      <h3 style="margin:0;font-family:Maplestory,sans-serif;font-size:17px;color:#1e40af;">🎧 출판사 공식 QR 오디오 & E-Book</h3>
-      <button onclick="closeQrAudioModal()" style="background:#f1f5f9;border:none;border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer;">✕</button>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=63U92V6C11RH1GOYLXOR91YU86L1HLIQ&view=1" target="_blank" style="text-decoration:none;background:#eff6ff;border:1.5px solid #93c5fd;color:#1e40af;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
-        <span>📗 인사이트 L1 음원 듣기</span> <span>→</span>
-      </a>
-      <a href="https://netutor-m.neflow.ai/pages/QRcode/sendmail.asp?bookcode=BA03040013" target="_blank" style="text-decoration:none;background:#eff6ff;border:1.5px solid #93c5fd;color:#1e40af;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
-        <span>📖 인사이트 L1 E-Book 열기</span> <span>→</span>
-      </a>
-      <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=5ETU185OZCQ4ZSEKKJNC8CX77HKLGX83&view=1" target="_blank" style="text-decoration:none;background:#fff7ed;border:1.5px solid #fdba74;color:#c2410c;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
-        <span>📙 인사이트 L2 음원 듣기</span> <span>→</span>
-      </a>
-      <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=PMESMFPWKKB2K19I7I9BTKJERP6K263A&view=1" target="_blank" style="text-decoration:none;background:#fef2f2;border:1.5px solid #fca5a5;color:#b91c1c;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
-        <span>📕 인사이트 L3 음원 듣기</span> <span>→</span>
-      </a>
-      <a href="https://www.e-future.co.kr/audio/info.do?bookkey=1026&cd_num=1" target="_blank" style="text-decoration:none;background:#f5f3ff;border:1.5px solid #c084fc;color:#6b21a8;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
-        <span>📘 핸드인핸드 5권 오디오 전곡</span> <span>→</span>
-      </a>
-      <a href="https://www.e-future.co.kr/audio/track/info?bookkey=1026&cd_num=1&unit_idx=102" target="_blank" style="text-decoration:none;background:#7c4dff;color:white;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
-        <span>🏆 Unit 5 트랙 다이렉트 재생</span> <span>→</span>
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- Add ORT Book Modal -->
+    <!-- Add ORT Book Modal -->
 <div id="addOrtModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;justify-content:center;align-items:center;padding:16px;">
   <div style="background:white;border-radius:20px;max-width:440px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
