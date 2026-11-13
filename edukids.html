@@ -1745,6 +1745,11 @@
             마이크를 누르고 말해보세요!
           </div>
         </div>
+
+        <button type="button" class="btn-self-pass" onclick="passShadowDirectly()" style="width:100%;padding:11px 14px;margin:8px 0 6px;background:linear-gradient(135deg, #10b981, #059669);color:#ffffff;border:none;border-radius:14px;font-family:'Maplestory',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 10px rgba(16,185,129,0.22);">
+          <span>🗣️</span> <span>소리 내어 직접 읽었어요 (100점 통과) 👍</span>
+        </button>
+
         <button class="btn-next-word" style="background:#4f46e5; margin-top:4px;" onclick="nextShadowSentence()">
           다음 문장 쉐도잉 →
         </button>
@@ -1858,6 +1863,13 @@
         </button>
         <div class="mic-status-hint" id="studioMicHint">
           버튼을 누르고 아이패드/스마트폰에 대고 영어로 읽어보세요!
+        </div>
+
+        <button type="button" id="btnJoySelfPass" class="btn-self-pass" onclick="passJoySpeakingDirectly()" style="width:100%;max-width:320px;height:52px;background:linear-gradient(135deg, #10b981, #059669);color:#ffffff;border:none;border-radius:26px;font-family:'Maplestory',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(16,185,129,0.28);transition:all 0.15s ease;">
+          <span>🗣️</span> <span>소리 내어 직접 읽었어요 (100점 통과) 👍</span>
+        </button>
+        <div style="font-size:12px;color:#64748b;text-align:center;">
+          ※ 아이패드 마이크 오류나 권한 걱정 없이 100점으로 즉시 통과됩니다!
         </div>
       </div>
 
@@ -6117,7 +6129,60 @@ function setStudioMicUI(state) {
 function showStudioError(msg) {
   var hint = document.getElementById('studioMicHint');
   if (hint) {
-    hint.innerHTML = '<span style="color:#dc2626; font-weight:700;">' + msg + '</span>';
+    hint.innerHTML = '<div style="color:#dc2626; font-weight:700; margin-bottom:6px;">⚠️ ' + msg + '</div>' +
+      '<div style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:12px; padding:10px; color:#065f46; font-size:12.5px; font-weight:600; text-align:center;">' +
+      '💡 아이패드 마이크 권한과 상관없이 바로 아래 <b>[🗣️ 소리 내어 직접 읽었어요]</b> 버튼을 누르면 100점으로 통과됩니다!</div>';
+  }
+}
+
+function passJoySpeakingDirectly() {
+  if (currentStudioRec) {
+    try { currentStudioRec.abort(); } catch(e){}
+    currentStudioRec = null;
+  }
+  isStudioListening = false;
+  setStudioMicUI('idle');
+
+  var targetText = currentJoyTarget ? currentJoyTarget.en : 'I had a wonderful day! I played with my friends.';
+  document.getElementById('speechResultCard').style.display = 'flex';
+  document.getElementById('spokenTranscriptBox').textContent = '"' + targetText + '"';
+
+  var words = targetText.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+  var wordsHtml = '';
+  words.forEach(function(w) {
+    wordsHtml += '<span class="w-badge ok">✓ ' + esc(w) + '</span> ';
+  });
+  document.getElementById('alignedWordsBox').innerHTML = wordsHtml;
+
+  var starsEl = document.getElementById('speechScoreStars');
+  var badgeEl = document.getElementById('speechScoreBadge');
+  var feedbackEl = document.getElementById('minkyFeedbackBox');
+
+  playCorrectSound();
+  starsEl.textContent = '⭐⭐⭐';
+  badgeEl.className = 'score-badge pass';
+  badgeEl.textContent = '🎉 100점! 완벽 통과!';
+  feedbackEl.innerHTML = '<div class="minky-fb-title">🐱 밍키 칭찬:</div>' +
+    '<div class="minky-fb-msg">우와 하린아! 영어로 소리 내어 정말 또박또박 멋지게 잘 읽었어! 조이영어 화상 수업 때 필리핀 선생님께 이렇게 말하면 칭찬 폭풍을 받을 거야! ✨</div>';
+
+  clearStudioError();
+}
+
+function passShadowDirectly() {
+  if (currentShadowRec) {
+    try { currentShadowRec.stop(); } catch(e){}
+    currentShadowRec = null;
+  }
+  isMicListening = false;
+  var btn = document.getElementById('btnShadowMic');
+  if (btn) btn.classList.remove('listening');
+  var label = document.getElementById('btnMicLabel');
+  if (label) label.textContent = '말하기 시작';
+
+  playCorrectSound();
+  var pill = document.getElementById('shadowScorePill');
+  if (pill) {
+    pill.innerHTML = '<span style="color:#059669; font-weight:800;">🎉 100점! 완벽 통과! (소리 내어 읽기 완료)</span>';
   }
 }
 
