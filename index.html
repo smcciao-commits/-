@@ -1050,7 +1050,7 @@ function mockCall(fn, args) {
     return { score: Math.round((correct / (total || 1)) * 100) };
   }
 
-  /* ===== 단어 대결 (배틀) v57 실시간 무결점 엔진 (Dual SSE + Text/Plain POST + BroadcastChannel + Auto-Heartbeat) ===== */
+  /* ===== 단어 대결 (배틀) v58 실시간 엔진 ===== */
   if (fn === 'battleSets') {
     var sets = [];
     var allKeys = Object.keys(ALL_WORD_SETS);
@@ -1098,7 +1098,7 @@ function mockCall(fn, args) {
       localStorage.setItem('topedu_battle_latest', code);
     } catch(e){}
 
-    broadcastBattleNet(code, {
+    sendBattleNet(code, {
       type: 'room',
       code: code,
       status: 'lobby',
@@ -1120,129 +1120,13 @@ function mockCall(fn, args) {
     };
   }
 
-  if (fn === 'battleHost') {
-    var code = String(args[1] || '');
-    var action = args[2];
-    var room = null;
-    try {
-      var raw = localStorage.getItem('topedu_battle_' + code);
-      if (raw) room = JSON.parse(raw);
-    } catch(e){}
-    if (!room) {
-      return { code: code, status: 'end', set: '대결', rank: [] };
-    }
-
-    var now = Date.now();
-    if (action === 'start' && room.status === 'lobby') {
-      room.status = 'run';
-      room.startAt = now + 3000;
-      room.endAt = room.startAt + (room.mins * 60 * 1000);
-      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
-
-      var startPayload = {
-        type: 'start',
-        code: code,
-        startAt: room.startAt,
-        endAt: room.endAt,
-        dir: room.dir,
-        setNames: room.setNames || []
-      };
-      broadcastBattleNet(code, startPayload);
-      setTimeout(function(){ broadcastBattleNet(code, startPayload); }, 300);
-      setTimeout(function(){ broadcastBattleNet(code, startPayload); }, 700);
-    } else if (action === 'end' && room.status !== 'end') {
-      room.status = 'end';
-      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
-      var endPayload = { type: 'end', code: code };
-      broadcastBattleNet(code, endPayload);
-      setTimeout(function(){ broadcastBattleNet(code, endPayload); }, 300);
-    } else if (room.status === 'run' && now > room.endAt + 2000) {
-      room.status = 'end';
-      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
-    }
-
-    var pKeys = Object.keys(room.players || {});
-    var rankList = pKeys.map(function(k) {
-      var p = room.players[k];
-      return {
-        name: p.name,
-        ban: p.ban,
-        c: p.c || 0,
-        x: p.x || 0
-      };
-    }).sort(function(a, b) {
-      return (b.c - a.c) || (a.x - b.x);
-    });
-    rankList.forEach(function(r, idx) { r.rank = idx + 1; });
-
-    if (room.status === 'lobby') {
-      return {
-        code: code,
-        status: 'lobby',
-        set: room.set,
-        mins: room.mins,
-        dir: room.dir,
-        names: room.names || [],
-        count: (room.names || []).length
-      };
-    } else if (room.status === 'run') {
-      return {
-        code: code,
-        status: 'run',
-        set: room.set,
-        mins: room.mins,
-        dir: room.dir,
-        startIn: Math.max(0, (room.startAt || now) - now),
-        endIn: Math.max(0, (room.endAt || now) - now),
-        rank: rankList
-      };
-    } else {
-      return {
-        code: code,
-        status: 'end',
-        set: room.set,
-        rank: rankList
-      };
-    }
-  }
-
   if (fn === 'battleJoin') {
     var cred = args[0] || {};
     var code = String(args[1] || '').trim();
-    var room = null;
-    try {
-      var raw = localStorage.getItem('topedu_battle_' + code);
-      if (raw) room = JSON.parse(raw);
-    } catch(e){}
-
     var sName = cred.name || '학생';
     var sBan = cred.ban || '';
 
-    if (!room) {
-      room = {
-        code: code,
-        status: 'lobby',
-        set: '단어 대결',
-        setNames: [],
-        names: [sName],
-        players: {},
-        qs: generateBattleQs(sBan, 'en')
-      };
-    }
-    if (!room.qs || !room.qs.length) {
-      room.qs = generateBattleQs(sBan, 'en', room.setNames);
-    }
-
-    var pKey = sBan + ':' + sName;
-    room.players = room.players || {};
-    room.names = room.names || [];
-    if (!room.players[pKey]) {
-      room.players[pKey] = { name: sName, ban: sBan, c: 0, x: 0, wrong: [] };
-      if (room.names.indexOf(sName) < 0) room.names.push(sName);
-      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
-    }
-
-    broadcastBattleNet(code, {
+    sendBattleNet(code, {
       type: 'join',
       code: code,
       name: sName,
@@ -1251,107 +1135,8 @@ function mockCall(fn, args) {
 
     return {
       code: code,
-      count: room.names.length
-    };
-  }
-
-  if (fn === 'battleState') {
-    var cred = args[0] || {};
-    var code = String(args[1] || '').trim();
-    var withQs = !!args[2];
-    var room = null;
-    try {
-      var raw = localStorage.getItem('topedu_battle_' + code);
-      if (raw) room = JSON.parse(raw);
-    } catch(e){}
-
-    var sName = cred.name || '학생';
-    var sBan = cred.ban || '';
-
-    if (!room) {
-      room = {
-        code: code,
-        status: 'lobby',
-        set: '단어 대결',
-        setNames: [],
-        names: [sName],
-        players: {},
-        qs: generateBattleQs(sBan, 'en')
-      };
-    }
-    if (!room.qs || !room.qs.length) {
-      room.qs = generateBattleQs(sBan, room.dir || 'en', room.setNames);
-      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
-    }
-
-    var now = Date.now();
-    var pKeys = Object.keys(room.players || {});
-    var rankList = pKeys.map(function(k) {
-      var p = room.players[k];
-      return { name: p.name, ban: p.ban, c: p.c || 0, x: p.x || 0 };
-    }).sort(function(a, b) { return (b.c - a.c) || (a.x - b.x); });
-    rankList.forEach(function(r, idx) { r.rank = idx + 1; });
-
-    var myObj = { rank: 1, c: 0, x: 0 };
-    rankList.forEach(function(r) {
-      if (r.name === sName) myObj = r;
-    });
-
-    if (room.status === 'lobby') {
-      return { status: 'lobby', count: (room.names || []).length, names: room.names || [] };
-    } else if (room.status === 'run') {
-      var qsToSend = withQs ? (room.qs && room.qs.length ? room.qs : generateBattleQs(sBan, room.dir || 'en', room.setNames)) : undefined;
-      return {
-        status: 'run',
-        startIn: Math.max(0, (room.startAt || now) - now),
-        endIn: Math.max(0, (room.endAt || now) - now),
-        qs: qsToSend
-      };
-    } else {
-      return {
-        status: 'end',
-        top: rankList.slice(0, 3),
-        me: myObj
-      };
-    }
-  }
-
-  if (fn === 'battleReport') {
-    var cred = args[0] || {};
-    var code = String(args[1] || '').trim();
-    var c = Number(args[2]) || 0;
-    var x = Number(args[3]) || 0;
-    var wrong = args[4] || [];
-    var sName = cred.name || '학생';
-    var sBan = cred.ban || '';
-
-    broadcastBattleNet(code, {
-      type: 'report',
-      code: code,
       name: sName,
-      ban: sBan,
-      c: c,
-      x: x
-    });
-
-    var room = null;
-    try {
-      var raw = localStorage.getItem('topedu_battle_' + code);
-      if (raw) room = JSON.parse(raw);
-    } catch(e){}
-
-    if (room) {
-      room.players = room.players || {};
-      var pKey = sBan + ':' + sName;
-      room.players[pKey] = { name: sName, ban: sBan, c: c, x: x, wrong: wrong };
-      if ((room.names || []).indexOf(sName) < 0 && sName) room.names.push(sName);
-      try { localStorage.setItem('topedu_battle_' + code, JSON.stringify(room)); } catch(e){}
-    }
-
-    return {
-      rank: 1,
-      count: 1,
-      status: (room ? room.status : 'run')
+      ban: sBan
     };
   }
 
@@ -3219,13 +3004,12 @@ function callq(fn){ // 로딩 표시 없이
   });
 }
 var NB=['①','②','③','④'];
-var B={gen:0,code:'',sig:'',tick:null,v:null};
+var B={gen:0,code:'',sig:'',tick:null,v:null,room:null,hostTimer:null,stuTimer:null};
 function bStop(){
   B.gen++;
   if(B.tick){ clearInterval(B.tick); B.tick=null; }
-  if(B.hostHeartbeat){ clearInterval(B.hostHeartbeat); B.hostHeartbeat=null; }
-  if(B.stuHeartbeat){ clearInterval(B.stuHeartbeat); B.stuHeartbeat=null; }
-  closeBattleNet();
+  if(B.hostTimer){ clearTimeout(B.hostTimer); B.hostTimer=null; }
+  if(B.stuTimer){ clearTimeout(B.stuTimer); B.stuTimer=null; }
   document.body.classList.remove('board');
 }
 function bClock(onTick){ if(B.tick) clearInterval(B.tick); B.tick=setInterval(onTick,200); onTick(); }
@@ -3234,71 +3018,25 @@ function tilesHtml(q){
   return q.o.map(function(t,i){ return '<button class="bo c'+i+'" data-k="'+i+'"><span class="nb">'+NB[i]+'</span><span>'+esc(t)+'</span></button>'; }).join('');
 }
 
-/* ===== 실시간 통신 허브 (Dual SSE + Text/Plain POST + BroadcastChannel) ===== */
-var _battle_es = null;
-var _battle_bc = null;
-var _battle_code = '';
-
-function closeBattleNet(){
-  if(_battle_es){ try{ _battle_es.close(); }catch(e){} _battle_es = null; }
-  if(_battle_bc){ try{ _battle_bc.close(); }catch(e){} _battle_bc = null; }
-  _battle_code = '';
-}
-
-function broadcastBattleNet(code, payload){
+/* ===== 초고속 실시간 통신 엔진 (BroadcastChannel + text/plain POST + Direct Polling) ===== */
+function sendBattleNet(code, payload){
   if(!code) return;
-  // 1. Same-device BroadcastChannel (0ms sync)
+  // 1. Same-device cross-tab 0ms sync
   try {
     if (window.BroadcastChannel) {
-      if(!_battle_bc || _battle_bc.name !== 'topedu_bt_' + code){
-        _battle_bc = new BroadcastChannel('topedu_bt_' + code);
-      }
-      _battle_bc.postMessage(payload);
+      var bc = new BroadcastChannel('topedu_bt_' + code);
+      bc.postMessage(payload);
+      setTimeout(function(){ try{ bc.close(); }catch(e){} }, 500);
     }
   } catch(e){}
 
-  // 2. Network push via ntfy (text/plain avoids CORS preflight OPTIONS request!)
+  // 2. Network push (text/plain avoids CORS preflight OPTIONS request!)
   try {
     fetch('https://ntfy.sh/topedu_bt_' + code, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload)
     }).catch(function(){});
-  } catch(e){}
-}
-
-function initBattleNet(code, onMsg){
-  closeBattleNet();
-  _battle_code = code;
-
-  // 1. BroadcastChannel listener
-  try {
-    if (window.BroadcastChannel) {
-      _battle_bc = new BroadcastChannel('topedu_bt_' + code);
-      _battle_bc.onmessage = function(e){
-        if(e && e.data) onMsg(e.data);
-      };
-    }
-  } catch(e){}
-
-  // 2. EventSource (SSE) persistent stream
-  try {
-    var es = new EventSource('https://ntfy.sh/topedu_bt_' + code + '/sse');
-    _battle_es = es;
-    es.onmessage = function(e){
-      try {
-        var data = JSON.parse(e.data);
-        var m = typeof data.message === 'string' ? JSON.parse(data.message) : data.message;
-        if(m && m.type) onMsg(m);
-      } catch(err){}
-    };
-    es.onerror = function(){
-      if(es.readyState === EventSource.CLOSED && _battle_code === code){
-        setTimeout(function(){
-          if(_battle_code === code) initBattleNet(code, onMsg);
-        }, 2000);
-      }
-    };
   } catch(e){}
 }
 
@@ -3341,101 +3079,139 @@ function showBattleSetup(){
 function hostEnter(v){
   bStop(); document.body.classList.add('board');
   B.code = v.code; B.sig = ''; var g = B.gen;
-  hostRender(v);
+  var raw = localStorage.getItem('topedu_battle_' + B.code);
+  B.room = raw ? JSON.parse(raw) : v;
+  B.room.players = B.room.players || {};
+  B.room.names = B.room.names || [];
+  B.room.rank = B.room.rank || [];
+  hostRender(B.room);
 
-  // Initialize Host Realtime Listener
-  initBattleNet(B.code, function(m){
-    if(g !== B.gen) return;
-    var raw = localStorage.getItem('topedu_battle_' + B.code);
-    var r = raw ? JSON.parse(raw) : null;
-    if(!r) return;
+  // 1. BroadcastChannel instant sync (0ms)
+  try {
+    if (window.BroadcastChannel) {
+      var bc = new BroadcastChannel('topedu_bt_' + B.code);
+      bc.onmessage = function(e){
+        if(g !== B.gen || !e || !e.data) return;
+        handleTeacherNetMsg(e.data);
+      };
+    }
+  } catch(e){}
 
+  function handleTeacherNetMsg(m){
+    if(!m || !B.room) return;
+    var changed = false;
     if(m.type === 'join' && m.name){
-      r.players = r.players || {};
-      r.names = r.names || [];
       var pKey = (m.ban || '') + ':' + m.name;
-      if(!r.players[pKey]){
-        r.players[pKey] = { name: m.name, ban: m.ban || '', c: 0, x: 0, wrong: [] };
-        if(r.names.indexOf(m.name) < 0) r.names.push(m.name);
-        try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(r)); } catch(e){}
-        if(r.status === 'lobby') lobbyNames(r);
-        // Reply with roster update so student phones see live confirmed count!
-        broadcastBattleNet(B.code, { type: 'roster', code: B.code, names: r.names, count: r.names.length });
+      if(!B.room.players[pKey]){
+        B.room.players[pKey] = { name: m.name, ban: m.ban || '', c: 0, x: 0, wrong: [] };
+        if(B.room.names.indexOf(m.name) < 0) B.room.names.push(m.name);
+        changed = true;
       }
     } else if(m.type === 'report' && m.name){
-      r.players = r.players || {};
       var pKey = (m.ban || '') + ':' + m.name;
-      if(r.players[pKey]){
-        r.players[pKey].c = Math.max(r.players[pKey].c || 0, m.c || 0);
-        r.players[pKey].x = Math.max(r.players[pKey].x || 0, m.x || 0);
+      if(!B.room.players[pKey]){
+        B.room.players[pKey] = { name: m.name, ban: m.ban || '', c: m.c || 0, x: m.x || 0 };
+        if(B.room.names.indexOf(m.name) < 0) B.room.names.push(m.name);
+        changed = true;
       } else {
-        r.players[pKey] = { name: m.name, ban: m.ban || '', c: m.c || 0, x: m.x || 0 };
-        if((r.names || []).indexOf(m.name) < 0) r.names.push(m.name);
-      }
-      try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(r)); } catch(e){}
-      if(r.status === 'run'){
-        var pKeys = Object.keys(r.players);
-        var rankList = pKeys.map(function(k){ var p = r.players[k]; return { name: p.name, ban: p.ban, c: p.c || 0, x: p.x || 0 }; })
-          .sort(function(a, b){ return (b.c - a.c) || (a.x - b.x); });
-        rankList.forEach(function(item, idx){ item.rank = idx + 1; });
-        var rr = $('#race');
-        if(rr) rr.innerHTML = raceRows({ rank: rankList });
+        var newC = Math.max(B.room.players[pKey].c || 0, m.c || 0);
+        var newX = Math.max(B.room.players[pKey].x || 0, m.x || 0);
+        if(B.room.players[pKey].c !== newC || B.room.players[pKey].x !== newX){
+          B.room.players[pKey].c = newC;
+          B.room.players[pKey].x = newX;
+          changed = true;
+        }
       }
     }
-  });
+    if(changed){
+      updateHostRosterAndRanks();
+    }
+  }
 
-  // Host heartbeat & fallback poller (gentle 2.5s loop, no DDoS!)
-  B.hostHeartbeat = setInterval(function(){
+  function updateHostRosterAndRanks(){
+    var pKeys = Object.keys(B.room.players);
+    var rankList = pKeys.map(function(k){
+      var p = B.room.players[k];
+      return { name: p.name, ban: p.ban, c: p.c || 0, x: p.x || 0 };
+    }).sort(function(a, b){ return (b.c - a.c) || (a.x - b.x); });
+    rankList.forEach(function(item, idx){ item.rank = idx + 1; });
+    B.room.rank = rankList;
+    B.room.count = B.room.names.length;
+    try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(B.room)); } catch(e){}
+    hostRender(B.room);
+  }
+
+  // 2. Teacher direct poller (poll every 1.2s, 1 device = 50 req/min, 100% reliable!)
+  (function hostPollLoop(){
     if(g !== B.gen) return;
-    callq('battleHost', S.admin.pw, B.code, 'poll').then(function(r){
-      if(g !== B.gen) return;
-      hostRender(r);
-      // Broadcast room beacon so student phones discover room instantly
-      broadcastBattleNet(B.code, { type: 'room', code: B.code, status: r.status, names: r.names || [], count: (r.names || []).length });
-    }).catch(function(){});
+    fetch('https://ntfy.sh/topedu_bt_' + B.code + '/json?poll=1&since=10m')
+      .then(function(res){ return res.text(); })
+      .then(function(txt){
+        if(g !== B.gen) return;
+        var lines = txt.trim().split('\n');
+        lines.forEach(function(l){
+          if(!l.trim()) return;
+          try {
+            var d = JSON.parse(l);
+            var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
+            if(m) handleTeacherNetMsg(m);
+          } catch(e){}
+        });
 
-    // Gentle fallback poll (every 5 seconds, limited to last 15 seconds)
-    if(Date.now() % 5000 < 2500){
-      fetch('https://ntfy.sh/topedu_bt_' + B.code + '/json?poll=1&since=15s')
-        .then(function(res){ return res.text(); })
-        .then(function(txt){
-          var lines = txt.trim().split('\n');
-          var raw = localStorage.getItem('topedu_battle_' + B.code);
-          var r = raw ? JSON.parse(raw) : null;
-          if(!r) return;
-          var changed = false;
-          lines.forEach(function(l){
-            if(!l.trim()) return;
-            try {
-              var d = JSON.parse(l);
-              var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
-              if(m && m.type === 'join' && m.name){
-                r.players = r.players || {};
-                r.names = r.names || [];
-                var pKey = (m.ban || '') + ':' + m.name;
-                if(!r.players[pKey]){
-                  r.players[pKey] = { name: m.name, ban: m.ban || '', c: 0, x: 0, wrong: [] };
-                  if(r.names.indexOf(m.name) < 0) r.names.push(m.name);
-                  changed = true;
-                }
-              }
-            } catch(e){}
-          });
-          if(changed){
-            localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(r));
-            if(r.status === 'lobby') lobbyNames(r);
-          }
-        }).catch(function(){});
-    }
-  }, 2500);
+        // Broadcast room beacon so student phones see live confirmed count!
+        sendBattleNet(B.code, {
+          type: 'room',
+          code: B.code,
+          status: B.room.status,
+          names: B.room.names,
+          count: B.room.names.length
+        });
+
+        if(B.room.status !== 'end'){
+          B.hostTimer = setTimeout(hostPollLoop, 1200);
+        }
+      })
+      .catch(function(){
+        if(g === B.gen && B.room.status !== 'end'){
+          B.hostTimer = setTimeout(hostPollLoop, 1500);
+        }
+      });
+  })();
 }
 
 function hostAct(a){
   var g=B.gen;
-  call('battleHost',S.admin.pw,B.code,a).then(function(r){ if(g===B.gen) hostRender(r); }).catch(function(e){ alert(errMsg(e)); });
+  if(!B.room) return;
+  var now = Date.now();
+  if(a === 'start' && B.room.status === 'lobby'){
+    B.room.status = 'run';
+    B.room.startAt = now + 3000;
+    B.room.endAt = B.room.startAt + (B.room.mins * 60 * 1000);
+    try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(B.room)); } catch(e){}
+    hostRender(B.room);
+
+    var startPayload = {
+      type: 'start',
+      code: B.code,
+      startAt: B.room.startAt,
+      endAt: B.room.endAt,
+      dir: B.room.dir,
+      setNames: B.room.setNames || []
+    };
+    sendBattleNet(B.code, startPayload);
+    setTimeout(function(){ sendBattleNet(B.code, startPayload); }, 300);
+    setTimeout(function(){ sendBattleNet(B.code, startPayload); }, 700);
+  } else if(a === 'end' && B.room.status !== 'end'){
+    B.room.status = 'end';
+    try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(B.room)); } catch(e){}
+    hostRender(B.room);
+    sendBattleNet(B.code, { type: 'end', code: B.code });
+  }
 }
-function hostExit(){ if(B.v&&B.v.status==='run'&&!confirm('대결을 끝내고 나갈까요?')) return; if(B.v&&B.v.status==='run') callq('battleHost',S.admin.pw,B.code,'end'); bStop(); showAdmin(); }
+
+function hostExit(){ if(B.v&&B.v.status==='run'&&!confirm('대결을 끝내고 나갈까요?')) return; if(B.v&&B.v.status==='run') hostAct('end'); bStop(); showAdmin(); }
 function hostHead(v,extra){ return '<div class="bhd"><button class="back" id="bx">← 나가기</button><div class="grow">⚔️ '+esc(v.set)+'</div>'+(extra||'')+'</div>'; }
+
 function lobbyNames(v){
   var nm = $('#names');
   if(!nm) return;
@@ -3447,6 +3223,7 @@ function lobbyNames(v){
     bst.disabled = !cnt;
   }
 }
+
 function raceRows(v){
   var rankList = v.rank || [];
   var max = Math.max(1, rankList.length ? rankList[0].c : 1);
@@ -3454,12 +3231,13 @@ function raceRows(v){
     return '<div class="rrow"><span class="r">'+r.rank+'</span><span class="nm">'+esc(r.name)+'</span><div class="trk"><i style="width:'+Math.max(2,Math.round(r.c/max*100))+'%"></i></div><span class="s">'+r.c+'</span></div>';
   }).join('') || '<div class="small">아직 아무도 없어요</div>';
 }
+
 function hostRender(v){
   B.v=v;
   var sig=v.status;
   if(sig===B.sig){
     if(v.status==='lobby') lobbyNames(v);
-    if(v.status==='run'){ var rr=$('#race'); if(rr) rr.innerHTML=raceRows(v); B.endAt=Date.now()+v.endIn; B.startAt=Date.now()+v.startIn; }
+    if(v.status==='run'){ var rr=$('#race'); if(rr) rr.innerHTML=raceRows(v); B.endAt=v.endAt; B.startAt=v.startAt; }
     return;
   }
   B.sig=sig;
@@ -3472,15 +3250,15 @@ function hostRender(v){
     app.innerHTML=html; lobbyNames(v);
     $('#bstart').onclick=function(){ hostAct('start'); };
   } else if(v.status==='run'){
-    B.endAt=Date.now()+v.endIn; B.startAt=Date.now()+v.startIn;
+    B.endAt=v.endAt; B.startAt=v.startAt;
     html=hostHead(v,'<button class="btn gray" id="bend" style="width:auto;margin:0;padding:10px 16px;font-size:15px">지금 끝내기</button>')+
-      '<div style="display:flex;align-items:center;justify-content:center;gap:18px;margin:4px 0 14px"><span style="font-size:26px;font-weight:800;color:var(--sub)">남은 시간</span><span id="bclk" style="font-size:72px;font-weight:900">'+mmss(v.endIn)+'</span><span style="font-size:20px;color:var(--sub);font-weight:700">방 '+esc(v.code)+'</span></div>'+
+      '<div style="display:flex;align-items:center;justify-content:center;gap:18px;margin:4px 0 14px"><span style="font-size:26px;font-weight:800;color:var(--sub)">남은 시간</span><span id="bclk" style="font-size:72px;font-weight:900">'+mmss(v.endAt-Date.now())+'</span><span style="font-size:20px;color:var(--sub);font-weight:700">방 '+esc(v.code)+'</span></div>'+
       '<div class="rk"><h3>🏁 실시간 순위 <span class="small" style="font-size:16px">(맞힌 개수)</span></h3><div id="race">'+raceRows(v)+'</div></div>';
     app.innerHTML=html;
     $('#bend').onclick=function(){ if(confirm('지금 끝낼까요?')) hostAct('end'); };
     bClock(function(){ var c=$('#bclk'); if(!c) return; var s=B.startAt-Date.now(); c.textContent=s>0?('준비 '+Math.ceil(s/1000)):mmss(B.endAt-Date.now()); c.style.color=(s<=0&&B.endAt-Date.now()<=10000)?'var(--no)':''; });
   } else if(v.status==='end'){
-    var r=v.rank, md=['🥇','🥈','🥉'];
+    var r=v.rank||[], md=['🥇','🥈','🥉'];
     var pod=[1,0,2].filter(function(i){return r[i];}).map(function(i){ return '<div class="p'+(i+1)+'"><div class="m">'+md[i]+'</div><div class="nm">'+esc(r[i].name)+'</div><div class="sc">'+r[i].c+'개 맞힘'+(r[i].x?' · '+r[i].x+'개 틀림':'')+'</div></div>'; }).join('');
     html=hostHead(v)+'<div style="text-align:center;font-size:40px;font-weight:900;margin-top:10px">🏆 최종 결과</div><div class="pod">'+pod+'</div>'+
       (r.length>3?'<div class="rk" style="max-width:640px;margin:0 auto"><ul class="list">'+r.slice(3).map(function(x){ return '<li><span class="r">'+x.rank+'</span><span>'+esc(x.name)+'</span><span class="s">'+x.c+'개</span></li>'; }).join('')+'</ul></div>':'')+
@@ -3522,12 +3300,22 @@ function playerEnter(v){
   var prevC = (R && R.c) ? R.c : 0;
   var prevX = (R && R.x) ? R.x : 0;
   R = { c: prevC, x: prevX, wrong: [], order: [], i: 0, qs: null, rank: 0, done: false, busy: false, sent: -1 };
-  pWait(v);
+  pWait({ code: B.code, count: 1 });
 
-  // Initialize Student Realtime Listener
-  initBattleNet(B.code, function(m){
-    if(g !== B.gen) return;
-    if(m.type === 'start'){
+  // 1. BroadcastChannel instant sync (0ms)
+  try {
+    if (window.BroadcastChannel) {
+      var bc = new BroadcastChannel('topedu_bt_' + B.code);
+      bc.onmessage = function(e){
+        if(g !== B.gen || !e || !e.data) return;
+        handleStudentNetMsg(e.data);
+      };
+    }
+  } catch(e){}
+
+  function handleStudentNetMsg(m){
+    if(!m) return;
+    if(m.type === 'start' && !R.startAt){
       if(!R.qs || !R.qs.length){
         R.qs = generateBattleQs(S.cred ? S.cred.ban : '', m.dir || 'en', m.setNames || []);
       }
@@ -3535,51 +3323,57 @@ function playerEnter(v){
         startIn: Math.max(0, (m.startAt || Date.now()) - Date.now()),
         endIn: Math.max(0, (m.endAt || (Date.now() + 180000)) - Date.now())
       }, g);
-    } else if(m.type === 'end'){
+    } else if(m.type === 'end' && !R.done){
       pEnd({ me: { rank: R.rank || 1, c: R.c, x: R.x }, top: [] });
-    } else if(m.type === 'roster' || m.type === 'room'){
-      var names = m.names || [];
+    } else if(m.type === 'room' && m.names){
       var c = $('#bcnt');
-      if(c && names.length) c.textContent = names.length + '명 참여 중';
+      if(c && m.names.length) c.textContent = m.names.length + '명 참여 중';
       var pn = $('#pnames');
-      if(pn && names.length){
-        pn.innerHTML = names.map(function(n){
+      if(pn && m.names.length){
+        pn.innerHTML = m.names.map(function(n){
           var isMe = (S.cred && S.cred.name === n);
           return '<span class="chip" style="' + (isMe ? 'background:var(--main);color:#fff;font-weight:800;' : '') + '">' + esc(n) + (isMe ? ' (나)' : '') + '</span> ';
         }).join('');
       }
     }
-  });
+  }
 
-  // Continuous Join Heartbeat while in lobby (every 2.5s until game starts!)
-  // This guarantees the teacher screen registers the student 100% even if the first packet was delayed!
-  B.stuHeartbeat = setInterval(function(){
-    if(g !== B.gen || (R && R.startAt)) {
-      clearInterval(B.stuHeartbeat);
-      B.stuHeartbeat = null;
-      return;
-    }
-    broadcastBattleNet(B.code, {
+  // 2. Student poller & join heartbeat (pings every 2s while in lobby, stops on start!)
+  (function stuPollLoop(){
+    if(g !== B.gen || R.startAt) return;
+    
+    // Announce presence
+    sendBattleNet(B.code, {
       type: 'join',
       code: B.code,
       name: S.cred ? S.cred.name : '학생',
       ban: S.cred ? S.cred.ban : ''
     });
 
-    // Check game state
-    callq('battleState', S.cred, B.code, !R.qs).then(function(r){
-      if(g !== B.gen) return;
-      if(r.status === 'run' && (!R.qs || !R.qs.length)){
-        R.qs = (r.qs && r.qs.length) ? r.qs : generateBattleQs(S.cred ? S.cred.ban : '', 'en', r.setNames);
-        raceStart(r, g);
-      } else if(r.status === 'end'){
-        pEnd(r);
-      } else if(r.status === 'lobby'){
-        var c = $('#bcnt');
-        if(c && r.count) c.textContent = r.count + '명 참여 중';
-      }
-    }).catch(function(){});
-  }, 2500);
+    // Check room state
+    fetch('https://ntfy.sh/topedu_bt_' + B.code + '/json?poll=1&since=1m')
+      .then(function(res){ return res.text(); })
+      .then(function(txt){
+        if(g !== B.gen || R.startAt) return;
+        var lines = txt.trim().split('\n');
+        lines.forEach(function(l){
+          if(!l.trim()) return;
+          try {
+            var d = JSON.parse(l);
+            var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
+            if(m) handleStudentNetMsg(m);
+          } catch(e){}
+        });
+        if(!R.startAt){
+          B.stuTimer = setTimeout(stuPollLoop, 2000);
+        }
+      })
+      .catch(function(){
+        if(g === B.gen && !R.startAt){
+          B.stuTimer = setTimeout(stuPollLoop, 2500);
+        }
+      });
+  })();
 }
 
 function pWait(v){
@@ -3594,7 +3388,7 @@ function pWait(v){
 }
 
 function raceStart(v,g){
-  if(B.stuHeartbeat){ clearInterval(B.stuHeartbeat); B.stuHeartbeat = null; }
+  if(B.stuTimer){ clearTimeout(B.stuTimer); B.stuTimer = null; }
   if(!R.qs || !R.qs.length){
     R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
   }
@@ -3614,16 +3408,20 @@ function raceStart(v,g){
     if(now<R.startAt){ var n=$('#rdn'); if(n) n.textContent=Math.ceil((R.startAt-now)/1000); return; }
     if($('#rdy')&&$('#rdy').style.display!=='none'){ $('#rdy').style.display='none'; $('#qbox').style.display=''; nextQ(); }
     var t=$('#rt'); if(t) t.textContent=mmss(R.endAt-now);
-    if(now>=R.endAt&&!R.done){ R.done=true; report(g,true); app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">⏰</div><div class="t">시간 끝!</div><div class="s">'+R.c+'개 맞혔어요. 결과를 기다리는 중…</div></div>'; bindBack(playerExit); }
+    if(now>=R.endAt&&!R.done){ R.done=true; reportScore(); app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">⏰</div><div class="t">시간 끝!</div><div class="s">'+R.c+'개 맞혔어요. 결과를 기다리는 중…</div></div>'; bindBack(playerExit); }
   });
-  (function rep(){ setTimeout(function(){ if(g!==B.gen||R.done) return; report(g,false); rep(); },1500); })();
+  (function rep(){ setTimeout(function(){ if(g!==B.gen||R.done) return; reportScore(); rep(); },1500); })();
 }
 
-function report(g,fin){
-  callq('battleReport',S.cred,B.code,R.c,R.x,R.wrong).then(function(r){
-    if(g!==B.gen) return; R.rank=r.rank; var k=$('#rrk'); if(k&&r.rank) k.innerHTML='지금 <b>'+r.rank+'등</b>';
-    if(r.status==='end'&&!R.done){ R.done=true; }
-  }).catch(function(){ if(fin&&g===B.gen) setTimeout(function(){ report(g,true); },1000); });
+function reportScore(){
+  sendBattleNet(B.code, {
+    type: 'report',
+    code: B.code,
+    name: S.cred ? S.cred.name : '학생',
+    ban: S.cred ? S.cred.ban : '',
+    c: R.c,
+    x: R.x
+  });
 }
 
 function nextQ(){
@@ -3656,14 +3454,14 @@ function nextQ(){
       R.c++;
       $('#rc').textContent=R.c;
       b.classList.add('hit');
-      report(B.gen,false);
+      reportScore();
       setTimeout(nextQ,180);
     } else {
       playWrongSound();
       R.x++;
       R.wrong.push(q.w);
       b.classList.add('miss');
-      report(B.gen,false);
+      reportScore();
       var r=app.querySelector('#rtiles .bo[data-k="'+q.a+'"]');
       if(r) r.classList.add('hit');
       [].forEach.call(app.querySelectorAll('#rtiles .bo'),function(x){ if(x!==b&&x!==r) x.classList.add('dim'); });
