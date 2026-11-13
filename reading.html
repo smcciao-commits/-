@@ -3882,9 +3882,10 @@ function removeLookedUpWord(word) {
 
 // Helper: Wrap words in text with clickable spans
 function makeWordsClickable(text) {
-  // Match english words
-  return text.replace(/\b([a-zA-Z]{2,})\b/g, function(match) {
-    return `<span class="word-clickable" onclick="lookupWord(event, '${match}')">${match}</span>`;
+  // Tag-safe replacement: preserve existing HTML tags (<...>) and only wrap english words outside tags
+  return String(text || '').replace(/(<[^>]+>)|(\b[a-zA-Z]{2,}\b)/g, function(match, isTag, word) {
+    if (isTag) return isTag;
+    return `<span class="word-clickable" onclick="lookupWord(event, '${word}')">${word}</span>`;
   });
 }
 

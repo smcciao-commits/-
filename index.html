@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<title>수지탑에듀 영어 단어·독해 학습센터</title>
 <base target="_top">
 <meta charset="utf-8">
 <meta name="referrer" content="no-referrer">
@@ -990,8 +991,13 @@ function mockCall(fn, args) {
         target: s.target || '전체'
       });
     }
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = String(now.getMonth() + 1).padStart(2, '0');
+    var d = String(now.getDate()).padStart(2, '0');
+    var todayStr = y + '-' + m + '-' + d;
     return {
-      today: '2026-11-12',
+      today: todayStr,
       classes: ['초5', '수지중1', '수지중2', '홍천고1', '예비고1', '풍덕초6', '한빛중2', '현암고1', '현암고2', '수지고2', '죽전고2'],
       sets: adminSets
     };
@@ -1077,17 +1083,6 @@ function mockCall(fn, args) {
     }
     return ALL_WORD_SETS[keys[0]].words;
   }
-  if (fn === 'studentLogin') {
-    var sets = [
-      { name: '홍천 외부1 동물상징 단어', count: 12, progress: { modes: {} } },
-      { name: '예시 단어 세트', count: 6, progress: { modes: {} } }
-    ];
-    return { sets: sets, ban: args[0].ban, name: args[0].name };
-  }
-  if (fn === 'getWordSet') {
-    var setName = args[1];
-    return STANDALONE_WORDS[setName] || STANDALONE_WORDS['예시 단어 세트'];
-  }
   if (fn === 'submitWord') {
     var cred = args[0] || {};
     var setName = args[1] || '';
@@ -1096,6 +1091,40 @@ function mockCall(fn, args) {
     var score = Math.round((correct / (total || 1)) * 100);
     saveStudentProgressDB(cred.ban, cred.name, setName, mode, score);
     return { score: score };
+  }
+  if (fn === 'submitProblems') {
+    var cred = args[0] || {};
+    var setName = args[1] || '';
+    var userAns = args[2] || [];
+    var sec = args[3] || 0;
+    var list = mockCall('getProblemSet', [cred, setName]);
+    var correct = 0, detail = [];
+    for (var i = 0; i < list.length; i++) {
+      var p = list[i];
+      var my = userAns[i];
+      var expected = String(p.ans || '').trim();
+      var myStr = Array.isArray(my) ? my.join(',') : String(my || '').trim();
+      var isOk = (myStr === expected);
+      if (isOk) correct++;
+      detail.push({
+        ok: isOk,
+        check: false,
+        answer: expected,
+        my: myStr,
+        exp: p.exp || ''
+      });
+    }
+    var score = Math.round((correct / (list.length || 1)) * 100);
+    saveStudentProgressDB(cred.ban, cred.name, setName, '문제', score);
+    try {
+      sendDirectorPushNotification('[문제풀이 완료] ' + (cred.name || '학생') + ' (' + (cred.ban || '') + ')', '[' + setName + '] ' + score + '점 완료! (' + correct + '/' + list.length + ')', 'study');
+    } catch(e){}
+    return {
+      score: score,
+      total: list.length,
+      correct: correct,
+      detail: detail
+    };
   }
 
   /* ===== 단어 대결 (배틀) v58 실시간 엔진 ===== */
@@ -1950,7 +1979,7 @@ function runCloze(words){
   function draw(){
     if(i>=list.length){ finish('예문빈칸','예문 빈칸',correct,list.length,wrong); return; }
     var c=list[i], z=clozeOf(c), ops=options(c,W.words.filter(function(o){return o.w!==c.w;}).concat([c]),'w');
-    app.innerHTML=topBar('⑤ 예문 빈칸')+'<div class="sub">'+(i+1)+' / '+list.length+' · 빈칸에 들어갈 단어는? (모양이 바뀔 수 있어요)</div><div class="bar"><i style="width:'+(i/list.length*100)+'%"></i></div>'+
+    app.innerHTML=topBar('⑥ 예문 빈칸')+'<div class="sub">'+(i+1)+' / '+list.length+' · 빈칸에 들어갈 단어는? (모양이 바뀔 수 있어요)</div><div class="bar"><i style="width:'+(i/list.length*100)+'%"></i></div>'+
       '<div class="passage" style="font-size:18px">'+esc(z.s).replace('_____','<b style="color:var(--pri)">_____</b>')+(z.ko?'<div class="small" style="margin-top:8px">'+esc(z.ko)+'</div>':'')+'</div>'+
       ops.map(function(o,k){return '<button class="opt" data-k="'+k+'">'+esc(o.w)+'</button>';}).join('')+'<div class="fb" id="fb"></div>';
     bindBack(showWordMenu);
@@ -2235,7 +2264,7 @@ function runChoice(words,retry){
   function draw(){
     if(i>=list.length){ finish('뜻고르기',retry?'틀린 단어 다시 하기':'뜻 고르기',correct,list.length,wrong); return; }
     var c=list[i], ops=options(c,W.words,'m');
-    app.innerHTML=topBar(retry?'틀린 단어 다시':'② 뜻 고르기')+'<div class="sub">'+(i+1)+' / '+list.length+'</div><div class="bar"><i style="width:'+(i/list.length*100)+'%"></i></div>'+
+    app.innerHTML=topBar(retry?'틀린 단어 다시':'③ 뜻 고르기')+'<div class="sub">'+(i+1)+' / '+list.length+'</div><div class="bar"><i style="width:'+(i/list.length*100)+'%"></i></div>'+
     '<div class="q">'+esc(c.w)+'</div><div style="text-align:center"><button class="say" id="say">🔊 발음 다시 듣기</button></div>'+
     ops.map(function(o,k){return '<button class="opt" data-k="'+k+'">'+esc(o.m)+'</button>';}).join('')+'<div class="fb" id="fb"></div>';
     bindBack(showWordMenu); $('#say').onclick=function(){speak(c.w);};
@@ -2259,7 +2288,7 @@ function runSpell(words){
   function draw(){
     if(i>=list.length){ finish('스펠링','스펠링 쓰기',correct,list.length,wrong); return; }
     var c=list[i], hint=0;
-    app.innerHTML=topBar('③ 스펠링 쓰기')+'<div class="sub">'+(i+1)+' / '+list.length+'</div><div class="bar"><i style="width:'+(i/list.length*100)+'%"></i></div>'+
+    app.innerHTML=topBar('④ 스펠링 쓰기')+'<div class="sub">'+(i+1)+' / '+list.length+'</div><div class="bar"><i style="width:'+(i/list.length*100)+'%"></i></div>'+
     '<div class="q ko">'+esc(c.m)+'</div><div style="text-align:center;margin:8px 0"><button class="say" id="say_spell" type="button">🔊 발음 다시 듣기</button></div><div class="sub" style="text-align:center" id="hn">'+c.w.length+'글자</div>'+
     '<input id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="영어로 쓰세요" style="text-align:center;margin-top:12px">'+
     '<div class="row"><button class="btn gray" id="hint">💡 힌트</button><button class="btn" id="ok">확인</button></div><div class="fb" id="fb"></div>';
@@ -2292,7 +2321,7 @@ function runMatch(words){
       return;
     }
     var set=rounds[r], tiles=shuffle(set.map(function(o){return {o:o,t:o.w,en:1};}).concat(set.map(function(o){return {o:o,t:o.m,en:0};}))), sel=null, left=set.length;
-    app.innerHTML=topBar('④ 짝 맞추기')+'<div class="sub">'+(r+1)+' / '+rounds.length+' 판 · 단어와 뜻을 차례로 눌러요</div><div class="bar"><i style="width:'+(r/rounds.length*100)+'%"></i></div>'+
+    app.innerHTML=topBar('⑤ 짝 맞추기')+'<div class="sub">'+(r+1)+' / '+rounds.length+' 판 · 단어와 뜻을 차례로 눌러요</div><div class="bar"><i style="width:'+(r/rounds.length*100)+'%"></i></div>'+
       '<div class="grid">'+tiles.map(function(x,k){return '<button class="tile" data-k="'+k+'">'+esc(x.t)+'</button>';}).join('')+'</div>';
     bindBack(showWordMenu);
     var btns=app.querySelectorAll('.tile');
@@ -2319,7 +2348,7 @@ function runTest(words){
   function draw(){
     if(i>=qs.length){ finish('테스트','마지막 테스트',correct,qs.length,wrong); return; }
     var q=qs[i], c=q.c;
-    var head=topBar('⑤ 마지막 테스트')+'<div class="sub">'+(i+1)+' / '+qs.length+' · 정답은 끝나고 알려줘요</div><div class="bar"><i style="width:'+(i/qs.length*100)+'%"></i></div>';
+    var head=topBar((W.words.some(clozeOf)?'⑦':'⑥')+' 마지막 테스트')+'<div class="sub">'+(i+1)+' / '+qs.length+' · 정답은 끝나고 알려줘요</div><div class="bar"><i style="width:'+(i/qs.length*100)+'%"></i></div>';
     function next(ok){ if(ok) correct++; else wrong.push(c.w); i++; draw(); }
     if(q.kind==='spell'){
       app.innerHTML=head+'<div class="q ko">'+esc(c.m)+'</div><div class="sub" style="text-align:center">영어로 쓰세요 ('+c.w.length+'글자)</div>'+
