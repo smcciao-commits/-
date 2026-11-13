@@ -1866,23 +1866,14 @@ function showHome(){
   html += drawStudentInAppNoteCard(me.name);
   html += drawSpecialHwCard(me.ban);
 
-  // CATS English Daily Studio Hero Card for 초5 Harin
-  if (me.ban === '초5' || (me.ban === '선생님' && (S.tf === '초5' || !S.tf))) {
-    html += '<div style="margin:10px 0 14px;padding:16px;background:linear-gradient(135deg, #f3e8ff, #fce7f3);border:2.5px solid #c084fc;border-radius:20px;box-shadow:0 6px 20px rgba(124,77,255,0.18);cursor:pointer;position:relative;overflow:hidden;" onclick="location.href=\'cats.html\'">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
-        '<span style="background:#7c4dff;color:white;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;">🐱 [초5 하린 전용] 캐츠 잉글리시 4단계 훈련관</span>' +
-        '<span style="font-size:12px;font-weight:700;color:#db2777;background:white;padding:3px 8px;border-radius:8px;border:1px solid #f472b6;">⏰ 매일 16:30 알람</span>' +
+  // 초등부 전용 '에듀키즈(edukids)' 독립 전용관 안내 카드
+  if (me.ban === '초5' || me.ban === '풍덕초6' || (me.ban === '선생님' && (S.tf === '초5' || S.tf === '풍덕초6' || !S.tf))) {
+    html += '<div style="margin:10px 0 14px;padding:14px 16px;background:linear-gradient(135deg, #f3e8ff, #fce7f3);border:2px solid #c084fc;border-radius:18px;cursor:pointer;box-shadow:0 4px 14px rgba(124,77,255,0.15);" onclick="location.href=\'edukids.html\'">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<div style="font-family:Maplestory,sans-serif;font-size:16px;font-weight:700;color:#4c1d95;">🎒 초등 전용 앱 \'에듀키즈 (edukids)\' 바로가기 →</div>' +
+        '<span style="background:#7c4dff;color:white;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;">에듀키즈 전용관</span>' +
       '</div>' +
-      '<div style="display:flex;gap:14px;align-items:center;">' +
-        '<div style="font-size:42px;flex-shrink:0;animation:bounce 1.5s infinite;">🐱</div>' +
-        '<div style="flex:1;">' +
-          '<div style="font-family:Maplestory,sans-serif;font-size:17px;font-weight:700;color:#4c1d95;">캐츠잉글리시 4단계 데일리 루틴</div>' +
-          '<div style="font-size:12.5px;color:#6b21a8;margin-top:2px;">워밍업 단어 ➔ 애니메이션 영상 & 쉐도잉 ➔ AI 냥이 토크 ➔ 15분 아이패드 보상!</div>' +
-        '</div>' +
-      '</div>' +
-      '<button style="width:100%;margin-top:12px;background:linear-gradient(135deg, #7c4dff, #ff4081);color:white;border:none;border-radius:12px;padding:11px;font-family:Maplestory,sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(124,77,255,0.3);">' +
-        '🚀 냥이와 20분 영어 놀이 시작하기 →' +
-      '</button>' +
+      '<div style="font-size:12px;color:#6b21a8;margin-top:4px;">캐츠 스튜디오 · Hand in Hand 5 전단원 영상관 (24편) · ORT 음원 · 15분 보상 플래너</div>' +
     '</div>';
   }
   html += drawTodayCard();
@@ -1903,22 +1894,7 @@ function showHome(){
     '<div style="font-size:12px;color:#718096;margin-top:2px">' + rSub + '</div></div>' +
     '<button style="background:#ff758c;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">풀러가기 →</button></div>';
   
-  // Official QR Audio & E-Book Hub
-  html += '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg, #eff6ff, #f0fdf4);border:2px solid #60a5fa;border-radius:16px;box-shadow:0 3px 10px rgba(59,130,246,0.12)">' +
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-      '<div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14px;color:#1d4ed8">🎧 출판사 공식 QR 오디오 & E-Book 센터</div>' +
-      '<span style="font-size:11px;background:#3b82f6;color:white;padding:2px 7px;border-radius:999px;font-weight:700">정품 교재 연동</span>' +
-    '</div>' +
-    '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
-      '<a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=63U92V6C11RH1GOYLXOR91YU86L1HLIQ&view=1" target="_blank" style="text-decoration:none;background:white;border:1.5px solid #93c5fd;color:#1e40af;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:8px">📗 인사이트 L1 음원</a>' +
-      '<a href="https://netutor-m.neflow.ai/pages/QRcode/sendmail.asp?bookcode=BA03040013" target="_blank" style="text-decoration:none;background:white;border:1.5px solid #93c5fd;color:#1e40af;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:8px">📖 L1 E-Book</a>' +
-      '<a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=5ETU185OZCQ4ZSEKKJNC8CX77HKLGX83&view=1" target="_blank" style="text-decoration:none;background:white;border:1.5px solid #fdba74;color:#c2410c;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:8px">📙 인사이트 L2 음원</a>' +
-      '<a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=PMESMFPWKKB2K19I7I9BTKJERP6K263A&view=1" target="_blank" style="text-decoration:none;background:white;border:1.5px solid #fca5a5;color:#b91c1c;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:8px">📕 인사이트 L3 음원</a>' +
-      '<a href="https://www.e-future.co.kr/audio/info.do?bookkey=1026&cd_num=1" target="_blank" style="text-decoration:none;background:white;border:1.5px solid #c084fc;color:#6b21a8;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:8px">📘 핸드인핸드 5권 오디오</a>' +
-      '<a href="https://www.e-future.co.kr/audio/track/info?bookkey=1026&cd_num=1&unit_idx=102" target="_blank" style="text-decoration:none;background:#7c4dff;color:white;font-size:11.5px;font-weight:700;padding:5px 9px;border-radius:8px">🏆 Unit 5 트랙</a>' +
-      '<a href="cats.html?step=2&series=handinhand&unit=5" style="text-decoration:none;background:linear-gradient(135deg,#2563eb,#7c4dff);color:white;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:8px;box-shadow:0 2px 6px rgba(37,99,235,0.25)">🎬 Hand in Hand 5 영상관 (Unit 1~12 전편)</a>' +
-    '</div>' +
-  '</div>';
+
 
   html += drawLiveClassBanner(me.ban);
   if (me.ban === '초5') {

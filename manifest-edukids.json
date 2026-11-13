@@ -1,0 +1,25 @@
+{
+  "name": "수지탑에듀 에듀키즈 (TOP EDU KIDS)",
+  "short_name": "에듀키즈",
+  "description": "수지탑에듀학원 초등부 전용 영어 놀이터 & 학습센터",
+  "start_url": "./edukids.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#7c4dff",
+  "icons": [
+    {
+      "src": "harin-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "harin-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

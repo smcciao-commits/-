@@ -1,0 +1,5313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>🎒 수지탑에듀 에듀키즈 (TOP EDU KIDS)</title>
+  <link rel="manifest" href="manifest-edukids.json">
+  <link rel="apple-touch-icon" href="harin-icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    @font-face {
+      font-family: 'Maplestory';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+    }
+    :root {
+      --primary: #7c4dff;
+      --primary-dark: #651fff;
+      --accent: #ff4081;
+      --accent-light: #fff0f5;
+      --mint: #00e676;
+      --gold: #ffb300;
+      --bg: #f5f3ff;
+      --card-bg: #ffffff;
+      --text: #2d3748;
+      --muted: #718096;
+      --border: #e2e8f0;
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 30px rgba(124, 77, 255, 0.12);
+      position: relative;
+      padding-bottom: 90px;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      background: linear-gradient(135deg, #7c4dff, #ff4081);
+      color: white;
+      padding: 14px 16px 18px;
+      border-bottom-left-radius: 26px;
+      border-bottom-right-radius: 26px;
+      box-shadow: 0 6px 20px rgba(124, 77, 255, 0.25);
+    }
+    .nav-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .btn-back-home {
+      background: rgba(255,255,255,0.25);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: white;
+      border-radius: 12px;
+      padding: 5px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      backdrop-filter: blur(4px);
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .app-logo {
+      font-size: 30px;
+      animation: catWiggle 2.5s infinite ease-in-out;
+    }
+    .app-title-box h1 {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .app-title-box .sub {
+      font-size: 11.5px;
+      opacity: 0.92;
+      margin-top: 1px;
+    }
+    .badge-class {
+      background: rgba(255,255,255,0.25);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Stats & Speed Ribbon */
+    .stats-ribbon {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      flex: 1;
+      min-width: 80px;
+      background: rgba(0,0,0,0.18);
+      border-radius: 12px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .stat-pill .val {
+      color: #ffd54f;
+      font-family: 'Maplestory', sans-serif;
+      font-size: 13.5px;
+    }
+    .btn-speed-toggle {
+      background: #e0e7ff;
+      color: #3730a3;
+      border: none;
+      border-radius: 12px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .btn-alarm-toggle {
+      background: #ffd54f;
+      color: #3e2723;
+      border: none;
+      border-radius: 12px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Content Area */
+    .content {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Collapsible Alarm Card */
+    .alarm-card {
+      background: linear-gradient(135deg, #fff9c4, #fffde7);
+      border: 2px solid #ffd54f;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(255, 179, 0, 0.15);
+    }
+    .alarm-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .alarm-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #f57f17;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .alarm-status-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #4caf50;
+      color: white;
+    }
+    .alarm-status-badge.off {
+      background: #9e9e9e;
+    }
+    .alarm-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .alarm-time-input {
+      border: 1.5px solid #fbc02d;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      background: white;
+      color: #37474f;
+      font-family: 'Maplestory', sans-serif;
+    }
+    .btn-test-alarm {
+      background: #f57f17;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Mascot Hero */
+    .mascot-hero {
+      background: linear-gradient(135deg, #f3e8ff, #fce7f3);
+      border: 2px solid #e9d5ff;
+      border-radius: 22px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.08);
+      cursor: pointer;
+    }
+    .cat-avatar-wrap {
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 2px solid #f472b6;
+    }
+    .cat-avatar-wrap svg {
+      width: 58px;
+      height: 58px;
+    }
+    .cat-bubble {
+      flex: 1;
+      background: white;
+      border-radius: 16px;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #374151;
+      border: 1.5px solid #f472b6;
+    }
+    .cat-name {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 11.5px;
+      color: #ff4081;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    /* Joy English Special Practice Card */
+    .joy-card {
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      border: 2.5px solid #818cf8;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .joy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .joy-title-badge {
+      background: #4f46e5;
+      color: white;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .joy-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 16px;
+      color: #1e1b4b;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .joy-sub {
+      font-size: 12px;
+      color: #4b5563;
+      line-height: 1.45;
+    }
+    .joy-cat-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .joy-cat-tabs::-webkit-scrollbar { display: none; }
+    .joy-tab-btn {
+      flex-shrink: 0;
+      background: white;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4338ca;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .joy-tab-btn.active {
+      background: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    }
+    .joy-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .joy-item {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1.5px solid #e0e7ff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .joy-en-text {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 15px;
+      color: #1e1b4b;
+      line-height: 1.4;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .joy-ko-text {
+      font-size: 12.5px;
+      color: #4338ca;
+      font-weight: 600;
+    }
+    .joy-tip-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 11.5px;
+      color: #92400e;
+      line-height: 1.35;
+    }
+    .joy-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .btn-joy-speak {
+      background: #eef2ff;
+      border: 1.5px solid #c7d2fe;
+      color: #4338ca;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-joy-shadow {
+      background: #ec4899;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+
+    /* Joy English Speaking Studio Modal */
+    .speaking-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      padding: 16px;
+    }
+    .speaking-modal-overlay.show {
+      display: flex;
+    }
+    .speaking-modal-card {
+      background: white;
+      border-radius: 26px;
+      padding: 22px 20px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .speaking-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid #f1f5f9;
+      padding-bottom: 10px;
+    }
+    .speaking-modal-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 16.5px;
+      color: #1e1b4b;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .speaking-badge-tag {
+      background: #e0e7ff;
+      color: #4338ca;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .btn-speaking-close {
+      background: #f1f5f9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-speaking-close:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .speaking-target-box {
+      background: linear-gradient(135deg, #f5f3ff, #fdf2f8);
+      border: 2px solid #c7d2fe;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .speaking-target-en {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 17.5px;
+      color: #1e1b4b;
+      line-height: 1.45;
+    }
+    .speaking-target-ko {
+      font-size: 13px;
+      color: #4338ca;
+      font-weight: 600;
+    }
+    .speaking-target-tip {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      color: #92400e;
+      line-height: 1.4;
+    }
+    .btn-listen-target {
+      background: white;
+      border: 1.5px solid #818cf8;
+      color: #4338ca;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.12);
+      align-self: center;
+      transition: all 0.2s;
+    }
+    .btn-listen-target:hover {
+      background: #eef2ff;
+    }
+    .mic-action-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+    }
+    .btn-studio-mic {
+      width: 100%;
+      max-width: 320px;
+      height: 52px;
+      border-radius: 26px;
+      border: none;
+      font-family: 'Maplestory', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s;
+    }
+    .btn-studio-mic.idle {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      box-shadow: 0 6px 18px rgba(236, 72, 153, 0.35);
+    }
+    .btn-studio-mic.idle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(236, 72, 153, 0.45);
+    }
+    .btn-studio-mic.listening {
+      background: linear-gradient(135deg, #ef4444, #f43f5e);
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      animation: studioMicPulse 1.5s infinite;
+    }
+    @keyframes studioMicPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    .mic-status-hint {
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.4;
+      min-height: 20px;
+    }
+    .speech-result-card {
+      background: #f8fafc;
+      border: 2px solid #e0e7ff;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: slideUp 0.3s ease-out;
+    }
+    @keyframes slideUp {
+      0% { transform: translateY(12px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .score-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .score-stars {
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+    .score-badge {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+    .score-badge.pass {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1.5px solid #34d399;
+    }
+    .score-badge.retry {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1.5px solid #f59e0b;
+    }
+    .spoken-transcript-box {
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #1e293b;
+      font-style: italic;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .aligned-words-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .aligned-words-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .aligned-words-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .w-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .w-badge.ok {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .w-badge.miss {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+    .minky-fb-card {
+      background: #fffbeb;
+      border: 1.5px dashed #fde68a;
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .minky-fb-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 2px;
+    }
+    .minky-fb-msg {
+      font-size: 12px;
+      color: #78350f;
+      line-height: 1.4;
+    }
+    .result-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .btn-res-retry {
+      flex: 1;
+      background: #eef2ff;
+      border: 1.5px solid #c7d2fe;
+      color: #4338ca;
+      border-radius: 12px;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-res-done {
+      flex: 1;
+      background: #4f46e5;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+
+    /* YouTube Player Container */
+    .youtube-player-container {
+      background: white;
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+    }
+    .youtube-frame-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000;
+    }
+    .youtube-frame-wrap iframe {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: none;
+    }
+    .youtube-meta-bar {
+      padding: 12px 14px;
+      background: #faf5ff;
+      border-top: 1.5px solid #e9d5ff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .yt-title-badge {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 14px;
+      color: #6b21a8;
+      font-weight: 700;
+    }
+    .yt-subtitle {
+      font-size: 11.5px;
+      color: #6b7280;
+      line-height: 1.35;
+    }
+    .btn-yt-change {
+      background: #f3e8ff;
+      border: 1.5px solid #c084fc;
+      color: #7e22ce;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-yt-change:hover {
+      background: #e9d5ff;
+    }
+
+    /* Day Pack Selector */
+    .day-selector-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .day-selector-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .day-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .day-chips::-webkit-scrollbar { display: none; }
+    .day-chip {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #f8fafc;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .day-chip.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(124, 77, 255, 0.25);
+    }
+
+    /* 4-Step Tab Navigation */
+    .step-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: #edf2f7;
+      padding: 5px;
+      border-radius: 16px;
+    }
+    .step-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 4px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #718096;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .step-btn .step-ico { font-size: 17px; }
+    .step-btn.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    /* Step Card Container */
+    .step-view {
+      background: white;
+      border-radius: 22px;
+      padding: 18px 16px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid #edf2f7;
+      padding-bottom: 10px;
+    }
+    .step-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .step-counter {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      background: #f3e8ff;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    /* Step 1: Vocabulary Cards */
+    .voca-flip-box {
+      perspective: 1000px;
+      width: 100%;
+      height: 200px;
+      cursor: pointer;
+    }
+    .voca-card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 18px;
+    }
+    .voca-card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    .voca-card-front, .voca-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.12);
+    }
+    .voca-card-front {
+      background: linear-gradient(135deg, #ffffff, #faf5ff);
+      border: 2.5px solid #c084fc;
+    }
+    .voca-card-back {
+      background: linear-gradient(135deg, #fdf4ff, #fae8ff);
+      border: 2.5px solid #f472b6;
+      transform: rotateY(180deg);
+    }
+    .voca-word {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+    }
+    .voca-phonetic {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .voca-meaning {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #be185d;
+      margin-bottom: 6px;
+    }
+    .voca-engdef {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.4;
+      background: rgba(255,255,255,0.7);
+      padding: 6px 10px;
+      border-radius: 10px;
+      margin-top: 4px;
+    }
+    .voca-example {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    .voca-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-audio-speak {
+      background: #f3e8ff;
+      border: 1.5px solid #c084fc;
+      color: var(--primary);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-next-word {
+      flex: 1;
+      background: var(--primary);
+      border: none;
+      color: white;
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(124, 77, 255, 0.25);
+    }
+
+    /* ========================================= */
+    /* STEP 2: HIGH-GRADE ANIMATED SVG THEATRE   */
+    /* ========================================= */
+    .theatre-box {
+      width: 100%;
+      height: 240px;
+      background: linear-gradient(180deg, #bae6fd 0%, #e0f2fe 60%, #bbf7d0 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      border: 3px solid #7dd3fc;
+      cursor: pointer;
+      user-select: none;
+    }
+    .theatre-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .particles-layer {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .magic-sparkle {
+      position: absolute;
+      font-size: 24px;
+      pointer-events: none;
+      animation: burstFloat 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+      z-index: 20;
+    }
+    @keyframes burstFloat {
+      0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
+      50% { transform: translate(var(--tx), var(--ty)) scale(1.3) rotate(180deg); opacity: 1; }
+      100% { transform: translate(var(--tx2), var(--ty2)) scale(0.8) rotate(360deg); opacity: 0; }
+    }
+
+    /* CSS Animations for Characters */
+    @keyframes cloudDrift {
+      0% { transform: translateX(-30px); }
+      50% { transform: translateX(30px); }
+      100% { transform: translateX(-30px); }
+    }
+    .anim-cloud { animation: cloudDrift 14s infinite ease-in-out; }
+
+    @keyframes cheetahRun {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-8px) rotate(-3deg); }
+      50% { transform: translateY(0) rotate(2deg); }
+      75% { transform: translateY(-5px) rotate(-1deg); }
+    }
+    .anim-cheetah { animation: cheetahRun 0.8s infinite ease-in-out; }
+
+    @keyframes giraffeSway {
+      0%, 100% { transform: rotate(0deg); transform-origin: 350px 200px; }
+      50% { transform: rotate(4deg); transform-origin: 350px 200px; }
+    }
+    .anim-giraffe { animation: giraffeSway 3s infinite ease-in-out; }
+
+    @keyframes hippoBop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .anim-hippo { animation: hippoBop 2s infinite ease-in-out; }
+
+    @keyframes sunGlow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .anim-sun { animation: sunGlow 3s infinite ease-in-out; transform-origin: 430px 40px; }
+
+    .theatre-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: #1e293b;
+      color: white;
+      border-radius: 14px;
+      margin-top: 6px;
+    }
+    .theatre-btn {
+      background: #334155;
+      border: none;
+      color: white;
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .theatre-btn.play {
+      background: #10b981;
+      color: white;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    .subtitles-box {
+      background: #faf5ff;
+      border: 2px solid #e9d5ff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-height: 58px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .sub-speaker {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 12px;
+      color: #9333ea;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .sub-en {
+      font-size: 15px;
+      font-weight: 800;
+      color: #581c87;
+      line-height: 1.4;
+    }
+    .sub-ko {
+      font-size: 12.5px;
+      color: #4b5563;
+      margin-top: 3px;
+    }
+
+    /* Shadowing Practice */
+    .shadowing-box {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .shadow-target-en {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 16px;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+    .shadow-target-ko {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .shadow-mic-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn-mic {
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+    .btn-mic.listening {
+      animation: pulseRed 1.2s infinite;
+      background: #dc2626;
+    }
+    .shadow-result-pill {
+      flex: 1;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #059669;
+      text-align: center;
+    }
+
+    /* Step 3: AI Cat Talk */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 200px;
+    }
+    .chat-bubble-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .chat-bubble-row.user {
+      flex-direction: row-reverse;
+    }
+    .chat-msg {
+      max-width: 82%;
+      padding: 10px 12px;
+      border-radius: 16px;
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+    .chat-msg.cat {
+      background: #f3e8ff;
+      color: #4a044e;
+      border-bottom-left-radius: 4px;
+      border: 1.5px solid #d8b4fe;
+    }
+    .chat-msg.user {
+      background: #ff4081;
+      color: white;
+      border-bottom-right-radius: 4px;
+      font-weight: 600;
+    }
+    .reply-chips-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .reply-chip {
+      background: white;
+      border: 2px solid #c084fc;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #6b21a8;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .reply-chip:active {
+      background: #faf5ff;
+      transform: scale(0.98);
+    }
+
+    /* Step 4: Quiz */
+    .quiz-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .quiz-q-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 15.5px;
+      line-height: 1.45;
+      color: #1f2937;
+    }
+    .quiz-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quiz-opt-btn {
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      text-align: left;
+    }
+    .quiz-opt-btn.correct {
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #047857;
+    }
+    .quiz-opt-btn.wrong {
+      background: #fef2f2;
+      border-color: #ef4444;
+      color: #b91c1c;
+    }
+
+    /* Scramble builder */
+    .scramble-slots {
+      min-height: 44px;
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 6px 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .scramble-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .word-token {
+      background: white;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Reward Celebration Modal */
+    .celebration-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .celebration-overlay.show { display: flex; }
+    .celebration-card {
+      background: white;
+      border-radius: 26px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: popIn 0.35s ease;
+    }
+    .trophy-badge {
+      font-size: 60px;
+      animation: trophyBounce 1.5s infinite;
+    }
+    .reward-passcode-box {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 2.5px dashed #f59e0b;
+      border-radius: 18px;
+      padding: 14px;
+      margin: 4px 0;
+    }
+    .reward-passcode-val {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #b45309;
+      letter-spacing: 4px;
+      margin-top: 3px;
+    }
+    .btn-close-reward {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Alarm Ringing Modal */
+    .alarm-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+    .alarm-modal-overlay.show { display: flex; }
+    .alarm-modal-card {
+      background: white;
+      border-radius: 26px;
+      padding: 22px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 3px solid #ffd54f;
+      box-shadow: 0 0 30px rgba(255, 213, 79, 0.5);
+      animation: popIn 0.35s ease;
+    }
+
+    /* Bottom Dock Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 520px;
+      background: white;
+      border-top: 1.5px solid var(--border);
+      padding: 10px 16px 14px;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+      z-index: 100;
+    }
+    .dock-btn {
+      border: none;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+    }
+    .dock-btn.active { color: var(--primary); }
+    .dock-btn .dock-ico { font-size: 20px; }
+
+    @keyframes catWiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+    @keyframes pulseRed {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 0 16px rgba(239, 68, 68, 0.8); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes trophyBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+<script src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-top-row">
+      <button class="btn-back-home" onclick="location.href='index.html'">
+        <span>←</span> <span>탑에듀 단어앱 홈</span>
+      </button>
+      <div class="badge-class">🎒 초등 에듀키즈 👑</div>
+      <button onclick="openQrAudioModal()" style="background:#2563eb;color:white;font-size:12px;padding:6px 10px;border:none;border-radius:8px;cursor:pointer;font-weight:700">🎧 교재 QR 음원</button>
+    </div>
+
+    <div class="nav-row">
+      <div class="app-brand">
+        <div class="app-logo">🎒</div>
+        <div class="app-title-box">
+          <h1 style="font-size:24px;color:#4c1d95;">탑에듀 에듀키즈 <span style="background:#7c4dff;color:white;font-size:12px;padding:2px 8px;border-radius:8px;">edukids</span></h1>
+          <div class="sub" style="font-size:13px;color:#6b21a8;font-weight:600;">초등 전용 영어 놀이터 · 캐츠 스튜디오 & 교재 영상관 & 초등 단어장</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats & Speed Ribbon -->
+    <div class="stats-ribbon">
+      <div class="stat-pill">
+        <span>🔥</span> <span>출석:</span> <span class="val" id="streakVal">3일째</span>
+      </div>
+      <div class="stat-pill">
+        <span>⭐</span> <span>포인트:</span> <span class="val" id="starVal">250P</span>
+      </div>
+      <button class="btn-speed-toggle" id="btnSpeedToggle" onclick="toggleTtsSpeed()">
+        <span id="speedIcon">🐢</span> <span id="speedLabel">느리게 (0.7x)</span>
+      </button>
+      <button class="btn-alarm-toggle" id="btnTopAlarm" onclick="toggleAlarmCard()">
+        <span>🔔</span> <span id="alarmTimeBadge">16:30 ON</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Collapsible Daily Alarm Setting Card -->
+    <div class="alarm-card" id="alarmCard" style="display:none;">
+      <div class="alarm-card-header">
+        <div class="alarm-title">
+          <span>⏰</span> <span>하린이의 매일 공부 알람</span>
+        </div>
+        <span class="alarm-status-badge" id="alarmStatusBadge">켜짐 (ON)</span>
+      </div>
+      <div style="font-size: 12px; color: #7f6a00; line-height: 1.4;">
+        설정된 시간에 경쾌한 학교 종소리 멜로디와 알람이 울려 매일 20분 공부 루틴을 챙겨줘요!
+      </div>
+      <div class="alarm-controls">
+        <input type="time" class="alarm-time-input" id="alarmTimeInput" value="16:30" onchange="saveAlarmSettings()">
+        <button class="btn-test-alarm" onclick="testAlarmBell()">
+          <span>🔔</span> <span>알람음 듣기</span>
+        </button>
+        <button class="btn-test-alarm" style="background:#5c6bc0" onclick="toggleAlarmActive()">
+          <span id="btnAlarmPowerTxt">알람 끄기</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mascot Minky Coach Hero -->
+    <div class="mascot-hero" onclick="petMinky()">
+      <div class="cat-avatar-wrap">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="52" r="38" fill="#fbcfe8" />
+          <polygon points="20,28 32,8 44,24" fill="#f472b6" />
+          <polygon points="24,25 32,13 40,24" fill="#fce7f3" />
+          <polygon points="80,28 68,8 56,24" fill="#f472b6" />
+          <polygon points="76,25 68,13 60,24" fill="#fce7f3" />
+          <ellipse cx="50" cy="54" rx="32" ry="28" fill="#ffffff" />
+          <circle cx="38" cy="48" r="6" fill="#1e1b4b" />
+          <circle cx="40" cy="46" r="2" fill="#ffffff" />
+          <circle cx="62" cy="48" r="6" fill="#1e1b4b" />
+          <circle cx="64" cy="46" r="2" fill="#ffffff" />
+          <polygon points="50,56 47,53 53,53" fill="#f43f5e" />
+          <path d="M46,58 Q50,62 54,58" stroke="#f43f5e" stroke-width="2" fill="none" />
+          <line x1="22" y1="52" x2="10" y2="48" stroke="#cbd5e1" stroke-width="2" />
+          <line x1="22" y1="56" x2="10" y2="58" stroke="#cbd5e1" stroke-width="2" />
+          <line x1="78" y1="52" x2="90" y2="48" stroke="#cbd5e1" stroke-width="2" />
+          <line x1="78" y1="56" x2="90" y2="58" stroke="#cbd5e1" stroke-width="2" />
+          <rect x="36" y="74" width="28" height="6" rx="3" fill="#ec4899" />
+          <circle cx="50" cy="80" r="5" fill="#f59e0b" />
+        </svg>
+      </div>
+      <div class="cat-bubble">
+        <div class="cat-name">🐱 캐츠 코치 밍키 (터치하면 야옹!)</div>
+        <div id="minkyDialogue">하린아 안녕! 🐱 2단계 영상 시어터에서 진짜 귀여운 동물 친구들과 마법 터치 효과를 즐겨봐! ✨</div>
+      </div>
+    </div>
+
+    <!-- Joy English Special Practice Card -->
+    <div class="joy-card">
+      <div class="joy-header">
+        <div class="joy-title">
+          <span>🗣️</span> <span>조이 화상영어 특급 대비!</span>
+        </div>
+        <span class="joy-title-badge">How was your day?</span>
+      </div>
+      <div class="joy-sub">
+        필리핀 선생님이 <b>"오늘 하루 어땠어?", "기분 어때?"</b> 물어보실 때 맨날 <i>"I'm happy", "I'm tired"</i>만 하지 않고 센스 있게 대답하는 마법의 표현들!
+      </div>
+
+      <div class="joy-cat-tabs" id="joyCatTabs">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="joy-card-list" id="joyCardList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Day Pack Selector -->
+    <div class="day-selector-card">
+      <div class="day-selector-label">
+        <span>📚 핸드인핸드 5권 데일리 학습 세트</span>
+        <span style="color:var(--primary); font-size:12px;" id="currentBookLabel">Hand in Hand 5</span>
+      </div>
+      <div class="day-chips" id="dayChips">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- 4-Step Tab Navigation -->
+    <div class="step-nav">
+      <button class="step-btn active" id="tabStep1" onclick="switchStep(1)">
+        <span class="step-ico">🐾</span>
+        <span>1. 단어 워밍업</span>
+      </button>
+      <button class="step-btn" id="tabStep2" onclick="switchStep(2)">
+        <span class="step-ico">🎬</span>
+        <span>2. 영상 & 쉐도잉</span>
+      </button>
+      <button class="step-btn" id="tabStep3" onclick="switchStep(3)">
+        <span class="step-ico">💬</span>
+        <span>3. AI 냥이 토크</span>
+      </button>
+      <button class="step-btn" id="tabStep4" onclick="switchStep(4)">
+        <span class="step-ico">🏆</span>
+        <span>4. 데일리 퀴즈</span>
+      </button>
+    </div>
+
+    <!-- STEP 1 VIEW -->
+    <div class="step-view" id="step1View">
+      <div class="step-header">
+        <div class="step-title">
+          <span>🐾</span> <span>오늘의 핵심 단어 탐험</span>
+        </div>
+        <div class="step-counter" id="vocaCounter">1 / 6</div>
+      </div>
+
+      <div class="voca-flip-box" onclick="flipVocaCard()">
+        <div class="voca-card-inner" id="vocaCardInner">
+          <div class="voca-card-front">
+            <div style="font-size:11.5px; color:#a855f7; font-weight:700; margin-bottom:6px">탭해서 뜻 확인하기 🔄</div>
+            <div class="voca-word" id="vWord">field day</div>
+            <div class="voca-phonetic" id="vPhone">/fiːld deɪ/</div>
+            <div class="voca-example" id="vEg">"We had a fun field day at school."</div>
+          </div>
+          <div class="voca-card-back">
+            <div class="voca-meaning" id="vMean">운동회, 체육대회</div>
+            <div class="voca-engdef" id="vEngDef">a special day for outdoor sports at school</div>
+            <div style="font-size:12px; color:#be185d; margin-top:4px" id="vEngDefKo">학교에서 야외 운동과 경기를 하는 특별한 날</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="voca-actions">
+        <button class="btn-audio-speak" onclick="speakCurrentWord()">
+          <span>🔊</span> <span>원어민 발음 (느리게)</span>
+        </button>
+        <button class="btn-next-word" onclick="nextVocaWord()">
+          <span>다음 단어로 넘어가기 →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2 VIEW: HIGH-GRADE ANIMATED SVG THEATRE -->
+    <div class="step-view" id="step2View" style="display:none;">
+      <div class="step-header">
+        <div class="step-title">
+          <span>🎬</span> <span>애니메이션 시어터 & 쉐도잉</span>
+        </div>
+        <div class="step-counter" id="theatreStatusBadge">영상 준비됨</div>
+      </div>
+
+      <!-- Animated Interactive SVG Theatre Box -->
+      <!-- YouTube HD Video Theatre -->
+      
+      <!-- 3대 교재 시리즈 통합 영상관 Hub -->
+      <div style="background:white;border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:0 4px 15px rgba(124,58,237,0.08);border:1.5px solid #ede9fe;">
+        <div style="font-size:12.5px;font-weight:700;color:#4b5563;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="display:flex;align-items:center;gap:5px;">🎬 <b>교재별 영상관 선택</b></span>
+          <span id="series_count_badge" style="font-size:11.5px;color:#7c3aed;font-weight:700;background:#f5f3ff;padding:3px 8px;border-radius:12px;border:1px solid #ddd6fe;">3대 교재 완비</span>
+        </div>
+
+        <!-- Series Main Tabs -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+          <button id="btnSeriesHandInHand" onclick="switchVideoSeries('handinhand')" style="flex:1;min-width:100px;padding:9px 8px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #2563eb;background:#2563eb;color:white;box-shadow:0 2px 6px rgba(37,99,235,0.25);transition:all 0.2s;">
+            📘 핸드인핸드 5<br><span style="font-size:10.5px;font-weight:400;">Unit 5~12 전단원</span>
+          </button>
+          <button id="btnSeriesOrt" onclick="switchVideoSeries('ort')" style="flex:1;min-width:100px;padding:9px 8px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #059669;background:white;color:#059669;transition:all 0.2s;">
+            📖 ORT 옥스포드<br><span style="font-size:10.5px;font-weight:400;">5단계 10권+</span>
+          </button>
+          <button id="btnSeriesInsight" onclick="switchVideoSeries('insight')" style="flex:1;min-width:100px;padding:9px 8px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #d97706;background:white;color:#d97706;transition:all 0.2s;">
+            📗 인사이트링크<br><span style="font-size:10.5px;font-weight:400;">L1~L3 리딩영상</span>
+          </button>
+        </div>
+
+        <!-- Sub Controls Area -->
+        <div id="sub_selector_controls" style="margin-bottom:10px;">
+          <!-- Dynamically populated by renderVideoSeriesUI() -->
+        </div>
+
+        <!-- Chips Area -->
+        <div id="video_series_chips" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <!-- Dynamically populated by renderVideoSeriesUI() -->
+        </div>
+      </div>
+      <div class="youtube-player-container">
+        <div class="youtube-frame-wrap" style="position:relative; overflow:hidden;">
+          <iframe id="theatreYtIframe" 
+                  src="https://www.youtube-nocookie.com/embed/4Myovaplq4Y?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://smcciao-commits.github.io" 
+                  title="Top Edu Safe English Video Player" 
+                  frameborder="0" 
+                  sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+          </iframe>
+
+          <!-- Child-Safe Touch Shield: Blocks clicks on YouTube top bar (Title, Avatar, Share) -->
+          <div class="yt-guard-top" style="position:absolute; top:0; left:0; width:100%; height:58px; z-index:15; background:transparent; cursor:default;" onclick="event.stopPropagation(); event.preventDefault();"></div>
+
+          <!-- Child-Safe Touch Shield: Blocks clicks on bottom-right YouTube Logo / Watch on YouTube link -->
+          <div class="yt-guard-bottom-right" style="position:absolute; bottom:0; right:0; width:115px; height:45px; z-index:15; background:transparent; cursor:default;" onclick="event.stopPropagation(); event.preventDefault();"></div>
+
+          <!-- Child-Safe End Cover: Pops up when video ends or can be triggered, preventing related video clicks -->
+          <div id="ytEndCover" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.92); z-index:25; flex-direction:column; justify-content:center; align-items:center; color:white; padding:20px; text-align:center;">
+            <div style="font-size:36px; margin-bottom:8px;">🎉</div>
+            <div style="font-family:'Maplestory',sans-serif; font-size:18px; font-weight:700; color:#38bdf8; margin-bottom:6px;">영상 시청 완료! 참 잘했어요!</div>
+            <div style="font-size:13px; color:#cbd5e1; margin-bottom:16px;">다른 영상으로 넘어가지 않고, 이제 아래에서 마이크로 따라 말해볼까요? 🎙️</div>
+            <div style="display:flex; gap:8px;">
+              <button onclick="replayYoutubeVideo()" style="background:#4f46e5; color:white; border:none; padding:10px 18px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer;">
+                🔄 영상 다시 보기
+              </button>
+              <button onclick="document.getElementById('ytEndCover').style.display='none'" style="background:#334155; color:#cbd5e1; border:none; padding:10px 14px; border-radius:10px; font-size:12.5px; font-weight:600; cursor:pointer;">
+                화면 닫기
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="youtube-meta-bar">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div style="margin-bottom:4px;">
+              <span style="display:inline-flex; align-items:center; gap:4px; background:#ecfdf5; border:1px solid #a7f3d0; padding:2px 8px; border-radius:6px; font-size:11px; color:#065f46; font-weight:700;">
+                🔒 딴짓 방지 안심 모드 ON (외부 유튜브·앱 이탈 원천 차단)
+              </span>
+            </div>
+            <div class="yt-title-badge" id="ytVideoTitle">🏃 Day 01: Hand in Hand 5 Unit 5 (School Field Day 애니메이션)</div>
+            <button class="btn-yt-change" onclick="openYoutubeCustomizer()">🔗 다른 유튜브 영상 넣기</button>
+          </div>
+          <div class="yt-subtitle" id="ytVideoSub">고화질 애니메이션 영상을 시청한 뒤 아래에서 마이크로 따라 말해보세요!</div>
+        </div>
+      </div>
+
+      <!-- Shadowing Practice -->
+      <div class="shadowing-box">
+        <div id="shadowSourceBadge" style="display:inline-flex; align-items:center; gap:5px; background:#eff6ff; color:#1d4ed8; border:1.5px solid #bfdbfe; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700; margin-bottom:10px;">
+          🎬 현재 영상 맞춤 쉐도잉: <b style="color:#1d4ed8;">Unit 05 운동회 (추천)</b> <span style="font-size:11px;color:#6b7280;font-weight:400;">(📘 핸드인핸드 회화)</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:700; font-size:13.5px; color:#334155;">🎙️ 따라 말하기 (Shadowing)</span>
+          <span style="font-size:11.5px; color:#6366f1; font-weight:700;" id="shadowCounter">1 / 3 문장</span>
+        </div>
+        <div class="shadow-target-en" id="shadowEn">Hold the hoop with two hands and spin it like this.</div>
+        <div class="shadow-target-ko" id="shadowKo">양손으로 훌라후프를 잡고 이렇게 돌려봐.</div>
+
+        <div class="shadow-mic-row">
+          <button class="btn-mic" id="btnShadowMic" onclick="toggleShadowMic()">
+            <span>🎙️</span> <span id="btnMicLabel">말하기 시작</span>
+          </button>
+          <button class="btn-audio-speak" style="padding:10px 14px;" onclick="speakShadowTarget()">
+            <span>🔊</span>
+          </button>
+          <div class="shadow-result-pill" id="shadowScorePill">
+            마이크를 누르고 말해보세요!
+          </div>
+        </div>
+        <button class="btn-next-word" style="background:#4f46e5; margin-top:4px;" onclick="nextShadowSentence()">
+          다음 문장 쉐도잉 →
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3 VIEW -->
+    <div class="step-view" id="step3View" style="display:none;">
+      <div class="step-header">
+        <div class="step-title">
+          <span>💬</span> <span>AI 냥이 친구와 1:1 토크</span>
+        </div>
+        <div class="step-counter" id="talkRoundBadge">1 / 3 턴</div>
+      </div>
+
+      <div class="chat-container" id="chatContainer">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div style="font-size:12px; color:var(--muted); margin-top:4px;">
+        💡 마음에 드는 답변을 터치하면 냥이가 영어로 반응해요!
+      </div>
+      <div class="reply-chips-wrap" id="replyChipsWrap">
+        <!-- Option chips rendered by JS -->
+      </div>
+    </div>
+
+    <!-- STEP 4 VIEW -->
+    <div class="step-view" id="step4View" style="display:none;">
+      <div class="step-header">
+        <div class="step-title">
+          <span>🏆</span> <span>오늘의 데일리 확인 퀴즈</span>
+        </div>
+        <div class="step-counter" id="quizCounter">1 / 5</div>
+      </div>
+
+      <div class="quiz-card" id="quizCard">
+        <!-- Quiz Q rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Reward Celebration Modal -->
+  <div class="celebration-overlay" id="celebrationOverlay">
+    <div class="celebration-card">
+      <div class="trophy-badge">🏆</div>
+      <div class="celebration-title">오늘의 캐츠 잉글리시 완료!</div>
+      <div style="font-size:13.5px; color:#4b5563; line-height:1.5;">
+        하린아, 오늘 4단계 완전학습을 완벽하게 끝냈어! 조이영어 선생님이랑도 자신 있게 대화하자! 🐱💖
+      </div>
+
+      <div class="reward-passcode-box">
+        <div class="reward-passcode-label">🎁 오늘의 아이패드 15분 자유시간 보상 암호</div>
+        <div class="reward-passcode-val" id="rewardPasscodeVal">⭐ 1215 ⭐</div>
+        <div style="font-size:11.5px; color:#b45309; margin-top:3px;">엄마에게 이 암호를 보여주면 15분 해금 완료!</div>
+      </div>
+
+      <button class="btn-close-reward" onclick="closeRewardModal()">
+        신나게 완료하기 (스탬프 적립) 🎉
+      </button>
+    </div>
+  </div>
+
+  <!-- Alarm Ringing Modal -->
+  <div class="alarm-modal-overlay" id="alarmModalOverlay">
+    <div class="alarm-modal-card">
+      <div style="font-size:54px;">🔔</div>
+      <div style="font-family:'Maplestory',sans-serif; font-size:22px; color:#b45309;">
+        하린아! 캐츠 잉글리시 시간이야! 🐱
+      </div>
+      <div style="font-size:13.5px; color:#4b5563; line-height:1.5;">
+        매일 20분 꾸준히 하면 영어가 술술 나와요! 냥이 밍키가 기다리고 있어~
+      </div>
+      <button class="btn-close-reward" style="background:#f59e0b;" onclick="dismissAlarmAndStart()">
+        🚀 지금 바로 공부 시작하기!
+      </button>
+      <button style="border:none; background:transparent; font-size:13px; color:#6b7280; font-weight:700; cursor:pointer;" onclick="snoozeAlarm()">
+        5분 뒤에 다시 알려줘 (스누즈)
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Joy English Speaking Studio Modal -->
+  <div class="speaking-modal-overlay" id="speakingModalOverlay">
+    <div class="speaking-modal-card">
+      <div class="speaking-modal-header">
+        <div class="speaking-modal-title">
+          <span>🗣️</span> <span>조이영어 따라 말하기</span>
+          <span class="speaking-badge-tag">1:1 스피킹</span>
+        </div>
+        <button class="btn-speaking-close" onclick="closeJoySpeakingModal()">✕</button>
+      </div>
+
+      <div class="speaking-target-box">
+        <div class="speaking-target-en" id="speakTargetEn">I had a wonderful day! I played with my friends.</div>
+        <div class="speaking-target-ko" id="speakTargetKo">👉 오늘 정말 멋진 하루였어요! 친구들이랑 재미있게 놀았거든요.</div>
+        <div class="speaking-target-tip" id="speakTargetTip">💡 <b>꿀팁:</b> 선생님께 단순한 'I'm happy' 대신, '친구랑 놀았다'는 이유를 덧붙이면 필리핀 선생님이 폭풍 칭찬해 주세요!</div>
+        <div style="text-align:center; margin-top:4px;">
+          <button class="btn-listen-target" onclick="listenJoyTarget()">
+            <span>🔊</span> <span>원어민 천천히 발음 듣기</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mic Interaction Area -->
+      <div class="mic-action-panel">
+        <button class="btn-studio-mic idle" id="btnStudioMic" onclick="toggleStudioMic()">
+          <span id="studioMicIcon">🎙️</span>
+          <span id="studioMicText">마이크 누르고 말하기</span>
+        </button>
+        <div class="mic-status-hint" id="studioMicHint">
+          버튼을 누르고 아이패드/스마트폰에 대고 영어로 읽어보세요!
+        </div>
+      </div>
+
+      <!-- Real Result Scoring Card -->
+      <div class="speech-result-card" id="speechResultCard" style="display:none;">
+        <div class="score-header-row">
+          <span class="score-stars" id="speechScoreStars">⭐⭐⭐</span>
+          <span class="score-badge pass" id="speechScoreBadge">100점! Perfect!</span>
+        </div>
+        
+        <div>
+          <div class="aligned-words-label">🗣️ 내가 말한 문장:</div>
+          <div class="spoken-transcript-box" id="spokenTranscriptBox">"..."</div>
+        </div>
+
+        <div class="aligned-words-wrap">
+          <div class="aligned-words-label">📝 단어별 발음 일치도:</div>
+          <div class="aligned-words-list" id="alignedWordsBox">
+            <!-- Dynamic badges -->
+          </div>
+        </div>
+
+        <div class="minky-fb-card" id="minkyFeedbackBox">
+          <!-- Dynamic Minky feedback -->
+        </div>
+
+        <div class="result-actions-row">
+          <button class="btn-res-retry" onclick="retryStudioMic()">🔄 다시 도전하기</button>
+          <button class="btn-res-done" onclick="closeJoySpeakingModal()">완료 👍</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Dock Bar -->
+  <div class="bottom-bar">
+    <button class="dock-btn active" onclick="location.reload()">
+      <span class="dock-ico">🐱</span>
+      <span>캐츠 훈련관</span>
+    </button>
+    <button class="dock-btn" onclick="location.href='index.html'">
+      <span class="dock-ico">📘</span>
+      <span>탑에듀 단어앱</span>
+    </button>
+    <button class="dock-btn" onclick="location.href='harin.html'">
+      <span class="dock-ico">⭐</span>
+      <span>하린 플래너</span>
+    </button>
+    <button class="dock-btn" onclick="location.href='reading.html'">
+      <span class="dock-ico">📖</span>
+      <span>독해 모의고사</span>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ============ DATA & STATE ============ */
+var DAILY_PACKS = [
+  {
+    "id": "day01",
+    "title": "Hand in Hand 5 - Unit 05: School Field Day (운동회 날)",
+    "book": "Hand in Hand 5",
+    "theme": "School Field Day & Sports",
+    "words": [
+      {
+        "w": "field day",
+        "m": "운동회, 체육대회",
+        "engDef": "a special day for outdoor sports at school",
+        "engDefKo": "학교에서 야외 운동과 경기를 하는 특별한 날",
+        "e": "We had a fun field day at school.",
+        "k": "우리는 학교에서 재미있는 운동회를 했습니다.",
+        "p": "/fiːld deɪ/"
+      },
+      {
+        "w": "relay race",
+        "m": "이어달리기, 계주",
+        "engDef": "a running race between teams with a baton",
+        "engDefKo": "바통을 넘겨주는 팀 달리기 경기",
+        "e": "My team won the relay race!",
+        "k": "우리 팀이 이어달리기에서 이겼어요!",
+        "p": "/ˈriːleɪ reɪs/"
+      },
+      {
+        "w": "cheer",
+        "m": "응원하다, 환호하다",
+        "engDef": "to shout loudly to encourage someone",
+        "engDefKo": "누군가를 격려하기 위해 크게 소리치다",
+        "e": "We cheered for our classmates loudly.",
+        "k": "우리는 친구들을 크게 응원했습니다.",
+        "p": "/tʃɪr/"
+      },
+      {
+        "w": "win",
+        "m": "이기다, 승리하다",
+        "engDef": "to be the best in a game or contest",
+        "engDefKo": "경기나 경쟁에서 1등을 하다",
+        "e": "Who will win the game today?",
+        "k": "오늘 경기에서 누가 이길까요?",
+        "p": "/wɪn/"
+      },
+      {
+        "w": "prize",
+        "m": "상, 상품",
+        "engDef": "a reward given to the winner",
+        "engDefKo": "대회의 승자에게 주어지는 보상",
+        "e": "She got a prize for running fast.",
+        "k": "그녀는 빨리 달려서 상을 받았습니다.",
+        "p": "/praɪz/"
+      },
+      {
+        "w": "medal",
+        "m": "메달, 훈장",
+        "engDef": "a metal award worn around the neck",
+        "engDefKo": "목에 거는 금속 상패",
+        "e": "He was proud of his gold medal.",
+        "k": "그는 자신의 금메달을 자랑스러워했습니다.",
+        "p": "/ˈmed.əl/"
+      },
+      {
+        "w": "fast",
+        "m": "빠른, 빨리",
+        "engDef": "moving or happening with great speed",
+        "engDefKo": "아주 빠른 속도로 움직이는",
+        "e": "Run as fast as you can!",
+        "k": "가능한 한 빨리 달리세요!",
+        "p": "/fæst/"
+      },
+      {
+        "w": "exciting",
+        "m": "신나는, 흥미진진한",
+        "engDef": "causing great enthusiasm",
+        "engDefKo": "큰 열정과 신남을 불러일으키는",
+        "e": "The sports day was so exciting.",
+        "k": "운동회는 정말 신났습니다.",
+        "p": "/ɪkˈsaɪ.tɪŋ/"
+      }
+    ],
+    "theatreStory": null,
+    "shadowing": [
+      {
+        "sentence": "Hold the hoop with two hands and spin it like this.",
+        "ko": "양손으로 훌라후프를 잡고 이렇게 돌려봐."
+      },
+      {
+        "sentence": "I ran in the relay race with my team.",
+        "ko": "우리 팀과 함께 이어달리기를 했어요."
+      },
+      {
+        "sentence": "We cheered loudly and won a gold medal!",
+        "ko": "우리는 크게 응원하고 금메달을 땄어요!"
+      }
+    ],
+    "talk": [
+      {
+        "q": "Hi Harin! 🐱 Today is our School Field Day! Which sports event do you want to join?",
+        "qKo": "안녕 하린아! 오늘 우리 신나는 운동회 날이야! 넌 어떤 경기에 나가고 싶어?",
+        "options": [
+          {
+            "t": "I want to run in the relay race! 🏃",
+            "rep": "Wow! You run so fast like the wind! Go Harin!"
+          },
+          {
+            "t": "I love spinning the hula hoop! ⭕",
+            "rep": "Super cute! You have amazing balance and skills!"
+          }
+        ]
+      },
+      {
+        "q": "Did you cheer loudly for your friends today?",
+        "qKo": "오늘 친구들을 위해 목청껏 큰 소리로 응원했니?",
+        "options": [
+          {
+            "t": "Yes! We cheered and won a gold medal! 🥇",
+            "rep": "Hooray! Congratulations on your gold medal!"
+          },
+          {
+            "t": "We had so much fun together! 😄",
+            "rep": "That is the true spirit of sports! Wonderful job!"
+          }
+        ]
+      },
+      {
+        "q": "You did fantastic today! Ready to take our daily quiz?",
+        "qKo": "오늘 정말 대단했어! 이제 신나는 데일리 퀴즈 풀 준비 됐니?",
+        "options": [
+          {
+            "t": "I am totally ready, Minky! 🐾",
+            "rep": "Let's get 100 points together! Here we go!"
+          },
+          {
+            "t": "Give me a high five first! ✋",
+            "rep": "High five, Harin! Let's shine bright!"
+          }
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "'운동회, 체육대회'를 뜻하는 영어 단어는 무엇일까요?",
+        "opts": [
+          "field day",
+          "book club",
+          "music room"
+        ],
+        "a": 0,
+        "ex": "'field day'는 학교에서 야외 운동과 경기를 펼치는 신나는 운동회 날이에요!"
+      },
+      {
+        "q": "'우리 팀이 이어달리기에서 이겼어요!'를 영어로 바르게 표현한 것은?",
+        "opts": [
+          "My team won the relay race!",
+          "My team read the story book.",
+          "My team went to the library."
+        ],
+        "a": 0,
+        "ex": "이어달리기는 'relay race', 이겼다는 'won'이에요!"
+      },
+      {
+        "q": "훌라후프를 돌리는 방법으로 알맞은 표현은?",
+        "opts": [
+          "Hold the hoop with two hands and spin it.",
+          "Kick the ball into the net.",
+          "Throw the book on the desk."
+        ],
+        "a": 0,
+        "ex": "양손으로 잡고 돌리라는 'Hold the hoop with two hands and spin it'이에요!"
+      }
+    ]
+  },
+  {
+    "id": "day02",
+    "title": "ORT Stage 5 - Book 1: Rowing Boats (노 젓는 보트와 플로피)",
+    "book": "Oxford Reading Tree Stage 5",
+    "theme": "Rowing Boats & River Adventure",
+    "words": [
+      {
+        "w": "rowing boat",
+        "m": "노 젓는 보트",
+        "engDef": "a small boat moved with oars",
+        "engDefKo": "노를 저어서 움직이는 작은 보트",
+        "e": "We will take those rowing boats.",
+        "k": "우리는 저 노 젓는 보트를 탈 거야.",
+        "p": "/ˈroʊ.ɪŋ boʊt/"
+      },
+      {
+        "w": "river",
+        "m": "강, 하천",
+        "engDef": "a natural wide flow of fresh water",
+        "engDefKo": "자연적으로 흐르는 넓은 민물 줄기",
+        "e": "The river was calm and peaceful.",
+        "k": "강물은 잔잔하고 평화로웠습니다.",
+        "p": "/ˈrɪv.ər/"
+      },
+      {
+        "w": "rope",
+        "m": "밧줄, 로프",
+        "engDef": "strong thick cord made of twisted strands",
+        "engDefKo": "여러 가닥을 꼬아 만든 튼튼하고 굵은 줄",
+        "e": "Dad held the strong rope tightly.",
+        "k": "아빠가 튼튼한 밧줄을 꽉 잡았습니다.",
+        "p": "/roʊp/"
+      },
+      {
+        "w": "jump",
+        "m": "뛰어들다, 점프하다",
+        "engDef": "to push yourself into the air or water",
+        "engDefKo": "공중이나 물속으로 몸을 힘껏 던지다",
+        "e": "Floppy jumped into the water.",
+        "k": "플로피가 물속으로 뛰어들었습니다.",
+        "p": "/dʒʌmp/"
+      },
+      {
+        "w": "swim",
+        "m": "헤엄치다, 수영하다",
+        "engDef": "to move through water by moving arms or legs",
+        "engDefKo": "물속에서 몸을 움직여 앞으로 나아가다",
+        "e": "Floppy can swim very well.",
+        "k": "플로피는 수영을 아주 잘합니다.",
+        "p": "/swɪm/"
+      },
+      {
+        "w": "save",
+        "m": "구하다, 건져내다",
+        "engDef": "to rescue someone or something from danger",
+        "engDefKo": "위험이나 곤경에서 건져내어 돕다",
+        "e": "He swam fast to save the rope.",
+        "k": "그는 밧줄을 구하기 위해 빨리 헤엄쳤습니다.",
+        "p": "/seɪv/"
+      },
+      {
+        "w": "teeth",
+        "m": "이빨, 치아",
+        "engDef": "hard white parts inside the mouth",
+        "engDefKo": "입안에 있는 단단하고 하얀 조직",
+        "e": "Floppy got the rope in his teeth.",
+        "k": "플로피가 밧줄을 이빨로 물었습니다.",
+        "p": "/tiːθ/"
+      },
+      {
+        "w": "hero",
+        "m": "영웅, 주인공",
+        "engDef": "a person or dog admired for brave acts",
+        "engDefKo": "용감한 행동으로 모두에게 찬사를 받는 존재",
+        "e": "Floppy is our true hero today!",
+        "k": "플로피는 오늘 우리의 진정한 영웅이에요!",
+        "p": "/ˈhɪr.oʊ/"
+      }
+    ],
+    "theatreStory": null,
+    "shadowing": [
+      {
+        "sentence": "We will take those rowing boats, said Dad.",
+        "ko": "우리는 저 노 젓는 보트를 탈 거야, 아빠가 말씀하셨어요."
+      },
+      {
+        "sentence": "Floppy jumped into the water to save the rope.",
+        "ko": "플로피는 밧줄을 구하기 위해 물속으로 뛰어들었습니다."
+      },
+      {
+        "sentence": "Everyone cheered for the brave dog Floppy!",
+        "ko": "모두가 용감한 개 플로피를 향해 환호했습니다!"
+      }
+    ],
+    "talk": [
+      {
+        "q": "Hi Harin! 🐶 Have you ever been on a boat on a river?",
+        "qKo": "안녕 하린아! 넌 강에서 보트를 타 본 적이 있니?",
+        "options": [
+          {
+            "t": "Yes, boating with my family is so fun! 🚣",
+            "rep": "Rowing on the gentle river is so much fun!"
+          },
+          {
+            "t": "I want to ride a rowing boat with Floppy! 🐕",
+            "rep": "Floppy would be the best boat buddy ever!"
+          }
+        ]
+      },
+      {
+        "q": "Floppy jumped into the river to save the rope! Isn't he brave?",
+        "qKo": "플로피가 밧줄을 건지려고 강물에 뛰어들었어! 정말 용감하지?",
+        "options": [
+          {
+            "t": "Floppy is a super brave hero dog! 🌟",
+            "rep": "Yes! Good boy Floppy saved the whole day!"
+          },
+          {
+            "t": "I love smart and friendly dogs! 🐾",
+            "rep": "Dogs are truly our most loyal and wonderful friends!"
+          }
+        ]
+      },
+      {
+        "q": "You read ORT Stage 5 so well! Shall we solve the quiz?",
+        "qKo": "ORT 5단계를 정말 씩씩하게 잘 읽었어! 퀴즈 풀러 가볼까?",
+        "options": [
+          {
+            "t": "Yes! Let's test what we learned! 📖",
+            "rep": "You will get a perfect score, I am sure!"
+          },
+          {
+            "t": "I am ready for the challenge! 🎯",
+            "rep": "That's the spirit, Harin! Let's do it!"
+          }
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "'노 젓는 보트'를 영어로 무엇이라고 할까요?",
+        "opts": [
+          "rowing boat",
+          "magic castle",
+          "flying airplane"
+        ],
+        "a": 0,
+        "ex": "'rowing boat'는 노를 저어서 타는 보트예요!"
+      },
+      {
+        "q": "플로피가 강물에 뛰어든 이유로 알맞은 것은?",
+        "opts": [
+          "To save the rope in the river.",
+          "To eat sweet ice cream.",
+          "To sleep under the tree."
+        ],
+        "a": 0,
+        "ex": "플로피는 강에 빠진 밧줄을 건지기 위해 용감하게 뛰어들었어요!"
+      },
+      {
+        "q": "'모두가 용감한 개 플로피에게 환호했습니다'의 올바른 영어 문장은?",
+        "opts": [
+          "Everyone cheered for the brave dog Floppy!",
+          "Floppy lost his red collar.",
+          "Dad painted the front door."
+        ],
+        "a": 0,
+        "ex": "환호했다는 'cheered', 용감한 개는 'brave dog'이에요!"
+      }
+    ]
+  },
+  {
+    "id": "day03",
+    "title": "ORT Stage 4 - Book 1 & 4: House for Sale & The Secret Room",
+    "book": "Oxford Reading Tree Stage 4",
+    "theme": "Moving & The Secret Room",
+    "words": [
+      {
+        "w": "house",
+        "m": "집, 주택",
+        "engDef": "a building for people to live in",
+        "engDefKo": "사람이 살기 위해 지은 건물",
+        "e": "They looked at the big house.",
+        "k": "그들은 큰 집을 보았습니다.",
+        "p": "/haʊs/"
+      },
+      {
+        "w": "tree house",
+        "m": "나무 위의 오두막",
+        "engDef": "a small play house built in a tree",
+        "engDefKo": "나무 위에 지은 작은 놀이 집",
+        "e": "They played in the tree house.",
+        "k": "그들은 나무 위의 집에서 놀았습니다.",
+        "p": "/triː haʊs/"
+      },
+      {
+        "w": "wallpaper",
+        "m": "벽지",
+        "engDef": "paper pasted on walls for decoration",
+        "engDefKo": "벽에 바르는 두꺼운 종이",
+        "e": "Kipper pulled the old wallpaper.",
+        "k": "키퍼가 낡은 벽지를 잡아당겼습니다.",
+        "p": "/ˈwɑːlˌpeɪ.pər/"
+      },
+      {
+        "w": "door",
+        "m": "문, 출입구",
+        "engDef": "a barrier used to close an entrance",
+        "engDefKo": "출입구를 여닫는 문",
+        "e": "Behind the paper was a secret door.",
+        "k": "벽지 뒤에 비밀의 문이 있었습니다.",
+        "p": "/dɔːr/"
+      },
+      {
+        "w": "secret",
+        "m": "비밀의, 숨겨진",
+        "engDef": "kept hidden from other people",
+        "engDefKo": "다른 사람에게 알려지지 않게 숨겨진",
+        "e": "They found a secret room.",
+        "k": "그들은 비밀의 방을 발견했습니다.",
+        "p": "/ˈsiː.krət/"
+      },
+      {
+        "w": "miniature",
+        "m": "축소 모형, 미니어처",
+        "engDef": "a much smaller model of something",
+        "engDefKo": "어떤 것의 아주 작은 복제품 모형",
+        "e": "Inside was an amazing miniature house!",
+        "k": "안에는 놀라운 미니어처 집이 있었습니다!",
+        "p": "/ˈmɪn.i.ə.tʃər/"
+      },
+      {
+        "w": "tiny",
+        "m": "아주 작은, 조그마한",
+        "engDef": "extremely small in size",
+        "engDefKo": "크기가 몹시 작은",
+        "e": "There were tiny figures inside.",
+        "k": "안에는 아주 작은 인형들이 있었습니다.",
+        "p": "/ˈtaɪ.ni/"
+      },
+      {
+        "w": "magic key",
+        "m": "마법 열쇠",
+        "engDef": "a key that starts magical journeys",
+        "engDefKo": "신비한 모험을 시작하게 해주는 열쇠",
+        "e": "The magic key began to glow!",
+        "k": "마법 열쇠가 빛나기 시작했습니다!",
+        "p": "/ˈmædʒ.ɪk kiː/"
+      }
+    ],
+    "theatreStory": null,
+    "shadowing": [
+      {
+        "sentence": "Dad and Mum liked the big house.",
+        "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."
+      },
+      {
+        "sentence": "They pulled the wallpaper and found a door.",
+        "ko": "그들은 벽지를 뜯고 문을 발견했습니다."
+      },
+      {
+        "sentence": "Inside was an amazing miniature house!",
+        "ko": "안에는 놀라운 미니어처 집이 있었습니다!"
+      }
+    ],
+    "talk": [
+      {
+        "q": "Hi Harin! 🏠 If your room had a secret door, what would be inside?",
+        "qKo": "안녕 하린아! 만약 네 방에 비밀의 문이 있다면 그 안에 뭐가 있으면 좋겠어?",
+        "options": [
+          {
+            "t": "A magical candy and toy kingdom! 🍭",
+            "rep": "Sweet and fun! You could eat candies all day!"
+          },
+          {
+            "t": "A cozy secret study with fairy tale books! 📚",
+            "rep": "How charming! Reading cozy books in a secret room!"
+          }
+        ]
+      },
+      {
+        "q": "Biff and Chip found a tiny miniature house! Isn't that magical?",
+        "qKo": "비프와 칩이 아주 작은 미니어처 집을 찾았어! 정말 신기하지?",
+        "options": [
+          {
+            "t": "It is so cute and fascinating! ✨",
+            "rep": "Yes! Everything in the little house was so detailed!"
+          },
+          {
+            "t": "I want to shrink and go inside! 🧚",
+            "rep": "Haha, the magic key might shrink us just like that!"
+          }
+        ]
+      },
+      {
+        "q": "Are you ready to test your ORT Stage 4 vocabulary?",
+        "qKo": "이제 ORT 4단계 단어 실력을 뽐낼 퀴즈를 풀어볼까?",
+        "options": [
+          {
+            "t": "I am ready, let's get 100 points! 💯",
+            "rep": "Awesome! Let's go for gold!"
+          },
+          {
+            "t": "Count on me, Minky! 🐱",
+            "rep": "You can do it easily, Harin!"
+          }
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "'비밀의 문'을 영어로 바르게 쓴 것은?",
+        "opts": [
+          "secret door",
+          "big window",
+          "blue carpet"
+        ],
+        "a": 0,
+        "ex": "'secret'은 비밀의, 'door'는 문이에요!"
+      },
+      {
+        "q": "아이들이 낡은 벽지 뒤에서 발견한 놀라운 것은 무엇이었나요?",
+        "opts": [
+          "An amazing miniature house",
+          "A sleeping giant bear",
+          "A dirty football"
+        ],
+        "a": 0,
+        "ex": "낡은 문 안쪽 비밀의 방에는 자신들의 집과 똑같이 생긴 미니어처 집이 있었어요!"
+      },
+      {
+        "q": "'안에는 놀라운 미니어처 집이 있었습니다!'의 올바른 영어 문장은?",
+        "opts": [
+          "Inside was an amazing miniature house!",
+          "Dad painted the tree green.",
+          "Mum washed the car clean."
+        ],
+        "a": 0,
+        "ex": "미니어처 집은 'miniature house', 놀라운은 'amazing'이에요!"
+      }
+    ]
+  },
+  {
+    "id": "day04",
+    "title": "Insight Link Starter L1 - Unit 01: All About Me (나의 모든 것)",
+    "book": "Insight Link Starter 1",
+    "theme": "All About Me & Favorites",
+    "words": [
+      {
+        "w": "read",
+        "m": "읽다, 독서하다",
+        "engDef": "to look at and understand written words",
+        "engDefKo": "글을 보고 의미를 이해하다",
+        "e": "I like reading interesting books.",
+        "k": "나는 재미있는 책 읽는 것을 좋아해요.",
+        "p": "/riːd/"
+      },
+      {
+        "w": "favorite",
+        "m": "가장 좋아하는",
+        "engDef": "best liked above all others",
+        "engDefKo": "다른 모든 것 중에서 가장 마음에 드는",
+        "e": "What is your favorite color?",
+        "k": "네가 가장 좋아하는 색은 무엇이니?",
+        "p": "/ˈfeɪ.vər.ɪt/"
+      },
+      {
+        "w": "share",
+        "m": "나누다, 공유하다",
+        "engDef": "to divide or give a part to others",
+        "engDefKo": "다른 사람과 함께 나누어 쓰거나 알리다",
+        "e": "We share our stories every day.",
+        "k": "우리는 매일 이야기를 함께 나눠요.",
+        "p": "/ʃer/"
+      },
+      {
+        "w": "learn",
+        "m": "배우다, 익히다",
+        "engDef": "to get knowledge or skill",
+        "engDefKo": "지식이나 기술을 얻고 익히다",
+        "e": "Learning new things is exciting.",
+        "k": "새로운 것을 배우는 것은 신나요.",
+        "p": "/lɝːn/"
+      },
+      {
+        "w": "friend",
+        "m": "친구, 동무",
+        "engDef": "a person you know and like well",
+        "engDefKo": "서로 잘 알고 가깝게 지내는 사람",
+        "e": "I play with my friends at school.",
+        "k": "나는 학교에서 친구들과 놀아요.",
+        "p": "/frend/"
+      },
+      {
+        "w": "story",
+        "m": "이야기, 동화",
+        "engDef": "a tale or account of events",
+        "engDefKo": "사건이나 모험을 담은 흥미진진한 이야기",
+        "e": "She told us an interesting story.",
+        "k": "그녀는 우리에게 재미있는 이야기를 들려주었습니다.",
+        "p": "/ˈstɔː.ri/"
+      },
+      {
+        "w": "hobby",
+        "m": "취미",
+        "engDef": "an activity done for pleasure in free time",
+        "engDefKo": "자유 시간에 즐거움을 위해 하는 활동",
+        "e": "My hobby is drawing pictures.",
+        "k": "내 취미는 그림 그리기예요.",
+        "p": "/ˈhɑː.bi/"
+      },
+      {
+        "w": "special",
+        "m": "특별한, 소중한",
+        "engDef": "different from what is normal or usual",
+        "engDefKo": "보통과 달리 특별히 남다르고 귀한",
+        "e": "Everyone has a special talent.",
+        "k": "모든 사람은 특별한 재능을 가지고 있어요.",
+        "p": "/ˈspeʃ.əl/"
+      }
+    ],
+    "theatreStory": null,
+    "shadowing": [
+      {
+        "sentence": "I like reading interesting books with my friends.",
+        "ko": "친구들과 재미있는 책 읽는 것을 좋아해요."
+      },
+      {
+        "sentence": "We share our favorite stories every day.",
+        "ko": "우리는 매일 좋아하는 이야기를 함께 나눠요."
+      },
+      {
+        "sentence": "Learning new things is always exciting.",
+        "ko": "새로운 것을 배우는 것은 항상 신나요."
+      }
+    ],
+    "talk": [
+      {
+        "q": "Hi Harin! 📗 What is your favorite thing to do after school?",
+        "qKo": "안녕 하린아! 학교 끝나고 가장 하고 싶은 일이 뭐야?",
+        "options": [
+          {
+            "t": "I like drawing and reading fun books! 🎨",
+            "rep": "Drawing and reading make you so smart and creative!"
+          },
+          {
+            "t": "I love playing with my puppy and friends! 🐶",
+            "rep": "Playing with puppy is the happiest time ever!"
+          }
+        ]
+      },
+      {
+        "q": "What is your favorite food in the whole world?",
+        "qKo": "세상에서 가장 좋아하는 음식이 뭐야?",
+        "options": [
+          {
+            "t": "I love sweet strawberry ice cream! 🍓",
+            "rep": "Yummy! Strawberry ice cream is so delicious!"
+          },
+          {
+            "t": "I love crispy pizza and fried chicken! 🍕",
+            "rep": "Mmm! Pizza and chicken are pure happiness!"
+          }
+        ]
+      },
+      {
+        "q": "You are doing great in Insight Link reading! Ready for the quiz?",
+        "qKo": "인사이트링크 리딩을 아주 잘 해냈어! 퀴즈 풀러 가볼까?",
+        "options": [
+          {
+            "t": "Yes, let's finish with 100 points! 💯",
+            "rep": "You are a reading superstar, Harin!"
+          },
+          {
+            "t": "I am all ready, Minky! 🐾",
+            "rep": "Let's show your reading power!"
+          }
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "'가장 좋아하는'을 뜻하는 영어 단어는?",
+        "opts": [
+          "favorite",
+          "difficult",
+          "hungry"
+        ],
+        "a": 0,
+        "ex": "'favorite'은 가장 좋아하는, 마음에 드는 것이에요!"
+      },
+      {
+        "q": "'친구들과 재미있는 책 읽는 것을 좋아해요'의 알맞은 영작은?",
+        "opts": [
+          "I like reading interesting books with my friends.",
+          "I cooked dinner for my puppy.",
+          "I went to sleep very early."
+        ],
+        "a": 0,
+        "ex": "책 읽는 것은 'reading books', 친구들과는 'with my friends'예요!"
+      },
+      {
+        "q": "'새로운 것을 배우는 것은 항상 신나요'를 뜻하는 문장은?",
+        "opts": [
+          "Learning new things is always exciting.",
+          "The winter was very cold.",
+          "We bought a new blue bicycle."
+        ],
+        "a": 0,
+        "ex": "배우는 것은 'Learning', 신나는 것은 'exciting'이에요!"
+      }
+    ]
+  }
+];
+var JOY_CATS = [{"catId": "great", "catName": "🌟 기분 최고 & 신나는 날", "expressions": [{"en": "I had a wonderful day! I played with my friends.", "ko": "오늘 정말 멋진 하루였어요! 친구들이랑 재미있게 놀았거든요.", "tip": "선생님께 단순한 'I'm happy' 대신, '친구랑 놀았다'는 이유를 덧붙이면 필리핀 선생님이 폭풍 칭찬해 주세요!", "level": "왕초보 필수 ⭐"}, {"en": "I'm feeling great today! I got 100 points on my test.", "ko": "오늘 기분 최고예요! 시험에서 100점 맞았거든요.", "tip": "좋은 일이 있었을 때는 'I am feeling great!'이라고 신나게 말해보세요!", "level": "칭찬 유발 ⭐"}, {"en": "Today was super fun! I ate delicious strawberry ice cream.", "ko": "오늘 완전 신났어요! 맛있는 딸기 아이스크림을 먹었거든요.", "tip": "간식이나 음식을 먹은 이야기를 덧붙이면 대화가 훨씬 길고 자연스러워져요!", "level": "일상 회화 ⭐"}]}, {"catId": "busy", "catName": "🎒 바쁘고 보람찬 날", "expressions": [{"en": "I was a little busy with my homework today.", "ko": "오늘 학교 숙제하느라 조금 바빴어요.", "tip": "숙제가 많았던 날 'I was busy with my homework'라고 하면 선생님이 공감해 주셔요.", "level": "자연스러운 표현 ⭐"}, {"en": "I had swimming class today, so I'm a bit hungry!", "ko": "오늘 수영 수업을 하고 와서 조금 배고파요!", "tip": "운동이나 학원 다녀온 뒤 'I am a bit hungry(조금 배고파요)'라고 하면 리액션이 빵 터져요!", "level": "생생한 표현 ⭐"}, {"en": "I studied math and English hard today.", "ko": "오늘 수학이랑 영어를 열심히 공부했어요.", "tip": "열심히 공부했다고 자랑스럽게 말할 때 딱 좋은 모범생 표현!", "level": "열공 모드 ⭐"}]}, {"catId": "tired", "catName": "😴 피곤하지만 파이팅", "expressions": [{"en": "I'm a little tired, but I'm ready for English class!", "ko": "조금 피곤하지만 영어 수업 준비는 완료됐어요!", "tip": "맨날 'I'm tired'만 하지 말고, 'But I'm ready(하지만 준비됐어요)!'를 붙이면 선생님이 감동받으셔요!", "level": "특급 센스 ⭐⭐⭐"}, {"en": "I had a long day at school, but I'm happy now.", "ko": "학교에서 긴 하루를 보냈지만 지금은 기분 좋아요.", "tip": "'I had a long day'는 원어민들이 정말 자주 쓰는 자연스러운 하루 표현이에요!", "level": "원어민 자연스러움 ⭐"}]}, {"catId": "weekend", "catName": "🎈 주말 이야기 (Weekend)", "expressions": [{"en": "I had a great weekend! I went to a big shopping mall with my mom.", "ko": "주말 정말 즐겁게 보냈어요! 엄마랑 큰 쇼핑몰에 갔거든요.", "tip": "선생님이 'How was your weekend?'라고 물어보실 때 엄마와 어디 다녀왔는지 말하는 마법의 문장!", "level": "주말 필수 ⭐"}, {"en": "I went to the park and rode my bicycle.", "ko": "공원에 가서 자전거를 탔어요.", "tip": "야외 활동이나 산책 이야기를 할 때 가장 쉽고 당당하게 말할 수 있어요.", "level": "주말 필수 ⭐"}, {"en": "I stayed home, ate delicious food, and relaxed.", "ko": "집에서 맛있는 음식 먹으면서 푹 쉬었어요.", "tip": "주말에 집에서 푹 쉬었을 때 'relaxed(편하게 쉬었다)'라고 대답해 보세요!", "level": "집콕 휴식 ⭐"}]}];
+
+var S = {
+  curDayIdx: 0,
+  curStep: 1,
+  curJoyCatIdx: 0,
+  vocaIdx: 0,
+  shadowIdx: 0,
+  talkRound: 0,
+  quizIdx: 0,
+  quizScore: 0,
+  ttsRate: parseFloat(localStorage.getItem('topedu_cats_rate') || '0.72'),
+  alarmTime: localStorage.getItem('topedu_cats_alarm_time') || '16:30',
+  alarmActive: localStorage.getItem('topedu_cats_alarm_active') !== 'false',
+  streak: parseInt(localStorage.getItem('topedu_cats_streak') || '3'),
+  points: parseInt(localStorage.getItem('topedu_cats_points') || '250')
+};
+
+/* ============ AUDIO SYNTHESIS ENGINE ============ */
+var audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) audioCtx = new AudioContext();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTone(freq, type, duration, delay) {
+  var ctx = getAudioCtx();
+  if (!ctx) return;
+  setTimeout(function() {
+    try {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(e){}
+  }, (delay || 0) * 1000);
+}
+
+function playChimeBell() {
+  playTone(329.63, 'sine', 0.6, 0.0);
+  playTone(415.30, 'sine', 0.6, 0.25);
+  playTone(493.88, 'sine', 0.6, 0.50);
+  playTone(659.25, 'sine', 1.0, 0.75);
+}
+
+function playMagicTwinkleSound() {
+  playTone(587.33, 'triangle', 0.2, 0.0); // D5
+  playTone(880.00, 'triangle', 0.2, 0.08); // A5
+  playTone(1174.66, 'sine', 0.4, 0.16); // D6
+}
+
+function playCorrectSound() {
+  playTone(523.25, 'triangle', 0.3, 0);
+  playTone(659.25, 'triangle', 0.3, 0.12);
+  playTone(783.99, 'triangle', 0.5, 0.24);
+}
+
+function playWrongSound() {
+  playTone(261.63, 'sawtooth', 0.3, 0);
+  playTone(220.00, 'sawtooth', 0.4, 0.15);
+}
+
+function playMeowSound() {
+  var ctx = getAudioCtx();
+  if (!ctx) return;
+  try {
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(450, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(750, ctx.currentTime + 0.15);
+    osc.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.4);
+  } catch(e){}
+}
+
+/* ============ SPEECH SYNTHESIS ENGINE ============ */
+function speakText(text, lang, onDone) {
+  if (!('speechSynthesis' in window)) {
+    if (onDone) setTimeout(onDone, 1000);
+    return;
+  }
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = lang || 'en-US';
+  u.rate = S.ttsRate;
+  u.pitch = 1.25;
+  
+  var finished = false;
+  function finish() {
+    if (finished) return;
+    finished = true;
+    if (onDone) onDone();
+  }
+  
+  u.onend = finish;
+  u.onerror = finish;
+  
+  // Safety timeout
+  setTimeout(finish, 7000);
+  
+  window.speechSynthesis.speak(u);
+}
+
+function toggleTtsSpeed() {
+  if (S.ttsRate <= 0.75) {
+    S.ttsRate = 0.85;
+  } else {
+    S.ttsRate = 0.70;
+  }
+  localStorage.setItem('topedu_cats_rate', S.ttsRate);
+  updateSpeedUI();
+  playCorrectSound();
+  speakText("Speed set to " + (S.ttsRate < 0.8 ? "slow" : "normal"), 'en-US');
+}
+
+function updateSpeedUI() {
+  var icon = document.getElementById('speedIcon');
+  var label = document.getElementById('speedLabel');
+  if (S.ttsRate <= 0.75) {
+    icon.textContent = '🐢';
+    label.textContent = '느리게 (0.7x)';
+  } else {
+    icon.textContent = '🐰';
+    label.textContent = '보통 (0.85x)';
+  }
+}
+
+/* ============ INIT APP ============ */
+window.addEventListener('DOMContentLoaded', function() {
+  initDayChips();
+  initJoySection();
+  initMagicTouch();
+  loadDay(0);
+  updateAlarmUI();
+  updateSpeedUI();
+  startAlarmTimer();
+
+  // URL query parameter routing (?step=2&series=handinhand&unit=5&type=conv)
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var sSeries = params.get('series');
+    var sType = params.get('type');
+    var sUnit = parseInt(params.get('unit') || '0', 10);
+    var sStep = parseInt(params.get('step') || '0', 10);
+
+    if (sSeries && (sSeries === 'handinhand' || sSeries === 'ort' || sSeries === 'insight')) {
+      currentVideoSeries = sSeries;
+    }
+    if (sType && (sType === 'conv' || sType === 'song')) {
+      currentHihType = sType;
+    }
+    if (sUnit > 0 && currentVideoSeries === 'handinhand') {
+      activeItemIndices['handinhand'] = Math.max(0, Math.min(11, sUnit - 1));
+    }
+    selectVideoItem(currentVideoSeries, activeItemIndices[currentVideoSeries]);
+
+    if (sStep >= 1 && sStep <= 4) {
+      switchStep(sStep);
+    }
+  } catch(e) {}
+});
+
+function initDayChips() {
+  var el = document.getElementById('dayChips');
+  if (!el) return;
+  var html = '';
+  DAILY_PACKS.forEach(function(p, i) {
+    html += '<button class="day-chip ' + (i === S.curDayIdx ? 'active' : '') + '" onclick="selectDay(' + i + ')">' +
+      'Day ' + (i < 9 ? '0' : '') + (i + 1) + '</button>';
+  });
+  el.innerHTML = html;
+}
+
+function selectDay(idx) {
+  stopTheatreAudio();
+  initDayChips();
+  loadDay(idx);
+}
+
+function loadDay(idx) {
+  if (idx < 0 || idx >= DAILY_PACKS.length) idx = 0;
+  S.curDayIdx = idx;
+  var p = DAILY_PACKS[idx];
+  var label = document.getElementById('currentBookLabel');
+  if (label) label.textContent = p.book;
+
+  S.vocaIdx = 0;
+  S.shadowIdx = 0;
+  S.talkRound = 0;
+  S.quizIdx = 0;
+  S.quizScore = 0;
+
+  renderVocaCard();
+
+  // Sync 3-series video hub to the Day pack
+  if (idx === 0) {
+    currentVideoSeries = 'handinhand';
+    currentHihType = 'conv';
+    activeItemIndices['handinhand'] = 4; // Unit 05 운동회
+  } else if (idx === 1) {
+    currentVideoSeries = 'ort';
+    currentOrtLevel = 'ort5';
+    activeItemIndices['ort'] = 0; // 1권 Rowing Boats
+  } else if (idx === 2) {
+    currentVideoSeries = 'ort';
+    currentOrtLevel = 'ort4';
+    activeItemIndices['ort'] = 0; // 1권 House for Sale
+  } else if (idx === 3) {
+    currentVideoSeries = 'insight';
+    currentInsightLevel = 'l1';
+    activeItemIndices['insight'] = 0; // L1-U01 All About Me
+  }
+
+  selectVideoItem(currentVideoSeries, activeItemIndices[currentVideoSeries]);
+}
+
+/* ============ YOUTUBE HD VIDEO THEATRE SYSTEM & 3-SERIES MULTI-HUB ============ */
+var ytPlayer = null;
+function onYouTubeIframeAPIReady() {
+  initYtPlayer();
+}
+
+function initYtPlayer() {
+  try {
+    if (window.YT && YT.Player) {
+      ytPlayer = new YT.Player('theatreYtIframe', {
+        events: {
+          'onStateChange': onYtStateChange
+        }
+      });
+    }
+  } catch(e) {}
+}
+
+function onYtStateChange(event) {
+  if (event && event.data === 0) {
+    var cover = document.getElementById('ytEndCover');
+    if (cover) cover.style.display = 'flex';
+  }
+}
+
+function replayYoutubeVideo() {
+  var cover = document.getElementById('ytEndCover');
+  if (cover) cover.style.display = 'none';
+  if (ytPlayer && ytPlayer.seekTo && ytPlayer.playVideo) {
+    ytPlayer.seekTo(0);
+    ytPlayer.playVideo();
+  } else {
+    var iframe = document.getElementById('theatreYtIframe');
+    if (iframe) {
+      var src = iframe.src;
+      iframe.src = src;
+    }
+  }
+}
+
+/* Datasets for 3 Major Textbook Series */
+var HANDINHAND_SERIES_VIDEOS = [
+  {
+    "unitNum": 1,
+    "id": "1bz9Xqb528I",
+    "chipLabel": "Unit 01 동물달리기",
+    "title": "📘 Hand in Hand 5 - Unit 01: Animals & Running (동물과 달리기)",
+    "sub": "가젤과 동물 친구들이 드넓은 초원에서 신나게 달려요!",
+    "shadow": [
+      {
+        "sentence": "The gazelle runs very fast across the grass.",
+        "ko": "가젤은 풀밭을 가로질러 아주 빠르게 달려요."
+      },
+      {
+        "sentence": "Which animal is the fastest in the world?",
+        "ko": "세상에서 어떤 동물이 가장 빠를까요?"
+      },
+      {
+        "sentence": "Look at the animals running together happily.",
+        "ko": "행복하게 함께 달리는 동물들을 보세요."
+      }
+    ]
+  },
+  {
+    "unitNum": 2,
+    "id": "f2Y4lHN6soY",
+    "chipLabel": "Unit 02 옷과쇼핑",
+    "title": "📘 Hand in Hand 5 - Unit 02: Clothes & Shopping (옷과 쇼핑)",
+    "sub": "새 옷과 신발을 입어보고 나에게 꼭 맞는 옷을 찾아요!",
+    "shadow": [
+      {
+        "sentence": "These new shoes are a little too tight for me.",
+        "ko": "이 새 신발은 나에게 약간 너무 꽉 끼어요."
+      },
+      {
+        "sentence": "Can I try on a bigger size, please?",
+        "ko": "더 큰 사이즈로 한번 입어봐도 될까요?"
+      },
+      {
+        "sentence": "This blue jacket fits me perfectly!",
+        "ko": "이 파란색 재킷이 나에게 딱 맞아요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 3,
+    "id": "cLaheuvXVvY",
+    "chipLabel": "Unit 03 학교음악회",
+    "title": "📘 Hand in Hand 5 - Unit 03: School Concert (학교 음악회)",
+    "sub": "친구들과 멋진 악기를 연주하며 음악회를 준비해요!",
+    "shadow": [
+      {
+        "sentence": "We are practicing songs for the school concert.",
+        "ko": "우리는 학교 음악회를 위해 노래를 연습하고 있어요."
+      },
+      {
+        "sentence": "She plays the violin very well on the stage.",
+        "ko": "그녀는 무대 위에서 바이올린을 아주 잘 연주해요."
+      },
+      {
+        "sentence": "Everyone clapped and cheered for our performance.",
+        "ko": "모두가 우리 공연에 박수를 치고 환호했어요."
+      }
+    ]
+  },
+  {
+    "unitNum": 4,
+    "id": "1RaIZ5Rotq8",
+    "chipLabel": "Unit 04 야구경기",
+    "title": "📘 Hand in Hand 5 - Unit 04: Baseball & Sports (야구와 스포츠)",
+    "sub": "타석에 서서 멋진 홈런을 치고 야구 경기를 즐겨요!",
+    "shadow": [
+      {
+        "sentence": "Matt is at bat, and everyone is watching him.",
+        "ko": "맷이 타석에 들어섰고, 모두가 그를 지켜보고 있어요."
+      },
+      {
+        "sentence": "Hit the baseball hard toward the outfield!",
+        "ko": "야구공을 외야 쪽으로 강하게 치세요!"
+      },
+      {
+        "sentence": "It is a home run, and the crowd goes wild!",
+        "ko": "홈런이에요, 관중들이 열광해요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 5,
+    "id": "4Myovaplq4Y",
+    "chipLabel": "Unit 05 운동회 (추천)",
+    "title": "📘 Hand in Hand 5 - Unit 05: School Field Day (운동회 날)",
+    "sub": "운동회 날 친구들과 이어달리기를 하고 훌라후프를 돌려요!",
+    "shadow": [
+      {
+        "sentence": "Hold the hoop with two hands and spin it like this.",
+        "ko": "양손으로 훌라후프를 잡고 이렇게 돌려봐."
+      },
+      {
+        "sentence": "I ran in the relay race with my team.",
+        "ko": "우리 팀과 함께 이어달리기를 했어요."
+      },
+      {
+        "sentence": "We cheered loudly and won a gold medal!",
+        "ko": "우리는 크게 응원하고 금메달을 땄어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 6,
+    "id": "OB2r2mLsrJA",
+    "chipLabel": "Unit 06 짐싸기",
+    "title": "📘 Hand in Hand 5 - Unit 06: Packing for a Trip (여행 짐 싸기)",
+    "sub": "여행을 떠나기 전 신나게 짐을 싸고 필요한 물건을 챙겨요!",
+    "shadow": [
+      {
+        "sentence": "It is time to pack our bags for the trip.",
+        "ko": "여행을 위해 가방을 쌀 시간이에요."
+      },
+      {
+        "sentence": "Did you pack your sunglasses and hat?",
+        "ko": "선글라스와 모자를 챙겼나요?"
+      },
+      {
+        "sentence": "I am so excited to go on vacation!",
+        "ko": "휴가를 떠나게 되어 너무 신나요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 7,
+    "id": "r5jG0-kZy18",
+    "chipLabel": "Unit 07 음식권하기",
+    "title": "📘 Hand in Hand 5 - Unit 07: Offering Food & Help (음식 권하기)",
+    "sub": "친구에게 음식을 권하고 예의 바르게 대답하는 법을 배워요!",
+    "shadow": [
+      {
+        "sentence": "Would you like some delicious snacks?",
+        "ko": "맛있는 간식 좀 드실래요?"
+      },
+      {
+        "sentence": "No, thank you. I am already full.",
+        "ko": "아니요, 괜찮습니다. 이미 배가 불러요."
+      },
+      {
+        "sentence": "Thank you for being so polite and kind.",
+        "ko": "친절하고 예의 바르게 말해줘서 고마워요."
+      }
+    ]
+  },
+  {
+    "unitNum": 8,
+    "id": "VseC0u4eYS8",
+    "chipLabel": "Unit 08 대청소",
+    "title": "📘 Hand in Hand 5 - Unit 08: Spring Cleaning (대청소의 날)",
+    "sub": "봄맞이 집안 대청소를 하며 방을 청소하고 정리해요!",
+    "shadow": [
+      {
+        "sentence": "Let us help clean the living room today.",
+        "ko": "오늘 거실 청소하는 것을 함께 도와요."
+      },
+      {
+        "sentence": "I can sweep the floor and wipe the table.",
+        "ko": "저는 바닥을 쓸고 식탁을 닦을 수 있어요."
+      },
+      {
+        "sentence": "Our house looks so clean and neat now!",
+        "ko": "이제 우리 집이 정말 깨끗하고 단정해 보여요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 9,
+    "id": "Y8JIR6xAjAs",
+    "chipLabel": "Unit 09 지하철",
+    "title": "📘 Hand in Hand 5 - Unit 09: Transportation (지하철과 교통수단)",
+    "sub": "박물관에 가기 위해 지하철을 타고 이동하는 대화!",
+    "shadow": [
+      {
+        "sentence": "We can take the subway to the museum.",
+        "ko": "우리는 박물관까지 지하철을 타고 갈 수 있어요."
+      },
+      {
+        "sentence": "Which station should we get off at?",
+        "ko": "어느 역에서 내려야 하나요?"
+      },
+      {
+        "sentence": "The subway is fast, clean, and convenient.",
+        "ko": "지하철은 빠르고 깨끗하며 편리해요."
+      }
+    ]
+  },
+  {
+    "unitNum": 10,
+    "id": "b9kpGxtOqPM",
+    "chipLabel": "Unit 10 기념일",
+    "title": "📘 Hand in Hand 5 - Unit 10: Special Days (특별한 기념일과 약속)",
+    "sub": "친구의 특별한 날과 파티에 초대받아 꼭 가겠다고 약속해요!",
+    "shadow": [
+      {
+        "sentence": "I am having a special birthday party this Saturday.",
+        "ko": "이번 주 토요일에 특별한 생일 파티를 열어요."
+      },
+      {
+        "sentence": "Do not worry, I will definitely be there!",
+        "ko": "걱정 마, 내가 꼭 갈게!"
+      },
+      {
+        "sentence": "We will have fun games and delicious cake.",
+        "ko": "우리는 재미있는 게임과 맛있는 케이크를 먹을 거야."
+      }
+    ]
+  },
+  {
+    "unitNum": 11,
+    "id": "B2Ob3W6k0ZI",
+    "chipLabel": "Unit 11 샌드위치",
+    "title": "📘 Hand in Hand 5 - Unit 11: Making Sandwiches (맛있는 샌드위치 만들기)",
+    "sub": "땅콩버터와 젤리로 맛있는 샌드위치를 만드는 레시피!",
+    "shadow": [
+      {
+        "sentence": "Spread the peanut butter on the bread.",
+        "ko": "식빵 위에 땅콩버터를 펴 바르세요."
+      },
+      {
+        "sentence": "Add sweet strawberry jelly on the other slice.",
+        "ko": "다른 빵에는 달콤한 딸기 젤리를 얹으세요."
+      },
+      {
+        "sentence": "This sandwich tastes so sweet and yummy!",
+        "ko": "이 샌드위치는 정말 달콤하고 맛있어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 12,
+    "id": "VCQe59TxR6I",
+    "chipLabel": "Unit 12 오감탐험",
+    "title": "📘 Hand in Hand 5 - Unit 12: Five Senses (오감으로 느끼는 세상 & 총정리)",
+    "sub": "보고, 듣고, 맛보고, 냄새 맡고, 만지는 신비한 오감 탐험!",
+    "shadow": [
+      {
+        "sentence": "We explore the world with our five senses.",
+        "ko": "우리는 오감으로 세상을 탐험해요."
+      },
+      {
+        "sentence": "I can see bright colors and hear sweet music.",
+        "ko": "나는 밝은 색을 보고 감미로운 음악을 들을 수 있어요."
+      },
+      {
+        "sentence": "It is wonderful to learn English together!",
+        "ko": "함께 영어를 배우는 것은 정말 멋져요!"
+      }
+    ]
+  }
+];
+
+var HANDINHAND_SONG_VIDEOS = [
+  {
+    "unitNum": 1,
+    "id": "vjg6C8V2tw8",
+    "chipLabel": "Song 01 가젤노래",
+    "title": "🎵 Hand in Hand 5 - Unit 01 Song: Run! Run! Gazelle! (가젤의 달리기 노래)",
+    "sub": "신나는 리듬에 맞춰 가젤과 함께 초원을 달리는 챈트 송!",
+    "shadow": [
+      {
+        "sentence": "Run, run, gazelle! Run across the grass!",
+        "ko": "달려라, 가젤! 풀밭을 가로질러 달려라!"
+      },
+      {
+        "sentence": "Can you run faster than a cheetah?",
+        "ko": "치타보다 더 빠르게 달릴 수 있니?"
+      },
+      {
+        "sentence": "Yes, I can run very fast!",
+        "ko": "응, 나는 아주 빠르게 달릴 수 있어!"
+      }
+    ]
+  },
+  {
+    "unitNum": 2,
+    "id": "cspMSyof5Gw",
+    "chipLabel": "Song 02 꽉끼는신발",
+    "title": "🎵 Hand in Hand 5 - Unit 02 Song: Too Tight? (신발이 너무 꽉 끼나요?)",
+    "sub": "신발이 꼭 맞는지 확인하며 노래하는 신나는 패션 챈트!",
+    "shadow": [
+      {
+        "sentence": "Are your new shoes too tight?",
+        "ko": "새 신발이 너무 꽉 끼니?"
+      },
+      {
+        "sentence": "No, they are just right for me!",
+        "ko": "아니요, 저에게 딱 맞아요!"
+      },
+      {
+        "sentence": "I like my brand new sneakers!",
+        "ko": "나는 내 새 운동화가 마음에 들어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 3,
+    "id": "LSOQj3PTJ7U",
+    "chipLabel": "Song 03 학교음악회",
+    "title": "🎵 Hand in Hand 5 - Unit 03 Song: School Concert (학교 음악회 노래)",
+    "sub": "악기를 연주하며 음악회에 모두를 초대하는 멜로디!",
+    "shadow": [
+      {
+        "sentence": "Come to our joyful school concert!",
+        "ko": "우리의 즐거운 학교 음악회에 오세요!"
+      },
+      {
+        "sentence": "Listen to the sweet sound of music.",
+        "ko": "아름다운 음악 소리를 들어보세요."
+      },
+      {
+        "sentence": "We can sing and play instruments together.",
+        "ko": "우리는 함께 노래하고 악기를 연주할 수 있어요."
+      }
+    ]
+  },
+  {
+    "unitNum": 4,
+    "id": "FAd-leQiL40",
+    "chipLabel": "Song 04 야구경기",
+    "title": "🎵 Hand in Hand 5 - Unit 04 Song: Matt at Bat (타석에 선 맷)",
+    "sub": "야구 배트를 휘두르고 베이스를 달리는 신나는 야구 송!",
+    "shadow": [
+      {
+        "sentence": "Matt is at bat, swing the bat high!",
+        "ko": "맷이 타석에 섰어요, 배트를 높이 휘둘러요!"
+      },
+      {
+        "sentence": "He hit the ball into the blue sky.",
+        "ko": "그는 파란 하늘 높이 공을 쳤어요."
+      },
+      {
+        "sentence": "Run to first base, run to home plate!",
+        "ko": "1루로 달려라, 홈플레이트로 달려라!"
+      }
+    ]
+  },
+  {
+    "unitNum": 5,
+    "id": "HaEfanCkjeM",
+    "chipLabel": "Song 05 훌라후프 (추천)",
+    "title": "🎵 Hand in Hand 5 - Unit 05 Song: How to Hula Hoop (훌라후프 돌리는 법)",
+    "sub": "운동회 날 훌라후프를 떨어뜨리지 않고 신나게 돌리는 댄스 챈트!",
+    "shadow": [
+      {
+        "sentence": "How to hula hoop, spin it around your waist!",
+        "ko": "훌라후프 돌리는 법, 허리 주위로 돌려봐!"
+      },
+      {
+        "sentence": "Keep it going, do not let it drop!",
+        "ko": "계속 돌려봐, 떨어뜨리지 마!"
+      },
+      {
+        "sentence": "Hula hooping is so much fun on field day!",
+        "ko": "운동회 날 훌라후프 돌리기는 정말 신나요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 6,
+    "id": "HcCtIgC3qbA",
+    "chipLabel": "Song 06 짐싸기송",
+    "title": "🎵 Hand in Hand 5 - Unit 06 Song: It is Time to Pack (짐 쌀 시간이야)",
+    "sub": "여행 가방에 필수품을 챙기며 노래하는 바캉스 송!",
+    "shadow": [
+      {
+        "sentence": "It is time to pack our bags for the trip.",
+        "ko": "여행 가방을 쌀 시간이에요."
+      },
+      {
+        "sentence": "Pack your sunglasses, swimsuit, and sandals.",
+        "ko": "선글라스, 수영복, 샌들을 챙기세요."
+      },
+      {
+        "sentence": "We are ready for an exciting journey!",
+        "ko": "우리는 신나는 여행을 떠날 준비가 됐어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 7,
+    "id": "a2iG__uiISo",
+    "chipLabel": "Song 07 음식사양",
+    "title": "🎵 Hand in Hand 5 - Unit 07 Song: No, Thanks! (괜찮아요, 고마워요)",
+    "sub": "예의 바르게 사양하고 감사 인사를 전하는 에티켓 송!",
+    "shadow": [
+      {
+        "sentence": "Would you like some sweet cookies?",
+        "ko": "달콤한 쿠키 좀 드실래요?"
+      },
+      {
+        "sentence": "No, thanks! I am full right now.",
+        "ko": "괜찮아요, 고마워요! 지금은 배가 불러요."
+      },
+      {
+        "sentence": "Thank you for asking so politely.",
+        "ko": "예의 바르게 물어봐 줘서 고마워요."
+      }
+    ]
+  },
+  {
+    "unitNum": 8,
+    "id": "id9yslaAUKo",
+    "chipLabel": "Song 08 봄대청소",
+    "title": "🎵 Hand in Hand 5 - Unit 08 Song: Spring Cleaning (봄맞이 대청소 노래)",
+    "sub": "먼지를 털고 바닥을 닦으며 집안을 반짝반짝 만드는 청소 송!",
+    "shadow": [
+      {
+        "sentence": "Spring cleaning is here, let us tidy up!",
+        "ko": "봄맞이 대청소 시간이에요, 함께 정리해요!"
+      },
+      {
+        "sentence": "Dust the shelves and mop the clean floor.",
+        "ko": "선반의 먼지를 털고 깨끗한 바닥을 닦아요."
+      },
+      {
+        "sentence": "Working together makes our home shine!",
+        "ko": "함께 일하면 우리 집이 반짝반짝 빛나요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 9,
+    "id": "1cUTo3ekJhc",
+    "chipLabel": "Song 09 지하철송",
+    "title": "🎵 Hand in Hand 5 - Unit 09 Song: Subway to the Museum (박물관 지하철)",
+    "sub": "덜컹덜컹 지하철을 타고 박물관으로 향하는 경쾌한 교통 챈트!",
+    "shadow": [
+      {
+        "sentence": "Take the subway to the history museum!",
+        "ko": "지하철을 타고 역사 박물관으로 가요!"
+      },
+      {
+        "sentence": "Mind the doors and watch your step.",
+        "ko": "출입문을 조심하고 발밑을 보세요."
+      },
+      {
+        "sentence": "The train is moving fast on the track.",
+        "ko": "기차가 선로 위를 빠르게 달리고 있어요."
+      }
+    ]
+  },
+  {
+    "unitNum": 10,
+    "id": "zFWpW9s7Nw4",
+    "chipLabel": "Song 10 파티약속",
+    "title": "🎵 Hand in Hand 5 - Unit 10 Song: I Will Be There (꼭 갈게!)",
+    "sub": "친구의 소중한 생일 파티 초대에 꼭 가겠다고 부르는 우정 송!",
+    "shadow": [
+      {
+        "sentence": "Will you come to my party this weekend?",
+        "ko": "이번 주말 내 파티에 올 거니?"
+      },
+      {
+        "sentence": "Yes, I will be there on time!",
+        "ko": "응, 제시간에 꼭 갈게!"
+      },
+      {
+        "sentence": "We will celebrate and have a great time.",
+        "ko": "우리는 축하하며 멋진 시간을 보낼 거야."
+      }
+    ]
+  },
+  {
+    "unitNum": 11,
+    "id": "eULyS9IQr1Q",
+    "chipLabel": "Song 11 샌드위치",
+    "title": "🎵 Hand in Hand 5 - Unit 11 Song: Peanut Butter and Jelly Sandwiches (피넛버터 샌드위치)",
+    "sub": "빵에 잼을 바르고 맛있게 한 입 베어 무는 요리 챈트!",
+    "shadow": [
+      {
+        "sentence": "Peanut butter and jelly on sweet bread!",
+        "ko": "달콤한 식빵 위의 땅콩버터와 젤리!"
+      },
+      {
+        "sentence": "First you spread it, then you slice it.",
+        "ko": "먼저 펴 바르고, 그다음 잘라요."
+      },
+      {
+        "sentence": "It is the best snack for lunch!",
+        "ko": "점심으로 먹기 가장 좋은 최고의 간식이에요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 12,
+    "id": "Q7Zgnk_P5dU",
+    "chipLabel": "Song 12 오감의노래",
+    "title": "🎵 Hand in Hand 5 - Unit 12 Song: Five Senses! (오감의 노래)",
+    "sub": "보고 듣고 느끼며 세상을 배우는 신나는 오감 총정리 피날레 송!",
+    "shadow": [
+      {
+        "sentence": "I see, I hear, I smell, I taste, I touch.",
+        "ko": "나는 보고, 듣고, 냄새 맡고, 맛보고, 만져요."
+      },
+      {
+        "sentence": "Our five senses tell us all about the world.",
+        "ko": "우리의 오감은 세상에 대한 모든 것을 알려줘요."
+      },
+      {
+        "sentence": "Use your senses every single day!",
+        "ko": "매일매일 너의 감각들을 사용해 봐!"
+      }
+    ]
+  }
+];
+
+var ORT4_SERIES_VIDEOS = [
+  {
+    "bookNum": 1,
+    "id": "dhenXGjGCF8",
+    "chipLabel": "1권 House for Sale",
+    "title": "📖 ORT 4 - Book 1: House for Sale (팔려고 내놓은 집)",
+    "sub": "키퍼 가족이 낡았지만 넓고 멋진 새 집을 보러 갔어요!",
+    "shadow": [
+      {
+        "sentence": "Dad and Mum liked the big house.",
+        "ko": "아빠와 엄마는 큰 집을 마음에 들어 했습니다."
+      },
+      {
+        "sentence": "The children went in the tree house.",
+        "ko": "아이들은 나무 위의 오두막으로 갔습니다."
+      },
+      {
+        "sentence": "Kipper pulled the old wallpaper.",
+        "ko": "키퍼가 낡은 벽지를 잡아당겼습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 2,
+    "id": "TMdp8Ky7ykM",
+    "chipLabel": "2권 The New House",
+    "title": "📖 ORT 4 - Book 2: The New House (새 집으로 이사해요)",
+    "sub": "커다란 이삿짐 밴이 오고, 신나게 짐을 싸서 새 집으로 출발!",
+    "shadow": [
+      {
+        "sentence": "A big van came to the house.",
+        "ko": "큰 밴이 집으로 왔습니다."
+      },
+      {
+        "sentence": "Dad and the children packed the boxes.",
+        "ko": "아빠와 아이들은 상자에 짐을 쌌습니다."
+      },
+      {
+        "sentence": "The van went to the new house.",
+        "ko": "밴은 새 집으로 갔습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 3,
+    "id": "5YY8-YRUtW0",
+    "chipLabel": "3권 Come In!",
+    "title": "📖 ORT 4 - Book 3: Come In! (들어와서 같이 놀자!)",
+    "sub": "아빠가 문을 칠하는 동안 친구들이 찾아왔어요! 들어와서 놀자!",
+    "shadow": [
+      {
+        "sentence": "Dad was painting the front door.",
+        "ko": "아빠는 현관문을 칠하고 있었습니다."
+      },
+      {
+        "sentence": "Come in and play with us, said Biff.",
+        "ko": "들어와서 우리랑 놀자, 비프가 말했습니다."
+      },
+      {
+        "sentence": "Mum gave the children some biscuits.",
+        "ko": "엄마는 아이들에게 비스킷을 주었습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 4,
+    "id": "6PeL52MLUkE",
+    "chipLabel": "4권 The Secret Room",
+    "title": "📖 ORT 4 - Book 4: The Secret Room (비밀의 방의 발견)",
+    "sub": "벽지를 뜯어내자 숨겨진 비밀 문과 미니어처 집이 나타났어요!",
+    "shadow": [
+      {
+        "sentence": "They pulled the wallpaper and found a door.",
+        "ko": "그들은 벽지를 뜯고 문을 발견했습니다."
+      },
+      {
+        "sentence": "The old door was stuck fast.",
+        "ko": "낡은 문이 꽉 끼어 있었습니다."
+      },
+      {
+        "sentence": "Inside was an amazing miniature house!",
+        "ko": "안에는 놀라운 미니어처 집이 있었습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 5,
+    "id": "2rk_tRaTOck",
+    "chipLabel": "5권 The Play",
+    "title": "📖 ORT 4 - Book 5: The Play (신나는 학교 연극)",
+    "sub": "무대 의상을 입고 관객들의 큰 환호를 받으며 연극을 펼쳐요!",
+    "shadow": [
+      {
+        "sentence": "The children put on a great play.",
+        "ko": "아이들은 멋진 연극을 무대에 올렸습니다."
+      },
+      {
+        "sentence": "Kipper wore a very funny costume.",
+        "ko": "키퍼는 아주 우스꽝스러운 옷을 입었습니다."
+      },
+      {
+        "sentence": "The audience clapped and cheered loudly.",
+        "ko": "관객들은 크게 박수를 치고 환호했습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 6,
+    "id": "tPnjWbxYKW4",
+    "chipLabel": "6권 The Storm",
+    "title": "📖 ORT 4 - Book 6: The Storm (폭풍우와 마법의 열쇠)",
+    "sub": "거센 폭풍우가 지나간 뒤, 플로피가 빛나는 마법 열쇠를 발견했어요!",
+    "shadow": [
+      {
+        "sentence": "A big storm blew the giant tree down.",
+        "ko": "거대한 폭풍이 거대한 나무를 쓰러뜨렸습니다."
+      },
+      {
+        "sentence": "Floppy found a secret glowing box.",
+        "ko": "플로피는 비밀의 빛나는 상자를 찾았습니다."
+      },
+      {
+        "sentence": "Inside was a wonderful magic key!",
+        "ko": "안에는 놀라운 마법 열쇠가 들어 있었습니다!"
+      }
+    ]
+  }
+];
+var ORT5_SERIES_VIDEOS = [
+  {
+    "bookNum": 1,
+    "id": "z1QBjbs3w1o",
+    "chipLabel": "1권 Rowing Boats",
+    "title": "📖 ORT 5 - Book 1: Rowing Boats (노 젓는 보트와 플로피의 구출)",
+    "sub": "가족들과 함께 강가에서 보트를 타다가 로프를 놓쳤지만, 똑똑한 플로피가 헤엄쳐 구해줬어요!",
+    "shadow": [
+      {
+        "sentence": "We will take those rowing boats, said Dad.",
+        "ko": "우리는 저 노 젓는 보트를 탈 거야, 아빠가 말씀하셨어요."
+      },
+      {
+        "sentence": "Floppy jumped into the water to save the rope.",
+        "ko": "플로피는 밧줄을 구하기 위해 물속으로 뛰어들었습니다."
+      },
+      {
+        "sentence": "Everyone cheered for the brave dog Floppy!",
+        "ko": "모두가 용감한 개 플로피를 향해 환호했습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 2,
+    "id": "T5IFhvMKCWs",
+    "chipLabel": "2권 Kipper & Trolls",
+    "title": "📖 ORT 5 - Book 2: Kipper and the Trolls (키퍼와 심술쟁이 트롤들)",
+    "sub": "마법의 열쇠가 빛나며 무시무시하고 우스꽝스러운 트롤들의 세상으로 날아갔어요!",
+    "shadow": [
+      {
+        "sentence": "The magic key began to glow brightly.",
+        "ko": "마법의 열쇠가 밝게 빛나기 시작했습니다."
+      },
+      {
+        "sentence": "The trolls were big, green, and very noisy.",
+        "ko": "트롤들은 덩치가 크고 초록색이며 매우 시끄러웠습니다."
+      },
+      {
+        "sentence": "Kipper ran across the magic wooden bridge.",
+        "ko": "키퍼는 마법의 나무다리를 건너 달렸습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 3,
+    "id": "vaEQhPb80yA",
+    "chipLabel": "3권 Castle Adventure",
+    "title": "📖 ORT 5 - Book 3: Castle Adventure (거대한 성에서의 마법 모험)",
+    "sub": "중세의 거대한 성으로 모험을 떠나 높은 탑과 비밀의 통로를 탐험해요!",
+    "shadow": [
+      {
+        "sentence": "They looked up at the giant castle walls.",
+        "ko": "그들은 거대한 성벽을 올려다보았습니다."
+      },
+      {
+        "sentence": "A friendly knight welcomed the children inside.",
+        "ko": "친절한 기사가 아이들을 안으로 맞이했습니다."
+      },
+      {
+        "sentence": "It was an exciting and unforgettable adventure!",
+        "ko": "정말 신나고 잊을 수 없는 모험이었습니다!"
+      }
+    ]
+  },
+  {
+    "bookNum": 4,
+    "id": "w4gqYg52is8",
+    "chipLabel": "4권 Mirror Island",
+    "title": "📖 ORT 5 - Book 4: Mirror Island (거울 섬과 캡틴 크로우)",
+    "sub": "모든 것이 반대로 비치는 신비한 거울 섬에서 해적들과의 두뇌 싸움!",
+    "shadow": [
+      {
+        "sentence": "Everything on the island looked like a mirror.",
+        "ko": "섬에 있는 모든 것이 거울처럼 비쳤습니다."
+      },
+      {
+        "sentence": "Captain Crow searched for the hidden treasure.",
+        "ko": "크로우 선장은 숨겨진 보물을 찾아다녔습니다."
+      },
+      {
+        "sentence": "The clever children outsmarted the pirate crew.",
+        "ko": "영리한 아이들이 해적 선원들을 지혜로 이겼습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 5,
+    "id": "9yf-G9VDXro",
+    "chipLabel": "5권 Magic Paintbrush",
+    "title": "📖 ORT 5 - Book 5: The Magic Paintbrush (신비한 마법의 붓)",
+    "sub": "그림을 그리면 실제로 살아 움직이는 마법의 붓을 얻은 아이들의 모험!",
+    "shadow": [
+      {
+        "sentence": "Whatever she painted came to real life.",
+        "ko": "그녀가 그린 것은 무엇이든 진짜 살아 움직였습니다."
+      },
+      {
+        "sentence": "She painted delicious food for hungry people.",
+        "ko": "그녀는 배고픈 사람들을 위해 맛있는 음식을 그렸습니다."
+      },
+      {
+        "sentence": "The greedy king tried to steal the magic brush.",
+        "ko": "욕심쟁이 왕이 마법의 붓을 훔치려 했습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 6,
+    "id": "nlEwjr_fCaY",
+    "chipLabel": "6권 Monster Mistake",
+    "title": "📖 ORT 5 - Book 6: A Monster Mistake (괴물 소동과 진실)",
+    "sub": "숲속에 무서운 괴물이 나타났다고 생각했지만 사실은 귀여운 해프닝이었어요!",
+    "shadow": [
+      {
+        "sentence": "They heard a strange sound in the dark forest.",
+        "ko": "그들은 어두운 숲속에서 이상한 소리를 들었습니다."
+      },
+      {
+        "sentence": "Do not be afraid, it is just a friendly creature.",
+        "ko": "두려워하지 마, 그저 친절한 동물일 뿐이야."
+      },
+      {
+        "sentence": "Everyone laughed at the funny monster mistake.",
+        "ko": "모두가 우스꽝스러운 괴물 착각에 웃음을 터뜨렸습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 7,
+    "id": "aZNp63Hfa4U",
+    "chipLabel": "7권 Husky Adventure",
+    "title": "📖 ORT 5 - Book 7: Husky Adventure (허스키 썰매견과 눈 덮인 모험)",
+    "sub": "하얀 눈이 가득한 북극에서 용감하고 씩씩한 허스키 썰매견들과 함께 달려요!",
+    "shadow": [
+      {
+        "sentence": "The strong huskies pulled the wooden sled fast.",
+        "ko": "힘센 허스키들이 나무 썰매를 빠르게 끌었습니다."
+      },
+      {
+        "sentence": "Snow was falling gently over the cold mountains.",
+        "ko": "차가운 산 위로 눈이 부드럽게 내리고 있었습니다."
+      },
+      {
+        "sentence": "The sled ride was thrilling and super fast.",
+        "ko": "썰매 타기는 짜릿하고 정말 빨랐습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 8,
+    "id": "tpenPh5d2v0",
+    "chipLabel": "8권 Orchid Thief",
+    "title": "📖 ORT 5 - Book 8: The Orchid Thief (희귀한 난초 도둑을 찾아라)",
+    "sub": "식물원에서 가장 진귀한 무지개 난초가 사라졌어요! 탐정이 되어 도둑을 잡아요!",
+    "shadow": [
+      {
+        "sentence": "The rare purple orchid was gone from the garden.",
+        "ko": "희귀한 보라색 난초가 정원에서 사라졌습니다."
+      },
+      {
+        "sentence": "The children looked carefully for footprints.",
+        "ko": "아이들은 발자국을 주의 깊게 찾았습니다."
+      },
+      {
+        "sentence": "They solved the mystery and saved the flowers.",
+        "ko": "그들은 수수께끼를 풀고 꽃들을 구해냈습니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 9,
+    "id": "45A6EXZrptE",
+    "chipLabel": "9권 Stranger Beast",
+    "title": "📖 ORT 5 - Book 9: The Stranger Beast (신비로운 미지의 야수)",
+    "sub": "안개 낀 계곡에서 마주친 신비한 야수와 우정을 쌓아가는 감동적인 이야기!",
+    "shadow": [
+      {
+        "sentence": "A gentle creature appeared through the morning mist.",
+        "ko": "아침 안개 사이로 온순한 생명체가 나타났습니다."
+      },
+      {
+        "sentence": "Kipper offered some fresh apples to the beast.",
+        "ko": "키퍼는 그 야수에게 신선한 사과를 건넸습니다."
+      },
+      {
+        "sentence": "Kindness makes friends across different worlds.",
+        "ko": "친절함은 서로 다른 세상 속에서도 친구를 만들어 줍니다."
+      }
+    ]
+  },
+  {
+    "bookNum": 10,
+    "id": "DZzZqM8pDjc",
+    "chipLabel": "10권 The Beast Feasts",
+    "title": "📖 ORT 5 - Book 10: The Beast Feasts (야수와 함께하는 성대한 만찬)",
+    "sub": "새로운 친구가 된 야수와 함께 마을 사람들과 다 함께 즐기는 맛있는 파티!",
+    "shadow": [
+      {
+        "sentence": "The long dining table was full of delicious fruit.",
+        "ko": "긴 식탁은 맛있는 과일로 가득 차 있었습니다."
+      },
+      {
+        "sentence": "Everyone cheered and clapped their hands together.",
+        "ko": "모두가 다 함께 손뼉을 치며 환호했습니다."
+      },
+      {
+        "sentence": "It was the happiest day in the whole kingdom.",
+        "ko": "온 왕국에서 가장 행복한 날이었습니다."
+      }
+    ]
+  }
+];
+var INSIGHT_SERIES_VIDEOS = {
+  "l1": [
+    {
+      "unitNum": 1,
+      "id": "Gz7FvWNqzuo",
+      "chipLabel": "L1-U01 All About Me",
+      "title": "📗 Insight Link Starter L1 - Unit 01: All About Me",
+      "sub": "친구들과 흥미진진한 이야기를 함께 읽고 나눠요!",
+      "shadow": [
+        {
+          "sentence": "I like reading interesting books with my friends.",
+          "ko": "친구들과 재미있는 책 읽는 것을 좋아해요."
+        },
+        {
+          "sentence": "We share our favorite stories every day.",
+          "ko": "우리는 매일 좋아하는 이야기를 함께 나눠요."
+        },
+        {
+          "sentence": "Learning new things is always exciting.",
+          "ko": "새로운 것을 배우는 것은 항상 신나요."
+        }
+      ]
+    },
+    {
+      "unitNum": 2,
+      "id": "cMeZ9npiqd8",
+      "chipLabel": "L1-U02 Swan Lake",
+      "title": "📗 Insight Link Starter L1 - Unit 02: Swan Lake Story",
+      "sub": "호수 위에서 아름답게 펼쳐지는 백조의 호수 이야기!",
+      "shadow": [
+        {
+          "sentence": "The swan danced gracefully across the lake.",
+          "ko": "백조가 호수 위에서 우아하게 춤을 추었습니다."
+        },
+        {
+          "sentence": "The music was soft and beautiful.",
+          "ko": "음악이 부드럽고 아름다웠습니다."
+        },
+        {
+          "sentence": "Everyone clapped for the magical performance.",
+          "ko": "모두가 마법 같은 공연에 박수를 보냈습니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 3,
+      "id": "E6SopVElpVo",
+      "chipLabel": "L1-U03 Nature",
+      "title": "📗 Insight Link Starter L1 - Unit 03: Nature & Forest",
+      "sub": "맑은 공기와 푸른 숲, 자연이 주는 선물!",
+      "shadow": [
+        {
+          "sentence": "Big green trees grow tall in the forest.",
+          "ko": "큰 초록 나무들이 숲속에서 높게 자라요."
+        },
+        {
+          "sentence": "Birds sing sweet songs in the morning.",
+          "ko": "새들이 아침에 고운 노래를 불러요."
+        },
+        {
+          "sentence": "Nature gives us clean air and water.",
+          "ko": "자연은 우리에게 맑은 공기와 물을 줍니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 4,
+      "id": "orCJRfJXByE",
+      "chipLabel": "L1-U04 Animal Homes",
+      "title": "📗 Insight Link Starter L1 - Unit 04: Animal Habitats",
+      "sub": "동물들의 신비한 보금자리와 자연 서식지 탐험!",
+      "shadow": [
+        {
+          "sentence": "Animals live in different homes and habitats.",
+          "ko": "동물들은 다양한 보금자리와 서식지에 살아요."
+        },
+        {
+          "sentence": "Fish swim freely in the blue ocean.",
+          "ko": "물고기들은 푸른 바다에서 자유롭게 헤엄쳐요."
+        },
+        {
+          "sentence": "We must protect animal homes together.",
+          "ko": "우리는 동물들의 집을 함께 지켜야 해요."
+        }
+      ]
+    }
+  ],
+  "l2": [
+    {
+      "unitNum": 1,
+      "id": "kwi8bWPGRsw",
+      "chipLabel": "L2-U01 Daily Water",
+      "title": "📗 Insight Link Starter L2 - Unit 01: Daily Water Use",
+      "sub": "우리가 매일 쓰는 물의 소중함과 절약 습관!",
+      "shadow": [
+        {
+          "sentence": "We use water every day for drinking and washing.",
+          "ko": "우리는 마시고 씻기 위해 매일 물을 사용해요."
+        },
+        {
+          "sentence": "Saving water is important for our planet.",
+          "ko": "물을 아끼는 것은 우리 지구를 위해 중요합니다."
+        },
+        {
+          "sentence": "Turn off the faucet while brushing your teeth.",
+          "ko": "양치하는 동안 수도꼭지를 잠그세요."
+        }
+      ]
+    },
+    {
+      "unitNum": 2,
+      "id": "2xZEzV9Xq-k",
+      "chipLabel": "L2-U02 Helpers",
+      "title": "📗 Insight Link Starter L2 - Unit 02: Community Helpers",
+      "sub": "우리 동네를 안전하고 행복하게 지켜주는 이웃들!",
+      "shadow": [
+        {
+          "sentence": "Firefighters and doctors help people every day.",
+          "ko": "소방관과 의사는 매일 사람들을 도와요."
+        },
+        {
+          "sentence": "They work hard to keep our neighborhood safe.",
+          "ko": "그들은 우리 동네를 안전하게 지키기 위해 열심히 일해요."
+        },
+        {
+          "sentence": "We are thankful for their dedicated work.",
+          "ko": "우리는 그분들의 헌신적인 일에 감사해요."
+        }
+      ]
+    },
+    {
+      "unitNum": 3,
+      "id": "uYv4xMHLf3U",
+      "chipLabel": "L2-U03 Healthy Food",
+      "title": "📗 Insight Link Starter L2 - Unit 03: Healthy Eating Habits",
+      "sub": "신선한 채소와 과일로 튼튼한 몸 만들기!",
+      "shadow": [
+        {
+          "sentence": "Eating fresh vegetables makes our body strong.",
+          "ko": "신선한 채소를 먹으면 몸이 튼튼해져요."
+        },
+        {
+          "sentence": "Drink plenty of water throughout the day.",
+          "ko": "하루 종일 물을 충분히 마시세요."
+        },
+        {
+          "sentence": "Healthy food gives us good energy.",
+          "ko": "건강한 음식은 우리에게 좋은 에너지를 줍니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 4,
+      "id": "5iuxZnyfSZc",
+      "chipLabel": "L2-U04 Inventions",
+      "title": "📗 Insight Link Starter L2 - Unit 04: Incredible Inventions",
+      "sub": "세상을 바꾼 놀라운 발명품 이야기!",
+      "shadow": [
+        {
+          "sentence": "Inventions make our lives easier and better.",
+          "ko": "발명품들은 우리의 삶을 더 쉽고 편리하게 만들어요."
+        },
+        {
+          "sentence": "Great ideas can change the whole world.",
+          "ko": "위대한 아이디어는 온 세상을 바꿀 수 있습니다."
+        },
+        {
+          "sentence": "Anyone can become a creative thinker.",
+          "ko": "누구나 창의적인 생각가가 될 수 있어요."
+        }
+      ]
+    }
+  ],
+  "l3": [
+    {
+      "unitNum": 1,
+      "id": "lR2C9YB5Tlk",
+      "chipLabel": "L3-U01 Nile River",
+      "title": "📗 Insight Link Starter L3 - Unit 01: The Mighty Nile River",
+      "sub": "세계에서 가장 긴 나일강과 고대 문명의 신비!",
+      "shadow": [
+        {
+          "sentence": "The Nile River is the longest river in the world.",
+          "ko": "나일강은 세계에서 가장 긴 강이에요."
+        },
+        {
+          "sentence": "Ancient people built civilizations near the water.",
+          "ko": "고대 사람들은 물가 근처에 문명을 건설했습니다."
+        },
+        {
+          "sentence": "Rivers give life to plants and animals.",
+          "ko": "강은 식물과 동물에게 생명을 불어넣어 줘요."
+        }
+      ]
+    },
+    {
+      "unitNum": 3,
+      "id": "wdKQvtrpP_U",
+      "chipLabel": "L3-U03 Wonders",
+      "title": "📗 Insight Link Starter L3 - Unit 03: Wonders of the Earth",
+      "sub": "자연이 빚어낸 숨 막히게 웅장한 지구의 경이!",
+      "shadow": [
+        {
+          "sentence": "High mountains reach up to the clouds.",
+          "ko": "높은 산들은 구름까지 솟아올라 있어요."
+        },
+        {
+          "sentence": "Nature creates breathtaking landscapes everywhere.",
+          "ko": "자연은 곳곳에 숨 막히게 아름다운 풍경을 만듭니다."
+        },
+        {
+          "sentence": "We can explore many wonders around us.",
+          "ko": "우리는 우리 주변의 수많은 경이로움을 탐험할 수 있어요."
+        }
+      ]
+    },
+    {
+      "unitNum": 5,
+      "id": "z0Jke9wNx-k",
+      "chipLabel": "L3-U05 Weather",
+      "title": "📗 Insight Link Starter L3 - Unit 05: How Weather Changes",
+      "sub": "태양과 바람, 구름이 만드는 사계절 날씨의 변화!",
+      "shadow": [
+        {
+          "sentence": "The sun heats the land and creates wind.",
+          "ko": "태양이 땅을 데우고 바람을 만듭니다."
+        },
+        {
+          "sentence": "Clouds bring rain and snow to the earth.",
+          "ko": "구름은 땅에 비와 눈을 내려줘요."
+        },
+        {
+          "sentence": "The seasons bring different beauty each time.",
+          "ko": "계절은 매번 색다른 아름다움을 선사합니다."
+        }
+      ]
+    },
+    {
+      "unitNum": 6,
+      "id": "4Xv6xWUNbh8",
+      "chipLabel": "L3-U06 Animal Feet",
+      "title": "📗 Insight Link Starter L3 - Unit 06: Amazing Animal Adaptations",
+      "sub": "추운 북극과 거친 자연에서 살아남는 동물들의 지혜!",
+      "shadow": [
+        {
+          "sentence": "Animals adapt to survive in harsh weather.",
+          "ko": "동물들은 혹독한 날씨에서 살아남기 위해 적응해요."
+        },
+        {
+          "sentence": "Polar bears have thick fur for freezing cold.",
+          "ko": "북극곰은 살을 에는 추위를 견디기 위해 두꺼운 털이 있어요."
+        },
+        {
+          "sentence": "Every living creature has unique strengths.",
+          "ko": "모든 살아있는 생명체는 고유한 장점을 지니고 있습니다."
+        }
+      ]
+    }
+  ]
+};
+
+var currentVideoSeries = 'handinhand'; // 'handinhand' | 'ort' | 'insight'
+var currentHihType = 'conv';           // 'conv' | 'song'
+var currentOrtLevel = 'ort5';         // 'ort5' | 'ort4'
+var currentInsightLevel = 'l1';       // 'l1' | 'l2' | 'l3'
+
+var activeItemIndices = {
+  'handinhand': 4, // default to Unit 5 (0-indexed 4: School Field Day)
+  'ort': 0,
+  'insight': 0
+};
+
+var currentOrtShadow = HANDINHAND_SERIES_VIDEOS[4].shadow; // Default to Unit 05 (운동회: 훌라후프)
+
+function switchVideoSeries(series) {
+  currentVideoSeries = series;
+  renderVideoSeriesUI();
+  var idx = activeItemIndices[series] || 0;
+  selectVideoItem(series, idx);
+}
+
+function switchHihType(type) {
+  currentHihType = type;
+  renderVideoSeriesUI();
+  var idx = activeItemIndices['handinhand'] || 0;
+  selectVideoItem('handinhand', idx);
+}
+
+function switchOrtLevel(lvl) {
+  currentOrtLevel = lvl;
+  activeItemIndices['ort'] = 0;
+  renderVideoSeriesUI();
+  selectVideoItem('ort', 0);
+}
+
+function switchInsightLevel(lvl) {
+  currentInsightLevel = lvl;
+  activeItemIndices['insight'] = 0;
+  renderVideoSeriesUI();
+  selectVideoItem('insight', 0);
+}
+
+function getOrtListForCurrentLevel() {
+  if (currentOrtLevel === 'ort5') {
+    try {
+      var s5 = localStorage.getItem('cats_ort5_custom_series_v1');
+      if (s5) return JSON.parse(s5);
+    } catch(e) {}
+    return ORT5_SERIES_VIDEOS;
+  } else {
+    try {
+      var s4 = localStorage.getItem('cats_ort_custom_series_v1');
+      if (s4) return JSON.parse(s4);
+    } catch(e) {}
+    return ORT4_SERIES_VIDEOS;
+  }
+}
+
+function renderVideoSeriesUI() {
+  var btnH = document.getElementById('btnSeriesHandInHand');
+  var btnO = document.getElementById('btnSeriesOrt');
+  var btnI = document.getElementById('btnSeriesInsight');
+  var badge = document.getElementById('series_count_badge');
+
+  if (btnH && btnO && btnI) {
+    btnH.style.background = (currentVideoSeries === 'handinhand' ? '#2563eb' : 'white');
+    btnH.style.color = (currentVideoSeries === 'handinhand' ? 'white' : '#2563eb');
+    btnH.style.boxShadow = (currentVideoSeries === 'handinhand' ? '0 2px 6px rgba(37,99,235,0.25)' : 'none');
+
+    btnO.style.background = (currentVideoSeries === 'ort' ? '#059669' : 'white');
+    btnO.style.color = (currentVideoSeries === 'ort' ? 'white' : '#059669');
+    btnO.style.boxShadow = (currentVideoSeries === 'ort' ? '0 2px 6px rgba(5,150,105,0.25)' : 'none');
+
+    btnI.style.background = (currentVideoSeries === 'insight' ? '#d97706' : 'white');
+    btnI.style.color = (currentVideoSeries === 'insight' ? 'white' : '#d97706');
+    btnI.style.boxShadow = (currentVideoSeries === 'insight' ? '0 2px 6px rgba(217,119,6,0.25)' : 'none');
+  }
+
+  var subControls = document.getElementById('sub_selector_controls');
+  var chipsContainer = document.getElementById('video_series_chips');
+  if (!subControls || !chipsContainer) return;
+
+  var currentIdx = activeItemIndices[currentVideoSeries] || 0;
+
+  if (currentVideoSeries === 'handinhand') {
+    var isSong = (currentHihType === 'song');
+    if (badge) badge.textContent = isSong ? '노래·챈트 (Unit 1~12 전편)' : '회화 애니메이션 (Unit 1~12 전편)';
+    subControls.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">' +
+      '<div style="display:flex;gap:6px;">' +
+        '<button onclick="switchHihType(\'conv\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #2563eb;background:' + (!isSong ? '#2563eb' : 'white') + ';color:' + (!isSong ? 'white' : '#2563eb') + ';font-weight:700;">💬 회화 애니메이션</button>' +
+        '<button onclick="switchHihType(\'song\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #ec4899;background:' + (isSong ? '#ec4899' : 'white') + ';color:' + (isSong ? 'white' : '#ec4899') + ';font-weight:700;">🎵 노래·챈트 (12곡)</button>' +
+      '</div>' +
+      '<div style="font-size:11px;color:#6b7280;font-weight:600;">e-future 공식</div>' +
+    '</div>';
+
+    var hihList = (isSong ? HANDINHAND_SONG_VIDEOS : HANDINHAND_SERIES_VIDEOS);
+    chipsContainer.innerHTML = hihList.map(function(item, idx) {
+      var isActive = (idx === currentIdx);
+      var activeBg = isSong ? '#ec4899' : '#2563eb';
+      var border = isActive ? ('2px solid ' + activeBg) : (isSong ? '#fbcfe8' : '#bfdbfe');
+      var bg = isActive ? activeBg : (isSong ? '#fdf2f8' : '#eff6ff');
+      var color = isActive ? 'white' : (isSong ? '#be185d' : '#1e3a8a');
+      var weight = isActive ? '700' : '600';
+      return '<button class="series-chip" onclick="selectVideoItem(\'handinhand\', ' + idx + ')" style="font-size:12px;padding:7px 11px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? ('0 2px 6px ' + (isSong ? 'rgba(236,72,153,0.35)' : 'rgba(37,99,235,0.3)')) : 'none') + ';">' +
+        item.chipLabel + '</button>';
+    }).join('');
+
+  } else if (currentVideoSeries === 'ort') {
+    var ortList = getOrtListForCurrentLevel();
+    if (badge) badge.textContent = (currentOrtLevel === 'ort5' ? '5단계 10권+' : '4단계 6권+') + ' (' + ortList.length + '권 수록)';
+
+    subControls.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">' +
+      '<div style="display:flex;gap:6px;">' +
+        '<button onclick="switchOrtLevel(\'ort5\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #059669;background:' + (currentOrtLevel === 'ort5' ? '#059669' : 'white') + ';color:' + (currentOrtLevel === 'ort5' ? 'white' : '#059669') + ';font-weight:700;">🌟 5단계 (10권+)</button>' +
+        '<button onclick="switchOrtLevel(\'ort4\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #7c3aed;background:' + (currentOrtLevel === 'ort4' ? '#7c3aed' : 'white') + ';color:' + (currentOrtLevel === 'ort4' ? 'white' : '#7c3aed') + ';font-weight:700;">📖 4단계 (6권+)</button>' +
+      '</div>' +
+      '<button onclick="openAddOrtModal()" style="font-size:11px;color:white;background:#059669;border:none;padding:5px 10px;border-radius:7px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px;box-shadow:0 2px 5px rgba(5,150,105,0.3);">' +
+        '<span>➕</span> <span>권수 추가</span>' +
+      '</button>' +
+    '</div>';
+
+    chipsContainer.innerHTML = ortList.map(function(item, idx) {
+      var isActive = (idx === currentIdx);
+      var activeColor = (currentOrtLevel === 'ort5' ? '#059669' : '#7c3aed');
+      var border = isActive ? ('2px solid ' + activeColor) : '#e5e7eb';
+      var bg = isActive ? activeColor : 'white';
+      var color = isActive ? 'white' : '#374151';
+      var weight = isActive ? '700' : '600';
+      return '<button class="series-chip" onclick="selectVideoItem(\'ort\', ' + idx + ')" style="font-size:12px;padding:7px 10px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? '0 2px 6px rgba(0,0,0,0.15)' : 'none') + ';">' +
+        item.chipLabel + '</button>';
+    }).join('');
+
+  } else if (currentVideoSeries === 'insight') {
+    var inList = INSIGHT_SERIES_VIDEOS[currentInsightLevel] || [];
+    if (badge) badge.textContent = '인사이트 ' + currentInsightLevel.toUpperCase() + ' (' + inList.length + '개 유닛)';
+
+    subControls.innerHTML = '<div style="display:flex;gap:6px;">' +
+      '<button onclick="switchInsightLevel(\'l1\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #d97706;background:' + (currentInsightLevel === 'l1' ? '#d97706' : 'white') + ';color:' + (currentInsightLevel === 'l1' ? 'white' : '#d97706') + ';font-weight:700;">📗 Starter L1</button>' +
+      '<button onclick="switchInsightLevel(\'l2\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #d97706;background:' + (currentInsightLevel === 'l2' ? '#d97706' : 'white') + ';color:' + (currentInsightLevel === 'l2' ? 'white' : '#d97706') + ';font-weight:700;">📗 Starter L2</button>' +
+      '<button onclick="switchInsightLevel(\'l3\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #d97706;background:' + (currentInsightLevel === 'l3' ? '#d97706' : 'white') + ';color:' + (currentInsightLevel === 'l3' ? 'white' : '#d97706') + ';font-weight:700;">📗 Starter L3</button>' +
+    '</div>';
+
+    chipsContainer.innerHTML = inList.map(function(item, idx) {
+      var isActive = (idx === currentIdx);
+      var border = isActive ? '2px solid #d97706' : '1px solid #fed7aa';
+      var bg = isActive ? '#d97706' : '#fffbeb';
+      var color = isActive ? 'white' : '#9a3412';
+      var weight = isActive ? '700' : '600';
+      return '<button class="series-chip" onclick="selectVideoItem(\'insight\', ' + idx + ')" style="font-size:12px;padding:7px 11px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? '0 2px 6px rgba(217,119,6,0.3)' : 'none') + ';">' +
+        item.chipLabel + '</button>';
+    }).join('');
+  }
+}
+
+function selectVideoItem(series, idx) {
+  if (!series) series = currentVideoSeries;
+  activeItemIndices[series] = idx;
+  var item = null;
+
+  if (series === 'handinhand') {
+    var hList = (currentHihType === 'song' ? HANDINHAND_SONG_VIDEOS : HANDINHAND_SERIES_VIDEOS);
+    item = hList[idx] || hList[0];
+  } else if (series === 'ort') {
+    var list = getOrtListForCurrentLevel();
+    item = list[idx] || list[0];
+  } else if (series === 'insight') {
+    var inList = INSIGHT_SERIES_VIDEOS[currentInsightLevel] || [];
+    item = inList[idx] || inList[0];
+  }
+
+  if (!item) return;
+
+  var cover = document.getElementById('ytEndCover');
+  if (cover) cover.style.display = 'none';
+
+  var iframe = document.getElementById('theatreYtIframe');
+  if (iframe) {
+    var targetSrc = 'https://www.youtube-nocookie.com/embed/' + item.id + '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=https://smcciao-commits.github.io';
+    if (iframe.src !== targetSrc) {
+      iframe.src = targetSrc;
+      setTimeout(initYtPlayer, 800);
+    }
+  }
+
+  var titleEl = document.getElementById('ytVideoTitle');
+  if (titleEl) titleEl.textContent = item.title;
+  var subEl = document.getElementById('ytVideoSub');
+  if (subEl) subEl.textContent = item.sub;
+
+  // 100% video-to-shadow synchronization
+  if (item.shadow && item.shadow.length) {
+    currentOrtShadow = item.shadow;
+  } else {
+    currentOrtShadow = DAILY_PACKS[S.curDayIdx].shadowing;
+  }
+  S.shadowIdx = 0;
+
+  var badgeEl = document.getElementById('shadowSourceBadge');
+  if (badgeEl) {
+    var seriesLabel = (series === 'handinhand') ? (currentHihType === 'song' ? '🎵 핸드인핸드 노래' : '📘 핸드인핸드 회화') : ((series === 'ort') ? ('📖 ORT ' + (currentOrtLevel === 'ort5' ? '5단계' : '4단계')) : ('📗 인사이트 ' + currentInsightLevel.toUpperCase()));
+    badgeEl.innerHTML = '🎬 현재 영상 맞춤 쉐도잉: <b style="color:#1d4ed8;">' + (item.chipLabel || item.title) + '</b> <span style="font-size:11px;color:#6b7280;font-weight:400;">(' + seriesLabel + ')</span>';
+  }
+
+  renderShadowSentence();
+  renderVideoSeriesUI();
+}
+
+function openAddOrtModal() {
+  var m = document.getElementById('addOrtModal');
+  if (m) m.style.display = 'flex';
+}
+
+function closeAddOrtModal() {
+  var m = document.getElementById('addOrtModal');
+  if (m) m.style.display = 'none';
+}
+
+function saveCustomOrtBook() {
+  var title = document.getElementById('newOrtTitle').value.trim();
+  var ytInput = document.getElementById('newOrtYoutube').value.trim();
+  var summary = document.getElementById('newOrtSummary').value.trim();
+  var s1 = document.getElementById('newOrtS1').value.trim();
+  var s1k = document.getElementById('newOrtS1k').value.trim();
+  var s2 = document.getElementById('newOrtS2').value.trim();
+  var s2k = document.getElementById('newOrtS2k').value.trim();
+  var s3 = document.getElementById('newOrtS3').value.trim();
+  var s3k = document.getElementById('newOrtS3k').value.trim();
+
+  if (!title || !ytInput) {
+    alert('책 제목과 유튜브 링크는 필수입니다!');
+    return;
+  }
+
+  var vidId = extractYoutubeId(ytInput);
+  if (!vidId) {
+    alert('올바른 유튜브 링크 또는 영상 ID를 입력해 주세요.');
+    return;
+  }
+
+  var currentList = getOrtListForCurrentLevel();
+  var newBook = {
+    bookNum: currentList.length + 1,
+    id: vidId,
+    chipLabel: (currentList.length + 1) + '권 ' + title.substring(0, 10),
+    title: (currentOrtLevel === 'ort5' ? '📖 ORT 5: ' : '📖 ORT 4: ') + title,
+    sub: summary || '원장님께서 추가 등록하신 맞춤 모험 영상!',
+    shadow: [
+      { sentence: s1 || 'We went on a magical reading adventure.', ko: s1k || '우리는 마법 같은 리딩 모험을 떠났습니다.' },
+      { sentence: s2 || 'The magic key glowed in the darkness.', ko: s2k || '마법의 열쇠가 어둠 속에서 빛났습니다.' },
+      { sentence: s3 || 'Everyone had a wonderful time together.', ko: s3k || '모두가 함께 즐거운 시간을 보냈습니다.' }
+    ]
+  };
+
+  currentList.push(newBook);
+  var storageKey = (currentOrtLevel === 'ort5' ? 'cats_ort5_custom_series_v1' : 'cats_ort_custom_series_v1');
+  localStorage.setItem(storageKey, JSON.stringify(currentList));
+
+  closeAddOrtModal();
+  renderVideoSeriesUI();
+  selectVideoItem('ort', currentList.length - 1);
+  alert('🎉 ' + title + ' 영상이 안전하게 추가되었습니다!');
+}
+
+function extractYoutubeId(url) {
+  if (!url) return null;
+  if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+  var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  return m ? m[1] : null;
+}
+
+
+/* ============ JOY ENGLISH SPECIAL SECTION ============ */
+function initJoySection() {
+  var tabsEl = document.getElementById('joyCatTabs');
+  var tabsHtml = '';
+  JOY_CATS.forEach(function(cat, idx) {
+    tabsHtml += '<button class="joy-tab-btn ' + (idx === S.curJoyCatIdx ? 'active' : '') + '" onclick="switchJoyCat(' + idx + ')">' +
+      cat.catName + '</button>';
+  });
+  tabsEl.innerHTML = tabsHtml;
+  renderJoyList();
+}
+
+function switchJoyCat(idx) {
+  S.curJoyCatIdx = idx;
+  initJoySection();
+  playCorrectSound();
+}
+
+function renderJoyList() {
+  var listEl = document.getElementById('joyCardList');
+  var cat = JOY_CATS[S.curJoyCatIdx];
+  var html = '';
+  cat.expressions.forEach(function(exp, idx) {
+    html += '<div class="joy-item">' +
+      '<div class="joy-en-text">' +
+        '<span>' + exp.en + '</span>' +
+        '<span style="font-size:11px; color:#4f46e5; background:#e0e7ff; padding:2px 8px; border-radius:999px; white-space:nowrap;">' + exp.level + '</span>' +
+      '</div>' +
+      '<div class="joy-ko-text">👉 ' + exp.ko + '</div>' +
+      '<div class="joy-tip-box">💡 <b>꿀팁:</b> ' + exp.tip + '</div>' +
+      '<div class="joy-actions">' +
+        '<button class="btn-joy-speak" onclick="speakJoyExp(\'' + exp.en.replace(/'/g, "\\'") + '\')">' +
+          '<span>🔊</span> <span>천천히 발음 듣기</span>' +
+        '</button>' +
+        '<button class="btn-joy-shadow" onclick="openJoySpeakingModal(' + S.curJoyCatIdx + ', ' + idx + ')">' +
+          '<span>🎙️</span> <span>따라 말해보기</span>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+  });
+  listEl.innerHTML = html;
+}
+
+function speakJoyExp(enText) {
+  speakText(enText, 'en-US');
+}
+
+/* ============ SPEECH EVALUATION ENGINE (ALIGN & LEVENSHTEIN) ============ */
+function normWord(w) {
+  return String(w || '').toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]/g, "");
+}
+function levDist(a, b) {
+  var m = a.length, n = b.length;
+  if (!m) return n; if (!n) return m;
+  var d = Array.from({length: n + 1}, function(_, j) { return j; });
+  for (var i = 1; i <= m; i++) {
+    var prev = d[0]; d[0] = i;
+    for (var j = 1; j <= n; j++) {
+      var t = d[j];
+      d[j] = Math.min(d[j] + 1, d[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = t;
+    }
+  }
+  return d[n];
+}
+function isSameWord(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  var L = Math.max(a.length, b.length);
+  if (L >= 4 && levDist(a, b) <= (L >= 7 ? 2 : 1)) return true;
+  return false;
+}
+function alignSpeech(target, spoken) {
+  var T = target.split(/\s+/).map(function(w) { return { disp: w, key: normWord(w) }; }).filter(function(x) { return x.key; });
+  var S = spoken.replace(/-/g, " ").split(/\s+/).map(normWord).filter(Boolean);
+  var n = T.length, m = S.length;
+  var dp = Array.from({length: n + 1}, function() { return new Array(m + 1).fill(0); });
+  for (var i = n - 1; i >= 0; i--) {
+    for (var j = m - 1; j >= 0; j--) {
+      dp[i][j] = isSameWord(T[i].key, S[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i + 1][j + 1]);
+    }
+  }
+  var i = 0, j = 0, st = new Array(n).fill("miss");
+  while (i < n && j < m) {
+    if (isSameWord(T[i].key, S[j])) { st[i] = "ok"; i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) i++;
+    else j++;
+  }
+  var okN = st.filter(function(x) { return x === "ok"; }).length;
+  var score = n ? Math.round(okN / n * 100) : 0;
+  return { T: T, st: st, score: score, spoken: spoken };
+}
+
+/* ============ JOY ENGLISH SPEAKING STUDIO MODAL LOGIC ============ */
+var currentJoyTarget = null;
+var currentStudioRec = null;
+var isStudioListening = false;
+
+function openJoySpeakingModal(catIdx, expIdx) {
+  stopTheatreAudio();
+  window.speechSynthesis.cancel();
+  var cat = JOY_CATS[catIdx];
+  if (!cat || !cat.expressions[expIdx]) return;
+  var exp = cat.expressions[expIdx];
+  currentJoyTarget = exp;
+
+  document.getElementById('speakTargetEn').textContent = exp.en;
+  document.getElementById('speakTargetKo').textContent = '👉 ' + exp.ko;
+  document.getElementById('speakTargetTip').innerHTML = '💡 <b>꿀팁:</b> ' + exp.tip;
+
+  document.getElementById('speechResultCard').style.display = 'none';
+  setStudioMicUI('idle');
+  clearStudioError();
+
+  document.getElementById('speakingModalOverlay').classList.add('show');
+}
+
+function closeJoySpeakingModal() {
+  stopStudioMic();
+  window.speechSynthesis.cancel();
+  document.getElementById('speakingModalOverlay').classList.remove('show');
+}
+
+function listenJoyTarget() {
+  if (!currentJoyTarget) return;
+  speakText(currentJoyTarget.en, 'en-US');
+}
+
+function toggleStudioMic() {
+  if (isStudioListening) {
+    stopStudioMic();
+  } else {
+    startStudioMic();
+  }
+}
+
+function retryStudioMic() {
+  document.getElementById('speechResultCard').style.display = 'none';
+  startStudioMic();
+}
+
+function startStudioMic() {
+  window.speechSynthesis.cancel();
+  var SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecClass) {
+    showStudioError("이 브라우저는 실시간 음성 인식을 지원하지 않습니다. 사파리(Safari) 또는 크롬(Chrome)에서 마이크를 이용해 보세요! [원어민 발음 듣기]로 직접 소리 내어 연습할 수 있습니다.");
+    return;
+  }
+
+  try {
+    if (currentStudioRec) {
+      try { currentStudioRec.abort(); } catch(e){}
+      currentStudioRec = null;
+    }
+
+    var rec = new SpeechRecClass();
+    rec.lang = 'en-US';
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    currentStudioRec = rec;
+
+    rec.onstart = function() {
+      isStudioListening = true;
+      setStudioMicUI('listening');
+      clearStudioError();
+    };
+
+    rec.onresult = function(e) {
+      isStudioListening = false;
+      setStudioMicUI('idle');
+      var transcript = (e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
+      handleStudioSpeechResult(transcript);
+    };
+
+    rec.onerror = function(e) {
+      isStudioListening = false;
+      setStudioMicUI('idle');
+      var err = e.error || '';
+      if (err === 'not-allowed') {
+        showStudioError("⚠️ 마이크 권한이 꺼져 있습니다. 사파리/크롬 설정에서 마이크를 '허용'해 주세요!");
+      } else if (err === 'no-speech') {
+        showStudioError("목소리가 감지되지 않았어요. 마이크 가까이에서 조금 더 큰 소리로 읽어보세요!");
+      } else if (err === 'network') {
+        showStudioError("음성 인식 네트워크 연결을 확인해 주세요.");
+      } else {
+        showStudioError("음성을 인식하지 못했어요. [마이크 누르고 말하기]를 다시 눌러보세요.");
+      }
+    };
+
+    rec.onend = function() {
+      isStudioListening = false;
+      var card = document.getElementById('speechResultCard');
+      if (!card || card.style.display === 'none') {
+        setStudioMicUI('idle');
+      }
+    };
+
+    rec.start();
+  } catch(err) {
+    showStudioError("마이크를 시작할 수 없습니다: " + (err.message || err));
+  }
+}
+
+function stopStudioMic() {
+  if (currentStudioRec) {
+    try { currentStudioRec.stop(); } catch(e){}
+  }
+  isStudioListening = false;
+  setStudioMicUI('idle');
+}
+
+function setStudioMicUI(state) {
+  var btn = document.getElementById('btnStudioMic');
+  var icon = document.getElementById('studioMicIcon');
+  var label = document.getElementById('studioMicText');
+  var hint = document.getElementById('studioMicHint');
+
+  if (state === 'listening') {
+    btn.className = 'btn-studio-mic listening';
+    icon.textContent = '🔴';
+    label.textContent = '듣고 있어요... 영어로 말씀하세요!';
+    hint.innerHTML = '<span style="color:#ef4444; font-weight:700;">🎙️ 귀 기울여 듣고 있어요!</span> 또박또박 말씀하시면 자동으로 채점해요.';
+  } else {
+    btn.className = 'btn-studio-mic idle';
+    icon.textContent = '🎙️';
+    label.textContent = '마이크 누르고 말하기';
+    hint.innerHTML = '버튼을 누르고 아이패드/스마트폰 마이크에 대고 영어로 읽어보세요!';
+  }
+}
+
+function showStudioError(msg) {
+  var hint = document.getElementById('studioMicHint');
+  if (hint) {
+    hint.innerHTML = '<span style="color:#dc2626; font-weight:700;">' + msg + '</span>';
+  }
+}
+
+function clearStudioError() {
+  var hint = document.getElementById('studioMicHint');
+  if (hint) hint.textContent = '버튼을 누르고 아이패드/스마트폰 마이크에 대고 영어로 읽어보세요!';
+}
+
+function handleStudioSpeechResult(transcript) {
+  if (!transcript || !transcript.trim()) {
+    showStudioError("목소리가 감지되지 않았어요. 마이크 가까이에서 조금 더 큰 소리로 말씀해 보세요!");
+    return;
+  }
+  var targetText = currentJoyTarget ? currentJoyTarget.en : '';
+  var res = alignSpeech(targetText, transcript);
+
+  document.getElementById('speechResultCard').style.display = 'flex';
+  document.getElementById('spokenTranscriptBox').textContent = '"' + transcript + '"';
+
+  var wordsHtml = '';
+  res.T.forEach(function(t, k) {
+    var isOk = (res.st[k] === 'ok');
+    wordsHtml += '<span class="w-badge ' + (isOk ? 'ok' : 'miss') + '">' +
+      (isOk ? '✓ ' : '✕ ') + t.disp + '</span>';
+  });
+  document.getElementById('alignedWordsBox').innerHTML = wordsHtml;
+
+  var starsEl = document.getElementById('speechScoreStars');
+  var badgeEl = document.getElementById('speechScoreBadge');
+  var feedbackEl = document.getElementById('minkyFeedbackBox');
+
+  if (res.score >= 80) {
+    playCorrectSound();
+    starsEl.textContent = (res.score === 100) ? '⭐⭐⭐' : '⭐⭐';
+    badgeEl.className = 'score-badge pass';
+    badgeEl.textContent = '🎉 ' + res.score + '점! 통과!';
+    feedbackEl.innerHTML = '<div class="minky-fb-title">🐱 밍키 칭찬:</div>' +
+      '<div class="minky-fb-msg">우와 하린아! 발음이 정말 훌륭해! 조이영어 화상 수업 때 필리핀 선생님께 이렇게 말하면 칭찬 폭풍을 받을 거야! ✨</div>';
+  } else {
+    playWrongSound();
+    starsEl.textContent = '⭐';
+    badgeEl.className = 'score-badge retry';
+    badgeEl.textContent = '💪 ' + res.score + '점! 다시 도전!';
+    feedbackEl.innerHTML = '<div class="minky-fb-title">🐱 밍키 힌트:</div>' +
+      '<div class="minky-fb-msg">빨간 단어를 조금 더 크고 또박또박 발음해 볼까? [다시 도전하기]를 눌러서 한 번 더 연습해 보자! 🐾</div>';
+  }
+}
+
+/* ============ STEP SWITCHING ============ */
+function switchStep(step) {
+  if (S.curStep === 2 && step !== 2) {
+    stopTheatreAudio();
+  }
+  S.curStep = step;
+  for (var i = 1; i <= 4; i++) {
+    var tab = document.getElementById('tabStep' + i);
+    var view = document.getElementById('step' + i + 'View');
+    if (tab) tab.className = 'step-btn' + (i === step ? ' active' : '');
+    if (view) view.style.display = (i === step ? 'flex' : 'none');
+  }
+  if (step === 2) {
+    selectVideoItem(currentVideoSeries, activeItemIndices[currentVideoSeries]);
+    initYtPlayer();
+  }
+}
+
+/* ============ STEP 1: VOCABULARY FLIP ============ */
+function renderVocaCard() {
+  var p = DAILY_PACKS[S.curDayIdx];
+  var w = p.words[S.vocaIdx];
+  document.getElementById('vocaCounter').textContent = (S.vocaIdx + 1) + ' / ' + p.words.length;
+  document.getElementById('vWord').textContent = w.w;
+  document.getElementById('vPhone').textContent = w.p || '';
+  document.getElementById('vEg').textContent = '"' + w.e + '"';
+  document.getElementById('vMean').textContent = w.m;
+  document.getElementById('vEngDef').textContent = w.engDef || '';
+  document.getElementById('vEngDefKo').textContent = w.engDefKo || '';
+  document.getElementById('vocaCardInner').classList.remove('flipped');
+}
+
+function flipVocaCard() {
+  document.getElementById('vocaCardInner').classList.toggle('flipped');
+}
+
+function speakCurrentWord() {
+  var p = DAILY_PACKS[S.curDayIdx];
+  var w = p.words[S.vocaIdx];
+  speakText(w.w + '... ' + w.e, 'en-US');
+}
+
+function nextVocaWord() {
+  var p = DAILY_PACKS[S.curDayIdx];
+  if (S.vocaIdx < p.words.length - 1) {
+    S.vocaIdx++;
+    renderVocaCard();
+    playCorrectSound();
+  } else {
+    document.getElementById('tabStep1').classList.add('done');
+    minkySay('단어 워밍업 완료! 아주 훌륭해! 이제 애니메이션 영상 시청과 쉐도잉을 해볼까?');
+    switchStep(2);
+  }
+}
+
+/* ======================================================= */
+/* STEP 2: HIGH-GRADE ANIMATED SVG THEATRE & ROBUST AUDIO  */
+/* ======================================================= */
+var isTheatrePlaying = false;
+var theatreTimer = null;
+var curLineIdx = 0;
+
+function initTheatreScene() {
+  stopTheatreAudio();
+  isTheatrePlaying = false;
+  curLineIdx = 0;
+  document.getElementById('btnPlayTheatre').innerHTML = '<span>▶️</span> <span>영상 재생</span>';
+  document.getElementById('theatreStatusBadge').textContent = '영상 준비됨';
+  var p = DAILY_PACKS[S.curDayIdx];
+  if (p.story && p.story.lines && p.story.lines[0]) {
+    document.getElementById('subSpeaker').textContent = p.story.lines[0].speaker + ':';
+    document.getElementById('subEn').textContent = p.story.lines[0].text;
+    document.getElementById('subKo').textContent = p.story.lines[0].ko;
+  }
+}
+
+function stopTheatreAudio() {
+  isTheatrePlaying = false;
+  if (theatreTimer) {
+    clearTimeout(theatreTimer);
+    theatreTimer = null;
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  var btn = document.getElementById('btnPlayTheatre');
+  if (btn) btn.innerHTML = '<span>▶️</span> <span>영상 재생</span>';
+  var badge = document.getElementById('theatreStatusBadge');
+  if (badge) badge.textContent = '일시 정지됨';
+}
+
+function toggleTheatrePlay() {
+  if (isTheatrePlaying) {
+    stopTheatreAudio();
+  } else {
+    startTheatrePlay();
+  }
+}
+
+function restartTheatre() {
+  stopTheatreAudio();
+  curLineIdx = 0;
+  startTheatrePlay();
+}
+
+function startTheatrePlay() {
+  isTheatrePlaying = true;
+  document.getElementById('btnPlayTheatre').innerHTML = '<span>⏸️</span> <span>일시정지</span>';
+  document.getElementById('theatreStatusBadge').textContent = '▶️ 상영 중';
+  playNextTheatreLine();
+}
+
+function playNextTheatreLine() {
+  if (!isTheatrePlaying) return;
+  var p = DAILY_PACKS[S.curDayIdx];
+  var lines = (p.story && p.story.lines) || [];
+  
+  if (curLineIdx >= lines.length) {
+    // Story finished!
+    isTheatrePlaying = false;
+    document.getElementById('btnPlayTheatre').innerHTML = '<span>🔄</span> <span>다시 보기</span>';
+    document.getElementById('theatreStatusBadge').textContent = '✅ 상영 완료';
+    minkySay('우와! 재미있는 애니메이션 영상을 다 봤어! 이제 아래 마이크를 누르고 문장을 따라 말해보자!');
+    playCorrectSound();
+    return;
+  }
+
+  var line = lines[curLineIdx];
+  document.getElementById('subSpeaker').textContent = line.speaker + ':';
+  document.getElementById('subEn').textContent = line.text;
+  document.getElementById('subKo').textContent = line.ko;
+
+  // Animate the speaking character!
+  bounceSpeakerCharacter(line.speaker);
+
+  speakText(line.text, 'en-US', function() {
+    if (!isTheatrePlaying) return;
+    curLineIdx++;
+    theatreTimer = setTimeout(playNextTheatreLine, 1400); // Clean 1.4s gap
+  });
+}
+
+function bounceSpeakerCharacter(speaker) {
+  var idMap = {
+    'Cheetah': 'charCheetah',
+    'Giraffe': 'charGiraffe',
+    'Hippo': 'charHippo'
+  };
+  var elemId = idMap[speaker];
+  if (elemId) {
+    var el = document.getElementById(elemId);
+    if (el) {
+      el.style.transform = 'scale(1.15) translateY(-8px)';
+      el.style.transition = 'transform 0.3s ease';
+      setTimeout(function() {
+        el.style.transform = 'scale(1) translateY(0)';
+      }, 500);
+    }
+  }
+}
+
+/* ============ UNIVERSAL MAGIC TOUCH EFFECT ============ */
+function initMagicTouch() {
+  var box = document.getElementById('theatreBox');
+  if (!box) return;
+
+  function handleInteraction(e) {
+    var rect = box.getBoundingClientRect();
+    var clientX = e.clientX;
+    var clientY = e.clientY;
+    if (e.touches && e.touches[0]) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    }
+    if (clientX === undefined) return;
+
+    var x = clientX - rect.left;
+    var y = clientY - rect.top;
+    spawnMagicBurst(x, y);
+    playMagicTwinkleSound();
+  }
+
+  box.addEventListener('pointerdown', handleInteraction, { passive: true });
+}
+
+function spawnMagicBurst(x, y) {
+  var layer = document.getElementById('theatreParticles');
+  if (!layer) return;
+
+  var emojis = ['⭐', '✨', '💖', '🎉', '🐾', '🌟', '🌈', '🍭'];
+  for (var i = 0; i < 7; i++) {
+    var spark = document.createElement('div');
+    spark.className = 'magic-sparkle';
+    spark.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    var angle = Math.random() * Math.PI * 2;
+    var dist1 = 20 + Math.random() * 35;
+    var dist2 = 45 + Math.random() * 55;
+
+    var tx = Math.cos(angle) * dist1 + 'px';
+    var ty = Math.sin(angle) * dist1 - 15 + 'px';
+    var tx2 = Math.cos(angle) * dist2 + 'px';
+    var ty2 = Math.sin(angle) * dist2 - 35 + 'px';
+
+    spark.style.setProperty('--tx', tx);
+    spark.style.setProperty('--ty', ty);
+    spark.style.setProperty('--tx2', tx2);
+    spark.style.setProperty('--ty2', ty2);
+
+    spark.style.left = (x - 12) + 'px';
+    spark.style.top = (y - 12) + 'px';
+
+    layer.appendChild(spark);
+    (function(el) {
+      setTimeout(function() {
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      }, 850);
+    })(spark);
+  }
+}
+
+/* ============ SHADOWING ENGINE ============ */
+var isMicListening = false;
+var speechRec = null;
+
+function renderShadowSentence() {
+  var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : DAILY_PACKS[S.curDayIdx].shadowing;
+  var s = list[S.shadowIdx] || list[0];
+  document.getElementById('shadowCounter').textContent = (S.shadowIdx + 1) + ' / ' + list.length + ' 문장';
+  document.getElementById('shadowEn').textContent = s.sentence;
+  document.getElementById('shadowKo').textContent = s.ko;
+  document.getElementById('shadowScorePill').textContent = '마이크를 누르고 말해보세요!';
+  document.getElementById('shadowScorePill').style.color = '#059669';
+}
+
+function speakShadowTarget() {
+  var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : DAILY_PACKS[S.curDayIdx].shadowing;
+  var s = list[S.shadowIdx] || list[0];
+  speakText(s.sentence, 'en-US');
+}
+
+var currentShadowRec = null;
+
+function toggleShadowMic() {
+  var btn = document.getElementById('btnShadowMic');
+  var pill = document.getElementById('shadowScorePill');
+
+  if (isMicListening) {
+    if (currentShadowRec) {
+      try { currentShadowRec.stop(); } catch(e){}
+    }
+    isMicListening = false;
+    btn.classList.remove('listening');
+    document.getElementById('btnMicLabel').textContent = '말하기 시작';
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  var SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecClass) {
+    pill.innerHTML = '<span style="color:#dc2626;">이 브라우저는 실시간 음성 인식을 지원하지 않습니다. 사파리/크롬을 이용해 주세요.</span>';
+    return;
+  }
+
+  try {
+    var rec = new SpeechRecClass();
+    rec.lang = 'en-US';
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    currentShadowRec = rec;
+
+    rec.onstart = function() {
+      isMicListening = true;
+      btn.classList.add('listening');
+      document.getElementById('btnMicLabel').textContent = '듣고 있어요...';
+      pill.innerHTML = '<span style="color:#ef4444; font-weight:700;">🎙️ 귀 기울여 듣고 있어요!</span> 또박또박 말씀하세요.';
+    };
+
+    rec.onresult = function(e) {
+      isMicListening = false;
+      btn.classList.remove('listening');
+      document.getElementById('btnMicLabel').textContent = '말하기 시작';
+      var transcript = (e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
+      var p = DAILY_PACKS[S.curDayIdx];
+      var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : p.shadowing;
+      var targetSentence = list[S.shadowIdx].sentence;
+      var res = alignSpeech(targetSentence, transcript);
+
+      var badgesHtml = res.T.map(function(t, k) {
+        var isOk = (res.st[k] === 'ok');
+        return '<span style="display:inline-block; padding:2px 7px; margin:2px; border-radius:999px; font-size:12px; font-weight:700; background:' + (isOk ? '#d1fae5; color:#065f46;' : '#fee2e2; color:#991b1b;') + '">' + (isOk ? '✓ ' : '✕ ') + t.disp + '</span>';
+      }).join(' ');
+
+      if (res.score >= 80) {
+        pill.innerHTML = '<div style="color:#059669; font-weight:700; font-size:14px; margin-bottom:4px;">🎉 ' + res.score + '점! Perfect!</div>' +
+          '<div style="font-size:12px; color:#4b5563; margin-bottom:4px;">내가 말한 문장: "' + transcript + '"</div>' +
+          '<div>' + badgesHtml + '</div>';
+        playCorrectSound();
+      } else {
+        pill.innerHTML = '<div style="color:#d97706; font-weight:700; font-size:14px; margin-bottom:4px;">💪 ' + res.score + '점! 다시 도전!</div>' +
+          '<div style="font-size:12px; color:#4b5563; margin-bottom:4px;">내가 말한 문장: "' + transcript + '"</div>' +
+          '<div>' + badgesHtml + '</div>';
+        playWrongSound();
+      }
+    };
+
+    rec.onerror = function(e) {
+      isMicListening = false;
+      btn.classList.remove('listening');
+      document.getElementById('btnMicLabel').textContent = '말하기 시작';
+      var err = e.error || '';
+      if (err === 'not-allowed') {
+        pill.innerHTML = '<span style="color:#dc2626;">⚠️ 마이크 권한이 꺼져 있습니다. 브라우저 설정에서 마이크를 허용해 주세요!</span>';
+      } else if (err === 'no-speech') {
+        pill.innerHTML = '<span style="color:#d97706;">목소리가 들리지 않았어요. 마이크 가까이에서 조금 더 크게 읽어주세요!</span>';
+      } else {
+        pill.innerHTML = '<span style="color:#d97706;">음성을 잘 인식하지 못했어요. 다시 마이크를 눌러보세요!</span>';
+      }
+    };
+
+    rec.onend = function() {
+      isMicListening = false;
+      btn.classList.remove('listening');
+      document.getElementById('btnMicLabel').textContent = '말하기 시작';
+    };
+
+    rec.start();
+  } catch(e) {
+    pill.innerHTML = '<span style="color:#dc2626;">마이크를 시작할 수 없습니다: ' + (e.message || e) + '</span>';
+  }
+}
+
+function nextShadowSentence() {
+  var p = DAILY_PACKS[S.curDayIdx];
+  var list = (currentOrtShadow && currentOrtShadow.length) ? currentOrtShadow : p.shadowing;
+  if (S.shadowIdx < list.length - 1) {
+    S.shadowIdx++;
+    renderShadowSentence();
+    playCorrectSound();
+  } else {
+    document.getElementById('tabStep2').classList.add('done');
+    minkySay('영상 시청과 쉐도잉 완료! 이제 나와 1:1로 직접 영어로 대화해 볼까?');
+    switchStep(3);
+  }
+}
+
+/* ============ STEP 3: AI CAT TALK ============ */
+function initCatTalk() {
+  S.talkRound = 0;
+  document.getElementById('chatContainer').innerHTML = '';
+  renderCatTurn();
+}
+
+function renderCatTurn() {
+  var p = DAILY_PACKS[S.curDayIdx];
+  var t = p.talk[S.talkRound];
+  document.getElementById('talkRoundBadge').textContent = (S.talkRound + 1) + ' / ' + p.talk.length + ' 턴';
+
+  var container = document.getElementById('chatContainer');
+  var catBubble = document.createElement('div');
+  catBubble.className = 'chat-bubble-row';
+  catBubble.innerHTML = '<div style="font-size:24px">🐱</div><div class="chat-msg cat"><b>Minky:</b><br>' +
+    t.q + '<div style="font-size:11.5px; opacity:0.8; margin-top:2px;">' + t.qKo + '</div></div>';
+  container.appendChild(catBubble);
+  speakText(t.q, 'en-US');
+
+  var chipsWrap = document.getElementById('replyChipsWrap');
+  var html = '';
+  t.options.forEach(function(opt, idx) {
+    html += '<button class="reply-chip" onclick="userReplyTalk(' + idx + ')">' + opt.t + '</button>';
+  });
+  chipsWrap.innerHTML = html;
+}
+
+function userReplyTalk(optIdx) {
+  var p = DAILY_PACKS[S.curDayIdx];
+  var t = p.talk[S.talkRound];
+  var picked = t.options[optIdx];
+
+  var container = document.getElementById('chatContainer');
+  var userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble-row user';
+  userBubble.innerHTML = '<div style="font-size:24px">👑</div><div class="chat-msg user">' + picked.t + '</div>';
+  container.appendChild(userBubble);
+  playCorrectSound();
+
+  var catReaction = document.createElement('div');
+  catReaction.className = 'chat-bubble-row';
+  catReaction.innerHTML = '<div style="font-size:24px">🐱</div><div class="chat-msg cat"><b>Minky:</b><br>' + picked.rep + '</div>';
+  setTimeout(function() {
+    container.appendChild(catReaction);
+    speakText(picked.rep, 'en-US');
+  }, 400);
+
+  document.getElementById('replyChipsWrap').innerHTML = '';
+
+  setTimeout(function() {
+    if (S.talkRound < p.talk.length - 1) {
+      S.talkRound++;
+      renderCatTurn();
+    } else {
+      document.getElementById('tabStep3').classList.add('done');
+      minkySay('우와 하린아! 영어 말하기 실력이 대단해! 이제 마지막 퀴즈 풀고 선물 받자!');
+      switchStep(4);
+    }
+  }, 1500);
+}
+
+/* ============ STEP 4: DAILY QUIZ ============ */
+function renderQuizQ() {
+  var p = DAILY_PACKS[S.curDayIdx];
+  var q = p.quiz[S.quizIdx];
+  document.getElementById('quizCounter').textContent = (S.quizIdx + 1) + ' / ' + p.quiz.length;
+
+  var card = document.getElementById('quizCard');
+  var html = '<div class="quiz-q-title">' + q.q.replace(/\n/g, '<br>') + '</div>';
+
+  if (q.type === 'choice' || q.type === 'tf') {
+    html += '<div class="quiz-opts">';
+    q.opts.forEach(function(opt, idx) {
+      html += '<button class="quiz-opt-btn" onclick="checkQuizAns(' + idx + ', this)">' + opt + '</button>';
+    });
+    html += '</div>';
+  } else if (q.type === 'scramble') {
+    html += '<div class="scramble-box">' +
+      '<div class="scramble-slots" id="scrambleSlots"></div>' +
+      '<div class="scramble-pool" id="scramblePool">';
+    q.words.forEach(function(w, idx) {
+      html += '<button class="word-token" onclick="pickScrambleWord(this, \'' + w + '\')">' + w + '</button>';
+    });
+    html += '</div>' +
+      '<button class="btn-next-word" style="background:#10b981; margin-top:8px;" onclick="submitScramble()">정답 제출하기 ✨</button>' +
+    '</div>';
+  }
+
+  if (q.hint) {
+    html += '<div style="font-size:12px; color:#d97706; background:#fffbeb; padding:8px 12px; border-radius:10px;">' + q.hint + '</div>';
+  }
+
+  card.innerHTML = html;
+}
+
+function checkQuizAns(idx, btn) {
+  var p = DAILY_PACKS[S.curDayIdx];
+  var q = p.quiz[S.quizIdx];
+  if (idx === q.ans) {
+    btn.classList.add('correct');
+    playCorrectSound();
+    S.quizScore += 20;
+    setTimeout(nextQuizQ, 800);
+  } else {
+    btn.classList.add('wrong');
+    playWrongSound();
+    setTimeout(nextQuizQ, 1000);
+  }
+}
+
+var pickedWords = [];
+function pickScrambleWord(btn, w) {
+  pickedWords.push(w);
+  btn.style.display = 'none';
+  var slots = document.getElementById('scrambleSlots');
+  var tok = document.createElement('span');
+  tok.className = 'word-token';
+  tok.style.background = '#e0e7ff';
+  tok.textContent = w;
+  slots.appendChild(tok);
+}
+
+function submitScramble() {
+  playCorrectSound();
+  S.quizScore += 20;
+  pickedWords = [];
+  setTimeout(nextQuizQ, 600);
+}
+
+function nextQuizQ() {
+  var p = DAILY_PACKS[S.curDayIdx];
+  if (S.quizIdx < p.quiz.length - 1) {
+    S.quizIdx++;
+    renderQuizQ();
+  } else {
+    document.getElementById('tabStep4').classList.add('done');
+    showCelebrationReward();
+  }
+}
+
+/* ============ REWARD & CELEBRATION ============ */
+function showCelebrationReward() {
+  playChimeBell();
+  S.points += 100;
+  S.streak++;
+  localStorage.setItem('topedu_cats_points', S.points);
+  localStorage.setItem('topedu_cats_streak', S.streak);
+  document.getElementById('starVal').textContent = S.points + 'P';
+  document.getElementById('streakVal').textContent = S.streak + '일째';
+
+  var pass = '⭐ ' + (new Date().getDate() * 100 + 15) + ' ⭐';
+  document.getElementById('rewardPasscodeVal').textContent = pass;
+  document.getElementById('celebrationOverlay').classList.add('show');
+}
+
+function closeRewardModal() {
+  document.getElementById('celebrationOverlay').classList.remove('show');
+  minkySay('오늘의 캐츠 잉글리시 4단계 완료! 아이패드 15분 재미있게 놀고 내일 또 만나! 🐱🎉');
+}
+
+/* ============ ALARM SYSTEM ENGINE ============ */
+function updateAlarmUI() {
+  document.getElementById('alarmTimeInput').value = S.alarmTime;
+  var badge = document.getElementById('alarmTimeBadge');
+  var statusBadge = document.getElementById('alarmStatusBadge');
+  var pwrTxt = document.getElementById('btnAlarmPowerTxt');
+
+  if (S.alarmActive) {
+    badge.textContent = S.alarmTime + ' ON';
+    statusBadge.textContent = '켜짐 (ON)';
+    statusBadge.className = 'alarm-status-badge';
+    pwrTxt.textContent = '알람 끄기';
+  } else {
+    badge.textContent = '알람 OFF';
+    statusBadge.textContent = '꺼짐 (OFF)';
+    statusBadge.className = 'alarm-status-badge off';
+    pwrTxt.textContent = '알람 켜기';
+  }
+}
+
+function toggleAlarmCard() {
+  var card = document.getElementById('alarmCard');
+  card.style.display = (card.style.display === 'none' ? 'flex' : 'none');
+}
+
+function toggleAlarmActive() {
+  S.alarmActive = !S.alarmActive;
+  localStorage.setItem('topedu_cats_alarm_active', S.alarmActive);
+  updateAlarmUI();
+  playCorrectSound();
+}
+
+function saveAlarmSettings() {
+  var val = document.getElementById('alarmTimeInput').value;
+  if (val) {
+    S.alarmTime = val;
+    localStorage.setItem('topedu_cats_alarm_time', val);
+    updateAlarmUI();
+    playCorrectSound();
+  }
+}
+
+function testAlarmBell() {
+  playChimeBell();
+  document.getElementById('alarmModalOverlay').classList.add('show');
+}
+
+function dismissAlarmAndStart() {
+  document.getElementById('alarmModalOverlay').classList.remove('show');
+  switchStep(1);
+}
+
+function snoozeAlarm() {
+  document.getElementById('alarmModalOverlay').classList.remove('show');
+}
+
+function startAlarmTimer() {
+  setInterval(function() {
+    if (!S.alarmActive) return;
+    var now = new Date();
+    var cur = (now.getHours() < 10 ? '0' : '') + now.getHours() + ':' +
+              (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+    if (cur === S.alarmTime && now.getSeconds() < 12) {
+      playChimeBell();
+      document.getElementById('alarmModalOverlay').classList.add('show');
+    }
+  }, 10000);
+}
+
+/* ============ INTERACTION HELPER ============ */
+function petMinky() {
+  playMeowSound();
+  var quotes = [
+    '야옹! 하린아 오늘 기분 어때? 조이영어 필리핀 선생님께 멋지게 말해보자! 🐾',
+    '하린이는 영어를 진짜 빠르게 배우는 천재야! 🐱⭐',
+    '궁금한 단어가 있으면 언제든 나 밍키한테 물어봐!',
+    'How was your day? 오늘 하루 어땠어, 하린아? 💖'
+  ];
+  var q = quotes[Math.floor(Math.random() * quotes.length)];
+  minkySay(q);
+}
+
+function minkySay(txt, speakVoice) {
+  var el = document.getElementById('minkyDialogue');
+  if (el) el.textContent = txt;
+  if (speakVoice === true) {
+    speakText(txt, 'ko-KR');
+  }
+}
+</script>
+
+
+<!-- QR Audio & E-Book Modal -->
+<div id="qrAudioModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;justify-content:center;align-items:center;padding:16px;">
+  <div style="background:white;border-radius:20px;max-width:440px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div style="font-family:Maplestory,sans-serif;font-size:16px;font-weight:700;color:#1e3a8a;">🎧 출판사 공식 QR 오디오 & E-Book</div>
+      <button onclick="closeQrAudioModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#64748b;">✕</button>
+    </div>
+    <div style="font-size:12.5px;color:#475569;margin-bottom:14px;line-height:1.4;">
+      스마트폰이나 태블릿으로 책을 보며 터치 한 번으로 공식 출판사 원어민 음원과 전자책을 바로 들을 수 있습니다.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="padding:10px 12px;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#1e40af;margin-bottom:4px;">📗 Insight Link Starter L1 (기린)</div>
+        <div style="display:flex;gap:6px;">
+          <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=63U92V6C11RH1GOYLXOR91YU86L1HLIQ&view=1" target="_blank" style="text-decoration:none;background:#2563eb;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 공식 MP3 음원</a>
+          <a href="https://netutor-m.neflow.ai/pages/QRcode/sendmail.asp?bookcode=BA03040013" target="_blank" style="text-decoration:none;background:white;border:1px solid #2563eb;color:#2563eb;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">📖 전자 E-Book</a>
+        </div>
+      </div>
+      <div style="padding:10px 12px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#c2410c;margin-bottom:4px;">📙 Insight Link Starter L2 (물고기)</div>
+        <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=5ETU185OZCQ4ZSEKKJNC8CX77HKLGX83&view=1" target="_blank" style="text-decoration:none;background:#ea580c;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 공식 MP3 음원</a>
+      </div>
+      <div style="padding:10px 12px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#b91c1c;margin-bottom:4px;">📕 Insight Link Starter L3 (달팽이)</div>
+        <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=PMESMFPWKKB2K19I7I9BTKJERP6K263A&view=1" target="_blank" style="text-decoration:none;background:#dc2626;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 공식 MP3 음원</a>
+      </div>
+      <div style="padding:10px 12px;background:#faf5ff;border:1.5px solid #e9d5ff;border-radius:12px;">
+        <div style="font-weight:700;font-size:13px;color:#6b21a8;margin-bottom:4px;">📘 Hand in Hand 5 (e-future)</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <a href="https://www.e-future.co.kr/audio/info.do?bookkey=1026&cd_num=1" target="_blank" style="text-decoration:none;background:#7c3aed;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🎧 전체 오디오</a>
+          <a href="https://www.e-future.co.kr/audio/track/info?bookkey=1026&cd_num=1&unit_idx=102" target="_blank" style="text-decoration:none;background:#9333ea;color:white;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">🏃 Unit 5 트랙</a>
+          <a href="https://www.e-future.co.kr/app/handinhand/index" target="_blank" style="text-decoration:none;background:white;border:1px solid #7c3aed;color:#7c3aed;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:700">📱 무료 학습 앱</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function openQrAudioModal() {
+  var m = document.getElementById('qrAudioModal');
+  if (m) m.style.display = 'flex';
+}
+function closeQrAudioModal() {
+  var m = document.getElementById('qrAudioModal');
+  if (m) m.style.display = 'none';
+}
+</script>
+
+
+
+    <!-- 📘 에듀키즈 초등 전용 단어장 센터 -->
+    <div class="card" style="margin:20px 0;padding:18px 16px;background:#ffffff;border:2.5px solid #f472b6;border-radius:20px;box-shadow:0 4px 14px rgba(244,114,182,0.15);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:28px;">📘</span>
+          <div>
+            <div style="font-family:Maplestory,sans-serif;font-size:17px;font-weight:800;color:#be185d;">에듀키즈 초등 전용 단어장</div>
+            <div style="font-size:12px;color:#9d174d;margin-top:2px;">Hand in Hand · ORT · 인사이트 링크 · 능률 초등필수</div>
+          </div>
+        </div>
+        <span style="background:#db2777;color:white;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;">클래스카드형 4대 필수</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <a href="index.html" style="text-decoration:none;display:block;background:#fdf2f8;border:1.5px solid #fbcfe8;padding:12px;border-radius:14px;color:#831843;">
+          <div style="font-size:22px;">📘</div>
+          <div style="font-weight:800;font-size:14px;margin-top:4px;">Hand in Hand 5</div>
+          <div style="font-size:11.5px;color:#9d174d;">Unit 1~12 전단원 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f5f3ff;border:1.5px solid #ddd6fe;padding:12px;border-radius:14px;color:#4c1d95;">
+          <div style="font-size:22px;">📗</div>
+          <div style="font-weight:800;font-size:14px;margin-top:4px;">ORT Stage 4 & 5</div>
+          <div style="font-size:11.5px;color:#6b21a8;">Rowing Boats 외 핵심 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#eff6ff;border:1.5px solid #bfdbfe;padding:12px;border-radius:14px;color:#1e40af;">
+          <div style="font-size:22px;">📙</div>
+          <div style="font-weight:800;font-size:14px;margin-top:4px;">Insight Link 1·2·3</div>
+          <div style="font-size:11.5px;color:#1d4ed8;">Day별 실전문맥 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f0fdf4;border:1.5px solid #bbf7d0;padding:12px;border-radius:14px;color:#166534;">
+          <div style="font-size:22px;">📕</div>
+          <div style="font-weight:800;font-size:14px;margin-top:4px;">능률VOCA 초등필수</div>
+          <div style="font-size:11.5px;color:#15803d;">Day 01~39 초등 필수 800</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#fffbeb;border:1.5px solid #fef3c7;padding:12px;border-radius:14px;color:#92400e;">
+          <div style="font-size:22px;">✏️</div>
+          <div style="font-weight:800;font-size:14px;margin-top:4px;">Let's Go Grammar 1</div>
+          <div style="font-size:11.5px;color:#b45309;">초등 기초 문법 어휘</div>
+        </a>
+        <a href="index.html" style="text-decoration:none;display:block;background:#f8fafc;border:1.5px solid #e2e8f0;padding:12px;border-radius:14px;color:#334155;">
+          <div style="font-size:22px;">🏫</div>
+          <div style="font-weight:800;font-size:14px;margin-top:4px;">천재(함) 초5 교과서</div>
+          <div style="font-size:11.5px;color:#475569;">11·12과 교과 어휘</div>
+        </a>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button onclick="location.href='index.html'" style="flex:1;background:linear-gradient(135deg,#db2777,#f43f5e);color:white;border:none;padding:11px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(219,39,119,0.25);">
+          🚀 클래스카드형 단어 풀러가기 →
+        </button>
+        <button onclick="location.href='harin.html'" style="background:#f3e8ff;border:1.5px solid #c084fc;color:#6b21a8;padding:11px 14px;border-radius:12px;font-family:Maplestory,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+          📅 주간 플래너
+        </button>
+      </div>
+    </div>
+
+
+<!-- QR Audio Modal -->
+<div id="qrAudioModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:white;border-radius:20px;padding:22px;max-width:480px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h3 style="margin:0;font-family:Maplestory,sans-serif;font-size:17px;color:#1e40af;">🎧 출판사 공식 QR 오디오 & E-Book</h3>
+      <button onclick="closeQrAudioModal()" style="background:#f1f5f9;border:none;border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer;">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=63U92V6C11RH1GOYLXOR91YU86L1HLIQ&view=1" target="_blank" style="text-decoration:none;background:#eff6ff;border:1.5px solid #93c5fd;color:#1e40af;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
+        <span>📗 인사이트 L1 음원 듣기</span> <span>→</span>
+      </a>
+      <a href="https://netutor-m.neflow.ai/pages/QRcode/sendmail.asp?bookcode=BA03040013" target="_blank" style="text-decoration:none;background:#eff6ff;border:1.5px solid #93c5fd;color:#1e40af;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
+        <span>📖 인사이트 L1 E-Book 열기</span> <span>→</span>
+      </a>
+      <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=5ETU185OZCQ4ZSEKKJNC8CX77HKLGX83&view=1" target="_blank" style="text-decoration:none;background:#fff7ed;border:1.5px solid #fdba74;color:#c2410c;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
+        <span>📙 인사이트 L2 음원 듣기</span> <span>→</span>
+      </a>
+      <a href="https://waffle.nebooks.co.kr/pages/view.asp?ckey=PMESMFPWKKB2K19I7I9BTKJERP6K263A&view=1" target="_blank" style="text-decoration:none;background:#fef2f2;border:1.5px solid #fca5a5;color:#b91c1c;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
+        <span>📕 인사이트 L3 음원 듣기</span> <span>→</span>
+      </a>
+      <a href="https://www.e-future.co.kr/audio/info.do?bookkey=1026&cd_num=1" target="_blank" style="text-decoration:none;background:#f5f3ff;border:1.5px solid #c084fc;color:#6b21a8;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
+        <span>📘 핸드인핸드 5권 오디오 전곡</span> <span>→</span>
+      </a>
+      <a href="https://www.e-future.co.kr/audio/track/info?bookkey=1026&cd_num=1&unit_idx=102" target="_blank" style="text-decoration:none;background:#7c4dff;color:white;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">
+        <span>🏆 Unit 5 트랙 다이렉트 재생</span> <span>→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Add ORT Book Modal -->
+<div id="addOrtModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;justify-content:center;align-items:center;padding:16px;">
+  <div style="background:white;border-radius:20px;max-width:440px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div style="font-family:'Maplestory',sans-serif;font-size:16px;font-weight:700;color:#5b21b6;">➕ ORT 4단계 권수 추가하기</div>
+      <button onclick="closeAddOrtModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#64748b;">✕</button>
+    </div>
+    <div style="font-size:12.5px;color:#475569;margin-bottom:14px;line-height:1.4;">
+      ORT 4단계의 추가 권수(More Stories, Sparrows 등) 유튜브 영상과 쉐도잉 문장을 자유롭게 등록해 계속 늘려갈 수 있습니다.
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <label style="font-size:12px;font-weight:700;color:#334155;display:block;margin-bottom:4px;">책 제목 (권수 & 영어제목)</label>
+        <input type="text" id="newOrtTitle" placeholder="예: 7권: Nobody Got Wet" style="width:100%;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;color:#334155;display:block;margin-bottom:4px;">유튜브 링크 또는 영상 ID</label>
+        <input type="text" id="newOrtYtUrl" placeholder="예: https://youtu.be/... 또는 영상ID" style="width:100%;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;color:#334155;display:block;margin-bottom:4px;">줄거리 한 줄 설명</label>
+        <input type="text" id="newOrtSub" placeholder="예: 비프와 친구들이 빗속에서 신나는 모험을 해요!" style="width:100%;padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+
+      <div style="padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
+        <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">🎙️ 쉐도잉 따라 말하기 문장 3개 (선택)</div>
+        <input type="text" id="newOrtS1" placeholder="문장 1 (예: Nobody got wet in the rain.)" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;margin-bottom:6px;box-sizing:border-box;">
+        <input type="text" id="newOrtS2" placeholder="문장 2 (예: They ran into the little hut.)" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;margin-bottom:6px;box-sizing:border-box;">
+        <input type="text" id="newOrtS3" placeholder="문장 3 (예: It was a very lucky day!)" style="width:100%;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;box-sizing:border-box;">
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <button onclick="submitNewOrtBook()" style="flex:1;background:#7c3aed;color:white;border:none;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">
+          🚀 저장 및 즉시 등록
+        </button>
+        <button onclick="closeAddOrtModal()" style="background:#e2e8f0;color:#475569;border:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">
+          취소
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
