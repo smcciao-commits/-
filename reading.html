@@ -3318,8 +3318,43 @@ function renderReadingMode(p, area) {
 }
 
 // 2. Blank & Scramble Mode Renderer
+// 2. Core Blank Keywords Database for Step 1 (Passages 1-6)
+const BLANK_KEYWORDS = {
+  1: [
+    "filled with", "culture", "community", "celebrate festivals", "remember important events",
+    "traditions", "Thanksgiving", "express gratitude", "what they have", "Festival of Colors",
+    "represents", "bring people together", "strengthen the bonds", "from one generation to the next",
+    "never changes", "meet new needs", "What matters is that", "meaning behind their traditions"
+  ],
+  2: [
+    "constructed understanding", "passed from one generation to the next", "recollection",
+    "enables people to learn", "past experiences", "identity", "collective memory",
+    "stored in objects", "access a vast array", "Artifacts", "provide insights into",
+    "infinite amount", "longest-lasting", "thousands of years"
+  ],
+  3: [
+    "prevents a worker from being promoted", "bamboo ceiling", "glass ceiling",
+    "without considering", "eliminate the prejudice", "more aware of", "stereotyping",
+    "biases", "based on", "refers to", "affects", "diverse", "prejudice", "positions"
+  ],
+  4: [
+    "focus on utilizing", "opportunity to reach", "consumer data", "personal interests",
+    "shopping habits", "target their ads", "specific groups", "browsing history",
+    "sponsored posts", "influencers", "efficient", "traditional marketing campaigns"
+  ],
+  5: [
+    "traffic signals", "caution", "confusion", "serious train accident", "supposed to stop",
+    "crashed", "replaced with", "calming effect", "due to", "short wavelength",
+    "long wavelength", "warning drivers to stop"
+  ],
+  6: [
+    "peppered moth", "evolution", "theory of natural selection", "blend in with",
+    "air pollution", "survival advantage", "short lifespan", "quite quickly"
+  ]
+};
+
 function renderBlankMode(p, area) {
-  const scrambles = SCRAMBLES[curPassage];
+  const scrambles = SCRAMBLES[curPassage] || [];
   let html = `
     <div class="card">
       <div class="card-header">
@@ -3333,23 +3368,50 @@ function renderBlankMode(p, area) {
 
       <!-- Blank Passage -->
       <div class="passage-box" style="margin-bottom:24px;">
-        <div style="font-weight:700; color:#ff4081; margin-bottom:10px;">[1단계] 핵심 키워드 빈칸 뚫기</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div style="font-weight:700; color:#ff4081; font-size:15px;">[1단계] 핵심 키워드 빈칸 뚫기</div>
+          <div style="display:flex; gap:6px;">
+            <button class="tool-btn" style="padding:3px 10px; font-size:12px; background:#f1f5f9; color:#475569;" onclick="revealAllBlanks()">👁️ 전체 정답 열기</button>
+            <button class="tool-btn" style="padding:3px 10px; font-size:12px; background:#f1f5f9; color:#475569;" onclick="hideAllBlanks()">↺ 전체 다시 가리기</button>
+          </div>
+        </div>
   `;
 
+  // Get keywords for this passage (or fallback)
+  let kws = (BLANK_KEYWORDS[curPassage] || p.keywords || []).slice();
+  if (kws.length === 0 && p.paragraphs) {
+    p.paragraphs.forEach(para => {
+      if (para.syntaxes) {
+        para.syntaxes.forEach(s => {
+          const cleaned = s.title.replace(/~|p\.p\.|A|B|\.\.\./g, '').trim();
+          if (cleaned.length > 2) kws.push(cleaned);
+        });
+      }
+    });
+  }
+
+  // Sort longest first
+  kws.sort((a, b) => b.length - a.length);
+
   p.paragraphs.forEach((para, pIdx) => {
-    let blankedEn = para.en;
-    const keywords = [
-      "filled with", "culture", "community", "traditions", "Thanksgiving", "gratitude",
-      "what they have", "represent", "celebrations", "strengthen", "bonds", "generation",
-      "never changes", "meet new needs", "What matters", "constructed", "recollection",
-      "enables", "identity", "collective memory", "access", "insights", "longest-lasting", "thousands of years"
-    ];
-    keywords.forEach(kw => {
-      const reg = new RegExp('\\b' + kw + '\\b', 'gi');
-      blankedEn = blankedEn.replace(reg, `<span class="blank-word" onclick="revealBlank(this)">${kw}</span>`);
+    let text = para.en;
+    const placeholders = [];
+
+    kws.forEach(kw => {
+      const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const reg = new RegExp('\\b' + escaped + '\\b', 'gi');
+      text = text.replace(reg, (match) => {
+        const ph = `___BLANK_${placeholders.length}___`;
+        placeholders.push(match);
+        return ph;
+      });
     });
 
-    html += `<div class="p-para" style="margin-bottom:12px;">${blankedEn}</div>`;
+    placeholders.forEach((orig, idx) => {
+      text = text.replace(`___BLANK_${idx}___`, `<span class="blank-word" onclick="revealBlank(this)" title="터치하여 정답 확인">${orig}</span>`);
+    });
+
+    html += `<div class="p-para" style="margin-bottom:12px;">${text}</div>`;
   });
 
   html += `
@@ -3394,7 +3456,18 @@ function revealBlank(el) {
   if (!el.classList.contains('revealed')) {
     el.classList.add('revealed');
     playCorrectSound();
+  } else {
+    el.classList.remove('revealed');
   }
+}
+
+function revealAllBlanks() {
+  document.querySelectorAll('.blank-word').forEach(el => el.classList.add('revealed'));
+  playCorrectSound();
+}
+
+function hideAllBlanks() {
+  document.querySelectorAll('.blank-word').forEach(el => el.classList.remove('revealed'));
 }
 
 // Scramble Interaction Logic
