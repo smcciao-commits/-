@@ -771,10 +771,45 @@ if ('caches' in window) {
     for (var name of names) caches.delete(name);
   });
 }
-function forceAppRefresh() {
+function forceAppRefresh(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  var btn = document.getElementById('btn_app_refresh') || (e ? e.target : null);
+  if (btn) {
+    btn.innerHTML = '⏳ 갱신 중...';
+    btn.style.opacity = '0.7';
+  }
+  
+  var toast = document.createElement('div');
+  toast.id = 'refresh_toast';
+  toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0f172a;color:#ffffff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:700;z-index:9999999;box-shadow:0 10px 25px rgba(0,0,0,0.35);display:flex;align-items:center;gap:8px;border:1.5px solid #10b981;';
+  toast.innerHTML = '<span>🔄</span> <span>최신 버전으로 새로고침하고 있습니다...</span>';
+  document.body.appendChild(toast);
+
+  var unregisterPromise = Promise.resolve();
+  if ('serviceWorker' in navigator) {
+    unregisterPromise = navigator.serviceWorker.getRegistrations().then(function(regs) {
+      return Promise.all(regs.map(function(reg) { return reg.unregister(); }));
+    }).catch(function(err){ console.log(err); });
+  }
+
+  var cachePromise = Promise.resolve();
   if ('caches' in window) {
-    caches.keys().then(function(names) {
+    cachePromise = caches.keys().then(function(names) {
       return Promise.all(names.map(function(name) { return caches.delete(name); }));
+    }).catch(function(err){ console.log(err); });
+  }
+
+  try { sessionStorage.clear(); } catch(err){}
+
+  Promise.all([unregisterPromise, cachePromise]).then(function() {
+    setTimeout(function() {
+      var cleanUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+      window.location.replace(cleanUrl + '?v=' + Date.now());
+    }, 350);
+  });
+}
+
+));
     }).then(function() {
       window.location.reload(true);
     });
@@ -1511,7 +1546,7 @@ function playFanfareSound(){
 
 function topBar(title, backFn){
   var snd = isSoundOn() ? '🔊' : '🔇';
-  return '<div class="top"><button class="back" id="back">← 뒤로</button><div class="grow"><div class="title">'+esc(title)+'</div></div><button class="sound-toggle" onclick="forceAppRefresh()" title="최신 버전으로 새로고침" style="margin-right:6px;">🔄</button><button class="sound-toggle" id="btn_sound_toggle" title="효과음 켜기/끄기">'+snd+'</button></div>';
+  return '<div class="top"><button class="back" id="back">← 뒤로</button><div class="grow"><div class="title">'+esc(title)+'</div></div><button class="sound-toggle" id="btn_app_refresh" onclick="forceAppRefresh(event)" title="최신 버전으로 새로고침" style="margin-right:6px;">🔄</button><button class="sound-toggle" id="btn_sound_toggle" title="효과음 켜기/끄기">'+snd+'</button></div>';
 }
 function bindBack(fn){ var b=$('#back'); if(b) b.onclick=fn; }
 var timer0=0; function startClock(){ timer0=Date.now(); } function secs(){ return Math.round((Date.now()-timer0)/1000); }
@@ -1883,7 +1918,7 @@ function openReadingApp() {
 function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ if (s.type==='문제') return s.progress.test===null||s.progress.test===undefined; return !getWordSetCompletion(s).isComplete; }).length;
-  var html='<div style="display:flex;justify-content:space-between;align-items:center;"><h1>'+esc(me.name)+' 안녕! 👋</h1><button onclick="forceAppRefresh()" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1.5px solid #14b8a6;padding:6px 12px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">🔄 최신 새로고침</button></div><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;"><h1>'+esc(me.name)+' 안녕! 👋</h1><button id="btn_app_refresh" onclick="forceAppRefresh(event)" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1.5px solid #14b8a6;padding:6px 12px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">🔄 최신 새로고침</button></div><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
   html += drawStudentInAppNoteCard(me.name);
   html += drawSpecialHwCard(me.ban);
 

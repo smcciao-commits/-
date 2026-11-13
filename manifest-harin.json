@@ -1,9 +1,10 @@
 {
-  "name": "하린이 공부 습관 플래너",
+  "id": "topedu-harin-planner",
+  "name": "하린이 공부 플래너",
   "short_name": "하린플래너",
   "description": "하린이의 주간 공부 스케줄 & 닥달 코치 앱",
-  "start_url": "./harin.html",
-  "scope": "./",
+  "start_url": "./harin.html?app=harin",
+  "scope": "./harin.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
