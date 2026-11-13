@@ -2057,6 +2057,30 @@ window.addEventListener('DOMContentLoaded', function() {
   updateAlarmUI();
   updateSpeedUI();
   startAlarmTimer();
+
+  // URL query parameter routing (?step=2&series=handinhand&unit=5&type=conv)
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var sSeries = params.get('series');
+    var sType = params.get('type');
+    var sUnit = parseInt(params.get('unit') || '0', 10);
+    var sStep = parseInt(params.get('step') || '0', 10);
+
+    if (sSeries && (sSeries === 'handinhand' || sSeries === 'ort' || sSeries === 'insight')) {
+      currentVideoSeries = sSeries;
+    }
+    if (sType && (sType === 'conv' || sType === 'song')) {
+      currentHihType = sType;
+    }
+    if (sUnit > 0 && currentVideoSeries === 'handinhand') {
+      activeItemIndices['handinhand'] = Math.max(0, Math.min(11, sUnit - 1));
+    }
+    if (sStep >= 1 && sStep <= 4) {
+      setStep(sStep);
+    } else {
+      selectVideoItem(currentVideoSeries, activeItemIndices[currentVideoSeries]);
+    }
+  } catch(e) {}
 });
 
 function initDayChips() {
@@ -2121,9 +2145,93 @@ function replayYoutubeVideo() {
 /* Datasets for 3 Major Textbook Series */
 var HANDINHAND_SERIES_VIDEOS = [
   {
+    "unitNum": 1,
+    "id": "1bz9Xqb528I",
+    "chipLabel": "Unit 01 동물달리기",
+    "title": "📘 Hand in Hand 5 - Unit 01: Animals & Running (동물과 달리기)",
+    "sub": "가젤과 동물 친구들이 드넓은 초원에서 신나게 달려요!",
+    "shadow": [
+      {
+        "sentence": "The gazelle runs very fast across the grass.",
+        "ko": "가젤은 풀밭을 가로질러 아주 빠르게 달려요."
+      },
+      {
+        "sentence": "Which animal is the fastest in the world?",
+        "ko": "세상에서 어떤 동물이 가장 빠를까요?"
+      },
+      {
+        "sentence": "Look at the animals running together happily.",
+        "ko": "행복하게 함께 달리는 동물들을 보세요."
+      }
+    ]
+  },
+  {
+    "unitNum": 2,
+    "id": "f2Y4lHN6soY",
+    "chipLabel": "Unit 02 옷과쇼핑",
+    "title": "📘 Hand in Hand 5 - Unit 02: Clothes & Shopping (옷과 쇼핑)",
+    "sub": "새 옷과 신발을 입어보고 나에게 꼭 맞는 옷을 찾아요!",
+    "shadow": [
+      {
+        "sentence": "These new shoes are a little too tight for me.",
+        "ko": "이 새 신발은 나에게 약간 너무 꽉 끼어요."
+      },
+      {
+        "sentence": "Can I try on a bigger size, please?",
+        "ko": "더 큰 사이즈로 한번 입어봐도 될까요?"
+      },
+      {
+        "sentence": "This blue jacket fits me perfectly!",
+        "ko": "이 파란색 재킷이 나에게 딱 맞아요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 3,
+    "id": "cLaheuvXVvY",
+    "chipLabel": "Unit 03 학교음악회",
+    "title": "📘 Hand in Hand 5 - Unit 03: School Concert (학교 음악회)",
+    "sub": "친구들과 멋진 악기를 연주하며 음악회를 준비해요!",
+    "shadow": [
+      {
+        "sentence": "We are practicing songs for the school concert.",
+        "ko": "우리는 학교 음악회를 위해 노래를 연습하고 있어요."
+      },
+      {
+        "sentence": "She plays the violin very well on the stage.",
+        "ko": "그녀는 무대 위에서 바이올린을 아주 잘 연주해요."
+      },
+      {
+        "sentence": "Everyone clapped and cheered for our performance.",
+        "ko": "모두가 우리 공연에 박수를 치고 환호했어요."
+      }
+    ]
+  },
+  {
+    "unitNum": 4,
+    "id": "1RaIZ5Rotq8",
+    "chipLabel": "Unit 04 야구경기",
+    "title": "📘 Hand in Hand 5 - Unit 04: Baseball & Sports (야구와 스포츠)",
+    "sub": "타석에 서서 멋진 홈런을 치고 야구 경기를 즐겨요!",
+    "shadow": [
+      {
+        "sentence": "Matt is at bat, and everyone is watching him.",
+        "ko": "맷이 타석에 들어섰고, 모두가 그를 지켜보고 있어요."
+      },
+      {
+        "sentence": "Hit the baseball hard toward the outfield!",
+        "ko": "야구공을 외야 쪽으로 강하게 치세요!"
+      },
+      {
+        "sentence": "It is a home run, and the crowd goes wild!",
+        "ko": "홈런이에요, 관중들이 열광해요!"
+      }
+    ]
+  },
+  {
     "unitNum": 5,
     "id": "4Myovaplq4Y",
-    "chipLabel": "Unit 05 운동회",
+    "chipLabel": "Unit 05 운동회 (추천)",
     "title": "📘 Hand in Hand 5 - Unit 05: School Field Day (운동회 날)",
     "sub": "운동회 날 친구들과 이어달리기를 하고 훌라후프를 돌려요!",
     "shadow": [
@@ -2289,6 +2397,262 @@ var HANDINHAND_SERIES_VIDEOS = [
     ]
   }
 ];
+
+var HANDINHAND_SONG_VIDEOS = [
+  {
+    "unitNum": 1,
+    "id": "vjg6C8V2tw8",
+    "chipLabel": "Song 01 가젤노래",
+    "title": "🎵 Hand in Hand 5 - Unit 01 Song: Run! Run! Gazelle! (가젤의 달리기 노래)",
+    "sub": "신나는 리듬에 맞춰 가젤과 함께 초원을 달리는 챈트 송!",
+    "shadow": [
+      {
+        "sentence": "Run, run, gazelle! Run across the grass!",
+        "ko": "달려라, 가젤! 풀밭을 가로질러 달려라!"
+      },
+      {
+        "sentence": "Can you run faster than a cheetah?",
+        "ko": "치타보다 더 빠르게 달릴 수 있니?"
+      },
+      {
+        "sentence": "Yes, I can run very fast!",
+        "ko": "응, 나는 아주 빠르게 달릴 수 있어!"
+      }
+    ]
+  },
+  {
+    "unitNum": 2,
+    "id": "cspMSyof5Gw",
+    "chipLabel": "Song 02 꽉끼는신발",
+    "title": "🎵 Hand in Hand 5 - Unit 02 Song: Too Tight? (신발이 너무 꽉 끼나요?)",
+    "sub": "신발이 꼭 맞는지 확인하며 노래하는 신나는 패션 챈트!",
+    "shadow": [
+      {
+        "sentence": "Are your new shoes too tight?",
+        "ko": "새 신발이 너무 꽉 끼니?"
+      },
+      {
+        "sentence": "No, they are just right for me!",
+        "ko": "아니요, 저에게 딱 맞아요!"
+      },
+      {
+        "sentence": "I like my brand new sneakers!",
+        "ko": "나는 내 새 운동화가 마음에 들어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 3,
+    "id": "LSOQj3PTJ7U",
+    "chipLabel": "Song 03 학교음악회",
+    "title": "🎵 Hand in Hand 5 - Unit 03 Song: School Concert (학교 음악회 노래)",
+    "sub": "악기를 연주하며 음악회에 모두를 초대하는 멜로디!",
+    "shadow": [
+      {
+        "sentence": "Come to our joyful school concert!",
+        "ko": "우리의 즐거운 학교 음악회에 오세요!"
+      },
+      {
+        "sentence": "Listen to the sweet sound of music.",
+        "ko": "아름다운 음악 소리를 들어보세요."
+      },
+      {
+        "sentence": "We can sing and play instruments together.",
+        "ko": "우리는 함께 노래하고 악기를 연주할 수 있어요."
+      }
+    ]
+  },
+  {
+    "unitNum": 4,
+    "id": "FAd-leQiL40",
+    "chipLabel": "Song 04 야구경기",
+    "title": "🎵 Hand in Hand 5 - Unit 04 Song: Matt at Bat (타석에 선 맷)",
+    "sub": "야구 배트를 휘두르고 베이스를 달리는 신나는 야구 송!",
+    "shadow": [
+      {
+        "sentence": "Matt is at bat, swing the bat high!",
+        "ko": "맷이 타석에 섰어요, 배트를 높이 휘둘러요!"
+      },
+      {
+        "sentence": "He hit the ball into the blue sky.",
+        "ko": "그는 파란 하늘 높이 공을 쳤어요."
+      },
+      {
+        "sentence": "Run to first base, run to home plate!",
+        "ko": "1루로 달려라, 홈플레이트로 달려라!"
+      }
+    ]
+  },
+  {
+    "unitNum": 5,
+    "id": "HaEfanCkjeM",
+    "chipLabel": "Song 05 훌라후프 (추천)",
+    "title": "🎵 Hand in Hand 5 - Unit 05 Song: How to Hula Hoop (훌라후프 돌리는 법)",
+    "sub": "운동회 날 훌라후프를 떨어뜨리지 않고 신나게 돌리는 댄스 챈트!",
+    "shadow": [
+      {
+        "sentence": "How to hula hoop, spin it around your waist!",
+        "ko": "훌라후프 돌리는 법, 허리 주위로 돌려봐!"
+      },
+      {
+        "sentence": "Keep it going, do not let it drop!",
+        "ko": "계속 돌려봐, 떨어뜨리지 마!"
+      },
+      {
+        "sentence": "Hula hooping is so much fun on field day!",
+        "ko": "운동회 날 훌라후프 돌리기는 정말 신나요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 6,
+    "id": "HcCtIgC3qbA",
+    "chipLabel": "Song 06 짐싸기송",
+    "title": "🎵 Hand in Hand 5 - Unit 06 Song: It is Time to Pack (짐 쌀 시간이야)",
+    "sub": "여행 가방에 필수품을 챙기며 노래하는 바캉스 송!",
+    "shadow": [
+      {
+        "sentence": "It is time to pack our bags for the trip.",
+        "ko": "여행 가방을 쌀 시간이에요."
+      },
+      {
+        "sentence": "Pack your sunglasses, swimsuit, and sandals.",
+        "ko": "선글라스, 수영복, 샌들을 챙기세요."
+      },
+      {
+        "sentence": "We are ready for an exciting journey!",
+        "ko": "우리는 신나는 여행을 떠날 준비가 됐어요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 7,
+    "id": "a2iG__uiISo",
+    "chipLabel": "Song 07 음식사양",
+    "title": "🎵 Hand in Hand 5 - Unit 07 Song: No, Thanks! (괜찮아요, 고마워요)",
+    "sub": "예의 바르게 사양하고 감사 인사를 전하는 에티켓 송!",
+    "shadow": [
+      {
+        "sentence": "Would you like some sweet cookies?",
+        "ko": "달콤한 쿠키 좀 드실래요?"
+      },
+      {
+        "sentence": "No, thanks! I am full right now.",
+        "ko": "괜찮아요, 고마워요! 지금은 배가 불러요."
+      },
+      {
+        "sentence": "Thank you for asking so politely.",
+        "ko": "예의 바르게 물어봐 줘서 고마워요."
+      }
+    ]
+  },
+  {
+    "unitNum": 8,
+    "id": "id9yslaAUKo",
+    "chipLabel": "Song 08 봄대청소",
+    "title": "🎵 Hand in Hand 5 - Unit 08 Song: Spring Cleaning (봄맞이 대청소 노래)",
+    "sub": "먼지를 털고 바닥을 닦으며 집안을 반짝반짝 만드는 청소 송!",
+    "shadow": [
+      {
+        "sentence": "Spring cleaning is here, let us tidy up!",
+        "ko": "봄맞이 대청소 시간이에요, 함께 정리해요!"
+      },
+      {
+        "sentence": "Dust the shelves and mop the clean floor.",
+        "ko": "선반의 먼지를 털고 깨끗한 바닥을 닦아요."
+      },
+      {
+        "sentence": "Working together makes our home shine!",
+        "ko": "함께 일하면 우리 집이 반짝반짝 빛나요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 9,
+    "id": "1cUTo3ekJhc",
+    "chipLabel": "Song 09 지하철송",
+    "title": "🎵 Hand in Hand 5 - Unit 09 Song: Subway to the Museum (박물관 지하철)",
+    "sub": "덜컹덜컹 지하철을 타고 박물관으로 향하는 경쾌한 교통 챈트!",
+    "shadow": [
+      {
+        "sentence": "Take the subway to the history museum!",
+        "ko": "지하철을 타고 역사 박물관으로 가요!"
+      },
+      {
+        "sentence": "Mind the doors and watch your step.",
+        "ko": "출입문을 조심하고 발밑을 보세요."
+      },
+      {
+        "sentence": "The train is moving fast on the track.",
+        "ko": "기차가 선로 위를 빠르게 달리고 있어요."
+      }
+    ]
+  },
+  {
+    "unitNum": 10,
+    "id": "zFWpW9s7Nw4",
+    "chipLabel": "Song 10 파티약속",
+    "title": "🎵 Hand in Hand 5 - Unit 10 Song: I Will Be There (꼭 갈게!)",
+    "sub": "친구의 소중한 생일 파티 초대에 꼭 가겠다고 부르는 우정 송!",
+    "shadow": [
+      {
+        "sentence": "Will you come to my party this weekend?",
+        "ko": "이번 주말 내 파티에 올 거니?"
+      },
+      {
+        "sentence": "Yes, I will be there on time!",
+        "ko": "응, 제시간에 꼭 갈게!"
+      },
+      {
+        "sentence": "We will celebrate and have a great time.",
+        "ko": "우리는 축하하며 멋진 시간을 보낼 거야."
+      }
+    ]
+  },
+  {
+    "unitNum": 11,
+    "id": "eULyS9IQr1Q",
+    "chipLabel": "Song 11 샌드위치",
+    "title": "🎵 Hand in Hand 5 - Unit 11 Song: Peanut Butter and Jelly Sandwiches (피넛버터 샌드위치)",
+    "sub": "빵에 잼을 바르고 맛있게 한 입 베어 무는 요리 챈트!",
+    "shadow": [
+      {
+        "sentence": "Peanut butter and jelly on sweet bread!",
+        "ko": "달콤한 식빵 위의 땅콩버터와 젤리!"
+      },
+      {
+        "sentence": "First you spread it, then you slice it.",
+        "ko": "먼저 펴 바르고, 그다음 잘라요."
+      },
+      {
+        "sentence": "It is the best snack for lunch!",
+        "ko": "점심으로 먹기 가장 좋은 최고의 간식이에요!"
+      }
+    ]
+  },
+  {
+    "unitNum": 12,
+    "id": "Q7Zgnk_P5dU",
+    "chipLabel": "Song 12 오감의노래",
+    "title": "🎵 Hand in Hand 5 - Unit 12 Song: Five Senses! (오감의 노래)",
+    "sub": "보고 듣고 느끼며 세상을 배우는 신나는 오감 총정리 피날레 송!",
+    "shadow": [
+      {
+        "sentence": "I see, I hear, I smell, I taste, I touch.",
+        "ko": "나는 보고, 듣고, 냄새 맡고, 맛보고, 만져요."
+      },
+      {
+        "sentence": "Our five senses tell us all about the world.",
+        "ko": "우리의 오감은 세상에 대한 모든 것을 알려줘요."
+      },
+      {
+        "sentence": "Use your senses every single day!",
+        "ko": "매일매일 너의 감각들을 사용해 봐!"
+      }
+    ]
+  }
+];
+
 var ORT4_SERIES_VIDEOS = [
   {
     "bookNum": 1,
@@ -2891,11 +3255,12 @@ var INSIGHT_SERIES_VIDEOS = {
 };
 
 var currentVideoSeries = 'handinhand'; // 'handinhand' | 'ort' | 'insight'
+var currentHihType = 'conv';           // 'conv' | 'song'
 var currentOrtLevel = 'ort5';         // 'ort5' | 'ort4'
 var currentInsightLevel = 'l1';       // 'l1' | 'l2' | 'l3'
 
 var activeItemIndices = {
-  'handinhand': 0,
+  'handinhand': 4, // default to Unit 5 (0-indexed 4: School Field Day)
   'ort': 0,
   'insight': 0
 };
@@ -2907,6 +3272,13 @@ function switchVideoSeries(series) {
   renderVideoSeriesUI();
   var idx = activeItemIndices[series] || 0;
   selectVideoItem(series, idx);
+}
+
+function switchHihType(type) {
+  currentHihType = type;
+  renderVideoSeriesUI();
+  var idx = activeItemIndices['handinhand'] || 0;
+  selectVideoItem('handinhand', idx);
 }
 
 function switchOrtLevel(lvl) {
@@ -2966,18 +3338,25 @@ function renderVideoSeriesUI() {
   var currentIdx = activeItemIndices[currentVideoSeries] || 0;
 
   if (currentVideoSeries === 'handinhand') {
-    if (badge) badge.textContent = 'Unit 5~12 (총 8개 단원 완비)';
-    subControls.innerHTML = '<div style="font-size:11.5px;color:#1e40af;font-weight:700;display:flex;align-items:center;gap:4px;">' +
-      '<span>🏃</span> <span>e-future 공식 애니메이션 & 실전 회화 쉐도잉</span>' +
-      '</div>';
+    var isSong = (currentHihType === 'song');
+    if (badge) badge.textContent = isSong ? '노래·챈트 (Unit 1~12 전편)' : '회화 애니메이션 (Unit 1~12 전편)';
+    subControls.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">' +
+      '<div style="display:flex;gap:6px;">' +
+        '<button onclick="switchHihType(\'conv\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #2563eb;background:' + (!isSong ? '#2563eb' : 'white') + ';color:' + (!isSong ? 'white' : '#2563eb') + ';font-weight:700;">💬 회화 애니메이션</button>' +
+        '<button onclick="switchHihType(\'song\')" style="font-size:11.5px;padding:5px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #ec4899;background:' + (isSong ? '#ec4899' : 'white') + ';color:' + (isSong ? 'white' : '#ec4899') + ';font-weight:700;">🎵 노래·챈트 (12곡)</button>' +
+      '</div>' +
+      '<div style="font-size:11px;color:#6b7280;font-weight:600;">e-future 공식</div>' +
+    '</div>';
 
-    chipsContainer.innerHTML = HANDINHAND_SERIES_VIDEOS.map(function(item, idx) {
+    var hihList = (isSong ? HANDINHAND_SONG_VIDEOS : HANDINHAND_SERIES_VIDEOS);
+    chipsContainer.innerHTML = hihList.map(function(item, idx) {
       var isActive = (idx === currentIdx);
-      var border = isActive ? '2px solid #2563eb' : '1px solid #bfdbfe';
-      var bg = isActive ? '#2563eb' : '#eff6ff';
-      var color = isActive ? 'white' : '#1e3a8a';
+      var activeBg = isSong ? '#ec4899' : '#2563eb';
+      var border = isActive ? ('2px solid ' + activeBg) : (isSong ? '#fbcfe8' : '#bfdbfe');
+      var bg = isActive ? activeBg : (isSong ? '#fdf2f8' : '#eff6ff');
+      var color = isActive ? 'white' : (isSong ? '#be185d' : '#1e3a8a');
       var weight = isActive ? '700' : '600';
-      return '<button class="series-chip" onclick="selectVideoItem(\'handinhand\', ' + idx + ')" style="font-size:12px;padding:7px 11px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? '0 2px 6px rgba(37,99,235,0.3)' : 'none') + ';">' +
+      return '<button class="series-chip" onclick="selectVideoItem(\'handinhand\', ' + idx + ')" style="font-size:12px;padding:7px 11px;border-radius:8px;cursor:pointer;border:' + border + ';background:' + bg + ';color:' + color + ';font-weight:' + weight + ';box-shadow:' + (isActive ? ('0 2px 6px ' + (isSong ? 'rgba(236,72,153,0.35)' : 'rgba(37,99,235,0.3)')) : 'none') + ';">' +
         item.chipLabel + '</button>';
     }).join('');
 
@@ -3033,7 +3412,8 @@ function selectVideoItem(series, idx) {
   var item = null;
 
   if (series === 'handinhand') {
-    item = HANDINHAND_SERIES_VIDEOS[idx];
+    var hList = (currentHihType === 'song' ? HANDINHAND_SONG_VIDEOS : HANDINHAND_SERIES_VIDEOS);
+    item = hList[idx] || hList[0];
   } else if (series === 'ort') {
     var list = getOrtListForCurrentLevel();
     item = list[idx];
