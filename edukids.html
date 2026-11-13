@@ -1452,7 +1452,19 @@
       50% { transform: translateY(-8px); }
     }
   </style>
-<script src="https://www.youtube.com/iframe_api"></script>
+<script src="https://www.youtube.com/iframe_api">function forceAppRefresh() {
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      return Promise.all(names.map(function(name) { return caches.delete(name); }));
+    }).then(function() {
+      window.location.reload(true);
+    });
+  } else {
+    window.location.reload(true);
+  }
+}
+
+</script>
 </head>
 <body>
 
@@ -1461,10 +1473,10 @@
   <div class="top-nav">
     <div class="nav-top-row">
       <button class="btn-back-home" onclick="location.href='index.html'">
-        <span>←</span> <span>탑에듀 단어앱 홈</span>
+        <span>←</span> <span>단어앱 홈</span>
       </button>
-      <div class="badge-class">🎒 초등 에듀키즈 👑</div>
-      <button onclick="openQrAudioModal()" style="background:#2563eb;color:white;font-size:12px;padding:6px 10px;border:none;border-radius:8px;cursor:pointer;font-weight:700">🎧 교재 QR 음원</button>
+      <button onclick="forceAppRefresh()" style="background:linear-gradient(135deg, #10b981, #059669);color:white;font-size:12.5px;padding:6px 12px;border:none;border-radius:10px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(16,185,129,0.28);">🔄 최신 새로고침</button>
+      <button onclick="openQrAudioModal()" style="background:#2563eb;color:white;font-size:12px;padding:6px 10px;border:none;border-radius:8px;cursor:pointer;font-weight:700">🎧 교재 QR</button>
     </div>
 
     <div class="nav-row">

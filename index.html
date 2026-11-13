@@ -771,6 +771,18 @@ if ('caches' in window) {
     for (var name of names) caches.delete(name);
   });
 }
+function forceAppRefresh() {
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      return Promise.all(names.map(function(name) { return caches.delete(name); }));
+    }).then(function() {
+      window.location.reload(true);
+    });
+  } else {
+    window.location.reload(true);
+  }
+}
+
 </script>
 </head>
 <body>
@@ -1499,7 +1511,7 @@ function playFanfareSound(){
 
 function topBar(title, backFn){
   var snd = isSoundOn() ? '🔊' : '🔇';
-  return '<div class="top"><button class="back" id="back">← 뒤로</button><div class="grow"><div class="title">'+esc(title)+'</div></div><button class="sound-toggle" id="btn_sound_toggle" title="효과음 켜기/끄기">'+snd+'</button></div>';
+  return '<div class="top"><button class="back" id="back">← 뒤로</button><div class="grow"><div class="title">'+esc(title)+'</div></div><button class="sound-toggle" onclick="forceAppRefresh()" title="최신 버전으로 새로고침" style="margin-right:6px;">🔄</button><button class="sound-toggle" id="btn_sound_toggle" title="효과음 켜기/끄기">'+snd+'</button></div>';
 }
 function bindBack(fn){ var b=$('#back'); if(b) b.onclick=fn; }
 var timer0=0; function startClock(){ timer0=Date.now(); } function secs(){ return Math.round((Date.now()-timer0)/1000); }
@@ -1871,7 +1883,7 @@ function openReadingApp() {
 function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ if (s.type==='문제') return s.progress.test===null||s.progress.test===undefined; return !getWordSetCompletion(s).isComplete; }).length;
-  var html='<h1>'+esc(me.name)+' 안녕! 👋</h1><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;"><h1>'+esc(me.name)+' 안녕! 👋</h1><button onclick="forceAppRefresh()" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1.5px solid #14b8a6;padding:6px 12px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">🔄 최신 새로고침</button></div><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
   html += drawStudentInAppNoteCard(me.name);
   html += drawSpecialHwCard(me.ban);
 
