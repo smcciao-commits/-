@@ -928,6 +928,48 @@ function generateBattleQs(ban, dir, setNames) {
   }).filter(function(q) { return q.o.length === 4; });
 }
 
+
+/* ============ 학생 학습 진도 & 점수 영구 저장소 (초기화 방지 엔진) ============ */
+function getStudentProgressDB(ban, name){
+  try {
+    var k = 'topedu_prog_' + (ban || '') + '_' + (name || '');
+    var raw = localStorage.getItem(k);
+    return raw ? JSON.parse(raw) : {};
+  } catch(e){ return {}; }
+}
+
+function saveStudentProgressDB(ban, name, setName, mode, score){
+  if (!setName) return;
+  try {
+    var k = 'topedu_prog_' + (ban || '') + '_' + (name || '');
+    var db = getStudentProgressDB(ban, name);
+    db[setName] = db[setName] || { modes: {}, test: null, updatedAt: Date.now() };
+    db[setName].modes = db[setName].modes || {};
+    db[setName].modes[mode] = Math.max(db[setName].modes[mode] || 0, score);
+    if (mode === '테스트') {
+      db[setName].test = Math.max(db[setName].test == null ? -1 : db[setName].test, score);
+    }
+    db[setName].updatedAt = Date.now();
+    localStorage.setItem(k, JSON.stringify(db));
+
+    // 교사용 전체 기록 대시보드 동기화
+    var gKey = 'topedu_all_records';
+    var gRaw = localStorage.getItem(gKey);
+    var gList = gRaw ? JSON.parse(gRaw) : [];
+    gList.unshift({
+      ban: ban || '',
+      name: name || '학생',
+      setName: setName,
+      mode: mode,
+      score: score,
+      time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+      date: new Date().toLocaleDateString('ko-KR')
+    });
+    if (gList.length > 200) gList = gList.slice(0, 200);
+    localStorage.setItem(gKey, JSON.stringify(gList));
+  } catch(e){}
+}
+
 function mockCall(fn, args) {
   if (fn === 'getClasses') {
     return { classes: ['초5', '수지중2', '홍천고1', '예비고1', '수지중1', '풍덕초6', '한빛중2', '현암고1', '현암고2', '수지고2', '죽전고2', '선생님'] };
@@ -992,11 +1034,12 @@ function mockCall(fn, args) {
       var target = (!Array.isArray(sData) && sData.target) ? sData.target : (sName.indexOf('하린') >= 0 || sName.indexOf('ORT') >= 0 || sName.indexOf('Hand') >= 0 || sName.indexOf('Insight') >= 0 ? '초5' : '전체');
       var targets = target.split(/[,，\/]/).map(function(x) { return x.trim(); });
       if (target === '전체' || targets.indexOf(ban) >= 0 || sName.indexOf(ban) >= 0) {
+        var sp = getStudentProgressDB(ban, name);
         sets.push({
           type: '단어',
           name: sName,
           count: wList.length,
-          progress: { modes: {}, test: null }
+          progress: sp[sName] || { modes: {}, test: null }
         });
       }
     }
@@ -1046,8 +1089,13 @@ function mockCall(fn, args) {
     return STANDALONE_WORDS[setName] || STANDALONE_WORDS['예시 단어 세트'];
   }
   if (fn === 'submitWord') {
+    var cred = args[0] || {};
+    var setName = args[1] || '';
+    var mode = args[2] || '';
     var correct = args[3], total = args[4];
-    return { score: Math.round((correct / (total || 1)) * 100) };
+    var score = Math.round((correct / (total || 1)) * 100);
+    saveStudentProgressDB(cred.ban, cred.name, setName, mode, score);
+    return { score: score };
   }
 
   /* ===== 단어 대결 (배틀) v58 실시간 엔진 ===== */
@@ -1505,20 +1553,31 @@ function addDirectorNoticeLog(type, title, body, sender){
 function sendDirectorPushNotification(title, body, tag){
   addDirectorNoticeLog(tag || 'notice', title, body);
 
-  // 1. ntfy.sh Mobile & Lock Screen Push (사진 속 상단바 푸시 알림)
+  // 1. ntfy.sh UTF-8 JSON POST (한글 완벽 지원, 모바일 잠금화면 실시간 푸시)
   try {
-    fetch('https://ntfy.sh/' + TOPEDU_NTFY_DIRECTOR, {
+    fetch('https://ntfy.sh', {
       method: 'POST',
-      headers: {
-        'Title': title,
-        'Priority': 'urgent',
-        'Tags': tag === 'study' ? 'tada,trophy,star' : 'envelope,speech_balloon'
-      },
-      body: body
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        topic: TOPEDU_NTFY_DIRECTOR,
+        title: title,
+        message: body,
+        priority: 4,
+        tags: tag === 'study' ? ['tada', 'trophy'] : ['envelope', 'speech_balloon']
+      })
     }).catch(function(){});
   } catch(e){}
 
-  // 2. Web Notifications API (브라우저 상단 알림 팝업)
+  // 2. text/plain UTF-8 2차 안전망 전송
+  try {
+    fetch('https://ntfy.sh/' + TOPEDU_NTFY_DIRECTOR, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      body: title + '\n' + body
+    }).catch(function(){});
+  } catch(e){}
+
+  // 3. Web Notifications API (브라우저 상단 알림 팝업)
   try {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(title, {
@@ -1528,7 +1587,7 @@ function sendDirectorPushNotification(title, body, tag){
     }
   } catch(e){}
 
-  // 3. Vibration if supported
+  // 4. Vibration if supported
   try {
     if (navigator.vibrate) navigator.vibrate([150, 80, 150]);
   } catch(e){}
@@ -1831,6 +1890,7 @@ function showWordMenu(){
 }
 function finish(mode,label,correct,total,wrong,extra){
   var sec=secs();
+  saveStudentProgressDB(S.cred.ban, S.cred.name, W.set.name, mode, Math.round((correct/(total||1))*100));
   call('submitWord',S.cred,W.set.name,mode,correct,total,wrong,sec).then(function(r){
     W.set.progress=W.set.progress||{modes:{},test:null};
     W.set.progress.modes[mode]=Math.max(W.set.progress.modes[mode]||0,r.score);
@@ -1966,7 +2026,10 @@ function coloredSpeechHTML(res) {
 var ACTIVE_REC = null;
 function listenAndScore(targetText, btnEl, resEl, onPass) {
   if (!SR) {
-    alert("이 브라우저는 음성 인식을 지원하지 않습니다. 크롬(Chrome)이나 사파리(Safari), 엣지(Edge)에서 이용해 주세요.");
+    resEl.innerHTML = '<div style="color:#b45309;background:#fef3c7;padding:10px 14px;border-radius:12px;font-size:13px;margin-top:8px;line-height:1.5;">' +
+      '💡 <b>안내:</b> 현재 브라우저(인앱/카톡 등)는 마이크 음성 인식이 지원되지 않습니다.<br>' +
+      '<b>[🔊 원어민 듣기]</b>로 들으신 뒤 아래 <b>[🗣️ 직접 소리 내어 읽었어요]</b>를 누르면 100점으로 통과됩니다! (크롬/사파리에서 마이크 지원)' +
+      '</div>';
     return;
   }
   if (ACTIVE_REC) {
@@ -1982,7 +2045,7 @@ function listenAndScore(targetText, btnEl, resEl, onPass) {
 
     btnEl.classList.add('recording');
     btnEl.innerHTML = '🔴 듣고 있어요... 말씀하세요!';
-    resEl.innerHTML = '<div style="color:#ff5c8a;font-size:13px;margin-top:6px;">마이크에 대고 영어로 또박또박 말씀해 보세요 🎙️</div>';
+    resEl.innerHTML = '<div style="color:#ff5c8a;font-size:13.5px;font-weight:700;margin-top:6px;">마이크에 대고 영어로 또박또박 말씀해 보세요 🎙️</div>';
 
     rec.onresult = function(e) {
       btnEl.classList.remove('recording');
@@ -2006,7 +2069,13 @@ function listenAndScore(targetText, btnEl, resEl, onPass) {
       btnEl.classList.remove('recording');
       btnEl.innerHTML = '🎤 따라 말하기 (발음 채점)';
       ACTIVE_REC = null;
-      resEl.innerHTML = '<div style="color:#c62828;font-size:13px;margin-top:6px;">마이크 권한을 허용했는지 확인해 주세요 (' + (e.error || '음성 인식 실패') + ')</div>';
+      var err = e.error || '';
+      var msg = '음성을 인식하지 못했어요.';
+      if (err === 'not-allowed') msg = '⚠️ 마이크 권한이 꺼져 있습니다. 브라우저 설정에서 마이크를 허용해 주세요.';
+      else if (err === 'no-speech') msg = '목소리가 잘 안 들렸어요. 마이크 가까이에서 조금 더 크게 읽어보세요.';
+      resEl.innerHTML = '<div style="color:#c62828;background:#fee2e2;padding:10px 14px;border-radius:12px;font-size:13px;margin-top:8px;line-height:1.5;">' +
+        msg + '<br><b style="color:#059669;">마이크 인식이 안 되면 아래 [🗣️ 직접 소리 내어 읽었어요]를 누르시면 100점으로 통과됩니다!</b>' +
+        '</div>';
     };
 
     rec.onend = function() {
@@ -2022,7 +2091,9 @@ function listenAndScore(targetText, btnEl, resEl, onPass) {
     btnEl.classList.remove('recording');
     btnEl.innerHTML = '🎤 따라 말하기 (발음 채점)';
     ACTIVE_REC = null;
-    resEl.innerHTML = '<div style="color:#c62828;font-size:13px;margin-top:6px;">음성 인식 시작 실패: ' + err + '</div>';
+    resEl.innerHTML = '<div style="color:#c62828;background:#fee2e2;padding:10px 14px;border-radius:12px;font-size:13px;margin-top:8px;line-height:1.5;">' +
+      '마이크 실행 오류: ' + err + '<br><b style="color:#059669;">아래 [🗣️ 직접 소리 내어 읽었어요]를 눌러 바로 통과하세요!</b>' +
+      '</div>';
   }
 }
 
@@ -2090,6 +2161,11 @@ function runSpeak(words) {
         '<div class="speak-box" style="margin-top:16px;">' +
           '<button class="btn-speak" id="btn_mic">🎤 마이크 누르고 따라 말하기</button>' +
           '<div id="spk_eval_res" style="min-height:40px;"></div>' +
+          '<div style="margin-top:12px;">' +
+            '<button class="btn ghost" id="btn_self_pass" style="width:100%;padding:10px 14px;font-size:14px;color:#059669;border:2px solid #10b981;background:#ecfdf5;font-weight:700;border-radius:12px;cursor:pointer">' +
+              '🗣️ 소리 내어 직접 읽었어요 (100점 통과) 👍' +
+            '</button>' +
+          '</div>' +
         '</div>' +
       '</div>' +
       '<div class="row">' +
@@ -2108,13 +2184,27 @@ function runSpeak(words) {
       stopSpeak();
       listenAndScore(c.w, bMic, rEval, function(score) {
         passedScores[c.w] = score;
-        rEval.innerHTML += '<div style="color:#2e7d32;font-size:14px;font-weight:bold;margin-top:8px;">🎉 통과! 1.5초 후 다음 단어로 넘어갑니다!</div>';
+        rEval.innerHTML += '<div style="color:#2e7d32;font-size:14px;font-weight:bold;margin-top:8px;">🎉 통과! 1.2초 후 다음 단어로 넘어갑니다!</div>';
         setTimeout(function() {
           idx++;
           draw();
-        }, 1500);
+        }, 1200);
       });
     };
+
+    var bSelfPass = $('#btn_self_pass');
+    if (bSelfPass) {
+      bSelfPass.onclick = function() {
+        stopSpeak();
+        playCorrectSound();
+        passedScores[c.w] = 100;
+        rEval.innerHTML = '<div style="color:#059669;font-size:15px;font-weight:bold;margin-top:8px;">👏 큰 소리로 잘 읽었어요! (100점 완료)</div>';
+        setTimeout(function() {
+          idx++;
+          draw();
+        }, 800);
+      };
+    }
 
     $('#btn_spk_prev').onclick = function() {
       stopSpeak();
@@ -2543,6 +2633,7 @@ function showAdmin(){
         '학생이 쪽지를 보내거나 단어 학습을 100% 완료했을 때 원장님 스마트폰 상단바/잠금화면에 실시간으로 알림이 뜹니다.' +
       '</div>' +
       '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">' +
+        '<button id="btn_sync_ntfy_notes" onclick="showAdmin();" style="background:#059669;color:white;border:none;border-radius:10px;padding:10px 14px;font-weight:700;font-size:13px;cursor:pointer">🔄 학생 쪽지 실시간 새로고침</button>' +
         '<button id="btn_req_notif" style="background:#7c4dff;color:white;border:none;border-radius:10px;padding:10px 14px;font-weight:700;font-size:13px;cursor:pointer">🔔 1초 브라우저 알림 켜기</button>' +
         '<a href="https://ntfy.sh/' + TOPEDU_NTFY_DIRECTOR + '" target="_blank" style="text-decoration:none;background:#2563eb;color:white;border-radius:10px;padding:10px 14px;font-weight:700;font-size:13px;display:inline-block">📲 ntfy 스마트폰 잠금화면 채널 열기</a>' +
         '<button id="btn_toggle_praise" style="background:' + (isAiPraise?'#059669':'#64748b') + ';color:white;border:none;border-radius:10px;padding:10px 14px;font-weight:700;font-size:13px;cursor:pointer">' +
@@ -2571,6 +2662,42 @@ function showAdmin(){
     '</div>';
 
     app.innerHTML = html + '<div id="aout">' + hHtml + '</div>';
+    if(A.tab === 'alerts'){
+      // 학생 쪽지 실시간 ntfy 서버 수집기
+      fetch('https://' + 'ntfy.sh/' + TOPEDU_NTFY_DIRECTOR + '/json?poll=1&since=7d')
+        .then(function(res){ return res.text(); })
+        .then(function(txt){
+          var lines = txt.trim().split('\n');
+          var changed = false;
+          var curLogs = getDirectorNoticesLog();
+          lines.forEach(function(l){
+            if(!l.trim()) return;
+            try {
+              var d = JSON.parse(l);
+              if(d.event === 'message'){
+                var msgTitle = d.title || '학생 쪽지';
+                var msgBody = d.message || '';
+                var already = curLogs.some(function(item){ return item.title === msgTitle && item.body === msgBody; });
+                if(!already){
+                  curLogs.unshift({
+                    type: (d.tags && d.tags.indexOf('trophy') >= 0) ? 'study' : 'note',
+                    title: msgTitle,
+                    body: msgBody,
+                    time: new Date(d.time * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+                    date: new Date(d.time * 1000).toLocaleDateString('ko-KR')
+                  });
+                  changed = true;
+                }
+              }
+            } catch(e){}
+          });
+          if(changed){
+            if(curLogs.length > 50) curLogs = curLogs.slice(0, 50);
+            localStorage.setItem('topedu_director_notices_log', JSON.stringify(curLogs));
+            showAdmin();
+          }
+        }).catch(function(){});
+    }
     $('#back').onclick = start;
     $('#bnew').onclick = showBattleSetup; var bl = $('#blive'); if(bl) bl.onclick = showLiveClassSetup;
     [].forEach.call(app.querySelectorAll('.tabs button'), function(b){ b.onclick = function(){ A.tab = b.dataset.t; showAdmin(); }; });
