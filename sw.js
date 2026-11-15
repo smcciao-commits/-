@@ -1,5 +1,5 @@
 // TOP EDU PWA Service Worker - Auto Cache Purge
-const CACHE_NAME = 'topedu-pwa-v76';
+const CACHE_NAME = 'topedu-pwa-v77';
 
 self.addEventListener('install', function(e) {
   self.skipWaiting();
