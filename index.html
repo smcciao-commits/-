@@ -1101,7 +1101,25 @@ function mockCall(fn, args) {
     return { students: TOPEDU_ALL_STUDENTS };
   }
   if (fn === 'adminDayReport') {
-    return { day: '2026-11-11', students: TOPEDU_ALL_STUDENTS };
+    var ban = args[1] || '';
+    var day = args[2] || new Date().toISOString().slice(0, 10);
+    var filtered = TOPEDU_ALL_STUDENTS.filter(function(st) {
+      return !ban || st.ban === ban;
+    }).map(function(st) {
+      var isDone = (st.status === 'done' || !!st.did);
+      return {
+        ban: st.ban,
+        name: st.name,
+        pw: st.pw,
+        status: st.status,
+        streak: st.streak,
+        score: st.score,
+        lastTime: st.lastTime,
+        did: isDone,
+        msg: st.msg || ('[' + st.name + '] 탑에듀 단어 학습 알림: 오늘 단어 학습이 아직 안 끝났어~ 자기 전에 10분만 꼭 완료하자!')
+      };
+    });
+    return { day: day, students: filtered };
   }
   if (fn === 'studentLogin') {
     var ban = args[0].ban, name = args[0].name;
