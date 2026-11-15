@@ -6875,7 +6875,6 @@ async function translateKoreanToEnglish(koText) {
   if (!clean) return '';
   if (JOY_OFFLINE_DICT[clean]) return JOY_OFFLINE_DICT[clean];
 
-  // 1) Primary: Google Translate public endpoint (fast & CORS-friendly)
   try {
     var gUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=en&dt=t&q=' + encodeURIComponent(clean);
     var res = await fetch(gUrl);
@@ -6888,7 +6887,6 @@ async function translateKoreanToEnglish(koText) {
     }
   } catch (e) {}
 
-  // 2) Secondary: MyMemory free translation API
   try {
     var mUrl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(clean) + '&langpair=ko|en';
     var mRes = await fetch(mUrl);
@@ -6899,7 +6897,6 @@ async function translateKoreanToEnglish(koText) {
     }
   } catch (e2) {}
 
-  // 3) Offline keyword fallback
   if (clean.indexOf('숙제') >= 0) return 'I did my homework today.';
   if (clean.indexOf('친구') >= 0) return 'I had fun with my friends today.';
   if (clean.indexOf('학교') >= 0) return 'Today at school was fun!';
@@ -6912,9 +6909,14 @@ function escapeHtmlAttr(str) {
   return String(str).replace(/&/g, '&amp;').replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function copyJoyAiText(encodedText, btnEl) {
-  var txt = decodeURIComponent(encodedText);
-  if (navigator.clipboard && navigator.clipboard.writeText) {
+function speakJoyAiBtn(btnEl) {
+  var txt = btnEl ? btnEl.getAttribute('data-en') : '';
+  if (txt) speakText(txt, 'en-US');
+}
+
+function copyJoyAiBtn(btnEl) {
+  var txt = btnEl ? btnEl.getAttribute('data-en') : '';
+  if (txt && navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(txt).catch(function(){});
   }
   if (btnEl) {
@@ -6954,7 +6956,7 @@ async function runJoyAiWriter() {
     if (!/[.!?]$/.test(enText)) enText += '.';
   }
 
-  var encEn = encodeURIComponent(enText);
+  var safeEn = escapeHtmlAttr(enText);
   var aiBubble = document.createElement('div');
   aiBubble.className = 'chat-bubble-row';
   aiBubble.innerHTML =
@@ -6962,10 +6964,10 @@ async function runJoyAiWriter() {
     '<div class="chat-msg cat">' +
       '<b>Minky 영작 AI:</b> 영어로 이렇게 말하면 딱 좋아! ✨' +
       '<div class="joy-ai-result-card">' +
-        '<div class="joy-ai-en-text">' + escapeHtmlAttr(enText) + '</div>' +
+        '<div class="joy-ai-en-text">' + safeEn + '</div>' +
         '<div class="joy-ai-action-row">' +
-          '<button type="button" class="joy-ai-mini-btn listen" onclick="speakText(decodeURIComponent('' + encEn + ''), 'en-US')">🔊 다시 듣기</button>' +
-          '<button type="button" class="joy-ai-mini-btn" onclick="copyJoyAiText('' + encEn + '', this)">📋 문장 복사</button>' +
+          '<button type="button" class="joy-ai-mini-btn listen" data-en="' + safeEn + '" onclick="speakJoyAiBtn(this)">🔊 다시 듣기</button>' +
+          '<button type="button" class="joy-ai-mini-btn" data-en="' + safeEn + '" onclick="copyJoyAiBtn(this)">📋 문장 복사</button>' +
         '</div>' +
       '</div>' +
       '<div style="font-size:11.5px; opacity:0.85; margin-top:4px;">조이 선생님께 소리 내어 말해 보자! Great job, Harin! 👍</div>' +
