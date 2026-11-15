@@ -2831,7 +2831,7 @@ function showAdmin(){
     app.innerHTML = html + '<div id="aout">' + hHtml + '</div>';
     if(A.tab === 'alerts'){
       // 학생 쪽지 실시간 ntfy 서버 수집기
-      fetch('https://' + 'ntfy.sh/' + TOPEDU_NTFY_DIRECTOR + '/json?poll=1&since=7d')
+      fetch('https://' + 'ntfy.sh/' + TOPEDU_NTFY_DIRECTOR + '/json?poll=1&since=all')
         .then(function(res){ return res.text(); })
         .then(function(txt){
           var lines = txt.trim().split('\n');
@@ -2842,8 +2842,14 @@ function showAdmin(){
             try {
               var d = JSON.parse(l);
               if(d.event === 'message'){
-                var msgTitle = d.title || '학생 쪽지';
+                var msgTitle = d.title || '';
                 var msgBody = d.message || '';
+                if(!msgTitle && msgBody.indexOf('\n') >= 0){
+                  var nlIdx = msgBody.indexOf('\n');
+                  msgTitle = msgBody.slice(0, nlIdx).trim();
+                  msgBody = msgBody.slice(nlIdx + 1).trim();
+                }
+                if(!msgTitle) msgTitle = '학생 쪽지';
                 var already = curLogs.some(function(item){ return item.title === msgTitle && item.body === msgBody; });
                 if(!already){
                   curLogs.unshift({
