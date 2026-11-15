@@ -1451,6 +1451,145 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
     }
+  
+    /* ============ JOY ENGLISH AI WRITER IN STEP 3 ============ */
+    .joy-ai-writer-box {
+      margin-top: 14px;
+      background: linear-gradient(135deg, #f5f3ff 0%, #ecfdf5 100%);
+      border: 2px solid #c4b5fd;
+      border-radius: 20px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.08);
+    }
+    .joy-ai-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .joy-ai-title {
+      font-family: 'Maplestory', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #5b21b6;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .joy-ai-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: #ddd6fe;
+      color: #5b21b6;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+    .joy-ai-desc {
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.45;
+    }
+    .joy-ai-quick-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .joy-ai-quick-chip {
+      background: #ffffff;
+      border: 1.5px solid #ddd6fe;
+      color: #6d28d9;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .joy-ai-quick-chip:active {
+      transform: scale(0.96);
+      background: #ede9fe;
+    }
+    .joy-ai-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .joy-ai-input {
+      flex: 1;
+      min-width: 0;
+      border: 2px solid #a78bfa;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      font-family: inherit;
+      background: #ffffff;
+      color: #1e293b;
+      outline: none;
+    }
+    .joy-ai-input:focus {
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14);
+    }
+    .joy-ai-btn {
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(109, 40, 217, 0.25);
+      transition: transform 0.15s;
+    }
+    .joy-ai-btn:active {
+      transform: scale(0.96);
+    }
+    .joy-ai-btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+    .joy-ai-result-card {
+      background: #ffffff;
+      border: 1.5px solid #a7f3d0;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-top: 6px;
+    }
+    .joy-ai-en-text {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+    .joy-ai-action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .joy-ai-mini-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .joy-ai-mini-btn.listen {
+      background: #d1fae5;
+      border-color: #6ee7b7;
+      color: #065f46;
+    }
+
   </style>
 <script src="https://www.youtube.com/iframe_api"></script>
 </head>
@@ -1775,6 +1914,27 @@
       <div class="reply-chips-wrap" id="replyChipsWrap">
         <!-- Option chips rendered by JS -->
       </div>
+
+      <div class="joy-ai-writer-box" id="joyAiWriterBox">
+        <div class="joy-ai-header">
+          <div class="joy-ai-title"><span>✨</span> <span>조이영어 영작 AI (한글 ➔ 영어)</span></div>
+          <span class="joy-ai-badge">화상수업 치트키 🐱</span>
+        </div>
+        <div class="joy-ai-desc">
+          조이영어 선생님께 하고 싶은 말을 한글로 써 봐! 밍키가 쉬운 영어 문장으로 바로 바꿔서 발음까지 들려줄게.
+        </div>
+        <div class="joy-ai-quick-row">
+          <button type="button" class="joy-ai-quick-chip" onclick="quickJoyAiWrite('오늘 급식 진짜 맛있었어!')">🍱 오늘 급식 맛있었어</button>
+          <button type="button" class="joy-ai-quick-chip" onclick="quickJoyAiWrite('학교에서 친구랑 피구했어!')">🏐 친구랑 피구했어</button>
+          <button type="button" class="joy-ai-quick-chip" onclick="quickJoyAiWrite('강아지랑 산책하고 왔어!')">🐶 강아지 산책했어</button>
+          <button type="button" class="joy-ai-quick-chip" onclick="quickJoyAiWrite('주말에 가족이랑 외식했어!')">🍕 가족이랑 외식했어</button>
+        </div>
+        <div class="joy-ai-input-row">
+          <input type="text" class="joy-ai-input" id="joyWriteInput" placeholder="예: 오늘 학교에서 친구랑 떡볶이 먹었어!" onkeydown="if(event.key==='Enter'){event.preventDefault();runJoyAiWriter();}">
+          <button type="button" class="joy-ai-btn" id="joyWriteBtn" onclick="runJoyAiWriter()">✨ 영작하기</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- STEP 4 VIEW -->
@@ -6686,6 +6846,140 @@ function userReplyTalk(optIdx) {
       switchStep(4);
     }
   }, 1500);
+}
+
+
+/* ============ JOY ENGLISH KOREAN->ENGLISH AI WRITER ============ */
+var JOY_OFFLINE_DICT = {
+  '오늘 급식 진짜 맛있었어!': 'School lunch was really delicious today!',
+  '학교에서 친구랑 피구했어!': 'I played dodgeball with my friends at school!',
+  '강아지랑 산책하고 왔어!': 'I went for a walk with my puppy!',
+  '주말에 가족이랑 외식했어!': 'I ate out with my family on the weekend!',
+  '배고파': 'I am hungry.',
+  '졸려': 'I am sleepy.',
+  '행복해': 'I am happy.',
+  '재밌었어': 'It was so much fun!',
+  '숙제 다 했어': 'I finished all my homework.'
+};
+
+function quickJoyAiWrite(sampleKo) {
+  var inp = document.getElementById('joyWriteInput');
+  if (inp) {
+    inp.value = sampleKo;
+    runJoyAiWriter();
+  }
+}
+
+async function translateKoreanToEnglish(koText) {
+  var clean = (koText || '').trim();
+  if (!clean) return '';
+  if (JOY_OFFLINE_DICT[clean]) return JOY_OFFLINE_DICT[clean];
+
+  // 1) Primary: Google Translate public endpoint (fast & CORS-friendly)
+  try {
+    var gUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=en&dt=t&q=' + encodeURIComponent(clean);
+    var res = await fetch(gUrl);
+    if (res.ok) {
+      var data = await res.json();
+      if (data && Array.isArray(data[0])) {
+        var out = data[0].map(function(part) { return part[0] || ''; }).join('').trim();
+        if (out) return out;
+      }
+    }
+  } catch (e) {}
+
+  // 2) Secondary: MyMemory free translation API
+  try {
+    var mUrl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(clean) + '&langpair=ko|en';
+    var mRes = await fetch(mUrl);
+    if (mRes.ok) {
+      var mData = await mRes.json();
+      var mOut = mData && mData.responseData && mData.responseData.translatedText;
+      if (mOut && mOut.trim()) return mOut.trim();
+    }
+  } catch (e2) {}
+
+  // 3) Offline keyword fallback
+  if (clean.indexOf('숙제') >= 0) return 'I did my homework today.';
+  if (clean.indexOf('친구') >= 0) return 'I had fun with my friends today.';
+  if (clean.indexOf('학교') >= 0) return 'Today at school was fun!';
+  if (clean.indexOf('밥') >= 0 || clean.indexOf('먹') >= 0 || clean.indexOf('급식') >= 0) return 'I ate delicious food today!';
+  if (clean.indexOf('강아지') >= 0) return 'I played with my cute puppy today!';
+  return 'I want to share my story with you today!';
+}
+
+function escapeHtmlAttr(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyJoyAiText(encodedText, btnEl) {
+  var txt = decodeURIComponent(encodedText);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).catch(function(){});
+  }
+  if (btnEl) {
+    var old = btnEl.textContent;
+    btnEl.textContent = '✅ 복사됨!';
+    setTimeout(function() { btnEl.textContent = old; }, 1400);
+  }
+}
+
+async function runJoyAiWriter() {
+  var inp = document.getElementById('joyWriteInput');
+  var btn = document.getElementById('joyWriteBtn');
+  var container = document.getElementById('chatContainer');
+  if (!inp || !container) return;
+
+  var koText = inp.value.trim();
+  if (!koText) {
+    inp.focus();
+    return;
+  }
+
+  inp.value = '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ 영작 중...';
+  }
+
+  var userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble-row user';
+  userBubble.innerHTML = '<div style="font-size:24px">👑</div><div class="chat-msg user"><b>하린:</b> ' + escapeHtmlAttr(koText) + '</div>';
+  container.appendChild(userBubble);
+  container.scrollTop = container.scrollHeight;
+
+  var enText = await translateKoreanToEnglish(koText);
+  if (enText && enText.length > 0) {
+    enText = enText.charAt(0).toUpperCase() + enText.slice(1);
+    if (!/[.!?]$/.test(enText)) enText += '.';
+  }
+
+  var encEn = encodeURIComponent(enText);
+  var aiBubble = document.createElement('div');
+  aiBubble.className = 'chat-bubble-row';
+  aiBubble.innerHTML =
+    '<div style="font-size:24px">🐱</div>' +
+    '<div class="chat-msg cat">' +
+      '<b>Minky 영작 AI:</b> 영어로 이렇게 말하면 딱 좋아! ✨' +
+      '<div class="joy-ai-result-card">' +
+        '<div class="joy-ai-en-text">' + escapeHtmlAttr(enText) + '</div>' +
+        '<div class="joy-ai-action-row">' +
+          '<button type="button" class="joy-ai-mini-btn listen" onclick="speakText(decodeURIComponent('' + encEn + ''), 'en-US')">🔊 다시 듣기</button>' +
+          '<button type="button" class="joy-ai-mini-btn" onclick="copyJoyAiText('' + encEn + '', this)">📋 문장 복사</button>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:11.5px; opacity:0.85; margin-top:4px;">조이 선생님께 소리 내어 말해 보자! Great job, Harin! 👍</div>' +
+    '</div>';
+
+  container.appendChild(aiBubble);
+  container.scrollTop = container.scrollHeight;
+  playCorrectSound();
+  speakText(enText, 'en-US');
+
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = '✨ 영작하기';
+  }
 }
 
 /* ============ STEP 4: DAILY QUIZ ============ */
