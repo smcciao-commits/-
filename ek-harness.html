@@ -17,6 +17,8 @@ var qs = new URLSearchParams(location.search);
 var report = document.getElementById('report');
 var bootErrs = [];
 
+if (qs.get('reset') === '1') { try { localStorage.removeItem('edukids_streak_harin_v1'); } catch (e) {} }
+
 function log(s) { bootErrs.push(s); }
 
 fetch('edukids.html?cb=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (html) {
@@ -56,11 +58,14 @@ function runChecks() {
   out.push('FNS: ' + fns.map(function (k) { return k + '=' + typeof w[k]; }).join(' '));
 
   /* 스트릭 기록 기능 점검: 오늘 완료 처리 후 배너가 done 상태가 되는지 */
-  try {
-    w.ekRecord('테스트');
-    out.push('AFTER_RECORD: streak=' + w.ekInfo().streak + ' todayDone=' + w.ekInfo().todayDone + ' cls=' + q('.ek-streak').className + ' stampOn=' + d.querySelectorAll('.ek-sk-stamp.on').length);
-    out.push('RIBBON_AFTER: ' + txt('#streakVal'));
-  } catch (e) { out.push('RECORD FAIL: ' + e.message); }
+  if (qs.get('record') === '1') {
+    try {
+      w.ekRecord('단어');
+      out.push('AFTER_RECORD: streak=' + w.ekInfo().streak + ' todayDone=' + w.ekInfo().todayDone + ' cls=' + q('.ek-streak').className + ' stampOn=' + d.querySelectorAll('.ek-sk-stamp.on').length);
+      out.push('RIBBON_AFTER: ' + txt('#streakVal'));
+      out.push('BAR_WIDTH: ' + (q('.ek-sk-bar > i') || {}).style.width);
+    } catch (e) { out.push('RECORD FAIL: ' + e.message); }
+  }
 
   /* .ics 만들기 점검 */
   try {
