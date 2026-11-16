@@ -1766,7 +1766,7 @@
     <!-- Stats & Speed Ribbon -->
     <div class="stats-ribbon">
       <div class="stat-pill">
-        <span>🔥</span> <span>출석:</span> <span class="val" id="streakVal">3일째</span>
+        <span>🔥</span> <span>출석:</span> <span class="val" id="streakVal">0일째</span>
       </div>
       <div class="stat-pill">
         <span>⭐</span> <span>포인트:</span> <span class="val" id="starVal">250P</span>
@@ -3149,7 +3149,7 @@ var S = {
   ttsRate: parseFloat(localStorage.getItem('topedu_cats_rate') || '0.72'),
   alarmTime: localStorage.getItem('topedu_cats_alarm_time') || '16:30',
   alarmActive: localStorage.getItem('topedu_cats_alarm_active') !== 'false',
-  streak: parseInt(localStorage.getItem('topedu_cats_streak') || '3'),
+  streak: 0,
   points: parseInt(localStorage.getItem('topedu_cats_points') || '250')
 };
 
@@ -3287,6 +3287,7 @@ window.addEventListener('DOMContentLoaded', function() {
   updateAlarmUI();
   updateSpeedUI();
   startAlarmTimer();
+  try { ekInit(); } catch (e) {}
 
   // URL query parameter routing (?step=2&series=handinhand&unit=5&type=conv)
   try {
@@ -6517,6 +6518,7 @@ function passJoySpeakingDirectly() {
     '<div class="minky-fb-msg">우와 하린아! 영어로 소리 내어 정말 또박또박 멋지게 잘 읽었어! 조이영어 화상 수업 때 필리핀 선생님께 이렇게 말하면 칭찬 폭풍을 받을 거야! ✨</div>';
 
   clearStudioError();
+  try { ekRecord('조이'); } catch (e) {}
 }
 
 function passShadowDirectly() {
@@ -6535,6 +6537,7 @@ function passShadowDirectly() {
   if (pill) {
     pill.innerHTML = '<span style="color:#059669; font-weight:800;">🎉 100점! 완벽 통과! (소리 내어 읽기 완료)</span>';
   }
+  try { ekRecord('쉐도잉'); } catch (e) {}
 }
 
 function clearStudioError() {
@@ -6572,6 +6575,7 @@ function handleStudioSpeechResult(transcript) {
     badgeEl.textContent = '🎉 ' + res.score + '점! 통과!';
     feedbackEl.innerHTML = '<div class="minky-fb-title">🐱 밍키 칭찬:</div>' +
       '<div class="minky-fb-msg">우와 하린아! 발음이 정말 훌륭해! 조이영어 화상 수업 때 필리핀 선생님께 이렇게 말하면 칭찬 폭풍을 받을 거야! ✨</div>';
+    try { ekRecord('조이'); } catch (e) {}
   } else {
     playWrongSound();
     starsEl.textContent = '⭐';
@@ -6640,6 +6644,7 @@ function nextVocaWord() {
   } else {
     document.getElementById('tabStep1').classList.add('done');
     minkySay('단어 워밍업 완료! 아주 훌륭해! 이제 애니메이션 영상 시청과 쉐도잉을 해볼까?');
+    try { ekRecord('단어'); } catch (e) {}
     switchStep(2);
   }
 }
@@ -6888,6 +6893,7 @@ function toggleShadowMic() {
           '<div style="font-size:12px; color:#4b5563; margin-bottom:4px;">내가 말한 문장: "' + transcript + '"</div>' +
           '<div>' + badgesHtml + '</div>';
         playCorrectSound();
+        try { ekRecord('쉐도잉'); } catch (e) {}
       } else {
         pill.innerHTML = '<div style="color:#d97706; font-weight:700; font-size:14px; margin-bottom:4px;">💪 ' + res.score + '점! 다시 도전!</div>' +
           '<div style="font-size:12px; color:#4b5563; margin-bottom:4px;">내가 말한 문장: "' + transcript + '"</div>' +
@@ -6932,6 +6938,7 @@ function nextShadowSentence() {
   } else {
     document.getElementById('tabStep2').classList.add('done');
     minkySay('영상 시청과 쉐도잉 완료! 이제 나와 1:1로 직접 영어로 대화해 볼까?');
+    try { ekRecord('쉐도잉'); } catch (e) {}
     switchStep(3);
   }
 }
@@ -7220,11 +7227,13 @@ function nextQuizQ() {
 function showCelebrationReward() {
   playChimeBell();
   S.points += 100;
-  S.streak++;
   localStorage.setItem('topedu_cats_points', S.points);
-  localStorage.setItem('topedu_cats_streak', S.streak);
   document.getElementById('starVal').textContent = S.points + 'P';
-  document.getElementById('streakVal').textContent = S.streak + '일째';
+  try {
+    ekRecord('퀴즈');
+  } catch (e) {
+    document.getElementById('streakVal').textContent = S.streak + '일째';
+  }
 
   var pass = '⭐ ' + (new Date().getDate() * 100 + 15) + ' ⭐';
   document.getElementById('rewardPasscodeVal').textContent = pass;
