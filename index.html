@@ -2,6 +2,12 @@
 <html lang="ko">
 <head>
 <title>수지탑에듀 영어 단어·독해 학습센터</title>
+<script>/* v82: 오류 점검용 수집기 (화면에는 안 보임) */
+window.__topeduErrors = [];
+window.addEventListener('error', function(e){ try { window.__topeduErrors.push('error: ' + (e.message || '') + ' @' + (e.filename || '') + ':' + (e.lineno || 0)); } catch(x){} });
+window.addEventListener('unhandledrejection', function(e){ try { window.__topeduErrors.push('promise: ' + String((e.reason && e.reason.message) || e.reason)); } catch(x){} });
+(function(){ try { var ce = console.error; console.error = function(){ try { window.__topeduErrors.push('console.error: ' + Array.prototype.join.call(arguments, ' ')); } catch(x){} return ce.apply(console, arguments); }; } catch(x){} })();
+</script>
 <base target="_top">
 <meta charset="utf-8">
 <meta name="referrer" content="no-referrer">
@@ -842,6 +848,113 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
+/* ================= v82: 🔥 듀오링고식 스트릭 캐릭터 ================= */
+.streak-hero { position: relative; display: flex; gap: 12px; align-items: center; padding: 14px; margin: 12px 0 10px; border-radius: 20px; border: 2.5px solid #0d9488; background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 72%); box-shadow: 0 6px 18px rgba(13,148,136,0.14); overflow: hidden; }
+.streak-hero::after { content: ''; position: absolute; right: -34px; top: -34px; width: 116px; height: 116px; border-radius: 50%; background: rgba(13,148,136,0.07); pointer-events: none; }
+.sh-char { position: relative; flex: 0 0 auto; width: 64px; height: 64px; border-radius: 22px; display: grid; place-items: center; background: #fff; border: 2px solid #99f6e4; box-shadow: 0 3px 10px rgba(13,148,136,0.16); }
+.sh-owl { font-size: 34px; line-height: 1; animation: shBob 2.6s ease-in-out infinite; }
+.sh-mood { position: absolute; right: -5px; bottom: -3px; font-size: 18px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18)); }
+.sh-flame { position: absolute; left: -7px; top: -9px; font-size: 16px; }
+.sh-main { flex: 1 1 auto; min-width: 0; position: relative; z-index: 1; }
+.sh-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.sh-days { font-family: Maplestory, sans-serif; font-weight: 700; font-size: 16px; color: #0f766e; }
+.sh-tag { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.sh-msg { font-size: 12.5px; line-height: 1.42; color: #334155; margin-top: 4px; word-break: keep-all; }
+.sh-msg b { color: #0f766e; }
+.sh-bar { height: 7px; border-radius: 999px; background: #e2e8f0; margin: 8px 0 9px; overflow: hidden; }
+.sh-bar > i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #14b8a6, #0d9488); transition: width .45s ease; }
+.sh-actions { display: flex; gap: 7px; align-items: center; }
+.sh-btn { flex: 1 1 auto; min-width: 0; padding: 11px 10px; border-radius: 13px; font-family: Maplestory, sans-serif; font-weight: 700; font-size: 13.5px; color: #fff; background: linear-gradient(135deg, #0d9488, #14b8a6); box-shadow: 0 3px 10px rgba(13,148,136,0.26); line-height: 1.2; }
+.sh-bell { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 13px; background: #fff; border: 1.5px solid #99f6e4; font-size: 17px; }
+@keyframes shBob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-4px) rotate(2deg); } }
+@keyframes shShake { 0%,100% { transform: rotate(-6deg) scale(1); } 50% { transform: rotate(6deg) scale(1.06); } }
+@keyframes shGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.34); } 50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); } }
+/* 아침 · 여유 */
+.streak-hero.s-calm { border-color: #14b8a6; }
+/* 오후 · 넛지 */
+.streak-hero.s-nudge { border-color: #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #ffffff 72%); box-shadow: 0 6px 18px rgba(245,158,11,0.16); }
+.s-nudge .sh-char { border-color: #fcd34d; }
+.s-nudge .sh-days { color: #b45309; }
+.s-nudge .sh-tag { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+.s-nudge .sh-bar > i { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.s-nudge .sh-btn { background: linear-gradient(135deg, #f59e0b, #f97316); box-shadow: 0 3px 10px rgba(245,158,11,0.3); }
+.s-nudge .sh-msg b { color: #b45309; }
+/* 저녁 · 위기 */
+.streak-hero.s-warn { border-color: #f97316; background: linear-gradient(135deg, #fff7ed 0%, #ffffff 72%); box-shadow: 0 6px 18px rgba(249,115,22,0.18); }
+.s-warn .sh-char { border-color: #fdba74; }
+.s-warn .sh-days { color: #c2410c; }
+.s-warn .sh-tag { background: #ffedd5; color: #9a3412; border-color: #fdba74; }
+.s-warn .sh-bar > i { background: linear-gradient(90deg, #fb923c, #f97316); }
+.s-warn .sh-btn { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 3px 10px rgba(249,115,22,0.32); }
+.s-warn .sh-msg b { color: #c2410c; }
+/* 밤 · 다급 */
+.streak-hero.s-rage { border-color: #ef4444; background: linear-gradient(135deg, #fef2f2 0%, #ffffff 72%); box-shadow: 0 6px 18px rgba(239,68,68,0.2); animation: shGlow 1.8s ease-in-out infinite; }
+.s-rage .sh-char { border-color: #fca5a5; }
+.s-rage .sh-owl { animation: shShake 0.9s ease-in-out infinite; }
+.s-rage .sh-days { color: #b91c1c; }
+.s-rage .sh-tag { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+.s-rage .sh-bar > i { background: linear-gradient(90deg, #f87171, #dc2626); }
+.s-rage .sh-btn { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 3px 10px rgba(239,68,68,0.34); }
+.s-rage .sh-msg b { color: #b91c1c; }
+/* 오늘 목표 완료 */
+.streak-hero.s-done { border-color: #10b981; background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 72%); box-shadow: 0 6px 18px rgba(16,185,129,0.16); }
+.s-done .sh-char { border-color: #6ee7b7; }
+.s-done .sh-days { color: #047857; }
+.s-done .sh-tag { background: #d1fae5; color: #047857; border-color: #6ee7b7; }
+.s-done .sh-bar > i { background: linear-gradient(90deg, #34d399, #10b981); }
+.s-done .sh-btn { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 3px 10px rgba(16,185,129,0.26); }
+.s-done .sh-msg b { color: #047857; }
+@media (max-width: 380px) {
+  .sh-char { width: 54px; height: 54px; border-radius: 18px; }
+  .sh-owl { font-size: 28px; }
+  .sh-days { font-size: 15px; }
+  .sh-btn { font-size: 12.5px; padding: 10px 8px; }
+}
+
+/* ================= v82: 🔔 매일 학습 알림 설정 모달 ================= */
+.notif-overlay { position: fixed; inset: 0; z-index: 9500; display: none; background: rgba(15,23,42,0.55); padding: 16px; overflow: auto; }
+.notif-overlay.on { display: flex; align-items: center; justify-content: center; }
+.notif-card { display: flex; flex-direction: column; width: 100%; max-width: 440px; max-height: calc(100vh - 32px); background: #fff; border-radius: 20px; box-shadow: 0 20px 50px rgba(15,23,42,0.38); overflow: hidden; }
+.nc-head { display: flex; align-items: center; gap: 10px; padding: 13px 16px; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; flex: 0 0 auto; }
+.nc-body { padding: 15px 16px 18px; overflow: auto; -webkit-overflow-scrolling: touch; }
+.nc-vtag { font-size: 10.5px; opacity: 0.85; font-weight: 700; }
+.nc-perm { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border-radius: 12px; background: #f8fafc; border: 1.5px solid #e2e8f0; font-size: 12.5px; font-weight: 700; color: #334155; margin-bottom: 12px; }
+.nc-perm .on { color: #047857; }
+.nc-perm .off { color: #b91c1c; }
+.nc-lbl { font-size: 12.5px; font-weight: 800; color: #0f766e; margin: 14px 0 7px; }
+.nc-chips { display: flex; gap: 7px; }
+.nc-chip { flex: 1 1 0; padding: 10px 2px; border-radius: 13px; border: 1.5px solid #cbd5e1; background: #fff; font-size: 13px; font-weight: 800; color: #475569; line-height: 1.15; }
+.nc-chip span { display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-top: 3px; }
+.nc-chip.on { border-color: #0d9488; background: #ccfbf1; color: #0f766e; }
+.nc-chip.on span { color: #0d9488; }
+.nc-time { display: flex; align-items: center; gap: 8px; margin-top: 9px; font-size: 12.5px; color: #475569; font-weight: 700; }
+.nc-time input { padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 13.5px; font-weight: 700; color: #1e293b; }
+.nc-main { width: 100%; margin-top: 16px; padding: 14px; border-radius: 15px; font-family: Maplestory, sans-serif; font-weight: 700; font-size: 15px; color: #fff; background: linear-gradient(135deg, #0d9488, #14b8a6); box-shadow: 0 4px 14px rgba(13,148,136,0.28); }
+.nc-main.off { background: linear-gradient(135deg, #64748b, #94a3b8); box-shadow: none; }
+.nc-sub { width: 100%; margin-top: 9px; padding: 12px; border-radius: 13px; font-size: 13px; font-weight: 800; color: #0d9488; background: #f0fdfa; border: 1.5px solid #99f6e4; }
+.nc-note { margin-top: 13px; padding: 10px 12px; border-radius: 12px; background: #fffbeb; border: 1px solid #fde68a; font-size: 11.5px; line-height: 1.5; color: #92400e; word-break: keep-all; }
+.nc-note b { color: #b45309; }
+.nc-ok { margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: #ecfdf5; border: 1px solid #6ee7b7; font-size: 12px; font-weight: 700; color: #047857; }
+@media (max-width: 420px) {
+  .notif-overlay { padding: 10px; }
+  .notif-card { max-height: calc(100vh - 20px); }
+  .nc-chip { font-size: 12px; }
+}
+
+/* v82: 선생님 화면 스트릭 관제 */
+.sb-box { border: 2px solid #f59e0b; background: linear-gradient(135deg,#fffbeb,#fff); border-radius: 18px; padding: 14px; margin-bottom: 14px; }
+.sb-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+.sb-counts { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 9px; }
+.sb-pill { font-size: 11.5px; font-weight: 800; padding: 4px 9px; border-radius: 999px; background: #fff; border: 1.5px solid #e2e8f0; color: #475569; }
+.sb-pill.done { color: #047857; border-color: #6ee7b7; background: #ecfdf5; }
+.sb-pill.ing { color: #b45309; border-color: #fcd34d; background: #fffbeb; }
+.sb-pill.none { color: #b91c1c; border-color: #fca5a5; background: #fef2f2; }
+.sb-list { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow: auto; }
+.sb-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 11px; background: #fff; border: 1.5px solid #f1f5f9; font-size: 12.5px; }
+.sb-row b { font-weight: 800; color: #1e293b; }
+.sb-row .fl { font-weight: 800; color: #b45309; }
+.sb-empty { font-size: 12px; color: #92400e; line-height: 1.5; word-break: keep-all; }
+
 </style>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -865,6 +978,10 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(regs) {
     for (var reg of regs) reg.unregister();
   });
+  // v82: 알림 표시에는 서비스워커가 필요해서 매 로드마다 새로 등록해요 (캐시는 비우므로 구버전 고정 없음)
+  if (navigator.serviceWorker.register) {
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function(){});
+  }
 }
 if ('caches' in window) {
   caches.keys().then(function(names) {
@@ -916,6 +1033,8 @@ function forceAppRefresh(e) {
 <div class="load" id="load">잠시만요…</div>
 <!-- v80: 🖨️ 단어장 · 시험지 인쇄 모달 (인쇄 시 이 안의 #printSheetArea 만 출력) -->
 <div id="printOverlay" class="print-overlay" aria-hidden="true"><div class="print-modal" id="printModal"></div></div>
+<!-- v82: 🔔 매일 학습 알림 설정 모달 -->
+<div id="notifOverlay" class="notif-overlay" aria-hidden="true"><div class="notif-card" id="notifModal"></div></div>
 <script>
 /* ============ 기본 ============ */
 var S = { cred: null, home: null, admin: null };
@@ -1145,6 +1264,13 @@ function saveStudentProgressDB(ban, name, setName, mode, score){
     });
     if (gList.length > 200) gList = gList.slice(0, 200);
     localStorage.setItem(gKey, JSON.stringify(gList));
+
+    /* v82: 오늘 학습 기록·연속 학습(스트릭) 갱신 */
+    try {
+      if (typeof recordDailyStudy === 'function') {
+        recordDailyStudy(ban, name, setName, isSetCompleteByName(ban, name, setName));
+      }
+    } catch(e){}
   } catch(e){}
 }
 
@@ -1690,8 +1816,9 @@ function login(c){
 /* ============ 홈 ============ */
 
 
-function drawTodayCard(){
+function drawTodayCard(info){
   var now = new Date();
+  var streakNow = info ? (info.streak || 0) : 0;
   var m = now.getMonth() + 1, d = now.getDate();
   var WD = ["일", "월", "화", "수", "목", "금", "토"];
   var wd = WD[now.getDay()];
@@ -1706,7 +1833,7 @@ function drawTodayCard(){
     '<div class="tnums" style="display:grid;grid-template-columns:repeat(3,1fr);background:#f0fdfa;border-radius:12px;margin-bottom:12px;text-align:center;padding:10px 4px">' +
       '<div><b style="font-size:24px;color:var(--pri);font-family:Maplestory,sans-serif">15</b><div style="font-size:12px;color:var(--muted);margin-top:2px">오늘 새 단어</div></div>' +
       '<div style="border-left:1px dashed #ccfbf1;border-right:1px dashed #ccfbf1"><b style="font-size:24px;color:#e8590c;font-family:Maplestory,sans-serif">5</b><div style="font-size:12px;color:var(--muted);margin-top:2px">에빙하우스 복습</div></div>' +
-      '<div><b style="font-size:24px;color:#0d9488;font-family:Maplestory,sans-serif">🔥3일</b><div style="font-size:12px;color:var(--muted);margin-top:2px">연속 출석</div></div>' +
+      '<div><b style="font-size:24px;color:#0d9488;font-family:Maplestory,sans-serif">🔥' + streakNow + '일</b><div style="font-size:12px;color:var(--muted);margin-top:2px">연속 학습</div></div>' +
     '</div>' +
     '<button class="btn" id="btn_daily_quest" style="width:100%;padding:14px;font-size:16.5px;font-weight:700;border-radius:14px;background:linear-gradient(135deg,#0d9488,#14b8a6);box-shadow:0 4px 12px rgba(13,148,136,0.22);font-family:Maplestory,sans-serif;margin-bottom:10px">🚀 오늘의 학습 시작하기 (15단어+복습)</button>' +
     '<div class="steps" style="display:flex;gap:6px;justify-content:space-around;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px">' +
@@ -1720,18 +1847,23 @@ function drawTodayCard(){
   '</div>';
 }
 
-function drawAttendanceCalendar(){
+function drawAttendanceCalendar(info){
   var now = new Date();
   var y = now.getFullYear(), m = now.getMonth() + 1, todayD = now.getDate();
   var firstDow = new Date(y, m - 1, 1).getDay();
   var daysInMonth = new Date(y, m, 0).getDate();
   var WD = ["일", "월", "화", "수", "목", "금", "토"];
+  var daysDB = (info && info.db && info.db.days) ? info.db.days : {};
+  var streakNow = info ? (info.streak || 0) : 0;
+  var monthDone = 0;
 
   var cells = "";
   for(var k = 0; k < firstDow; k++) cells += '<span class="cd e"></span>';
   for(var d = 1; d <= daysInMonth; d++){
     var isToday = (d === todayD);
-    var isDone = (d < todayD && (d % 2 === 1 || d === 10)); // sample attended days including yesterday
+    var dk = y + '-' + ('0' + m).slice(-2) + '-' + ('0' + d).slice(-2);
+    var isDone = !!(daysDB[dk] && daysDB[dk].done);
+    if(isDone) monthDone++;
     var cls = "cd" + (isToday ? " tod" : "") + (isDone ? " stamp" : "");
     cells += '<button class="' + cls + '" type="button" data-d="' + d + '">' + d + '</button>';
   }
@@ -1739,16 +1871,16 @@ function drawAttendanceCalendar(){
   return '<div class="card cal" style="margin-top:10px;margin-bottom:12px;border:1.5px solid var(--line);border-radius:18px;padding:14px;background:white">' +
     '<div class="chead" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
       '<b style="font-size:15.5px;color:var(--pri);font-family:Maplestory,sans-serif">📅 ' + y + '년 ' + m + '월 출석 도장 달력</b>' +
-      '<span style="font-size:12px;font-weight:700;color:var(--pri);background:#f0fdfa;padding:3px 10px;border-radius:999px">🔥 3일 연속 출석 중</span>' +
+      '<span style="font-size:12px;font-weight:700;color:var(--pri);background:#f0fdfa;padding:3px 10px;border-radius:999px">🔥 ' + streakNow + '일 연속 학습 중</span>' +
     '</div>' +
     '<div class="cgrid">' +
       WD.map(function(w){ return '<span class="cw">' + w + '</span>'; }).join('') +
       cells +
     '</div>' +
     '<div class="clegend" style="display:flex;justify-content:space-around;font-size:11.5px;color:var(--muted);margin-top:10px;border-top:1px dashed var(--line);padding-top:8px">' +
-      '<span><i style="display:inline-block;width:10px;height:10px;background:#0d9488;border-radius:50%;margin-right:4px;vertical-align:middle"></i>출석 도장</span>' +
+      '<span><i style="display:inline-block;width:10px;height:10px;background:#0d9488;border-radius:50%;margin-right:4px;vertical-align:middle"></i>학습 완료 도장</span>' +
       '<span><i style="display:inline-block;width:10px;height:10px;border:1.5px solid #0d9488;border-radius:50%;margin-right:4px;vertical-align:middle"></i>오늘 (' + m + '월 ' + todayD + '일)</span>' +
-      '<span>이달 출석 <b>5일</b></span>' +
+      '<span>이달 학습 완료 <b>' + monthDone + '일</b></span>' +
     '</div>' +
   '</div>';
 }
@@ -2031,6 +2163,8 @@ function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ if (s.type==='문제') return s.progress.test===null||s.progress.test===undefined; return !getWordSetCompletion(s).isComplete; }).length;
   var html='<div style="display:flex;justify-content:space-between;align-items:center;"><h1>'+esc(me.name)+' 안녕! 👋</h1><button id="btn_app_refresh" onclick="forceAppRefresh(event)" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1.5px solid #14b8a6;padding:6px 12px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">🔄 최신 새로고침</button></div><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
+  var meInfo = getStreakInfo(me.ban, me.name);
+  html += drawStreakHero(me);
   html += drawStudentInAppNoteCard(me.name);
   html += drawSpecialHwCard(me.ban);
 
@@ -2044,8 +2178,9 @@ function showHome(){
       '<div style="font-size:12px;color:#6b21a8;margin-top:4px;">캐츠 스튜디오 · Hand in Hand 5 전단원 영상관 (24편) · ORT 음원 · 15분 보상 플래너</div>' +
     '</div>';
   }
-  html += drawTodayCard();
-  html += drawAttendanceCalendar();
+  html += drawTodayCard(meInfo);
+  html += drawAttendanceCalendar(meInfo);
+  html += drawNotifCard(me);
   
   var rTitle = '📖 수지중2 외부지문 독해·어법 변형 마스터';
   var rSub = 'Lesson 7 외부 1·2번 지문 정독 & 7대 킬러 변형 모의';
@@ -2118,7 +2253,22 @@ function showHome(){
   var bjl = $('#bjoinlive'); if(bjl) bjl.onclick = function(){ enterLiveClass(me.ban, false); };
   var cLive = $('#card_live_join'); if(cLive) cLive.onclick = function(){ enterLiveClass(this.dataset.ban || me.ban, false, this.dataset.title); };
   var bDq=$('#btn_daily_quest'); if(bDq){ bDq.onclick=function(){ if(h.sets&&h.sets.length){ openWordSet(h.sets[0]); } }; }
+  /* v82: 스트릭 배너 · 매일 알림 버튼 연결 */
+  var sGo = $('#streak_go');
+  if(sGo) sGo.onclick = function(){ if(h.sets && h.sets.length){ openWordSet(h.sets[0]); } else { alert('아직 올라온 학습이 없어요. 선생님께 세트를 올려달라고 해요!'); } };
+  var sBell = $('#streak_bell'); if(sBell) sBell.onclick = openNotifModal;
+  var nOpen = $('#btn_notif_open'); if(nOpen) nOpen.onclick = openNotifModal;
+  var nIcs = $('#btn_ics_save'); if(nIcs) nIcs.onclick = function(){
+    var t = getStreakDB(me.ban, me.name).notif.time || '20:00';
+    if(downloadIcs(t)){
+      setTimeout(function(){ alert('📅 캘린더 파일(.ics)을 내려받았어요!\n\n· 안드로이드: 다운로드 알림 → 파일을 누르면 캘린더에 추가\n· 아이폰: 파일 앱 → 내려받은 파일 누르기 → 캘린더 추가\n\n매일 ' + t + '에 폰이 직접 알림을 울려줘요.'); }, 150);
+    } else { openNotifModal(); }
+  };
   [].forEach.call(app.querySelectorAll('.tf'),function(b){ b.onclick=function(){ S.tf=b.dataset.b; showHome(); window.scrollTo(0,0); }; });
+  /* v82: 알람 스케줄러·스트릭 관제 동기화 */
+  try { startReminderLoop(); } catch(e){}
+  try { syncSwState(me.ban, me.name); } catch(e){}
+  try { pushStreakBoard(me.ban, me.name, false, getStreakInfo(me.ban, me.name).streak); } catch(e){}
 }
 function refreshHome(){ return login(S.cred); }
 
@@ -2196,6 +2346,15 @@ function finish(mode,label,correct,total,wrong,extra){
     }
     var html=topBar(W.set.name)+'<div class="card" style="text-align:center"><div class="sub">'+label+'</div>'+
       (extra||'<div class="big">'+r.score+'점</div><div>'+total+'개 중 <b>'+correct+'개</b> 맞았어요'+(r.score===100?' 🎉':'')+'</div>')+'</div>';
+    /* v82: 오늘 학습 기록 직후 스트릭 카드 */
+    try {
+      var si = getStreakInfo(S.cred.ban, S.cred.name);
+      if(si.todayDone){
+        html += '<div class="streak-hero s-done" style="margin-top:0"><div class="sh-char"><div class="sh-owl">🥳</div><div class="sh-flame">🔥</div></div><div class="sh-main"><div class="sh-row"><span class="sh-days">🔥 ' + si.streak + '일 연속!</span><span class="sh-tag">오늘 목표 완료</span></div><div class="sh-msg">' + (si.yesterdayDone ? '어제에 이어 <b>' + si.streak + '일차</b> 성공! 내일도 이 흐름 그대로 가자.' : '<b>오늘 1일차</b> 시작! 내일 또 하면 2일째야.') + '</div></div></div>';
+      } else {
+        html += '<div class="streak-hero s-calm" style="margin-top:0"><div class="sh-char"><div class="sh-owl">🦉</div><div class="sh-mood">😊</div><div class="sh-flame">🔥</div></div><div class="sh-main"><div class="sh-row"><span class="sh-days">🔥 ' + si.streak + '일 연속 유지 중</span><span class="sh-tag">오늘 미완료</span></div><div class="sh-msg">이번 세트의 <b>필수 모드를 모두</b> 끝내면 오늘 목표 완료! 남은 단계 조금만 더 하자.</div></div></div>';
+      }
+    } catch(e){}
     if(wrong.length){
       html+='<div class="card"><h2>틀린 단어 '+wrong.length+'개</h2><ul class="list">'+
       wrong.map(function(w){ var x=W.words.filter(function(o){return o.w===w;})[0]; return '<li><b>'+esc(w)+'</b><span>'+esc(x?x.m:'')+'</span></li>'; }).join('')+'</ul>'+
@@ -3223,6 +3382,7 @@ function loadAdminDashboard(){
 
 function drawScienceTeacherDashboard(students){
   var tot = students.length;
+  var realMap = getRealStreakMap();
   var doneList = students.filter(function(s){ return s.status === 'done' || s.did; });
   var midList = students.filter(function(s){ return s.status === 'mid'; });
   var noneList = students.filter(function(s){ return s.status === 'none' || (!s.did && s.status !== 'mid'); });
@@ -3241,6 +3401,8 @@ function drawScienceTeacherDashboard(students){
     '<div class="dash-kpi"><div class="num" style="color:#e8590c">' + midList.length + '명</div><div class="lbl">학습 중</div></div>' +
     '<div class="dash-kpi"><div class="num" style="color:#d63939">' + noneList.length + '명</div><div class="lbl">오늘 미접속</div></div>' +
   '</div>';
+
+  html += '<div class="sb-box" id="streakBoardBox"><div style="font-size:12px;color:#92400e">🔥 스트릭 관제 불러오는 중...</div></div>';
 
   html += '<div class="dash-filter-bar">' +
     '<button class="dash-chip ' + (DASH_FILTER==='all'?'on':'') + '" data-df="all">🌸 전체 (' + tot + ')</button>' +
@@ -3273,13 +3435,15 @@ function drawScienceTeacherDashboard(students){
     var isDone = s.status === 'done' || s.did;
     var isMid = s.status === 'mid';
     var stBadge = isDone ? '<span class="st-badge st-done">완료 ' + (s.score || 100) + '점</span>' : (isMid ? '<span class="st-badge st-mid">학습 중</span>' : '<span class="st-badge st-none">미접속</span>');
-    var streakText = (s.streak ? '🔥' + s.streak + '일' : '-');
+    var rInfo = realMap[s.ban + '|' + s.name];
+    var streakText = rInfo ? ('🔥' + (rInfo.s || 0) + '일') : (s.streak ? '🔥' + s.streak + '일' : '-');
+    var realSub = rInfo ? ('<div style="font-size:10px;font-weight:800;margin-top:2px;color:' + (rInfo.d ? '#047857' : '#b91c1c') + '">' + (rInfo.d ? '오늘 완료' : '오늘 미완료') + '</div>') : '';
 
     html += '<tr>' +
       '<td><input type="checkbox" class="stu_chk" data-idx="' + idx + '" ' + (SEL_STU[s.name] ? 'checked' : '') + '></td>' +
       '<td><b>' + esc(s.name) + '</b><div style="font-size:11px;color:var(--muted)">' + esc(s.ban) + '</div></td>' +
       '<td>' + stBadge + '</td>' +
-      '<td style="font-weight:700;color:#0d9488">' + streakText + '</td>' +
+      '<td style="font-weight:700;color:#0d9488">' + streakText + realSub + '</td>' +
       '<td><div style="font-size:12px">' + esc(s.lastTime || '-') + '</div>' + (s.score ? '<b style="color:var(--pri)">' + s.score + '점</b>' : '') + '</td>' +
       '<td><button class="btn-sm send-one" data-idx="' + idx + '">💬 코멘트</button>' +
       (function(){
@@ -3295,6 +3459,7 @@ function drawScienceTeacherDashboard(students){
   html += '</tbody></table><div id="stu_modal_box"></div>';
 
   $('#aout').innerHTML = html;
+  try { renderStreakBoard(); pullStreakBoard(); } catch(e){}
 
   // Event bindings
   [].forEach.call($('#aout').querySelectorAll('.dash-chip'), function(btn){
@@ -3980,7 +4145,7 @@ function pEnd(v){
 }
 
 /* ================= v80: 🖨️ 단어장 · 시험지 인쇄 ================= */
-var TOPEDU_APP_VERSION = 'v81';
+var TOPEDU_APP_VERSION = 'v82';
 var PRT = { ban: '전체', sets: {}, type: 'mean', shuffle: false, count: 'all', answer: true, cols: 2, ex: false, q: '' };
 var PRT_TIMER = null;
 
@@ -4246,8 +4411,621 @@ if (document.addEventListener) {
     if (e.key === 'Escape') {
       var ov = document.getElementById('printOverlay');
       if (ov && ov.classList.contains('on')) closePrintSheet();
+      var no = document.getElementById('notifOverlay');
+      if (no && no.classList.contains('on')) closeNotifModal();
     }
   });
+}
+
+/* ================= v82: 🔥 연속 학습(스트릭) 엔진 ================= */
+var TOPEDU_STREAK_BOARD_TOPIC = 'topedu_streak_board_chosumin';
+var STREAK_BOARD = {};
+var STREAK_BOARD_FETCHED_AT = 0;
+var REM_TIMER = null;
+var REM_NAG_GAP_MIN = 45;
+var REM_MAX_NAG = 3;
+
+function tdKey(d){ d = d || new Date(); return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2); }
+function tdParse(k){ var p = String(k||'').split('-'); if(p.length < 3) return new Date(); return new Date(+p[0], (+p[1])-1, +p[2]); }
+function streakKey(ban,name){ return 'topedu_streak_' + (ban||'') + '_' + (name||''); }
+
+function getStreakDB(ban,name){
+  var def = { days:{}, best:0, lastDone:'', notif:{ enabled:false, time:'20:00', sent:null, lastNagAt:0 } };
+  try {
+    var raw = localStorage.getItem(streakKey(ban,name));
+    if(!raw) return def;
+    var o = JSON.parse(raw);
+    if(!o || typeof o !== 'object') return def;
+    o.days = (o.days && typeof o.days === 'object') ? o.days : {};
+    o.best = +o.best || 0;
+    o.notif = (o.notif && typeof o.notif === 'object') ? o.notif : { enabled:false, time:'20:00' };
+    if(typeof o.notif.time !== 'string' || !/^\d{1,2}:\d{2}$/.test(o.notif.time)) o.notif.time = '20:00';
+    if(!o.notif.sent || typeof o.notif.sent !== 'object') o.notif.sent = null;
+    return o;
+  } catch(e){ return def; }
+}
+function saveStreakDB(ban,name,db){ try{ localStorage.setItem(streakKey(ban,name), JSON.stringify(db)); }catch(e){} }
+
+function computeStreak(days){
+  var t = tdKey();
+  var todayDone = !!(days && days[t] && days[t].done);
+  var d = new Date();
+  if(!todayDone) d.setDate(d.getDate() - 1);
+  var cur = 0;
+  for(var i = 0; i < 400; i++){
+    var k = tdKey(d);
+    if(days && days[k] && days[k].done){ cur++; d.setDate(d.getDate() - 1); } else break;
+  }
+  return { cur: cur, todayDone: todayDone };
+}
+
+function getStreakInfo(ban,name){
+  var db = getStreakDB(ban,name);
+  var s = computeStreak(db.days);
+  var t = tdKey();
+  var y = tdParse(t); y.setDate(y.getDate() - 1);
+  var yKey = tdKey(y);
+  var today = db.days[t] || {};
+  var yDone = !!(db.days[yKey] && db.days[yKey].done);
+  var lastDone = db.lastDone || '';
+  var broken = !s.todayDone && s.cur === 0 && !!lastDone && lastDone !== t && lastDone !== yKey;
+  return {
+    ban: ban, name: name, streak: s.cur, todayDone: s.todayDone, yesterdayDone: yDone,
+    best: Math.max(db.best || 0, s.cur), lastDone: lastDone, broken: broken,
+    acts: today.acts || 0, db: db
+  };
+}
+
+/* 세트 하나가 필수 학습 100% 완료인지 (getWordSetCompletion과 같은 규칙) */
+function isSetCompleteByName(ban,name,setName){
+  if(!setName) return false;
+  try {
+    if(typeof getStudentProgressDB !== 'function') return false;
+    var db = getStudentProgressDB(ban,name);
+    var p = db[setName];
+    if(!p) return false;
+    var m = p.modes || {};
+    var sData = (typeof ALL_WORD_SETS !== 'undefined') ? ALL_WORD_SETS[setName] : null;
+    if(!sData){ return (p.test !== null && p.test !== undefined) || (m['문제'] !== undefined); }
+    var wList = Array.isArray(sData) ? sData : (sData.words || []);
+    var hasCloze = false;
+    for(var i = 0; i < wList.length; i++){ if(clozeOf(wList[i])){ hasCloze = true; break; } }
+    var hasCard = (m['카드'] !== undefined);
+    var hasChoice = (m['뜻고르기'] !== undefined);
+    var hasMatch = (m['짝맞추기'] !== undefined);
+    var hasClozeDone = hasCloze ? (m['예문빈칸'] !== undefined) : true;
+    var hasTest = (p.test !== null && p.test !== undefined) || (m['테스트'] !== undefined);
+    return !!(hasCard && hasChoice && hasMatch && hasClozeDone && hasTest);
+  } catch(e){ return false; }
+}
+
+/* 학습 모드가 끝날 때마다 오늘 기록(=스트릭)에 남겨요 */
+function recordDailyStudy(ban,name,setName,isComplete){
+  if(!ban || !name) return null;
+  var t = tdKey();
+  var db = getStreakDB(ban,name);
+  var d = db.days[t] || { acts:0 };
+  d.acts = (d.acts || 0) + 1;
+  d.lastAt = Date.now();
+  if(setName){ d.sets = d.sets || {}; d.sets[setName] = (d.sets[setName] || 0) + 1; }
+  var wasDone = !!d.done;
+  if(isComplete){
+    d.done = 1; d.doneAt = Date.now();
+    if(setName) d.doneSet = setName;
+    db.lastDone = t;
+  }
+  db.days[t] = d;
+  var st = computeStreak(db.days);
+  if(st.cur > (db.best || 0)) db.best = st.cur;
+  /* 400일 넘는 기록은 정리 */
+  var keys = Object.keys(db.days);
+  if(keys.length > 420){
+    keys.sort();
+    for(var i = 0; i < keys.length - 400; i++) delete db.days[keys[i]];
+  }
+  saveStreakDB(ban,name,db);
+  if(isComplete && !wasDone) onDailyGoalComplete(ban,name,st.cur,setName);
+  return getStreakInfo(ban,name);
+}
+
+function onDailyGoalComplete(ban,name,streak,setName){
+  try { pushStreakBoard(ban,name,true,streak); } catch(e){}
+  try { syncSwState(ban,name); } catch(e){}
+}
+
+function drawStreakHero(me){
+  if(!me) return '';
+  var info = getStreakInfo(me.ban, me.name);
+  var now = new Date();
+  var hh = now.getHours();
+  var streak = info.streak;
+  var done = info.todayDone;
+  var cls, mood, msg, tag, btn;
+  var remain = (24 * 60) - (hh * 60 + now.getMinutes());
+
+  if(done){
+    cls = 's-done'; mood = '🥳';
+    msg = '오늘 목표 끝! 내일도 하면 <b>' + (streak + 1) + '일차</b>야. 이 흐름 그대로 가자!';
+    tag = '오늘 완료'; btn = '한 세트 더 하기';
+  } else if(info.broken){
+    cls = 's-warn'; mood = '😢';
+    msg = '스트릭이 끊겼어… <b>오늘 시작하면 다시 1일차!</b> 10분이면 충분해.';
+    tag = '아직 시작 전'; btn = '오늘 1일차 시작하기';
+  } else if(hh >= 5 && hh < 12){
+    cls = 's-calm'; mood = '😊';
+    msg = streak > 0 ? ('아침부터 움직이면 <b>' + streak + '일 연속</b> 유지! 10분이면 저녁이 편해.') : '아침 10분이면 끝나. <b>오늘부터 1일차</b> 시작해볼까?';
+    tag = streak > 0 ? '오늘 미완료' : '아직 시작 전'; btn = '지금 10분만 하기';
+  } else if(hh >= 12 && hh < 18){
+    cls = 's-nudge'; mood = '😯';
+    msg = streak > 0 ? ('어? 오늘 아직 안 했네. <b>' + streak + '일 연속</b> 지금 지키자!') : '오늘 아직 안 했네? 지금 10분이면 끝나!';
+    tag = streak > 0 ? '오늘 미완료' : '아직 시작 전'; btn = '지금 10분만 하고 오기';
+  } else if(hh >= 18 && hh < 22){
+    cls = 's-warn'; mood = '😰';
+    msg = streak > 0 ? ('<b>오늘 안 하면 ' + streak + '일 스트릭 끊겨!</b> 자기 전 10분, 지금 하자!') : '오늘 안 하면 <b>0일</b>이야. 자기 전 10분만!';
+    tag = '오늘 미완료'; btn = '지금 바로 10분 학습';
+  } else {
+    cls = 's-rage'; mood = '😡';
+    msg = '<b>자정까지 ' + (remain > 0 ? remain : 0) + '분!</b> 지금 안 하면 스트릭 0일로 리셋돼!';
+    tag = '마감 임박'; btn = '🚨 지금 당장 시작';
+  }
+
+  var pct = done ? 100 : Math.min(90, (info.acts || 0) * 20);
+  var bestLine = (info.best > info.streak && info.best > 0) ? ' · 최고 🔥' + info.best + '일' : '';
+
+  return '<div class="streak-hero ' + cls + '" id="streak_hero">' +
+    '<div class="sh-char"><div class="sh-owl">🦉</div><div class="sh-mood">' + mood + '</div><div class="sh-flame">🔥</div></div>' +
+    '<div class="sh-main">' +
+      '<div class="sh-row"><span class="sh-days">🔥 ' + streak + '일 연속</span><span class="sh-tag">' + tag + '</span></div>' +
+      '<div class="sh-msg">' + msg + bestLine + '</div>' +
+      '<div class="sh-bar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="sh-actions">' +
+        '<button type="button" class="sh-btn" id="streak_go">' + btn + ' →</button>' +
+        '<button type="button" class="sh-bell" id="streak_bell" title="매일 학습 알림 설정">🔔</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* ================= v82: 🔔 알림 권한 · 서비스워커 · 매일 알림 ================= */
+function notifSupported(){ return ('Notification' in window); }
+function notifPermission(){ try { return ('Notification' in window) ? Notification.permission : 'unsupported'; } catch(e){ return 'unsupported'; } }
+function tdNotifIcon(){ try { return new URL('icon-192.png', location.href).href; } catch(e){ return 'icon-192.png'; } }
+function withTimeout(p, ms){
+  return Promise.race([p, new Promise(function(res){ setTimeout(function(){ res('__timeout'); }, ms); })]);
+}
+
+/* 안드로이드 크롬은 new Notification() 미지원 → 서비스워커 showNotification 우선 */
+function showLocalNotification(title, body, tag){
+  if(!notifSupported() || notifPermission() !== 'granted') return Promise.resolve(false);
+  var icon = tdNotifIcon();
+  var opts = { body: body, icon: icon, badge: icon, tag: tag || 'topedu-streak', renotify: true, data: { url: location.href } };
+  try { opts.vibrate = [140, 70, 140, 70, 200]; } catch(e){}
+  var viaSw = Promise.reject(new Error('no-sw'));
+  try {
+    if(navigator.serviceWorker && navigator.serviceWorker.ready){
+      viaSw = withTimeout(navigator.serviceWorker.ready, 3000).then(function(reg){
+        if(!reg || reg === '__timeout' || typeof reg.showNotification !== 'function') throw new Error('no-reg');
+        return reg.showNotification(title, opts);
+      });
+    }
+  } catch(e){}
+  return viaSw.then(function(){ return true; }).catch(function(){
+    try { new Notification(title, opts); return true; } catch(e){ return false; }
+  });
+}
+
+function syncSwState(ban,name){
+  if(!ban || !name) return;
+  try {
+    if(!window.indexedDB) return;
+    var info = getStreakInfo(ban,name);
+    var db = getStreakDB(ban,name);
+    var payload = {
+      ban: ban, name: name, enabled: !!db.notif.enabled, time: db.notif.time || '20:00',
+      todayDone: !!info.todayDone, streak: info.streak, doneDate: info.todayDone ? tdKey() : '', updatedAt: Date.now()
+    };
+    var req = indexedDB.open('topedu_sw_state', 1);
+    req.onupgradeneeded = function(){ try { req.result.createObjectStore('kv'); } catch(e){} };
+    req.onsuccess = function(){
+      try {
+        var idb = req.result;
+        var tx = idb.transaction('kv','readwrite');
+        tx.objectStore('kv').put(payload, 'state');
+        tx.oncomplete = function(){ try { idb.close(); } catch(e){} };
+      } catch(e){}
+    };
+    req.onerror = function(){};
+  } catch(e){}
+}
+
+function requestNotifPermission(){
+  if(!notifSupported()) return Promise.resolve('unsupported');
+  if(Notification.permission === 'granted') return Promise.resolve('granted');
+  if(Notification.permission === 'denied') return Promise.resolve('denied');
+  try {
+    return Notification.requestPermission().then(function(p){ return p; }).catch(function(){ return 'denied'; });
+  } catch(e){ return Promise.resolve('denied'); }
+}
+
+/* 알림 켜기 (권한 허용 포함) */
+function enableDailyNotif(ban,name,timeStr){
+  return requestNotifPermission().then(function(perm){
+    var db = getStreakDB(ban,name);
+    if(perm !== 'granted'){
+      db.notif.enabled = false;
+      saveStreakDB(ban,name,db);
+      renderNotifModal();
+      return perm;
+    }
+    db.notif.enabled = true;
+    if(timeStr) db.notif.time = timeStr;
+    db.notif.sent = null;
+    saveStreakDB(ban,name,db);
+    syncSwState(ban,name);
+    renderNotifModal();
+    startReminderLoop();
+    return showLocalNotification('🔔 탑에듀 알림 켜짐!', '매일 ' + (db.notif.time) + '에 ' + name + ' 학생 폰으로 학습 알림을 보낼게요. 오늘 10분, 지금 시작하면 스트릭 유지!', 'topedu-notif-on').then(function(ok){
+      return perm;
+    });
+  });
+}
+
+function disableDailyNotif(ban,name){
+  var db = getStreakDB(ban,name);
+  db.notif.enabled = false;
+  saveStreakDB(ban,name,db);
+  syncSwState(ban,name);
+  renderNotifModal();
+}
+
+/* 앱이 열려 있을 때 정해진 시각 이후 미완료면 집요하게 알림 (하루 최대 3회) */
+function reminderText(level, info){
+  var s = info.streak || 0;
+  if(level <= 1){
+    return {
+      title: '🔥 오늘 학습 아직 안 했어!',
+      body: s > 0 ? ('"' + s + '일 연속" 스트릭이 오늘 끊길 수 있어. 10분이면 끝나!')
+                  : '탑에듀 단어 10분만 하고 자기자. 오늘 1일차 시작!' 
+    };
+  }
+  if(level === 2){
+    return {
+      title: '🦉 어? 아직 안 했네',
+      body: s > 0 ? ('🔥 ' + s + '일이 사라지기 직전이야! 지금 바로 시작!') : '오늘 학습 안 하면 0일이야. 지금 10분만!' 
+    };
+  }
+  return { title: '🚨 마지막 경고!', body: '자정 지나면 스트릭이 리셋돼. 지금 당장 탑에듀 앱 열어서 10분 학습!' };
+}
+
+function checkReminderNow(){
+  if(!S || !S.cred || !S.cred.ban || !S.cred.name) return;
+  if(!notifSupported() || notifPermission() !== 'granted') return;
+  var ban = S.cred.ban, name = S.cred.name;
+  var db = getStreakDB(ban,name);
+  var st = db.notif;
+  if(!st.enabled) return;
+  var info = getStreakInfo(ban,name);
+  if(info.todayDone) return;
+  var now = new Date();
+  var nowMin = now.getHours() * 60 + now.getMinutes();
+  var parts = String(st.time || '20:00').split(':');
+  var due = ((+parts[0]) || 20) * 60 + ((+parts[1]) || 0);
+  if(nowMin < due) return;
+  var t = tdKey();
+  var sent = st.sent || {};
+  if(sent.date !== t) sent = { date: t, n: 0 };
+  if(sent.n >= REM_MAX_NAG) return;
+  if(sent.n > 0 && (Date.now() - (st.lastNagAt || 0)) < REM_NAG_GAP_MIN * 60000) return;
+  sent.n = sent.n + 1;
+  st.sent = sent;
+  st.lastNagAt = Date.now();
+  saveStreakDB(ban,name,db);
+  var tx = reminderText(sent.n, info);
+  showLocalNotification(tx.title, tx.body, 'topedu-nag-' + t + '-' + sent.n);
+}
+
+function startReminderLoop(){
+  if(REM_TIMER){ clearInterval(REM_TIMER); }
+  REM_TIMER = setInterval(function(){ try { checkReminderNow(); } catch(e){} }, 60000);
+  setTimeout(function(){ try { checkReminderNow(); } catch(e){} }, 3500);
+}
+
+/* 휴대폰 기본 캘린더용 .ics (매일 반복 + 알람) — 앱을 완전히 꺼도 OS가 확실히 띄움 */
+function icsPad(n){ return ('0' + n).slice(-2); }
+function icsLocal(d){
+  return d.getFullYear() + icsPad(d.getMonth()+1) + icsPad(d.getDate()) + 'T' + icsPad(d.getHours()) + icsPad(d.getMinutes()) + '00';
+}
+function buildIcsText(timeStr, name){
+  var p = String(timeStr || '20:00').split(':');
+  var hh = Math.min(23, Math.max(0, +p[0] || 20));
+  var mm = Math.min(59, Math.max(0, +p[1] || 0));
+  var start = new Date();
+  start.setDate(start.getDate() + 1);
+  start.setHours(hh, mm, 0, 0);
+  var end = new Date(start.getTime() + 15 * 60000);
+  var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.[0-9]+/, '');
+  var who = name ? (name + ' 학생') : '학생';
+  var summary = '🔥 탑에듀 단어 학습 10분 (' + who + ')';
+  var desc = '탑에듀 영어 단어 앱에서 오늘의 필수 학습을 10분 안에 끝내면 연속 학습(스트릭)이 이어집니다.\n앱: https://smcciao-commits.github.io/-/';
+  var lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//TopEdu Academy//Study Streak Reminder v82//KO',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:탑에듀 매일 학습 알림',
+    'BEGIN:VTIMEZONE',
+    'TZID:Asia/Seoul',
+    'BEGIN:STANDARD',
+    'DTSTART:19700101T000000',
+    'TZOFFSETFROM:+0900',
+    'TZOFFSETTO:+0900',
+    'TZNAME:KST',
+    'END:STANDARD',
+    'END:VTIMEZONE',
+    'BEGIN:VEVENT',
+    'UID:topedu-streak-' + icsLocal(start) + '-' + String(name || 'student').replace(/\s/g, '') + '@smcciao-commits.github.io',
+    'DTSTAMP:' + stamp,
+    'DTSTART;TZID=Asia/Seoul:' + icsLocal(start),
+    'DTEND;TZID=Asia/Seoul:' + icsLocal(end),
+    'RRULE:FREQ=DAILY',
+    'SUMMARY:' + summary,
+    'DESCRIPTION:' + desc.replace(/\n/g, '\\n'),
+    'BEGIN:VALARM',
+    'TRIGGER:-PT0M',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:' + summary,
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ];
+  return lines.join('\r\n') + '\r\n';
+}
+function downloadIcs(timeStr){
+  var name = (S && S.cred) ? S.cred.name : '';
+  var txt = buildIcsText(timeStr, name);
+  try {
+    var blob = new Blob([txt], { type: 'text/calendar;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'topedu_daily_study_' + String(timeStr || '20:00').replace(':', '') + '.ics';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ try { URL.revokeObjectURL(url); a.parentNode.removeChild(a); } catch(e){} }, 1500);
+    return true;
+  } catch(e){ return false; }
+}
+
+/* ===== 알림 설정 모달 ===== */
+function openNotifModal(){
+  renderNotifModal();
+  var ov = document.getElementById('notifOverlay');
+  if(!ov) return;
+  ov.classList.add('on');
+  ov.setAttribute('aria-hidden', 'false');
+  try { document.body.style.overflow = 'hidden'; } catch(e){}
+}
+function closeNotifModal(){
+  var ov = document.getElementById('notifOverlay');
+  if(!ov) return;
+  ov.classList.remove('on');
+  ov.setAttribute('aria-hidden', 'true');
+  try { document.body.style.overflow = ''; } catch(e){}
+}
+function renderNotifModal(){
+  var el = document.getElementById('notifModal');
+  if(!el) return;
+  var ban = (S && S.cred) ? S.cred.ban : '';
+  var name = (S && S.cred) ? S.cred.name : '';
+  var db = getStreakDB(ban,name);
+  var st = db.notif;
+  var perm = notifPermission();
+  var on = !!st.enabled && perm === 'granted';
+  var permTxt = perm === 'granted' ? '알림 권한 허용됨 ✓' : (perm === 'denied' ? '알림 차단됨 (설정에서 허용 필요)' : (perm === 'unsupported' ? '이 브라우저는 웹 알림 미지원' : '아직 허용 안 됨'));
+  var permCls = perm === 'granted' ? 'on' : 'off';
+  var presets = [['16:00','하교 직후'], ['20:00','저녁'], ['21:30','자기 전']];
+  var cur = st.time || '20:00';
+  var isPreset = presets.map(function(p){ return p[0]; }).indexOf(cur) >= 0;
+
+  var h = '';
+  h += '<div class="nc-head"><div style="flex:1;font-size:15.5px;font-weight:800;font-family:Maplestory,sans-serif">🔔 매일 학습 알림 <span class="nc-vtag">' + TOPEDU_APP_VERSION + '</span></div><button type="button" class="prt-x" id="ncClose">✕</button></div>';
+  h += '<div class="nc-body">';
+  h += '<div class="nc-perm"><span>알림 상태</span><span class="' + permCls + '">' + permTxt + '</span></div>';
+  h += '<div style="font-size:12.5px;color:#475569;line-height:1.5;word-break:keep-all">오늘 학습을 아직 안 끝냈을 때, 정한 시각에 폰 상단바·잠금화면으로 <b>듀오링고처럼 집요하게</b> 알려줘요. ' + (on ? '<b style="color:#047857">매일 ' + cur + ' 알림 켜짐</b>' : '지금은 꺼져 있어요.') + '</div>';
+  h += '<div class="nc-lbl">알림 시간 고르기</div>';
+  h += '<div class="nc-chips">' + presets.map(function(p){
+    return '<button type="button" class="nc-chip' + (cur === p[0] ? ' on' : '') + '" data-t="' + p[0] + '">' + p[0] + '<span>' + p[1] + '</span></button>';
+  }).join('') + '</div>';
+  h += '<div class="nc-time"><span>직접 입력</span><input type="time" id="ncTime" value="' + cur + '"></div>';
+  h += '<button type="button" class="nc-main' + (on ? ' off' : '') + '" id="ncMain">' + (on ? '🔕 매일 알림 끄기' : '🔔 매일 학습 알림 켜기') + '</button>';
+  h += '<button type="button" class="nc-sub" id="ncTest">📣 테스트 알림 지금 받아보기</button>';
+  h += '<button type="button" class="nc-sub" id="ncIcs" style="color:#b45309;background:#fffbeb;border-color:#fcd34d">📅 휴대폰 캘린더에 매일 알림 추가 (.ics)</button>';
+  if(on) h += '<div class="nc-ok">✔ 매일 ' + cur + '에 알림 예약됨 · 오늘 학습 완료하면 오늘은 안 울려요</div>';
+  h += '<div class="nc-note"><b>솔직한 한계 안내</b> — 웹앱 알림은 <b>앱을 완전히 종료</b>하면 안 올 수 있어요(아이폰·안드로이드 정책).<br>그래서 <b>.ics 캘린더 알림</b>을 같이 넣어두면 폰 기본 캘린더가 앱이 꺼져 있어도 100% 울려줍니다. 두 가지 다 켜 두는 게 가장 집요해요 🔥</div>';
+  h += '</div>';
+  el.innerHTML = h;
+
+  var bc = document.getElementById('ncClose'); if(bc) bc.onclick = closeNotifModal;
+  [].forEach.call(el.querySelectorAll('.nc-chip'), function(chip){
+    chip.onclick = function(){
+      var t = chip.dataset.t;
+      var d2 = getStreakDB(ban,name);
+      d2.notif.time = t; d2.notif.sent = null;
+      saveStreakDB(ban,name,d2);
+      syncSwState(ban,name);
+      if(d2.notif.enabled && notifPermission() === 'granted'){
+        showLocalNotification('🔔 알림 시간 변경', '이제 매일 ' + t + '에 알림이 와요!', 'topedu-time-changed');
+      }
+      renderNotifModal();
+    };
+  });
+  var tm = document.getElementById('ncTime');
+  if(tm) tm.onchange = function(){
+    var t = this.value || '20:00';
+    var d2 = getStreakDB(ban,name);
+    d2.notif.time = t; d2.notif.sent = null;
+    saveStreakDB(ban,name,d2);
+    syncSwState(ban,name);
+    renderNotifModal();
+  };
+  var bm = document.getElementById('ncMain');
+  if(bm) bm.onclick = function(){
+    if(on){ disableDailyNotif(ban,name); return; }
+    var t = (document.getElementById('ncTime') || {}).value || cur;
+    bm.disabled = true;
+    bm.textContent = '권한 확인 중...';
+    enableDailyNotif(ban,name,t).then(function(perm2){
+      if(perm2 !== 'granted'){
+        alert('알림 권한이 허용되지 않았어요.\n\n[설정 → 알림]에서 이 앱 알림을 허용하거나, 아래 [📅 캘린더 .ics] 버튼으로 확실하게 받아보세요!');
+      }
+    });
+  };
+  var bt = document.getElementById('ncTest');
+  if(bt) bt.onclick = function(){
+    requestNotifPermission().then(function(perm2){
+      if(perm2 !== 'granted'){ alert('먼저 알림 권한을 허용해 주세요!'); renderNotifModal(); return; }
+      showLocalNotification('🔔 탑에듀 알림 테스트', name + ' 학생, 이렇게 알림이 와요! 오늘 10분 학습하면 🔥' + (getStreakInfo(ban,name).streak) + '일 유지!', 'topedu-test-' + Date.now()).then(function(ok){
+        if(!ok) alert('알림을 띄우지 못했어요. 폰 설정에서 이 앱의 알림을 허용해 주세요.');
+      });
+    });
+  };
+  var bi = document.getElementById('ncIcs');
+  if(bi) bi.onclick = function(){
+    var t = (document.getElementById('ncTime') || {}).value || cur;
+    if(downloadIcs(t)){
+      renderNotifModal();
+      setTimeout(function(){ alert('📅 캘린더 파일(.ics)을 내려받았어요!\n\n아래 방법으로 열면 매일 ' + t + '에 폰이 직접 알림을 울려줘요.\n· 안드로이드: 다운로드 알림 → 파일을 누르면 캘린더에 추가\n· 아이폰: 파일 앱 → 내려받은 파일 누르기 → 캘린더 추가'); }, 200);
+    } else { alert('캘린더 파일을 만들지 못했어요. 잠시 후 다시 시도해 주세요.'); }
+  };
+}
+
+/* 학생 홈: 매일 알림 카드 */
+function drawNotifCard(me){
+  if(!me) return '';
+  var db = getStreakDB(me.ban, me.name);
+  var st = db.notif;
+  var perm = notifPermission();
+  var on = !!st.enabled && perm === 'granted';
+  var sub = on ? ('매일 <b>' + st.time + '</b> 알림 켜짐 · 오늘 미완료면 알려줘요')
+               : (perm === 'unsupported' ? '이 브라우저는 웹 알림이 안 돼요 → 캘린더 알림을 써 주세요'
+               : (perm === 'denied' ? '알림이 차단돼 있어요 → 캘린더 알림으로 받아보세요'
+               : '한 번만 켜두면 매일 정한 시각에 알려줘요'));
+  return '<div class="card" style="margin:10px 0 12px;border:2px solid #99f6e4;border-radius:18px;padding:14px;background:linear-gradient(135deg,#f0fdfa,#ffffff)">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px">' +
+      '<div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:15px;color:#0f766e">🔔 매일 학습 알림</div>' +
+      '<span style="font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;' + (on ? 'background:#d1fae5;color:#047857;border:1px solid #6ee7b7' : 'background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0') + '">' + (on ? 'ON' : 'OFF') + '</span>' +
+    '</div>' +
+    '<div style="font-size:12px;color:#475569;margin-bottom:10px">' + sub + '</div>' +
+    '<div style="display:flex;gap:7px;flex-wrap:wrap">' +
+      '<button type="button" id="btn_notif_open" style="flex:1 1 160px;padding:12px;border-radius:13px;font-family:Maplestory,sans-serif;font-weight:700;font-size:13.5px;color:#fff;background:linear-gradient(135deg,#0d9488,#14b8a6);box-shadow:0 3px 10px rgba(13,148,136,0.26)">' + (on ? '🔔 알림 시간 바꾸기' : '🔔 매일 학습 알림 켜기') + '</button>' +
+      '<button type="button" id="btn_ics_save" style="flex:0 0 auto;padding:12px 13px;border-radius:13px;font-weight:800;font-size:13px;color:#b45309;background:#fffbeb;border:1.5px solid #fcd34d">📅 캘린더</button>' +
+    '</div>' +
+  '</div>';
+}
+
+/* ===== 선생님 화면: 스트릭 관제 (학생 폰 기록 + 알림서버 동기화) ===== */
+function getRealStreakMap(){
+  var out = {};
+  try {
+    for(var i = 0; i < localStorage.length; i++){
+      var k = localStorage.key(i);
+      if(!k || k.indexOf('topedu_streak_') !== 0) continue;
+      var rest = k.slice('topedu_streak_'.length);
+      var u = rest.indexOf('_');
+      if(u < 0) continue;
+      var ban = rest.slice(0, u), nm = rest.slice(u + 1);
+      if(!ban || !nm) continue;
+      var info = getStreakInfo(ban, nm);
+      out[ban + '|' + nm] = { n: nm, b: ban, s: info.streak, d: info.todayDone ? 1 : 0, t: tdKey(), ts: Date.now(), local: true };
+    }
+  } catch(e){}
+  return out;
+}
+function mergeStreakBoard(row){
+  if(!row || !row.n) return;
+  var k = (row.b || '') + '|' + row.n;
+  var cur = STREAK_BOARD[k];
+  if(!cur || (row.ts || 0) >= (cur.ts || 0)) STREAK_BOARD[k] = row;
+}
+function pushStreakBoard(ban, name, done, streak){
+  try {
+    if(!ban || !name) return;
+    var t = tdKey();
+    var key = 'topedu_board_push_' + ban + '_' + name;
+    var last = null;
+    try { last = localStorage.getItem(key); } catch(e){}
+    if(!done && last === t) return;   /* 하루 1회만 (완료 시엔 한 번 더) */
+    try { localStorage.setItem(key, t); } catch(e){}
+    var row = { n: name, b: ban, s: streak || 0, d: done ? 1 : 0, t: t, ts: Date.now() };
+    fetch('https://ntfy.sh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: TOPEDU_STREAK_BOARD_TOPIC, title: 'streak', message: JSON.stringify(row), priority: 2 })
+    }).catch(function(){});
+  } catch(e){}
+}
+function pullStreakBoard(){
+  try {
+    fetch('https://ntfy.sh/' + TOPEDU_STREAK_BOARD_TOPIC + '/json?poll=1&since=all')
+      .then(function(r){ return r.text(); })
+      .then(function(txt){
+        var lines = String(txt || '').trim().split('\n');
+        lines.forEach(function(l){
+          if(!l.trim()) return;
+          try {
+            var d = JSON.parse(l);
+            if(d && d.event === 'message' && d.message){
+              var row = JSON.parse(d.message);
+              if(row && row.n){ if(!row.ts) row.ts = (d.time || 0) * 1000; mergeStreakBoard(row); }
+            }
+          } catch(e){}
+        });
+        STREAK_BOARD_FETCHED_AT = Date.now();
+        renderStreakBoard();
+      }).catch(function(){ renderStreakBoard(); });
+  } catch(e){ renderStreakBoard(); }
+}
+function renderStreakBoard(){
+  var box = document.getElementById('streakBoardBox');
+  if(!box) return;
+  var t = tdKey();
+  var local = getRealStreakMap();
+  var keys = Object.keys(STREAK_BOARD);
+  var rows = [];
+  keys.forEach(function(k){ rows.push(STREAK_BOARD[k]); });
+  Object.keys(local).forEach(function(k){
+    var r = local[k], hit = false;
+    for(var i = 0; i < rows.length; i++){ if(rows[i].n === r.n && rows[i].b === r.b){ hit = true; break; } }
+    if(!hit) rows.push(r);
+  });
+  var today = rows.filter(function(r){ return r.t === t; });
+  var done = today.filter(function(r){ return r.d; });
+  var ing = today.filter(function(r){ return !r.d && r.s > 0; });
+  var notYet = today.filter(function(r){ return !r.d && !r.s; });
+  rows.sort(function(a,b){ return (b.s || 0) - (a.s || 0); });
+
+  var h = '<div class="sb-head"><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:15px;color:#b45309">🔥 스트릭 관제 (오늘 실시간)</div>' +
+    '<button type="button" class="btn-sm" id="sbRefresh" style="background:#fff;border:1.5px solid #fcd34d;color:#b45309">🔄 새로고침</button></div>';
+  h += '<div class="sb-counts">' +
+    '<span class="sb-pill done">오늘 완료 ' + done.length + '명</span>' +
+    '<span class="sb-pill ing">미완료 ' + ing.length + '명</span>' +
+    '<span class="sb-pill none">아직 시작 전 ' + notYet.length + '명</span>' +
+    '<span class="sb-pill">기록 없음 ' + Math.max(0, ((typeof TOPEDU_ALL_STUDENTS !== 'undefined' ? TOPEDU_ALL_STUDENTS.length : 0)) - today.length) + '명</span>' +
+  '</div>';
+  if(rows.length){
+    h += '<div class="sb-list">' + rows.slice(0, 40).map(function(r){
+      var st = r.t === t ? (r.d ? '<span class="st-badge st-done">오늘 완료</span>' : '<span class="st-badge st-none">오늘 미완료</span>') : '<span class="st-badge st-mid">오늘 기록 없음</span>';
+      return '<div class="sb-row"><div><b>' + esc(r.n) + '</b> <span style="color:#94a3b8;font-size:11px">' + esc(r.b || '') + '</span></div>' +
+        '<div style="display:flex;align-items:center;gap:8px"><span class="fl">🔥' + (r.s || 0) + '일</span>' + st + '</div></div>';
+    }).join('') + '</div>';
+  } else {
+    h += '<div class="sb-empty">아직 올라온 스트릭 기록이 없어요. 학생이 폰으로 앱에 들어와 학습하면 <b>하루 1회 자동으로</b> 이 화면에 올라옵니다. (인터넷 연결 필요)</div>';
+  }
+  box.innerHTML = h;
+  var br = document.getElementById('sbRefresh');
+  if(br) br.onclick = function(){ STREAK_BOARD = {}; pullStreakBoard(); };
 }
 
 /* ============ 시작 ============ */
