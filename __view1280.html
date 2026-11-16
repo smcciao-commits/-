@@ -11,6 +11,16 @@
 </style>
 </head>
 <body>
-<iframe id="f" src="index.html?v=d82" title="desktop view" allow="notifications"></iframe>
+<iframe id="f" title="desktop view" allow="notifications"></iframe>
+<script>
+var f = document.getElementById('f');
+f.src = 'index.html?v=' + Date.now();
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    var y = parseInt((location.hash||'').replace('#',''),10) || 0;
+    try { f.contentWindow.scrollTo(0, y); } catch(e){}
+  }, 1200);
+});
+</script>
 </body>
 </html>
