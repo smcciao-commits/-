@@ -505,7 +505,7 @@ function submitAnswer(){
     var ws=document.querySelectorAll('#pool .word');for(var i=0;i<ws.length;i++)ws[i].disabled=true;
     var ss=document.querySelectorAll('.ansslot .sel');for(var k=0;k<ss.length;k++)ss[k].disabled=true;
   }
-  var keyTxt=(p.mode==='blank')?(it.blank.replace('____','['+it.answer+']')):'';
+  var keyTxt=(p.mode==='blank')?(it.blank.replace('____','['+it.answer+']').replace(/\s*\([^)]*\)/g,'')):'';
   var fb=document.getElementById('fbbox');
   fb.innerHTML='<div class="fb '+(ok?'ok':'no')+'">'+
     '<div class="fbhead">'+(ok?'✅ 정답입니다!':'❌ 아쉬워요 — 정답과 비교해 보세요')+'</div>'+
@@ -627,7 +627,7 @@ function buildSheetHTML(sets,withAnswers){
       q+='<div class="p-q"><div class="p-num">'+(i+1)+'</div><div class="p-body">'+
         '<div class="p-ko">'+esc(it.ko)+'</div>'+
         '<div class="p-cond">'+esc(it.condition)+'</div>'+
-        (it.hint?'<div class="p-cond">제시어: '+esc(it.hint)+'</div>':'')+
+        (it.hint&&norm(it.hint)!==norm(it.answer)?'<div class="p-cond">제시어: '+esc(it.hint)+'</div>':'')+
         '<div class="p-line"></div><div class="p-line"></div></div></div>';
     });
     out+='<div class="p-page">'+
