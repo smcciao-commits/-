@@ -742,6 +742,96 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .aligned-words .w.ok { color: #2e7d32; font-weight: bold; background: #e8f5e9; border-radius: 4px; padding: 2px 6px; margin: 0 2px; display: inline-block; }
 .aligned-words .w.miss { color: #c62828; text-decoration: line-through; background: #ffebee; border-radius: 4px; padding: 2px 6px; margin: 0 2px; display: inline-block; }
 
+/* ================= v80: 🖨️ 단어장 · 시험지 인쇄 ================= */
+.print-overlay { position: fixed; inset: 0; z-index: 9000; display: none; background: rgba(15,23,42,0.55); padding: 14px; overflow: auto; }
+.print-overlay.on { display: block; }
+.print-modal { display: flex; flex-direction: column; max-width: 1060px; margin: 6px auto; max-height: calc(100vh - 40px); background: #fff; border-radius: 18px; box-shadow: 0 18px 50px rgba(15,23,42,0.35); overflow: hidden; }
+.print-modal-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; flex: 0 0 auto; }
+.prt-x { background: rgba(255,255,255,0.18); color: #fff; border: none; border-radius: 10px; width: 34px; height: 34px; font-size: 16px; font-weight: 700; cursor: pointer; }
+.print-modal-body { display: flex; flex: 1 1 auto; min-height: 0; }
+.print-settings { width: 350px; flex: 0 0 350px; overflow: auto; padding: 14px; border-right: 1px solid #e2e8f0; background: #fbfefe; }
+.prt-sec { margin-bottom: 16px; }
+.prt-lbl { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: #0f766e; margin-bottom: 7px; }
+.prt-badge { font-size: 11px; font-weight: 700; color: #0d9488; background: #ccfbf1; border-radius: 999px; padding: 2px 8px; }
+.prt-input { width: 100%; padding: 9px 11px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 13.5px; font-family: inherit; color: #1e293b; background: #fff; }
+.prt-listbtns { display: flex; gap: 6px; margin-top: 8px; }
+.prt-mini { flex: 1; padding: 7px 8px; font-size: 11.5px; font-weight: 700; color: #0d9488; background: #f0fdfa; border: 1.5px solid #99f6e4; border-radius: 9px; cursor: pointer; font-family: inherit; }
+.prt-mini.gray { color: #64748b; background: #f8fafc; border-color: #e2e8f0; }
+.prt-setlist { margin-top: 8px; max-height: 210px; overflow: auto; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; padding: 4px; }
+.prt-set { display: flex; align-items: flex-start; gap: 7px; padding: 7px 8px; border-radius: 9px; cursor: pointer; line-height: 1.3; }
+.prt-set.on { background: #f0fdfa; }
+.prt-set input[type=checkbox] { margin: 2px 0 0; width: 15px; height: 15px; accent-color: #0d9488; flex: 0 0 auto; }
+.prt-setname { flex: 1; font-size: 12.5px; font-weight: 600; color: #1e293b; word-break: break-all; }
+.prt-setmeta { flex: 0 0 auto; font-size: 10.5px; color: #64748b; font-weight: 700; white-space: nowrap; }
+.prt-empty { padding: 16px 8px; text-align: center; font-size: 12px; color: #94a3b8; }
+.prt-type { display: flex; align-items: center; gap: 8px; padding: 9px 10px; margin-bottom: 6px; border: 1.5px solid #e2e8f0; border-radius: 11px; cursor: pointer; background: #fff; line-height: 1.25; }
+.prt-type.on { border-color: #14b8a6; background: #f0fdfa; }
+.prt-type input { accent-color: #0d9488; width: 15px; height: 15px; flex: 0 0 auto; }
+.prt-type .ic { font-size: 15px; }
+.prt-type b { font-size: 12.5px; color: #1e293b; display: block; }
+.prt-type i { font-size: 10.5px; color: #64748b; font-style: normal; display: block; }
+.prt-check { display: flex; align-items: center; gap: 8px; padding: 7px 9px; margin-bottom: 5px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; background: #fff; font-size: 12.5px; font-weight: 600; color: #334155; }
+.prt-check.on { border-color: #14b8a6; background: #f0fdfa; }
+.prt-check input { accent-color: #0d9488; width: 15px; height: 15px; }
+.prt-row2 { display: flex; gap: 8px; }
+.prt-row2 > * { flex: 1; }
+.print-preview-pane { flex: 1 1 auto; min-width: 0; overflow: auto; background: #eef2f6; padding: 12px; }
+.prt-pvbar { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; font-weight: 700; color: #475569; margin-bottom: 8px; }
+.print-modal-foot { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-top: 1px solid #e2e8f0; background: #fbfefe; flex: 0 0 auto; }
+.prt-footnote { flex: 1; font-size: 12px; color: #dc2626; font-weight: 700; }
+.prt-btn { padding: 11px 18px; border-radius: 12px; border: none; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; box-shadow: 0 4px 12px rgba(13,148,136,0.28); }
+.prt-btn.ghost { background: #f1f5f9; color: #475569; box-shadow: none; border: 1.5px solid #e2e8f0; }
+
+/* A4 시험지(미리보기 + 인쇄 공용) */
+.a4-sheet { width: 210mm; min-height: 297mm; box-sizing: border-box; background: #fff; color: #000; padding: 12mm 12mm 10mm; margin: 0 auto; box-shadow: 0 2px 12px rgba(15,23,42,0.18); font-family: Pretendard, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-size: 10.5pt; line-height: 1.35; }
+.print-preview-pane .a4-sheet { zoom: 0.74; }
+.ps-head { border-bottom: 2px solid #111; padding-bottom: 5px; margin-bottom: 8px; }
+.ps-school { font-family: Maplestory, Pretendard, sans-serif; font-size: 13pt; font-weight: 800; letter-spacing: 0.3px; }
+.ps-title { display: inline-block; font-size: 11pt; font-weight: 800; margin-top: 2px; border: 1.5px solid #111; border-radius: 4px; padding: 0 7px; }
+.ps-meta { font-size: 8.5pt; color: #222; margin-top: 4px; }
+.ps-info { display: flex; justify-content: space-between; gap: 6px; font-size: 9.5pt; font-weight: 700; margin-top: 6px; }
+.ps-grid { margin-top: 6px; }
+.ps-grid.ps-cols2 { column-count: 2; column-gap: 7mm; column-rule: 0.4pt solid #ddd; }
+.ps-grid.ps-cols1 { column-count: 1; }
+.ps-row { display: flex; align-items: baseline; gap: 4px; padding: 2.6px 0; border-bottom: 0.6pt dotted #b8b8b8; font-size: 10pt; break-inside: avoid; page-break-inside: avoid; }
+.ps-no { flex: 0 0 20px; text-align: right; font-size: 8.5pt; color: #444; }
+.ps-en { font-weight: 700; }
+.ps-mn { margin-left: auto; text-align: right; padding-left: 6px; }
+.ps-blank { flex: 1 1 auto; min-width: 24px; margin-left: 4px; border-bottom: 0.8pt solid #777; height: 11px; }
+.ps-ex { font-size: 8pt; color: #333; padding: 0 0 3px 24px; break-inside: avoid; page-break-inside: avoid; }
+.ps-empty { padding: 30px 0; text-align: center; font-size: 10pt; color: #777; }
+.ps-ans { display: flex; gap: 5px; padding: 2.4px 0; font-size: 9.5pt; break-inside: avoid; page-break-inside: avoid; }
+.ps-ans b { flex: 0 0 22px; text-align: right; }
+.ps-page-break { break-before: page; page-break-before: always; height: 0; margin: 0; }
+.prt-vtag { font-size: 10.5px; opacity: 0.85; font-weight: 700; }
+@media (max-width: 900px) {
+  .print-preview-pane .a4-sheet { zoom: 0.5; }
+}
+@media (max-width: 800px) {
+  .print-overlay { padding: 0; }
+  .print-modal { max-height: 100vh; border-radius: 0; margin: 0; }
+  .print-modal-body { flex-direction: column; }
+  .print-settings { width: auto; flex: 1 1 auto; max-height: 48vh; border-right: none; border-bottom: 1px solid #e2e8f0; }
+  .print-preview-pane { flex: 1 1 auto; padding: 8px; }
+  .prt-setlist { max-height: 150px; }
+}
+@media (max-width: 560px) {
+  .print-preview-pane .a4-sheet { zoom: 0.34; }
+}
+
+/* ===== 인쇄 전용: 시험지 외 모든 UI 숨김 ===== */
+@media print {
+  @page { size: A4; margin: 10mm 10mm 10mm 10mm; }
+  html, body { background: #fff !important; background-image: none !important; overflow: visible !important; height: auto !important; }
+  body > *:not(#printOverlay) { display: none !important; }
+  #printOverlay { position: static !important; inset: auto !important; display: block !important; padding: 0 !important; margin: 0 !important; background: #fff !important; overflow: visible !important; z-index: auto !important; }
+  .no-print { display: none !important; }
+  .print-modal, .print-modal-body, .print-preview-pane { display: block !important; position: static !important; width: auto !important; max-width: none !important; max-height: none !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: #fff !important; overflow: visible !important; }
+  #printSheetArea, .a4-sheet { display: block !important; zoom: 1 !important; width: auto !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: #fff !important; color: #000 !important; font-size: 10.5pt !important; }
+  .ps-page-break { break-before: page; page-break-before: always; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
 </style>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -814,6 +904,8 @@ function forceAppRefresh(e) {
 <body>
 <div class="wrap" id="app"></div>
 <div class="load" id="load">잠시만요…</div>
+<!-- v80: 🖨️ 단어장 · 시험지 인쇄 모달 (인쇄 시 이 안의 #printSheetArea 만 출력) -->
+<div id="printOverlay" class="print-overlay" aria-hidden="true"><div class="print-modal" id="printModal"></div></div>
 <script>
 /* ============ 기본 ============ */
 var S = { cred: null, home: null, admin: null };
@@ -2056,6 +2148,9 @@ function showWordMenu(){
 
   app.innerHTML = topBar(W.set.name) +
     statusBanner +
+    '<div style="display:flex;gap:8px;margin:0 0 12px">' +
+      '<button type="button" class="btn" id="btn_print_set" style="flex:1;margin:0;padding:10px;font-size:13.5px;font-weight:700;background:#f0fdfa;border:1.5px solid #14b8a6;color:#0d9488;border-radius:12px">🖨️ 이 세트로 시험지 인쇄</button>' +
+    '</div>' +
     '<div class="modes">' +
       '<button class="mode" data-m="card">' + tick('카드') + '<div class="n">🃏</div><b>① 카드 외우기 <span class="badge-tag req">필수</span></b><span>뒤집어서 뜻 확인 & 발음 채점</span></button>' +
       '<button class="mode" data-m="speak">' + tick('말하기') + '<div class="n">🎙️</div><b>② 따라 말하기 <span class="badge-tag opt">자율</span></b><span>원어민 듣고 발음 채점 · 80점 통과</span></button>' +
@@ -2067,6 +2162,8 @@ function showWordMenu(){
     '</div>';
 
   bindBack(function(){ refreshHome(); });
+  var bPrintSet = $('#btn_print_set');
+  if (bPrintSet) bPrintSet.onclick = function(){ openPrintSheet(W.set && W.set.name); };
   [].forEach.call(app.querySelectorAll('.mode'),function(b){
     b.onclick=function(){
       ({card:runCard,speak:runSpeak,choice:runChoice,spell:runSpell,match:runMatch,cloze:runCloze,test:runTest})[b.dataset.m](W.words);
@@ -2794,10 +2891,13 @@ var SEL_STU = {};
 function showAdmin(){
   var A = S.admin, I = A.info;
   if(!A.tab) A.tab = 'dash';
-  var html = '<div class="top"><button class="back" id="back">← 나가기</button><div class="grow"><div class="title">선생님 관리 화면 🌸</div></div></div>'+
+  var html = '<div class="top"><button class="back" id="back">← 나가기</button><div class="grow"><div class="title">선생님 관리 화면 🌸 <span style="font-size:11px;font-weight:700;color:#0d9488;background:#ccfbf1;border-radius:999px;padding:2px 8px;vertical-align:middle">' + TOPEDU_APP_VERSION + '</span></div></div></div>'+
     '<div style="display:flex;gap:8px;margin:6px 0 10px">'+
     '<button class="btn dark" id="bnew" style="flex:1;margin:0">⚔️ 단어 대결 (칠판)</button>'+
     '<button class="btn" id="blive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 화상수업 열기</button>'+
+    '</div>'+
+    '<div style="display:flex;gap:8px;margin:0 0 10px">'+
+    '<button type="button" class="btn" id="bprint" onclick="openPrintSheet()" style="flex:1;margin:0;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(13,148,136,0.28)">🖨️ 단어·시험지 인쇄</button>'+
     '</div>'+
     '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button></div>';
 
@@ -3867,6 +3967,263 @@ function pEnd(v){
     '<div class="card"><h2>🏆 1~3등</h2><ul class="list">'+(v.top||[]).map(function(r){ return '<li><span>'+md[r.rank-1]+' '+esc(r.name)+'</span><b>'+r.c+'개</b></li>'; }).join('')+'</ul></div>'+
     '<button class="btn" id="bhome">처음 화면으로</button>';
   bindBack(playerExit); $('#bhome').onclick=playerExit;
+}
+
+/* ================= v80: 🖨️ 단어장 · 시험지 인쇄 ================= */
+var TOPEDU_APP_VERSION = 'v80';
+var PRT = { ban: '전체', sets: {}, type: 'mean', shuffle: false, count: 'all', answer: true, cols: 2, ex: false, q: '' };
+var PRT_TIMER = null;
+
+function prtSetList() {
+  var arr = [];
+  var keys = Object.keys(ALL_WORD_SETS || {});
+  for (var i = 0; i < keys.length; i++) {
+    var s = ALL_WORD_SETS[keys[i]] || {};
+    arr.push({ name: keys[i], target: s.target || '기타', count: (s.words || []).length });
+  }
+  return arr;
+}
+function prtBanList() {
+  var seen = {}, arr = prtSetList();
+  for (var i = 0; i < arr.length; i++) seen[arr[i].target] = true;
+  var pref = ['초5', '수지중1', '수지중2', '예비고1', '홍천고1'];
+  var head = pref.filter(function (b) { return seen[b]; });
+  var rest = Object.keys(seen).filter(function (b) { return pref.indexOf(b) < 0; }).sort();
+  return head.concat(rest);
+}
+function prtSelectedNames() {
+  return Object.keys(PRT.sets).filter(function (n) { return PRT.sets[n] && ALL_WORD_SETS[n]; });
+}
+function prtVisibleSets() {
+  var q = String(PRT.q || '').trim().toLowerCase();
+  return prtSetList().filter(function (s) {
+    if (PRT.ban !== '전체' && s.target !== PRT.ban) return false;
+    if (q && s.name.toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+}
+function prtItems() {
+  var names = prtSelectedNames(), seen = {}, list = [];
+  for (var i = 0; i < names.length; i++) {
+    var ws = (ALL_WORD_SETS[names[i]] || {}).words || [];
+    for (var j = 0; j < ws.length; j++) {
+      var o = ws[j] || {};
+      var en = o.w || o.word || '';
+      var mn = o.m || o.meaning || '';
+      if (!en && !mn) continue;
+      var key = en ? norm(en) : ('#' + i + '_' + j);
+      if (seen[key]) continue;
+      seen[key] = 1;
+      list.push({ en: String(en), enu: String(mn), ex: String(o.e || o.example || ''), exK: String(o.k || o.ex_trans || '') });
+    }
+  }
+  return list;
+}
+function prtBuildSheet() {
+  var items = prtItems();
+  if (PRT.shuffle) items = shuffle(items);
+  var lim = items.length;
+  if (PRT.count !== 'all') {
+    var n = parseInt(PRT.count, 10);
+    if (n > 0) lim = Math.min(items.length, n);
+  }
+  items = items.slice(0, lim);
+  var dirs = [];
+  for (var i = 0; i < items.length; i++) {
+    if (PRT.type === 'mix') dirs.push(Math.random() < 0.5 ? 'm2e' : 'e2m');
+    else if (PRT.type === 'eng') dirs.push('m2e');
+    else dirs.push('e2m');
+  }
+  return { items: items, dirs: dirs };
+}
+function openPrintSheet(presetSet) {
+  var ov = document.getElementById('printOverlay');
+  if (!ov) return;
+  if (presetSet && ALL_WORD_SETS[presetSet]) {
+    PRT.sets = {};
+    PRT.sets[presetSet] = true;
+    PRT.ban = (ALL_WORD_SETS[presetSet] || {}).target || '전체';
+    PRT.q = '';
+  }
+  ov.classList.add('on');
+  ov.setAttribute('aria-hidden', 'false');
+  try { document.body.style.overflow = 'hidden'; } catch (e) {}
+  renderPrintModal();
+  renderPrintPreview();
+  var sc = document.getElementById('prtSearch');
+  if (sc && presetSet) { try { sc.blur(); } catch (e) {} }
+}
+function closePrintSheet() {
+  var ov = document.getElementById('printOverlay');
+  if (!ov) return;
+  ov.classList.remove('on');
+  ov.setAttribute('aria-hidden', 'true');
+  try { document.body.style.overflow = ''; } catch (e) {}
+}
+function renderPrintModal() {
+  var el = document.getElementById('printModal');
+  if (!el) return;
+  var banOpts = '<option value="전체">전체 반 (모든 세트)</option>' + prtBanList().map(function (b) {
+    return '<option value="' + esc(b) + '"' + (PRT.ban === b ? ' selected' : '') + '>' + esc(b) + '</option>';
+  }).join('');
+  function typeCard(k, ic, label, desc) {
+    return '<label class="prt-type' + (PRT.type === k ? ' on' : '') + '"><input type="radio" name="prtType" value="' + k + '"' + (PRT.type === k ? ' checked' : '') + '><span class="ic">' + ic + '</span><span><b>' + label + '</b><i>' + desc + '</i></span></label>';
+  }
+  var h = '';
+  h += '<div class="print-modal-head no-print"><div style="flex:1;font-size:16px;font-weight:800">🖨️ 단어장 · 시험지 인쇄 <span class="prt-vtag">' + TOPEDU_APP_VERSION + '</span></div><button class="prt-x" id="prtClose" type="button">✕</button></div>';
+  h += '<div class="print-modal-body">';
+  h += '<div class="print-settings no-print">';
+  h += '<div class="prt-sec"><div class="prt-lbl">1. 반(대상) 선택</div><select id="prtBan" class="prt-input">' + banOpts + '</select></div>';
+  h += '<div class="prt-sec"><div class="prt-lbl">2. 세트 선택 <span class="prt-badge" id="prtSelCount">0개</span></div>';
+  h += '<input id="prtSearch" class="prt-input" placeholder="세트 이름 검색 (예: 빠바, 수지중2, 하린)" value="' + esc(PRT.q) + '">';
+  h += '<div class="prt-listbtns"><button type="button" class="prt-mini" id="prtSelAll">보이는 세트 전체 선택</button><button type="button" class="prt-mini gray" id="prtSelNone">선택 해제</button></div>';
+  h += '<div class="prt-setlist" id="prtSetList"></div></div>';
+  h += '<div class="prt-sec"><div class="prt-lbl">3. 출력 유형</div>';
+  h += typeCard('voca', '📖', '암기용 단어장', '번호 + 영어 + 뜻');
+  h += typeCard('mean', '📝', '뜻 쓰기 시험지', '영어만 제시 + 빈칸');
+  h += typeCard('eng', '📝', '영어 쓰기 시험지', '뜻만 제시 + 빈칸');
+  h += typeCard('mix', '🔀', '혼합 시험지', '영어/뜻 랜덤 섞어 빈칸');
+  h += '</div>';
+  h += '<div class="prt-sec"><div class="prt-lbl">4. 옵션</div>';
+  h += '<label class="prt-check' + (PRT.shuffle ? ' on' : '') + '"><input type="checkbox" data-opt="shuffle"' + (PRT.shuffle ? ' checked' : '') + '>🔀 순서 섞기(랜덤)</label>';
+  h += '<div class="prt-row2" style="margin-bottom:5px"><select id="prtCount" class="prt-input"><option value="all"' + (PRT.count === 'all' ? ' selected' : '') + '>출제 개수: 전체</option><option value="20"' + (PRT.count === '20' ? ' selected' : '') + '>20개</option><option value="30"' + (PRT.count === '30' ? ' selected' : '') + '>30개</option><option value="50"' + (PRT.count === '50' ? ' selected' : '') + '>50개</option><option value="100"' + (PRT.count === '100' ? ' selected' : '') + '>100개</option></select></div>';
+  h += '<label class="prt-check' + (PRT.answer ? ' on' : '') + '"><input type="checkbox" data-opt="answer"' + (PRT.answer ? ' checked' : '') + '>✅ 정답지 함께 출력 (다음 페이지)</label>';
+  h += '<label class="prt-check' + (PRT.ex ? ' on' : '') + '"><input type="checkbox" data-opt="ex"' + (PRT.ex ? ' checked' : '') + '>📄 암기장에 예문·해석 포함</label>';
+  h += '<div class="prt-row2">';
+  h += '<label class="prt-check' + (PRT.cols === 2 ? ' on' : '') + '" style="margin:0"><input type="radio" name="prtCols" value="2"' + (PRT.cols === 2 ? ' checked' : '') + '>2단</label>';
+  h += '<label class="prt-check' + (PRT.cols === 1 ? ' on' : '') + '" style="margin:0"><input type="radio" name="prtCols" value="1"' + (PRT.cols === 1 ? ' checked' : '') + '>1단</label>';
+  h += '</div></div>';
+  h += '</div>';
+  h += '<div class="print-preview-pane" id="prtPreviewPane"><div class="prt-pvbar no-print"><span>👀 미리보기 · A4 (실제 인쇄 모양)</span><span id="prtPvInfo"></span></div><div class="a4-sheet" id="printSheetArea"></div></div>';
+  h += '</div>';
+  h += '<div class="print-modal-foot no-print"><div class="prt-footnote" id="prtFootNote"></div><button type="button" class="prt-btn ghost" id="prtCancel">닫기</button><button type="button" class="prt-btn" id="prtPrint">🖨️ 인쇄하기</button></div>';
+  el.innerHTML = h;
+
+  var bClose = document.getElementById('prtClose'); if (bClose) bClose.onclick = closePrintSheet;
+  var bCancel = document.getElementById('prtCancel'); if (bCancel) bCancel.onclick = closePrintSheet;
+  var bPrint = document.getElementById('prtPrint'); if (bPrint) bPrint.onclick = prtDoPrint;
+  var bAll = document.getElementById('prtSelAll');
+  if (bAll) bAll.onclick = function () {
+    var vis = prtVisibleSets();
+    for (var i = 0; i < vis.length; i++) PRT.sets[vis[i].name] = true;
+    renderPrintSetList(); renderPrintPreview();
+  };
+  var bNone = document.getElementById('prtSelNone');
+  if (bNone) bNone.onclick = function () { PRT.sets = {}; renderPrintSetList(); renderPrintPreview(); };
+  var sc = document.getElementById('prtSearch');
+  if (sc) sc.oninput = function () { PRT.q = this.value; renderPrintSetList(); };
+  var pane = el.querySelector('.print-settings');
+  if (pane) pane.onchange = function (e) {
+    var t = e.target;
+    if (!t) return;
+    if (t.id === 'prtBan') { PRT.ban = t.value; renderPrintSetList(); renderPrintPreview(); return; }
+    if (t.id === 'prtCount') { PRT.count = t.value; renderPrintPreview(); return; }
+    if (t.name === 'prtType') {
+      PRT.type = t.value;
+      [].forEach.call(el.querySelectorAll('.prt-type'), function (lb) { lb.classList.toggle('on', (lb.querySelector('input') || {}).value === PRT.type); });
+      renderPrintPreview(); return;
+    }
+    if (t.name === 'prtCols') {
+      PRT.cols = parseInt(t.value, 10) === 1 ? 1 : 2;
+      [].forEach.call(el.querySelectorAll('input[name=prtCols]'), function (r) { var lb = r.closest('label'); if (lb) lb.classList.toggle('on', r.checked); });
+      renderPrintPreview(); return;
+    }
+    if (t.getAttribute && t.getAttribute('data-opt')) {
+      PRT[t.getAttribute('data-opt')] = !!t.checked;
+      var lb2 = t.closest('label'); if (lb2) lb2.classList.toggle('on', !!t.checked);
+      renderPrintPreview(); return;
+    }
+    if (t.getAttribute && t.getAttribute('data-set')) {
+      var nm = t.getAttribute('data-set');
+      if (t.checked) PRT.sets[nm] = true; else delete PRT.sets[nm];
+      var lb3 = t.closest('label'); if (lb3) lb3.classList.toggle('on', !!t.checked);
+      updatePrintCount(); renderPrintPreview(); return;
+    }
+  };
+  renderPrintSetList();
+}
+function updatePrintCount() {
+  var n = prtSelectedNames().length;
+  var badge = document.getElementById('prtSelCount');
+  if (badge) badge.textContent = n + '개';
+}
+function renderPrintSetList() {
+  var box = document.getElementById('prtSetList');
+  if (!box) return;
+  var vis = prtVisibleSets();
+  if (!vis.length) {
+    box.innerHTML = '<div class="prt-empty">해당 반 · 검색어에 맞는 세트가 없습니다.</div>';
+  } else {
+    box.innerHTML = vis.map(function (s) {
+      var on = !!PRT.sets[s.name];
+      return '<label class="prt-set' + (on ? ' on' : '') + '"><input type="checkbox" data-set="' + esc(s.name) + '"' + (on ? ' checked' : '') + '><span class="prt-setname">' + esc(s.name) + '</span><span class="prt-setmeta">' + esc(s.target) + ' · ' + s.count + '</span></label>';
+    }).join('');
+  }
+  updatePrintCount();
+}
+function renderPrintPreview() {
+  var area = document.getElementById('printSheetArea');
+  if (!area) return;
+  var built = prtBuildSheet();
+  var items = built.items, dirs = built.dirs;
+  var names = prtSelectedNames();
+  var typeTitle = ({ voca: '암기용 단어장', mean: '뜻 쓰기 시험지', eng: '영어 쓰기 시험지', mix: '혼합 시험지' })[PRT.type] || '시험지';
+  var setLine = names.length ? (names.length <= 2 ? names.join(' · ') : names[0] + ' 외 ' + (names.length - 1) + '개 세트') : '세트를 선택해 주세요';
+  var isTest = PRT.type !== 'voca';
+  var h = '';
+  h += '<div class="ps-head"><div class="ps-school">수지탑에듀학원</div><div class="ps-title">' + esc(typeTitle) + '</div>';
+  h += '<div class="ps-meta">' + esc(setLine) + ' · ' + (isTest ? '총 ' + items.length + '문제' : '단어 ' + items.length + '개') + '</div>';
+  h += '<div class="ps-info"><span>이름: _______________</span><span>날짜: ____________</span>' + (isTest ? '<span>점수: ______ / ' + items.length + '</span>' : '<span>확인: ______</span>') + '</div></div>';
+  if (!items.length) {
+    h += '<div class="ps-empty">왼쪽에서 세트를 1개 이상 선택하면<br>여기에 실제 A4 시험지 모양 그대로 미리보기가 나옵니다.</div>';
+  } else {
+    h += '<div class="ps-grid ' + (PRT.cols === 1 ? 'ps-cols1' : 'ps-cols2') + '">';
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      var row = '<div class="ps-row"><span class="ps-no">' + (i + 1) + '.</span>';
+      if (PRT.type === 'voca') {
+        row += '<span class="ps-en">' + esc(it.en) + '</span><span class="ps-mn">' + esc(it.enu) + '</span>';
+      } else if (dirs[i] === 'm2e') {
+        row += '<span class="ps-en">' + esc(it.enu) + '</span><span class="ps-blank"></span>';
+      } else {
+        row += '<span class="ps-en">' + esc(it.en) + '</span><span class="ps-blank"></span>';
+      }
+      row += '</div>';
+      if (PRT.type === 'voca' && PRT.ex && it.ex) {
+        row += '<div class="ps-ex">· ' + esc(it.ex) + (it.exK ? ' — ' + esc(it.exK) : '') + '</div>';
+      }
+      h += row;
+    }
+    h += '</div>';
+  }
+  if (PRT.answer && items.length) {
+    h += '<div class="ps-page-break"></div>';
+    h += '<div class="ps-head"><div class="ps-school">수지탑에듀학원</div><div class="ps-title">정답표 · ' + esc(typeTitle) + '</div><div class="ps-meta">' + esc(setLine) + ' · 총 ' + items.length + '문제</div></div>';
+    h += '<div class="ps-grid ps-cols2">';
+    for (var k = 0; k < items.length; k++) {
+      var a = (PRT.type === 'voca') ? items[k].enu : (dirs[k] === 'e2m' ? items[k].enu : items[k].en);
+      h += '<div class="ps-ans"><b>' + (k + 1) + '.</b><span>' + esc(a) + '</span></div>';
+    }
+    h += '</div>';
+  }
+  area.innerHTML = h;
+  var info = document.getElementById('prtPvInfo');
+  if (info) info.textContent = (isTest ? items.length + '문제' : items.length + '단어') + (PRT.answer && items.length ? ' · 정답지 포함' : '');
+  var note = document.getElementById('prtFootNote');
+  if (note) note.textContent = (prtSelectedNames().length && items.length) ? '' : '세트를 1개 이상 선택해 주세요.';
+}
+function prtDoPrint() {
+  if (!prtSelectedNames().length) { alert('먼저 세트를 1개 이상 선택해 주세요!'); return; }
+  renderPrintPreview();
+  setTimeout(function () { try { window.print(); } catch (e) { alert('인쇄 창을 열지 못했습니다: ' + errMsg(e)); } }, 120);
+}
+if (document.addEventListener) {
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var ov = document.getElementById('printOverlay');
+      if (ov && ov.classList.contains('on')) closePrintSheet();
+    }
+  });
 }
 
 /* ============ 시작 ============ */
