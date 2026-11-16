@@ -937,6 +937,11 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .nc-note { margin-top: 13px; padding: 10px 12px; border-radius: 12px; background: #fffbeb; border: 1px solid #fde68a; font-size: 11.5px; line-height: 1.5; color: #92400e; word-break: keep-all; }
 .nc-note b { color: #b45309; }
 .nc-ok { margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: #ecfdf5; border: 1px solid #6ee7b7; font-size: 12px; font-weight: 700; color: #047857; }
+.nc-testbox { margin-top: 9px; padding: 10px 12px; border-radius: 12px; font-size: 12px; line-height: 1.55; word-break: keep-all; border: 1.5px solid #e2e8f0; background: #f8fafc; color: #334155; }
+.nc-testbox b { font-weight: 800; }
+.nc-testbox.good { background: #ecfdf5; border-color: #6ee7b7; color: #047857; }
+.nc-testbox.bad { background: #fef2f2; border-color: #fca5a5; color: #b91c1c; }
+.nc-testbox.wait { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
 @media (max-width: 420px) {
   .notif-overlay { padding: 10px; }
   .notif-card { max-height: calc(100vh - 20px); }
@@ -956,6 +961,21 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .sb-row b { font-weight: 800; color: #1e293b; }
 .sb-row .fl { font-weight: 800; color: #b45309; }
 .sb-empty { font-size: 12px; color: #92400e; line-height: 1.5; word-break: keep-all; }
+/* v83: 오늘 미완료 학생 전원 일괄 독촉 쪽지 */
+.sb-nag { margin: 2px 0 10px; }
+.sb-nag-btn { width: 100%; padding: 12px; border-radius: 14px; border: none; font-family: Maplestory, sans-serif; font-weight: 700; font-size: 13.5px; color: #fff; background: linear-gradient(135deg,#e11d48,#f43f5e); box-shadow: 0 3px 10px rgba(225,29,72,0.26); }
+.sb-nag-btn:active { transform: translateY(1px); }
+.nag-sum { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 10px; }
+.nag-list { max-height: 210px; overflow: auto; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 4px 6px; background: #fff; }
+.nag-row { display: flex; align-items: center; gap: 7px; padding: 6px 4px; border-bottom: 1px dashed #f1f5f9; font-size: 12.5px; color: #1e293b; }
+.nag-row:last-child { border-bottom: 0; }
+.nag-row b { font-weight: 800; }
+.nag-row .nm { flex: 1 1 auto; min-width: 0; }
+.nag-row .st { font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+.nag-row .st.ing { color: #b45309; background: #fffbeb; border: 1px solid #fcd34d; }
+.nag-row .st.none { color: #b91c1c; background: #fef2f2; border: 1px solid #fca5a5; }
+.nag-tools { display: flex; gap: 6px; margin-top: 8px; }
+.nag-tools button { flex: 1 1 0; padding: 9px; border-radius: 11px; border: 1.5px solid #cbd5e1; background: #fff; font-size: 12px; font-weight: 800; color: #475569; }
 
 </style>
   <link rel="manifest" href="manifest.json">
@@ -1038,6 +1058,8 @@ function forceAppRefresh(e) {
 <div id="printOverlay" class="print-overlay" aria-hidden="true"><div class="print-modal" id="printModal"></div></div>
 <!-- v82: 🔔 매일 학습 알림 설정 모달 -->
 <div id="notifOverlay" class="notif-overlay" aria-hidden="true"><div class="notif-card" id="notifModal"></div></div>
+<!-- v83: 📢 오늘 미완료 학생 전원 일괄 독촉 쪽지 모달 -->
+<div id="nagOverlay" class="notif-overlay" aria-hidden="true"><div class="notif-card" id="nagModal"></div></div>
 <script>
 /* ============ 기본 ============ */
 var S = { cred: null, home: null, admin: null };
@@ -2272,6 +2294,8 @@ function showHome(){
   try { startReminderLoop(); } catch(e){}
   try { syncSwState(me.ban, me.name); } catch(e){}
   try { pushStreakBoard(me.ban, me.name, false, getStreakInfo(me.ban, me.name).streak); } catch(e){}
+  /* v83: 원장님이 보낸 일괄 독촉 쪽지를 학생 폰에서도 받아옴 */
+  try { pullMyTeacherNote(me); } catch(e){}
 }
 function refreshHome(){ return login(S.cred); }
 
@@ -3545,6 +3569,7 @@ function openStudentCommentModal(s){
     var msg = $('#cmsg_text').value.trim();
     if(!msg){ alert('쪽지 내용을 입력해주세요.'); return; }
     sendTeacherNote(s.name, msg);
+    try { publishStudentNote(s.name, s.ban, msg); } catch(e){}
     if(typeof playCorrectSound === 'function') playCorrectSound();
     this.textContent = '💌 쪽지 전송 완료! 학생 앱에 뜹니다 ✔';
     this.style.background = '#2b8a3e';
@@ -4148,7 +4173,7 @@ function pEnd(v){
 }
 
 /* ================= v80: 🖨️ 단어장 · 시험지 인쇄 ================= */
-var TOPEDU_APP_VERSION = 'v82';
+var TOPEDU_APP_VERSION = 'v83';
 var PRT = { ban: '전체', sets: {}, type: 'mean', shuffle: false, count: 'all', answer: true, cols: 2, ex: false, q: '' };
 var PRT_TIMER = null;
 
@@ -4596,29 +4621,84 @@ function drawStreakHero(me){
 /* ================= v82: 🔔 알림 권한 · 서비스워커 · 매일 알림 ================= */
 function notifSupported(){ return ('Notification' in window); }
 function notifPermission(){ try { return ('Notification' in window) ? Notification.permission : 'unsupported'; } catch(e){ return 'unsupported'; } }
-function tdNotifIcon(){ try { return new URL('icon-192.png', location.href).href; } catch(e){ return 'icon-192.png'; } }
+/* v83: 알림 아이콘은 반드시 실제 PNG 파일(./icon-192.png).
+   안드로이드 크롬은 SVG·data URI 아이콘이 오면 showNotification 자체를 조용히 실패시키는 경우가 있어요. */
+function tdNotifIcon(){ try { return new URL('./icon-192.png', location.href).href; } catch(e){ return './icon-192.png'; } }
 function withTimeout(p, ms){
   return Promise.race([p, new Promise(function(res){ setTimeout(function(){ res('__timeout'); }, ms); })]);
 }
-
-/* 안드로이드 크롬은 new Notification() 미지원 → 서비스워커 showNotification 우선 */
-function showLocalNotification(title, body, tag){
-  if(!notifSupported() || notifPermission() !== 'granted') return Promise.resolve(false);
+function notifOptionsWith(title, body, tag){
   var icon = tdNotifIcon();
-  var opts = { body: body, icon: icon, badge: icon, tag: tag || 'topedu-streak', renotify: true, data: { url: location.href } };
+  var opts = { body: body || '', icon: icon, badge: icon, tag: tag || 'topedu-streak', renotify: true, data: { url: location.href } };
   try { opts.vibrate = [140, 70, 140, 70, 200]; } catch(e){}
-  var viaSw = Promise.reject(new Error('no-sw'));
-  try {
-    if(navigator.serviceWorker && navigator.serviceWorker.ready){
-      viaSw = withTimeout(navigator.serviceWorker.ready, 3000).then(function(reg){
-        if(!reg || reg === '__timeout' || typeof reg.showNotification !== 'function') throw new Error('no-reg');
-        return reg.showNotification(title, opts);
+  return opts;
+}
+
+/* 안드로이드 크롬은 new Notification() 미지원 → 서비스워커 showNotification 필수.
+   v83: ready 타임아웃 시 getRegistration()/getRegistrations() 로 한 번 더 직접 시도하고,
+   성공·실패·권한 상태를 {ok, permission, method, reason} 로 돌려줍니다(테스트 결과 박스에 표시). */
+function showLocalNotificationResult(title, body, tag){
+  var out = { ok:false, permission:notifPermission(), method:'none', reason:'' };
+  if(!notifSupported()){ out.reason = 'unsupported'; return Promise.resolve(out); }
+  if(out.permission !== 'granted'){ out.reason = (out.permission === 'denied' ? 'denied' : 'not-granted'); return Promise.resolve(out); }
+
+  var withIcon = notifOptionsWith(title, body, tag);
+  var plain = { body: body || '', tag: (tag || 'topedu-streak'), renotify: true, data: withIcon.data };
+
+  function fire(reg, method){
+    if(!reg || typeof reg.showNotification !== 'function') return Promise.reject(new Error('no-reg'));
+    var p;
+    try { p = Promise.resolve(reg.showNotification(title, withIcon)); }
+    catch(e){ p = Promise.reject(e); }
+    return p.then(function(){ out.ok = true; out.method = method; out.reason = ''; return true; })
+      .catch(function(){
+        /* 아이콘 처리 실패 등 → 아이콘 없이라도 알림은 띄운다 */
+        try {
+          return Promise.resolve(reg.showNotification(title, plain)).then(function(){
+            out.ok = true; out.method = method + '+no-icon'; out.reason = 'icon-retry'; return true;
+          });
+        } catch(e2){ out.reason = 'show-error'; return false; }
       });
-    }
-  } catch(e){}
-  return viaSw.then(function(){ return true; }).catch(function(){
-    try { new Notification(title, opts); return true; } catch(e){ return false; }
-  });
+  }
+
+  return Promise.resolve()
+    .then(function(){
+      if(!navigator.serviceWorker) throw new Error('no-sw');
+      return withTimeout(navigator.serviceWorker.ready, 3000).then(function(reg){
+        if(!reg || reg === '__timeout') throw new Error('ready-timeout');
+        return reg;
+      });
+    })
+    .then(function(reg){ return fire(reg, 'sw-ready'); })
+    .catch(function(){
+      /* 2차: ready 가 늦으면 등록을 직접 찾아 즉시 시도 */
+      var p = (navigator.serviceWorker && navigator.serviceWorker.getRegistration) ? navigator.serviceWorker.getRegistration() : Promise.resolve(null);
+      return Promise.resolve(p).catch(function(){ return null; }).then(function(reg){
+        if(!reg) return Promise.reject(new Error('no-reg'));
+        return fire(reg, 'sw-registration');
+      });
+    })
+    .catch(function(){
+      /* 3차: 등록 목록에서 알림 가능한 것 사용 */
+      var p = (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) ? navigator.serviceWorker.getRegistrations() : Promise.resolve([]);
+      return Promise.resolve(p).catch(function(){ return []; }).then(function(list){
+        var reg = (list || []).filter(function(r){ return r && typeof r.showNotification === 'function'; })[0];
+        if(!reg) return Promise.reject(new Error('no-reg-any'));
+        return fire(reg, 'sw-registrations');
+      });
+    })
+    .catch(function(e){
+      /* 4차: 창 알림(데스크톱 크롬) */
+      if(!out.reason) out.reason = (e && e.message) ? String(e.message) : 'sw-unavailable';
+      try { new Notification(title, withIcon); out.ok = true; out.method = 'window'; return true; }
+      catch(e2){ out.ok = false; return false; }
+    })
+    .then(function(){ return out; });
+}
+
+/* 기존 호출부 호환: 성공/실패 boolean */
+function showLocalNotification(title, body, tag){
+  return showLocalNotificationResult(title, body, tag).then(function(r){ return !!r.ok; });
 }
 
 function syncSwState(ban,name){
@@ -4757,7 +4837,7 @@ function buildIcsText(timeStr, name){
   var lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//TopEdu Academy//Study Streak Reminder v82//KO',
+    'PRODID:-//TopEdu Academy//Study Streak Reminder v83//KO',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'X-WR-CALNAME:탑에듀 매일 학습 알림',
@@ -4848,6 +4928,7 @@ function renderNotifModal(){
   h += '<div class="nc-time"><span>직접 입력</span><input type="time" id="ncTime" value="' + cur + '"></div>';
   h += '<button type="button" class="nc-main' + (on ? ' off' : '') + '" id="ncMain">' + (on ? '🔕 매일 알림 끄기' : '🔔 매일 학습 알림 켜기') + '</button>';
   h += '<button type="button" class="nc-sub" id="ncTest">📣 테스트 알림 지금 받아보기</button>';
+  h += '<div id="ncTestBox" class="nc-testbox" style="display:none"></div>';
   h += '<button type="button" class="nc-sub" id="ncIcs" style="color:#b45309;background:#fffbeb;border-color:#fcd34d">📅 휴대폰 캘린더에 매일 알림 추가 (.ics)</button>';
   if(on) h += '<div class="nc-ok">✔ 매일 ' + cur + '에 알림 예약됨 · 오늘 학습 완료하면 오늘은 안 울려요</div>';
   h += '<div class="nc-note"><b>솔직한 한계 안내</b> — 웹앱 알림은 <b>앱을 완전히 종료</b>하면 안 올 수 있어요(아이폰·안드로이드 정책).<br>그래서 <b>.ics 캘린더 알림</b>을 같이 넣어두면 폰 기본 캘린더가 앱이 꺼져 있어도 100% 울려줍니다. 두 가지 다 켜 두는 게 가장 집요해요 🔥</div>';
@@ -4891,11 +4972,51 @@ function renderNotifModal(){
   };
   var bt = document.getElementById('ncTest');
   if(bt) bt.onclick = function(){
+    var box = document.getElementById('ncTestBox');
+    function showBox(kind, html){
+      if(!box) return;
+      box.style.display = 'block';
+      box.className = 'nc-testbox ' + kind;
+      box.innerHTML = html;
+    }
+    bt.disabled = true;
+    showBox('wait', '⏳ 테스트 알림을 보내는 중… (최대 3초)');
+    function done(){ try { bt.disabled = false; } catch(e){} }
+
     requestNotifPermission().then(function(perm2){
-      if(perm2 !== 'granted'){ alert('먼저 알림 권한을 허용해 주세요!'); renderNotifModal(); return; }
-      showLocalNotification('🔔 탑에듀 알림 테스트', name + ' 학생, 이렇게 알림이 와요! 오늘 10분 학습하면 🔥' + (getStreakInfo(ban,name).streak) + '일 유지!', 'topedu-test-' + Date.now()).then(function(ok){
-        if(!ok) alert('알림을 띄우지 못했어요. 폰 설정에서 이 앱의 알림을 허용해 주세요.');
+      if(perm2 !== 'granted'){
+        done();
+        if(perm2 === 'denied'){
+          showBox('bad', '<b>🚫 알림이 차단되어 있어요 (권한: 차단됨)</b><br>' +
+            '크롬 주소창 왼쪽 아이콘(<b>자물쇠·설정 아이콘</b>) → <b>권한</b> → <b>알림</b> → <b>허용</b>으로 바꾸고,<br>' +
+            '화면 상단 <b>[🔄 최신 새로고침]</b>을 누른 뒤 다시 시도해 주세요.<br>' +
+            '<span style="opacity:0.85">폰 <b>설정 → 애플리케이션 → Chrome → 알림</b>도 켜져 있어야 해요.</span>');
+        } else if(perm2 === 'unsupported'){
+          showBox('bad', '<b>이 브라우저는 웹 알림을 지원하지 않아요</b><br>크롬으로 열어 주세요. 지금은 아래 <b>[📅 휴대폰 캘린더에 매일 알림 추가]</b>로 받는 게 확실해요.');
+        } else {
+          showBox('bad', '<b>알림 권한이 아직 허용되지 않았어요</b><br>크롬 주소창 왼쪽 아이콘 → <b>권한</b> → <b>알림</b> → <b>허용</b>으로 바꾸고 다시 눌러 주세요.');
+        }
+        return;
+      }
+      var streakNow = 0;
+      try { streakNow = getStreakInfo(ban, name).streak || 0; } catch(e){}
+      return showLocalNotificationResult('🔔 탑에듀 알림 테스트', (name || '학생') + ' 학생, 이렇게 알림이 와요! 오늘 10분 학습하면 🔥' + streakNow + '일 유지!', 'topedu-test-' + Date.now()).then(function(r){
+        done();
+        if(r && r.ok){
+          showBox('good', '<b>📣 상단바로 테스트 알림을 보냈어요!</b><br>' +
+            '잠금화면을 내리거나 화면 위쪽을 봐 주세요. 몇 초 안에 안 보이면 앱을 완전히 종료한 상태일 수 있으니, 아래 <b>[📅 캘린더 알림]</b>을 같이 켜두면 확실해요.<br>' +
+            '<span style="opacity:0.8">권한: 허용 · 전송: ' + (r.method === 'sw-ready' ? '서비스워커' : (r.method === 'window' ? '창 알림' : '서비스워커 재시도')) + (r.reason === 'icon-retry' ? ' (아이콘 없이 전송)' : '') + '</span>');
+        } else {
+          var why = (r && r.reason) ? r.reason : 'unknown';
+          var tip = '화면 상단 <b>[🔄 최신 새로고침]</b>을 누르면 서비스워커가 새로 등록돼요. 그래도 안 되면 아래 <b>[📅 캘린더 알림]</b>으로 받아주세요.';
+          if(why === 'denied') tip = '크롬 주소창 왼쪽 아이콘 → <b>권한</b> → <b>알림</b> → <b>허용</b>으로 바꾼 뒤 다시 시도해 주세요.';
+          showBox('bad', '<b>테스트 알림을 띄우지 못했어요</b><br>' + tip +
+            '<br><span style="opacity:0.8">권한: ' + ((r && r.permission) || perm2) + ' · 원인: ' + why + '</span>');
+        }
       });
+    }).catch(function(){
+      done();
+      showBox('bad', '<b>테스트 알림을 보내지 못했어요</b><br>잠시 후 다시 시도하거나 아래 <b>[📅 캘린더 알림]</b>을 써 주세요.');
     });
   };
   var bi = document.getElementById('ncIcs');
@@ -4998,6 +5119,8 @@ function renderStreakBoard(){
   var box = document.getElementById('streakBoardBox');
   if(!box) return;
   var t = tdKey();
+  var nagTargets = [];
+  try { nagTargets = getTodayNagTargets(); } catch(e){}
   var local = getRealStreakMap();
   var keys = Object.keys(STREAK_BOARD);
   var rows = [];
@@ -5021,6 +5144,7 @@ function renderStreakBoard(){
     '<span class="sb-pill none">아직 시작 전 ' + notYet.length + '명</span>' +
     '<span class="sb-pill">기록 없음 ' + Math.max(0, ((typeof TOPEDU_ALL_STUDENTS !== 'undefined' ? TOPEDU_ALL_STUDENTS.length : 0)) - today.length) + '명</span>' +
   '</div>';
+  h += '<div class="sb-nag"><button type="button" class="sb-nag-btn" id="sbBulkNag">📢 오늘 미완료 학생 전원 일괄 독촉 쪽지' + (nagTargets.length ? ' (' + nagTargets.length + '명)' : '') + '</button></div>';
   if(rows.length){
     h += '<div class="sb-list">' + rows.slice(0, 40).map(function(r){
       var st = r.t === t ? (r.d ? '<span class="st-badge st-done">오늘 완료</span>' : '<span class="st-badge st-none">오늘 미완료</span>') : '<span class="st-badge st-mid">오늘 기록 없음</span>';
@@ -5033,6 +5157,230 @@ function renderStreakBoard(){
   box.innerHTML = h;
   var br = document.getElementById('sbRefresh');
   if(br) br.onclick = function(){ STREAK_BOARD = {}; pullStreakBoard(); };
+  var bn = document.getElementById('sbBulkNag');
+  if(bn) bn.onclick = function(){ openBulkNagModal(); };
+}
+
+/* ================= v83: 📢 오늘 미완료 학생 전원 일괄 독촉 쪽지 ================= */
+var TOPEDU_NOTE_TOPIC = 'topedu_note_chosumin';
+var NAG_TARGETS = [];
+var NAG_SEL = {};
+var NAG_BUSY = false;
+var NOTE_PULL_AT = 0;
+var NAG_DEFAULT_TEXT = '{이름}야, 오늘 탑에듀 단어 학습이 아직 안 끝났어! 자기 전 10분만 하면 끝나. 오늘 안 하면 🔥연속 학습이 끊겨~ 지금 앱 열어서 마무리하자! 🌸';
+
+/* 원장님 쪽지를 학생 폰으로도 보내기 (ntfy 공용 채널 → 학생 앱이 자기 이름 것만 받음) */
+function publishStudentNote(name, ban, msg){
+  if(!name || !msg) return Promise.resolve(false);
+  var row = { n: name, b: ban || '', msg: msg, ts: Date.now(), t: tdKey() };
+  try {
+    return fetch('https://ntfy.sh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: TOPEDU_NOTE_TOPIC, title: 'note', message: JSON.stringify(row), priority: 3 })
+    }).then(function(r){ return !!r.ok; }).catch(function(){ return false; });
+  } catch(e){ return Promise.resolve(false); }
+}
+
+function getAppliedNoteTs(name){ try { return +(localStorage.getItem('topedu_note_ts_' + (name || '')) || 0); } catch(e){ return 0; } }
+function setAppliedNoteTs(name, ts){ try { localStorage.setItem('topedu_note_ts_' + (name || ''), String(ts || 0)); } catch(e){} }
+
+/* 학생 폰: 원장님이 보낸 새 쪽지를 받아서 홈 [조수민 원장님의 도착 쪽지]에 꽂습니다 */
+function pullMyTeacherNote(me, force){
+  if(!me || !me.name || me.ban === '선생님') return;
+  if(!window.fetch) return;
+  if(NAG_BUSY) return;
+  if(!force && (Date.now() - NOTE_PULL_AT) < 10000) return;
+  NOTE_PULL_AT = Date.now();
+  NAG_BUSY = true;
+  fetch('https://ntfy.sh/' + TOPEDU_NOTE_TOPIC + '/json?poll=1&since=all')
+    .then(function(r){ return r.text(); })
+    .then(function(txt){
+      NAG_BUSY = false;
+      var lines = String(txt || '').trim().split('\n');
+      var best = null, applied = getAppliedNoteTs(me.name);
+      lines.forEach(function(l){
+        if(!l.trim()) return;
+        try {
+          var d = JSON.parse(l);
+          if(!d || d.event !== 'message' || !d.message) return;
+          var row = JSON.parse(d.message);
+          if(!row || row.n !== me.name || !row.msg) return;
+          if(row.b && me.ban && row.b !== me.ban) return;
+          var ts = row.ts || ((d.time || 0) * 1000);
+          if(!best || ts > best.ts){ row.ts = ts; best = row; }
+        } catch(e){}
+      });
+      if(!best) return;
+      if((best.ts || 0) <= applied) return;
+      var db = getNoteDB();
+      var cur = db[me.name] || {};
+      if(cur.teacherMsg !== best.msg){
+        cur.teacherMsg = best.msg;
+        cur.teacherTime = '방금 전';
+        cur.unread = true;
+        db[me.name] = cur;
+        saveNoteDB(db);
+        try { if(typeof playCorrectSound === 'function') playCorrectSound(); } catch(e){}
+      }
+      setAppliedNoteTs(me.name, best.ts || Date.now());
+      if(typeof showHome === 'function') showHome();
+    })
+    .catch(function(){ NAG_BUSY = false; });
+}
+
+/* 오늘 아직 완료하지 않은 학생 목록 (실시간 스트릭 기록 기준) */
+function getTodayNagTargets(){
+  var t = tdKey();
+  var roster = (typeof TOPEDU_ALL_STUDENTS !== 'undefined' && TOPEDU_ALL_STUDENTS) ? TOPEDU_ALL_STUDENTS : [];
+  var local = {};
+  try { local = getRealStreakMap(); } catch(e){}
+  var out = [];
+  roster.forEach(function(st){
+    if(!st || !st.name) return;
+    if(st.ban === '선생님' || st.name === '조수민') return;
+    var k = (st.ban || '') + '|' + st.name;
+    var board = STREAK_BOARD[k];
+    var lc = local[k];
+    var doneToday = false, startedToday = false, streak = 0;
+    if(board && board.t === t){ startedToday = true; doneToday = !!board.d; streak = board.s || 0; }
+    if(lc && lc.t === t){ startedToday = true; if(lc.d) doneToday = true; streak = Math.max(streak, lc.s || 0); }
+    if(doneToday) return;
+    out.push({ ban: st.ban || '', name: st.name, state: startedToday ? 'ing' : 'none', streak: streak });
+  });
+  out.sort(function(a,b){
+    if(a.state !== b.state) return a.state === 'ing' ? -1 : 1;
+    if((b.streak || 0) !== (a.streak || 0)) return (b.streak || 0) - (a.streak || 0);
+    return String(a.name).localeCompare(String(b.name));
+  });
+  return out;
+}
+
+function fillNagText(tpl, x){
+  return String(tpl || '').split('{이름}').join(x.name || '').split('{반}').join(x.ban || '');
+}
+
+function closeBulkNagModal(){
+  var ov = document.getElementById('nagOverlay');
+  if(!ov) return;
+  ov.classList.remove('on');
+  ov.setAttribute('aria-hidden', 'true');
+  try { document.body.style.overflow = ''; } catch(e){}
+}
+
+function openBulkNagModal(){
+  var ov = document.getElementById('nagOverlay');
+  var el = document.getElementById('nagModal');
+  if(!ov || !el) return;
+  NAG_TARGETS = [];
+  NAG_SEL = {};
+  el.innerHTML = '<div class="nc-head"><div style="flex:1;font-size:15.5px;font-weight:800;font-family:Maplestory,sans-serif">📢 미완료 일괄 독촉 쪽지 <span class="nc-vtag">' + TOPEDU_APP_VERSION + '</span></div><button type="button" class="prt-x" id="nagClose">✕</button></div>' +
+    '<div class="nc-body"><div style="font-size:12.5px;color:#475569;line-height:1.6">오늘 학습 현황을 불러오는 중…<br><span style="font-size:11.5px;color:#94a3b8">(학생 폰에서 올라온 실시간 스트릭 기록을 읽습니다)</span></div></div>';
+  ov.classList.add('on');
+  ov.setAttribute('aria-hidden', 'false');
+  try { document.body.style.overflow = 'hidden'; } catch(e){}
+  var bc = document.getElementById('nagClose'); if(bc) bc.onclick = closeBulkNagModal;
+  try { pullStreakBoard(); } catch(e){}
+  setTimeout(function(){ try { renderBulkNagModal(); } catch(e){} }, 1400);
+}
+
+function renderBulkNagModal(){
+  var el = document.getElementById('nagModal');
+  var ov = document.getElementById('nagOverlay');
+  if(!el || !ov || !ov.classList.contains('on')) return;
+
+  NAG_TARGETS = getTodayNagTargets();
+  NAG_TARGETS.forEach(function(x){ var k = x.ban + '|' + x.name; if(NAG_SEL[k] === undefined) NAG_SEL[k] = true; });
+  var t = tdKey();
+  var boardToday = 0, boardDone = 0;
+  Object.keys(STREAK_BOARD).forEach(function(k){
+    var r = STREAK_BOARD[k];
+    if(r && r.t === t){ boardToday++; if(r.d) boardDone++; }
+  });
+  var ingN = NAG_TARGETS.filter(function(x){ return x.state === 'ing'; }).length;
+  var noneN = NAG_TARGETS.length - ingN;
+  var selN = NAG_TARGETS.filter(function(x){ return NAG_SEL[x.ban + '|' + x.name]; }).length;
+
+  var h = '';
+  h += '<div class="nc-head"><div style="flex:1;font-size:15.5px;font-weight:800;font-family:Maplestory,sans-serif">📢 미완료 일괄 독촉 쪽지 <span class="nc-vtag">' + TOPEDU_APP_VERSION + '</span></div><button type="button" class="prt-x" id="nagClose">✕</button></div>';
+  h += '<div class="nc-body">';
+  h += '<div class="nag-sum">' +
+      '<span class="sb-pill ing">미완료(학습 중) ' + ingN + '명</span>' +
+      '<span class="sb-pill none">미시작 ' + noneN + '명</span>' +
+      '<span class="sb-pill done">오늘 완료 ' + boardDone + '명</span>' +
+    '</div>';
+  h += '<div style="font-size:12px;color:#475569;line-height:1.55;margin-bottom:10px;word-break:keep-all">오늘 완료한 학생은 목록에서 빼놨어요. 문구는 <b>{이름}</b>·<b>{반}</b>을 학생별로 바꾸어 들어갑니다. 보낸 쪽지는 학생 홈 맨 위 <b>[조수민 원장님의 도착 쪽지]</b>에 띄워요.' +
+    (boardToday ? '' : '<br><span style="color:#b45309;font-weight:700">⚠ 오늘 폰에서 올라온 실시간 기록이 0건이라 전원이 미완료로 잡혔어요. 아래 [🔄 실시간 새로고침]을 한 번 눌러 맞춰 주세요.</span>') +
+    '</div>';
+  h += '<div class="nc-lbl">보낼 쪽지 문구 (학생별로 이름이 자동으로 들어가요)</div>';
+  h += '<textarea id="nag_text" style="width:100%;height:86px;padding:10px;border-radius:12px;border:1.5px solid #cbd5e1;font-family:inherit;font-size:13px;line-height:1.5;box-sizing:border-box">' + esc(NAG_DEFAULT_TEXT) + '</textarea>';
+  h += '<div class="nc-lbl" id="nagCountLbl">받을 학생 (' + selN + ' / ' + NAG_TARGETS.length + '명 선택)</div>';
+  if(NAG_TARGETS.length){
+    h += '<div class="nag-list">' + NAG_TARGETS.map(function(x, i){
+      var k = x.ban + '|' + x.name;
+      return '<label class="nag-row"><input type="checkbox" class="nag_chk" data-i="' + i + '"' + (NAG_SEL[k] ? ' checked' : '') + '>' +
+        '<span class="nm"><b>' + esc(x.name) + '</b> <span style="color:#94a3b8;font-size:11px">' + esc(x.ban) + (x.streak ? ' · 🔥' + x.streak + '일' : '') + '</span></span>' +
+        '<span class="st ' + x.state + '">' + (x.state === 'ing' ? '미완료' : '미시작') + '</span></label>';
+    }).join('') + '</div>';
+    h += '<div class="nag-tools"><button type="button" id="nagAll">전체 선택</button><button type="button" id="nagNone">전체 해제</button><button type="button" id="nagRefresh">🔄 실시간 새로고침</button></div>';
+  } else {
+    h += '<div style="padding:14px;border-radius:12px;background:#ecfdf5;border:1.5px solid #6ee7b7;font-size:12.5px;color:#047857;font-weight:700;line-height:1.5">🎉 오늘 학습을 다 끝냈거나, 보낼 미완료 학생이 없어요!</div>';
+  }
+  h += '<button type="button" class="nc-main" id="nagSend"' + (NAG_TARGETS.length ? '' : ' disabled style="opacity:0.5"') + '>📢 ' + selN + '명에게 독촉 쪽지 보내기</button>';
+  h += '<div id="nagResult" class="nc-testbox good" style="display:none"></div>';
+  h += '<div class="nc-note">보낸 쪽지는 학생 홈의 <b>조수민 원장님의 도착 쪽지</b>에 그대로 뜨고, 학생이 답장하면 원장님 폰으로 알림이 와요. 학생이 앱을 완전히 꺼둔 상태면 다음에 앱을 열 때 받습니다.</div>';
+  h += '</div>';
+  el.innerHTML = h;
+
+  var bc = document.getElementById('nagClose'); if(bc) bc.onclick = closeBulkNagModal;
+  [].forEach.call(el.querySelectorAll('.nag_chk'), function(chk){
+    chk.onchange = function(){
+      var x = NAG_TARGETS[+this.dataset.i];
+      if(x) NAG_SEL[x.ban + '|' + x.name] = this.checked;
+      var selNow = NAG_TARGETS.filter(function(y){ return NAG_SEL[y.ban + '|' + y.name]; }).length;
+      var lbl = document.getElementById('nagCountLbl');
+      if(lbl) lbl.textContent = '받을 학생 (' + selNow + ' / ' + NAG_TARGETS.length + '명 선택)';
+      var sd = document.getElementById('nagSend');
+      if(sd) sd.textContent = '📢 ' + selNow + '명에게 독촉 쪽지 보내기';
+    };
+  });
+  var ba = document.getElementById('nagAll');
+  if(ba) ba.onclick = function(){ NAG_TARGETS.forEach(function(x){ NAG_SEL[x.ban + '|' + x.name] = true; }); renderBulkNagModal(); };
+  var bnone = document.getElementById('nagNone');
+  if(bnone) bnone.onclick = function(){ NAG_TARGETS.forEach(function(x){ NAG_SEL[x.ban + '|' + x.name] = false; }); renderBulkNagModal(); };
+  var brf = document.getElementById('nagRefresh');
+  if(brf) brf.onclick = function(){ STREAK_BOARD = {}; try { pullStreakBoard(); } catch(e){} brf.textContent = '⏳ 불러오는 중…'; setTimeout(renderBulkNagModal, 1400); };
+  var bs = document.getElementById('nagSend');
+  if(bs) bs.onclick = function(){ sendBulkNag(); };
+}
+
+function sendBulkNag(){
+  var ta = document.getElementById('nag_text');
+  var tpl = ta ? ta.value.trim() : '';
+  if(!tpl){ alert('학생들에게 보낼 쪽지 문구를 적어 주세요.'); return; }
+  var list = NAG_TARGETS.filter(function(x){ return NAG_SEL[x.ban + '|' + x.name]; });
+  if(!list.length){ alert('쪽지를 보낼 학생을 한 명 이상 골라 주세요.'); return; }
+  var sample = list[0];
+  if(!confirm('오늘 미완료 ' + list.length + '명에게 독촉 쪽지를 보냅니다.\n\n[' + sample.name + ' 학생에게 갈 문구]\n' + fillNagText(tpl, sample) + '\n\n지금 보낼까요?')) return;
+
+  var done = 0;
+  list.forEach(function(x){
+    var msg = fillNagText(tpl, x);
+    try { sendTeacherNote(x.name, msg); done++; } catch(e){}
+    try { publishStudentNote(x.name, x.ban, msg); } catch(e){}
+  });
+  try { if(typeof playCorrectSound === 'function') playCorrectSound(); } catch(e){}
+
+  var box = document.getElementById('nagResult');
+  if(box){
+    box.style.display = 'block';
+    box.className = 'nc-testbox good';
+    box.innerHTML = '<b>✅ ' + done + '명에게 독촉 쪽지를 보냈어요!</b><br>' +
+      '학생이 앱을 열면 홈 맨 위 <b>[조수민 원장님의 도착 쪽지]</b>에 이 문구가 그대로 떠요. (앱을 꺼둔 학생은 다음에 열 때 받습니다)';
+  }
+  var sd = document.getElementById('nagSend');
+  if(sd){ sd.textContent = '✅ ' + done + '명 발송 완료'; sd.disabled = true; sd.style.opacity = '0.75'; }
+  try { renderStreakBoard(); } catch(e){}
 }
 
 /* ============ 시작 ============ */

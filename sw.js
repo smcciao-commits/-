@@ -1,6 +1,13 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v82 공부 알림
-const CACHE_NAME = 'topedu-pwa-v82';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림
+const CACHE_NAME = 'topedu-pwa-v83';
 const STATE_DB = 'topedu_sw_state';
+
+/* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
+   안드로이드 크롬은 SVG/data URI 아이콘이 오면 showNotification 을 조용히 실패시키는 경우가 있어요. */
+function notifIconUrl() {
+  try { return new URL('icon-192.png', self.registration.scope).href; }
+  catch (e) { return './icon-192.png'; }
+}
 
 self.addEventListener('install', function(e) {
   self.skipWaiting();
@@ -31,10 +38,11 @@ self.addEventListener('fetch', function(e) {
 
 /* ===== v82: 알림 ===== */
 function notifOptions(data) {
+  var icon = notifIconUrl();
   var opts = {
     body: data.body || '',
-    icon: data.icon || 'icon-192.png',
-    badge: data.badge || data.icon || 'icon-192.png',
+    icon: icon,
+    badge: icon,
     tag: data.tag || 'topedu-streak',
     renotify: true,
     data: { url: data.url || './' }
@@ -111,13 +119,10 @@ self.addEventListener('periodicsync', function(e) {
     var parts = String(st.time || '20:00').split(':');
     var due = ((+parts[0]) || 20) * 60 + ((+parts[1]) || 0);
     if (minutesNow() < due) return;
-    return self.registration.showNotification('🔥 ' + st.name + ' 학생, 오늘 학습 아직!', {
-      body: (st.streak > 0 ? (st.streak + '일 연속 스트릭이 오늘 끊길 수 있어. ') : '') + '10분만 하면 끝나!',
-      icon: 'icon-192.png',
-      badge: 'icon-192.png',
+    return self.registration.showNotification('🔥 ' + st.name + ' 학생, 오늘 학습 아직!', notifOptions({
+      body: (st.streak > 0 ? (st.streak + '일 연속 스트릭이 오늘 끊길 수 있어. ') : '10분만 하면 끝나!'),
       tag: 'topedu-nag-' + todayStr(),
-      renotify: true,
-      data: { url: './index.html' }
-    });
+      url: './index.html'
+    }));
   }));
 });
