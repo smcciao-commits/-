@@ -3974,18 +3974,25 @@ var TOPEDU_APP_VERSION = 'v80';
 var PRT = { ban: '전체', sets: {}, type: 'mean', shuffle: false, count: 'all', answer: true, cols: 2, ex: false, q: '' };
 var PRT_TIMER = null;
 
+function prtTargets(s) {
+  var t = String((s && s.target) || '기타');
+  var parts = t.split(',').map(function (x) { return x.trim(); }).filter(function (x) { return !!x; });
+  return parts.length ? parts : ['기타'];
+}
 function prtSetList() {
   var arr = [];
   var keys = Object.keys(ALL_WORD_SETS || {});
   for (var i = 0; i < keys.length; i++) {
     var s = ALL_WORD_SETS[keys[i]] || {};
-    arr.push({ name: keys[i], target: s.target || '기타', count: (s.words || []).length });
+    arr.push({ name: keys[i], target: s.target || '기타', targets: prtTargets(s), count: (s.words || []).length });
   }
   return arr;
 }
 function prtBanList() {
   var seen = {}, arr = prtSetList();
-  for (var i = 0; i < arr.length; i++) seen[arr[i].target] = true;
+  for (var i = 0; i < arr.length; i++) {
+    for (var j = 0; j < arr[i].targets.length; j++) seen[arr[i].targets[j]] = true;
+  }
   var pref = ['초5', '수지중1', '수지중2', '예비고1', '홍천고1'];
   var head = pref.filter(function (b) { return seen[b]; });
   var rest = Object.keys(seen).filter(function (b) { return pref.indexOf(b) < 0; }).sort();
@@ -3997,7 +4004,7 @@ function prtSelectedNames() {
 function prtVisibleSets() {
   var q = String(PRT.q || '').trim().toLowerCase();
   return prtSetList().filter(function (s) {
-    if (PRT.ban !== '전체' && s.target !== PRT.ban) return false;
+    if (PRT.ban !== '전체' && s.targets.indexOf(PRT.ban) < 0) return false;
     if (q && s.name.toLowerCase().indexOf(q) < 0) return false;
     return true;
   });
@@ -4042,7 +4049,7 @@ function openPrintSheet(presetSet) {
   if (presetSet && ALL_WORD_SETS[presetSet]) {
     PRT.sets = {};
     PRT.sets[presetSet] = true;
-    PRT.ban = (ALL_WORD_SETS[presetSet] || {}).target || '전체';
+    PRT.ban = prtTargets(ALL_WORD_SETS[presetSet])[0];
     PRT.q = '';
   }
   ov.classList.add('on');
