@@ -4563,10 +4563,14 @@ function drawStreakHero(me){
     cls = 's-warn'; mood = '😰';
     msg = streak > 0 ? ('<b>오늘 안 하면 ' + streak + '일 스트릭 끊겨!</b> 자기 전 10분, 지금 하자!') : '오늘 안 하면 <b>0일</b>이야. 자기 전 10분만!';
     tag = '오늘 미완료'; btn = '지금 바로 10분 학습';
-  } else {
+  } else if(hh >= 22){
     cls = 's-rage'; mood = '😡';
     msg = '<b>자정까지 ' + (remain > 0 ? remain : 0) + '분!</b> 지금 안 하면 스트릭 0일로 리셋돼!';
     tag = '마감 임박'; btn = '🚨 지금 당장 시작';
+  } else {
+    cls = 's-rage'; mood = '😳';
+    msg = '이 시간까지 안 했어? <b>오늘 자정까지 ' + (remain > 0 ? remain : 0) + '분</b> 남았어. 지금 10분만 하고 자자!';
+    tag = '오늘 미완료'; btn = '지금 10분만 하기';
   }
 
   var pct = done ? 100 : Math.min(90, (info.acts || 0) * 20);
@@ -4764,7 +4768,7 @@ function buildIcsText(timeStr, name){
     'END:STANDARD',
     'END:VTIMEZONE',
     'BEGIN:VEVENT',
-    'UID:topedu-streak-' + icsLocal(start) + '-' + String(name || 'student').replace(/\s/g, '') + '@smcciao-commits.github.io',
+    'UID:topedu-streak-' + icsLocal(start) + '@smcciao-commits.github.io',
     'DTSTAMP:' + stamp,
     'DTSTART;TZID=Asia/Seoul:' + icsLocal(start),
     'DTEND;TZID=Asia/Seoul:' + icsLocal(end),
