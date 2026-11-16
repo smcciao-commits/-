@@ -588,12 +588,18 @@ function showTeacher(){
         '<button class="btn ghost" style="margin:0;font-size:15px" onclick="previewSet(\''+s.id+'\')">👀 미리보기</button>'+
         '<button class="btn" style="margin:0;font-size:15px" onclick="showPrintPreview(\''+s.id+'\',true)">🖨️ 시험지 인쇄</button>'+
       '</div>'+
-      '<div class="sub" style="font-size:11.5px;margin-top:8px">'+s.items.map(function(it){return esc(it.tag);}).filter(function(v,i,a){return a.indexOf(v)===i;}).join(' · ')+'</div>'+
+      '<div class="sub" style="font-size:11.5px;margin-top:8px">'+tagSummary(s)+'</div>'+
     '</div>';
   }).join('');
   html+='<div class="row" style="margin-top:12px"><button class="btn gray" style="margin:0" onclick="showLogin()">로그아웃</button></div>';
   app.innerHTML=html;
   bindRefresh();
+}
+
+function tagSummary(s){
+  var tags=s.items.map(function(it){return esc(it.tag);}).filter(function(v,i,a){return a.indexOf(v)===i;});
+  if(tags.length<=6)return tags.join(' · ');
+  return tags.slice(0,6).join(' · ')+' 외 '+(tags.length-6)+'개';
 }
 
 function previewSet(id){
