@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>ek harness (temporary)</title>
+<style>
+  html, body { margin: 0; background: #eef2ff; font-family: monospace; }
+  #frame { position: absolute; left: 0; top: 0; width: 390px; height: 844px; border: 0; background: #fff; }
+  #report { position: absolute; left: 406px; top: 0; width: 560px; padding: 10px; font-size: 12px; line-height: 1.55; white-space: pre-wrap; color: #111827; }
+</style>
+</head>
+<body>
+<iframe id="frame" width="390" height="844"></iframe>
+<div id="report">loading…</div>
+<script>
+var qs = new URLSearchParams(location.search);
+var report = document.getElementById('report');
+var bootErrs = [];
+
+function log(s) { bootErrs.push(s); }
+
+fetch('edukids.html?cb=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (html) {
+  var inject = '<scr' + 'ipt>' +
+    'window.__ekErrs=[];' +
+    'window.addEventListener("error",function(e){window.__ekErrs.push("JS error: "+(e.message||"")+" @"+((e.filename||"").split("/").pop())+":"+e.lineno);},true);' +
+    'window.addEventListener("unhandledrejection",function(e){window.__ekErrs.push("unhandled rejection: "+((e.reason&&e.reason.message)||e.reason));});' +
+    '(function(){var ce=console.error;console.error=function(){try{window.__ekErrs.push("console.error: "+Array.prototype.slice.call(arguments).map(String).join(" ").slice(0,220));}catch(x){} if(ce) ce.apply(console,arguments);};})();' +
+    '</scr' + 'ipt>';
+  html = html.replace('<head>', '<head>' + inject);
+  var fr = document.getElementById('frame');
+  fr.srcdoc = html;
+  setTimeout(runChecks, 5000);
+}).catch(function (e) { report.textContent = 'FETCH FAIL ' + e.message; });
+
+function runChecks() {
+  var fr = document.getElementById('frame');
+  var w = fr.contentWindow;
+  var d = w.document;
+  var out = [];
+  function q(s) { return d.querySelector(s); }
+  function txt(s) { var el = q(s); return el ? el.textContent.trim() : null; }
+
+  out.push('URL: ' + d.location.href);
+  out.push('TITLE: ' + d.title);
+  out.push('BANNER: ' + (q('.ek-streak') ? q('.ek-streak').className : 'MISSING'));
+  out.push('BANNER_DAYS: ' + txt('.ek-sk-days'));
+  out.push('BANNER_MSG: ' + txt('.ek-sk-msg'));
+  out.push('BANNER_BTN: ' + txt('#ekStreakGo') + ' / BELL: ' + (q('#ekStreakBell') ? 'ok' : 'MISSING'));
+  out.push('STAMPS: ' + d.querySelectorAll('.ek-sk-stamp').length);
+  out.push('RIBBON_STREAK: ' + txt('#streakVal'));
+  out.push('STEP_BTNS: ' + d.querySelectorAll('.step-btn').length + ' / DAY_CHIPS: ' + d.querySelectorAll('#dayChips button').length);
+  out.push('JOY_CARDS: ' + d.querySelectorAll('#joyCardList button').length + ' / VIDEO_CHIPS: ' + d.querySelectorAll('#video_series_chips button').length);
+  out.push('VOCA: ' + txt('#vWord') + ' (' + txt('#vocaCounter') + ')');
+  out.push('DOCK: ' + d.querySelectorAll('.dock-btn').length + ' / HUB_LINKS: ' + d.querySelectorAll('#sec_voca_hub a').length);
+  var fns = ['ekInit', 'ekRecord', 'ekInfo', 'ekOpenNotifModal', 'ekRenderNotifModal', 'ekBuildIcs', 'ekDownloadIcs', 'ekShowNotificationResult', 'ekCheckNag'];
+  out.push('FNS: ' + fns.map(function (k) { return k + '=' + typeof w[k]; }).join(' '));
+
+  /* 스트릭 기록 기능 점검: 오늘 완료 처리 후 배너가 done 상태가 되는지 */
+  try {
+    w.ekRecord('테스트');
+    out.push('AFTER_RECORD: streak=' + w.ekInfo().streak + ' todayDone=' + w.ekInfo().todayDone + ' cls=' + q('.ek-streak').className + ' stampOn=' + d.querySelectorAll('.ek-sk-stamp.on').length);
+    out.push('RIBBON_AFTER: ' + txt('#streakVal'));
+  } catch (e) { out.push('RECORD FAIL: ' + e.message); }
+
+  /* .ics 만들기 점검 */
+  try {
+    var ics = w.ekBuildIcs('20:00');
+    out.push('ICS: lines=' + ics.split('\r\n').length + ' hasRRULE=' + (ics.indexOf('RRULE:FREQ=DAILY') >= 0) + ' hasAlarm=' + (ics.indexOf('BEGIN:VALARM') >= 0) + ' tz=' + (ics.indexOf('TZID=Asia/Seoul') >= 0));
+  } catch (e) { out.push('ICS FAIL: ' + e.message); }
+
+  if (qs.get('modal') === '1') {
+    try { w.ekOpenNotifModal(); out.push('MODAL: opened=' + (q('#ekNotifOverlay').className.indexOf('on') >= 0) + ' chips=' + d.querySelectorAll('.ek-nc-chip').length + ' testBtn=' + (q('#ekNcTest') ? 'ok' : 'MISSING') + ' icsBtn=' + (q('#ekNcIcs') ? 'ok' : 'MISSING')); }
+    catch (e) { out.push('MODAL FAIL: ' + e.message); }
+  }
+
+  out.push('ERRORS(' + (w.__ekErrs ? w.__ekErrs.length : 'n/a') + '): ' + (w.__ekErrs && w.__ekErrs.length ? '\n  - ' + w.__ekErrs.join('\n  - ') : 'none'));
+  if (bootErrs.length) out.push('HARNESS: ' + bootErrs.join(' | '));
+  report.textContent = out.join('\n');
+}
+</script>
+</body>
+</html>
