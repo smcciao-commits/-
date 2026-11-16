@@ -977,12 +977,13 @@ window.onerror = function(msg, url, line) {
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(regs) {
-    for (var reg of regs) reg.unregister();
-  });
-  // v82: 알림 표시에는 서비스워커가 필요해서 매 로드마다 새로 등록해요 (캐시는 비우므로 구버전 고정 없음)
-  if (navigator.serviceWorker.register) {
-    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function(){});
-  }
+    return Promise.all(regs.map(function(reg) { return reg.unregister(); }));
+  }).then(function() {
+    // v82: 알림 표시에는 서비스워커가 필요해요. 기존 등록을 지운 뒤 새로 등록합니다(캐시는 비우므로 구버전 고정 없음).
+    if (navigator.serviceWorker.register) {
+      return navigator.serviceWorker.register('sw.js', { scope: './' });
+    }
+  }).catch(function(){});
 }
 if ('caches' in window) {
   caches.keys().then(function(names) {
@@ -3427,7 +3428,7 @@ function drawScienceTeacherDashboard(students){
     '<th style="width:30px"><input type="checkbox" id="chk_all"></th>' +
     '<th>반 / 이름</th>' +
     '<th>학습 현황</th>' +
-    '<th>연속<br><span style="font-size:9.5px;font-weight:700;color:#94a3b8">실시간</span></th>' +
+    '<th style="white-space:nowrap">연속</th>' +
     '<th>최근 접속 / 점수</th>' +
     '<th>알림</th>' +
   '</tr></thead><tbody>';
@@ -3442,7 +3443,7 @@ function drawScienceTeacherDashboard(students){
 
     html += '<tr>' +
       '<td><input type="checkbox" class="stu_chk" data-idx="' + idx + '" ' + (SEL_STU[s.name] ? 'checked' : '') + '></td>' +
-      '<td><b>' + esc(s.name) + '</b><div style="font-size:11px;color:var(--muted)">' + esc(s.ban) + '</div></td>' +
+      '<td style="white-space:nowrap"><b>' + esc(s.name) + '</b><div style="font-size:11px;color:var(--muted)">' + esc(s.ban) + '</div></td>' +
       '<td>' + stBadge + '</td>' +
       '<td style="font-weight:700;color:#0d9488">' + streakText + realSub + '</td>' +
       '<td><div style="font-size:12px">' + esc(s.lastTime || '-') + '</div>' + (s.score ? '<b style="color:var(--pri)">' + s.score + '점</b>' : '') + '</td>' +
