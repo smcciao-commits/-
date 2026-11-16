@@ -328,7 +328,7 @@
       background: #333; color: white; padding: 12px 22px; border-radius: 999px;
       font-size: 14px; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 1000; display: flex; align-items: center; gap: 8px;
+      z-index: 9500; display: flex; align-items: center; gap: 8px;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
@@ -346,6 +346,9 @@
         <div class="coin-val" id="coin_display">🪙 350P</div>
       </div>
     </div>
+
+    <!-- v84: 🦉 연속 실천(스트릭) 배너 -->
+    <div id="streakHero"></div>
 
     <!-- Coach Nagging Card -->
     <div class="coach-card">
@@ -426,6 +429,9 @@
       <div class="voca-arrow">→</div>
     </a>
   </div>
+
+  <!-- v84: 🔔 매일 알림 설정 모달 -->
+  <div class="notif-ov" id="notifOverlay" aria-hidden="true"><div class="notif-modal" id="notifModal"></div></div>
 
   <div class="toast" id="toast">🎉 +50 코인 획득! 훌륭해!</div>
 
@@ -543,7 +549,13 @@
     function loadState() {
       try {
         const raw = localStorage.getItem(LS_KEY);
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+          const o = JSON.parse(raw);
+          if (o && typeof o === 'object') {
+            if (!o.checks) o.checks = {};
+            return o;
+          }
+        }
       } catch (e) {}
       return { coins: 350, checks: {} };
     }
@@ -646,7 +658,7 @@
       const schEl = document.getElementById('schedule_list');
       const items = SCHEDULE[curDay] || [];
       schEl.innerHTML = items.map((it, idx) => {
-        const key = curDay + '_sch_' + idx;
+        const key = keyOf(curDay, 'sch', idx);
         const done = !!state.checks[key];
         return `
           <div class="item-card ${done ? 'done' : ''}" data-k="${key}">
@@ -662,7 +674,7 @@
 
       const evEl = document.getElementById('everyday_list');
       evEl.innerHTML = EVERYDAY_HABITS.map(ev => {
-        const key = curDay + '_' + ev.id;
+        const key = keyOf(curDay, 'ev', ev.id);
         const done = !!state.checks[key];
         return `
           <div class="item-card ${done ? 'done' : ''}" data-k="${key}">
@@ -696,14 +708,12 @@
 
       renderProgress();
       updateCoach();
+      renderStreakBanner();
     }
 
     function renderProgress() {
-      const items = SCHEDULE[curDay] || [];
-      const total = items.length + EVERYDAY_HABITS.length;
-      let done = 0;
-      items.forEach((_, idx) => { if (state.checks[curDay + '_sch_' + idx]) done++; });
-      EVERYDAY_HABITS.forEach(ev => { if (state.checks[curDay + '_' + ev.id]) done++; });
+      const total = (SCHEDULE[curDay] || []).length + EVERYDAY_HABITS.length;
+      const done = countDoneFor(curDay);
 
       const pct = total ? Math.round((done / total) * 100) : 0;
       document.getElementById('prog_fill').style.width = pct + '%';
@@ -711,11 +721,8 @@
     }
 
     function updateCoach() {
-      const items = SCHEDULE[curDay] || [];
-      const total = items.length + EVERYDAY_HABITS.length;
-      let done = 0;
-      items.forEach((_, idx) => { if (state.checks[curDay + '_sch_' + idx]) done++; });
-      EVERYDAY_HABITS.forEach(ev => { if (state.checks[curDay + '_' + ev.id]) done++; });
+      const total = (SCHEDULE[curDay] || []).length + EVERYDAY_HABITS.length;
+      const done = countDoneFor(curDay);
       const pct = total ? Math.round((done / total) * 100) : 0;
 
       const coachMsgEl = document.getElementById('coach_text');
@@ -756,9 +763,521 @@
       }
     };
 
+    /* ================= v84: 🦉 연속 실천(스트릭) + 🔔 매일 알림 ================= */
+    var STREAK_KEY = 'harin_streak_v1';
+    function pad2(n) { return ('0' + n).slice(-2); }
+    function dateKeyOf(d) { d = d || new Date(); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+    function todayKey() { return dateKeyOf(new Date()); }
+    function prevDayKey() { var d = new Date(); d.setDate(d.getDate() - 1); return dateKeyOf(d); }
+    /* 체크 키 = 날짜|요일|종류|항목 — 매주 같은 요일 체크가 그대로 남아 저절로 100%가 되던 문제 수정 */
+    function keyOf(day, kind, id) { return todayKey() + '|' + day + '|' + kind + '|' + id; }
+
+    function loadStreak() {
+      try {
+        var raw = localStorage.getItem(STREAK_KEY);
+        if (raw) {
+          var o = JSON.parse(raw) || {};
+          var nf = o.notif || {};
+          return {
+            n: +o.n || 0, best: +o.best || 0, lastDone: o.lastDone || '', prevDone: o.prevDone || '', firstDate: o.firstDate || '',
+            notif: { enabled: !!nf.enabled, time: nf.time || '20:00', sentDate: nf.sentDate || '', sentN: +nf.sentN || 0, lastNagAt: +nf.lastNagAt || 0 }
+          };
+        }
+      } catch (e) {}
+      return { n: 0, best: 0, lastDone: '', prevDone: '', firstDate: '', notif: { enabled: false, time: '20:00', sentDate: '', sentN: 0, lastNagAt: 0 } };
+    }
+    var STREAK = loadStreak();
+    function saveStreak() { try { localStorage.setItem(STREAK_KEY, JSON.stringify(STREAK)); } catch (e) {} }
+
+    /* 예전(요일만으로 저장한) 체크 표시를 오늘 날짜 키로 한 번만 옮깁니다 */
+    function migrateChecks() {
+      if (state.checksVer === 2) return;
+      var prefix = todayDay + '_';
+      var keys = Object.keys(state.checks || {});
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        if (!state.checks[k]) continue;
+        if (k.indexOf('|') >= 0) continue;
+        if (k.indexOf(prefix) !== 0) continue;
+        var rest = k.slice(prefix.length);
+        var parts = rest.split('_');
+        var nk = (parts[0] === 'sch') ? keyOf(todayDay, 'sch', parts[1]) : keyOf(todayDay, 'ev', rest);
+        state.checks[nk] = true;
+        delete state.checks[k];
+      }
+      state.checksVer = 2;
+      try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+    }
+
+    function countDoneFor(day) {
+      var items = SCHEDULE[day] || [];
+      var done = 0;
+      for (var i = 0; i < items.length; i++) { if (state.checks[keyOf(day, 'sch', i)]) done++; }
+      for (var j = 0; j < EVERYDAY_HABITS.length; j++) { if (state.checks[keyOf(day, 'ev', EVERYDAY_HABITS[j].id)]) done++; }
+      return done;
+    }
+    function countTodayMissions() {
+      var total = (SCHEDULE[todayDay] || []).length + EVERYDAY_HABITS.length;
+      return { day: todayDay, total: total, done: countDoneFor(todayDay) };
+    }
+    function isTodayAllDone() {
+      var m = countTodayMissions();
+      return m.total > 0 && m.done >= m.total;
+    }
+    function effectiveStreak() {
+      if (!STREAK.lastDone) return 0;
+      if (STREAK.lastDone === todayKey() || STREAK.lastDone === prevDayKey()) return STREAK.n;
+      return 0;
+    }
+    function isStreakBroken() {
+      return !!STREAK.lastDone && STREAK.lastDone !== todayKey() && STREAK.lastDone !== prevDayKey();
+    }
+
+    /* 오늘 미션을 다 끝내면 연속 일수 +1. 다시 풀면 되돌립니다. */
+    function syncStreak() {
+      var m = countTodayMissions();
+      var all = m.total > 0 && m.done >= m.total;
+      var tk = todayKey();
+      if (all && STREAK.lastDone !== tk) {
+        STREAK.prevDone = STREAK.lastDone || '';
+        STREAK.n = (STREAK.lastDone === prevDayKey()) ? (STREAK.n + 1) : 1;
+        STREAK.lastDone = tk;
+        if (!STREAK.firstDate) STREAK.firstDate = tk;
+        if (STREAK.n > STREAK.best) STREAK.best = STREAK.n;
+        saveStreak();
+        try { playCorrectSound(); } catch (e) {}
+        showToast('🔥 ' + STREAK.n + '일 연속 달성! 대단하다!' );
+      } else if (!all && STREAK.lastDone === tk) {
+        STREAK.n = Math.max(0, STREAK.n - 1);
+        STREAK.lastDone = STREAK.prevDone || '';
+        saveStreak();
+      }
+      return { all: all, n: effectiveStreak(), best: STREAK.best, m: m, broken: isStreakBroken() };
+    }
+
+    function goTodayMissions() {
+      curDay = todayDay;
+      renderAll();
+      var el = document.getElementById('day_tabs');
+      try { if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+    }
+
+    function renderStreakBanner() {
+      var host = document.getElementById('streakHero');
+      if (!host) return;
+      var info = syncStreak();
+      var n = info.n, m = info.m;
+      var now = new Date();
+      var hh = now.getHours();
+      var nowMin = hh * 60 + now.getMinutes();
+      var remainBed = (23 * 60 + 30) - nowMin;
+      var cls, mood, msg, tag, btn;
+
+      if (info.all) {
+        cls = 's-done'; mood = '🥳'; tag = '오늘 완료';
+        msg = '오늘 미션 올클리어! <b>' + (n > 0 ? n + '일 연속' : '1일차') + '</b> 이어졌어. 내일도 하면 <b>' + (n + 1) + '일차</b>! 🔥';
+        btn = '오늘 기록 보기 →';
+      } else if (info.broken) {
+        cls = 's-warn'; mood = '😢'; tag = '스트릭 끊김';
+        msg = '아이고, 스트릭이 끊겼어… <b>오늘 다시 하면 1일차</b>부터! 10분이면 돼.';
+        btn = '오늘 1일차 시작 →';
+      } else if (hh >= 5 && hh < 12) {
+        cls = 's-calm'; mood = '😊'; tag = (n > 0 ? '오늘 미완료' : '아직 시작 전');
+        msg = (n > 0 ? ('아침에 10분만 하면 <b>' + n + '일 연속</b> 지켜져! 저녁이 훨씬 편해져~') : '아침에 10분이면 끝나. <b>오늘부터 1일차</b> 시작해볼까?');
+        btn = '지금 10분만 하기 →';
+      } else if (hh >= 12 && hh < 18) {
+        cls = 's-nudge'; mood = '😯'; tag = (n > 0 ? '오늘 미완료' : '아직 시작 전');
+        msg = (n > 0 ? ('어? 하교했는데 오늘 아직 안 했네. <b>' + n + '일 연속</b> 지금 지키자!') : '하교했으면 지금부터 하나씩! <b>오늘 1일차</b> 시작!');
+        btn = '지금부터 하나씩 →';
+      } else if (hh >= 18 && hh < 22) {
+        cls = 's-warn'; mood = '😰'; tag = '오늘 미완료';
+        msg = (n > 0 ? ('<b>오늘 안 하면 ' + n + '일 스트릭 끊겨!</b> 자기 전까지 얼른 끝내자!') : '오늘 안 하면 <b>0일</b>이야! 자기 전 30분이면 끝나.');
+        btn = '지금 바로 시작 →';
+      } else {
+        cls = 's-rage'; mood = '😡'; tag = '마감 임박';
+        if (hh >= 22) {
+          msg = (remainBed > 0 ? ('<b>23시 30분 취침까지 ' + remainBed + '분!</b> 지금 안 하면 스트릭 리셋!') : '<b>취침 시간 넘었어!</b> 그래도 10분만 하면 스트릭 살아나!');
+        } else {
+          msg = (n > 0 ? ('<b>새벽이야!</b> 지금 시작하면 <b>' + (n + 1) + '일차</b>로 이어져. 얼른 하고 자자!') : '<b>이 시간까지 안 했어?</b> 지금 10분만 하고 얼른 자자!');
+        }
+        btn = '🚨 지금 당장 시작 →';
+      }
+
+      var pct = m.total ? Math.round((m.done / m.total) * 100) : 0;
+      var bestLine = (STREAK.best > n && STREAK.best > 0) ? ' · 최고 🔥' + STREAK.best + '일' : '';
+      host.innerHTML =
+        '<div class="streak-hero ' + cls + '">' +
+          '<div class="sh-char"><span class="sh-flame">🔥</span><span class="sh-owl">🦉</span><span class="sh-mood">' + mood + '</span></div>' +
+          '<div class="sh-main">' +
+            '<div class="sh-row"><span class="sh-days">' + (n > 0 ? '🔥 ' + n + '일 연속' : '🔥 오늘 1일차') + '</span><span class="sh-tag">' + tag + '</span></div>' +
+            '<div class="sh-msg">' + msg + bestLine + '</div>' +
+            '<div class="sh-bar"><i style="width:' + pct + '%"></i></div>' +
+            '<div class="sh-prog">오늘 미션 <b>' + m.done + '/' + m.total + '</b> 완료' + (info.all ? ' · 모두 끝!' : '') + '</div>' +
+            '<div class="sh-actions">' +
+              '<button type="button" class="sh-btn" id="sh_go">' + btn + '</button>' +
+              '<button type="button" class="sh-bell" id="sh_bell" aria-label="매일 알림 설정" title="매일 알림 설정">🔔</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      var g = document.getElementById('sh_go'); if (g) g.onclick = goTodayMissions;
+      var b = document.getElementById('sh_bell'); if (b) b.onclick = openNotifModal;
+    }
+
+    /* ---------- 🔔 알림: 권한 · 서비스워커 · 테스트 ---------- */
+    function notifSupported() { return ('Notification' in window); }
+    function notifPermission() { try { return ('Notification' in window) ? Notification.permission : 'unsupported'; } catch (e) { return 'unsupported'; } }
+    /* 안드로이드 크롬은 실제 PNG 아이콘이 아니면 showNotification 을 조용히 실패시키는 경우가 있어요 */
+    function harinNotifIcon() { try { return new URL('./harin-icon-192.png', location.href).href; } catch (e) { return './harin-icon-192.png'; } }
+    function withTimeout(p, ms) {
+      return Promise.race([p, new Promise(function (res) { setTimeout(function () { res('__timeout'); }, ms); })]);
+    }
+    function harinNotifOptions(title, body, tag) {
+      var icon = harinNotifIcon();
+      var opts = { body: body || '', icon: icon, badge: icon, tag: tag || 'harin-planner', renotify: true, data: { url: location.href } };
+      try { opts.vibrate = [140, 70, 140, 70, 220]; } catch (e) {}
+      return opts;
+    }
+    function showHarinNotificationResult(title, body, tag) {
+      var out = { ok: false, permission: notifPermission(), method: 'none', reason: '' };
+      if (!notifSupported()) { out.reason = 'unsupported'; return Promise.resolve(out); }
+      if (out.permission !== 'granted') { out.reason = (out.permission === 'denied' ? 'denied' : 'not-granted'); return Promise.resolve(out); }
+
+      var withIcon = harinNotifOptions(title, body, tag);
+      var plain = { body: body || '', tag: (tag || 'harin-planner'), renotify: true, data: withIcon.data };
+
+      function fire(reg, method) {
+        if (!reg || typeof reg.showNotification !== 'function') return Promise.reject(new Error('no-reg'));
+        var p;
+        try { p = Promise.resolve(reg.showNotification(title, withIcon)); }
+        catch (e) { p = Promise.reject(e); }
+        return p.then(function () { out.ok = true; out.method = method; out.reason = ''; return true; })
+          .catch(function () {
+            try {
+              return Promise.resolve(reg.showNotification(title, plain)).then(function () {
+                out.ok = true; out.method = method + '+no-icon'; out.reason = 'icon-retry'; return true;
+              });
+            } catch (e2) { out.reason = 'show-error'; return false; }
+          });
+      }
+
+      return Promise.resolve()
+        .then(function () {
+          if (!navigator.serviceWorker) throw new Error('no-sw');
+          return withTimeout(navigator.serviceWorker.ready, 3000).then(function (reg) {
+            if (!reg || reg === '__timeout') throw new Error('ready-timeout');
+            return reg;
+          });
+        })
+        .then(function (reg) { return fire(reg, 'sw-ready'); })
+        .catch(function () {
+          var p = (navigator.serviceWorker && navigator.serviceWorker.getRegistration) ? navigator.serviceWorker.getRegistration() : Promise.resolve(null);
+          return Promise.resolve(p).catch(function () { return null; }).then(function (reg) {
+            if (!reg) return Promise.reject(new Error('no-reg'));
+            return fire(reg, 'sw-registration');
+          });
+        })
+        .catch(function () {
+          var p = (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) ? navigator.serviceWorker.getRegistrations() : Promise.resolve([]);
+          return Promise.resolve(p).catch(function () { return []; }).then(function (list) {
+            var reg = (list || []).filter(function (r) { return r && typeof r.showNotification === 'function'; })[0];
+            if (!reg) return Promise.reject(new Error('no-reg-any'));
+            return fire(reg, 'sw-registrations');
+          });
+        })
+        .catch(function (e) {
+          if (!out.reason) out.reason = (e && e.message) ? String(e.message) : 'sw-unavailable';
+          try { new Notification(title, withIcon); out.ok = true; out.method = 'window'; return true; }
+          catch (e2) { out.ok = false; return false; }
+        })
+        .then(function () { return out; });
+    }
+    function showHarinNotification(title, body, tag) {
+      return showHarinNotificationResult(title, body, tag).then(function (r) { return !!r.ok; });
+    }
+    function requestNotifPermission() {
+      if (!notifSupported()) return Promise.resolve('unsupported');
+      if (Notification.permission === 'granted') return Promise.resolve('granted');
+      if (Notification.permission === 'denied') return Promise.resolve('denied');
+      try {
+        return Notification.requestPermission().then(function (p) { return p; }).catch(function () { return 'denied'; });
+      } catch (e) { return Promise.resolve('denied'); }
+    }
+
+    /* ---------- 📅 휴대폰 기본 캘린더용 .ics (매일 반복 + 알람) ---------- */
+    function icsPad(n) { return ('0' + n).slice(-2); }
+    function icsLocal(d) {
+      return d.getFullYear() + icsPad(d.getMonth() + 1) + icsPad(d.getDate()) + 'T' + icsPad(d.getHours()) + icsPad(d.getMinutes()) + '00';
+    }
+    function buildHarinIcs(timeStr) {
+      var p = String(timeStr || '20:00').split(':');
+      var hh = Math.min(23, Math.max(0, +p[0] || 20));
+      var mm = Math.min(59, Math.max(0, +p[1] || 0));
+      var start = new Date();
+      start.setDate(start.getDate() + 1);
+      start.setHours(hh, mm, 0, 0);
+      var end = new Date(start.getTime() + 15 * 60000);
+      var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.[0-9]+/, '');
+      var summary = '🦉 하린이 오늘 미션 체크 (하루 플래너) ' + icsPad(hh) + ':' + icsPad(mm);
+      var desc = '하린 플래너에서 오늘 미션(시간표 + 매일 필수)을 하나씩 체크하고 연속 실천(🔥스트릭)을 이어가요.\n플래너: https://smcciao-commits.github.io/-/harin.html';
+      var lines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//TopEdu Academy//Harin Planner Reminder v84//KO',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
+        'X-WR-CALNAME:하린이 플래너 매일 알림',
+        'BEGIN:VTIMEZONE',
+        'TZID:Asia/Seoul',
+        'BEGIN:STANDARD',
+        'DTSTART:19700101T000000',
+        'TZOFFSETFROM:+0900',
+        'TZOFFSETTO:+0900',
+        'TZNAME:KST',
+        'END:STANDARD',
+        'END:VTIMEZONE',
+        'BEGIN:VEVENT',
+        'UID:harin-planner-' + icsPad(hh) + icsPad(mm) + '@smcciao-commits.github.io',
+        'DTSTAMP:' + stamp,
+        'DTSTART;TZID=Asia/Seoul:' + icsLocal(start),
+        'DTEND;TZID=Asia/Seoul:' + icsLocal(end),
+        'RRULE:FREQ=DAILY',
+        'SUMMARY:' + summary,
+        'DESCRIPTION:' + desc.replace(/\n/g, '\\n'),
+        'BEGIN:VALARM',
+        'TRIGGER:-PT0M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:' + summary,
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ];
+      return lines.join('\r\n') + '\r\n';
+    }
+    function downloadHarinIcs(timeStr) {
+      var txt = buildHarinIcs(timeStr);
+      try {
+        var blob = new Blob([txt], { type: 'text/calendar;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'harin_daily_planner_' + String(timeStr || '20:00').replace(':', '') + '.ics';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { try { URL.revokeObjectURL(url); if (a.parentNode) a.parentNode.removeChild(a); } catch (e) {} }, 1500);
+        return true;
+      } catch (e) { return false; }
+    }
+
+    /* ---------- 🔔 알림 모달 ---------- */
+    function openNotifModal() {
+      renderNotifModal();
+      var ov = document.getElementById('notifOverlay');
+      if (!ov) return;
+      ov.classList.add('on');
+      ov.setAttribute('aria-hidden', 'false');
+      try { document.body.style.overflow = 'hidden'; } catch (e) {}
+    }
+    function closeNotifModal() {
+      var ov = document.getElementById('notifOverlay');
+      if (!ov) return;
+      ov.classList.remove('on');
+      ov.setAttribute('aria-hidden', 'true');
+      try { document.body.style.overflow = ''; } catch (e) {}
+    }
+    function renderNotifModal() {
+      var el = document.getElementById('notifModal');
+      if (!el) return;
+      var st = STREAK.notif;
+      var perm = notifPermission();
+      var on = !!st.enabled && perm === 'granted';
+      var permTxt = perm === 'granted' ? '허용됨 ✓' : (perm === 'denied' ? '차단됨 (설정에서 허용 필요)' : (perm === 'unsupported' ? '이 브라우저는 웹 알림 미지원' : '아직 허용 안 됨'));
+      var permCls = perm === 'granted' ? 'ok' : 'no';
+      var presets = [['16:00', '하교 직후'], ['20:00', '저녁'], ['21:30', '자기 전']];
+      var cur = st.time || '20:00';
+      var h = '';
+      h += '<div class="nc-head"><div class="nc-title">🔔 매일 플래너 알림</div><button type="button" class="nc-x" id="ncClose" aria-label="닫기">✕</button></div>';
+      h += '<div class="nc-perm"><span>알림 상태</span><span class="' + permCls + '">' + permTxt + '</span></div>';
+      h += '<div class="nc-desc">오늘 미션을 아직 다 못 끝냈을 때, 정한 시각에 폰 위쪽에 <b>듀오링고처럼 집요하게</b> 알려줘요. ' + (on ? '<b style="color:#047857">매일 ' + cur + ' 알림 켜짐</b>' : '지금은 꺼져 있어요.') + '</div>';
+      h += '<div class="nc-lbl">알림 시간 고르기</div>';
+      h += '<div class="nc-chips">' + presets.map(function (p) {
+        return '<button type="button" class="nc-chip' + (cur === p[0] ? ' on' : '') + '" data-t="' + p[0] + '">' + p[0] + '<span>' + p[1] + '</span></button>';
+      }).join('') + '</div>';
+      h += '<div class="nc-time"><span>직접 입력</span><input type="time" id="ncTime" value="' + cur + '"></div>';
+      h += '<button type="button" class="nc-main' + (on ? ' off' : '') + '" id="ncMain">' + (on ? '🔕 매일 알림 끄기' : '🔔 매일 알림 켜기') + '</button>';
+      h += '<button type="button" class="nc-sub" id="ncTest">📣 테스트 알림 지금 받아보기</button>';
+      h += '<div id="ncTestBox" class="nc-testbox" style="display:none"></div>';
+      h += '<button type="button" class="nc-sub" id="ncIcs" style="color:#b45309;background:#fffbeb;border-color:#fcd34d">📅 휴대폰 캘린더에 매일 알림 추가 (.ics)</button>';
+      if (on) h += '<div class="nc-ok">✔ 매일 ' + cur + ' 알림 예약됨 · 오늘 미션을 다 끝내면 그날은 안 울려요</div>';
+      h += '<div class="nc-note"><b>솔직한 한계 안내</b> — 웹앱 알림은 앱을 완전히 꺼버리면 안 올 수 있어요(아이폰·안드로이드 정책). 그래서 <b>.ics 캘린더 알림</b>을 같이 넣어두면 폰 기본 캘린더가 앱이 꺼져 있어도 확실히 울려줘요. 두 개 다 켜두는 게 가장 집요해요 🔥</div>';
+      el.innerHTML = h;
+
+      var bc = document.getElementById('ncClose'); if (bc) bc.onclick = closeNotifModal;
+      Array.prototype.forEach.call(el.querySelectorAll('.nc-chip'), function (chip) {
+        chip.onclick = function () {
+          STREAK.notif.time = chip.dataset.t;
+          STREAK.notif.sentDate = ''; STREAK.notif.sentN = 0;
+          saveStreak();
+          if (STREAK.notif.enabled && notifPermission() === 'granted') {
+            showHarinNotification('🔔 알림 시간 변경', '이제 매일 ' + STREAK.notif.time + '에 알려줄게!', 'harin-time-changed');
+          }
+          renderNotifModal();
+        };
+      });
+      var tm = document.getElementById('ncTime');
+      if (tm) tm.onchange = function () {
+        STREAK.notif.time = this.value || '20:00';
+        STREAK.notif.sentDate = ''; STREAK.notif.sentN = 0;
+        saveStreak();
+        renderNotifModal();
+      };
+      var bm = document.getElementById('ncMain');
+      if (bm) bm.onclick = function () {
+        if (on) {
+          STREAK.notif.enabled = false;
+          saveStreak();
+          renderNotifModal();
+          showToast('🔕 매일 알림을 껐어요');
+          return;
+        }
+        var t = (document.getElementById('ncTime') || {}).value || cur;
+        bm.disabled = true;
+        bm.textContent = '권한 확인 중...';
+        requestNotifPermission().then(function (perm2) {
+          if (perm2 !== 'granted') {
+            STREAK.notif.enabled = false;
+            saveStreak();
+            renderNotifModal();
+            var box = document.getElementById('ncTestBox');
+            if (box) {
+              box.style.display = 'block'; box.className = 'nc-testbox bad';
+              box.innerHTML = (perm2 === 'denied' ? '<b>🚫 알림이 차단되어 있어요</b><br>크롬 주소창 왼쪽 아이콘 → <b>권한</b> → <b>알림</b> → <b>허용</b>으로 바꾸고 화면 위 <b>[🔄 새로고침]</b>을 누른 뒤 다시 시도해 주세요.<br>' : '<b>알림 권한이 아직 허용되지 않았어요</b><br>권한 창에서 <b>[허용]</b>을 눌러야 켜져요. 아래 <b>[📅 캘린더 알림]</b>으로도 받을 수 있어요.') + '<br><span style="opacity:.85">폰 설정 → 애플리케이션 → Chrome → 알림도 켜져 있어야 해요.</span></div>';
+            }
+            return;
+          }
+          STREAK.notif.enabled = true;
+          STREAK.notif.time = t;
+          STREAK.notif.sentDate = ''; STREAK.notif.sentN = 0;
+          saveStreak();
+          renderNotifModal();
+          showHarinNotification('🔔 하린 플래너 알림 켜짐!', '매일 ' + t + '에 오늘 미션 남았으면 알려줄게. 오늘 10분만 하면 🔥' + effectiveStreak() + '일 유지!', 'harin-notif-on');
+        }).catch(function () {
+          if (bm) { bm.disabled = false; }
+        });
+      };
+      var bt = document.getElementById('ncTest');
+      if (bt) bt.onclick = function () {
+        var box = document.getElementById('ncTestBox');
+        function showBox(kind, html) {
+          if (!box) return;
+          box.style.display = 'block';
+          box.className = 'nc-testbox ' + kind;
+          box.innerHTML = html;
+        }
+        bt.disabled = true;
+        showBox('wait', '⏳ 테스트 알림을 보내는 중… (최대 3초)');
+        function done() { try { bt.disabled = false; } catch (e) {} }
+
+        requestNotifPermission().then(function (perm2) {
+          if (perm2 !== 'granted') {
+            done();
+            if (perm2 === 'denied') {
+              showBox('bad', '<b>🚫 알림이 차단되어 있어요 (권한: 차단됨)</b><br>크롬 주소창 왼쪽 아이콘(<b>자물쇠·설정</b>) → <b>권한</b> → <b>알림</b> → <b>허용</b>으로 바꾸고,<br>화면 위 <b>[🔄 새로고침]</b>을 누른 뒤 다시 시도해 주세요.<br><span style="opacity:.85">폰 <b>설정 → 애플리케이션 → Chrome → 알림</b>도 켜져 있어야 해요.</span>');
+            } else if (perm2 === 'unsupported') {
+              showBox('bad', '<b>이 브라우저는 웹 알림을 지원하지 않아요</b><br>크롬으로 열어 주세요. 지금은 아래 <b>[📅 휴대폰 캘린더에 매일 알림 추가]</b>가 확실해요.');
+            } else {
+              showBox('bad', '<b>알림 권한이 아직 허용되지 않았어요</b><br>권한 창에서 <b>[허용]</b>을 누르고 다시 눌러 주세요.');
+            }
+            return;
+          }
+          var nNow = effectiveStreak();
+          return showHarinNotificationResult('🔔 하린 플래너 알림 테스트', '하린아, 이렇게 알림이 와! 오늘 미션 남았어. 10분만 하면 🔥' + nNow + '일 유지!', 'harin-test-' + Date.now()).then(function (r) {
+            done();
+            if (r && r.ok) {
+              showBox('good', '<b>📣 테스트 알림을 보냈어요!</b><br>잠금화면을 내리거나 화면 위쪽을 봐 주세요. 몇 초 안에 안 보이면 앱을 완전히 끈 상태일 수 있으니 아래 <b>[📅 캘린더 알림]</b>을 같이 켜두면 확실해요.<br><span style="opacity:.8">권한: 허용 · 전송: ' + (r.method === 'sw-ready' ? '서비스워커' : (r.method === 'window' ? '창 알림' : '서비스워커 재시도')) + (r.reason === 'icon-retry' ? ' (아이콘 없이 전송)' : '') + '</span>');
+            } else {
+              var why = (r && r.reason) ? r.reason : 'unknown';
+              showBox('bad', '<b>테스트 알림을 띄우지 못했어요</b><br>화면 위 <b>[🔄 새로고침]</b>을 누르면 서비스워커가 새로 등록돼요. 그래도 안 되면 아래 <b>[📅 캘린더 알림]</b>으로 받아주세요.<br><span style="opacity:.8">권한: ' + ((r && r.permission) || perm2) + ' · 원인: ' + why + '</span>');
+            }
+          });
+        }).catch(function () {
+          done();
+          showBox('bad', '<b>테스트 알림을 보내지 못했어요</b><br>잠시 후 다시 시도하거나 아래 <b>[📅 캘린더 알림]</b>을 써 주세요.');
+        });
+      };
+      var bi = document.getElementById('ncIcs');
+      if (bi) bi.onclick = function () {
+        var t = (document.getElementById('ncTime') || {}).value || cur;
+        if (downloadHarinIcs(t)) {
+          showToast('📅 캘린더 파일을 내려받았어요');
+          setTimeout(function () {
+            alert('📅 캘린더 파일(.ics)을 내려받았어요!\n\n아래 방법으로 열면 매일 ' + t + '에 폰이 직접 알려줘요.\n· 안드로이드: 다운로드 알림 → 파일을 누르면 캘린더에 추가\n· 아이폰: 파일 앱 → 내려받은 파일 누르기 → 캘린더 추가');
+          }, 200);
+        } else {
+          alert('캘린더 파일을 만들지 못했어요. 잠시 후 다시 시도해 주세요.');
+        }
+      };
+    }
+
+    /* ---------- 앱이 켜져 있는 동안의 집요한 재촉 (하루 최대 3회) ---------- */
+    var HARIN_NAG_TIMER = null;
+    function harinNagText(level, n) {
+      if (level <= 1) {
+        return { title: '🦉 하린아! 오늘 미션 아직이야', body: (n > 0 ? ('"' + n + '일 연속" 스트릭이 오늘 끊길 수 있어. 10분이면 끝나!') : '플래너 열고 하나만 체크해보자. 오늘 1일차 시작!') };
+      }
+      if (level === 2) {
+        return { title: '🔥 스트릭 끊기기 직전!', body: (n > 0 ? ('🔥 ' + n + '일이 사라지기 직전이야! 지금 바로 플래너 체크!') : '오늘 안 하면 0일이야. 지금 10분만!') };
+      }
+      return { title: '🚨 마지막 알림!', body: '자정 지나면 스트릭이 리셋돼. 지금 당장 하린 플래너 열어서 미션 체크!' };
+    }
+    function checkHarinReminder() {
+      var st = STREAK.notif;
+      if (!st.enabled || notifPermission() !== 'granted') return;
+      if (isTodayAllDone()) return;
+      var now = new Date();
+      var nowMin = now.getHours() * 60 + now.getMinutes();
+      var parts = String(st.time || '20:00').split(':');
+      var due = ((+parts[0]) || 20) * 60 + ((+parts[1]) || 0);
+      if (nowMin < due) return;
+      var tk = todayKey();
+      if (st.sentDate !== tk) { st.sentDate = tk; st.sentN = 0; }
+      if (st.sentN >= 3) return;
+      if (st.sentN > 0 && (Date.now() - (st.lastNagAt || 0)) < 30 * 60000) return;
+      st.sentN = st.sentN + 1;
+      st.lastNagAt = Date.now();
+      saveStreak();
+      var tx = harinNagText(st.sentN, effectiveStreak());
+      showHarinNotification(tx.title, tx.body, 'harin-nag-' + tk + '-' + st.sentN);
+    }
+    function startReminderLoop() {
+      if (HARIN_NAG_TIMER) clearInterval(HARIN_NAG_TIMER);
+      HARIN_NAG_TIMER = setInterval(function () { try { checkHarinReminder(); } catch (e) {} }, 60000);
+      setTimeout(function () { try { checkHarinReminder(); } catch (e) {} }, 4000);
+    }
+
+    /* ---------- 자정이 지나면 '오늘'을 새로 계산 ---------- */
+    var LAST_TODAY_KEY = todayKey();
+    function tickDayRollover() {
+      if (todayKey() === LAST_TODAY_KEY) return;
+      LAST_TODAY_KEY = todayKey();
+      var newDay = WD_MAP[new Date().getDay()];
+      if (newDay === '토' || newDay === '일') newDay = '주말';
+      if (newDay !== todayDay) {
+        if (curDay === todayDay) curDay = newDay;
+        todayDay = newDay;
+      }
+      renderAll();
+    }
+
     // Init
+    migrateChecks();
     renderCoins();
     renderAll();
+    startReminderLoop();
+    setInterval(tickDayRollover, 60000);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) { try { tickDayRollover(); renderStreakBanner(); } catch (e) {} }
+    });
   </script>
 </body>
 </html>
