@@ -5311,7 +5311,7 @@ function renderBulkNagModal(){
       '<span class="sb-pill done">오늘 완료 ' + boardDone + '명</span>' +
     '</div>';
   h += '<div style="font-size:12px;color:#475569;line-height:1.55;margin-bottom:10px;word-break:keep-all">오늘 완료한 학생은 목록에서 빼놨어요. 문구는 <b>{이름}</b>·<b>{반}</b>을 학생별로 바꾸어 들어갑니다. 보낸 쪽지는 학생 홈 맨 위 <b>[조수민 원장님의 도착 쪽지]</b>에 띄워요.' +
-    (boardToday ? '' : '<br><span style="color:#b45309;font-weight:700">⚠ 오늘 폰에서 올라온 실시간 기록이 0건이라 전원이 미완료로 잡혔어요. 아래 [🔄 실시간 새로고침]을 한 번 눌러 맞춰 주세요.</span>') +
+    (boardToday ? '' : '<br><span style="color:#b45309;font-weight:700">⚠ 오늘 폰에서 올라온 실시간 기록이 0건이라 전원이 미완료로 잡혔어요. 아래 [🔄 새로고침]을 한 번 눌러 맞춰 주세요.</span>') +
     '</div>';
   h += '<div class="nc-lbl">보낼 쪽지 문구 (학생별로 이름이 자동으로 들어가요)</div>';
   h += '<textarea id="nag_text" style="width:100%;height:86px;padding:10px;border-radius:12px;border:1.5px solid #cbd5e1;font-family:inherit;font-size:13px;line-height:1.5;box-sizing:border-box">' + esc(NAG_DEFAULT_TEXT) + '</textarea>';
@@ -5323,7 +5323,7 @@ function renderBulkNagModal(){
         '<span class="nm"><b>' + esc(x.name) + '</b> <span style="color:#94a3b8;font-size:11px">' + esc(x.ban) + (x.streak ? ' · 🔥' + x.streak + '일' : '') + '</span></span>' +
         '<span class="st ' + x.state + '">' + (x.state === 'ing' ? '미완료' : '미시작') + '</span></label>';
     }).join('') + '</div>';
-    h += '<div class="nag-tools"><button type="button" id="nagAll">전체 선택</button><button type="button" id="nagNone">전체 해제</button><button type="button" id="nagRefresh">🔄 실시간 새로고침</button></div>';
+    h += '<div class="nag-tools"><button type="button" id="nagAll">전체 선택</button><button type="button" id="nagNone">전체 해제</button><button type="button" id="nagRefresh">🔄 새로고침</button></div>';
   } else {
     h += '<div style="padding:14px;border-radius:12px;background:#ecfdf5;border:1.5px solid #6ee7b7;font-size:12.5px;color:#047857;font-weight:700;line-height:1.5">🎉 오늘 학습을 다 끝냈거나, 보낼 미완료 학생이 없어요!</div>';
   }
