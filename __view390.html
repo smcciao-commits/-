@@ -12,5 +12,14 @@
 </head>
 <body>
 <iframe id="f" src="index.html?v=m82" title="mobile view" allow="notifications"></iframe>
+<script>
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    var y = parseInt((location.hash||'').replace('#',''),10) || 0;
+    var f = document.getElementById('f');
+    try { f.contentWindow.scrollTo(0, y); } catch(e){}
+  }, 900);
+});
+</script>
 </body>
 </html>
