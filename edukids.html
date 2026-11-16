@@ -7804,7 +7804,28 @@ function ekBuildIcs(timeStr) {
     'END:VEVENT',
     'END:VCALENDAR'
   ];
-  return lines.join('\r\n') + '\r\n';
+  return lines.map(ekFoldIcsLine).join('\r\n') + '\r\n';
+}
+/* v84: RFC5545 는 한 줄 75옥텟 제한 — 아이폰·아이패드 캘린더가 잘 읽도록 접어줍니다(한글·이모지 중간에서 끊지 않음) */
+function ekUtf8Len(ch) {
+  var c = ch.charCodeAt(0);
+  if (c < 0x80) return 1;
+  if (c < 0x800) return 2;
+  if (c < 0xd800) return 3;
+  return 2;
+}
+function ekFoldIcsLine(line) {
+  var line2 = String(line || '');
+  if (!line2) return line2;
+  var parts = [], cur = '', bytes = 0;
+  for (var i = 0; i < line2.length; i++) {
+    var ch = line2.charAt(i);
+    var b = ekUtf8Len(ch);
+    if (bytes + b > 73) { parts.push(cur); cur = ' '; bytes = 1; }
+    cur += ch; bytes += b;
+  }
+  parts.push(cur);
+  return parts.join('\r\n');
 }
 function ekDownloadIcs(timeStr) {
   var txt = ekBuildIcs(timeStr);
