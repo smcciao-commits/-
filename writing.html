@@ -400,7 +400,7 @@ function renderPlay(){
       return '<button class="sel" onclick="unpick('+k+')"><span class="o">'+(k+1)+'</span>'+esc(u.t)+'</button>';
     }).join(''):'<span class="ph">아래 단어 블록을 순서대로 눌러 보세요</span>';
     body+='<div class="ansslot" id="ansslot">'+selHtml+'</div>'+
-      '<div class="pool">'+pool.map(function(t,i){
+      '<div class="pool" id="pool">'+pool.map(function(t,i){
         if(used[i])return '';
         return '<button class="word" onclick="pick('+i+')">'+esc(t)+'</button>';
       }).join('')+'</div>'+
@@ -434,15 +434,36 @@ function pick(i){
   var pool=p.order[p.idx];
   if(p.sel.some(function(u){return u.i===i;}))return;
   p.sel.push({i:i,t:pool[i]});
-  renderPlay();
+  paintScramble();
 }
 function unpick(k){
   S.play.sel.splice(k,1);
-  renderPlay();
+  paintScramble();
 }
 function resetScramble(){
   S.play.sel=[];
-  renderPlay();
+  paintScramble();
+}
+/* 답을 고를 때는 문장 영역만 다시 그려서 화면이 튀지 않게 한다 */
+function paintScramble(){
+  var p=S.play;if(!p||p.mode!=='scramble')return;
+  var pool=p.order[p.idx];
+  var used={};p.sel.forEach(function(u){used[u.i]=1;});
+  var slot=document.getElementById('ansslot');
+  if(slot){
+    slot.innerHTML=p.sel.length?p.sel.map(function(u,k){
+      return '<button class="sel" onclick="unpick('+k+')"><span class="o">'+(k+1)+'</span>'+esc(u.t)+'</button>';
+    }).join(''):'<span class="ph">아래 단어 블록을 순서대로 눌러 보세요</span>';
+  }
+  var pb=document.getElementById('pool');
+  if(pb){
+    pb.innerHTML=pool.map(function(t,i){
+      if(used[i])return '';
+      return '<button class="word" onclick="pick('+i+')">'+esc(t)+'</button>';
+    }).join('');
+  }
+  var btn=document.getElementById('btn_submit');
+  if(btn&&!p.done)btn.disabled=(p.sel.length!==pool.length);
 }
 function quitPlay(){
   if(!confirm('지금 나가면 이번 풀이는 기록되지 않습니다. 나갈까요?'))return;
@@ -481,7 +502,7 @@ function submitAnswer(){
   var sb=document.getElementById('btn_submit');if(sb)sb.disabled=true;
   var inp=document.getElementById('inp');if(inp)inp.disabled=true;
   if(p.mode==='scramble'){
-    var ws=document.querySelectorAll('.pool .word');for(var i=0;i<ws.length;i++)ws[i].disabled=true;
+    var ws=document.querySelectorAll('#pool .word');for(var i=0;i<ws.length;i++)ws[i].disabled=true;
     var ss=document.querySelectorAll('.ansslot .sel');for(var k=0;k<ss.length;k++)ss[k].disabled=true;
   }
   var keyTxt=(p.mode==='blank')?(it.blank.replace('____','['+it.answer+']')):'';
