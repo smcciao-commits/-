@@ -231,7 +231,7 @@ function showLogin(){
   var opts=bans.map(function(b){return '<option value="'+esc(b)+'">'+esc(b)+'</option>';}).join('');
   app.innerHTML=
    '<div class="top"><div class="grow"><div class="title">✍️ 탑에듀 내신 서술형 <span class="ver">'+APP_VER+'</span></div>'+
-   '<div class="sub">어순배열 · 어형변화 · 조건영작</div></div>'+refreshStyle()+'</div>'+
+   '<div class="sub">어순배열 · 어형변화 · 조건영작</div></div><a class="back" href="index.html" style="text-decoration:none">🏠 단어앱</a>'+refreshStyle()+'</div>'+
    '<div class="card">'+
      '<label class="label" for="ban">반</label><select id="ban"><option value="">반을 골라주세요</option>'+opts+'</select>'+
      '<label class="label" for="name">이름</label><input id="name" placeholder="예: 홍길동" autocomplete="off">'+
@@ -242,8 +242,11 @@ function showLogin(){
    '<button class="linkbtn" id="adm">선생님 화면</button>';
   bindRefresh();
   var sel=document.getElementById('ban');
+  var qb='',qn='';
+  try{ var qs=new URLSearchParams(location.search); qb=qs.get('ban')||''; qn=qs.get('name')||''; }catch(e){}
   var last=store('topedu_writing_last');
-  if(last&&bans.indexOf(last.ban)>=0){sel.value=last.ban;document.getElementById('name').value=last.name||'';}
+  if(qb&&bans.indexOf(qb)>=0){sel.value=qb;document.getElementById('name').value=qn;}
+  else if(last&&bans.indexOf(last.ban)>=0){sel.value=last.ban;document.getElementById('name').value=last.name||'';}
   document.getElementById('go').onclick=doLogin;
   document.getElementById('pw').onkeydown=function(e){if(e.key==='Enter')doLogin();};
   document.getElementById('adm').onclick=showTeacherLogin;
@@ -309,7 +312,7 @@ function showHome(){
   if(S.me.teacher){showTeacher();return;}
   var sets=mySets();
   var html='<div class="top"><div class="grow"><div class="title">✍️ 탑에듀 내신 서술형 <span class="ver">'+APP_VER+'</span></div>'+
-    '<div class="sub">'+esc(S.me.ban)+' · '+esc(S.me.name)+' 님</div></div>'+refreshStyle()+'</div>';
+    '<div class="sub">'+esc(S.me.ban)+' · '+esc(S.me.name)+' 님</div></div><a class="back" href="index.html" style="text-decoration:none">🏠 단어앱</a>'+refreshStyle()+'</div>';
 
   if(!sets.length){
     html+='<div class="card"><h2>내 반 전용 서술형 세트는 없어요</h2><div class="sub" style="margin-bottom:2px">내 반은 서술형 세트가 따로 없어요. 아래 세트로 자유롭게 연습할 수 있어요.</div></div>';
@@ -568,7 +571,7 @@ function showTeacher(){
   var totalItems=SETS.reduce(function(a,s){return a+(s.practice?0:s.items.length);},0);
   var recs=records(),students=Object.keys(recs).filter(function(k){return k!=='teacher';});
   var html='<div class="top"><div class="grow"><div class="title">선생님 화면 👩‍🏫 <span class="ver">'+APP_VER+'</span></div>'+
-    '<div class="sub">서술형 시험지 인쇄 · 전체 세트 미리보기</div></div>'+refreshStyle()+'</div>'+
+    '<div class="sub">서술형 시험지 인쇄 · 전체 세트 미리보기</div></div><a class="back" href="index.html" style="text-decoration:none">🏠 단어앱</a>'+refreshStyle()+'</div>'+
     '<div class="card"><h2>세트 현황</h2>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center;background:var(--rule);border-radius:12px;padding:10px 4px">'+
       '<div><b style="font-size:22px;color:var(--pri)">'+SETS.filter(function(s){return !s.practice;}).length+'</b><div class="sub" style="font-size:11.5px">반 세트</div></div>'+

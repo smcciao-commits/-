@@ -806,6 +806,47 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .prt-btn.ghost { background: #f1f5f9; color: #475569; box-shadow: none; border: 1.5px solid #e2e8f0; }
 .prt-vtag { font-size: 10.5px; opacity: 0.85; font-weight: 700; }
 
+/* ================= v86: ✅ 숙제 1초 체크 & 에듀스탭/피클 문자 복사 ================= */
+.hwc-overlay { position: fixed; inset: 0; z-index: 9600; display: none; background: rgba(15,23,42,0.58); padding: 14px; overflow: auto; }
+.hwc-overlay.on { display: flex; align-items: flex-start; justify-content: center; }
+.hwc-card { display: flex; flex-direction: column; width: 100%; max-width: 620px; margin: 0 auto; max-height: calc(100vh - 28px); background: #fff; border-radius: 20px; box-shadow: 0 20px 50px rgba(15,23,42,0.38); overflow: hidden; }
+.hwc-head { display: flex; align-items: center; gap: 10px; padding: 13px 16px; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; flex: 0 0 auto; }
+.hwc-top { flex: 0 0 auto; padding: 11px 13px 9px; border-bottom: 1px solid #e2e8f0; background: #fbfefe; }
+.hwc-daterow { display: flex; gap: 7px; align-items: center; }
+.hwc-date { flex: 1 1 auto; min-width: 0; padding: 9px 11px; border: 1.5px solid #cbd5e1; border-radius: 11px; font-family: inherit; font-size: 13.5px; font-weight: 700; color: #1e293b; background: #fff; }
+.hwc-today { flex: 0 0 auto; padding: 9px 12px; border-radius: 11px; border: 1.5px solid #99f6e4; background: #f0fdfa; color: #0f766e; font-size: 12.5px; font-weight: 800; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.hwc-chips { display: flex; gap: 6px; overflow-x: auto; margin-top: 9px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+.hwc-chip { flex: 0 0 auto; padding: 8px 12px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: #fff; font-size: 12.5px; font-weight: 800; color: #475569; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.hwc-chip.on { border-color: #0d9488; background: #ccfbf1; color: #0f766e; }
+.hwc-counts { display: flex; gap: 11px; flex-wrap: wrap; margin-top: 9px; font-size: 12px; font-weight: 800; color: #475569; }
+.hwc-counts b { font-size: 13.5px; }
+.hwc-list { flex: 1 1 auto; min-height: 90px; overflow: auto; padding: 4px 10px 8px; -webkit-overflow-scrolling: touch; }
+.hwc-row { display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid #f1f5f9; }
+.hwc-row:last-child { border-bottom: 0; }
+.hwc-nm { flex: 1 1 auto; min-width: 0; font-size: 14.5px; font-weight: 800; color: #1e293b; line-height: 1.25; word-break: keep-all; }
+.hwc-nm u { display: block; font-size: 10.5px; font-weight: 700; color: #94a3b8; text-decoration: none; margin-top: 1px; }
+.hwc-btns { display: flex; gap: 5px; flex: 0 0 auto; }
+.hwc-btn { width: 42px; height: 42px; border-radius: 12px; border: 1.5px solid #e2e8f0; background: #fff; font-size: 18px; font-weight: 800; line-height: 1; color: #cbd5e1; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .1s ease, background .15s ease, border-color .15s ease; -webkit-tap-highlight-color: transparent; }
+.hwc-btn:active { transform: scale(0.94); }
+.hwc-btn.on-o { border-color: #16a34a; background: #dcfce7; color: #15803d; box-shadow: 0 2px 8px rgba(22,163,74,0.22); }
+.hwc-btn.on-t { border-color: #d97706; background: #fef3c7; color: #b45309; box-shadow: 0 2px 8px rgba(217,119,6,0.2); }
+.hwc-btn.on-x { border-color: #dc2626; background: #fee2e2; color: #b91c1c; box-shadow: 0 2px 8px rgba(220,38,38,0.2); }
+.hwc-empty { padding: 22px 10px; text-align: center; font-size: 12.5px; color: #94a3b8; }
+.hwc-foot { flex: 0 0 auto; padding: 9px 12px 12px; border-top: 1px solid #e2e8f0; background: #fbfefe; }
+.hwc-frow { display: flex; gap: 7px; }
+.hwc-big { flex: 1 1 auto; padding: 13px 10px; border-radius: 14px; border: none; font-size: 13.5px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #0d9488, #14b8a6); box-shadow: 0 4px 12px rgba(13,148,136,0.28); font-family: inherit; cursor: pointer; }
+.hwc-sub { flex: 0 0 auto; padding: 13px 12px; border-radius: 14px; border: 1.5px solid #99f6e4; background: #f0fdfa; color: #0d9488; font-size: 13px; font-weight: 800; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.hwc-prev { display: none; margin-top: 9px; padding: 10px 12px; border-radius: 12px; border: 1.5px dashed #99f6e4; background: #f0fdfa; font-size: 12.5px; line-height: 1.6; color: #0f766e; white-space: pre-wrap; word-break: break-all; max-height: 168px; overflow: auto; }
+.hwc-prev.on { display: block; }
+.hwc-prev b { display: block; margin-bottom: 4px; font-size: 11.5px; color: #0d9488; }
+@media (max-width: 420px) {
+  .hwc-overlay { padding: 8px; }
+  .hwc-card { max-height: calc(100vh - 16px); border-radius: 16px; }
+  .hwc-btn { width: 40px; height: 40px; font-size: 17px; }
+  .hwc-nm { font-size: 14px; }
+  .hwc-big { font-size: 13px; }
+}
+
 /* ===== A4 한 장(미리보기 + 인쇄 공용, 210×297mm 고정) ===== */
 .pv-pages { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .a4-page { position: relative; width: 210mm; height: 297mm; box-sizing: border-box; background: #fff; color: #111; overflow: hidden; box-shadow: 0 2px 12px rgba(15,23,42,0.2); font-family: Pretendard, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; line-height: 1.2; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -1114,6 +1155,8 @@ function forceAppRefresh(e) {
 <div id="notifOverlay" class="notif-overlay" aria-hidden="true"><div class="notif-card" id="notifModal"></div></div>
 <!-- v83: 📢 오늘 미완료 학생 전원 일괄 독촉 쪽지 모달 -->
 <div id="nagOverlay" class="notif-overlay" aria-hidden="true"><div class="notif-card" id="nagModal"></div></div>
+<!-- v86: ✅ 숙제 1초 체크 & 에듀스탭/피클 문자 복사 모달 -->
+<div id="hwOverlay" class="hwc-overlay" aria-hidden="true"><div class="hwc-card" id="hwModal"></div></div>
 <script>
 /* ============ 기본 ============ */
 var S = { cred: null, home: null, admin: null };
@@ -2230,6 +2273,189 @@ function openReadingApp() {
   location.href = 'reading.html?course=' + encodeURIComponent(b) + '&passage=' + p + '&student=' + encodeURIComponent(n) + '&ban=' + encodeURIComponent(b);
 }
 
+/* ================= v86: ✍️ 내신 서술형(writing.html) 세션 그대로 이어서 이동 ================= */
+function openWritingApp(){
+  var b = (S.cred ? S.cred.ban : (S.home && S.home.me ? S.home.me.ban : ''));
+  var n = (S.cred ? S.cred.name : (S.home && S.home.me ? S.home.me.name : ''));
+  var teach = (b === '선생님');
+  try {
+    if (n) {
+      /* writing.html 은 'topedu_writing_user_v1' 세션을 읽어서 바로 홈으로 들어가요 */
+      localStorage.setItem('topedu_writing_user_v1', JSON.stringify({ ban: b, name: n, teacher: teach }));
+      localStorage.setItem('topedu_writing_last', JSON.stringify({ ban: b, name: n }));
+    }
+  } catch(e) {}
+  location.href = 'writing.html' + (n ? ('?ban=' + encodeURIComponent(b) + '&name=' + encodeURIComponent(n)) : '');
+}
+
+/* ================= v86: ✅ 숙제 1초 체크 & 에듀스탭/피클 문자 복사 ================= */
+var HWC_KEY = 'topedu_hw_check_v1', HWC_FILTER = '전체', HWC_DATE = '';
+function hwcPad(n){ return (n < 10 ? '0' : '') + n; }
+function hwcToday(){ var d = new Date(); return d.getFullYear() + '-' + hwcPad(d.getMonth() + 1) + '-' + hwcPad(d.getDate()); }
+function hwcLookup(){ return store(HWC_KEY) || {}; }
+function hwcDay(date){ var a = hwcLookup(); return a[date] || {}; }
+function hwcSet(date, ban, name, val){
+  var all = hwcLookup(), day = all[date] || {}, k = ban + '|' + name;
+  if(val) day[k] = val; else delete day[k];
+  if(Object.keys(day).length) all[date] = day; else delete all[date];
+  store(HWC_KEY, all);
+}
+function hwcGroup(ban){
+  if(ban === '선생님') return '';
+  if(/예비고/.test(ban)) return '예비고1';
+  if(/중1/.test(ban)) return '중1';
+  if(/중2/.test(ban)) return '중2';
+  if(/초/.test(ban)) return '초등';
+  if(/고/.test(ban)) return '고등';
+  return ban;
+}
+function hwcStudents(){
+  var list = (typeof TOPEDU_ALL_STUDENTS !== 'undefined' && TOPEDU_ALL_STUDENTS) ? TOPEDU_ALL_STUDENTS : [];
+  return list.filter(function(s){ return s.ban !== '선생님'; });
+}
+function hwcLabel(v){ return v === 'o' ? '⭕ 완료' : (v === 't' ? '△ 일부' : (v === 'x' ? '✕ 미제출' : '')); }
+function hwcCountsHTML(c){
+  return '<span style="color:#15803d">⭕ <b>' + c.o + '</b></span>' +
+    '<span style="color:#b45309">△ <b>' + c.t + '</b></span>' +
+    '<span style="color:#b91c1c">✕ <b>' + c.x + '</b></span>' +
+    '<span style="color:#94a3b8">미확인 <b>' + c.u + '</b></span>';
+}
+function openHwCheck(){
+  if(!HWC_DATE) HWC_DATE = hwcToday();
+  renderHwCheck();
+  var ov = document.getElementById('hwOverlay');
+  if(!ov) return;
+  ov.classList.add('on');
+  ov.setAttribute('aria-hidden', 'false');
+  ov.onclick = function(e){ if(e.target === ov) closeHwCheck(); };
+  try { document.body.style.overflow = 'hidden'; } catch(e){}
+}
+function closeHwCheck(){
+  var ov = document.getElementById('hwOverlay');
+  if(!ov) return;
+  ov.classList.remove('on');
+  ov.setAttribute('aria-hidden', 'true');
+  try { document.body.style.overflow = ''; } catch(e){}
+}
+function renderHwCheck(){
+  var el = document.getElementById('hwModal');
+  if(!el) return;
+  var date = HWC_DATE || hwcToday();
+  var day = hwcDay(date);
+  var list = hwcStudents().filter(function(s){ return HWC_FILTER === '전체' || hwcGroup(s.ban) === HWC_FILTER; });
+  var chips = ['전체', '초등', '중1', '중2', '예비고1', '고등'];
+  var c = { o: 0, t: 0, x: 0, u: 0 }, k;
+  list.forEach(function(s){ k = day[s.ban + '|' + s.name]; if(k === 'o' || k === 't' || k === 'x') c[k]++; else c.u++; });
+
+  var h = '';
+  h += '<div class="hwc-head"><div style="flex:1;font-size:15.5px;font-weight:800;font-family:Maplestory,sans-serif">✅ 숙제 1초 체크 <span class="nc-vtag">' + TOPEDU_APP_VERSION + '</span></div><button type="button" class="prt-x" id="hwClose">✕</button></div>';
+  h += '<div class="hwc-top">';
+  h += '<div class="hwc-daterow"><input type="date" class="hwc-date" id="hwDate" value="' + esc(date) + '"><button type="button" class="hwc-today" id="hwToday">오늘</button></div>';
+  h += '<div class="hwc-chips">' + chips.map(function(x){ return '<button type="button" class="hwc-chip' + (x === HWC_FILTER ? ' on' : '') + '" data-f="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>';
+  h += '<div class="hwc-counts" id="hwCounts">' + hwcCountsHTML(c) + '</div>';
+  h += '</div>';
+  h += '<div class="hwc-list" id="hwList">';
+  if(!list.length) h += '<div class="hwc-empty">이 반 학생이 없어요. 다른 반을 골라 주세요.</div>';
+  list.forEach(function(s){
+    var st = day[s.ban + '|' + s.name] || '';
+    h += '<div class="hwc-row" data-ban="' + esc(s.ban) + '" data-name="' + esc(s.name) + '" data-st="' + st + '">' +
+      '<div class="hwc-nm">' + esc(s.name) + (HWC_FILTER === '전체' ? '<u>' + esc(s.ban) + '</u>' : '') + '</div>' +
+      '<div class="hwc-btns">' + ['o', 't', 'x'].map(function(v){
+        var g = v === 'o' ? '⭕' : (v === 't' ? '△' : '✕');
+        return '<button type="button" class="hwc-btn' + (st === v ? ' on-' + v : '') + '" data-v="' + v + '" aria-pressed="' + (st === v ? 'true' : 'false') + '" title="' + hwcLabel(v) + '">' + g + '</button>';
+      }).join('') + '</div></div>';
+  });
+  h += '</div>';
+  h += '<div class="hwc-foot">' +
+    '<div class="hwc-frow"><button type="button" class="hwc-sub" id="hwAllO">전체 ⭕ 처리</button><button type="button" class="hwc-big" id="hwCopy">📋 에듀스탭/피클용 요약 복사</button></div>' +
+    '<div class="hwc-prev" id="hwPrev"></div>' +
+    '</div>';
+  el.innerHTML = h;
+
+  var bc = document.getElementById('hwClose'); if(bc) bc.onclick = closeHwCheck;
+  var bd = document.getElementById('hwDate'); if(bd) bd.onchange = function(){ HWC_DATE = this.value || hwcToday(); renderHwCheck(); };
+  var bt = document.getElementById('hwToday'); if(bt) bt.onclick = function(){ HWC_DATE = hwcToday(); renderHwCheck(); };
+  [].forEach.call(el.querySelectorAll('.hwc-chip'), function(chip){
+    chip.onclick = function(){ HWC_FILTER = chip.dataset.f; renderHwCheck(); };
+  });
+  [].forEach.call(el.querySelectorAll('.hwc-row'), function(row){
+    [].forEach.call(row.querySelectorAll('.hwc-btn'), function(btn){
+      btn.onclick = function(){
+        var v = btn.dataset.v, cur = row.dataset.st || '', next = (cur === v ? '' : v);
+        row.dataset.st = next;
+        [].forEach.call(row.querySelectorAll('.hwc-btn'), function(b2){
+          var on2 = (b2.dataset.v === next);
+          b2.className = 'hwc-btn' + (on2 ? ' on-' + b2.dataset.v : '');
+          b2.setAttribute('aria-pressed', on2 ? 'true' : 'false');
+        });
+        hwcSet(HWC_DATE || hwcToday(), row.dataset.ban, row.dataset.name, next);
+        hwcRefreshCounts();
+        var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+        if(typeof playCorrectSound === 'function'){ try { playCorrectSound(); } catch(e){} }
+      };
+    });
+  });
+  var ba = document.getElementById('hwAllO');
+  if(ba) ba.onclick = function(){
+    var els = el.querySelectorAll('.hwc-row');
+    if(!els.length) return;
+    [].forEach.call(els, function(row){
+      row.dataset.st = 'o';
+      [].forEach.call(row.querySelectorAll('.hwc-btn'), function(b2){
+        var on2 = (b2.dataset.v === 'o');
+        b2.className = 'hwc-btn' + (on2 ? ' on-o' : '');
+        b2.setAttribute('aria-pressed', on2 ? 'true' : 'false');
+      });
+      hwcSet(HWC_DATE || hwcToday(), row.dataset.ban, row.dataset.name, 'o');
+    });
+    hwcRefreshCounts();
+    var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+  };
+  var bcp = document.getElementById('hwCopy');
+  if(bcp) bcp.onclick = function(){
+    var txt = hwcBuildText();
+    var pv = document.getElementById('hwPrev');
+    if(!txt){ alert('아직 체크한 학생이 없어요.\n⭕ / △ / ✕ 를 눌러 주세요.'); return; }
+    hwcCopy(txt, this, pv);
+  };
+}
+function hwcRefreshCounts(){
+  var box = document.getElementById('hwCounts'), listEl = document.getElementById('hwList');
+  if(!box || !listEl) return;
+  var c = { o: 0, t: 0, x: 0, u: 0 };
+  [].forEach.call(listEl.querySelectorAll('.hwc-row'), function(r){
+    var v = r.dataset.st;
+    if(v === 'o' || v === 't' || v === 'x') c[v]++; else c.u++;
+  });
+  box.innerHTML = hwcCountsHTML(c);
+}
+function hwcBuildText(){
+  var listEl = document.getElementById('hwList');
+  if(!listEl) return '';
+  var di = document.getElementById('hwDate');
+  var date = (di && di.value) ? di.value : (HWC_DATE || hwcToday());
+  var mm = parseInt(date.slice(5, 7), 10), dd = parseInt(date.slice(8, 10), 10);
+  var lines = [], un = 0;
+  [].forEach.call(listEl.querySelectorAll('.hwc-row'), function(r){
+    var v = r.dataset.st;
+    if(!v){ un++; return; }
+    lines.push('- ' + r.dataset.name + (HWC_FILTER === '전체' ? '(' + r.dataset.ban + ')' : '') + ': ' + hwcLabel(v));
+  });
+  if(!lines.length) return '';
+  var head = '[' + mm + '/' + dd + ' ' + (HWC_FILTER === '전체' ? '전체' : HWC_FILTER) + ' 숙제 현황]';
+  var txt = head + '\n' + lines.join('\n');
+  if(un) txt += '\n(미확인 ' + un + '명)';
+  return txt;
+}
+function hwcCopy(txt, btn, pv){
+  function done(){
+    if(btn){ var o = btn.getAttribute('data-o') || btn.textContent; btn.setAttribute('data-o', o); btn.textContent = '복사됨 ✔'; setTimeout(function(){ btn.textContent = o; }, 1400); }
+    if(pv){ pv.innerHTML = '<b>📋 복사된 문자 내용 — 에듀스탭/피클에 붙여넣기</b>' + esc(txt); pv.classList.add('on'); }
+  }
+  function fb(){ var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e){} document.body.removeChild(ta); done(); }
+  try { navigator.clipboard.writeText(txt).then(done, fb); } catch(e){ fb(); }
+}
+
 function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ if (s.type==='문제') return s.progress.test===null||s.progress.test===undefined; return !getWordSetCompletion(s).isComplete; }).length;
@@ -2267,6 +2493,12 @@ function showHome(){
     '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#0d9488">' + rTitle + '</div>' +
     '<div style="font-size:12px;color:#718096;margin-top:2px">' + rSub + '</div></div>' +
     '<button style="background:#0d9488;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">풀러가기 →</button></div>';
+
+  /* v86: ✍️ 내신 서술형(writing.html) 바로가기 — 로그인 세션 그대로 이어짐 */
+  html += '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg,#f5f3ff,#faf5ff);border:2px solid #a78bfa;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(139,92,246,0.14)" onclick="openWritingApp()">' +
+    '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#6d28d9">✍️ 내신 서술형 · 어순배열 마스터</div>' +
+    '<div style="font-size:12px;color:#7c6a9c;margin-top:2px">어순배열 · 어형변화 · 조건영작 서술형 실전 훈련</div></div>' +
+    '<button style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">쓰러가기 →</button></div>';
   
 
 
@@ -3140,6 +3372,10 @@ function showAdmin(){
     '</div>'+
     '<div style="display:flex;gap:8px;margin:0 0 10px">'+
     '<button type="button" class="btn" id="bprint" onclick="openPrintSheet()" style="flex:1;margin:0;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(13,148,136,0.28)">🖨️ 단어·시험지 인쇄</button>'+
+    '</div>'+
+    '<div style="display:flex;gap:8px;margin:0 0 10px">'+
+    '<button type="button" class="btn" id="bwrite" onclick="openWritingApp()" style="flex:1;margin:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(124,58,237,0.24)">✍️ 내신 서술형</button>'+
+    '<button type="button" class="btn" id="bhw" onclick="openHwCheck()" style="flex:1;margin:0;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#78350f;font-weight:800;box-shadow:0 4px 12px rgba(245,158,11,0.28)">✅ 숙제 1초 체크</button>'+
     '</div>'+
     '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button></div>';
 
@@ -4472,7 +4708,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v85';
+var TOPEDU_APP_VERSION = 'v86';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
