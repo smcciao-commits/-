@@ -2064,7 +2064,8 @@ var TOPEDU_NTFY_DIRECTOR = 'topedu_director_chosumin';
 function getDirectorNoticesLog(){
   try{
     var l = JSON.parse(localStorage.getItem('topedu_director_notices_log'));
-    if(Array.isArray(l)) return l;
+    /* v87: 보낸사람이 undefined 로 저장된 옛 [학습완료] 기록은 숨깁니다(원인은 수리됨) */
+    if(Array.isArray(l)) return l.filter(function(it){ return !/undefined/.test((it && it.title) || ''); });
   }catch(e){}
   return [];
 }
