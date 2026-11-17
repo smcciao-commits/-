@@ -827,7 +827,7 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 /* 공통 행 */
 .pg-row { display: flex; align-items: flex-end; box-sizing: border-box; width: 100%; overflow: hidden; }
 .pgno { flex: 0 0 auto; text-align: right; padding-right: 1.5mm; color: #333; font-weight: 700; font-size: 0.82em; }
-.pgp { flex: 0 0 auto; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pgp { flex: 0 0 auto; font-weight: 700; white-space: normal; word-break: keep-all; line-height: 1.16; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 /* 시험지(쓰기) */
 .row-test { padding-bottom: 1.1mm; }
 .row-test .r-blank { flex: 1 1 auto; min-width: 0; margin-left: 1.2mm; border-bottom: 1.1pt solid #3f3f46; height: 0.62em; }
@@ -836,6 +836,7 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .row-list:first-child { border-top: 0.6pt solid #d9d9dd; }
 .row-list .r-en { flex: 0 0 auto; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .row-list .r-ko { flex: 1 1 auto; min-width: 0; padding-left: 2mm; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.94em; }
+.row-list .r-en { white-space: nowrap; }
 /* 워크시트 — 표(table) 모양 */
 .row-ws { padding-bottom: 0; border-bottom: 0.6pt solid #b9b9c1; }
 .row-ws:first-child { border-top: 0.6pt solid #b9b9c1; }
@@ -4726,13 +4727,23 @@ function prtPageHTML(pg, pIdx, totalPages, L, all, isAns) {
     h += '<div class="pg-body" style="height:' + L.contentH + 'mm;">' + prtCardPagesHTML(pg, L) + '</div>';
   } else {
     var rowsInCol = Math.max(1, Math.ceil(pg.items.length / L.cols));
+    // 이 페이지에 줄이 적으면(예: 2단 워크시트 10줄) 칸 높이를 늘려 A4를 꽉 채운다 (최대 1.5배)
+    var LP = L;
+    if (!isAns && rowsInCol < L.rowsPerCol) {
+      var grow = Math.min(L.rowMm * 1.5, Math.max(L.rowMm, L.contentH / rowsInCol));
+      if (grow > L.rowMm + 0.05) {
+        LP = {};
+        for (var k in L) { if (L.hasOwnProperty(k)) LP[k] = L[k]; }
+        LP.rowMm = Math.round(grow * 100) / 100;
+      }
+    }
     h += '<div class="pg-body" style="height:' + L.contentH + 'mm;gap:' + L.colGap + 'mm;">';
     for (var c = 0; c < L.cols; c++) {
       var s = c * rowsInCol, e = Math.min(pg.items.length, s + rowsInCol);
       h += '<div class="pg-col" style="flex:1 1 0;min-width:0;width:' + colW.toFixed(1) + 'mm;">';
       for (var r = s; r < e; r++) {
-        h += isAns ? prtAnsRowHTML(pg.items[r], pg.start + r + 1, L)
-                   : prtRowHTML(pg.items[r], pg.start + r + 1, L, all, pg.start + r);
+        h += isAns ? prtAnsRowHTML(pg.items[r], pg.start + r + 1, LP)
+                   : prtRowHTML(pg.items[r], pg.start + r + 1, LP, all, pg.start + r);
       }
       h += '</div>';
     }
