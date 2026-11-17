@@ -1504,6 +1504,7 @@ function mockCall(fn, args) {
 
     var room = {
       code: code,
+      rid: 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       status: 'lobby',
       set: label,
       setNames: setNames,
@@ -1522,21 +1523,12 @@ function mockCall(fn, args) {
       localStorage.setItem('topedu_battle_latest', code);
     } catch(e){}
 
-    sendBattleNet(code, {
-      type: 'room',
+    return {
       code: code,
+      rid: room.rid,
       status: 'lobby',
       set: label,
       setNames: setNames,
-      mins: mins,
-      dir: dir,
-      names: []
-    });
-
-    return {
-      code: code,
-      status: 'lobby',
-      set: label,
       mins: mins,
       dir: dir,
       names: [],
@@ -3634,6 +3626,7 @@ function bStop(){
   if(B.stuTimer){ clearTimeout(B.stuTimer); B.stuTimer=null; }
   if(B.es){ try{ B.es.close(); }catch(e){} B.es=null; }
   if(window.R && R.es){ try{ R.es.close(); }catch(e){} R.es=null; }
+  try { bnStop(); } catch(e){}
   document.body.classList.remove('board');
 }
 function bClock(onTick){ if(B.tick) clearInterval(B.tick); B.tick=setInterval(onTick,200); onTick(); }
@@ -3642,27 +3635,159 @@ function tilesHtml(q){
   return q.o.map(function(t,i){ return '<button class="bo c'+i+'" data-k="'+i+'"><span class="nb">'+NB[i]+'</span><span>'+esc(t)+'</span></button>'; }).join('');
 }
 
-/* ===== 초고속 실시간 통신 엔진 (BroadcastChannel + text/plain POST + Direct Polling) ===== */
-function sendBattleNet(code, payload){
-  if(!code) return;
-  // 1. Same-device cross-tab 0ms sync
+/* ===== v84: 단어 대결 실시간 엔진 (MQTT over WebSocket 허브 + 동일 기기 BroadcastChannel) =====
+   진단(v84): v83까지는 ntfy.sh 공용 서버에만 의존했다. ntfy.sh는 같은 IP에서 요청 60회를
+   버스트로 허용한 뒤 5초에 1회로 제한하고(초과 시 429/연결 차단), 교실에서는 선생님 PC와
+   학생 폰 10~20대가 같은 회선(같은 IP)을 쓰는데 구버전은 1.5~2.5초마다 폴링·전송을 해서
+   몇 초 만에 한도가 소진됐다. 그래서 학생 폰에는 '참여 완료'가 뜨는데 선생님 화면은
+   '아직 아무도 안 들어왔어요'가 되는 일이 반복됐다.
+   → 접속을 유지하는 MQTT 브로커(WebSocket)로 교체한다. 접속 1회 뒤 메시지는 브로커가
+     중계하므로 기기 수와 무관하게 요청 한도에 걸리지 않는다. */
+var BN = { on:false, client:null, topic:'', role:'', id:'', handler:null, q:[], stateCb:null,
+           libP:null, gen:0, closed:true, broker:'', connectedAt:0, sawBroker:false };
+var BN_BROKERS = [
+  'wss://broker.emqx.io:8084/mqtt',
+  'wss://broker-cn.emqx.io:8084/mqtt',
+  'wss://test.mosquitto.org:8081/mqtt',
+  'wss://mqtt.eclipseprojects.io/mqtt'
+];
+var BN_LIBS = [
+  'https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js',
+  'https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js'
+];
+
+function bnTopicOf(code){
+  var s = 'topedu-battle-v84-' + code;
+  var h = 5381;
+  for (var i = 0; i < s.length; i++) { h = (((h << 5) + h) ^ s.charCodeAt(i)) >>> 0; }
+  return 'topedu/bt84/' + String(code) + '-' + h.toString(36);
+}
+
+function bnLoadLib(){
+  if (window.mqtt && window.mqtt.connect) return Promise.resolve(true);
+  if (BN.libP) return BN.libP;
+  BN.libP = new Promise(function(resolve){
+    var i = 0;
+    function tryNext(){
+      if (i >= BN_LIBS.length) { resolve(false); return; }
+      var url = BN_LIBS[i++];
+      var done = false;
+      var el = document.createElement('script');
+      el.src = url; el.async = true;
+      el.onload = function(){ if (done) return; done = true; resolve(!!(window.mqtt && window.mqtt.connect)); };
+      el.onerror = function(){ if (done) return; done = true; try { el.parentNode.removeChild(el); } catch(e){} tryNext(); };
+      document.head.appendChild(el);
+      setTimeout(function(){ if (done) return; if (window.mqtt && window.mqtt.connect) { done = true; resolve(true); return; } done = true; tryNext(); }, 5000);
+    }
+    tryNext();
+  });
+  return BN.libP;
+}
+
+function bnState(on, why){
+  BN.on = !!on; BN.why = why || '';
+  if (BN.stateCb) { try { BN.stateCb(BN.on ? 'on' : 'off', why || ''); } catch(e){} }
+}
+
+/* 대결 통신 시작: role 'host' | 'stu' */
+function bnStart(role, code, handler, stateCb){
+  bnStop();
+  BN.closed = false;
+  BN.role = role; BN.code = code; BN.handler = handler; BN.stateCb = stateCb || null;
+  BN.topic = bnTopicOf(code);
+  BN.id = role + '_' + Math.random().toString(36).slice(2, 9);
+  var g = BN.gen;
+  bnLoadLib().then(function(ok){
+    if (g !== BN.gen || BN.closed) return;
+    if (!ok) { bnState(false, '통신모듈 로드 실패'); return; }
+    // 여러 브로커에 동시에 붙어 가장 먼저 연결되는 곳을 쓴다 (한 곳이 막혀도 수업이 안 멈춤)
+    var settled = false;
+    BN_BROKERS.forEach(function(url){ bnTry(url, g, function(ok2){ if (ok2) settled = true; }); });
+    setTimeout(function(){
+      if (g !== BN.gen || BN.closed || BN.on) return;
+      bnState(false, '브로커 연결 실패');
+    }, 9000);
+  });
+}
+
+function bnTry(url, g, cb){
+  var c;
   try {
-    if (window.BroadcastChannel) {
-      var bc = new BroadcastChannel('topedu_bt_' + code);
+    c = window.mqtt.connect(url, {
+      clientId: 'te84_' + Math.random().toString(16).slice(2, 10),
+      clean: true, keepalive: 30, connectTimeout: 7000, reconnectPeriod: 0, protocolVersion: 4
+    });
+  } catch(e) { cb(false); return; }
+  var settled = false;
+  var to = setTimeout(function(){
+    if (settled) return; settled = true;
+    try { c.end(true); } catch(e){}
+    cb(false);
+  }, 7000);
+  c.on('error', function(){});
+  c.on('connect', function(){
+    clearTimeout(to);
+    if (settled) { try { c.end(true); } catch(e){} return; }
+    settled = true;
+    if (g !== BN.gen || BN.closed || BN.on) { try { c.end(true); } catch(e){} cb(false); return; }
+    BN.client = c; BN.broker = url; BN.connectedAt = Date.now(); BN.sawBroker = true;
+    try { c.subscribe(BN.topic, { qos: 0 }, function(){}); } catch(e){}
+    var q = BN.q.slice(); BN.q = [];
+    q.forEach(function(p){ try { c.publish(BN.topic, JSON.stringify(p), { qos: 0 }); } catch(e){} });
+    bnState(true, url);
+    cb(true);
+  });
+  c.on('message', function(t, m){
+    if (g !== BN.gen || String(t) !== BN.topic) return;
+    var d = null;
+    try { d = JSON.parse(m.toString()); } catch(e) { return; }
+    if (!d || (d.from && d.from === BN.id)) return;
+    if (BN.handler) { try { BN.handler(d); } catch(e){} }
+  });
+  c.on('close', function(){
+    if (g !== BN.gen || BN.closed) return;
+    if (BN.client !== c) return;
+    BN.client = null; BN.on = false;
+    bnState(false, '연결 끊김');
+    setTimeout(function(){
+      if (g !== BN.gen || BN.closed || BN.on) return;
+      BN.sawBroker = true;
+      var again = false;
+      BN_BROKERS.forEach(function(u){ bnTry(u, g, function(ok2){ if (ok2) again = true; }); });
+    }, 2000);
+  });
+}
+
+function bnStop(){
+  BN.gen++;
+  BN.closed = true;
+  if (BN.client) { try { BN.client.end(true); } catch(e){} BN.client = null; }
+  BN.on = false; BN.q = []; BN.stateCb = null;
+}
+
+/* 메시지 전송: 같은 기기(탭)는 BroadcastChannel로 즉시, 다른 기기는 MQTT 브로커로 */
+/* 진단용: 주소에 ?nobc=1 을 붙이면 같은 기기 동기화(BroadcastChannel)를 끄고
+   실제 네트워크 경로만으로 통신을 시험한다 (선생님 PC와 학생 폰이 다른 기기인 상황 재현) */
+var NOBC = /[?&]nobc=1/.test(location.search || '');
+
+function bnSend(payload){
+  if (!payload) return;
+  if (payload.from === undefined) payload.from = BN.id;
+  try {
+    if (!NOBC && window.BroadcastChannel && B.code) {
+      var bc = new BroadcastChannel('topedu_bt_' + B.code);
       bc.postMessage(payload);
-      setTimeout(function(){ try{ bc.close(); }catch(e){} }, 500);
+      setTimeout(function(){ try { bc.close(); } catch(e){} }, 300);
     }
   } catch(e){}
-
-  // 2. Network push (text/plain avoids CORS preflight OPTIONS request!)
-  try {
-    fetch('https://ntfy.sh/topedu_bt_' + code, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    }).catch(function(){});
-  } catch(e){}
+  if (BN.on && BN.client) {
+    try { BN.client.publish(BN.topic, JSON.stringify(payload), { qos: 0 }); return; } catch(e){}
+  }
+  if (BN.q.length < 80) BN.q.push(payload);
 }
+
+/* 예전 이름 유지(다른 화면에서 부르는 곳이 있어도 안 깨지게) */
+function sendBattleNet(code, payload){ bnSend(payload); }
 
 /* ----- 선생님 (전자칠판) ----- */
 function showBattleSetup(){
@@ -3703,16 +3828,21 @@ function showBattleSetup(){
 function hostEnter(v){
   bStop(); document.body.classList.add('board');
   B.code = v.code; B.sig = ''; var g = B.gen;
+  B.rid = v.rid || '';
   var raw = localStorage.getItem('topedu_battle_' + B.code);
-  B.room = raw ? JSON.parse(raw) : v;
+  var cached = null;
+  try { cached = raw ? JSON.parse(raw) : null; } catch(e){ cached = null; }
+  // 같은 번호를 예전에 쓴 적이 있으면 옛 명단이 남는다 → 방 고유번호(rid)가 다르면 새 방으로 시작
+  B.room = (cached && (!v.rid || !cached.rid || cached.rid === v.rid)) ? cached : v;
+  B.rid = B.room.rid || B.rid;
   B.room.players = B.room.players || {};
   B.room.names = B.room.names || [];
   B.room.rank = B.room.rank || [];
   hostRender(B.room);
 
-  // 1. BroadcastChannel instant sync (0ms, same-device)
+  // 1. Same-device cross-tab instant sync (?nobc=1 이면 끔)
   try {
-    if (window.BroadcastChannel) {
+    if (!NOBC && window.BroadcastChannel) {
       var bc = new BroadcastChannel('topedu_bt_' + B.code);
       bc.onmessage = function(e){
         if(g !== B.gen || !e || !e.data) return;
@@ -3721,23 +3851,30 @@ function hostEnter(v){
     }
   } catch(e){}
 
-  // 2. Server-Sent Events (SSE) live push stream (0ms, zero polling overhead, no rate limits!)
-  try {
-    if (window.EventSource) {
-      B.es = new EventSource('https://ntfy.sh/topedu_bt_' + B.code + '/sse');
-      B.es.onmessage = function(e){
-        if(g !== B.gen || !e || !e.data) return;
-        try {
-          var d = JSON.parse(e.data);
-          var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
-          if(m) handleTeacherNetMsg(m);
-        } catch(err){}
-      };
+  // 2. v84 실시간 허브(MQTT) — 학생 폰의 입장·점수를 바로 받는다
+  bnStart('host', B.code, function(m){ if (g === B.gen) handleTeacherNetMsg(m); }, function(st, why){
+    if (g !== B.gen) return;
+    B.net = st;
+    var el = $('#bnet');
+    if (el) {
+      el.textContent = st === 'on' ? '🟢 실시간 연결됨' : (why === '브로커 연결 실패' ? '🔴 실시간 연결 실패' : '🟡 연결 중…');
+      el.className = 'chip ' + (st === 'on' ? 'done' : 'todo');
     }
-  } catch(e){}
+    var box = $('#bwarn');
+    if (box) {
+      if (st === 'on') { box.style.display = 'none'; }
+      else if (why === '브로커 연결 실패') {
+        box.style.display = '';
+        box.innerHTML = '🔴 실시간 연결이 안 됐어요. 와이파이를 확인하고 <b>나가기 → 대결 만들기</b>를 다시 해 주세요.<br>' +
+          '<span class="small">(학생이 입장해도 명단이 안 뜨면 거의 이 상태예요 — 나갔다가 다시 방을 만들면 새 연결로 붙습니다.)</span>';
+      }
+    }
+  });
 
   function handleTeacherNetMsg(m){
     if(!m || !B.room) return;
+    // 다른 방(예전 대결)에서 온 메시지는 무시 — 방 고유번호로 걸러낸다
+    if(m.rid && B.room.rid && m.rid !== B.room.rid) return;
     var changed = false;
     if(m.type === 'join' && m.name){
       var pKey = (m.ban || '') + ':' + m.name;
@@ -3780,47 +3917,24 @@ function hostEnter(v){
     hostRender(B.room);
   }
 
-  // 3. Teacher periodic room beacon (broadcasts room status every 1.5s so student phones catch up instantly!)
-  (function hostPollLoop(){
-    if(g !== B.gen) return;
-
-    // Direct HTTP poll for join/report fallback
-    fetch('https://ntfy.sh/topedu_bt_' + B.code + '/json?poll=1')
-      .then(function(res){ return res.text(); })
-      .then(function(txt){
-        if(g !== B.gen) return;
-        var lines = txt.trim().split('\n');
-        lines.forEach(function(l){
-          if(!l.trim()) return;
-          try {
-            var d = JSON.parse(l);
-            var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
-            if(m) handleTeacherNetMsg(m);
-          } catch(e){}
-        });
-
-        // Broadcast room beacon with full state
-        sendBattleNet(B.code, {
-          type: 'room',
-          code: B.code,
-          status: B.room.status,
-          startAt: B.room.startAt,
-          endAt: B.room.endAt,
-          dir: B.room.dir,
-          setNames: B.room.setNames || [],
-          names: B.room.names,
-          count: B.room.names.length
-        });
-
-        if(B.room.status !== 'end'){
-          B.hostTimer = setTimeout(hostPollLoop, 1500);
-        }
-      })
-      .catch(function(){
-        if(g === B.gen && B.room.status !== 'end'){
-          B.hostTimer = setTimeout(hostPollLoop, 1800);
-        }
-      });
+  // 3. 방 상태 비콘 — 3초마다 방 정보를 뿌려 학생 폰이 늦게 들어와도 바로 목록·카운트다운을 맞춘다
+  (function hostBeacon(){
+    if(g !== B.gen || !B.room) return;
+    bnSend({
+      type: 'room',
+      code: B.code,
+      rid: B.room.rid || B.rid || '',
+      status: B.room.status,
+      set: B.room.set || '',
+      startAt: B.room.startAt || 0,
+      endAt: B.room.endAt || 0,
+      mins: B.room.mins || 3,
+      dir: B.room.dir || 'en',
+      setNames: B.room.setNames || [],
+      names: B.room.names || [],
+      count: (B.room.names || []).length
+    });
+    if (B.room.status !== 'end') B.hostTimer = setTimeout(hostBeacon, 3000);
   })();
 }
 
@@ -3838,26 +3952,30 @@ function hostAct(a){
     var startPayload = {
       type: 'start',
       code: B.code,
+      rid: B.room.rid || B.rid || '',
       status: 'run',
       startAt: B.room.startAt,
       endAt: B.room.endAt,
       dir: B.room.dir,
       setNames: B.room.setNames || []
     };
-    sendBattleNet(B.code, startPayload);
-    setTimeout(function(){ sendBattleNet(B.code, startPayload); }, 200);
-    setTimeout(function(){ sendBattleNet(B.code, startPayload); }, 500);
-    setTimeout(function(){ sendBattleNet(B.code, startPayload); }, 1000);
-    setTimeout(function(){ sendBattleNet(B.code, startPayload); }, 1800);
+    bnSend(startPayload);
+    setTimeout(function(){ bnSend(startPayload); }, 400);
+    setTimeout(function(){ bnSend(startPayload); }, 1200);
   } else if(a === 'end' && B.room.status !== 'end'){
     B.room.status = 'end';
     try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(B.room)); } catch(e){}
     hostRender(B.room);
-    sendBattleNet(B.code, { type: 'end', code: B.code });
+    var rl = (B.room.rank || []).map(function(r){ return { name: r.name, ban: r.ban || '', c: r.c || 0, x: r.x || 0, rank: r.rank }; });
+    var endPayload = { type: 'result', code: B.code, rid: B.room.rid || B.rid || '', list: rl, top: rl.slice(0, 3) };
+    bnSend({ type: 'end', code: B.code, rid: B.room.rid || B.rid || '' });
+    bnSend(endPayload);
+    setTimeout(function(){ bnSend(endPayload); }, 600);
+    setTimeout(function(){ bnSend(endPayload); }, 1600);
   }
 }
 
-function hostExit(){ if(B.v&&B.v.status==='run'&&!confirm('대결을 끝내고 나갈까요?')) return; if(B.v&&B.v.status==='run') hostAct('end'); bStop(); showAdmin(); }
+function hostExit(){ var st=(B.room&&B.room.status)||(B.v&&B.v.status)||''; if(st==='run'&&!confirm('대결을 끝내고 나갈까요?')) return; if(st==='run') hostAct('end'); bStop(); showAdmin(); }
 function hostHead(v,extra){ return '<div class="bhd"><button class="back" id="bx">← 나가기</button><div class="grow">⚔️ '+esc(v.set)+'</div>'+(extra||'')+'</div>'; }
 
 function lobbyNames(v){
@@ -3893,7 +4011,9 @@ function hostRender(v){
   var html='';
   if(v.status==='lobby'){
     html=hostHead(v)+'<div class="bguide">폰에서 <b>tinyurl.com/topedu-voca</b> → <b>⚔️ 단어 대결 참여</b> → 방 번호 입력</div>'+
-      '<div class="bcode">'+esc(v.code)+'</div><div class="bguide">게임 '+v.mins+'분 · '+(v.dir==='ko'?'뜻 보고 영어 고르기':'영어 보고 뜻 고르기')+' · 각자 자기 속도로 풀어요</div>'+
+      '<div class="bcode">'+esc(v.code)+'</div><div style="text-align:center;margin:0 0 6px"><span class="chip '+(B.net==='on'?'done':'todo')+'" id="bnet">'+(B.net==='on'?'🟢 실시간 연결됨':'🟡 연결 중…')+'</span></div>'+
+      '<div class="bguide">게임 '+v.mins+'분 · '+(v.dir==='ko'?'뜻 보고 영어 고르기':'영어 보고 뜻 고르기')+' · 각자 자기 속도로 풀어요</div>'+
+      '<div class="card small" id="bwarn" style="display:none;background:#fef2f2;border-color:#fecaca;color:#991b1b;text-align:center;max-width:720px;margin:10px auto;font-size:15px;line-height:1.6"></div>'+
       '<div class="names" id="names"></div><button class="btn" id="bstart" style="max-width:480px;margin:10px auto;font-size:24px;padding:20px" disabled>시작하기 (0명)</button>';
     app.innerHTML=html; lobbyNames(v);
     $('#bstart').onclick=function(){ hostAct('start'); };
@@ -3945,14 +4065,13 @@ function playerExit(){
 
 function playerEnter(v){
   bStop(); B.code = v.code; var g = B.gen;
-  var prevC = (window.R && R.c) ? R.c : 0;
-  var prevX = (window.R && R.x) ? R.x : 0;
-  R = { c: prevC, x: prevX, wrong: [], order: [], i: 0, qs: null, rank: 0, done: false, busy: false, sent: -1 };
+  R = { c: 0, x: 0, wrong: [], order: [], i: 0, qs: null, rank: 0, done: false, busy: false,
+        rid: v.rid || '', setNames: [], sawRoom: false, result: null, ended: false };
   pWait({ code: B.code, count: 1 });
 
-  // 1. BroadcastChannel instant sync (0ms, same-device)
+  // 1. 같은 기기(탭)끼리는 즉시 동기화 (?nobc=1 이면 끔)
   try {
-    if (window.BroadcastChannel) {
+    if (!NOBC && window.BroadcastChannel) {
       var bc = new BroadcastChannel('topedu_bt_' + B.code);
       bc.onmessage = function(e){
         if(g !== B.gen || !e || !e.data) return;
@@ -3961,38 +4080,84 @@ function playerEnter(v){
     }
   } catch(e){}
 
-  // 2. Server-Sent Events (SSE) live push stream (0ms instant start trigger!)
-  try {
-    if (window.EventSource) {
-      R.es = new EventSource('https://ntfy.sh/topedu_bt_' + B.code + '/sse');
-      R.es.onmessage = function(e){
-        if(g !== B.gen || !e || !e.data) return;
-        try {
-          var d = JSON.parse(e.data);
-          var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
-          if(m) handleStudentNetMsg(m);
-        } catch(err){}
-      };
+  // 2. v84 실시간 허브(MQTT) 연결 — 폰과 선생님 화면이 같은 방 채널을 구독한다
+  bnStart('stu', B.code, function(m){ if (g === B.gen) handleStudentNetMsg(m); }, function(st, why){
+    if (g !== B.gen) return;
+    var el = $('#stu_net');
+    if (el) {
+      el.textContent = st === 'on' ? '🟢 선생님 화면과 연결됨' : (why === '브로커 연결 실패' ? '🔴 연결 실패' : '🟡 연결 중…');
+      el.style.background = st === 'on' ? '#dcfce7' : (why === '브로커 연결 실패' ? '#fee2e2' : '#fef9c3');
+      el.style.color = st === 'on' ? '#166534' : (why === '브로커 연결 실패' ? '#991b1b' : '#854d0e');
     }
-  } catch(e){}
+    if (st === 'on') { announce(); var pb = $('#joinprob'); if (pb) pb.style.display = 'none'; }
+    if (st === 'off' && why === '브로커 연결 실패' && !R.sawRoom) showJoinProblem('broker');
+  });
 
   function handleStudentNetMsg(m){
     if(!m) return;
-    // CRUCIAL: Trigger start either by type==='start' OR room beacon with status==='run'!
+    if(m.rid && R.rid && m.rid !== R.rid) return;
+
+    if(m.type === 'room'){
+      R.sawRoom = true;
+      if(m.rid && !R.rid) R.rid = m.rid;
+      if(m.setNames && m.setNames.length) R.setNames = m.setNames;
+      if(m.set) R.setName = m.set;
+      var pb = $('#joinprob'); if(pb) pb.style.display = 'none';
+    }
+
+    // 최종 결과(순위 명단)
+    if(m.type === 'result' && m.list){
+      R.result = m.list;
+      var meName = S.cred ? S.cred.name : '';
+      for(var i = 0; i < m.list.length; i++){
+        if(m.list[i].name === meName){ R.rank = m.list[i].rank; break; }
+      }
+      if(R.done && !R.ended){
+        R.ended = true;
+        pEnd({ me: { rank: R.rank || 0, c: R.c, x: R.x }, top: (m.top || m.list.slice(0,3)), list: m.list });
+      }
+      return;
+    }
+
+    // 시작 — type 'start' 또는 방 비콘의 status 'run'
     if(((m.type === 'start') || (m.type === 'room' && m.status === 'run')) && !R.startAt){
+      var sets = (m.setNames && m.setNames.length) ? m.setNames : R.setNames;
       if(!R.qs || !R.qs.length){
-        R.qs = generateBattleQs(S.cred ? S.cred.ban : '', m.dir || 'en', m.setNames || []);
+        R.qs = generateBattleQs(S.cred ? S.cred.ban : '', m.dir || 'en', sets || []);
       }
       var now = Date.now();
       var startIn = m.startAt ? Math.max(0, m.startAt - now) : 0;
       var endIn = m.endAt ? Math.max(10000, m.endAt - now) : 180000;
-      raceStart({
-        startIn: startIn,
-        endIn: endIn
-      }, g);
-    } else if(m.type === 'end' && !R.done){
-      pEnd({ me: { rank: R.rank || 1, c: R.c, x: R.x }, top: [] });
-    } else if(m.type === 'room' && m.names){
+      raceStart({ startIn: startIn, endIn: endIn }, g);
+      return;
+    }
+
+    // 끝 — 결과를 먼저 기다렸다가 최종 순위로 보여 준다
+    if(m.type === 'end' || (m.type === 'room' && m.status === 'end')){
+      if(R.ended) return;
+      if(R.result){ R.ended = true; pEnd({ me: { rank: R.rank || 0, c: R.c, x: R.x }, top: R.result.slice(0,3), list: R.result }); return; }
+      if(!R.startAt){
+        R.done = true;
+        app.innerHTML = topBar('⚔️ 대결 ' + B.code) +
+          '<div class="mres"><div class="e">🔒</div><div class="t">이미 끝난 대결이에요</div><div class="s">선생님께 새 방 번호를 받아 다시 참여해 주세요.</div></div>' +
+          '<button class="btn" id="bhome">처음 화면으로</button>';
+        bindBack(playerExit); var bh = $('#bhome'); if(bh) bh.onclick = playerExit;
+        return;
+      }
+      R.done = true;
+      var gg = g;
+      app.innerHTML = topBar('⚔️ 대결 ' + B.code) + '<div class="mres"><div class="e">⏳</div><div class="t">결과 집계 중…</div><div class="s">' + R.c + '개 맞혔어요</div></div>';
+      bindBack(playerExit);
+      setTimeout(function(){
+        if(g !== B.gen || R.ended) return;
+        R.ended = true;
+        pEnd({ me: { rank: R.rank || 0, c: R.c, x: R.x }, top: [], list: [] });
+      }, 1600);
+      return;
+    }
+
+    // 대기실 인원·이름
+    if(m.type === 'room' && m.names){
       var c = $('#bcnt');
       if(c && m.names.length) c.textContent = m.names.length + '명 참여 중';
       var pn = $('#pnames');
@@ -4005,54 +4170,30 @@ function playerEnter(v){
     }
   }
 
-  // 3. Announce join presence immediately
-  sendBattleNet(B.code, {
-    type: 'join',
-    code: B.code,
-    name: S.cred ? S.cred.name : '학생',
-    ban: S.cred ? S.cred.ban : ''
-  });
+  // 3. 입장 알림 — 바로 1회 + 8초마다(끊겨도 다음 하트비트에 다시 붙는다)
+  function announce(){
+    bnSend({ type: 'join', code: B.code, rid: R.rid, name: S.cred ? S.cred.name : '학생', ban: S.cred ? S.cred.ban : '' });
+  }
+  announce();
+  var hb = setInterval(function(){
+    if(g !== B.gen || R.done || R.startAt){ clearInterval(hb); return; }
+    announce();
+  }, 8000);
 
-  // 4. Student poller (checks every 2.5s without 'since', and pings heartbeat every 5s)
-  var pollCount = 0;
-  (function stuPollLoop(){
-    if(g !== B.gen || R.startAt) return;
-    pollCount++;
+  // 4. 방을 못 찾으면(번호 오타·선생님 화면 문제) 9초 뒤 분명하게 알려 준다
+  setTimeout(function(){
+    if(g !== B.gen || R.sawRoom || R.startAt) return;
+    showJoinProblem('nosignal');
+  }, 9000);
+}
 
-    // Periodic heartbeat every 5s (every 2nd loop)
-    if(pollCount % 2 === 0){
-      sendBattleNet(B.code, {
-        type: 'join',
-        code: B.code,
-        name: S.cred ? S.cred.name : '학생',
-        ban: S.cred ? S.cred.ban : ''
-      });
-    }
-
-    // Direct HTTP poll without 'since' to catch latest room/start message
-    fetch('https://ntfy.sh/topedu_bt_' + B.code + '/json?poll=1')
-      .then(function(res){ return res.text(); })
-      .then(function(txt){
-        if(g !== B.gen || R.startAt) return;
-        var lines = txt.trim().split('\n');
-        lines.forEach(function(l){
-          if(!l.trim()) return;
-          try {
-            var d = JSON.parse(l);
-            var m = typeof d.message === 'string' ? JSON.parse(d.message) : d.message;
-            if(m) handleStudentNetMsg(m);
-          } catch(e){}
-        });
-        if(!R.startAt){
-          B.stuTimer = setTimeout(stuPollLoop, 2500);
-        }
-      })
-      .catch(function(){
-        if(g === B.gen && !R.startAt){
-          B.stuTimer = setTimeout(stuPollLoop, 3000);
-        }
-      });
-  })();
+function showJoinProblem(why){
+  var box = $('#joinprob');
+  if(!box) return;
+  box.style.display = '';
+  box.innerHTML = (why === 'broker')
+    ? '🔴 폰이 실시간 연결에 실패했어요.<br><span class="small">와이파이를 잠깐 끄고(LTE) 다시 참여해 보세요.</span>'
+    : '⚠️ 방 <b>' + esc(B.code) + '</b> 신호가 아직 안 와요.<br><span class="small">① 번호가 맞는지 ② 선생님 화면에 <b>🟢 실시간 연결됨</b>이 떠 있는지 확인해 주세요. 둘 다 맞으면 잠시 뒤 자동으로 다시 맞춰집니다.</span>';
 }
 
 function pWait(v){
@@ -4061,7 +4202,10 @@ function pWait(v){
     '<div class="mres" style="padding:28px 16px"><div class="e" style="font-size:60px">🙌</div>' +
     '<div class="t" style="font-size:24px;font-weight:900;color:var(--main)">' + esc(myName) + ' 참여 완료!</div>' +
     '<div class="s" style="margin-top:10px;font-size:16px;line-height:1.6">선생님이 칠판에서 [시작하기]를 누르면<br>자동으로 문제 풀이가 시작돼요! 🚀<br>' +
-    '<b id="bcnt" style="display:inline-block;margin-top:10px;background:#e0f2fe;color:#0369a1;padding:6px 14px;border-radius:20px;font-size:15px">' + (v.count || 1) + '명 참여 중</b></div>' +
+    '<b id="bcnt" style="display:inline-block;margin-top:10px;background:#e0f2fe;color:#0369a1;padding:6px 14px;border-radius:20px;font-size:15px">' + (v.count || 1) + '명 참여 중</b><br>' +
+    '<span id="stu_net" style="display:inline-block;margin-top:8px;background:#fef9c3;color:#854d0e;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:700">🟡 연결 중…</span><br>' +
+    '<span class="small" style="display:block;margin-top:8px">연결되면 인원이 실시간으로 늘어나요.</span></div>' +
+    '<div class="card small" id="joinprob" style="display:none;background:#fffbeb;border-color:#fde68a;color:#92400e;text-align:center;max-width:420px;margin:0 auto 12px;font-size:14px;line-height:1.6"></div>' +
     '<button id="btn_force_start" class="btn" style="margin:18px auto 6px;max-width:380px;background:#10b981;font-size:15.5px;padding:13px;box-shadow:0 4px 12px rgba(16,185,129,0.35);">' +
       '▶️ 칠판에 카운트다운 시작됐으면 터치!' +
     '</button>' +
@@ -4084,7 +4228,11 @@ function pWait(v){
 function raceStart(v,g){
   if(B.stuTimer){ clearTimeout(B.stuTimer); B.stuTimer = null; }
   if(!R.qs || !R.qs.length){
-    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
+    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en', R.setNames || []);
+  }
+  if(!R.qs || !R.qs.length){
+    app.innerHTML = topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">😥</div><div class="t">출제할 단어가 없어요</div><div class="s">선생님께 세트를 다시 골라 달라고 해 주세요.</div></div><button class="btn" id="bhome">처음 화면으로</button>';
+    bindBack(playerExit); var bh0=$('#bhome'); if(bh0) bh0.onclick=playerExit; return;
   }
   R.startAt=Date.now()+v.startIn; R.endAt=Date.now()+v.endIn;
   app.innerHTML=topBar('⚔️ 대결 '+B.code)+
@@ -4102,15 +4250,33 @@ function raceStart(v,g){
     if(now<R.startAt){ var n=$('#rdn'); if(n) n.textContent=Math.ceil((R.startAt-now)/1000); return; }
     if($('#rdy')&&$('#rdy').style.display!=='none'){ $('#rdy').style.display='none'; $('#qbox').style.display=''; nextQ(); }
     var t=$('#rt'); if(t) t.textContent=mmss(R.endAt-now);
-    if(now>=R.endAt&&!R.done){ R.done=true; reportScore(); app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">⏰</div><div class="t">시간 끝!</div><div class="s">'+R.c+'개 맞혔어요. 결과를 기다리는 중…</div></div>'; bindBack(playerExit); }
+    if(now>=R.endAt && !R.done){
+      R.done=true; reportScore();
+      app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">⏰</div><div class="t">시간 끝!</div><div class="s">'+R.c+'개 맞혔어요. 결과를 기다리는 중…</div></div>';
+      bindBack(playerExit);
+      // 선생님 결과가 안 오면 6초 뒤 내 점수로 정리
+      var gg0=g;
+      setTimeout(function(){
+        if(g!==B.gen || R.ended) return;
+        R.ended=true;
+        pEnd({ me:{rank:R.rank||0,c:R.c,x:R.x}, top:[], list:R.result||[] });
+      }, 6000);
+    }
   });
-  (function rep(){ setTimeout(function(){ if(g!==B.gen||R.done) return; reportScore(); rep(); },1500); })();
+  // 점수가 바뀔 때만 2초에 한 번 보고 (예전 1.5초 상시 전송 → 서버 한도 소진의 원인)
+  (function rep(){ setTimeout(function(){
+    if(g!==B.gen||R.done) return;
+    if(R.c!==R.sentC || R.x!==R.sentX){ reportScore(); }
+    rep();
+  },2000); })();
 }
 
 function reportScore(){
-  sendBattleNet(B.code, {
+  R.sentC = R.c; R.sentX = R.x;
+  bnSend({
     type: 'report',
     code: B.code,
+    rid: R.rid || '',
     name: S.cred ? S.cred.name : '학생',
     ban: S.cred ? S.cred.ban : '',
     c: R.c,
@@ -4121,7 +4287,7 @@ function reportScore(){
 function nextQ(){
   if(R.done) return;
   if(!R.qs || !R.qs.length){
-    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
+    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en', R.setNames || []);
   }
   if(!R.order || !R.order.length || R.i>=R.order.length){
     var o=R.qs.map(function(_,i){return i;});
@@ -4134,9 +4300,10 @@ function nextQ(){
   R.q=q;
   R.busy=false;
   if(!q){
-    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
+    R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en', R.setNames || []);
     q = R.qs[0];
   }
+  if(!q) return;
   var qe=$('#rq'); if(!qe) return;
   qe.className='q'+(/[가-힣]/.test(q.p)?' ko':''); qe.textContent=q.p;
   $('#rtiles').innerHTML=tilesHtml(q);
@@ -4166,15 +4333,17 @@ function nextQ(){
 
 function pEnd(v){
   bStop();
-  var md=['🥇','🥈','🥉'], me=v.me||{rank:0,c:R.c,x:R.x}, rk=me.rank;
-  app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">'+(rk>=1&&rk<=3?md[rk-1]:'🎉')+'</div><div class="t">최종 '+(rk||'-')+'등!</div><div class="s">'+me.c+'개 맞힘'+(me.x?' · '+me.x+'개 틀림':'')+'</div></div>'+
-    '<div class="card"><h2>🏆 1~3등</h2><ul class="list">'+(v.top||[]).map(function(r){ return '<li><span>'+md[r.rank-1]+' '+esc(r.name)+'</span><b>'+r.c+'개</b></li>'; }).join('')+'</ul></div>'+
+  var md=['🥇','🥈','🥉'], me=v.me||{rank:0,c:R.c,x:R.x}, rk=me.rank||0;
+  var top=(v.top||[]).filter(function(r){ return r && r.rank>=1 && r.rank<=3; });
+  app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">'+(rk>=1&&rk<=3?md[rk-1]:'🎉')+'</div><div class="t">최종 '+(rk?('🎯 '+rk+'등!'):'수고했어요!')+'</div><div class="s">'+me.c+'개 맞힘'+(me.x?' · '+me.x+'개 틀림':'')+'</div></div>'+
+    (top.length?'<div class="card"><h2>🏆 1~3등</h2><ul class="list">'+top.map(function(r){ return '<li><span>'+md[r.rank-1]+' '+esc(r.name)+'</span><b>'+r.c+'개</b></li>'; }).join('')+'</ul></div>':'')+
+    ((v.list&&v.list.length>3)?'<div class="card"><h2>전체 순위</h2><ul class="list">'+v.list.map(function(r){ return '<li><span>'+(r.rank||'-')+'. '+esc(r.name)+'</span><b>'+r.c+'개</b></li>'; }).join('')+'</ul></div>':'')+
     '<button class="btn" id="bhome">처음 화면으로</button>';
-  bindBack(playerExit); $('#bhome').onclick=playerExit;
+  bindBack(playerExit); var bh=$('#bhome'); if(bh) bh.onclick=playerExit;
 }
 
 /* ================= v80: 🖨️ 단어장 · 시험지 인쇄 ================= */
-var TOPEDU_APP_VERSION = 'v83';
+var TOPEDU_APP_VERSION = 'v84';
 var PRT = { ban: '전체', sets: {}, type: 'mean', shuffle: false, count: 'all', answer: true, cols: 2, ex: false, q: '' };
 var PRT_TIMER = null;
 
