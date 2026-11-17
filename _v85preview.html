@@ -814,9 +814,9 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .pg-top { display: flex; align-items: baseline; justify-content: space-between; gap: 4mm; }
 .pg-school { font-family: Maplestory, Pretendard, sans-serif; font-size: 12.5pt; font-weight: 800; letter-spacing: -0.2px; }
 .pg-time { font-size: 7.5pt; color: #555; font-weight: 600; }
-.pg-titleline { display: flex; align-items: center; gap: 2.6mm; margin-top: 0.8mm; }
-.pg-title { display: inline-block; max-width: 118mm; font-size: 10.5pt; font-weight: 800; border: 1.3pt solid #111; border-radius: 1.2mm; padding: 0.3mm 2.2mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pg-sub { font-size: 8pt; color: #333; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pg-titleline { display: flex; align-items: center; gap: 2.6mm; margin-top: 0.8mm; min-width: 0; }
+.pg-title { display: inline-block; flex: 0 1 auto; min-width: 0; max-width: 112mm; font-size: 10.5pt; font-weight: 800; border: 1.3pt solid #111; border-radius: 1.2mm; padding: 0.3mm 2.2mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pg-sub { flex: 1 1 auto; min-width: 0; font-size: 8pt; color: #333; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pg-info { display: flex; gap: 6mm; font-size: 9pt; font-weight: 700; margin-top: 1.2mm; }
 .pg-info span { white-space: nowrap; }
 .pg-rule { border-bottom: 1.4pt solid #111; margin-top: 1.2mm; }
@@ -4548,18 +4548,24 @@ function prtChoiceOptions(all, idx, want) {
   return shuffle(out);
 }
 function prtBookTitle(count, isAns) {
+  if (isAns) return '정답표';
   var t = String(PRT.headTitle || '').trim();
   var names = prtSelectedNames();
   if (!t) t = (names.length === 1) ? names[0] : (PRT_TITLE[PRT.type] || '단어 시험지');
-  if (isAns) t = '정답표 · ' + t;
   return t;
 }
 function prtSubLine(count, isAns) {
   var names = prtSelectedNames();
   var setLine = names.length === 0 ? '세트 미선택' : (names.length <= 2 ? names.join(' · ') : names[0] + ' 외 ' + (names.length - 1) + '세트');
-  var typeLabel = isAns ? '정답표' : (PRT_TITLE[PRT.type] || '시험지');
+  var typeLabel = PRT_TITLE[PRT.type] || '시험지';
   var autoByName = !String(PRT.headTitle || '').trim() && names.length === 1;
   var parts = [];
+  if (isAns) {
+    var t = String(PRT.headTitle || '').trim();
+    parts.push(t || (names.length ? setLine : typeLabel));
+    parts.push('채점용 · 총 ' + count + '개');
+    return parts.join(' · ');
+  }
   parts.push(autoByName ? typeLabel : setLine);
   parts.push('총 ' + count + '개');
   return parts.join(' · ');
@@ -4574,9 +4580,14 @@ function prtHeadHTML(pIdx, totalPages, count, L, isAns) {
   h += '<div class="pg-top"><span class="pg-school">수지탑에듀학원</span>' + (PRT.showTime ? '<span class="pg-time">' + esc(prtStamp()) + '</span>' : '') + '</div>';
   h += '<div class="pg-titleline"><span class="pg-title">' + esc(prtBookTitle(count, isAns)) + '</span><span class="pg-sub">' + esc(prtSubLine(count, isAns)) + '</span></div>';
   var nm = String(PRT.nameLabel || '이름').trim() || '이름';
-  h += '<div class="pg-info"><span>' + esc(nm) + ': ________________</span><span>날짜: ______________</span>';
-  if (!isAns && PRT.type !== 'list') h += '<span>점수: ______ / ' + count + '</span>';
-  h += '</div><div class="pg-rule"></div></div>';
+  if (isAns) {
+    h += '<div class="pg-info"><span>채점용 정답표</span><span>' + esc(PRT_TITLE[PRT.type] || '시험지') + ' ' + count + '문항</span></div>';
+  } else {
+    h += '<div class="pg-info"><span>' + esc(nm) + ': ________________</span><span>날짜: ______________</span>';
+    if (PRT.type !== 'list') h += '<span>점수: ______ / ' + count + '</span>';
+    h += '</div>';
+  }
+  h += '<div class="pg-rule"></div></div>';
   return h;
 }
 function prtFourLineHTML(it) {
@@ -4620,53 +4631,38 @@ function prtCardHTML(it, L) {
     + '<span class="ce" style="font-size:' + (Math.round(L.fs * 1.12 * 10) / 10) + 'pt;">' + esc(it.en) + '</span>'
     + '<span class="ck">' + esc(it.enu) + '</span></div>';
 }
-function prtPageHTML(pg, pIdx, totalPages, L, all) {
+function prtCardPagesHTML(pg, L) {
+  var h = '<div class="pg-cards" style="grid-template-columns:repeat(' + L.cols + ',1fr);grid-auto-rows:' + L.rowMm + 'mm;align-content:start;">';
+  for (var c0 = 0; c0 < pg.items.length; c0++) h += prtCardHTML(pg.items[c0], L);
+  return h + '</div>';
+}
+function prtAnsRowHTML(it, no, L) {
+  return '<div class="pg-row row-ans" style="height:' + L.rowMm + 'mm;font-size:' + (Math.round(L.fs * 0.94 * 10) / 10) + 'pt;">'
+    + (PRT.showNo ? '<span class="r-no" style="width:6.2mm;">' + no + '.</span>' : '')
+    + '<span class="r-ans">' + esc(prtAnswerField(it)) + '</span></div>';
+}
+function prtPageHTML(pg, pIdx, totalPages, L, all, isAns) {
   var colW = prtColW(L);
   var h = '<div class="a4-page' + (PRT.color ? '' : ' mono') + '" style="' + prtPad(L) + '">';
-  h += prtHeadHTML(pIdx, totalPages, all.length, L, false);
-  if (PRT.type === 'card') {
-    h += '<div class="pg-body" style="height:' + L.contentH + 'mm;">';
-    h += '<div class="pg-cards" style="grid-template-columns:repeat(' + L.cols + ',1fr);grid-auto-rows:' + L.rowMm + 'mm;align-content:start;">';
-    for (var c0 = 0; c0 < pg.items.length; c0++) h += prtCardHTML(pg.items[c0], L);
-    h += '</div></div>';
+  h += prtHeadHTML(pIdx, totalPages, all.length, L, !!isAns);
+  if (PRT.type === 'card' && !isAns) {
+    h += '<div class="pg-body" style="height:' + L.contentH + 'mm;">' + prtCardPagesHTML(pg, L) + '</div>';
   } else {
+    var rowsInCol = Math.max(1, Math.ceil(pg.items.length / L.cols));
     h += '<div class="pg-body" style="height:' + L.contentH + 'mm;gap:' + L.colGap + 'mm;">';
     for (var c = 0; c < L.cols; c++) {
-      var s = c * L.rowsPerCol, e = Math.min(pg.items.length, s + L.rowsPerCol);
+      var s = c * rowsInCol, e = Math.min(pg.items.length, s + rowsInCol);
       h += '<div class="pg-col" style="flex:1 1 0;min-width:0;width:' + colW.toFixed(1) + 'mm;">';
-      for (var r = s; r < e; r++) h += prtRowHTML(pg.items[r], pg.start + r + 1, L, all, pg.start + r);
+      for (var r = s; r < e; r++) {
+        h += isAns ? prtAnsRowHTML(pg.items[r], pg.start + r + 1, L)
+                   : prtRowHTML(pg.items[r], pg.start + r + 1, L, all, pg.start + r);
+      }
       h += '</div>';
     }
     h += '</div>';
   }
-  h += '<div class="pg-foot" style="height:' + L.footH + 'mm;">' + (pIdx + 1) + ' / ' + totalPages + '</div>';
+  h += '<div class="pg-foot" style="height:' + L.footH + 'mm;">' + (isAns ? '정답 ' : '') + (pIdx + 1) + ' / ' + totalPages + '</div>';
   return h + '</div>';
-}
-function prtAnswerPages(items, L) {
-  var cols = Math.max(2, L.cols);
-  var perCol = Math.max(1, Math.floor(L.contentH / L.ansRow));
-  var perPage = perCol * cols, pages = [];
-  for (var i = 0; i < items.length; i += perPage) pages.push({ start: i, items: items.slice(i, i + perPage) });
-  var colW = (L.usableW - L.colGap * (cols - 1)) / cols;
-  var h = '';
-  for (var p = 0; p < pages.length; p++) {
-    var pg = pages[p];
-    h += '<div class="a4-page' + (PRT.color ? '' : ' mono') + '" style="' + prtPad(L) + '">';
-    h += prtHeadHTML(p, pages.length, items.length, L, true);
-    h += '<div class="pg-body" style="height:' + L.contentH + 'mm;gap:' + L.colGap + 'mm;">';
-    for (var c = 0; c < cols; c++) {
-      var s = c * perCol, e = Math.min(pg.items.length, s + perCol);
-      h += '<div class="pg-col" style="flex:1 1 0;min-width:0;width:' + colW.toFixed(1) + 'mm;">';
-      for (var r = s; r < e; r++) {
-        h += '<div class="pg-row row-ans" style="height:' + L.ansRow + 'mm;font-size:' + (Math.round(L.fs * 0.92 * 10) / 10) + 'pt;">'
-          + (PRT.showNo ? '<span class="r-no" style="width:6.2mm;">' + (pg.start + r + 1) + '.</span>' : '')
-          + '<span class="r-ans">' + esc(prtAnswerField(pg.items[r])) + '</span></div>';
-      }
-      h += '</div>';
-    }
-    h += '</div><div class="pg-foot" style="height:' + L.footH + 'mm;">정답 ' + (p + 1) + ' / ' + pages.length + '</div></div>';
-  }
-  return h;
 }
 function openPrintSheet(presetSet) {
   var ov = document.getElementById('printOverlay');
@@ -4903,8 +4899,10 @@ function renderPrintPreview() {
   var showAns = !!(PRT.showAns && items.length && PRT.type !== 'list' && PRT.prompt !== 'both');
   var h = '';
   if (items.length) {
-    for (var p = 0; p < pages.length; p++) h += prtPageHTML(pages[p], p, pages.length, L, items);
-    if (showAns) h += prtAnswerPages(items, L);
+    for (var p = 0; p < pages.length; p++) h += prtPageHTML(pages[p], p, pages.length, L, items, false);
+    if (showAns) {
+      for (var q = 0; q < pages.length; q++) h += prtPageHTML(pages[q], q, pages.length, L, items, true);
+    }
   }
   area.innerHTML = '<div class="pv-pages">' + h + '</div>';
   var info = document.getElementById('prtPvInfo');
