@@ -2274,10 +2274,12 @@ function openReadingApp() {
 }
 
 /* ================= v86: ✍️ 내신 서술형(writing.html) 세션 그대로 이어서 이동 ================= */
-function openWritingApp(){
+function openWritingApp(asTeacher){
   var b = (S.cred ? S.cred.ban : (S.home && S.home.me ? S.home.me.ban : ''));
   var n = (S.cred ? S.cred.name : (S.home && S.home.me ? S.home.me.name : ''));
-  var teach = (b === '선생님');
+  /* 선생님 대시보드에서 들어가면 학생 로그인이 남아 있어도 선생님 화면으로 들어가요 */
+  var teach = !!asTeacher || (b === '선생님');
+  if(teach){ b = '선생님'; n = n || '조수민'; }
   try {
     if (n) {
       /* writing.html 은 'topedu_writing_user_v1' 세션을 읽어서 바로 홈으로 들어가요 */
@@ -2361,7 +2363,7 @@ function renderHwCheck(){
     h += '<div class="hwc-row" data-ban="' + esc(s.ban) + '" data-name="' + esc(s.name) + '" data-st="' + st + '">' +
       '<div class="hwc-nm">' + esc(s.name) + (HWC_FILTER === '전체' ? '<u>' + esc(s.ban) + '</u>' : '') + '</div>' +
       '<div class="hwc-btns">' + ['o', 't', 'x'].map(function(v){
-        var g = v === 'o' ? '⭕' : (v === 't' ? '△' : '✕');
+        var g = v === 'o' ? '○' : (v === 't' ? '△' : '✕');
         return '<button type="button" class="hwc-btn' + (st === v ? ' on-' + v : '') + '" data-v="' + v + '" aria-pressed="' + (st === v ? 'true' : 'false') + '" title="' + hwcLabel(v) + '">' + g + '</button>';
       }).join('') + '</div></div>';
   });
@@ -3374,7 +3376,7 @@ function showAdmin(){
     '<button type="button" class="btn" id="bprint" onclick="openPrintSheet()" style="flex:1;margin:0;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(13,148,136,0.28)">🖨️ 단어·시험지 인쇄</button>'+
     '</div>'+
     '<div style="display:flex;gap:8px;margin:0 0 10px">'+
-    '<button type="button" class="btn" id="bwrite" onclick="openWritingApp()" style="flex:1;margin:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(124,58,237,0.24)">✍️ 내신 서술형</button>'+
+    '<button type="button" class="btn" id="bwrite" onclick="openWritingApp(true)" style="flex:1;margin:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(124,58,237,0.24)">✍️ 내신 서술형</button>'+
     '<button type="button" class="btn" id="bhw" onclick="openHwCheck()" style="flex:1;margin:0;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#78350f;font-weight:800;box-shadow:0 4px 12px rgba(245,158,11,0.28)">✅ 숙제 1초 체크</button>'+
     '</div>'+
     '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button></div>';
