@@ -7153,13 +7153,16 @@ function renderQuizQ() {
   var card = document.getElementById('quizCard');
   var html = '<div class="quiz-q-title">' + q.q.replace(/\n/g, '<br>') + '</div>';
 
-  if (q.type === 'choice' || q.type === 'tf') {
+  /* v87: 데이터에 type 이 없어도(opts/words 만 있는 경우) 문제 방식 추론 */
+  var qtype = q.type || (q.opts && q.opts.length ? 'choice' : (q.words && q.words.length ? 'scramble' : ''));
+
+  if (qtype === 'choice' || qtype === 'tf') {
     html += '<div class="quiz-opts">';
     q.opts.forEach(function(opt, idx) {
       html += '<button class="quiz-opt-btn" onclick="checkQuizAns(' + idx + ', this)">' + opt + '</button>';
     });
     html += '</div>';
-  } else if (q.type === 'scramble') {
+  } else if (qtype === 'scramble') {
     html += '<div class="scramble-box">' +
       '<div class="scramble-slots" id="scrambleSlots"></div>' +
       '<div class="scramble-pool" id="scramblePool">';
@@ -7178,10 +7181,18 @@ function renderQuizQ() {
   card.innerHTML = html;
 }
 
+function quizAnsIdx(q) {
+  /* v87: 정답 키는 데이터에 따라 ans 또는 a */
+  if (!q) return -1;
+  if (q.ans != null) return q.ans;
+  if (q.a != null) return q.a;
+  return -1;
+}
+
 function checkQuizAns(idx, btn) {
   var p = DAILY_PACKS[S.curDayIdx];
   var q = p.quiz[S.quizIdx];
-  if (idx === q.ans) {
+  if (idx === quizAnsIdx(q)) {
     btn.classList.add('correct');
     playCorrectSound();
     S.quizScore += 20;

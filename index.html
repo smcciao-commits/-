@@ -2199,7 +2199,7 @@ function triggerAiPraiseReply(name, ban, msg){
     saveNoteDB(db);
 
     if(typeof playCorrectSound === 'function') playCorrectSound();
-    if(typeof showHome === 'function' && S && S.name === name) {
+    if(typeof showHome === 'function' && S && S.cred && S.cred.name === name) {
       showHome();
     }
   }, 1200);
@@ -2647,8 +2647,10 @@ function finish(mode,label,correct,total,wrong,extra){
     if(r.score === 100) { playFanfareSound(); } else if(r.score >= 80) { playCorrectSound(); }
     if(r.score === 100 || mode === '테스트'){
       try {
-        sendDirectorPushNotification('[학습완료] ' + S.name + ' (' + S.ban + ')', '[' + W.set.name + '] ' + mode + ' ' + (r.score === 100 ? '100점 올클리어! 🏆' : r.score + '점 완료!'), 'study');
-        triggerAiPraiseReply(S.name, S.ban, mode + ' ' + r.score + '점 완료');
+        var _stName = (S.cred && S.cred.name) || '';
+        var _stBan = (S.cred && S.cred.ban) || '';
+        sendDirectorPushNotification('[학습완료] ' + _stName + (_stBan ? ' (' + _stBan + ')' : ''), '[' + W.set.name + '] ' + mode + ' ' + (r.score === 100 ? '100점 올클리어! 🏆' : r.score + '점 완료!'), 'study');
+        triggerAiPraiseReply(_stName, _stBan, mode + ' ' + r.score + '점 완료');
       } catch(e){}
     }
     var html=topBar(W.set.name)+'<div class="card" style="text-align:center"><div class="sub">'+label+'</div>'+
@@ -4710,7 +4712,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v86';
+var TOPEDU_APP_VERSION = 'v87';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
