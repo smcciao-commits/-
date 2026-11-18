@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>v92 인강관 가로 전체화면 검증</title>
+<style>
+ html,body{margin:0;background:#0f172a;color:#7CFC98;font:12px/1.45 ui-monospace,monospace}
+ #box{padding:8px}
+ #f{border:0;background:#fff;display:block}
+ #bar{margin-top:8px;white-space:pre-wrap;line-height:1.6}
+ b{color:#fff}
+</style></head>
+<body>
+<div id="box">
+  <iframe id="f" title="viewport"></iframe>
+  <div id="bar">ready</div>
+</div>
+<script>
+var p = new URLSearchParams(location.search);
+var w = parseInt(p.get('w') || '390', 10), h = parseInt(p.get('h') || '844', 10);
+var f = document.getElementById('f');
+f.style.width = w + 'px'; f.style.height = h + 'px';
+document.getElementById('box').style.width = (w + 16) + 'px';
+f.src = 'index.html?v=92qa&t=' + Date.now();
+function tick() {
+  var o = '뷰포트 ' + w + '×' + h + '  (iframe 실제 ' ;
+  try {
+    var iw = f.contentWindow, doc = f.contentDocument;
+    var errs = (iw.__topeduErrors || []);
+    var st = doc.getElementById('bbPlayerStage');
+    var ov = doc.getElementById('bbOverlay');
+    var cls = st ? st.className : '(스테이지 없음)';
+    var r = st ? st.getBoundingClientRect() : { width: 0, height: 0, top: 0, left: 0 };
+    var bar = doc.getElementById('bbFsBar');
+    var barVis = bar ? iw.getComputedStyle(bar).display : '-';
+    var head = doc.querySelector('.bb-head');
+    o = '뷰포트 ' + w + '×' + h + ' (iframe 실제 ' + iw.innerWidth + '×' + iw.innerHeight + ')\n'
+      + '인강관 열림: ' + (ov ? ov.classList.contains('on') : false) + '\n'
+      + '스테이지 class: ' + cls + '\n'
+      + '스테이지 박스: ' + Math.round(r.width) + '×' + Math.round(r.height) + '  (left ' + Math.round(r.left) + ', top ' + Math.round(r.top) + ')\n'
+      + '전체화면 컨트롤바 display: ' + barVis + '\n'
+      + 'head 높이: ' + (head ? Math.round(head.getBoundingClientRect().height) : '-') + '\n'
+      + '콘솔/페이지 오류: ' + errs.length + '건' + (errs.length ? ' → ' + errs.join(' | ') : '');
+  } catch (e) { o += ' [읽기 실패 ' + e.message + ']'; }
+  document.getElementById('bar').textContent = o;
+}
+setInterval(tick, 700);
+f.addEventListener('load', function () { setTimeout(tick, 500); });
+</script>
+</body></html>
