@@ -2599,7 +2599,7 @@ var BB_LECTURES = [
     { id: 'uzkYpSmErjs', lb: '2편 · 45:14', s: '스캇영어학원', ed: 'new' } ] }
 ];
 var BB_SEL = { ch: 1, part: 0 };
-var BB_YT = null, BB_API_READY = false, BB_API_WAIT = [], BB_FALLBACK = false;
+var BB_YT = null, BB_API_READY = false, BB_API_WAIT = [], BB_FALLBACK = false, BB_REF_META = '';
 
 function bbPad(n) { return ('0' + n).slice(-2); }
 function bbWho() {
@@ -2651,6 +2651,12 @@ function bbSrc(id) {
 function openBbaba() {
   var ov = document.getElementById('bbOverlay');
   if (!ov) return;
+  /* index.html 은 referrer no-referrer 라서, 인강관을 여는 동안만 origin 으로 바꿔요.
+     (유튜브 임베드는 리퍼러가 비면 '오류 153'으로 재생을 거부해요) */
+  try {
+    var m = document.querySelector('meta[name="referrer"]');
+    if (m) { BB_REF_META = m.getAttribute('content') || 'no-referrer'; m.setAttribute('content', 'origin'); }
+  } catch (e) {}
   ov.classList.add('on');
   ov.setAttribute('aria-hidden', 'false');
   try { document.body.style.overflow = 'hidden'; } catch (e) {}
@@ -2659,6 +2665,10 @@ function openBbaba() {
 }
 function closeBbaba() {
   try { if (BB_YT && BB_YT.stopVideo) BB_YT.stopVideo(); } catch (e) {}
+  try {
+    var m = document.querySelector('meta[name="referrer"]');
+    if (m && BB_REF_META) m.setAttribute('content', BB_REF_META);
+  } catch (e) {}
   var ov = document.getElementById('bbOverlay');
   if (ov) { ov.classList.remove('on'); ov.setAttribute('aria-hidden', 'true'); }
   try { document.body.style.overflow = ''; } catch (e) {}
@@ -2699,7 +2709,7 @@ function bbMountVideo(id) {
   }
   /* API가 아직이면 일반 임베드로 먼저 틀어 줘요 */
   if (wrap) {
-    wrap.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(id) + '" title="탑에듀 빠바 인강" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
+    wrap.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(id) + '" title="탑에듀 빠바 인강" frameborder="0" referrerpolicy="origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
   }
   BB_API_WAIT.push(function () { /* API 준비 후에도 재생을 끊지 않도록 그대로 둬요 */ });
 }
@@ -2726,7 +2736,7 @@ function bbOnError(e) {
     BB_YT = null;
     var wrap0 = document.getElementById('bbPlayerWrap');
     if (wrap0) {
-      wrap0.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(bbCurVideo().id) + '" title="탑에듀 빠바 인강" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
+      wrap0.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(bbCurVideo().id) + '" title="탑에듀 빠바 인강" frameborder="0" referrerpolicy="origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
       return;
     }
   }
