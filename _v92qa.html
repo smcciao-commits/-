@@ -17,6 +17,8 @@ var p = new URLSearchParams(location.search);
 var w = parseInt(p.get('w') || '390', 10), h = parseInt(p.get('h') || '844', 10);
 var f = document.getElementById('f');
 f.style.width = w + 'px'; f.style.height = h + 'px';
+/* sb=1: 전체화면(requestFullscreen)을 못 쓰는 웹뷰·PWA·iOS 상황을 흉내내요 */
+if (p.get('sb') === '1') f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-modals');
 document.getElementById('box').style.width = (w + 16) + 'px';
 f.src = 'index.html?v=92qa&t=' + Date.now();
 function tick() {
