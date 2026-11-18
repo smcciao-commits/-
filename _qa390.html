@@ -41,6 +41,8 @@ fetch('harin.html?qa=' + Date.now(), {cache:'no-store'}).then(function(r){ retur
           put('overflowX: ' + (d.documentElement.scrollWidth > 390 ? 'YES' : 'no'));
           put('reward card exists: ' + !!d.getElementById('reward_passcode_card'));
           put('READY');
+          var sp = (location.search.match(/[?&]s=(\d+)/) || [])[1];
+          if (sp) { w.scrollTo(0, parseInt(sp, 10)); put('scrolled to ' + sp); }
         }catch(e){ put('HARNESS2 ' + e.message); }
       }, 1800);
     }catch(e){ put('HARNESS ' + e.message); }
