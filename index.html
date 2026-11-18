@@ -2649,10 +2649,10 @@ window.onYouTubeIframeAPIReady = function () {
   q.forEach(function (f) { try { f(); } catch (e) {} });
 };
 
-function bbSrc(id) {
+function bbSrc(id, auto) {
   /* origin 은 인코딩하지 않고 그대로 넣어야 유튜브가 받아요(에듀키즈와 같은 방식) */
   return 'https://www.youtube-nocookie.com/embed/' + id +
-    '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=' +
+    '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1' + (auto ? '&autoplay=1' : '') + '&origin=' +
     location.protocol + '//' + location.host;
 }
 
@@ -2717,10 +2717,10 @@ function bbMountVideo(id) {
     } catch (e) {}
   }
   /* API가 아직이면 일반 임베드로 먼저 틀어 줘요 */
-  bbShowStart(false);
   if (wrap) {
     wrap.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(id) + '" title="탑에듀 빠바 인강" frameborder="0" referrerpolicy="origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
   }
+  bbShowStart(true);
   BB_API_WAIT.push(function () { /* API 준비 후에도 재생을 끊지 않도록 그대로 둬요 */ });
 }
 function bbShowStart(on) {
@@ -2730,7 +2730,11 @@ function bbShowStart(on) {
 }
 function bbResume() {
   bbShowStart(false);
-  try { if (BB_YT && BB_YT.playVideo) BB_YT.playVideo(); } catch (e) {}
+  try {
+    if (BB_YT && BB_YT.playVideo) { BB_YT.playVideo(); return; }
+  } catch (e) {}
+  var f = document.getElementById('bbFrame');
+  if (f) f.src = bbSrc(bbCurVideo().id, true);
 }
 function bbOnState(e) {
   if (!e) return;
