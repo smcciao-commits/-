@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>v91 API 테스트</title>
+<style>body{margin:0;background:#eee;font-family:sans-serif;padding:8px} #p1,#p2,#p3{width:390px;height:220px;background:#000;margin-bottom:10px;border:2px solid #333} .cap{font-size:12px;font-weight:700;margin:4px 0} pre{font-size:11px;background:#fff;padding:6px;white-space:pre-wrap}</style>
+</head><body>
+<div class="cap">P1 · 내 앱과 같은 방식(YT.Player, nocookie 아님, origin 지정)</div><div id="p1"></div>
+<div class="cap">P2 · YT.Player + host=nocookie</div><div id="p2"></div>
+<div class="cap">P3 · YT.Player, origin 미지정</div><div id="p3"></div>
+<pre id="log"></pre>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+var logEl = document.getElementById('log');
+function log(s){ logEl.textContent += s + '\n'; }
+window.onYouTubeIframeAPIReady = function () {
+  log('API ready');
+  var host = location.protocol + '//' + location.host;
+  try {
+    new YT.Player('p1', { videoId: 'zbIh_epgf7g', width: '100%', height: '100%',
+      playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, origin: host },
+      events: { onError: function(e){ log('P1 error ' + e.data); }, onReady: function(){ log('P1 ready'); } } });
+  } catch (e) { log('P1 throw ' + e); }
+  try {
+    new YT.Player('p2', { videoId: 'zbIh_epgf7g', host: 'https://www.youtube-nocookie.com', width: '100%', height: '100%',
+      playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, origin: host },
+      events: { onError: function(e){ log('P2 error ' + e.data); }, onReady: function(){ log('P2 ready'); } } });
+  } catch (e) { log('P2 throw ' + e); }
+  try {
+    new YT.Player('p3', { videoId: 'zbIh_epgf7g', width: '100%', height: '100%',
+      playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1 },
+      events: { onError: function(e){ log('P3 error ' + e.data); }, onReady: function(){ log('P3 ready'); } } });
+  } catch (e) { log('P3 throw ' + e); }
+  setTimeout(function(){
+    ['p1','p2','p3'].forEach(function(id){
+      var f = document.querySelector('#' + id + ' iframe');
+      log(id + ' src=' + (f ? f.getAttribute('src') : 'no-iframe'));
+    });
+  }, 2500);
+};
+</script>
+</body></html>
