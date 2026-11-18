@@ -2973,22 +2973,29 @@ function bbExitFs() {
   } catch (e) {}
   try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
 }
-function bbFullscreen() {
-  var st = bbStage();
-  if (!st) return;
-  if (bbInFs()) { bbExitFs(); return; }
-  /* 1차: 네이티브 전체화면 + 가로 방향 잠금 */
-  try {
-    var p = st.requestFullscreen ? st.requestFullscreen({ navigationUI: 'hide' })
-      : (st.webkitRequestFullscreen ? st.webkitRequestFullscreen() : null);
-    if (p && p.catch) p.catch(function () {});
-  } catch (e) {}
+function bbLockLandscape() {
   try {
     if (screen.orientation && screen.orientation.lock) {
       var lp = screen.orientation.lock('landscape');
       if (lp && lp.catch) lp.catch(function () {});
     }
   } catch (e) {}
+}
+function bbFullscreen() {
+  var st = bbStage();
+  if (!st) return;
+  if (bbInFs()) { bbExitFs(); return; }
+  /* 1차: 네이티브 전체화면 + 가로 방향 잠금 (전체화면이 열린 다음에 방향을 잠가야 안드로이드 크롬이 받아줘요) */
+  var opened = false;
+  try {
+    var p = st.requestFullscreen ? st.requestFullscreen({ navigationUI: 'hide' })
+      : (st.webkitRequestFullscreen ? st.webkitRequestFullscreen() : null);
+    if (p && p.then) {
+      opened = true;
+      p.then(function () { bbLockLandscape(); }, function () { bbLockLandscape(); });
+    }
+  } catch (e) {}
+  if (!opened) bbLockLandscape();
   /* 2차(핵심): 지원이 안 돼도 무조건 넓은 가로 — 세로로 들고 있으면 90도 회전 */
   bbApplyFs();
 }
