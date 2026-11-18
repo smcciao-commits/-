@@ -555,6 +555,9 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .mres .e { font-size: 84px; }
 .mres .t { font-family: 'Maplestory', sans-serif; font-size: 30px; font-weight: 700; margin-top: 6px; color: var(--ink); }
 .mres .s { font-size: 18px; color: var(--sub); margin-top: 8px; }
+/* v90: 최종 결과 — 4등 이하 행에도 1~3등과 같은 '맞힘 · 틀림' 표기를 넣는다 */
+.rk .s.brs { white-space: nowrap; }
+.list li .brs { white-space: nowrap; font-weight: 800; font-size: 15.5px; text-align: right; }
 
 @media (max-width: 800px) {
   .bcode { font-size: 96px; letter-spacing: 10px; }
@@ -4344,6 +4347,14 @@ function raceRows(v){
   }).join('') || '<div class="small">아직 아무도 없어요</div>';
 }
 
+/* v90: 최종 결과의 점수 표기는 순위와 상관없이 항상 'N개 맞힘 · N개 틀림' 한 가지로 통일한다.
+   (v89까지는 1~3등에만 틀린 개수가 나오고 4등부터는 맞힌 개수만 보였다) */
+function btScoreTxt(r){
+  r = r || {};
+  var c = (r.c || 0), x = (r.x || 0);
+  return c + '개 맞힘 · ' + x + '개 틀림';
+}
+
 function hostRender(v){
   B.v=v;
   var sig=v.status;
@@ -4373,9 +4384,9 @@ function hostRender(v){
     bClock(function(){ var c=$('#bclk'); if(!c) return; var s=B.startAt-Date.now(); c.textContent=s>0?('준비 '+Math.ceil(s/1000)):mmss(B.endAt-Date.now()); c.style.color=(s<=0&&B.endAt-Date.now()<=10000)?'var(--no)':''; });
   } else if(v.status==='end'){
     var r=v.rank||[], md=['🥇','🥈','🥉'];
-    var pod=[1,0,2].filter(function(i){return r[i];}).map(function(i){ var rk=(r[i].rank||(i+1)); return '<div class="p'+(i+1)+'"><div class="m">'+(md[rk-1]||'🎖️')+'</div><div class="nm">'+esc(r[i].name)+'</div><div class="sc">'+r[i].c+'개 맞힘'+(r[i].x?' · '+r[i].x+'개 틀림':'')+'</div></div>'; }).join('');
+    var pod=[1,0,2].filter(function(i){return r[i];}).map(function(i){ var rk=(r[i].rank||(i+1)); return '<div class="p'+(i+1)+'"><div class="m">'+(md[rk-1]||'🎖️')+'</div><div class="nm">'+esc(r[i].name)+'</div><div class="sc">'+btScoreTxt(r[i])+'</div></div>'; }).join('');
     html=hostHead(v)+'<div style="text-align:center;font-size:40px;font-weight:900;margin-top:10px">🏆 최종 결과</div><div class="pod">'+pod+'</div>'+
-      (r.length>3?'<div class="rk" style="max-width:640px;margin:0 auto"><ul class="list">'+r.slice(3).map(function(x){ return '<li><span class="r">'+x.rank+'</span><span>'+esc(x.name)+'</span><span class="s">'+x.c+'개</span></li>'; }).join('')+'</ul></div>':'')+
+      (r.length>3?'<div class="rk" style="max-width:640px;margin:0 auto"><ul class="list">'+r.slice(3).map(function(x){ return '<li><span class="r">'+x.rank+'</span><span>'+esc(x.name)+'</span><span class="s brs">'+btScoreTxt(x)+'</span></li>'; }).join('')+'</ul></div>':'')+
       '<div class="row" style="max-width:640px;margin:20px auto 0"><button class="btn" id="bagain">같은 세트로 한 번 더</button><button class="btn ghost" id="bout">끝내기</button></div>';
     app.innerHTML=html; B.gen++;
     $('#bagain').onclick=function(){ var o=B.opt; call('battleCreate',S.admin.pw,o.sets,o.mins,o.dir).then(hostEnter).catch(function(e){ alert(errMsg(e)); }); };
@@ -4693,15 +4704,15 @@ function pEnd(v){
   bStop();
   var md=['🥇','🥈','🥉'], me=v.me||{rank:0,c:R.c,x:R.x}, rk=me.rank||0;
   var top=(v.top||[]).filter(function(r){ return r && r.rank>=1 && r.rank<=3; });
-  app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">'+(rk>=1&&rk<=3?md[rk-1]:'🎉')+'</div><div class="t">최종 '+(rk?('🎯 '+rk+'등!'):'수고했어요!')+'</div><div class="s">'+me.c+'개 맞힘'+(me.x?' · '+me.x+'개 틀림':'')+'</div></div>'+
-    (top.length?'<div class="card"><h2>🏆 1~3등</h2><ul class="list">'+top.map(function(r){ return '<li><span>'+md[r.rank-1]+' '+esc(r.name)+'</span><b>'+r.c+'개</b></li>'; }).join('')+'</ul></div>':'')+
-    ((v.list&&v.list.length>3)?'<div class="card"><h2>전체 순위</h2><ul class="list">'+v.list.map(function(r){ return '<li><span>'+(r.rank||'-')+'. '+esc(r.name)+'</span><b>'+r.c+'개</b></li>'; }).join('')+'</ul></div>':'')+
+  app.innerHTML=topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">'+(rk>=1&&rk<=3?md[rk-1]:'🎉')+'</div><div class="t">최종 '+(rk?('🎯 '+rk+'등!'):'수고했어요!')+'</div><div class="s">'+btScoreTxt(me)+'</div></div>'+
+    (top.length?'<div class="card"><h2>🏆 1~3등</h2><ul class="list">'+top.map(function(r){ return '<li><span>'+md[r.rank-1]+' '+esc(r.name)+'</span><b class="brs">'+btScoreTxt(r)+'</b></li>'; }).join('')+'</ul></div>':'')+
+    ((v.list&&v.list.length>3)?'<div class="card"><h2>전체 순위</h2><ul class="list">'+v.list.map(function(r){ return '<li><span>'+(r.rank||'-')+'. '+esc(r.name)+'</span><b class="brs">'+btScoreTxt(r)+'</b></li>'; }).join('')+'</ul></div>':'')+
     '<button class="btn" id="bhome">처음 화면으로</button>';
   bindBack(playerExit); var bh=$('#bhome'); if(bh) bh.onclick=playerExit;
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v89';
+var TOPEDU_APP_VERSION = 'v90';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
