@@ -1075,6 +1075,51 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .nag-tools { display: flex; gap: 6px; margin-top: 8px; }
 .nag-tools button { flex: 1 1 0; padding: 9px; border-radius: 11px; border: 1.5px solid #cbd5e1; background: #fff; font-size: 12px; font-weight: 800; color: #475569; }
 
+/* ================= v91: 📺 빠바 기초세우기 인강관 (예비고1 전용) ================= */
+.bb-overlay { position: fixed; inset: 0; z-index: 9700; display: none; background: #f6f8fb; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.bb-overlay.on { display: block; }
+.bb-card { max-width: 600px; margin: 0 auto; padding: 0 12px 30px; }
+.bb-head { position: sticky; top: 0; z-index: 8; display: flex; align-items: center; gap: 8px; padding: 10px 0 8px; background: rgba(246,248,251,.97); }
+.bb-back { flex: 0 0 auto; border: 1.5px solid #cbd5e1; background: #fff; color: #334155; font-weight: 800; font-size: 12.5px; padding: 8px 11px; border-radius: 11px; font-family: inherit; cursor: pointer; }
+.bb-hwrap { flex: 1; min-width: 0; }
+.bb-h1 { font-family: Maplestory, sans-serif; font-size: 15px; font-weight: 700; color: #0f172a; letter-spacing: -.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bb-h2 { font-size: 10.5px; color: #64748b; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bb-pill { flex: 0 0 auto; font-size: 10.5px; font-weight: 800; color: #0d9488; background: #ccfbf1; border: 1px solid #99f6e4; border-radius: 999px; padding: 4px 8px; }
+.bb-player { position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 20px rgba(15,23,42,.18); }
+.bb-player iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.bb-guard-top { position: absolute; top: 0; left: 0; right: 0; height: 54px; z-index: 12; background: transparent; }
+.bb-guard-br { position: absolute; bottom: 0; right: 0; width: 100px; height: 42px; z-index: 12; background: transparent; }
+.bb-cover { position: absolute; inset: 0; z-index: 20; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px; background: rgba(15,23,42,.94); color: #fff; }
+.bb-cover.on { display: flex; }
+.bb-cover-t { font-family: Maplestory, sans-serif; font-size: 14.5px; color: #5eead4; margin-bottom: 6px; }
+.bb-cover-s { font-size: 11.5px; color: #cbd5e1; line-height: 1.5; margin-bottom: 12px; }
+.bb-cover-btns { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; }
+.bb-cb { border: none; border-radius: 10px; padding: 9px 14px; font-size: 12.5px; font-weight: 800; font-family: inherit; cursor: pointer; }
+.bb-ctrl { display: flex; gap: 5px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+.bb-cbtn { flex: 1 1 auto; min-width: 62px; border: 1.5px solid #cbd5e1; background: #fff; color: #334155; border-radius: 10px; padding: 8px 6px; font-size: 11.5px; font-weight: 800; font-family: inherit; cursor: pointer; }
+.bb-cbtn.on { border-color: #0d9488; background: #f0fdfa; color: #0d9488; }
+.bb-meta { margin: 9px 0 4px; padding: 10px 12px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; }
+.bb-meta-t { font-family: Maplestory, sans-serif; font-size: 13.5px; font-weight: 700; color: #0f172a; }
+.bb-meta-s { font-size: 11px; color: #64748b; margin-top: 3px; line-height: 1.5; }
+.bb-tag { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 6px; margin-right: 4px; }
+.bb-tag.new { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.bb-tag.old { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.bb-parts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.bb-part { flex: 1 1 auto; min-width: 92px; border: 1.5px solid #cbd5e1; background: #fff; color: #334155; border-radius: 10px; padding: 8px 10px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; text-align: center; line-height: 1.35; }
+.bb-part.on { border-color: #0d9488; background: #f0fdfa; color: #0d9488; }
+.bb-listttl { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 7px; font-size: 12.5px; font-weight: 800; color: #334155; }
+.bb-prog { font-size: 11px; color: #0d9488; font-weight: 800; }
+.bb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.bb-ch { position: relative; border: 1.5px solid #e2e8f0; background: #fff; border-radius: 11px; padding: 8px 4px 7px; font-family: inherit; cursor: pointer; text-align: center; line-height: 1.2; }
+.bb-ch b { display: block; font-size: 11px; color: #0d9488; font-weight: 900; letter-spacing: -.2px; }
+.bb-ch span { display: block; font-size: 9px; color: #475569; margin-top: 2px; word-break: keep-all; }
+.bb-ch.on { border-color: #0d9488; background: #f0fdfa; box-shadow: 0 2px 8px rgba(13,148,136,.16); }
+.bb-ch.done:after { content: '✓'; position: absolute; top: -5px; right: -4px; width: 15px; height: 15px; border-radius: 50%; background: #0d9488; color: #fff; font-size: 9.5px; line-height: 15px; font-weight: 900; }
+.bb-donebtn { width: 100%; margin-top: 10px; border: none; border-radius: 12px; padding: 11px; font-size: 13px; font-weight: 800; font-family: inherit; cursor: pointer; background: linear-gradient(135deg,#0d9488,#14b8a6); color: #fff; }
+.bb-donebtn.off { background: #e2e8f0; color: #64748b; }
+.bb-foot { margin-top: 10px; font-size: 10px; color: #94a3b8; line-height: 1.6; }
+@media (max-width: 380px) { .bb-grid { grid-template-columns: repeat(3, 1fr); } .bb-h1 { font-size: 14px; } }
+
 </style>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -1160,6 +1205,48 @@ function forceAppRefresh(e) {
 <div id="nagOverlay" class="notif-overlay" aria-hidden="true"><div class="notif-card" id="nagModal"></div></div>
 <!-- v86: ✅ 숙제 1초 체크 & 에듀스탭/피클 문자 복사 모달 -->
 <div id="hwOverlay" class="hwc-overlay" aria-hidden="true"><div class="hwc-card" id="hwModal"></div></div>
+<!-- v91: 📺 빠바 기초세우기 인강관 (예비고1 전용 · 앱 안에서만 재생) -->
+<div id="bbOverlay" class="bb-overlay" aria-hidden="true">
+  <div class="bb-card">
+    <div class="bb-head">
+      <button type="button" class="bb-back" onclick="closeBbaba()">← 나가기</button>
+      <div class="bb-hwrap">
+        <div class="bb-h1">📺 빠바 기초세우기 인강관</div>
+        <div class="bb-h2">2024 개정판 · 무료 유튜브 강의 16강</div>
+      </div>
+      <span class="bb-pill" id="bbProgPill">0 / 16강</span>
+    </div>
+    <div class="bb-player">
+      <div id="bbPlayerWrap" style="position:absolute;top:0;left:0;width:100%;height:100%">
+        <div id="bbPlayerBox" style="width:100%;height:100%"></div>
+      </div>
+      <div class="bb-guard-top" onclick="event.stopPropagation();event.preventDefault();return false;"></div>
+      <div class="bb-guard-br" onclick="event.stopPropagation();event.preventDefault();return false;"></div>
+      <div class="bb-cover" id="bbCover">
+        <div class="bb-cover-t" id="bbCoverT">강의 끝! 수고했어요 👏</div>
+        <div class="bb-cover-s" id="bbCoverS">다른 영상으로 넘어가지 않도록 여기서 멈췄어요.</div>
+        <div class="bb-cover-btns">
+          <button type="button" class="bb-cb" style="background:#0d9488;color:#fff" onclick="bbReplay()">🔄 다시 보기</button>
+          <button type="button" class="bb-cb" style="background:#ea580c;color:#fff" onclick="bbNext()">▶ 다음 강의</button>
+          <button type="button" class="bb-cb" style="background:#334155;color:#cbd5e1" onclick="closeBbaba()">✕ 나가기</button>
+        </div>
+      </div>
+    </div>
+    <div class="bb-ctrl" id="bbCtrl">
+      <button type="button" class="bb-cbtn" onclick="bbTogglePlay()">⏯ 재생/멈춤</button>
+      <button type="button" class="bb-cbtn" data-rate="0.75" onclick="bbSetRate(0.75)">0.75배속</button>
+      <button type="button" class="bb-cbtn on" data-rate="1" onclick="bbSetRate(1)">1배속</button>
+      <button type="button" class="bb-cbtn" data-rate="1.25" onclick="bbSetRate(1.25)">1.25배속</button>
+      <button type="button" class="bb-cbtn" onclick="bbFullscreen()">⛶ 크게 보기</button>
+    </div>
+    <div id="bbInfo"></div>
+    <div class="bb-listttl"><span>📚 01강 ~ 16강</span><span class="bb-prog" id="bbProgTxt"></span></div>
+    <div class="bb-grid" id="bbGrid"></div>
+    <button type="button" class="bb-donebtn" id="bbDoneBtn" onclick="bbToggleDone()">✓ 이 강의 다 봤어요</button>
+    <div class="bb-foot">※ 무료로 공개된 유튜브 강의를 앱 안에서만 재생해요. 유튜브 앱·사이트로 나가는 버튼은 가려 뒀어요.<br>※ 스캇영어학원은 한 단원을 1·2편으로 나눠 올려서 두 편을 다 봐야 한 단원이 끝나요.<br>※ 04·05강은 2024 개정판 무료 강의가 아직 없어서 구판 개념 강의로 채웠어요.</div>
+  </div>
+</div>
+
 <script>
 /* ============ 기본 ============ */
 var S = { cred: null, home: null, admin: null };
@@ -2462,6 +2549,258 @@ function hwcCopy(txt, btn, pv){
   try { navigator.clipboard.writeText(txt).then(done, fb); } catch(e){ fb(); }
 }
 
+/* ================= v91: 📺 빠바 기초세우기 인강관 (예비고1 전용) ================= */
+/* 무료로 공개된 유튜브 강의만 담았어요. ed:'new' = 2024 개정판 강의, ed:'sub' = 구판 보충 강의 */
+var BB_LECTURES = [
+  { n: 1,  t: '영문의 기본 구조', v: [
+    { id: 'zbIh_epgf7g', lb: '1~3번', s: '지니오브램프영어', ed: 'new' },
+    { id: 'IFVkUBbo5WU', lb: '4~5번', s: '지니오브램프영어', ed: 'new' } ] },
+  { n: 2,  t: '주어·동사 바로 찾기', v: [
+    { id: 'pJDfGj52WWo', lb: '1~3번', s: '지니오브램프영어', ed: 'new' },
+    { id: 'iv-7D4voKWk', lb: '4~5번', s: '지니오브램프영어', ed: 'new' } ] },
+  { n: 3,  t: '목적어 바로 찾기', v: [
+    { id: 'M0l2Wr7nbp4', lb: '1~3번', s: '지니오브램프영어', ed: 'new' } ] },
+  { n: 4,  t: '보어의 이해', v: [
+    { id: 'Z63SUDIhvhk', lb: '개념 정리', s: '쌤마스터입시학원', ed: 'sub' } ] },
+  { n: 5,  t: '시제의 이해', v: [
+    { id: '7e2hE0ArNQg', lb: '1~2번', s: '에이닷 춘천', ed: 'sub' },
+    { id: 'Sj0YAiApMyI', lb: '3~5번', s: '에이닷 춘천', ed: 'sub' } ] },
+  { n: 6,  t: '수동태의 이해', v: [
+    { id: '9Eg58np_v_M', lb: '1~3번', s: '지니오브램프영어', ed: 'new' },
+    { id: 'WrfsVyVukHA', lb: '4~5번', s: '지니오브램프영어', ed: 'new' } ] },
+  { n: 7,  t: '조동사의 이해', v: [
+    { id: 'yNmVpuQ7KpA', lb: '개념 + 적용독해', s: '스캇영어학원', ed: 'new' } ] },
+  { n: 8,  t: '가정법의 이해', v: [
+    { id: 'IGXtgYAnTiY', lb: '개념 + 적용독해', s: '스캇영어학원', ed: 'new' },
+    { id: '_0-PRS1_oXI', lb: '3~5번', s: '지니오브램프영어', ed: 'new' } ] },
+  { n: 9,  t: '형용사적 수식어', v: [
+    { id: '0pmcJ5o5wGk', lb: '개념 + 적용독해', s: '스캇영어학원', ed: 'new' },
+    { id: 'KQlKXgdZIgM', lb: '1~3번', s: '지니오브램프영어', ed: 'new' } ] },
+  { n: 10, t: 'to부정사의 이해', v: [
+    { id: 'ZzDyGIIV6Rs', lb: '1편 · 35:38', s: '스캇영어학원', ed: 'new' },
+    { id: 'Ky_ATNevP8s', lb: '2편 · 30:34', s: '스캇영어학원', ed: 'new' } ] },
+  { n: 11, t: '분사구문의 이해', v: [
+    { id: 'SHejyG32PPg', lb: '1편 · 34:32', s: '스캇영어학원', ed: 'new' },
+    { id: 'AzYy9EfBe0A', lb: '2편 · 32:56', s: '스캇영어학원', ed: 'new' } ] },
+  { n: 12, t: '접속사의 이해', v: [
+    { id: 'uySmolShvdQ', lb: '1편 · 27:55', s: '스캇영어학원', ed: 'new' },
+    { id: 'lDdD8rRf8ow', lb: '2편 · 30:34', s: '스캇영어학원', ed: 'new' } ] },
+  { n: 13, t: '관계사의 이해 Ⅰ', v: [
+    { id: '_Cl4zVpALRg', lb: '1편 · 33:14', s: '스캇영어학원', ed: 'new' },
+    { id: 'AOpNkmYD76M', lb: '2편 · 25:41', s: '스캇영어학원', ed: 'new' } ] },
+  { n: 14, t: '관계사의 이해 Ⅱ', v: [
+    { id: 'pQkoj50KZyI', lb: '1편 · 37:12', s: '스캇영어학원', ed: 'new' },
+    { id: 'qEn8uygpb9o', lb: '2편 · 37:19', s: '스캇영어학원', ed: 'new' } ] },
+  { n: 15, t: '비교 구문', v: [
+    { id: '3I1xApQCULk', lb: '1편 · 31:09', s: '스캇영어학원', ed: 'new' },
+    { id: 'nfFCjmW3VWw', lb: '2편 · 23:57', s: '스캇영어학원', ed: 'new' } ] },
+  { n: 16, t: '특수 구문', v: [
+    { id: 'aMo7R8so944', lb: '1편 · 43:32', s: '스캇영어학원', ed: 'new' },
+    { id: 'uzkYpSmErjs', lb: '2편 · 45:14', s: '스캇영어학원', ed: 'new' } ] }
+];
+var BB_SEL = { ch: 1, part: 0 };
+var BB_YT = null, BB_API_READY = false, BB_API_WAIT = [];
+
+function bbPad(n) { return ('0' + n).slice(-2); }
+function bbWho() {
+  try { return (S.cred && S.cred.name) || (S.home && S.home.me && S.home.me.name) || 'guest'; }
+  catch (e) { return 'guest'; }
+}
+function bbDoneMap() {
+  var all = store('topedu_bbaba_v1') || {};
+  return all[bbWho()] || {};
+}
+function bbIsDone(n) { return !!bbDoneMap()['c' + n]; }
+function bbMark(n, on) {
+  var all = store('topedu_bbaba_v1') || {};
+  var u = bbWho(), m = all[u] || {};
+  if (on) m['c' + n] = Date.now(); else delete m['c' + n];
+  all[u] = m;
+  store('topedu_bbaba_v1', all);
+}
+function bbCount() {
+  var m = bbDoneMap(), c = 0;
+  BB_LECTURES.forEach(function (x) { if (m['c' + x.n]) c++; });
+  return c;
+}
+function bbCur() { return BB_LECTURES[BB_SEL.ch - 1] || BB_LECTURES[0]; }
+function bbCurVideo() { var L = bbCur(); return L.v[BB_SEL.part] || L.v[0]; }
+
+function bbLoadApi() {
+  if (window.YT && window.YT.Player) { BB_API_READY = true; return; }
+  if (document.getElementById('bbYtApi')) return;
+  var s = document.createElement('script');
+  s.id = 'bbYtApi';
+  s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+}
+window.onYouTubeIframeAPIReady = function () {
+  BB_API_READY = true;
+  var q = BB_API_WAIT.slice();
+  BB_API_WAIT = [];
+  q.forEach(function (f) { try { f(); } catch (e) {} });
+};
+
+function bbSrc(id) {
+  return 'https://www.youtube-nocookie.com/embed/' + id +
+    '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=' +
+    encodeURIComponent(location.protocol + '//' + location.host);
+}
+
+function openBbaba() {
+  var ov = document.getElementById('bbOverlay');
+  if (!ov) return;
+  ov.classList.add('on');
+  ov.setAttribute('aria-hidden', 'false');
+  try { document.body.style.overflow = 'hidden'; } catch (e) {}
+  bbLoadApi();
+  bbSelect(BB_SEL.ch || 1, BB_SEL.part || 0);
+}
+function closeBbaba() {
+  try { if (BB_YT && BB_YT.stopVideo) BB_YT.stopVideo(); } catch (e) {}
+  var ov = document.getElementById('bbOverlay');
+  if (ov) { ov.classList.remove('on'); ov.setAttribute('aria-hidden', 'true'); }
+  try { document.body.style.overflow = ''; } catch (e) {}
+}
+function bbSelect(n, part) {
+  BB_SEL = { ch: n, part: part || 0 };
+  var cov = document.getElementById('bbCover');
+  if (cov) cov.classList.remove('on');
+  bbMountVideo(bbCurVideo().id);
+  bbRenderInfo();
+  var ov = document.getElementById('bbOverlay');
+  if (ov) ov.scrollTop = 0;
+}
+function bbMountVideo(id) {
+  /* 이미 플레이어가 있으면 영상만 갈아끼워요 */
+  if (BB_YT && BB_YT.loadVideoById) {
+    try { BB_YT.loadVideoById(id); return; } catch (e) {}
+  }
+  var wrap = document.getElementById('bbPlayerWrap');
+  if (window.YT && window.YT.Player && wrap) {
+    try {
+      wrap.innerHTML = '<div id="bbPlayerBox" style="width:100%;height:100%"></div>';
+      BB_YT = new YT.Player('bbPlayerBox', {
+        videoId: id,
+        width: '100%', height: '100%',
+        playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, origin: location.protocol + '//' + location.host },
+        events: { onStateChange: bbOnState, onError: bbOnError }
+      });
+      setTimeout(function () {
+        try {
+          var f = BB_YT.getIframe();
+          if (f) { f.style.position = 'absolute'; f.style.top = '0'; f.style.left = '0'; f.style.width = '100%'; f.style.height = '100%'; f.style.border = '0'; }
+        } catch (e) {}
+      }, 400);
+      return;
+    } catch (e) {}
+  }
+  /* API가 아직이면 일반 임베드로 먼저 틀어 줘요 */
+  if (wrap) {
+    wrap.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(id) + '" title="탑에듀 빠바 인강" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
+  }
+  BB_API_WAIT.push(function () { /* API 준비 후에도 재생을 끊지 않도록 그대로 둬요 */ });
+}
+function bbOnState(e) {
+  if (!e) return;
+  if (e.data === 0) {
+    bbMark(BB_SEL.ch, true);
+    bbRenderInfo();
+    var cov = document.getElementById('bbCover');
+    if (cov) {
+      var t = document.getElementById('bbCoverT'), s2 = document.getElementById('bbCoverS');
+      if (t) t.textContent = '강의 끝! 수고했어요 👏';
+      if (s2) s2.textContent = '다른 영상으로 넘어가지 않도록 여기서 멈췄어요.';
+      cov.classList.add('on');
+    }
+  }
+}
+function bbOnError(e) {
+  var cov = document.getElementById('bbCover');
+  if (!cov) return;
+  var t = document.getElementById('bbCoverT'), s2 = document.getElementById('bbCoverS');
+  if (t) t.textContent = '이 영상은 지금 재생할 수 없어요';
+  if (s2) s2.textContent = '다른 강의를 골라 주세요. (오류 ' + (e && e.data) + ')';
+  cov.classList.add('on');
+}
+function bbRenderInfo() {
+  var L = bbCur(), v = bbCurVideo(); if (!v) return;
+  var done = bbIsDone(L.n), cnt = bbCount(), tot = BB_LECTURES.length;
+  var pill = document.getElementById('bbProgPill');
+  if (pill) pill.textContent = cnt + ' / ' + tot + '강';
+  var pt = document.getElementById('bbProgTxt');
+  if (pt) pt.textContent = cnt + '/' + tot + ' 완료';
+  var info = document.getElementById('bbInfo');
+  if (info) {
+    var h = '<div class="bb-meta">';
+    h += '<div class="bb-meta-t">' + bbPad(L.n) + '강 · ' + L.t + '</div>';
+    h += '<div class="bb-meta-s"><span class="bb-tag ' + (v.ed === 'new' ? 'new' : 'old') + '">' + (v.ed === 'new' ? '2024 개정판' : '구판 보충') + '</span>' + v.s + ' · ' + v.lb + '</div>';
+    if (L.v.length > 1) {
+      h += '<div class="bb-parts">';
+      L.v.forEach(function (x, i) {
+        h += '<button type="button" class="bb-part' + (i === BB_SEL.part ? ' on' : '') + '" onclick="bbSelect(' + L.n + ',' + i + ')">🎬 ' + x.lb + '</button>';
+      });
+      h += '</div>';
+    }
+    h += '</div>';
+    info.innerHTML = h;
+  }
+  var g = document.getElementById('bbGrid');
+  if (g) {
+    var s = '';
+    BB_LECTURES.forEach(function (x) {
+      s += '<button type="button" class="bb-ch' + (x.n === BB_SEL.ch ? ' on' : '') + (bbIsDone(x.n) ? ' done' : '') + '" onclick="bbSelect(' + x.n + ',0)"><b>' + bbPad(x.n) + '강</b><span>' + x.t + '</span></button>';
+    });
+    g.innerHTML = s;
+  }
+  var db = document.getElementById('bbDoneBtn');
+  if (db) {
+    db.className = 'bb-donebtn' + (done ? ' off' : '');
+    db.textContent = done ? '✓ 완료했어요 (누르면 취소)' : '✓ 이 강의 다 봤어요';
+  }
+}
+function bbToggleDone() {
+  bbMark(BB_SEL.ch, !bbIsDone(BB_SEL.ch));
+  bbRenderInfo();
+}
+function bbReplay() {
+  var cov = document.getElementById('bbCover');
+  if (cov) cov.classList.remove('on');
+  try {
+    if (BB_YT && BB_YT.seekTo) { BB_YT.seekTo(0); BB_YT.playVideo(); return; }
+  } catch (e) {}
+  var f = document.getElementById('bbFrame');
+  if (f) f.src = bbSrc(bbCurVideo().id);
+}
+function bbNext() {
+  var L = bbCur();
+  if (BB_SEL.part + 1 < L.v.length) { bbSelect(L.n, BB_SEL.part + 1); return; }
+  if (L.n < BB_LECTURES.length) { bbSelect(L.n + 1, 0); return; }
+  bbSelect(1, 0);
+}
+function bbTogglePlay() {
+  try {
+    if (!BB_YT || !BB_YT.getPlayerState) return;
+    if (BB_YT.getPlayerState() === 1) BB_YT.pauseVideo(); else BB_YT.playVideo();
+  } catch (e) {}
+}
+function bbSetRate(r) {
+  try { if (BB_YT && BB_YT.setPlaybackRate) BB_YT.setPlaybackRate(r); } catch (e) {}
+  var bs = document.querySelectorAll('#bbCtrl .bb-cbtn[data-rate]');
+  [].forEach.call(bs, function (b) {
+    b.className = 'bb-cbtn' + (parseFloat(b.getAttribute('data-rate')) === r ? ' on' : '');
+  });
+}
+function bbFullscreen() {
+  var el = document.getElementById('bbPlayerWrap');
+  if (!el) return;
+  try {
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else { var f = document.getElementById('bbFrame'); if (f && f.requestFullscreen) f.requestFullscreen(); }
+  } catch (e) {}
+}
+
 function showHome(){
   var h=S.home, me=h.me;
   var todo=h.sets.filter(function(s){ if (s.type==='문제') return s.progress.test===null||s.progress.test===undefined; return !getWordSetCompletion(s).isComplete; }).length;
@@ -2505,6 +2844,14 @@ function showHome(){
     '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#6d28d9">✍️ 내신 서술형 · 어순배열 마스터</div>' +
     '<div style="font-size:12px;color:#7c6a9c;margin-top:2px">어순배열 · 어형변화 · 조건영작 서술형 실전 훈련</div></div>' +
     '<button style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">쓰러가기 →</button></div>';
+  /* v91: 📺 빠바 기초세우기 인강관 — 예비고1(과 원장님)에게만 보여요 */
+  if (me.ban === '예비고1' || me.ban === '선생님') {
+    var bbDone = bbCount();
+    html += '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg,#fff7ed,#fffbeb);border:2px solid #fb923c;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(249,115,22,0.14)" onclick="openBbaba()">' +
+      '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#c2410c">📺 빠바 기초세우기 인강관</div>' +
+      '<div style="font-size:12px;color:#8a6a4f;margin-top:2px">2024 개정판 무료 유튜브 강의 16강 · 앱 안에서만 재생 (' + bbDone + '/16 완료)</div></div>' +
+      '<button style="background:#ea580c;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">보러가기 →</button></div>';
+  }
   
 
 
@@ -4712,7 +5059,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v90';
+var TOPEDU_APP_VERSION = 'v91';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
