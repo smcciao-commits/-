@@ -425,6 +425,8 @@
       <span>⏰ 시간표 일정</span>
       <span class="sec-sub" id="cur_day_label">수요일</span>
     </div>
+    <!-- v88: 조이 화상영어 새 시간표가 아직 적용되지 않는 날(11/23 이전 화·목)에만 뜨는 안내 -->
+    <div id="joy_note" style="display:none; margin:0 16px 10px; padding:10px 12px; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:14px; font-size:12.5px; color:#92400e; font-weight:700; line-height:1.5; text-align:left;"></div>
     <div class="card-list" id="schedule_list"></div>
 
     <!-- Everyday Quests -->
@@ -719,6 +721,19 @@
     function renderAll() {
       renderTabs();
       document.getElementById('cur_day_label').textContent = curDay === '주말' ? '토·일 주말' : curDay + '요일 스케줄';
+
+      // v88: 이번 주 화·목(11/23 이전)에는 "다음 주부터 3:00~3:25" 안내를 띄워 헷갈리지 않게
+      const joyNoteEl = document.getElementById('joy_note');
+      if (joyNoteEl) {
+        if ((curDay === '화' || curDay === '목') && !joyNewTimeOn(curDay)) {
+          const d = upcomingDateOf(curDay);
+          const n = new Date(d.getTime()); n.setDate(n.getDate() + 7);
+          joyNoteEl.style.display = 'block';
+          joyNoteEl.textContent = '🕒 이번 주 ' + (d.getMonth() + 1) + '/' + d.getDate() + '(' + curDay + ')은 조이 화상영어 수업이 없어요. 다음 주 ' + (n.getMonth() + 1) + '/' + n.getDate() + '(' + curDay + ')부터 3:00~3:25로 바뀝니다.';
+        } else {
+          joyNoteEl.style.display = 'none';
+        }
+      }
       
       const schEl = document.getElementById('schedule_list');
       const items = SCHEDULE[curDay] || [];
