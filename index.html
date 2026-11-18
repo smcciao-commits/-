@@ -2642,9 +2642,10 @@ window.onYouTubeIframeAPIReady = function () {
 };
 
 function bbSrc(id) {
+  /* origin 은 인코딩하지 않고 그대로 넣어야 유튜브가 받아요(에듀키즈와 같은 방식) */
   return 'https://www.youtube-nocookie.com/embed/' + id +
     '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=' +
-    encodeURIComponent(location.protocol + '//' + location.host);
+    location.protocol + '//' + location.host;
 }
 
 function openBbaba() {
