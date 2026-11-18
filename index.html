@@ -4857,6 +4857,7 @@ function hostAct(a){
   var now = Date.now();
   if(a === 'start' && B.room.status === 'lobby'){
     B.room.status = 'run';
+    B.autoEnd = false;
     B.room.startAt = now + 3000;
     B.room.endAt = B.room.startAt + (B.room.mins * 60 * 1000);
     try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(B.room)); } catch(e){}
@@ -4945,7 +4946,15 @@ function hostRender(v){
       '<div class="rk"><h3>🏁 실시간 순위 <span class="small" style="font-size:16px">(맞힌 개수)</span></h3><div id="race">'+raceRows(v)+'</div></div>';
     app.innerHTML=html;
     $('#bend').onclick=function(){ if(confirm('지금 끝낼까요?')) hostAct('end'); };
-    bClock(function(){ var c=$('#bclk'); if(!c) return; var s=B.startAt-Date.now(); c.textContent=s>0?('준비 '+Math.ceil(s/1000)):mmss(B.endAt-Date.now()); c.style.color=(s<=0&&B.endAt-Date.now()<=10000)?'var(--no)':''; });
+    bClock(function(){
+      var c=$('#bclk'); if(!c) return;
+      var s=B.startAt-Date.now(), left=B.endAt-Date.now();
+      c.textContent=s>0?('준비 '+Math.ceil(s/1000)):mmss(left);
+      c.style.color=(s<=0&&left<=10000)?'var(--no)':'';
+      /* v93: 시간이 다 되면 선생님이 [지금 끝내기]를 누르지 않아도 자동으로 최종 결과로 넘어간다.
+         (v92까지는 칠판이 0:00에서 멈춰 서서, 학생 폰은 '수고했어요' 화면에 갇혔다) */
+      if(s<=0 && left<=0 && B.room && B.room.status==='run' && !B.autoEnd){ B.autoEnd=true; hostAct('end'); }
+    });
   } else if(v.status==='end'){
     var r=v.rank||[], md=['🥇','🥈','🥉'];
     var pod=[1,0,2].filter(function(i){return r[i];}).map(function(i){ var rk=(r[i].rank||(i+1)); return '<div class="p'+(i+1)+'"><div class="m">'+(md[rk-1]||'🎖️')+'</div><div class="nm">'+esc(r[i].name)+'</div><div class="sc">'+btScoreTxt(r[i])+'</div></div>'; }).join('');
@@ -5051,9 +5060,16 @@ function playerEnter(v){
       for(var i = 0; i < m.list.length; i++){
         if(m.list[i].name === meName){ R.rank = m.list[i].rank; break; }
       }
-      if(R.done && !R.ended){
+      /* v93: 결과가 늦게 와도(이미 '수고했어요'로 정리된 뒤여도) 최종 순위표로 다시 그린다.
+         v92까지는 R.ended가 이미 true면 그냥 무시해서, 선생님이 6초 넘게 늦게 끝내면
+         학생 폰에 순위가 영영 안 떴다. */
+      var rsig = (m.list || []).map(function(r){ return r.name + ':' + (r.c||0) + ':' + (r.x||0) + ':' + (r.rank||0); }).join('|');
+      if(R.done){
         R.ended = true;
-        pEnd({ me: { rank: R.rank || 0, c: R.c, x: R.x }, top: (m.top || m.list.slice(0,3)), list: m.list });
+        if(R.renderedSig !== rsig){
+          R.renderedSig = rsig;
+          pEnd({ me: { rank: R.rank || 0, c: R.c, x: R.x }, top: (m.top || m.list.slice(0,3)), list: m.list });
+        }
       }
       return;
     }
@@ -5276,7 +5292,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v92';
+var TOPEDU_APP_VERSION = 'v93';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
