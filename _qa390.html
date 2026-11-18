@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>QA 390 임시 검증 페이지</title>
+<style>
+  html,body{margin:0;background:#0f172a;color:#7CFC98;font:12px/1.4 ui-monospace,monospace}
+  #wrap{padding:6px}
+  #f{width:390px;height:844px;border:0;display:block;background:#fff}
+  #bar{margin-top:6px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <iframe id="f" title="390 viewport"></iframe>
+  <div id="bar">ready</div>
+</div>
+<script>
+var p = new URLSearchParams(location.search);
+var u = p.get('u') || 'index.html?v=90(qa)';
+document.getElementById('f').src = u;
+document.getElementById('bar').textContent = 'iframe src = ' + u;
+</script>
+</body>
+</html>
