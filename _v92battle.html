@@ -5,20 +5,28 @@
 <title>v92 단어 대결 전수 검증 (중2 · 예비고1)</title>
 <style>
   html,body{margin:0;background:#0b1220;color:#cbd5e1;font:12px/1.45 ui-monospace,SFMono-Regular,monospace}
-  #top{padding:8px 12px;white-space:pre-wrap;color:#fff;border-bottom:1px solid #1e293b}
-  #top b{color:#7CFC98}
-  #stage{padding:10px 12px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
-  .dev{display:flex;flex-direction:column;gap:4px}
-  .lab{color:#fff;font-weight:700}
-  .lab span{color:#64748b;font-weight:400}
+  #bar{display:flex;gap:6px;flex-wrap:wrap;padding:6px 10px;border-bottom:1px solid #1e293b;background:#111827}
+  #bar button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:5px 10px;font:700 12px/1 ui-monospace,monospace;cursor:pointer}
+  #bar button.on{background:#0d9488;border-color:#0d9488;color:#fff}
+  #status{padding:6px 10px;white-space:pre-wrap;color:#fff}
+  #stage{padding:8px 10px}
+  .dev{display:none}
+  .dev.on{display:block}
   iframe{border:2px solid #334155;background:#fff;display:block}
+  .cap{color:#94a3b8;margin-bottom:3px}
 </style>
 </head>
 <body>
-<div id="top">준비 중…</div>
+<div id="bar">
+  <button data-v="t" class="on">👩‍🏫 선생님</button>
+  <span id="sbtns"></span>
+  <button data-v="all">모두 보기</button>
+</div>
+<div id="status">준비 중…</div>
 <div id="stage"></div>
 <script>
-/* 검증 하네스: 기기별(iframe)로 세션을 따로 세팅해 한 화면에서 교사 1대 + 학생 여러 대를 띄운다.
+/* v92 대결 검증 하네스 — 기기(iframe)마다 세션을 따로 세팅하고, 한 번에 한 기기만 크게 띄운다.
+   iframe은 숨겨져도 계속 돌아가므로(대결 로직은 setInterval) 여러 기기가 동시에 진행된다.
    ?nobc=1 이므로 같은 기기용 BroadcastChannel은 꺼지고 실시간 허브(MQTT)만으로 통신한다. */
 var q = new URLSearchParams(location.search);
 var ban = q.get('ban') || '수지중2';
@@ -29,10 +37,11 @@ var stus = (q.get('st') || '').split(',').filter(Boolean).map(function (x) {
 var vq = q.get('v') || '92';
 var base = 'index.html?nobc=1&v=' + vq;
 
-function dev(label, w, h, id) {
+function mkDev(id, label, w, h) {
   var d = document.createElement('div');
-  d.className = 'dev';
-  d.innerHTML = '<div class="lab">' + label + '</div>';
+  d.className = 'dev' + (id === 't' ? ' on' : '');
+  d.id = 'dev-' + id;
+  d.innerHTML = '<div class="cap">' + label + '</div>';
   var f = document.createElement('iframe');
   f.id = id; f.title = id;
   f.style.width = w + 'px'; f.style.height = h + 'px';
@@ -40,9 +49,34 @@ function dev(label, w, h, id) {
   document.getElementById('stage').appendChild(d);
   return f;
 }
-var tf = dev('👩‍🏫 선생님(칠판) · ' + ban + ' <span>1180×900</span>', 1180, 900, 'teacher');
+var tf = mkDev('t', '👩‍🏫 선생님(칩판) · ' + ban + ' · 1180×900', 1180, 900);
 stus.forEach(function (s, i) {
-  dev('📱 학생' + (i + 1) + ' · ' + s.name + ' <span>' + ban + ' · 390×844</span>', 390, 844, 's' + (i + 1));
+  mkDev('s' + (i + 1), '📱 학생' + (i + 1) + ' · ' + s.name + ' · ' + ban + ' · 390×844', 390, 844);
+  var b = document.createElement('button');
+  b.textContent = '학생' + (i + 1) + ' ' + s.name;
+  b.dataset.v = 's' + (i + 1);
+  document.getElementById('sbtns').appendChild(b);
+});
+function show(v) {
+  [].forEach.call(document.querySelectorAll('.dev'), function (d) {
+    d.classList.toggle('on', v === 'all' ? true : d.id === 'dev-' + v);
+  });
+  [].forEach.call(document.querySelectorAll('#bar button'), function (b) {
+    b.classList.toggle('on', b.dataset.v === v);
+  });
+  if (v === 'all') {
+    [].forEach.call(document.querySelectorAll('.dev iframe'), function (f) {
+      f.style.width = '560px'; f.style.height = '430px';
+    });
+  } else if (v === 't') {
+    tf.style.width = '1180px'; tf.style.height = '900px';
+  } else {
+    var f = document.getElementById(v);
+    f.style.width = '390px'; f.style.height = '844px';
+  }
+}
+[].forEach.call(document.querySelectorAll('#bar button'), function (b) {
+  b.onclick = function () { show(b.dataset.v); };
 });
 
 function seed(i) {
@@ -51,48 +85,39 @@ function seed(i) {
     else localStorage.setItem('cred', JSON.stringify({ ban: ban, name: stus[i].name, pw: stus[i].pw }));
   } catch (e) {}
 }
-function loadFrame(f, url, then) {
-  f.onload = function () { f.onload = null; setTimeout(then, 400); };
-  f.src = url + '&t=' + Date.now();
-}
-/* 교사 화면은 세션 없이 띄운다(로그인 화면 → 선생님 화면으로 직접 들어감) */
 function chain(i) {
   if (i >= stus.length) return;
   var f = document.getElementById('s' + (i + 1));
   seed(i);
-  f.onload = function () {
-    f.onload = null;
-    setTimeout(function () { chain(i + 1); }, 500);
-  };
+  f.onload = function () { f.onload = null; setTimeout(function () { chain(i + 1); }, 500); };
   f.src = base + '&stu=' + encodeURIComponent(stus[i].name) + '&t=' + Date.now();
 }
 seed(-1);
-loadFrame(tf, base, function () { chain(0); });
+tf.onload = function () { tf.onload = null; setTimeout(function () { chain(0); }, 500); };
+tf.src = base + '&t=' + Date.now();
 
 function txt(doc, id) {
   var el = doc && doc.getElementById(id);
   return el ? String(el.textContent || '').trim().replace(/\s+/g, ' ') : '';
 }
-function frameLine(id, label) {
+function line(id, label) {
   try {
     var f = document.getElementById(id), w = f.contentWindow, d = f.contentDocument;
     if (!w || !d || !d.body || !String(d.body.innerHTML || '').trim()) return label + ': (로드 중)';
     var errs = w.__topeduErrors || [];
-    var h1 = d.querySelector('h1');
-    var head = h1 ? String(h1.textContent || '').trim() : '';
+    var h = d.querySelector('h1');
     var net = txt(d, 'bnet') || txt(d, 'stu_net');
-    var out = label + ' | ' + (w.TOPEDU_APP_VERSION || '?') + ' | ' + (head || '—');
+    var out = label + ' | ' + (w.TOPEDU_APP_VERSION || '?') + ' | ' + (h ? h.textContent : '—');
     if (net) out += ' | ' + net;
     out += ' | 오류 ' + errs.length;
-    if (errs.length) out += '\n      ↳ ' + errs.slice(0, 2).join(' / ');
+    if (errs.length) out += ' ↳ ' + errs.slice(0, 2).join(' / ');
     return out;
   } catch (e) { return label + ': ' + e; }
 }
 function tick() {
-  var lines = ['실서버 ' + location.origin + ' ' + 'v92' + ' · ' + ban + ' · 학생 ' + stus.length + '명 · ' + new Date().toLocaleTimeString('ko-KR'),
-               frameLine('teacher', '선생님')];
-  stus.forEach(function (s, i) { lines.push(frameLine('s' + (i + 1), '학생' + (i + 1) + ' ' + s.name)); });
-  document.getElementById('top').innerHTML = '<b>v92 단어 대결 전수 검증</b> (nobc=1 · 기기별 실시간 허브 MQTT)\n' + lines.join('\n');
+  var L = ['실서버 ' + location.origin + ' v92 · ' + ban + ' · ' + new Date().toLocaleTimeString('ko-KR'), line('t', '선생님')];
+  stus.forEach(function (s, i) { L.push(line('s' + (i + 1), '학생' + (i + 1) + ' ' + s.name)); });
+  document.getElementById('status').textContent = L.join('\n');
 }
 setInterval(tick, 1000);
 tick();
