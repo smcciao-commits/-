@@ -19,6 +19,12 @@ fetch('harin.html?qa=' + Date.now(), {cache:'no-store'}).then(function(r){ retur
   html = html.replace("navigator.serviceWorker.register('sw.js')", "Promise.resolve()");
   var hook = '<script>window.__qaErrs=[];(function(){window.addEventListener("error",function(e){try{window.__qaErrs.push("ERROR "+(e.message||e.type)+" L"+(e.lineno||""))}catch(x){}},true);window.addEventListener("unhandledrejection",function(e){try{window.__qaErrs.push("REJECT "+((e.reason&&e.reason.message)||e.reason))}catch(x){}});var ce=console.error;console.error=function(){try{window.__qaErrs.push("CONSOLE "+Array.prototype.join.call(arguments," "))}catch(x){};return ce.apply(console,arguments)};})();<\/script>';
   var dir = location.href.replace(/[^\/]*$/, '');
+  var fake = (location.search.match(/[?&]fake=(\d{4}-\d{2}-\d{2})/) || [])[1];
+  if (fake) {
+    var p = fake.split('-');
+    var fakeHook = '<script>(function(){var R=Date;var T=new R(' + (+p[0]) + ',' + (+p[1] - 1) + ',' + (+p[2]) + ',10,0,0).getTime()-R.now();function ND(){var a=[].slice.call(arguments);if(!a.length)return new R(R.now()+T);if(a.length===1)return new R(a[0]);return new R(a[0],a[1],a[2],a[3]||0,a[4]||0,a[5]||0,a[6]||0)}ND.now=function(){return R.now()+T};ND.parse=R.parse;ND.UTC=R.UTC;ND.prototype=R.prototype;window.Date=ND;})();<\/script>';
+    html = html.replace('<head>', '<head>' + fakeHook);
+  }
   html = html.replace('<head>', '<head><base href="' + dir + '">' + hook);
   var f = document.getElementById('f');
   f.onload = function(){
