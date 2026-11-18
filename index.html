@@ -2599,7 +2599,7 @@ var BB_LECTURES = [
     { id: 'uzkYpSmErjs', lb: '2편 · 45:14', s: '스캇영어학원', ed: 'new' } ] }
 ];
 var BB_SEL = { ch: 1, part: 0 };
-var BB_YT = null, BB_API_READY = false, BB_API_WAIT = [];
+var BB_YT = null, BB_API_READY = false, BB_API_WAIT = [], BB_FALLBACK = false;
 
 function bbPad(n) { return ('0' + n).slice(-2); }
 function bbWho() {
@@ -2683,6 +2683,7 @@ function bbMountVideo(id) {
       wrap.innerHTML = '<div id="bbPlayerBox" style="width:100%;height:100%"></div>';
       BB_YT = new YT.Player('bbPlayerBox', {
         videoId: id,
+        host: 'https://www.youtube-nocookie.com',
         width: '100%', height: '100%',
         playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, origin: location.protocol + '//' + location.host },
         events: { onStateChange: bbOnState, onError: bbOnError }
@@ -2717,6 +2718,18 @@ function bbOnState(e) {
   }
 }
 function bbOnError(e) {
+  /* 유튜브가 이 기기에서 API 재생을 거부하면(101·150·153 등) 일반 임베드로 한 번만 갈아타요 */
+  var code = (e && e.data) || 0;
+  if (!BB_FALLBACK && (code === 101 || code === 150 || code === 153 || code === 2)) {
+    BB_FALLBACK = true;
+    try { if (BB_YT && BB_YT.destroy) BB_YT.destroy(); } catch (err) {}
+    BB_YT = null;
+    var wrap0 = document.getElementById('bbPlayerWrap');
+    if (wrap0) {
+      wrap0.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(bbCurVideo().id) + '" title="탑에듀 빠바 인강" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
+      return;
+    }
+  }
   var cov = document.getElementById('bbCover');
   if (!cov) return;
   var t = document.getElementById('bbCoverT'), s2 = document.getElementById('bbCoverS');
