@@ -1089,6 +1089,10 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .bb-player iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 .bb-guard-top { position: absolute; top: 0; left: 0; right: 0; height: 54px; z-index: 12; background: transparent; }
 .bb-guard-br { position: absolute; bottom: 0; right: 0; width: 100px; height: 42px; z-index: 12; background: transparent; }
+.bb-start { position: absolute; inset: 0; z-index: 18; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; background: rgba(15,23,42,.32); }
+.bb-start.off { display: none; }
+.bb-play { border: none; border-radius: 999px; padding: 13px 26px; font-size: 15px; font-weight: 800; font-family: inherit; color: #fff; background: linear-gradient(135deg,#0d9488,#14b8a6); box-shadow: 0 6px 18px rgba(13,148,136,.45); cursor: pointer; }
+.bb-start-s { font-size: 11px; color: #e2e8f0; font-weight: 700; }
 .bb-cover { position: absolute; inset: 0; z-index: 20; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px; background: rgba(15,23,42,.94); color: #fff; }
 .bb-cover.on { display: flex; }
 .bb-cover-t { font-family: Maplestory, sans-serif; font-size: 14.5px; color: #5eead4; margin-bottom: 6px; }
@@ -1222,6 +1226,10 @@ function forceAppRefresh(e) {
       </div>
       <div class="bb-guard-top" onclick="event.stopPropagation();event.preventDefault();return false;"></div>
       <div class="bb-guard-br" onclick="event.stopPropagation();event.preventDefault();return false;"></div>
+      <div class="bb-start off" id="bbStartCover">
+        <button type="button" class="bb-play" onclick="bbResume()">▶ 강의 재생</button>
+        <div class="bb-start-s" id="bbStartS">누르면 바로 재생돼요</div>
+      </div>
       <div class="bb-cover" id="bbCover">
         <div class="bb-cover-t" id="bbCoverT">강의 끝! 수고했어요 👏</div>
         <div class="bb-cover-s" id="bbCoverS">다른 영상으로 넘어가지 않도록 여기서 멈췄어요.</div>
@@ -2698,6 +2706,7 @@ function bbMountVideo(id) {
         playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, origin: location.protocol + '//' + location.host },
         events: { onStateChange: bbOnState, onError: bbOnError }
       });
+      bbShowStart(true);
       setTimeout(function () {
         try {
           var f = BB_YT.getIframe();
@@ -2708,13 +2717,24 @@ function bbMountVideo(id) {
     } catch (e) {}
   }
   /* API가 아직이면 일반 임베드로 먼저 틀어 줘요 */
+  bbShowStart(false);
   if (wrap) {
     wrap.innerHTML = '<iframe id="bbFrame" src="' + bbSrc(id) + '" title="탑에듀 빠바 인강" frameborder="0" referrerpolicy="origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
   }
   BB_API_WAIT.push(function () { /* API 준비 후에도 재생을 끊지 않도록 그대로 둬요 */ });
 }
+function bbShowStart(on) {
+  var e = document.getElementById('bbStartCover');
+  if (!e) return;
+  if (on) e.classList.remove('off'); else e.classList.add('off');
+}
+function bbResume() {
+  bbShowStart(false);
+  try { if (BB_YT && BB_YT.playVideo) BB_YT.playVideo(); } catch (e) {}
+}
 function bbOnState(e) {
   if (!e) return;
+  if (e.data === 1) { bbShowStart(false); return; }
   if (e.data === 0) {
     bbMark(BB_SEL.ch, true);
     bbRenderInfo();
@@ -2724,8 +2744,11 @@ function bbOnState(e) {
       if (t) t.textContent = '강의 끝! 수고했어요 👏';
       if (s2) s2.textContent = '다른 영상으로 넘어가지 않도록 여기서 멈췄어요.';
       cov.classList.add('on');
+      bbShowStart(false);
     }
+    return;
   }
+  if (e.data === -1 || e.data === 2 || e.data === 5) bbShowStart(true);
 }
 function bbOnError(e) {
   /* 유튜브가 이 기기에서 API 재생을 거부하면(101·150·153 등) 일반 임베드로 한 번만 갈아타요 */
