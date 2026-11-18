@@ -4570,23 +4570,11 @@ function pWait(v){
     '<span id="stu_net" style="display:inline-block;margin-top:8px;background:#fef9c3;color:#854d0e;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:700">🟡 연결 중…</span><br>' +
     '<span class="small" style="display:block;margin-top:8px">연결되면 인원이 실시간으로 늘어나요.</span></div>' +
     '<div class="card small" id="joinprob" style="display:none;background:#fffbeb;border-color:#fde68a;color:#92400e;text-align:center;max-width:420px;margin:0 auto 12px;font-size:14px;line-height:1.6"></div>' +
-    '<button id="btn_force_start" class="btn" style="margin:18px auto 6px;max-width:380px;background:#10b981;font-size:15.5px;padding:13px;box-shadow:0 4px 12px rgba(16,185,129,0.35);">' +
-      '▶️ 칠판에 카운트다운 시작됐으면 터치!' +
-    '</button>' +
     '<div id="pnames" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center"></div></div>';
   bindBack(playerExit);
-
-  var btnForce = $('#btn_force_start');
-  if(btnForce){
-    btnForce.onclick = function(){
-      if(!R.startAt){
-        if(!R.qs || !R.qs.length){
-          R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en');
-        }
-        raceStart({ startIn: 1000, endIn: 180000 }, B.gen);
-      }
-    };
-  }
+  /* v89: 학생 폰에서 혼자 먼저 시작하는 버튼을 없앴습니다.
+     시작은 오직 선생님이 칠판(교사 화면)에서 [시작하기]를 누를 때만 — 그 'start' 신호를 받아
+     모든 학생 폰이 같은 startAt(절대 시각)으로 동시에 출발합니다. */
 }
 
 function raceStart(v,g){
@@ -4713,7 +4701,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v87';
+var TOPEDU_APP_VERSION = 'v89';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
