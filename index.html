@@ -4886,7 +4886,10 @@ function showBattleSetup(){
         /* 문장 대결을 처음 열면 그 반 문장 세트를 미리 체크해 둔다(선생님이 손 안 대도 바로 시작 가능) */
         if(mode==='sentence' && !spicked.length){
           var ban=$('#bban').value;
-          if(ban) sentSetsForBan(ban).forEach(function(st){ if(spicked.indexOf(st.name)<0) spicked.push(st.name); });
+          /* 그 반 전용 세트만 미리 체크한다(반 지정 없는 연습용 세트는 선생님이 직접 고를 때만) */
+          if(ban) sentSetsForBan(ban).forEach(function(st){
+            if(st.bans && st.bans.indexOf(ban)>=0 && spicked.indexOf(st.name)<0) spicked.push(st.name);
+          });
         }
         syncMode(); drawSent();
       };
