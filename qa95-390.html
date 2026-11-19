@@ -17,13 +17,17 @@
 </div>
 <script>
 var p = new URLSearchParams(location.search);
+var w0 = parseInt(p.get('w') || '390', 10), h0 = parseInt(p.get('h') || '844', 10);
 var u = p.get('u') || ('index.html?v=95(qa)&t=' + Date.now());
 var f = document.getElementById('f');
+f.style.width = w0 + 'px'; f.style.height = h0 + 'px';
+/* sb=1: 전체화면(requestFullscreen)을 못 쓰는 웹뷰·PWA 상황을 흉내내요 → CSS 90도 회전 경로 */
+if (p.get('sb') === '1') f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-modals');
 window.__errs = [];
 window.__info = {};
 function draw() {
   var bar = document.getElementById('bar');
-  bar.textContent = 'iframe = ' + u +
+  bar.textContent = 'iframe = ' + u + (p.get('sb') === '1' ? '  [sandbox: 전체화면 불가]' : '') +
     '\nviewport = ' + ((window.__info.w || '?') + 'x' + (window.__info.h || '?')) +
     '  errors = ' + window.__errs.length +
     (window.__errs.length ? ('\n' + window.__errs.slice(-8).join('\n')) : '');
