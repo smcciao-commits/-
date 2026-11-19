@@ -1159,6 +1159,47 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .bb-ch span { display: block; font-size: 9px; color: #475569; margin-top: 2px; word-break: keep-all; }
 .bb-ch.on { border-color: #0d9488; background: #f0fdfa; box-shadow: 0 2px 8px rgba(13,148,136,.16); }
 .bb-ch.done:after { content: '✓'; position: absolute; top: -5px; right: -4px; width: 15px; height: 15px; border-radius: 50%; background: #0d9488; color: #fff; font-size: 9.5px; line-height: 15px; font-weight: 900; }
+.bb-donebtn.wait { background: linear-gradient(135deg,#f59e0b,#fbbf24); color: #78350f; }
+.bb-watch { padding: 9px 14px 2px; }
+.bb-watch-bar { height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
+.bb-watch-bar i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg,#0d9488,#14b8a6); transition: width .35s; }
+.bb-watch-t { font-size: 11.5px; color: #64748b; margin-top: 5px; text-align: center; font-weight: 700; }
+.bb-warn { display: none; margin: 8px 14px 0; padding: 10px 12px; border-radius: 12px; font-size: 12.5px; line-height: 1.55; font-weight: 700; }
+.bb-warn.on { display: block; }
+.bb-warn.no { background: #fffbeb; border: 1.5px solid #fcd34d; color: #92400e; }
+.bb-warn.cheat { background: #fef2f2; border: 1.5px solid #fca5a5; color: #b91c1c; }
+.hp-card { margin: 10px 0 14px; padding: 15px 16px; border-radius: 18px; border: 2.5px solid #7c3aed;
+  background: linear-gradient(135deg,#f5f3ff,#fdf4ff); box-shadow: 0 5px 18px rgba(124,58,237,0.18); }
+.hp-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.hp-ttl { font-family: Maplestory, sans-serif; font-weight: 700; font-size: 15.5px; color: #5b21b6; }
+.hp-pill { font-size: 11.5px; font-weight: 800; color: #6d28d9; background: #fff; border: 1.5px solid #c4b5fd; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.hp-main { font-size: 15px; font-weight: 800; color: #2d3748; margin: 9px 0 3px; line-height: 1.45; }
+.hp-main b { color: #6d28d9; }
+.hp-sub { font-size: 12.5px; color: #6b21a8; line-height: 1.5; }
+.hp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 9px 0 11px; }
+.hp-chip { font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #fff; border: 1.5px solid #ddd6fe; color: #6d28d9; }
+.hp-chip.on { background: #dcfce7; border-color: #86efac; color: #15803d; }
+.hp-chip.no { background: #fff; border-color: #fecaca; color: #b91c1c; }
+.hp-list { margin: 10px 0 4px; }
+.hp-item { display: flex; align-items: center; gap: 8px; padding: 9px 10px; background: #fff; border: 1.5px solid #ddd6fe; border-radius: 12px; margin-bottom: 6px; }
+.hp-item.on { background: #f0fdf4; border-color: #86efac; }
+.hp-item.sub { padding: 7px 10px; border-style: dashed; }
+.hp-ck { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: #f5f3ff; color: #7c3aed; border: 1.5px solid #c4b5fd;
+  font-size: 12.5px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+.hp-item.on .hp-ck { background: #dcfce7; color: #15803d; border-color: #86efac; }
+button.hp-ck.tap { cursor: pointer; font-family: inherit; }
+.hp-itx { flex: 1; min-width: 0; }
+.hp-itx b { display: block; font-size: 13px; color: #2d3748; line-height: 1.35; }
+.hp-itx span { display: block; font-size: 11.5px; color: #7c6a9c; margin-top: 2px; line-height: 1.4; }
+.hp-go { flex-shrink: 0; background: #7c3aed; color: #fff; border: none; border-radius: 9px; padding: 7px 10px; font-size: 11.5px;
+  font-weight: 800; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.hp-btns { display: flex; gap: 8px; }
+.hp-btns button { flex: 1; border: none; border-radius: 12px; padding: 11px 8px; font-weight: 800; font-size: 13px;
+  font-family: inherit; cursor: pointer; color: #fff; background: #7c3aed; }
+.hp-btns button.ghost { background: #fff; color: #6d28d9; border: 1.5px solid #c4b5fd; }
+.hp-note { font-size: 11px; color: #8b7ba8; margin-top: 8px; line-height: 1.45; }
+.hp-day { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px dashed #ddd6fe; font-size: 12.5px; }
+.hp-day.today { background: #f5f3ff; font-weight: 800; color: #5b21b6; }
 .bb-donebtn { width: 100%; margin-top: 10px; border: none; border-radius: 12px; padding: 11px; font-size: 13px; font-weight: 800; font-family: inherit; cursor: pointer; background: linear-gradient(135deg,#0d9488,#14b8a6); color: #fff; }
 .bb-donebtn.off { background: #e2e8f0; color: #64748b; }
 .bb-foot { margin-top: 10px; font-size: 10px; color: #94a3b8; line-height: 1.6; }
@@ -1370,6 +1411,12 @@ function forceAppRefresh(e) {
       <button type="button" class="bb-cbtn" data-rate="1.25" onclick="bbSetRate(1.25)">1.25배속</button>
       <button type="button" class="bb-cbtn" id="bbFsBtn" onclick="bbFullscreen()">⛶ 가로 전체화면</button>
     </div>
+    <!-- v96: 실제 시청 시간 게이지 · 미시청 완료 차단 경고 -->
+    <div class="bb-watch" id="bbWatch">
+      <div class="bb-watch-bar"><i id="bbWatchFill"></i></div>
+      <div class="bb-watch-t" id="bbWatchTxt">시청 0% · 재생하면 실제 시청 시간이 쌓여요</div>
+    </div>
+    <div class="bb-warn" id="bbWarn"></div>
     <div id="bbInfo"></div>
     <div class="bb-listttl"><span id="bbGridTtl">📚 01강 ~ 16강</span><span class="bb-prog" id="bbProgTxt"></span></div>
     <div class="bb-grid" id="bbGrid"></div>
@@ -2069,21 +2116,58 @@ function getAudioCtx(){
     var AC = window.AudioContext || window.webkitAudioContext;
     if(!AC) return null;
     if(!_audioCtx) _audioCtx = new AC();
-    if(_audioCtx.state === 'suspended'){
-      _audioCtx.resume().catch(function(){});
-    }
     return _audioCtx;
   } catch(e){ return null; }
 }
 
+/* v96: iOS/Android WebAudio 잠금 해제 — 무음 1샘플을 실제로 재생해 컨텍스트를 깨운다.
+   (예전에는 resume() 를 '걸어만' 두고 기다리지 않아서, 첫 제스처 전에 잠긴 컨텍스트에서는
+    오실레이터가 예약만 되고 소리가 안 났다. 특히 문장 대결 sbGrade() 는 setTimeout(280ms)
+    안에서 불려 제스처 문맥이 끊긴 채로 실행된다) */
+var _audioUnlocked = false;
+function unlockAudio(){
+  var ctx = getAudioCtx();
+  if(!ctx) return null;
+  try {
+    if(ctx.state === 'suspended' && ctx.resume){
+      var p = ctx.resume();
+      if(p && p.catch) p.catch(function(){});
+    }
+  } catch(e){}
+  if(!_audioUnlocked){
+    try {
+      var b = ctx.createBuffer(1, 1, 22050);
+      var s = ctx.createBufferSource();
+      s.buffer = b;
+      s.connect(ctx.destination);
+      if(s.start) s.start(0);
+      _audioUnlocked = true;
+    } catch(e){}
+  }
+  return ctx;
+}
+
+/* v96: suspended 면 resume() 이 '끝난 뒤에' 소리를 만든다(그 전에 start 하면 무음) */
+function _playWhenReady(fn){
+  if(!isSoundOn()) return;
+  var ctx = getAudioCtx();
+  if(!ctx) return;
+  var run = function(){ try { fn(ctx); } catch(e){} };
+  try {
+    if(ctx.state === 'suspended' && ctx.resume){
+      var p = ctx.resume();
+      if(p && p.then){ p.then(run).catch(run); }
+      else run();
+      return;
+    }
+  } catch(e){}
+  run();
+}
+function _sndDbg(k){ try { var d = window.__soundDebug || (window.__soundDebug = {correct:0,wrong:0,fanfare:0}); d[k] = (d[k]||0) + 1; } catch(e){} }
+
 if(typeof window !== 'undefined'){
-  ['click', 'touchstart', 'touchend', 'keydown'].forEach(function(ev){
-    window.addEventListener(ev, function(){
-      var ctx = getAudioCtx();
-      if(ctx && ctx.state === 'suspended'){
-        ctx.resume().catch(function(){});
-      }
-    }, { passive: true, capture: true });
+  ['touchstart', 'touchend', 'pointerdown', 'mousedown', 'click', 'keydown'].forEach(function(ev){
+    window.addEventListener(ev, function(){ unlockAudio(); }, { passive: true, capture: true });
   });
 }
 
@@ -2106,10 +2190,7 @@ document.addEventListener('click', function(e){
 
 /* 정답 사운드: 맑고 경쾌한 띵동 (G5 784Hz -> C6 1046.5Hz) */
 function playCorrectSound(){
-  if(!isSoundOn()) return;
-  var ctx = getAudioCtx();
-  if(!ctx) return;
-  try {
+  _playWhenReady(function(ctx){
     var now = ctx.currentTime;
     // 띵 (G5)
     var osc1 = ctx.createOscillator();
@@ -2137,15 +2218,13 @@ function playCorrectSound(){
     gain2.connect(ctx.destination);
     osc2.start(t2);
     osc2.stop(t2 + 0.48);
-  } catch(e){}
+    _sndDbg('correct');
+  });
 }
 
 /* 오답 사운드: 퀴즈 버저 삑~ (175Hz -> 140Hz sawtooth) */
 function playWrongSound(){
-  if(!isSoundOn()) return;
-  var ctx = getAudioCtx();
-  if(!ctx) return;
-  try {
+  _playWhenReady(function(ctx){
     var now = ctx.currentTime;
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
@@ -2160,15 +2239,13 @@ function playWrongSound(){
     gain.connect(ctx.destination);
     osc.start(now);
     osc.stop(now + 0.29);
-  } catch(e){}
+    _sndDbg('wrong');
+  });
 }
 
 /* 축하 팡파레: 100점 만점 / 완벽 통과 */
 function playFanfareSound(){
-  if(!isSoundOn()) return;
-  var ctx = getAudioCtx();
-  if(!ctx) return;
-  try {
+  _playWhenReady(function(ctx){
     var now = ctx.currentTime;
     var notes = [
       { f: 523.25, t: 0.00, d: 0.12 },
@@ -2189,7 +2266,8 @@ function playFanfareSound(){
       osc.start(now + n.t);
       osc.stop(now + n.t + n.d + 0.02);
     });
-  } catch(e){}
+    _sndDbg('fanfare');
+  });
 }
 
 function topBar(title, backFn){
@@ -2653,6 +2731,21 @@ function renderHwCheck(){
   h += '<div class="hwc-chips">' + chips.map(function(x){ return '<button type="button" class="hwc-chip' + (x === HWC_FILTER ? ' on' : '') + '" data-f="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>';
   h += '<div class="hwc-counts" id="hwCounts">' + hwcCountsHTML(c) + '</div>';
   h += '</div>';
+  /* v96: 오늘 인강 꼼수 시도 기록 + 학부모 문자 원터치 복사 */
+  var _ch = bbCheatList().filter(function (x) { return x.date === date; });
+  if (_ch.length) {
+    h += '<div style="margin:0 0 10px;padding:10px 12px;background:#fff5f5;border:1.5px solid #fca5a5;border-radius:12px">'
+      + '<div style="font-size:13px;font-weight:800;color:#b91c1c;margin-bottom:6px">🚨 오늘 인강 미시청/꼼수 시도 ' + _ch.length + '건</div>';
+    _ch.forEach(function (x) {
+      h += '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px dashed #fecaca">'
+        + '<div style="font-size:12px;color:#7f1d1d;line-height:1.45"><b>' + esc(x.name) + '</b>(' + esc(x.ban) + ') · ' + esc(x.label || '')
+        + ' · 시청 ' + esc(bbSec(x.watched || 0)) + '/' + esc(bbSec(x.need || 0)) + '</div>'
+        + '<button type="button" class="btn-sm" data-sms="' + esc(x.sms || '') + '" onclick="bbCopyCheat(this)" style="flex-shrink:0;background:#b91c1c;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11.5px;font-weight:700;cursor:pointer">📋 학부모 문자</button>'
+        + '</div>';
+    });
+    h += '<div id="bbCopyPrev" style="font-size:12px;color:#7f1d1d;background:#fff;border-radius:8px;padding:8px;margin-top:6px;display:none"></div>';
+    h += '</div>';
+  }
   h += '<div class="hwc-list" id="hwList">';
   if(!list.length) h += '<div class="hwc-empty">이 반 학생이 없어요. 다른 반을 골라 주세요.</div>';
   list.forEach(function(s){
@@ -2929,6 +3022,143 @@ function bbMarkIn(bk, n, on) {
   store(bk.store, all);
 }
 function bbMark(n, on) { bbMarkIn(bbCurBook(), n, on); }
+
+/* ===== v96: 실제 시청 시간 추적 (1초 완료 꼼수 차단) =====
+   · 유튜브 플레이어가 '재생 중'(state 1)일 때만 1초마다 시청 초를 쌓는다.
+   · API 없이 일반 iframe으로 떨어진 경우에도 재생 버튼을 누른 뒤 흐른 시간을 센다.
+   · 영상 길이(타임스탬프 구간이면 그 Day 구간)의 85%(30초 이하 구간은 80%) 이상
+     실제로 봐야 완료가 되고, 끝까지 재생(e.data 0)됐을 때는 60% 이상이면 완료로 본다. */
+var BB_WATCH_KEY = 'topedu_bb_watch_v96';
+var BB_CHEAT_KEY = 'topedu_bb_cheat_v96';
+var BB_WATCH = null, BB_WATCH_TIMER = null;
+
+function bbDayStr(d){
+  var x = d || new Date();
+  return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2) + '-' + ('0' + x.getDate()).slice(-2);
+}
+function bbParseDur(s){
+  var m = String(s || '').match(/(\d+)\s*:\s*(\d{2})/);
+  return m ? (parseInt(m[1], 10) * 60 + parseInt(m[2], 10)) : 0;
+}
+function bbWatchLoad(){
+  if (BB_WATCH) return BB_WATCH;
+  var v = store(BB_WATCH_KEY);
+  BB_WATCH = (v && typeof v === 'object') ? v : {};
+  return BB_WATCH;
+}
+function bbWatchSave(){ try { store(BB_WATCH_KEY, bbWatchLoad()); } catch (e) {} }
+function bbWatchKey(){ return BB_BOOK + '|' + BB_SEL.ch + '|' + (BB_SEL.part || 0); }
+function bbWatchRec(key){
+  var all = bbWatchLoad(), k = key || bbWatchKey(), r = all[k];
+  if (!r || r.d !== bbDayStr()) { r = { sec: 0, tries: 0, flagged: 0, d: bbDayStr() }; all[k] = r; }
+  return r;
+}
+function bbWatchSec(){ return bbWatchRec().sec || 0; }
+
+/* 이 Day(강)에서 실제로 봐야 하는 구간 길이(초) */
+function bbSegLen(){
+  var bk = bbCurBook(), it = bbItems(bk), L = bbCur(), v = bbCurVideo();
+  if (!v) return 0;
+  var st = v.st || 0;
+  if (bk.mode === 'day') {
+    var i = -1;
+    for (var k = 0; k < it.length; k++) { if (it[k].n === L.n) { i = k; break; } }
+    var nx = (i >= 0) ? it[i + 1] : null;
+    if (nx && nx.v && nx.v[0] && nx.v[0].id === v.id && (nx.v[0].st || 0) > st) return (nx.v[0].st || 0) - st;
+  }
+  var full = 0;
+  try { if (BB_YT && BB_YT.getDuration) full = Math.floor(BB_YT.getDuration() || 0); } catch (e) {}
+  if (!full) full = bbParseDur(v.dur);
+  if (full > st) return full - st;
+  return bbParseDur(v.dur) || 0;
+}
+function bbNeedPct(len){ return (len && len <= 30) ? 0.80 : 0.85; }
+function bbNeedSec(){
+  var len = bbSegLen();
+  return len > 0 ? Math.ceil(len * bbNeedPct(len)) : 0;
+}
+function bbWarnBox(msg, kind){
+  var w = document.getElementById('bbWarn');
+  if (!w) return;
+  if (!msg) { w.className = 'bb-warn'; w.innerHTML = ''; return; }
+  w.className = 'bb-warn on' + (kind ? (' ' + kind) : '');
+  w.innerHTML = esc(msg).replace(/\n/g, '<br>');
+}
+function bbWatchUi(){
+  var done = bbIsDone(BB_SEL.ch), len = bbSegLen(), sec = bbWatchSec();
+  var pct = len ? Math.min(100, Math.round(sec / len * 100)) : 0;
+  var need = bbNeedSec();
+  var fill = document.getElementById('bbWatchFill'), txt = document.getElementById('bbWatchTxt');
+  if (fill) fill.style.width = pct + '%';
+  if (txt) {
+    if (done) txt.textContent = '✅ 오늘 분량 시청 완료 — ' + bbSec(sec) + ' 시청';
+    else if (!len) txt.textContent = '재생하면 실제 시청 시간이 쌓여요';
+    else txt.textContent = '시청 ' + pct + '% · ' + bbSec(sec) + ' / ' + bbSec(len) + ' · ' + Math.round(bbNeedPct(len) * 100) + '% 이상 봐야 완료';
+  }
+  var db = document.getElementById('bbDoneBtn');
+  if (!db) return;
+  var L = bbCur(), lab = (bbCurBook().mode === 'day') ? ('Day ' + bbPad(L.n)) : (bbPad(L.n) + '강');
+  if (done) { db.className = 'bb-donebtn off'; db.textContent = '✓ 완료했어요 (누르면 취소)'; }
+  else if (!len || sec >= need) { db.className = 'bb-donebtn'; db.textContent = '✓ ' + lab + ' 다 봤어요'; }
+  else { db.className = 'bb-donebtn wait'; db.textContent = '⏳ 시청 중 ' + pct + '% · ' + Math.round(bbNeedPct(len) * 100) + '% 이상 봐야 완료'; }
+}
+function bbWatchStart(){
+  if (BB_WATCH_TIMER) return;
+  BB_WATCH_TIMER = setInterval(bbWatchTick, 1000);
+}
+function bbWatchStop(){ if (BB_WATCH_TIMER) { clearInterval(BB_WATCH_TIMER); BB_WATCH_TIMER = null; } }
+function bbWatchTick(){
+  var ov = document.getElementById('bbOverlay');
+  if (!ov || !ov.classList.contains('on')) return;
+  var playing = !!BB_PLAYING;
+  try { if (BB_YT && BB_YT.getPlayerState) playing = (BB_YT.getPlayerState() === 1); } catch (e) {}
+  if (!playing) { bbWatchUi(); return; }
+  var r = bbWatchRec();
+  r.sec = (r.sec || 0) + 1;
+  bbWatchSave();
+  bbWatchUi();
+}
+
+/* ===== 학부모 안내 문자 문구 자동 생성 ===== */
+function bbParentSms(name, book, label, sec, len){
+  return '[수지탑에듀] ' + name + ' 학생이 오늘 인강을 실제 시청하지 않고 완료 버튼을 눌러 안내드립니다. ('
+    + book + ' ' + label + ' · 실제 시청 ' + bbSec(sec) + ' / ' + bbSec(len) + ') '
+    + '집에서 영상 끝까지 시청할 수 있도록 확인 부탁드립니다.';
+}
+function bbCheatList(){
+  var l = store(BB_CHEAT_KEY);
+  return Array.isArray(l) ? l : [];
+}
+function bbCheatSave(rec){
+  var l = bbCheatList(), hit = -1;
+  for (var i = 0; i < l.length; i++) {
+    if (l[i].name === rec.name && l[i].date === rec.date && l[i].bookKey === rec.bookKey && l[i].day === rec.day) { hit = i; break; }
+  }
+  if (hit >= 0) {
+    l[hit].watched = rec.watched; l[hit].pct = rec.pct; l[hit].tries = rec.tries; l[hit].time = rec.time; l[hit].sms = rec.sms;
+  } else { l.unshift(rec); }
+  if (l.length > 60) l = l.slice(0, 60);
+  try { store(BB_CHEAT_KEY, l); } catch (e) {}
+}
+function bbFlagCheat(r, sec, len, pct){
+  var name = bbWho(), ban = bbBan(), bk = bbCurBook(), L = bbCur();
+  var label = (bk.mode === 'day') ? ('Day ' + bbPad(L.n)) : (bbPad(L.n) + '강');
+  var rec = {
+    t: 'cheat', name: name, ban: ban, book: bk.name, bookKey: bk.key, day: L.n, label: label,
+    watched: sec, need: len, pct: pct, tries: (r && r.tries) || 1,
+    date: bbDayStr(), time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+    sms: bbParentSms(name, bk.name, label, sec, len)
+  };
+  bbCheatSave(rec);
+  try { sendDirectorPushNotification('🚨 인강 미시청/꼼수 시도 · ' + name + ' (' + ban + ')', '[[BBCHEAT]]' + JSON.stringify(rec), 'cheat'); } catch (e) {}
+  bbWarnBox('🚨 미시청 완료 시도가 감지되어 원장님께 알림이 기록됩니다.\n(' + label + ' · 실제 시청 ' + bbSec(sec) + ' / ' + bbSec(len) + ' · 진행률 ' + pct + '%)', 'cheat');
+}
+function bbCheatOfLog(l){
+  if (!l || !l.body) return null;
+  var s = String(l.body);
+  if (s.indexOf('[[BBCHEAT]]') !== 0) return null;
+  try { return JSON.parse(s.slice(11)); } catch (e) { return null; }
+}
 function bbDoneCount(bk) {
   var m = bbDoneMap(bk), c = 0;
   bbItems(bk).forEach(function (x) { if (m['c' + x.n]) c++; });
@@ -2993,8 +3223,10 @@ function openBbaba(key) {
   bbLoadApi();
   bbRenderBooks();
   bbSelect(BB_SEL.ch, BB_SEL.part);
+  bbWatchStart();
 }
 function closeBbaba() {
+  try { bbWatchStop(); } catch (e) {}
   try { bbExitFs(); } catch (e) {}
   try { if (BB_YT && BB_YT.stopVideo) BB_YT.stopVideo(); } catch (e) {}
   try {
@@ -3102,11 +3334,19 @@ function bbResume() {
 }
 function bbOnState(e) {
   if (!e) return;
-  if (e.data === 1) { BB_PLAYING = true; bbShowStart(false); return; }
-  if (e.data === 2) { BB_PLAYING = false; }
+  if (e.data === 1) { BB_PLAYING = true; bbShowStart(false); bbWatchStart(); return; }
+  if (e.data === 2) { BB_PLAYING = false; bbWatchUi(); }
   if (e.data === 0) {
     BB_PLAYING = false;
-    bbMark(BB_SEL.ch, true);
+    /* v96: 끝까지 재생됐고 실제 시청이 60% 이상이면 완료, 아니면 건너뛰기 경고 */
+    var _len = bbSegLen(), _sec = bbWatchSec();
+    if (!_len || _sec >= Math.ceil(_len * 0.6)) {
+      bbMark(BB_SEL.ch, true);
+      bbWarnBox('', '');
+    } else {
+      bbWarnBox('⛔ 건너뛰기가 많아 완료로 인정되지 않았어요. 실제 시청 ' + ( _len ? Math.round(_sec / _len * 100) : 0 ) + '% — '
+        + Math.round(bbNeedPct(_len) * 100) + '% 이상 봐야 완료돼요. 처음부터 다시 재생해 주세요.', 'no');
+    }
     bbRenderInfo();
     var cov = document.getElementById('bbCover');
     if (cov) {
@@ -3197,16 +3437,43 @@ function bbRenderInfo() {
     });
     g.innerHTML = s;
   }
-  var db = document.getElementById('bbDoneBtn');
-  if (db) {
-    db.className = 'bb-donebtn' + (done ? ' off' : '');
-    db.textContent = done ? '✓ 완료했어요 (누르면 취소)' : ('✓ ' + (bk.mode === 'day' ? ('Day ' + bbPad(L.n)) : (bbPad(L.n) + '강')) + ' 다 봤어요');
-  }
+  bbWatchUi();
 }
 function bbToggleDone() {
-  bbMark(BB_SEL.ch, !bbIsDone(BB_SEL.ch));
+  try { unlockAudio(); } catch (e) {}
+  /* 완료 취소는 언제나 허용 */
+  if (bbIsDone(BB_SEL.ch)) {
+    bbMark(BB_SEL.ch, false);
+    bbWarnBox('', '');
+    bbRenderInfo();
+    bbRenderBooks();
+    return;
+  }
+  var len = bbSegLen(), sec = bbWatchSec(), need = bbNeedSec();
+  var pct = len ? Math.min(99, Math.round(sec / len * 100)) : 0;
+  if (!len || sec >= need) {
+    bbMark(BB_SEL.ch, true);
+    bbWarnBox('', '');
+    try { playCorrectSound(); } catch (e) {}
+    bbRenderInfo();
+    bbRenderBooks();
+    return;
+  }
+  /* 미시청 상태에서 완료 시도 */
+  var r = bbWatchRec();
+  r.tries = (r.tries || 0) + 1;
+  bbWatchSave();
+  var msg = '영상을 끝까지 시청해야 완료됩니다.\n현재 시청 ' + pct + '% — '
+    + Math.round(bbNeedPct(len) * 100) + '% 이상(약 ' + bbSec(Math.max(1, need - sec)) + ' 더) 봐야 완료돼요.';
+  bbWarnBox('⛔ ' + msg, 'no');
+  /* 15초 미만이거나 두 번째 시도면 꼼수 완료 시도로 기록 */
+  if (sec < 15 || r.tries >= 2) {
+    bbFlagCheat(r, sec, len, pct);
+    try { alert('영상을 끝까지 시청해야 완료됩니다.\n\n🚨 미시청 완료 시도가 감지되어 원장님께 알림이 기록됩니다.'); } catch (e) {}
+  } else {
+    try { alert(msg); } catch (e) {}
+  }
   bbRenderInfo();
-  bbRenderBooks();
 }
 function bbReplay() {
   var cov = document.getElementById('bbCover');
@@ -3362,6 +3629,8 @@ function showHome(){
   var meInfo = getStreakInfo(me.ban, me.name);
   html += drawStreakHero(me);
   html += drawStudentInAppNoteCard(me.name);
+  /* v96: 📌 오늘의 집 숙제 — 반별 단어 Day 분량 (원장님이 정한 계획표) */
+  html += drawHomePlanCard(me.ban);
   html += drawSpecialHwCard(me.ban);
 
   // 초등부 전용 '에듀키즈(edukids)' 독립 전용관 안내 카드
@@ -3475,6 +3744,8 @@ function showHome(){
   try { pushStreakBoard(me.ban, me.name, false, getStreakInfo(me.ban, me.name).streak); } catch(e){}
   /* v83: 원장님이 보낸 일괄 독촉 쪽지를 학생 폰에서도 받아옴 */
   try { pullMyTeacherNote(me); } catch(e){}
+  /* v96: 원장님이 바꾼 집 숙제 계획을 실시간으로 받아옴 */
+  try { hpSubscribe(); } catch(e){}
 }
 function refreshHome(){ return login(S.cred); }
 
@@ -4127,6 +4398,540 @@ function drawSpecialHwCard(ban) {
   '</div>';
 }
 
+/* ============ v96: 📌 반별 '오늘의 집 숙제' (수업 요일 패턴대로 단어 Day 분량 자동 계획) ============
+   수민 님 확정 수업 요일:
+     · 수지중1 = 수·금반   수→금(2일 간격) 하루 2 Day / 금→수(5일 간격) 토~화 하루 1 Day + 수요일 4 Day 총복습
+     · 수지중2 = 화·목반   화→목(2일 간격) 하루 2 Day / 목→화(5일 간격) 금~월 하루 1 Day + 화요일 4 Day 총복습
+     · 예비고1 = 화·목반   위와 같고 + 주 2~3회 빠바 기초세우기 1강 추가
+   요일별 값: 숫자 = 그날 새로 나가는 Day 수, 'rev' = 수업일 + 앞 4 Day 총복습, 0 = 수업일(새 숙제 없음) */
+var HP_KEY = 'topedu_home_plan_v96';
+var HP_EDIT = '';
+var HP_WD = ['일', '월', '화', '수', '목', '금', '토'];
+var HP_WEEK = {
+  '수금': { 0: 1, 1: 1, 2: 1, 3: 'rev', 4: 2, 5: 0, 6: 1 },
+  '화목': { 0: 1, 1: 1, 2: 'rev', 3: 2, 4: 0, 5: 1, 6: 1 }
+};
+var HP_DEFAULTS = {
+  '수지중1': { pattern: '수금', startDate: '2026-11-19', startDay: 1, perDay: 0, reviewEvery: 5, reviewDays: 4, testDays: 4, book: 'jungdeung', bbaba: 0,
+    itemWord: 1, itemSent: 1, itemRead: 1,
+    sentLabel: '동아(윤) 5~8과 본문 + 외부지문 어순배열', readLabel: '본문·외부지문 변형 10제 풀기' },
+  '수지중2': { pattern: '화목', startDate: '2026-11-19', startDay: 1, perDay: 0, reviewEvery: 5, reviewDays: 4, testDays: 4, book: 'silryeok', bbaba: 0,
+    itemWord: 1, itemSent: 1, itemRead: 1,
+    sentLabel: '동아(윤) 7·8과 본문 + 7과 외부 1·2번 어순배열', readLabel: '본문·외부지문 변형 10제 풀기' },
+  '예비고1': { pattern: '화목', startDate: '2026-11-19', startDay: 1, perDay: 0, reviewEvery: 5, reviewDays: 4, testDays: 4, book: 'eowon', bbaba: 3,
+    itemWord: 1, itemSent: 1, itemRead: 1,
+    sentLabel: '빠바 01강 4지문 본문 어순배열', readLabel: '빠바 01강 변형 10제 풀기' }
+};
+
+function hpAll(){
+  var saved = store(HP_KEY) || {}, out = {}, k;
+  for (k in HP_DEFAULTS) out[k] = hpMerge(HP_DEFAULTS[k], saved[k]);
+  for (k in saved) { if (k !== '__ts' && !out[k]) out[k] = saved[k]; }
+  return out;
+}
+function hpMerge(a, b){
+  var o = {}, k;
+  for (k in a) o[k] = a[k];
+  if (b) for (k in b) { if (k !== '__ts') o[k] = b[k]; }
+  return o;
+}
+function hpGet(ban){ var all = hpAll(); return all[ban] || null; }
+function hpSave(ban, cfg){
+  var all = hpAll();
+  all[ban] = hpMerge(HP_DEFAULTS[ban] || {}, cfg);
+  var raw = store(HP_KEY) || {}, out = {}, k;
+  for (k in all) out[k] = all[k];
+  if (raw.__ts) out.__ts = raw.__ts;
+  try { store(HP_KEY, out); } catch (e) {}
+}
+function hpParse(s){
+  var m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+}
+function hpFmt(d){ return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+function hpAdd(d, days){ var x = new Date(d.getTime()); x.setDate(x.getDate() + days); return x; }
+function hpToday(){ return bbDayStr(); }
+function hpMMDD(s){ var p = String(s).split('-'); return (+p[1]) + '/' + (+p[2]); }
+function hpWDof(s){ var d = hpParse(s); return d ? HP_WD[d.getDay()] : ''; }
+function hpWeekOf(cfg){ return HP_WEEK[(cfg && cfg.pattern) || '화목'] || HP_WEEK['화목']; }
+function hpIsClassDay(cfg, ds){
+  var d = hpParse(ds); if (!d) return false;
+  var v = hpWeekOf(cfg)[d.getDay()];
+  return (v === 0 || v === 'rev');
+}
+/* 그 날의 숙제: 시작일부터 하루씩 걸어 Day 를 쌓는다(총복습일은 Day 가 늘지 않음) */
+function hpWalkCfg(cfg, ds){
+  if (!cfg) return null;
+  var start = hpParse(cfg.startDate), cur = hpParse(ds);
+  if (!start || !cur) return null;
+  var wk = hpWeekOf(cfg);
+  var per = Number(cfg.perDay) || 0;              /* 0 = 요일 패턴 그대로 */
+  var revOn = Number(cfg.reviewEvery) > 1, revDays = Number(cfg.reviewDays) || 4;
+  var diff = Math.floor((cur.getTime() - start.getTime()) / 86400000);
+  var day = Math.max(1, Number(cfg.startDay) || 1);
+  if (diff < 0) return { cfg: cfg, type: 'before', idx: 0, from: day, to: day + (per || wk[1] || 1) - 1 };
+  var res = null;
+  for (var i = 0; i <= diff; i++) {
+    var d = hpAdd(start, i), v = wk[d.getDay()];
+    if (v === 'rev' && revOn) {
+      res = { cfg: cfg, type: 'review', idx: i + 1, from: Math.max(1, day - revDays), to: Math.max(1, day - 1) };
+    } else if (v === 'rev' || v === 0) {
+      res = { cfg: cfg, type: (v === 0 ? 'class' : 'new'), idx: i + 1, from: day, to: day + ((v === 'rev') ? (per || 2) : (per || 1)) - 1 };
+      if (v === 'rev') day += (per || 2);
+    } else {
+      var cnt = per || v;
+      res = { cfg: cfg, type: 'new', idx: i + 1, from: day, to: day + cnt - 1 };
+      day += cnt;
+    }
+  }
+  return res;
+}
+function hpWalkTo(ban, ds){ return hpWalkCfg(hpGet(ban), ds); }
+
+/* 다음/지난 수업일 */
+function hpNextClass(cfg, ds){
+  var d = hpParse(ds);
+  if (!d) return '';
+  for (var i = 1; i <= 14; i++) { var x = hpAdd(d, i); if (hpIsClassDay(cfg, hpFmt(x))) return hpFmt(x); }
+  return '';
+}
+function hpPrevClass(cfg, ds){   /* 오늘보다 '엄격히 이전' 수업일 */
+  var d = hpParse(ds);
+  if (!d) return '';
+  for (var i = 1; i <= 14; i++) { var x = hpAdd(d, -i); if (hpIsClassDay(cfg, hpFmt(x))) return hpFmt(x); }
+  return '';
+}
+/* from(제외) ~ to(포함) 사이에 쌓이는 Day 범위 = 그 수업 시험 범위 */
+function hpRangeBetween(cfg, fromEx, toInc){
+  var d = hpAdd(hpParse(fromEx), 1), end = hpParse(toInc);
+  var from = null, to = 0, review = false;
+  for (var t = 0; t < 40 && d.getTime() <= end.getTime(); t++) {
+    var w = hpWalkCfg(cfg, hpFmt(d));
+    if (w && (w.type === 'new' || w.type === 'review')) {
+      if (from === null) from = w.from;
+      to = Math.max(to, w.to);
+      if (w.type === 'review') review = true;
+    }
+    d = hpAdd(d, 1);
+  }
+  if (from === null) return { from: 0, to: 0, review: false, empty: true };
+  return { from: from, to: Math.max(to, from), review: review };
+}
+/* 오늘 기준 시험 범위: 수업일이면 오늘 시험, 아니면 다음 수업 시험 */
+function hpTestInfo(cfg, ds){
+  var today = ds || hpToday();
+  var yday = hpFmt(hpAdd(hpParse(today), -1));
+  if (hpIsClassDay(cfg, today)) {
+    /* 수업일: 지난 수업 다음날 ~ 어제까지 쌓인 Day 가 오늘 시험 범위 */
+    var r = hpRangeBetween(cfg, hpPrevClass(cfg, today) || yday, yday);
+    return { date: today, today: true, from: r.from, to: r.to, review: r.review, empty: !!r.empty };
+  }
+  var nc = hpNextClass(cfg, today);
+  if (!nc) return null;
+  var r2 = hpRangeBetween(cfg, hpPrevClass(cfg, today) || yday, hpFmt(hpAdd(hpParse(nc), -1)));
+  return { date: nc, today: false, from: r2.from, to: r2.to, review: r2.review, empty: !!r2.empty };
+}
+function hpWeek(cfg, ds, cnt){
+  var out = [], d = hpParse(ds);
+  if (!d) return out;
+  for (var i = 0; i < (cnt || 7); i++) {
+    var s = hpFmt(hpAdd(d, i));
+    out.push({ date: s, wd: HP_WD[hpParse(s).getDay()], plan: hpWalkCfg(cfg, s) });
+  }
+  return out;
+}
+function hpRangeTxt(w){
+  if (!w) return '';
+  if (w.type === 'class') return '수업일(새 숙제 없음)';
+  if (w.type === 'review') return 'Day ' + bbPad(w.from) + '~' + bbPad(w.to) + ' 총복습';
+  return (w.from === w.to) ? ('Day ' + bbPad(w.from)) : ('Day ' + bbPad(w.from) + '~' + bbPad(w.to));
+}
+function hpWordName(book, day){
+  var p = { 'eowon': '능률VOCA 어원편', 'silryeok': '주니어 능률VOCA 실력', 'jungdeung': '능률VOCA 중등필수' }[book];
+  if (!p || !day) return '';
+  return p + ' Day ' + bbPad(day);
+}
+/* 학생이 직접 체크하는 항목(문장 암기·독해) — 그 폰에만 저장 */
+var HP_TICK_KEY = 'topedu_hp_tick_v96';
+function hpTickGet(ban, date){
+  var a = store(HP_TICK_KEY) || {}, m = a[date + '|' + ban];
+  return (m && typeof m === 'object') ? m : {};
+}
+function hpTickSet(ban, date, k, on){
+  var a = store(HP_TICK_KEY) || {}, key = date + '|' + ban, m = a[key] || {};
+  if (on) m[k] = 1; else delete m[k];
+  a[key] = m;
+  try { store(HP_TICK_KEY, a); } catch (e) {}
+}
+function hpTick(ban, date, k){ return !!hpTickGet(ban, date)[k]; }
+function hpToggleItem(k){
+  try {
+    var me = (S.home && S.home.me) || {};
+    var ban = me.ban || (S.cred && S.cred.ban) || '';
+    if (!ban) return;
+    var on = !hpTick(ban, hpToday(), k);
+    hpTickSet(ban, hpToday(), k, on);
+    if (on) { try { playCorrectSound(); } catch (e) {} }
+    showHome();
+  } catch (e) {}
+}
+
+/* 예비고1: 주 2~3회 빠바 기초세우기 1강 (월·수·금) */
+function hpBbaba(cfg, ds){
+  var per = Number(cfg && cfg.bbaba) || 0;
+  if (per <= 0 || !cfg) return null;
+  var d = hpParse(ds), start = hpParse(cfg.startDate);
+  if (!d || !start || d.getTime() < start.getTime()) return null;
+  var days = (per >= 3) ? [1, 3, 5] : [3, 5];
+  if (days.indexOf(d.getDay()) < 0) return null;
+  var cnt = 0;
+  for (var x = new Date(start.getTime()); x.getTime() <= d.getTime(); x = hpAdd(x, 1)) {
+    if (days.indexOf(x.getDay()) >= 0) cnt++;
+  }
+  return { no: cnt, days: days, per: per };
+}
+
+/* ---------- 학생 홈 카드 (단어 + 문장 암기 + 독해·문제풀기 체크리스트) ---------- */
+function drawHomePlanCard(ban){
+  var cfg = hpGet(ban);
+  if (!cfg) return '';
+  var today = hpToday(), w = hpWalkCfg(cfg, today);
+  if (!w) return '';
+  var bk = bbBook(cfg.book), h = '', ti = null;
+  try { ti = hpTestInfo(cfg, today); } catch (e) {}
+  var word = Number(cfg.itemWord) ? 1 : 0, sent = Number(cfg.itemSent) ? 1 : 0, read = Number(cfg.itemRead) ? 1 : 0;
+  if (!word && !sent && !read) { word = 1; }
+  var hasDay = (w.type === 'new' || w.type === 'review');
+  var dd = 0, tt = 0;
+  if (hasDay) { for (var d2 = w.from; d2 <= w.to; d2++) { tt++; if (bbIsDoneIn(bk, d2)) dd++; } }
+  var bb = null;
+  try { bb = hpBbaba(cfg, today); } catch (e) {}
+
+  h += '<div class="hp-card" id="hpCard">';
+  h += '<div class="hp-head"><span class="hp-ttl">📌 오늘의 집 숙제</span><span class="hp-pill">' + esc(ban) + ' · ' + esc(cfg.pattern) + '반</span></div>';
+
+  if (w.type === 'before') {
+    h += '<div class="hp-main">' + esc(hpMMDD(cfg.startDate)) + '(' + esc(hpWDof(cfg.startDate)) + ')부터 시작! 첫날은 <b>' + esc(hpRangeTxt(w)) + '</b>이에요.</div>';
+  } else if (w.type === 'review') {
+    h += '<div class="hp-main">오늘 숙제: <b>' + esc(hpRangeTxt(w)) + '</b> — 인강 다시 보기 + 틀린 단어 집중 암기</div>';
+    h += '<div class="hp-sub">🔁 오늘은 수업일 + 총복습날이에요. 이 범위 그대로 단어시험 봐요.</div>';
+  } else if (w.type === 'class') {
+    var tomorrow = hpFmt(hpAdd(hpParse(today), 1)), nx = hpWalkCfg(cfg, tomorrow);
+    h += '<div class="hp-main">오늘은 <b>수업일(' + esc(hpWDof(today)) + ')</b>'
+      + ((ti && !ti.empty) ? (' — 오늘 단어시험 <b>' + esc(hpRangeTxt({ type: ti.review ? 'review' : 'new', from: ti.from, to: ti.to })) + '</b>') : '') + '</div>';
+    h += '<div class="hp-sub">' + ((nx && nx.type === 'new') ? ('단어는 ' + esc(hpWDof(tomorrow)) + '(' + esc(hpMMDD(tomorrow)) + ') <b>' + esc(hpRangeTxt(nx)) + '</b>부터예요. 문장 암기·독해는 오늘도 조금씩!') : '다음 수업 전까지 분량을 채워 두세요.') + '</div>';
+  } else {
+    h += '<div class="hp-main">오늘 숙제: <b>' + esc(hpRangeTxt(w)) + '</b> 인강 끝까지 시청 + 단어 암기/테스트 완료</div>';
+    if (ti && !ti.empty) {
+      h += '<div class="hp-sub">' + (ti.today ? '오늘 수업 단어시험 범위: ' : ('다음 수업 ' + esc(hpWDof(ti.date)) + '(' + esc(hpMMDD(ti.date)) + ') 단어시험 범위: '))
+        + '<b>' + esc(hpRangeTxt({ type: ti.review ? 'review' : 'new', from: ti.from, to: ti.to })) + '</b></div>';
+    }
+  }
+
+  /* ---- 오늘 숙제 체크리스트 ---- */
+  h += '<div class="hp-list">';
+  if (word) {
+    var on1 = (tt && dd >= tt);
+    if (hasDay) {
+      h += '<div class="hp-item' + (on1 ? ' on' : '') + '">'
+        + '<span class="hp-ck">' + (on1 ? '✓' : '○') + '</span>'
+        + '<div class="hp-itx"><b>단어 · ' + esc(hpRangeTxt(w)) + '</b><span>' + esc(bk.name) + ' 인강 끝까지 시청 + 단어 암기/테스트 (인강 ' + dd + '/' + tt + ')</span></div>'
+        + '<button type="button" class="hp-go" onclick="hpOpenVideo(\'' + bk.key + '\',' + w.from + ')">인강 →</button>'
+        + '</div>';
+      var wn = hpWordName(cfg.book, w.from);
+      if (wn) {
+        h += '<div class="hp-item sub">'
+          + '<span class="hp-ck">·</span>'
+          + '<div class="hp-itx"><b>' + esc(wn) + '</b><span>단어장에서 암기 → 뜻 고르기 → 짝맞추기 → 테스트</span></div>'
+          + '<button type="button" class="hp-go" onclick="hpOpenWord(\'' + wn.replace(/'/g, "\\'") + '\')">단어장 →</button>'
+          + '</div>';
+      }
+    } else {
+      h += '<div class="hp-item">'
+        + '<span class="hp-ck">·</span>'
+        + '<div class="hp-itx"><b>단어</b><span>오늘은 수업일 — 내일 분량부터 이어서 하면 돼요.</span></div>'
+        + '<button type="button" class="hp-go" onclick="hpOpenVideo(\'' + bk.key + '\',' + (w.from || 1) + ')">인강 →</button>'
+        + '</div>';
+    }
+  }
+  if (sent) {
+    var sOn = hpTick(ban, today, 'sent');
+    h += '<div class="hp-item' + (sOn ? ' on' : '') + '">'
+      + '<button type="button" class="hp-ck tap" onclick="hpToggleItem(\'sent\')" title="했으면 눌러서 체크">' + (sOn ? '✓' : '○') + '</button>'
+      + '<div class="hp-itx"><b>본문·외부지문 문장 암기</b><span>' + esc(cfg.sentLabel || '본문·외부지문 어순배열로 문장 암기') + '</span></div>'
+      + '<button type="button" class="hp-go" onclick="openWritingApp()">쓰러가기 →</button>'
+      + '</div>';
+  }
+  if (read) {
+    var rOn = hpTick(ban, today, 'read');
+    h += '<div class="hp-item' + (rOn ? ' on' : '') + '">'
+      + '<button type="button" class="hp-ck tap" onclick="hpToggleItem(\'read\')" title="했으면 눌러서 체크">' + (rOn ? '✓' : '○') + '</button>'
+      + '<div class="hp-itx"><b>변형·독해 문제 풀기</b><span>' + esc(cfg.readLabel || '본문·외부지문 변형 문제 풀기') + '</span></div>'
+      + '<button type="button" class="hp-go" onclick="openReadingApp()">풀러가기 →</button>'
+      + '</div>';
+  }
+  if (bb) {
+    h += '<div class="hp-item">'
+      + '<span class="hp-ck">🎬</span>'
+      + '<div class="hp-itx"><b>빠바 기초세우기 ' + bbPad(bb.no) + '강</b><span>주 ' + bb.per + '회 · 월·수·금 1강씩 (본문 독해)</span></div>'
+      + '<button type="button" class="hp-go" onclick="hpOpenVideo(\'bbaba\',' + bb.no + ')">보기 →</button>'
+      + '</div>';
+  }
+  h += '</div>';
+
+  h += '<div class="hp-note">' + esc(cfg.pattern) + '반 · ' + (Number(cfg.perDay) ? ('하루 ' + cfg.perDay + ' Day 고정') : '요일 패턴대로')
+    + (Number(cfg.reviewEvery) > 1 ? (' · 5일 간격은 총복습') : '') + ' · ○ 를 누르면 체크돼요.</div>';
+  h += '</div>';
+  return h;
+}
+function hpOpenVideo(key, day){
+  try {
+    var bk = bbBook(key);
+    BB_BOOK = bk.key;
+    BB_SEL = { ch: day, part: 0 };
+    BB_LAST[bk.key] = { ch: day, part: 0 };
+    openBbaba(bk.key);
+  } catch (e) { try { alert('인강관을 여는 데 문제가 생겼어요. 잠시 뒤 다시 눌러 주세요.'); } catch (x) {} }
+}
+function hpOpenWord(name){
+  try { openWordSet({ name: name, type: '단어' }); } catch (e) {}
+}
+
+/* ---------- 원장님 화면: 반별 집 숙제 지정 ---------- */
+function hpAdminHtml(){
+  var list = ['수지중1', '수지중2', '예비고1'];
+  var sel = (HP_EDIT && list.indexOf(HP_EDIT) >= 0) ? HP_EDIT : list[0];
+  var cfg = hpGet(sel) || {};
+  var h = '<div class="card" style="border:2px solid #7c3aed;background:#faf5ff;border-radius:16px;padding:16px;margin-top:14px">';
+  h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:22px">📌</span>'
+    + '<b style="font-size:16px;color:#5b21b6;font-family:Maplestory,sans-serif">반별 \'오늘의 집 숙제\' 분량 지정</b></div>';
+  h += '<div style="font-size:13px;color:#6b7280;line-height:1.5;margin-bottom:14px">수업 요일 패턴대로 <b>그 날 나갈 단어 Day 수</b>가 자동으로 정해지고, '
+    + '학생 홈 화면 최상단 <b>📌 오늘의 집 숙제</b> 카드에 바로 떠요.</div>';
+  h += '<label style="font-weight:700;color:#2d3748;margin-bottom:6px">1. 반</label>'
+    + '<select id="hpBan" style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:14px;margin-bottom:12px">'
+    + list.map(function (b) { return '<option value="' + b + '"' + (b === sel ? ' selected' : '') + '>' + b + '</option>'; }).join('') + '</select>';
+  h += '<label style="font-weight:700;color:#2d3748;margin-bottom:6px">2. 수업 요일 패턴 (시험·총복습일이 정해져요)</label>'
+    + '<select id="hpPattern" style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:14px;margin-bottom:12px">'
+    + ['수금', '화목'].map(function (p) {
+      var wk = HP_WEEK[p];
+      return '<option value="' + p + '"' + (p === cfg.pattern ? ' selected' : '') + '>' + p + '반 (수업 '
+        + [0, 1, 2, 3, 4, 5, 6].filter(function (x) { return wk[x] === 0 || wk[x] === 'rev'; }).map(function (x) { return HP_WD[x]; }).join('·')
+        + ' · ' + [0, 1, 2, 3, 4, 5, 6].filter(function (x) { return wk[x] === 'rev'; }).map(function (x) { return HP_WD[x]; }).join('·') + '요일 4 Day 총복습)</option>';
+    }).join('') + '</select>';
+  h += '<div style="display:flex;gap:8px">';
+  h += '<div style="flex:1"><label style="font-weight:700;color:#2d3748;margin-bottom:6px">3. 시작 날짜</label>'
+    + '<input type="date" id="hpStart" value="' + esc(cfg.startDate || hpToday()) + '" style="width:100%;padding:10px 8px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:13.5px"></div>';
+  h += '<div style="width:96px"><label style="font-weight:700;color:#2d3748;margin-bottom:6px">4. 시작 Day</label>'
+    + '<input type="number" id="hpStartDay" min="1" max="60" value="' + (Number(cfg.startDay) || 1) + '" style="width:100%;padding:10px 8px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:13.5px"></div>';
+  h += '</div><div style="height:12px"></div>';
+  h += '<div style="display:flex;gap:8px">';
+  h += '<div style="flex:1"><label style="font-weight:700;color:#2d3748;margin-bottom:6px">5. 하루 Day 수</label>'
+    + '<select id="hpPerDay" style="width:100%;padding:10px 8px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:13.5px">'
+    + '<option value="0"' + (Number(cfg.perDay) ? '' : ' selected') + '>자동 (요일 패턴)</option>'
+    + [1, 2, 3, 4].map(function (x) { return '<option value="' + x + '"' + (Number(cfg.perDay) === x ? ' selected' : '') + '>하루 ' + x + ' Day 고정</option>'; }).join('')
+    + '</select></div>';
+  h += '<div style="flex:1"><label style="font-weight:700;color:#2d3748;margin-bottom:6px">6. 4 Day 총복습</label>'
+    + '<select id="hpReview" style="width:100%;padding:10px 8px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:13.5px">'
+    + '<option value="5"' + (Number(cfg.reviewEvery) > 1 ? ' selected' : '') + '>켜기 (수업일 4 Day 총복습)</option>'
+    + '<option value="0"' + (Number(cfg.reviewEvery) > 1 ? '' : ' selected') + '>끄기</option>'
+    + '</select></div>';
+  h += '</div>';
+  h += '<div style="height:12px"></div><label style="font-weight:700;color:#2d3748;margin-bottom:6px">7. 숙제 구성 <span style="font-weight:400;font-size:11.5px;color:#8b7ba8">(체크한 항목만 학생 카드에 떠요)</span></label>'
+    + '<div style="background:#fff;border:1.5px solid #ddd6fe;border-radius:12px;padding:10px 12px">'
+    + '<label style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#4c1d95;margin:0 0 8px"><input type="checkbox" id="hpItemWord"' + (Number(cfg.itemWord) ? ' checked' : '') + ' style="width:18px;height:18px"> 📺 단어 (Day 인강 + 단어 암기/테스트)</label>'
+    + '<label style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#4c1d95;margin:0 0 6px"><input type="checkbox" id="hpItemSent"' + (Number(cfg.itemSent) ? ' checked' : '') + ' style="width:18px;height:18px"> ✍️ 본문·외부지문 문장 암기</label>'
+    + '<input id="hpSentLabel" value="' + esc(cfg.sentLabel || '') + '" placeholder="예: 동아(윤) 7·8과 본문 + 7과 외부 1·2번 어순배열" style="width:100%;padding:8px 10px;border:1.5px solid #e9d5ff;border-radius:9px;font-size:12.5px;margin-bottom:8px">'
+    + '<label style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#4c1d95;margin:0 0 6px"><input type="checkbox" id="hpItemRead"' + (Number(cfg.itemRead) ? ' checked' : '') + ' style="width:18px;height:18px"> 📖 변형·독해 문제 풀기</label>'
+    + '<input id="hpReadLabel" value="' + esc(cfg.readLabel || '') + '" placeholder="예: 본문·외부지문 변형 10제 풀기" style="width:100%;padding:8px 10px;border:1.5px solid #e9d5ff;border-radius:9px;font-size:12.5px">'
+    + '</div>';
+  if (sel === '예비고1') {
+    h += '<div style="height:12px"></div><label style="font-weight:700;color:#2d3748;margin-bottom:6px">8. 빠바 기초세우기 인강</label>'
+      + '<select id="hpBbaba" style="width:100%;padding:10px 8px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:13.5px">'
+      + '<option value="0"' + (Number(cfg.bbaba) ? '' : ' selected') + '>추가 안 함</option>'
+      + '<option value="2"' + (Number(cfg.bbaba) === 2 ? ' selected' : '') + '>주 2회 (수·금) 1강씩</option>'
+      + '<option value="3"' + (Number(cfg.bbaba) === 3 ? ' selected' : '') + '>주 3회 (월·수·금) 1강씩</option>'
+      + '</select>';
+  }
+  h += '<div id="hpPrev" style="margin-top:14px;padding:12px 14px;background:#fff;border:1.5px solid #ddd6fe;border-radius:12px;font-size:12.5px;color:#4c1d95;line-height:1.6"></div>';
+  h += '<button class="btn" id="hpSave" style="width:100%;margin-top:12px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:800;font-size:15px;padding:13px;border:none;border-radius:12px">💾 이 반 집 숙제 저장 + 학생 폰에 반영</button>';
+  h += '</div>';
+
+  h += '<div class="card" style="margin-top:14px"><div style="font-size:15px;font-weight:700;color:#2d3748;margin-bottom:10px">📋 지금 설정된 3반 집 숙제</div>';
+  list.forEach(function (b) {
+    var c = hpGet(b) || {}, w = hpWalkCfg(c, hpToday()), ti = hpTestInfo(c, hpToday());
+    h += '<div style="padding:11px 13px;background:#faf5ff;border:1.5px solid #ede9fe;border-radius:12px;margin-bottom:8px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">'
+      + '<b style="font-size:13.5px;color:#5b21b6">' + esc(b) + ' · ' + esc(c.pattern) + '반</b>'
+      + '<span style="font-size:11.5px;color:#7c3aed;font-weight:700">' + (Number(c.perDay) ? ('하루 ' + c.perDay + ' Day') : '요일 패턴')
+      + (Number(c.reviewEvery) > 1 ? ' · 총복습' : '') + (Number(c.bbaba) ? (' · 빠바 주' + c.bbaba + '회') : '') + '</span></div>'
+      + '<div style="font-size:12.5px;color:#4b5563;margin-top:4px">오늘(' + esc(hpWDof(hpToday())) + ') → <b>' + esc(w ? hpRangeTxt(w) : '—') + '</b>'
+      + (ti && !ti.empty ? (' · ' + (ti.today ? '오늘' : (esc(hpWDof(ti.date)) + '(' + esc(hpMMDD(ti.date)) + ')')) + ' 시험 ' + esc(hpRangeTxt({ type: ti.review ? 'review' : 'new', from: ti.from, to: ti.to }))) : '')
+      + '</div></div>';
+  });
+  h += '</div>';
+  return h;
+}
+function hpReadForm(){
+  var g = function (id) { var e = document.getElementById(id); return e ? e.value : ''; };
+  var ban = g('hpBan') || '수지중1';
+  var rev = Number(g('hpReview')) || 0;
+  var old = hpGet(ban) || {};
+  var chk = function (id) { var e = document.getElementById(id); return (e && e.checked) ? 1 : 0; };
+  return {
+    pattern: g('hpPattern') || '화목',
+    startDate: g('hpStart') || hpToday(),
+    startDay: Math.max(1, Number(g('hpStartDay')) || 1),
+    perDay: Math.max(0, Number(g('hpPerDay')) || 0),
+    reviewEvery: rev, reviewDays: rev ? 4 : 0,
+    testDays: 4,
+    book: old.book || (HP_DEFAULTS[ban] || {}).book || 'eowon',
+    bbaba: Number(g('hpBbaba')) || 0,
+    itemWord: chk('hpItemWord'), itemSent: chk('hpItemSent'), itemRead: chk('hpItemRead'),
+    sentLabel: g('hpSentLabel') || old.sentLabel || '',
+    readLabel: g('hpReadLabel') || old.readLabel || ''
+  };
+}
+function hpPreviewRefresh(){
+  var box = document.getElementById('hpPrev');
+  if (!box) return;
+  var cfg = hpReadForm();
+  var bk = bbBook(cfg.book);
+  var w = hpWalkCfg(cfg, hpToday());
+  var ti = hpTestInfo(cfg, hpToday());
+  var h = '<b>오늘(' + esc(hpMMDD(hpToday())) + ' ' + esc(hpWDof(hpToday())) + ') → ' + esc(w ? hpRangeTxt(w) : '—') + '</b>';
+  if (ti && !ti.empty) h += '<br>' + (ti.today ? '오늘 수업 시험' : ('다음 수업 ' + esc(hpWDof(ti.date)) + '(' + esc(hpMMDD(ti.date)) + ') 시험'))
+    + ': <b>' + esc(hpRangeTxt({ type: ti.review ? 'review' : 'new', from: ti.from, to: ti.to })) + '</b>';
+  h += '<div style="margin-top:8px;border-top:1px dashed #ddd6fe;padding-top:6px">';
+  hpWeek(cfg, hpToday(), 7).forEach(function (r) {
+    var lab = (r.plan && r.plan.type === 'class') ? '수업일 (새 숙제 없음)' : hpRangeTxt(r.plan);
+    h += '<div class="hp-day' + (r.date === hpToday() ? ' today' : '') + '"><span>' + esc(hpMMDD(r.date)) + '(' + esc(r.wd) + ')</span><span>'
+      + esc(lab) + '</span></div>';
+  });
+  var _items = [];
+  if (Number(cfg.itemWord)) _items.push('단어 ' + hpRangeTxt(w));
+  if (Number(cfg.itemSent)) _items.push('문장 암기');
+  if (Number(cfg.itemRead)) _items.push('독해 문제');
+  h += '</div><div style="margin-top:6px;font-size:11.5px;color:#8b7ba8">학생 카드 체크리스트: ' + esc(_items.join(' · ')) + ' · 교재 ' + esc(bk.name) + '</div>';
+  box.innerHTML = h;
+}
+function hpBindAdmin(){
+  var b = document.getElementById('hpBan');
+  if (!b) return;
+  hpPreviewRefresh();
+  b.onchange = function () { HP_EDIT = this.value; renderAdminHwManager(); };
+  ['hpPattern', 'hpStart', 'hpStartDay', 'hpPerDay', 'hpReview', 'hpBbaba', 'hpItemWord', 'hpItemSent', 'hpItemRead', 'hpSentLabel', 'hpReadLabel'].forEach(function (id) {
+    var e = document.getElementById(id);
+    if (e) { e.onchange = hpPreviewRefresh; e.oninput = hpPreviewRefresh; }
+  });
+  var sv = document.getElementById('hpSave');
+  if (sv) sv.onclick = function () {
+    var ban = (document.getElementById('hpBan') || {}).value;
+    var cfg = hpReadForm();
+    hpSave(ban, cfg);
+    hpPublish();
+    try { playCorrectSound(); } catch (e) {}
+    alert('✅ [' + ban + '] 집 숙제 계획을 저장했어요!\n\n· 오늘 분량: ' + hpRangeTxt(hpWalkTo(ban, hpToday()))
+      + '\n· 학생이 앱을 열면 홈 화면 최상단 📌 오늘의 집 숙제 카드에 바로 떠요.\n· 지금 켜져 있는 학생 폰에도 실시간으로 전달됩니다.');
+    renderAdminHwManager();
+  };
+}
+
+/* ---------- 실시간 반영(교사 → 학생 폰, MQTT retained) ---------- */
+var HP_TOPIC = 'topedu/hwplan/v96';
+var HP_BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker-cn.emqx.io:8084/mqtt'];
+var HP_NET = { started: false, open: 0 };
+
+function hpPublish(){
+  var plans = hpAll();
+  var payload = { v: 96, ts: Date.now(), plans: plans };
+  try {
+    bnLoadLib().then(function (ok) {
+      if (!ok) return;
+      HP_BROKERS.forEach(function (url) {
+        try {
+          var c = window.mqtt.connect(url, { clientId: 'hpp_' + Math.random().toString(16).slice(2, 10), clean: true, keepalive: 20, connectTimeout: 6000, reconnectPeriod: 0, protocolVersion: 4 });
+          c.on('error', function () {});
+          c.on('connect', function () {
+            try { c.publish(HP_TOPIC, JSON.stringify(payload), { qos: 0, retain: true }); } catch (e) {}
+            setTimeout(function () { try { c.end(true); } catch (e) {} }, 1200);
+          });
+          setTimeout(function () { try { c.end(true); } catch (e) {} }, 9000);
+        } catch (e) {}
+      });
+    });
+  } catch (e) {}
+}
+function hpApplyRemote(p){
+  if (!p || !p.plans || !p.ts) return;
+  var cur = store(HP_KEY) || {};
+  if (cur.__ts && Number(cur.__ts) >= Number(p.ts)) return;
+  var out = {}, k;
+  for (k in p.plans) { if (k !== '__ts' && p.plans[k]) out[k] = p.plans[k]; }
+  out.__ts = p.ts;
+  try { store(HP_KEY, out); } catch (e) {}
+  try { if (document.getElementById('hpCard') && S.home && S.home.me) showHome(); } catch (e) {}
+}
+function hpSubscribe(){
+  if (HP_NET.started) return;
+  HP_NET.started = true;
+  try {
+    bnLoadLib().then(function (ok) {
+      if (!ok) return;
+      HP_BROKERS.forEach(function (url) {
+        try {
+          var c = window.mqtt.connect(url, { clientId: 'hps_' + Math.random().toString(16).slice(2, 10), clean: true, keepalive: 30, connectTimeout: 6000, reconnectPeriod: 0, protocolVersion: 4 });
+          c.on('error', function () {});
+          c.on('connect', function () {
+            HP_NET.open++;
+            try { c.subscribe(HP_TOPIC, { qos: 0 }, function () {}); } catch (e) {}
+          });
+          c.on('message', function (t, m) {
+            if (String(t) !== HP_TOPIC) return;
+            try { hpApplyRemote(JSON.parse(m.toString())); } catch (e) {}
+          });
+          c.on('close', function () { HP_NET.open = Math.max(0, HP_NET.open - 1); });
+        } catch (e) {}
+      });
+    });
+  } catch (e) {}
+}
+
+/* ---------- 원장님 화면: 인강 꼼수 시도 기록 + 학부모 문자 ---------- */
+function bbCopyCheat(btn){
+  var sms = btn.getAttribute('data-sms') || '';
+  if (!sms) return;
+  var pv = document.getElementById('bbCopyPrev');
+  if (pv) pv.style.display = 'block';
+  hwcCopy(sms, btn, pv);
+}
+function bbCheatAdminHtml(){
+  var l = bbCheatList();
+  var h = '<div class="card" style="border:2px solid #f87171;background:#fff5f5;border-radius:16px;padding:16px;margin-bottom:14px">';
+  h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+    + '<div style="font-family:Maplestory,sans-serif;font-size:15.5px;font-weight:700;color:#b91c1c">🚨 인강 미시청·꼼수 시도 기록 (' + l.length + '건)</div>'
+    + (l.length ? '<button type="button" class="btn-sm" onclick="if(confirm(\'기록을 모두 지울까요?\')){localStorage.removeItem(\'' + BB_CHEAT_KEY + '\');showAdmin();}" style="font-size:11px;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;cursor:pointer;border-radius:8px;padding:5px 9px">기록 비우기</button>' : '')
+    + '</div>';
+  h += '<div style="font-size:12.5px;color:#7f1d1d;line-height:1.5;margin-bottom:10px">학생이 영상을 실제로 보지 않고 <b>✓ 다 봤어요</b>를 누르면 여기에 기록되고, 아래 문구를 그대로 복사해 학부모님께 보내시면 됩니다.</div>';
+  if (!l.length) {
+    h += '<div style="text-align:center;padding:16px;color:#9ca3af;font-size:13px">아직 꼼수 시도 기록이 없어요. 👍</div>';
+  } else {
+    l.forEach(function (c) {
+      h += '<div style="padding:11px 13px;background:#fff;border:1.5px solid #fecaca;border-radius:12px;margin-bottom:8px">'
+        + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">'
+        + '<div><b style="font-size:13.5px;color:#b91c1c">' + esc(c.name) + ' (' + esc(c.ban) + ')</b>'
+        + '<div style="font-size:12px;color:#7f1d1d;margin-top:2px">' + esc(c.book || '') + ' ' + esc(c.label || '') + ' · 실제 시청 '
+        + esc(bbSec(c.watched || 0)) + '/' + esc(bbSec(c.need || 0)) + ' (' + (c.pct || 0) + '%) · 시도 ' + (c.tries || 1) + '회</div></div>'
+        + '<span style="font-size:11px;color:#9ca3af;white-space:nowrap">' + esc(c.date || '') + ' ' + esc(c.time || '') + '</span></div>'
+        + '<div style="font-size:12.5px;color:#374151;background:#fff5f5;border-radius:8px;padding:9px 10px;margin-top:8px;line-height:1.5">' + esc(c.sms || bbParentSms(c.name, c.book, c.label, c.watched, c.need)) + '</div>'
+        + '<button type="button" class="btn" data-sms="' + esc(c.sms || '') + '" onclick="bbCopyCheat(this)" style="width:100%;margin-top:8px;background:#b91c1c;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:800;font-size:13px;cursor:pointer">📋 학부모님께 보낼 문자 복사</button>'
+        + '</div>';
+    });
+  }
+  h += '<div id="bbCopyPrev" style="font-size:12.5px;color:#334155;background:#fff;border:1.5px dashed #fca5a5;border-radius:10px;padding:10px;margin-top:4px;display:none"></div>';
+  h += '</div>';
+  return h;
+}
+
 /* ============ 선생님 화면 ============ */
 
 /* ============ 반별 실시간 화상수업 (WebRTC Live) ============ */
@@ -4284,6 +5089,7 @@ function showAdmin(){
 
   
   if(A.tab === 'alerts'){
+    try { hpSubscribe(); } catch(e){}
     var logs = getDirectorNoticesLog();
     var isAiPraise = localStorage.getItem('topedu_ai_praise_enabled') !== 'false';
     var notifPerm = ('Notification' in window) ? Notification.permission : 'unsupported';
@@ -4310,6 +5116,7 @@ function showAdmin(){
         '💡 <b>안내:</b> [ntfy 채널 열기]를 눌러 <b>구독(Subscribe)</b>해 두시면 원장님 폰 화면이 꺼져 있어도 사진처럼 즉시 잠금화면에 알림이 뜹니다.' +
       '</div>' +
     '</div>' +
+    bbCheatAdminHtml() +
     '<div class="card">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
         '<h2 style="margin:0;font-size:16px;color:#1e293b">📋 실시간 쪽지 & 학습 완료 알림 피드 (' + logs.length + '건)</h2>' +
@@ -4351,6 +5158,7 @@ function showAdmin(){
                 if(!msgTitle) msgTitle = '학생 쪽지';
                 var already = curLogs.some(function(item){ return item.title === msgTitle && item.body === msgBody; });
                 if(!already){
+                  try { var _bc = bbCheatOfLog({ body: msgBody }); if(_bc) bbCheatSave(_bc); } catch(e){}
                   curLogs.unshift({
                     type: (d.tags && d.tags.indexOf('trophy') >= 0) ? 'study' : 'note',
                     title: msgTitle,
@@ -4510,8 +5318,12 @@ function renderAdminHwManager() {
   }
   html += '</div>';
 
+  /* v96: 📌 반별 집 숙제 분량 지정 */
+  html += hpAdminHtml();
+
   var out = document.getElementById('aout');
   if (out) out.innerHTML = html;
+  try { hpBindAdmin(); } catch(e){}
 
   // Pre-fill if current ban has homework
   var curHw = currentHwAll[selBan];
@@ -5604,6 +6416,7 @@ function pWait(v){
 }
 
 function raceStart(v,g){
+  try { unlockAudio(); } catch(e) {}
   if(B.stuTimer){ clearTimeout(B.stuTimer); B.stuTimer = null; }
   var sent = (R.mode === 'sentence');
   if(sent){
@@ -5723,6 +6536,7 @@ function sbRender(){
     [].forEach.call(chips.querySelectorAll('[data-chip]'), function(b){
       b.onclick=function(){
         if(R.busy||!R.sq) return;
+        try { unlockAudio(); } catch(e){}
         var ci=+b.dataset.chip;
         if(R.sq.order.indexOf(ci)>=0) return;
         R.sq.order.push(ci); sbRender();
@@ -5736,6 +6550,7 @@ function sbRender(){
 function sbGrade(){
   var q=R.sq; if(!q || R.busy || R.done) return;
   R.busy = true;
+  try { unlockAudio(); } catch(e){}
   var mine = q.order.map(function(ci){ return q.chips[ci].w; }).join(' ');
   var ok = sbNorm(mine) === sbNorm(q.q.en);
   var fb=$('#sbfb');
@@ -5804,6 +6619,7 @@ function nextQ(){
   $('#rtiles').innerHTML=tilesHtml(q);
   [].forEach.call(app.querySelectorAll('#rtiles .bo'),function(b){ b.onclick=function(){
     if(R.busy||R.done) return; R.busy=true;
+    try { unlockAudio(); } catch(e){}
     var k=+b.dataset.k, ok=k===q.a;
     if(ok){
       playCorrectSound();
@@ -5839,7 +6655,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v95';
+var TOPEDU_APP_VERSION = 'v96';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
