@@ -9474,6 +9474,7 @@ function ssSmsGo(name, done) {
   if (phone) digits = phone.replace(/[^0-9+]/g, '');
   var href = 'sms:' + digits + '?body=' + encodeURIComponent(msg);
   SS.lastSms = { name: name, phone: phone, digits: digits, href: href, msg: msg, at: Date.now(), opened: false };
+  try { SS_BOARD_HOLD = Date.now() + 8000; } catch (e) {}
   ssCopyText(msg, function () { ssToast(SS.lastCopy && SS.lastCopy.ok ? '📋 문구를 복사했어요' : '문구 복사 실패 — 길게 눌러 복사해 주세요'); });
   if (!phone) {
     alert(name + ' 학생의 학부모 전화번호가 아직 없어요.\n\n아래 [📇 학부모 연락처]에 번호를 붙여넣고 저장하면\n다음부터 버튼 한 번으로 문자 앱이 열려요.\n\n(문구는 이미 복사해 두었어요 — 에듀스탭·카톡에 붙여넣으세요)');
@@ -9675,13 +9676,20 @@ function ssBoardHtml() {
   h += '<div style="font-size:11px;color:#0369a1;line-height:1.5;margin-top:6px">완료 판정 = ① 자기주도 완주 ② 오늘 학생 폰에서 올린 학습 완료 기록. 기록이 없는 학생은 미완료로 표시돼요.</div>';
   return h;
 }
-function ssSetFilter(f) { SS_VIEW.filter = f; ssBoardRefresh(); }
-function ssBoardRefresh() {
+var SS_BOARD_SIG = '', SS_BOARD_HOLD = 0;
+function ssSetFilter(f) { SS_VIEW.filter = f; ssBoardRefresh(true); }
+/* 내용이 그대로면 다시 그리지 않는다(문자 버튼을 누르는 순간 화면이 갈아엎이지 않게) */
+function ssBoardRefresh(force) {
   var b = document.getElementById('ssBoard');
   if (!b) return;
-  b.innerHTML = ssBoardHtml();
+  if (!force && Date.now() < (SS_BOARD_HOLD || 0)) return;
+  var html = ssBoardHtml();
+  if (!force && html === SS_BOARD_SIG) return;
+  SS_BOARD_SIG = html;
+  b.innerHTML = html;
 }
 function ssSummaryCopy(done) {
+  try { SS_BOARD_HOLD = Date.now() + 8000; } catch (e) {}
   var txt = ssSmsSummary(!!done);
   ssCopyText(txt, function (ok) {
     ssToast(ok ? (done ? '📋 완료 요약을 복사했어요' : '📋 미완료 요약을 복사했어요') : '복사 실패 — 다시 눌러 주세요');
@@ -9811,7 +9819,8 @@ function ssAdminBind() {
     var keys = Object.keys(p2);
     if (keys.length) ta.value = keys.map(function (k) { return k + ',' + p2[k]; }).join('\n');
   }
-  ssBoardRefresh();
+  SS_BOARD_SIG = ''; SS_BOARD_HOLD = 0;
+  ssBoardRefresh(true);
   ssTeacherSub();
   ssBoardPull(true);
   try { pullStreakBoard(); } catch (e) {}
