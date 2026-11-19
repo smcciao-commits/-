@@ -4647,10 +4647,13 @@ function drawHomePlanCard(ban){
           + '</div>';
       }
     } else {
+      var tmr0 = hpFmt(hpAdd(hpParse(today), 1)), tw0 = hpWalkCfg(cfg, tmr0);
+      var tfrom0 = (tw0 && tw0.type === 'new') ? tw0.from : (w.from || 1);
       h += '<div class="hp-item">'
         + '<span class="hp-ck">·</span>'
-        + '<div class="hp-itx"><b>단어</b><span>오늘은 수업일 — 내일 분량부터 이어서 하면 돼요.</span></div>'
-        + '<button type="button" class="hp-go" onclick="hpOpenVideo(\'' + bk.key + '\',' + (w.from || 1) + ')">인강 →</button>'
+        + '<div class="hp-itx"><b>단어' + ((tw0 && tw0.type === 'new') ? (' · 내일(' + esc(hpWDof(tmr0)) + ') ' + esc(hpRangeTxt(tw0))) : '') + '</b>'
+        + '<span>' + ((tw0 && tw0.type === 'new') ? '오늘 수업이라 새 분량은 내일부터 — 미리 인강 틀어 두면 좋아요.' : '오늘은 수업일 — 내일 분량부터 이어서 하면 돼요.') + '</span></div>'
+        + '<button type="button" class="hp-go" onclick="hpOpenVideo(\'' + bk.key + '\',' + tfrom0 + ')">인강 →</button>'
         + '</div>';
     }
   }
@@ -5123,6 +5126,16 @@ function showAdmin(){
         '<button class="btn-sm" onclick="localStorage.removeItem(\'topedu_director_notices_log\');showAdmin();" style="font-size:11px;background:#f1f5f9;color:#64748b;border:1px solid #cbd5e1;cursor:pointer">내역 비우기</button>' +
       '</div>' +
       (logs.length ? '<div style="display:flex;flex-direction:column;gap:8px">' + logs.map(function(l){
+        var _ch = bbCheatOfLog(l);
+        if (_ch) {
+          return '<div style="padding:10px 14px;background:#fff5f5;border:1.5px solid #fca5a5;border-radius:12px">'
+            + '<div style="font-weight:800;font-size:13.5px;color:#b91c1c">🚨 인강 미시청/꼼수 시도 · ' + esc(_ch.name) + ' (' + esc(_ch.ban) + ')</div>'
+            + '<div style="font-size:12.5px;color:#7f1d1d;margin-top:3px">' + esc(_ch.book || '') + ' ' + esc(_ch.label || '') + ' · 실제 시청 '
+            + esc(bbSec(_ch.watched || 0)) + '/' + esc(bbSec(_ch.need || 0)) + ' (' + (_ch.pct || 0) + '%) · 시도 ' + (_ch.tries || 1) + '회 · ' + esc(l.time || '') + '</div>'
+            + '<div style="font-size:12px;color:#374151;background:#fff;border-radius:8px;padding:8px 9px;margin-top:6px;line-height:1.5">' + esc(_ch.sms || '') + '</div>'
+            + '<button type="button" class="btn-sm" data-sms="' + esc(_ch.sms || '') + '" onclick="bbCopyCheat(this)" style="margin-top:6px;background:#b91c1c;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11.5px;font-weight:700;cursor:pointer">📋 학부모님께 보낼 문자 복사</button>'
+            + '</div>';
+        }
         var isStudy = l.type === 'study';
         return '<div style="padding:10px 14px;background:' + (isStudy?'#f0fdf4':'#f8fafc') + ';border:1.5px solid ' + (isStudy?'#86efac':'#ccfbf1') + ';border-radius:12px;display:flex;justify-content:space-between;align-items:center">' +
           '<div>' +
