@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>v97 QA · 390×844</title>
+<style>
+  html, body { margin: 0; background: #0f172a; font-family: Pretendard, sans-serif; }
+  .bar { color: #e2e8f0; font-size: 12px; padding: 6px 10px; font-weight: 700; }
+  iframe { border: 0; display: block; background: #fff; width: 390px; height: 844px; }
+</style>
+</head>
+<body>
+<div class="bar">v97 자기주도 QA · 390×844</div>
+<iframe id="fr" src="about:blank" width="390" height="844" allow="fullscreen; clipboard-write; clipboard-read" allowfullscreen></iframe>
+<script>
+  /* 항상 새 빌드를 받도록 캐시 방지 파라미터를 붙여서 띄운다 */
+  document.getElementById('fr').src = 'index.html?cb=' + Date.now();
+</script>
+</body>
+</html>
