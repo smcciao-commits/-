@@ -1278,6 +1278,97 @@ button.hp-ck.tap { cursor: pointer; font-family: inherit; }
 .bb-fsbar button.on { background: #14b8a6; border-color: #14b8a6; }
 .bb-fsbar button.bb-fsx { background: #ef4444; border-color: #ef4444; }
 
+/* ================= v97: ⏱️ 자기주도 1시간 모드 ================= */
+.ssx-overlay { position: fixed; inset: 0; z-index: 99990; background: #f1f5f9; display: none; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.ssx-overlay.on { display: block; }
+.ssx-card { max-width: 580px; margin: 0 auto; min-height: 100%; padding: 0 13px 40px; }
+.ssx-top { position: sticky; top: 0; z-index: 6; margin: 0 -13px 12px; padding: 9px 13px 10px; background: linear-gradient(135deg, #0f766e, #0d9488); color: #fff; display: flex; align-items: center; gap: 8px; box-shadow: 0 3px 12px rgba(13,148,136,.28); }
+.ssx-top .ssx-t { font-family: Maplestory, pretendard, sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap; }
+.ssx-steps { display: flex; gap: 4px; }
+.ssx-step { font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.2); color: #e6fffb; }
+.ssx-step.on { background: #fff; color: #0f766e; }
+.ssx-step.done { background: #bbf7d0; color: #065f46; }
+.ssx-clock { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 800; font-size: 13.5px; }
+.ssx-leave { font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.18); }
+.ssx-x { border: 1px solid rgba(255,255,255,.5); background: rgba(255,255,255,.14); color: #fff; border-radius: 9px; padding: 5px 9px; font-size: 11.5px; font-weight: 800; font-family: inherit; cursor: pointer; }
+.ssx-pane { background: #fff; border: 1.5px solid #ccfbf1; border-radius: 16px; padding: 14px; margin-bottom: 10px; box-shadow: 0 3px 12px rgba(13,148,136,.07); }
+.ssx-pane.amber { border-color: #fde68a; background: #fffbeb; }
+.ssx-pane.rose { border-color: #fecdd3; background: #fff1f2; }
+.ssx-h1 { font-family: Maplestory, pretendard, sans-serif; font-size: 16.5px; font-weight: 700; color: #0f172a; margin: 0 0 3px; }
+.ssx-h2 { font-size: 14px; font-weight: 800; color: #0f766e; margin: 0 0 4px; }
+.ssx-sub { font-size: 12.5px; color: #64748b; line-height: 1.5; }
+.ssx-big { font-family: Maplestory, pretendard, sans-serif; font-size: 30px; font-weight: 700; color: #0d9488; font-variant-numeric: tabular-nums; }
+.ssx-row { display: flex; align-items: center; gap: 8px; }
+.ssx-btn { display: block; width: 100%; border: none; border-radius: 13px; padding: 13px; font-size: 15px; font-weight: 800; font-family: inherit; cursor: pointer; background: #e2e8f0; color: #334155; margin-top: 10px; }
+.ssx-btn.pri { background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; box-shadow: 0 4px 12px rgba(13,148,136,.25); }
+.ssx-btn.warn { background: linear-gradient(135deg, #b91c1c, #ef4444); color: #fff; }
+.ssx-btn.sm { padding: 9px 12px; font-size: 13px; width: auto; margin-top: 0; }
+.ssx-btn:disabled { opacity: .42; cursor: not-allowed; box-shadow: none; }
+.ssx-stage { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 14px; margin-bottom: 8px; background: #fff; }
+.ssx-stage.on { border-color: #14b8a6; box-shadow: 0 2px 10px rgba(20,184,166,.16); }
+.ssx-stage.lock { opacity: .55; }
+.ssx-stage .num { width: 30px; height: 30px; flex: 0 0 30px; border-radius: 999px; background: #f0fdfa; color: #0f766e; font-weight: 900; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+.ssx-stage.on .num { background: #0d9488; color: #fff; }
+.ssx-stage .tx { flex: 1; min-width: 0; }
+.ssx-stage .tx b { display: block; font-size: 14px; color: #1e293b; }
+.ssx-stage .tx span { font-size: 11.5px; color: #64748b; }
+.ssx-chip { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 999px; background: #f1f5f9; color: #64748b; white-space: nowrap; }
+.ssx-chip.ok { background: #dcfce7; color: #15803d; }
+.ssx-chip.no { background: #fee2e2; color: #b91c1c; }
+.ssx-chip.warn { background: #fef3c7; color: #b45309; }
+.ssx-chip.pri { background: #ccfbf1; color: #0f766e; }
+.ssx-day { display: flex; align-items: center; gap: 9px; padding: 11px; border: 1.5px solid #e2e8f0; border-radius: 13px; margin-bottom: 8px; background: #fff; }
+.ssx-day.ok { border-color: #86efac; background: #f0fdf4; }
+.ssx-day.part { border-color: #fde68a; background: #fffbeb; }
+.ssx-day .dnum { font-family: Maplestory, pretendard, sans-serif; font-size: 12.5px; font-weight: 700; color: #0f766e; width: 52px; flex: 0 0 52px; }
+.ssx-day .dname { flex: 1; min-width: 0; font-size: 12.5px; color: #334155; line-height: 1.35; }
+.ssx-prog { height: 7px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin: 8px 0 2px; }
+.ssx-prog i { display: block; height: 100%; background: linear-gradient(90deg, #0d9488, #14b8a6); transition: width .25s; }
+.ssx-opt { display: block; width: 100%; text-align: left; background: #fff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 13px; font-size: 14.5px; line-height: 1.45; margin-bottom: 8px; font-family: inherit; color: #1e293b; cursor: pointer; }
+.ssx-opt:active { background: #f8fafc; }
+.ssx-opt.ok { border-color: #16a34a; background: #f0fdf4; color: #14532d; }
+.ssx-opt.no { border-color: #dc2626; background: #fef2f2; color: #7f1d1d; }
+.ssx-opt:disabled { cursor: default; }
+.ssx-word { font-family: Maplestory, pretendard, sans-serif; font-size: 30px; font-weight: 700; color: #0f172a; text-align: center; padding: 14px 6px 4px; word-break: break-word; }
+.ssx-passage { font-size: 14px; line-height: 1.62; color: #1e293b; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.ssx-q { font-size: 14.5px; font-weight: 800; color: #0f172a; line-height: 1.45; margin-bottom: 10px; }
+.ssx-list { max-height: 46vh; overflow-y: auto; -webkit-overflow-scrolling: touch; border: 1px solid #e2e8f0; border-radius: 12px; }
+.ssx-wrow { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-bottom: 1px dashed #e2e8f0; font-size: 13.5px; }
+.ssx-wrow:last-child { border-bottom: none; }
+.ssx-wrow b { color: #0f172a; font-size: 14px; }
+.ssx-wrow span { color: #64748b; font-size: 12.5px; margin-left: auto; text-align: right; }
+.ssx-spk { border: 1px solid #99f6e4; background: #f0fdfa; color: #0f766e; border-radius: 8px; padding: 4px 7px; font-size: 12px; cursor: pointer; font-family: inherit; }
+.ssx-chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
+.ssx-chipw { border: 1.5px solid #cbd5e1; background: #fff; color: #1e293b; border-radius: 11px; padding: 9px 11px; font-size: 14px; font-family: inherit; font-weight: 600; cursor: pointer; }
+.ssx-chipw:active { background: #f0fdfa; }
+.ssx-slot { min-height: 54px; border: 1.5px dashed #99f6e4; border-radius: 12px; padding: 8px; background: #f0fdfa; display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
+.ssx-slot .ssx-chipw { background: #0d9488; border-color: #0d9488; color: #fff; }
+.ssx-slot.bad { border-color: #fca5a5; background: #fef2f2; }
+.ssx-slot.good { border-color: #16a34a; background: #f0fdf4; }
+.ssx-ko { font-size: 14.5px; font-weight: 700; color: #0f172a; line-height: 1.5; margin-bottom: 4px; }
+.ssx-hint { font-size: 11.5px; color: #94a3b8; }
+.ssx-fb { border-radius: 12px; padding: 11px 12px; font-size: 13px; line-height: 1.55; margin-top: 4px; }
+.ssx-fb.ok { background: #f0fdf4; border: 1.5px solid #86efac; color: #14532d; }
+.ssx-fb.no { background: #fef2f2; border: 1.5px solid #fca5a5; color: #7f1d1d; }
+.ssx-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ssx-stat { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; }
+.ssx-stat b { display: block; font-family: Maplestory, pretendard, sans-serif; font-size: 19px; color: #0d9488; }
+.ssx-stat span { font-size: 11px; color: #64748b; }
+.ssx-cert { background: linear-gradient(135deg, #ecfdf5, #f0fdfa); border: 2px solid #14b8a6; border-radius: 16px; padding: 14px; text-align: center; }
+.ssx-cert .big { font-family: Maplestory, pretendard, sans-serif; font-size: 18px; color: #0f766e; }
+.ssx-warnbox { position: fixed; inset: 0; z-index: 99995; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 26px; background: radial-gradient(circle at 50% 30%, #b91c1c, #7f1d1d 70%); color: #fff; }
+.ssx-warnbox.on { display: flex; }
+.ssx-warnbox .lock { font-size: 62px; animation: ssxshake .5s ease-in-out 2; }
+.ssx-warnbox h2 { color: #fff; font-size: 21px; margin: 0; font-family: Maplestory, pretendard, sans-serif; }
+.ssx-warnbox p { color: #fee2e2; font-size: 13.5px; line-height: 1.6; margin: 0; max-width: 320px; }
+.ssx-warnbox .k { font-size: 12px; color: #fecaca; }
+@keyframes ssxshake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+.ssx-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); z-index: 99997; background: #0f172a; color: #fff; font-size: 12.5px; font-weight: 700; padding: 9px 14px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0,0,0,.3); opacity: 0; transition: opacity .2s; pointer-events: none; }
+.ssx-toast.on { opacity: 1; }
+.ssx-note { font-size: 11px; color: #94a3b8; line-height: 1.55; margin-top: 8px; }
+.ssx-badge-live { background: #ef4444; color: #fff; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; animation: ssxblink 1.2s infinite; }
+@keyframes ssxblink { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+
 </style>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -1362,6 +1453,17 @@ function forceAppRefresh(e) {
 <!-- v83: 📢 오늘 미완료 학생 전원 일괄 독촉 쪽지 모달 -->
 <div id="nagOverlay" class="notif-overlay" aria-hidden="true"><div class="notif-card" id="nagModal"></div></div>
 <!-- v86: ✅ 숙제 1초 체크 & 에듀스탭/피클 문자 복사 모달 -->
+<!-- v97: ⏱️ 자기주도 1시간 모드 (전체화면 학습 + 이탈 감시) -->
+<div id="ssOverlay" class="ssx-overlay" aria-hidden="true">
+  <div class="ssx-card" id="ssxCard"></div>
+</div>
+<div id="ssxWarn" class="ssx-warnbox" aria-hidden="true">
+  <div class="lock">🔒</div>
+  <h2>자기주도 화면을 벗어났어요!</h2>
+  <p id="ssxWarnBody">다른 앱(카톡·유튜브)으로 넘어가면 학습 시간이 멈추고, 이탈 기록이 원장님께 전송돼요.</p>
+  <div class="k" id="ssxWarnCnt"></div>
+  <button type="button" class="ssx-btn" style="max-width:280px;background:#fff;color:#b91c1c;font-weight:900" onclick="ssWarnClose()">계속 학습하기 →</button>
+</div>
 <div id="hwOverlay" class="hwc-overlay" aria-hidden="true"><div class="hwc-card" id="hwModal"></div></div>
 <!-- v91: 📺 빠바 기초세우기 인강관 (예비고1 전용 · 앱 안에서만 재생) -->
 <div id="bbOverlay" class="bb-overlay" aria-hidden="true">
@@ -3629,6 +3731,8 @@ function showHome(){
   var meInfo = getStreakInfo(me.ban, me.name);
   html += drawStreakHero(me);
   html += drawStudentInAppNoteCard(me.name);
+  /* v97: ⏱️ 자기주도 1시간 모드 (보조 교사 없이 50~60분 완주) */
+  try { html += ssHomeCard(me.ban); } catch(e){}
   /* v96: 📌 오늘의 집 숙제 — 반별 단어 Day 분량 (원장님이 정한 계획표) */
   html += drawHomePlanCard(me.ban);
   html += drawSpecialHwCard(me.ban);
@@ -3727,6 +3831,7 @@ function showHome(){
   var cLive = $('#card_live_join'); if(cLive) cLive.onclick = function(){ enterLiveClass(this.dataset.ban || me.ban, false, this.dataset.title); };
   var bDq=$('#btn_daily_quest'); if(bDq){ bDq.onclick=function(){ if(h.sets&&h.sets.length){ openWordSet(h.sets[0]); } }; }
   /* v82: 스트릭 배너 · 매일 알림 버튼 연결 */
+  var ssGoB = $('#ss_go'); if(ssGoB) ssGoB.onclick = ssEntry;
   var sGo = $('#streak_go');
   if(sGo) sGo.onclick = function(){ if(h.sets && h.sets.length){ openWordSet(h.sets[0]); } else { alert('아직 올라온 학습이 없어요. 선생님께 세트를 올려달라고 해요!'); } };
   var sBell = $('#streak_bell'); if(sBell) sBell.onclick = openNotifModal;
@@ -5088,7 +5193,7 @@ function showAdmin(){
     '<button type="button" class="btn" id="bwrite" onclick="openWritingApp(true)" style="flex:1;margin:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(124,58,237,0.24)">✍️ 내신 서술형</button>'+
     '<button type="button" class="btn" id="bhw" onclick="openHwCheck()" style="flex:1;margin:0;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#78350f;font-weight:800;box-shadow:0 4px 12px rgba(245,158,11,0.28)">✅ 숙제 1초 체크</button>'+
     '</div>'+
-    '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button></div>';
+    '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="ss" class="'+(A.tab==='ss'?'on':'')+'" style="color:#0891b2;font-weight:700">⏱️ 자기주도·학부모문자</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button></div>';
 
   
   if(A.tab === 'alerts'){
@@ -5231,6 +5336,15 @@ function showAdmin(){
     $('#bnew').onclick = showBattleSetup; var bl = $('#blive'); if(bl) bl.onclick = showLiveClassSetup;
     [].forEach.call(app.querySelectorAll('.tabs button'), function(b){ b.onclick = function(){ A.tab = b.dataset.t; showAdmin(); }; });
     loadAdminDashboard();
+    return;
+  }
+
+  if(A.tab === 'ss'){
+    app.innerHTML = html + '<div id="aout">' + ssAdminHtml() + '</div>';
+    $('#back').onclick = start;
+    $('#bnew').onclick = showBattleSetup; var bl2 = $('#blive'); if(bl2) bl2.onclick = showLiveClassSetup;
+    [].forEach.call(app.querySelectorAll('.tabs button'), function(b){ b.onclick = function(){ A.tab = b.dataset.t; showAdmin(); }; });
+    try { ssAdminBind(); } catch(e){}
     return;
   }
 
@@ -6668,7 +6782,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v96';
+var TOPEDU_APP_VERSION = 'v97';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -8175,6 +8289,1479 @@ function sendBulkNag(){
   var sd = document.getElementById('nagSend');
   if(sd){ sd.textContent = '✅ ' + done + '명 발송 완료'; sd.disabled = true; sd.style.opacity = '0.75'; }
   try { renderStreakBoard(); } catch(e){}
+}
+
+var SS3_BANK = {
+  '수지중2': [{"pass": "Why Does Festival Matter?", "type": "주제 추론", "q": "윗글의 주제로 가장 적절한 것은?", "p": "Festivals are more than special days filled with music, food, and fun... Festivals are not just about celebrating the past; they also help communities connect with the present and the future.", "c": ["The commercialization of traditional holiday festivals", "The diverse cultural functions and evolving nature of festivals", "The economic impact of Thanksgiving celebrations in America", "Historical origins of religious harvest rituals around the world", "Reasons why cultural traditions should never be modified"], "a": 1, "d": "본문은 축제가 단순한 즐길 거리를 넘어 '지역사회의 문화 이해', '사람 간 유대 강화 및 문화 전승', 그리고 '시대 변화에 맞춘 전통의 진화와 미래 연결'이라는 다채로운 역할을 수행함을 다루고 있습니다. 따라서 ② '축제의 다양한 문화적 기능과 진화하는 본질'이 가장 정확합니다."}, {"pass": "Why Does Festival Matter?", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "Festivals are more than special days filled with music, food, and fun... Festivals are not just about celebrating the past; they also help communities connect with the present and the future.", "c": ["Food and Dance: The Universal Elements of Modern Parties", "More Than Just Fun: Why Festivals Matter to Culture and Future", "How Holi Replaced Ancient Religious Ceremonies", "Why New Generations Refuse to Follow Old Traditions", "The Financial Burden of Holding Community Festivals"], "a": 1, "d": "첫 문장의 'more than special days filled with music, food, and fun'과 마지막 문장의 'connect with the present and the future'를 아우르는 제목은 ② 'More Than Just Fun: Why Festivals Matter to Culture and Future(단순한 즐거움 그 이상: 축제가 문화와 미래에 중요한 이유)'입니다."}, {"pass": "Why Does Festival Matter?", "type": "요지 파악", "q": "윗글의 요지로 가장 적절한 것은?", "p": "What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities connect with the present and the future.", "c": ["축제는 전통의 의미를 되새기며 시대에 맞게 계승하여 미래로 나아가게 한다.", "전통 축제의 원형을 조금이라도 변형하면 고유한 문화적 가치가 훼손된다.", "미국의 추수감사절은 인도의 홀리 축제보다 가족 결속력이 더 뛰어나다.", "현대 사회에서는 경제적 효율성을 위해 공동체 축제를 축소해야 한다.", "축제의 주된 목적은 과거의 역사적 사건을 원형 그대로 암기하는 것이다."], "a": 0, "d": "글쓴이가 마지막 4단락에서 '중요한 것은 전통의 의미를 이해하고 이를 어떻게 이어나갈지 결정하며, 현재와 미래를 연결하는 것'이라고 강조했으므로 ①번이 정확한 요지입니다."}, {"pass": "Why Does Festival Matter?", "type": "글의 순서", "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?", "p": "<b>[주어진 글]</b><br>Festivals are more than special days filled with music, food, and fun. They also tell us a lot about the culture of a community. Around the world, people celebrate festivals to remember important events, welcome new seasons, and share their traditions with others.<br><br><b>(A)</b> Festivals also bring people together. Families, friends, and neighbors work together to prepare food, make decorations, and take part in special activities. These shared experiences help strengthen the bonds between people...<br><b>(B)</b> For example, during Thanksgiving in the United States, families and friends gather to share a meal and express gratitude for what they have. In India, people celebrate Holi, the Festival of Colors...<br><b>(C)</b> However, culture is not something that never changes. As people's lives change, traditions may also change to meet new needs. What matters is that people understand the meaning behind their traditions...", "c": ["(A) - (C) - (B)", "(B) - (A) - (C)", "(B) - (C) - (A)", "(C) - (A) - (B)", "(C) - (B) - (A)"], "a": 1, "d": "주어진 글에서 '전 세계 사람들이 축제를 통해 전통을 나눈다'고 서술한 직후, (B)에서 연결사 'For example'과 함께 미국의 Thanksgiving과 인도의 Holi라는 구체적 사례를 제시합니다. 이어 (A)에서 'also(또한)'를 통해 사람들을 결속시키고 문화를 전승하는 기능을 덧붙인 뒤, 마지막 (C)에서 역접 'However'를 기점으로 문화의 변화와 미래 연결로 글을 마무리하는 (B)-(A)-(C)가 완벽한 흐름입니다."}, {"pass": "Why Does Festival Matter?", "type": "문장 삽입", "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?", "p": "<b>[주어진 문장]</b><br><span style='color:#e11d48; font-weight:700;'>However, culture is not something that never changes.</span><br><br>Festivals also bring people together. [ 1 ] Families, friends, and neighbors work together to prepare food, make decorations, and take part in special activities. [ 2 ] These shared experiences help strengthen the bonds between people. [ 3 ] In this way, festivals help pass culture from one generation to the next. [ 4 ] As people's lives change, traditions may also change to meet new needs. [ 5 ] What matters is that people understand the meaning behind their traditions and decide how to continue them.", "c": ["[ 1 ]", "[ 2 ]", "[ 3 ]", "[ 4 ]", "[ 5 ]"], "a": 3, "d": "[4] 바로 앞 문장까지는 축제가 문화를 한 세대에서 다음 세대로 전달(pass culture from one generation to the next)한다는 '전통의 전승'을 이야기합니다. 그러다 [4] 뒤 문장에서 '사람들의 삶이 변함에 따라 전통 또한 새로운 필요를 충족하기 위해 변할 수 있다'는 '변화'의 내용이 처음 등장하므로, 화제를 전환하는 주어진 문장(However, culture is not something that never changes)은 [4]에 반드시 들어가야 합니다."}, {"pass": "Why Does Festival Matter?", "type": "함축 의미 추론", "q": "밑줄 친 <u>connect with the present and the future</u>가 윗글에서 의미하는 바로 가장 적절한 것은?", "p": "What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities <u>connect with the present and the future</u>.", "c": ["preserve ancient customs without any modifications", "adapt traditional meanings to meet modern lives and ongoing needs", "completely discard past traditions and create futuristic rituals", "separate local communities from outside influences", "replace physical festival gatherings with virtual events"], "a": 1, "d": "축제가 과거만을 기리는 것이 아니라 현재와 미래를 연결한다는 것은, 바로 앞 문장의 '전통 이면에 담긴 의미를 이해하면서도 새로운 필요에 맞게 전통을 지속해 나가는 것'을 의미합니다. 즉, 전통의 본질을 살리면서 현대의 생활 방식과 새로운 요구에 유연하게 적응시키는 ②번이 정답입니다."}, {"pass": "Why Does Festival Matter?", "type": "어법 오류 찾기 1", "q": "다음 밑줄 친 ①~⑤ 중, 어법상 틀린 것은?", "p": "Festivals are more than special days ① <u>filled with</u> music, food, and fun. Families and friends gather to share a meal and express gratitude for ② <u>what</u> they have. Both show how people express their feelings and values ③ <u>through</u> celebrations. These shared experiences help ④ <u>strengthen</u> the bonds between people. However, culture is not something that never ⑤ <u>change</u>.", "c": ["① filled with", "② what", "③ through", "④ strengthen", "⑤ change"], "a": 4, "d": "⑤ 선행사가 'something'이라는 부정대명사(단수 취급)입니다. 따라서 이를 수식하는 주격 관계대명사 that절 안의 동사는 3인칭 단수 현재형인 <b>changes</b>가 되어야 합니다."}, {"pass": "Why Does Festival Matter?", "type": "어법 양자택일 2", "q": "다음 (A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?", "p": "Families and friends gather to share a meal and <b>(A) [express / expressing]</b> gratitude for what they have.<br>Although these festivals are different, both show how people <b>(B) [express / do they express]</b> their feelings and values.<br><b>(C) [What / That]</b> matters is that people understand the meaning behind their traditions.", "c": ["(A) express - (B) express - (C) What", "(A) express - (B) do they express - (C) That", "(A) expressing - (B) express - (C) What", "(A) expressing - (B) do they express - (C) What", "(A) express - (B) do they express - (C) What"], "a": 0, "d": "(A) to share a meal과 병렬 연결되어 to에 걸리는 동사원형 express가 맞습니다.<br>(B) 간접의문문 명사절은 '의문사 + 주어 + 동사'의 평서문 어순이므로 people express가 맞습니다.<br>(C) 뒤에 동사 matters의 주어가 빠져있는 불완전한 절을 이끌며 전체 문장의 주어 역할을 하는 관계대명사 What이 맞습니다. (What matters = 중요한 것)"}, {"pass": "Why Does Festival Matter?", "type": "문맥상 어휘", "q": "다음 밑줄 친 ①~⑤ 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?", "p": "Holi welcomes spring and ① <u>represents</u> joy and new beginnings. Festivals also bring people together. Families, friends, and neighbors work together to prepare food and decorations. These shared experiences help ② <u>weaken</u> the bonds between people. In this way, festivals help ③ <u>pass</u> culture from one generation to the next. As people's lives change, traditions may also change to ④ <u>meet</u> new needs. Festivals help communities ⑤ <u>connect</u> with the present and the future.", "c": ["① represents", "② weaken", "③ pass", "④ meet", "⑤ connect"], "a": 1, "d": "② 가족, 친구, 이웃들이 함께 음식을 준비하고 장식을 만들며 축제에 참여하는 공유된 경험은 사람들 사이의 유대를 '약화시키는(weaken)' 것이 아니라 '강화하는(strengthen)' 역할을 합니다. 따라서 weaken은 문맥의 흐름과 정반대입니다."}, {"pass": "Why Does Festival Matter?", "type": "빈칸 추론", "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?", "p": "However, culture is not something that never changes. As people's lives change, traditions may also change to meet new needs. What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities ________________________.", "c": ["compete aggressively against other foreign cultures", "connect with the present and the future", "eliminate ancient cultural symbols to cut government spending", "force young people to memorize all historical rituals", "isolate themselves from neighboring towns"], "a": 1, "d": "글의 마지막 결론 문장으로, 축제가 단순히 과거의 유산을 기념하는 것에 그치지 않고, 변화하는 시대 속에서 공동체가 '현재와 미래를 연결하도록(connect with the present and the future)' 돕는다는 내용이 들어가야 합니다."}, {"pass": "Cultural memory", "type": "주제 추론", "q": "What is the main topic of the passage?", "p": "Cultural memory is the constructed understanding of the past that is passed from one generation to the next... Indeed, cultural memory can last for thousands of years.", "c": ["Technological developments in digital archiving systems", "The definition, preservation, and enduring nature of cultural memory", "Why biological brain memory is superior to written text", "The negative influence of historical monuments on modern architecture", "Methods for erasing unwanted collective memories in society"], "a": 1, "d": "본문은 문화적 기억의 개념적 정의, 텍스트·유물·박물관 등을 통한 보존 및 저장 방식, 그리고 수천 년간 지속되는 영속적 가치를 포괄적으로 다루고 있으므로 ②번이 주제로 가장 적절합니다."}, {"pass": "Cultural memory", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "Cultural memory is the constructed understanding of the past that is passed from one generation to the next... Indeed, cultural memory can last for thousands of years.", "c": ["The Difference Between Human Brain and Digital Memory", "Cultural Memory: Meaning, Preservation, and Enduring Power", "Why Modern Museums are Losing Their Visitors", "The Limits of Artificial Intelligence in Storing History", "How Personal Recollection Overpowers Cultural Heritage"], "a": 1, "d": "문화적 기억의 의미와 박물관·도서관을 통한 보존, 그리고 수천 년간 지속되는 영속적 힘을 가장 명쾌하게 요약한 제목은 ② 'Cultural Memory: Meaning, Preservation, and Enduring Power'입니다."}, {"pass": "Cultural memory", "type": "요지 파악", "q": "윗글의 요지로 가장 적절한 것은?", "p": "Cultural memory is a form of collective memory shared by a group of people. Cultural memory is often stored in objects... Cultural memory is the longest-lasting form of memory. Indeed, cultural memory can last for thousands of years.", "c": ["문화적 기억은 유물과 상징물을 통해 전승되는 집단적 기억으로 수천 년간 지속된다.", "개인의 주관적 기억은 문화적 상징보다 훨씬 더 오래 보존되는 특성이 있다.", "인터넷의 발전으로 인해 박물관이나 유물 같은 물리적 기념물은 불필요해졌다.", "문화적 기억은 오직 문자 기록으로만 전달되며 예술 작품으로는 전승될 수 없다.", "한 세대가 지나면 과거의 집단적 기억은 완전히 소멸되는 것이 자연스럽다."], "a": 0, "d": "본문은 문화적 기억이 글, 유물, 의식 등의 상징물을 통해 집단적으로 공유되고 전승되며, 수천 년 동안 지속되는 가장 오래가는 기억 형태라고 설명하므로 ①번이 정확한 요지입니다."}, {"pass": "Cultural memory", "type": "글의 순서", "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?", "p": "<b>[주어진 글]</b><br>Cultural memory is the constructed understanding of the past that is passed from one generation to the next through text, paintings, monuments, rites, and other symbols.<br><br><b>(A)</b> To understand culture, humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into where we came from. Libraries and the internet store a seemingly infinite amount of data...<br><b>(B)</b> People may typically think of memory as the recollection of the past. Memory enables people to learn from past experiences and apply that knowledge in present circumstances. It is a critical part of our identity...<br><b>(C)</b> So is culture, the way of life specific to a group of people. Cultural memory is a form of collective memory shared by a group of people. Cultural memory is often stored in objects, such as museums or historical monuments...", "c": ["(A) - (C) - (B)", "(B) - (A) - (C)", "(B) - (C) - (A)", "(C) - (A) - (B)", "(C) - (B) - (A)"], "a": 2, "d": "주어진 글에서 문화적 기억의 정의를 내린 후, (B)에서 일반적인 기억(개인적 회상)의 기능과 정체성 형성을 설명합니다. 이어 (C)에서 'So is culture'로 기억에서 문화 및 집단적 기억으로 개념을 연결하고 박물관 등에 저장됨을 밝힌 뒤, 마지막 (A)에서 책, 유물, 도서관, 인터넷 등 구체적 매체와 수천 년 지속성으로 마무리하는 (B)-(C)-(A)가 가장 자연스럽습니다."}, {"pass": "Cultural memory", "type": "문장 삽입", "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?", "p": "<b>[주어진 문장]</b><br><span style='color:#e11d48; font-weight:700;'>So is culture, the way of life specific to a group of people.</span><br><br>People may typically think of memory as the recollection of the past. [ 1 ] Memory enables people to learn from past experiences and apply that knowledge in present circumstances. [ 2 ] It is a critical part of our identity. [ 3 ] Cultural memory is a form of collective memory shared by a group of people. [ 4 ] Cultural memory is often stored in objects, such as museums or historical monuments. [ 5 ]", "c": ["[ 1 ]", "[ 2 ]", "[ 3 ]", "[ 4 ]", "[ 5 ]"], "a": 2, "d": "[3] 앞 문장에서 기억이 우리 정체성의 결정적인 부분(It is a critical part of our identity)이라고 서술했습니다. 주어진 문장의 'So is culture(문화 또한 그러하다)'는 앞 문장의 be동사 서술어(is a critical part...)를 이어받아 문화 역시 정체성의 핵심임을 밝히며, [3] 뒤의 '집단적 기억인 문화적 기억'으로 논리적 다리를 놓아주는 역할을 합니다."}, {"pass": "Cultural memory", "type": "함축 의미 추론", "q": "밑줄 친 <u>the longest-lasting form of memory</u>가 의미하는 바로 가장 적절한 것은?", "p": "Libraries and the internet store a seemingly infinite amount of data about what it means to be part of a culture. Cultural memory is <u>the longest-lasting form of memory</u>. Indeed, cultural memory can last for thousands of years.", "c": ["biological neurons stored in the living brain", "shared cultural knowledge preserved for millennia through external records and artifacts", "individual short-term memory used to solve daily problems", "personal childhood memories that fade away with age", "confidential government files protected from the public"], "a": 1, "d": "수천 년 동안 지속될 수 있는 '가장 오래 지속되는 기억의 형태'란 텍스트, 그림, 기념물, 유물, 도서관, 인터넷 등 외부 상징물에 저장되어 세대를 초월하여 수천 년간 전승되는 공동체의 집단적 문화 지식을 뜻하므로 ②번이 정확합니다."}, {"pass": "Cultural memory", "type": "어법 오류 찾기 1", "q": "다음 밑줄 친 ①~⑤ 중, 어법상 틀린 것은?", "p": "Cultural memory is the constructed understanding of the past that is ① <u>passed</u> from one generation to the next. Memory enables people ② <u>learn</u> from past experiences and apply that knowledge in present circumstances. So ③ <u>is</u> culture, the way of life specific to a group of people. Humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into where we ④ <u>came</u> from. Indeed, cultural memory can ⑤ <u>last</u> for thousands of years.", "c": ["① passed", "② learn", "③ is", "④ came", "⑤ last"], "a": 1, "d": "② enable 동사는 5형식 문형에서 목적격 보어로 반드시 <b>to부정사</b>를 취합니다. 따라서 'enables people <b>to learn</b>'으로 고쳐야 올바른 어법입니다. (뒤의 apply도 to에 걸리는 병렬구조: to learn ... and (to) apply)"}, {"pass": "Cultural memory", "type": "어법 양자택일 2", "q": "다음 (A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?", "p": "Cultural memory is the constructed understanding of the past that <b>(A) [passed / is passed]</b> from one generation to the next.<br>To understand culture, humans <b>(B) [access / access to]</b> a vast array of cultural symbols.<br>Libraries and the internet store a <b>(C) [seemingly / seeming]</b> infinite amount of data.", "c": ["(A) is passed - (B) access - (C) seemingly", "(A) is passed - (B) access to - (C) seemingly", "(A) passed - (B) access - (C) seeming", "(A) passed - (B) access to - (C) seemingly", "(A) is passed - (B) access - (C) seeming"], "a": 0, "d": "(A) understanding(이해)은 인간에 의해 전승되는 것이므로 수동태 is passed가 맞습니다.<br>(B) access는 완전타동사이므로 전치사 to를 쓰지 않고 목적어를 바로 취합니다.<br>(C) 뒤에 나오는 형용사 infinite(무한한)를 수식해야 하므로 부사 형태인 seemingly(겉보기에는)가 맞습니다."}, {"pass": "Cultural memory", "type": "문맥상 어휘", "q": "다음 밑줄 친 ①~⑤ 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?", "p": "Memory enables people to learn from past experiences and apply that knowledge in ① <u>present</u> circumstances. It is a ② <u>critical</u> part of our identity. Cultural memory is a form of collective memory shared by a group of people. Artifacts of the past provide ③ <u>insights</u> into where we came from. Cultural memory is the ④ <u>shortest-lived</u> form of memory. Indeed, cultural memory can ⑤ <u>last</u> for thousands of years.", "c": ["① present", "② critical", "③ insights", "④ shortest-lived", "⑤ last"], "a": 3, "d": "④ 바로 뒤 문장에서 '참으로, 문화적 기억은 수천 년 동안 지속될 수 있다(can last for thousands of years)'고 서술하고 있습니다. 따라서 문화적 기억은 '가장 수명이 짧은(shortest-lived)' 것이 아니라 '가장 오래 지속되는(longest-lasting)' 형태의 기억이어야 문맥이 성립합니다."}, {"pass": "Cultural memory", "type": "빈칸 추론", "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?", "p": "To understand culture, humans access a vast array of cultural symbols, such as books. Artifacts of the past provide insights into ________________________. Libraries and the internet store a seemingly infinite amount of data about what it means to be part of a culture.", "c": ["where we came from", "how to erase digital footprints completely", "why ancient wars were inevitable", "what our biological genes will look like in the future", "how to sell antique objects for higher prices"], "a": 0, "d": "과거의 유물(Artifacts of the past)은 오늘날의 인간에게 과거의 뿌리와 정체성, 즉 '우리가 어디에서 왔는가(where we came from)'에 대한 통찰을 제공하므로 ①번이 정답입니다."}],
+  '한빛중2': [{"pass": "Why Does Festival Matter?", "type": "주제 추론", "q": "윗글의 주제로 가장 적절한 것은?", "p": "Festivals are more than special days filled with music, food, and fun... Festivals are not just about celebrating the past; they also help communities connect with the present and the future.", "c": ["The commercialization of traditional holiday festivals", "The diverse cultural functions and evolving nature of festivals", "The economic impact of Thanksgiving celebrations in America", "Historical origins of religious harvest rituals around the world", "Reasons why cultural traditions should never be modified"], "a": 1, "d": "본문은 축제가 단순한 즐길 거리를 넘어 '지역사회의 문화 이해', '사람 간 유대 강화 및 문화 전승', 그리고 '시대 변화에 맞춘 전통의 진화와 미래 연결'이라는 다채로운 역할을 수행함을 다루고 있습니다. 따라서 ② '축제의 다양한 문화적 기능과 진화하는 본질'이 가장 정확합니다."}, {"pass": "Why Does Festival Matter?", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "Festivals are more than special days filled with music, food, and fun... Festivals are not just about celebrating the past; they also help communities connect with the present and the future.", "c": ["Food and Dance: The Universal Elements of Modern Parties", "More Than Just Fun: Why Festivals Matter to Culture and Future", "How Holi Replaced Ancient Religious Ceremonies", "Why New Generations Refuse to Follow Old Traditions", "The Financial Burden of Holding Community Festivals"], "a": 1, "d": "첫 문장의 'more than special days filled with music, food, and fun'과 마지막 문장의 'connect with the present and the future'를 아우르는 제목은 ② 'More Than Just Fun: Why Festivals Matter to Culture and Future(단순한 즐거움 그 이상: 축제가 문화와 미래에 중요한 이유)'입니다."}, {"pass": "Why Does Festival Matter?", "type": "요지 파악", "q": "윗글의 요지로 가장 적절한 것은?", "p": "What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities connect with the present and the future.", "c": ["축제는 전통의 의미를 되새기며 시대에 맞게 계승하여 미래로 나아가게 한다.", "전통 축제의 원형을 조금이라도 변형하면 고유한 문화적 가치가 훼손된다.", "미국의 추수감사절은 인도의 홀리 축제보다 가족 결속력이 더 뛰어나다.", "현대 사회에서는 경제적 효율성을 위해 공동체 축제를 축소해야 한다.", "축제의 주된 목적은 과거의 역사적 사건을 원형 그대로 암기하는 것이다."], "a": 0, "d": "글쓴이가 마지막 4단락에서 '중요한 것은 전통의 의미를 이해하고 이를 어떻게 이어나갈지 결정하며, 현재와 미래를 연결하는 것'이라고 강조했으므로 ①번이 정확한 요지입니다."}, {"pass": "Why Does Festival Matter?", "type": "글의 순서", "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?", "p": "<b>[주어진 글]</b><br>Festivals are more than special days filled with music, food, and fun. They also tell us a lot about the culture of a community. Around the world, people celebrate festivals to remember important events, welcome new seasons, and share their traditions with others.<br><br><b>(A)</b> Festivals also bring people together. Families, friends, and neighbors work together to prepare food, make decorations, and take part in special activities. These shared experiences help strengthen the bonds between people...<br><b>(B)</b> For example, during Thanksgiving in the United States, families and friends gather to share a meal and express gratitude for what they have. In India, people celebrate Holi, the Festival of Colors...<br><b>(C)</b> However, culture is not something that never changes. As people's lives change, traditions may also change to meet new needs. What matters is that people understand the meaning behind their traditions...", "c": ["(A) - (C) - (B)", "(B) - (A) - (C)", "(B) - (C) - (A)", "(C) - (A) - (B)", "(C) - (B) - (A)"], "a": 1, "d": "주어진 글에서 '전 세계 사람들이 축제를 통해 전통을 나눈다'고 서술한 직후, (B)에서 연결사 'For example'과 함께 미국의 Thanksgiving과 인도의 Holi라는 구체적 사례를 제시합니다. 이어 (A)에서 'also(또한)'를 통해 사람들을 결속시키고 문화를 전승하는 기능을 덧붙인 뒤, 마지막 (C)에서 역접 'However'를 기점으로 문화의 변화와 미래 연결로 글을 마무리하는 (B)-(A)-(C)가 완벽한 흐름입니다."}, {"pass": "Why Does Festival Matter?", "type": "문장 삽입", "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?", "p": "<b>[주어진 문장]</b><br><span style='color:#e11d48; font-weight:700;'>However, culture is not something that never changes.</span><br><br>Festivals also bring people together. [ 1 ] Families, friends, and neighbors work together to prepare food, make decorations, and take part in special activities. [ 2 ] These shared experiences help strengthen the bonds between people. [ 3 ] In this way, festivals help pass culture from one generation to the next. [ 4 ] As people's lives change, traditions may also change to meet new needs. [ 5 ] What matters is that people understand the meaning behind their traditions and decide how to continue them.", "c": ["[ 1 ]", "[ 2 ]", "[ 3 ]", "[ 4 ]", "[ 5 ]"], "a": 3, "d": "[4] 바로 앞 문장까지는 축제가 문화를 한 세대에서 다음 세대로 전달(pass culture from one generation to the next)한다는 '전통의 전승'을 이야기합니다. 그러다 [4] 뒤 문장에서 '사람들의 삶이 변함에 따라 전통 또한 새로운 필요를 충족하기 위해 변할 수 있다'는 '변화'의 내용이 처음 등장하므로, 화제를 전환하는 주어진 문장(However, culture is not something that never changes)은 [4]에 반드시 들어가야 합니다."}, {"pass": "Why Does Festival Matter?", "type": "함축 의미 추론", "q": "밑줄 친 <u>connect with the present and the future</u>가 윗글에서 의미하는 바로 가장 적절한 것은?", "p": "What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities <u>connect with the present and the future</u>.", "c": ["preserve ancient customs without any modifications", "adapt traditional meanings to meet modern lives and ongoing needs", "completely discard past traditions and create futuristic rituals", "separate local communities from outside influences", "replace physical festival gatherings with virtual events"], "a": 1, "d": "축제가 과거만을 기리는 것이 아니라 현재와 미래를 연결한다는 것은, 바로 앞 문장의 '전통 이면에 담긴 의미를 이해하면서도 새로운 필요에 맞게 전통을 지속해 나가는 것'을 의미합니다. 즉, 전통의 본질을 살리면서 현대의 생활 방식과 새로운 요구에 유연하게 적응시키는 ②번이 정답입니다."}, {"pass": "Why Does Festival Matter?", "type": "어법 오류 찾기 1", "q": "다음 밑줄 친 ①~⑤ 중, 어법상 틀린 것은?", "p": "Festivals are more than special days ① <u>filled with</u> music, food, and fun. Families and friends gather to share a meal and express gratitude for ② <u>what</u> they have. Both show how people express their feelings and values ③ <u>through</u> celebrations. These shared experiences help ④ <u>strengthen</u> the bonds between people. However, culture is not something that never ⑤ <u>change</u>.", "c": ["① filled with", "② what", "③ through", "④ strengthen", "⑤ change"], "a": 4, "d": "⑤ 선행사가 'something'이라는 부정대명사(단수 취급)입니다. 따라서 이를 수식하는 주격 관계대명사 that절 안의 동사는 3인칭 단수 현재형인 <b>changes</b>가 되어야 합니다."}, {"pass": "Why Does Festival Matter?", "type": "어법 양자택일 2", "q": "다음 (A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?", "p": "Families and friends gather to share a meal and <b>(A) [express / expressing]</b> gratitude for what they have.<br>Although these festivals are different, both show how people <b>(B) [express / do they express]</b> their feelings and values.<br><b>(C) [What / That]</b> matters is that people understand the meaning behind their traditions.", "c": ["(A) express - (B) express - (C) What", "(A) express - (B) do they express - (C) That", "(A) expressing - (B) express - (C) What", "(A) expressing - (B) do they express - (C) What", "(A) express - (B) do they express - (C) What"], "a": 0, "d": "(A) to share a meal과 병렬 연결되어 to에 걸리는 동사원형 express가 맞습니다.<br>(B) 간접의문문 명사절은 '의문사 + 주어 + 동사'의 평서문 어순이므로 people express가 맞습니다.<br>(C) 뒤에 동사 matters의 주어가 빠져있는 불완전한 절을 이끌며 전체 문장의 주어 역할을 하는 관계대명사 What이 맞습니다. (What matters = 중요한 것)"}, {"pass": "Why Does Festival Matter?", "type": "문맥상 어휘", "q": "다음 밑줄 친 ①~⑤ 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?", "p": "Holi welcomes spring and ① <u>represents</u> joy and new beginnings. Festivals also bring people together. Families, friends, and neighbors work together to prepare food and decorations. These shared experiences help ② <u>weaken</u> the bonds between people. In this way, festivals help ③ <u>pass</u> culture from one generation to the next. As people's lives change, traditions may also change to ④ <u>meet</u> new needs. Festivals help communities ⑤ <u>connect</u> with the present and the future.", "c": ["① represents", "② weaken", "③ pass", "④ meet", "⑤ connect"], "a": 1, "d": "② 가족, 친구, 이웃들이 함께 음식을 준비하고 장식을 만들며 축제에 참여하는 공유된 경험은 사람들 사이의 유대를 '약화시키는(weaken)' 것이 아니라 '강화하는(strengthen)' 역할을 합니다. 따라서 weaken은 문맥의 흐름과 정반대입니다."}, {"pass": "Why Does Festival Matter?", "type": "빈칸 추론", "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?", "p": "However, culture is not something that never changes. As people's lives change, traditions may also change to meet new needs. What matters is that people understand the meaning behind their traditions and decide how to continue them. Festivals are not just about celebrating the past; they also help communities ________________________.", "c": ["compete aggressively against other foreign cultures", "connect with the present and the future", "eliminate ancient cultural symbols to cut government spending", "force young people to memorize all historical rituals", "isolate themselves from neighboring towns"], "a": 1, "d": "글의 마지막 결론 문장으로, 축제가 단순히 과거의 유산을 기념하는 것에 그치지 않고, 변화하는 시대 속에서 공동체가 '현재와 미래를 연결하도록(connect with the present and the future)' 돕는다는 내용이 들어가야 합니다."}, {"pass": "Cultural memory", "type": "주제 추론", "q": "What is the main topic of the passage?", "p": "Cultural memory is the constructed understanding of the past that is passed from one generation to the next... Indeed, cultural memory can last for thousands of years.", "c": ["Technological developments in digital archiving systems", "The definition, preservation, and enduring nature of cultural memory", "Why biological brain memory is superior to written text", "The negative influence of historical monuments on modern architecture", "Methods for erasing unwanted collective memories in society"], "a": 1, "d": "본문은 문화적 기억의 개념적 정의, 텍스트·유물·박물관 등을 통한 보존 및 저장 방식, 그리고 수천 년간 지속되는 영속적 가치를 포괄적으로 다루고 있으므로 ②번이 주제로 가장 적절합니다."}, {"pass": "Cultural memory", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "Cultural memory is the constructed understanding of the past that is passed from one generation to the next... Indeed, cultural memory can last for thousands of years.", "c": ["The Difference Between Human Brain and Digital Memory", "Cultural Memory: Meaning, Preservation, and Enduring Power", "Why Modern Museums are Losing Their Visitors", "The Limits of Artificial Intelligence in Storing History", "How Personal Recollection Overpowers Cultural Heritage"], "a": 1, "d": "문화적 기억의 의미와 박물관·도서관을 통한 보존, 그리고 수천 년간 지속되는 영속적 힘을 가장 명쾌하게 요약한 제목은 ② 'Cultural Memory: Meaning, Preservation, and Enduring Power'입니다."}],
+  '예비고1': [{"pass": "The Bamboo Ceiling in Western Companies", "type": "주제 추론", "q": "윗글의 주제로 가장 적절한 것은?", "p": "Office workers may face many biases... Hopefully, this will allow more Asian Americans to get important positions in Western companies.", "c": ["The invisible promotion barrier for Asian workers and corporate efforts to solve it", "Strategies for American companies to expand into Asian consumer markets", "The legal definition and history of gender discrimination in corporate America", "Why cultural stereotyping is necessary for maintaining workplace discipline", "Methods for evaluating the work efficiency of diverse ethnic groups"], "a": 0, "d": "본문은 서구 기업에서 아시아계 직원이 승진에서 겪는 편견인 '대나무 천장(bamboo ceiling)'의 개념과 원인, 그리고 이를 해소하기 위한 기업들의 교육 프로그램 노력을 종합적으로 설명하고 있습니다. 따라서 ①이 정답입니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "Similarly, the term \"bamboo ceiling\" refers to the specific bias that affects Asians working for Western companies...", "c": ["Overcoming Workplace Fatigue in Modern Offices", "Breaking the Bamboo Ceiling: Toward True Diversity for Asian Employees", "The Rise of Asian Multinationals in the Global Economy", "Why African American and Latino Workers Outperform Others", "A Complete Guide to Fast Corporate Promotions"], "a": 1, "d": "서구 기업 내 아시아계 근로자들이 겪는 승진 장벽인 '대나무 천장'을 부수고 진정한 다양성을 향해 나아가는 과정을 다루고 있으므로 ②번이 가장 적절합니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "글의 요지", "q": "윗글의 요지로 가장 적절한 것은?", "p": "However, companies are becoming more aware of the bamboo ceiling and are developing training programs to eliminate the prejudice.", "c": ["서구 기업 내 아시아계 승진 장벽(대나무 천장)을 해소하기 위한 기업의 인식과 제도적 노력이 필요하다.", "승진을 위해서는 소수 인종 간의 경쟁보다 협력이 우선시되어야 한다.", "유리천장 문제는 법적인 강제 조치만으로 완전히 해결될 수 있다.", "해외 취업을 준비하는 아시아계 청년들은 문화적 적응력을 먼저 길러야 한다.", "기업의 다양성 정책은 인종보다는 성별 균형에 더 집중해야 한다."], "a": 0, "d": "기업들이 대나무 천장을 인식하고 편견을 없애기 위한 교육 프로그램을 개발함으로써 아시아계 직원이 고위직에 진출할 수 있도록 해야 한다는 것이 글의 핵심 주장입니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "빈칸 추론", "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?", "p": "Similarly, the term \"bamboo ceiling\" refers to the specific bias that affects Asians working for Western companies. One problem is simple __________.", "c": ["stereotyping", "generosity", "hospitality", "transparency", "cooperation"], "a": 0, "d": "아시아계 직원들이 승진에서 겪는 첫 번째 원인으로 단순한 '고정관념(stereotyping)'이 제시되었습니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "함축 의미 추론", "q": "밑줄 친 <u>bamboo ceiling</u>이 윗글에서 의미하는 바로 가장 적절한 것은?", "p": "Similarly, the term \"<u>bamboo ceiling</u>\" refers to the specific bias that affects Asians working for Western companies.", "c": ["An invisible promotional barrier preventing Asian employees from reaching top positions in Western firms", "A traditional architectural ceiling made of environmentally friendly bamboo materials", "A company policy that strictly limits foreign investments in Asian markets", "A rapid promotion system designed exclusively for technical specialists", "A wage gap between male and female Asian corporate executives"], "a": 0, "d": "'bamboo ceiling'은 유리천장(glass ceiling)에서 파생된 표현으로, 서구 기업에서 아시아계 직원들이 고위직으로 승진하지 못하도록 가로막는 보이지 않는 차별 장벽을 뜻합니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "어법 오류", "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?", "p": "When this kind of bias prevents a worker from ① <u>being promoted</u>, we call it a glass ceiling. Similarly, the term \"bamboo ceiling\" refers to the specific bias that ② <u>affects</u> Asians ③ <u>working</u> for Western companies. One problem is simple stereotyping. Another is that businesses trying to become more diverse often seek African American or Latino employees without ④ <u>consider</u> Asian Americans. However, companies are becoming more ⑤ <u>aware</u> of the bamboo ceiling...", "c": ["①", "②", "③", "④", "⑤"], "a": 3, "d": "④번: without은 전치사이므로 뒤에 동사원형 consider가 올 수 없고 동명사 considering이 와야 어법상 올바릅니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "어법 양자택일", "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?", "p": "Some of these are (A) [based / basing] on gender or race... businesses trying to become more diverse often seek employees without considering Asian Americans. However, companies are developing training programs to (B) [eliminate / eliminating] the prejudice. Hopefully, this will allow more Asian Americans (C) [get / to get] important positions.", "c": ["based — eliminate — to get", "based — eliminating — get", "basing — eliminate — to get", "basing — eliminating — get", "based — eliminate — get"], "a": 0, "d": "(A) be based on(~에 기반을 두다) 수동형이므로 based가 올바릅니다.<br>(B) 'to부정사의 부사적 용법(목적: ~하기 위하여)'으로 to 뒤에 동사원형 eliminate가 와야 합니다.<br>(C) allow는 5형식에서 목적격 보어로 to부정사를 취하므로 to get이 올바릅니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "문맥 어휘", "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?", "p": "When this kind of bias ① <u>prevents</u> a worker from being promoted, we call it a glass ceiling... businesses trying to become more ② <u>diverse</u> often seek African American or Latino employees without considering Asian Americans. However, companies are becoming more ③ <u>aware</u> of the bamboo ceiling and are developing training programs to ④ <u>strengthen</u> the prejudice. Hopefully, this will allow more Asian Americans to get ⑤ <u>important</u> positions.", "c": ["①", "②", "③", "④", "⑤"], "a": 3, "d": "④번: 기업들이 교육 프로그램을 개발하는 목적은 편견을 '강화(strengthen)'하는 것이 아니라 '없애고 제거(eliminate / remove)'하기 위함입니다. 따라서 strengthen은 정반대의 단어로 어색합니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "글의 순서", "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?", "p": "Office workers may face many biases. Some of these are based on gender or race. When this kind of bias prevents a worker from being promoted, we call it a glass ceiling.\n\n(A) One problem is simple stereotyping. Another is that businesses trying to become more diverse often seek African American or Latino employees without considering Asian Americans.\n(B) Similarly, the term \"bamboo ceiling\" refers to the specific bias that affects Asians working for Western companies.\n(C) However, companies are becoming more aware of the bamboo ceiling and are developing training programs to eliminate the prejudice.", "c": ["(A) - (C) - (B)", "(B) - (A) - (C)", "(B) - (C) - (A)", "(C) - (A) - (B)", "(C) - (B) - (A)"], "a": 1, "d": "주어진 글에서 유리천장을 언급한 뒤, (B) 'Similarly(마찬가지로)'로 대나무 천장의 개념을 도입하고, (A)에서 대나무 천장의 구체적 원인(고정관념, 아시아계 배제)을 나열한 후, (C) 'However'로 이에 대한 기업들의 최근 인식과 해결 노력(training programs)으로 마무리되는 (B)-(A)-(C)가 가장 자연스럽습니다."}, {"pass": "The Bamboo Ceiling in Western Companies", "type": "문장 삽입", "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?", "p": "<b>[주어진 문장]</b> However, companies are becoming more aware of the bamboo ceiling and are developing training programs to eliminate the prejudice.\n\nOffice workers may face many biases. ( ① ) When this kind of bias prevents a worker from being promoted, we call it a glass ceiling. ( ② ) Similarly, the term \"bamboo ceiling\" refers to the specific bias that affects Asians working for Western companies. ( ③ ) One problem is simple stereotyping. Another is that businesses trying to become more diverse often seek African American or Latino employees without considering Asian Americans. ( ④ ) Hopefully, this will allow more Asian Americans to get important positions in Western companies. ( ⑤ )", "c": ["①", "②", "③", "④", "⑤"], "a": 3, "d": "주어진 문장은 역접 연결사 'However'와 함께 기업들이 대나무 천장을 인식하고 편견 제거 프로그램을 개발하고 있다는 긍정적 전환을 담고 있습니다. 따라서 차별의 구체적 문제점들이 서술된 문장 바로 뒤이자, 이로 인해 아시아계 직원이 고위직에 가기를 희망한다는 결론 앞인 ④번 자리가 가장 적절합니다."}, {"pass": "Targeted Advertising on Social Media", "type": "주제 추론", "q": "윗글의 주제로 가장 적절한 것은?", "p": "In recent years, many businesses have begun to focus on utilizing social media sites... Ultimately, this type of advertising tends to be more efficient than traditional marketing campaigns.", "c": ["The mechanisms and effectiveness of targeted social media advertising", "The danger of personal data leaks from search engine companies", "How traditional television advertising builds lasting brand loyalty", "Methods for regular users to block commercial sponsored posts", "The negative mental health effects of excessive social media browsing"], "a": 0, "d": "기업들이 소셜 미디어의 개인 데이터 수집과 인플루언서 협찬을 활용하여 소비자에게 정확히 타깃팅된 광고를 효율적으로 집행하는 방식을 다루고 있으므로 ①이 정답입니다."}, {"pass": "Targeted Advertising on Social Media", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "This kind of information can help businesses target their ads to more specific groups of consumers...", "c": ["Why Traditional Marketing Campaigns Will Never Die", "Smart Ads: How Social Media Reaches the Right Consumers", "The Decline of Influencer Marketing in Modern Business", "How to Protect Your Shopping Habits from Hackers", "The History of Search Engine Algorithms"], "a": 1, "d": "소셜 미디어가 소비자의 취향과 검색 기록을 분석하여 정확한 타깃에게 광고를 전달하는 원리를 설명하므로 ② 'Smart Ads: How Social Media Reaches the Right Consumers'가 가장 훌륭한 제목입니다."}, {"pass": "Targeted Advertising on Social Media", "type": "글의 요지", "q": "윗글의 요지로 가장 적절한 것은?", "p": "Ultimately, this type of advertising tends to be more efficient than traditional marketing campaigns.", "c": ["소셜 미디어 타깃 광고와 협찬 게시물은 전통 마케팅보다 더 높은 효율성을 발휘한다.", "소셜 미디어 사용자는 개인정보 보호를 위해 검색 기록을 주기적으로 삭제해야 한다.", "기업들은 인플루언서 마케팅보다 전통적인 인쇄 광고에 더 많은 예산을 배정해야 한다.", "검색 엔진 광고가 소셜 미디어 광고보다 소비자 도달 범위가 훨씬 넓다.", "과도한 맞춤형 광고는 소비자의 구매 의욕을 저하시키는 부작용을 낳는다."], "a": 0, "d": "글의 결론(Ultimately)에서 소셜 미디어 광고가 전통적인 마케팅 캠페인보다 더 효율적인 경향이 있다고 명확히 밝혔으므로 ①번이 정답입니다."}, {"pass": "Targeted Advertising on Social Media", "type": "빈칸 추론", "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?", "p": "This kind of information can help businesses __________ their ads to more specific groups of consumers.", "c": ["target", "conceal", "abandon", "confuse", "postpone"], "a": 0, "d": "수집된 세부 정보를 바탕으로 특정 소비자 집단을 '목표로 삼아 겨냥(target)'한다는 흐름입니다."}, {"pass": "Targeted Advertising on Social Media", "type": "함축 의미 추론", "q": "밑줄 친 <u>the ads you see have been selected to match your interests</u>가 의미하는 바로 가장 적절한 것은?", "p": "If you use social media, you've probably noticed this—<u>the ads you see have been selected to match your interests</u> or browsing history.", "c": ["Commercial messages are customized based on individual online behavior data", "All social media advertisements are displayed randomly without any filters", "Users are forced to buy products that they searched for in the past", "Government regulations require companies to show the same ads to everyone", "Influencers personally decide which products every follower should purchase"], "a": 0, "d": "사용자가 보는 광고가 자신의 관심사에 맞춰 선택되었다는 것은, 개인의 온라인 활동 및 검색 데이터에 기반해 광고가 맞춤형(customized)으로 제공된다는 뜻입니다."}, {"pass": "Targeted Advertising on Social Media", "type": "어법 오류", "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?", "p": "This is because social media sites provide businesses ① <u>with</u> the opportunity to reach more consumers... the ads you see ② <u>have been selected</u> to match your interests. Businesses are also making use of sponsored posts, which ③ <u>involves</u> paying social media influencers ④ <u>to mention</u> their products. Ultimately, this type of advertising tends to be more ⑤ <u>efficiently</u> than traditional marketing campaigns.", "c": ["①", "②", "③", "④", "⑤"], "a": 4, "d": "⑤번: tends to be 뒤에 be동사의 보어 역할을 해야 하므로 부사 efficiently가 아닌 형용사 efficient가 와야 올바릅니다."}, {"pass": "Targeted Advertising on Social Media", "type": "어법 양자택일", "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?", "p": "This is because social media sites provide businesses with the opportunity to (A) [reach / reaching] more consumers... Businesses are also making use of sponsored posts, (B) [which / that] involves paying influencers... Ultimately, this type of advertising tends (C) [be / to be] more efficient.", "c": ["reach — which — to be", "reach — that — to be", "reaching — which — be", "reaching — that — to be", "reach — which — be"], "a": 0, "d": "(A) opportunity를 수식하는 to부정사이므로 to reach가 올바릅니다.<br>(B) 콤마(,) 뒤 계속적 용법의 관계대명사로는 that을 쓸 수 없으므로 which가 올바릅니다.<br>(C) tend는 to부정사를 목적어로 취하는 동사(tend to-v)이므로 to be가 올바릅니다."}, {"pass": "Targeted Advertising on Social Media", "type": "문맥 어휘", "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?", "p": "social media sites provide businesses with the opportunity to reach ① <u>more</u> consumers. Many of these sites collect consumer data that cannot be found on search engines, such as users' personal interests. This kind of information can help businesses target their ads to more ② <u>specific</u> groups. Businesses are also making use of sponsored posts, which involves paying influencers to ③ <u>ignore</u> their products. Ultimately, this type of advertising tends to be more ④ <u>efficient</u> than ⑤ <u>traditional</u> marketing campaigns.", "c": ["①", "②", "③", "④", "⑤"], "a": 2, "d": "③번: 기업들이 인플루언서에게 대가를 지불하는 것은 자사 제품을 '무시(ignore)'하게 하려는 것이 아니라 '언급하고 홍보(mention / promote)'하게 하기 위함입니다. 따라서 ignore는 문맥상 어색합니다."}, {"pass": "Targeted Advertising on Social Media", "type": "글의 순서", "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?", "p": "In recent years, many businesses have begun to focus on utilizing social media sites. This is because social media sites provide businesses with the opportunity to reach more consumers.\n\n(A) If you use social media, you've probably noticed this—the ads you see have been selected to match your interests or browsing history.\n(B) Many of these sites collect consumer data that cannot be found on search engines, such as users' personal interests and shopping habits. This kind of information can help businesses target their ads to more specific groups of consumers.\n(C) Businesses are also making use of sponsored posts, which involves paying social media influencers to mention their products or services. Ultimately, this type of advertising tends to be more efficient than traditional marketing campaigns.", "c": ["(A) - (C) - (B)", "(B) - (A) - (C)", "(B) - (C) - (A)", "(C) - (A) - (B)", "(C) - (B) - (A)"], "a": 1, "d": "주어진 글에서 소셜 미디어 활용 시작 이유를 밝힌 뒤, (B)에서 검색 엔진에 없는 개인 데이터 수집과 타깃팅 원리를 설명하고, (A)에서 사용자가 일상에서 겪는 체감 사례(this)로 연결한 후, (C)에서 인플루언서 협찬과 최종적인 높은 효율성 요약으로 마무리되는 (B)-(A)-(C)가 가장 논리적입니다."}, {"pass": "Targeted Advertising on Social Media", "type": "문장 삽입", "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?", "p": "<b>[주어진 문장]</b> This kind of information can help businesses target their ads to more specific groups of consumers.\n\nIn recent years, many businesses have begun to focus on utilizing social media sites. ( ① ) This is because social media sites provide businesses with the opportunity to reach more consumers. ( ② ) Many of these sites collect consumer data that cannot be found on search engines, such as users' personal interests and shopping habits. ( ③ ) If you use social media, you've probably noticed this—the ads you see have been selected to match your interests or browsing history. ( ④ ) Businesses are also making use of sponsored posts. ( ⑤ )", "c": ["①", "②", "③", "④", "⑤"], "a": 2, "d": "주어진 문장의 'This kind of information'은 바로 앞 문장에 언급된 'users' personal interests and shopping habits'를 가리킵니다. 따라서 해당 데이터 언급 바로 뒤인 ③번 자리에 들어가는 것이 가장 적절합니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "주제 추론", "q": "윗글의 주제로 가장 적절한 것은?", "p": "Have you ever wondered why green means \"go\" on traffic signals?... which makes it the perfect choice for warning drivers to stop.", "c": ["The historical origin of traffic light colors and the scientific reasons behind them", "The technological evolution of automated train braking systems", "How driver fatigue increases the risk of railway crossing collisions", "Why green light is more dangerous than white light during nighttime driving", "The economic benefits of replacing traditional traffic lights with LEDs"], "a": 0, "d": "신호등 색상이 과거 열차 충돌 사고를 계기로 바뀌게 된 역사적 배경과, 파장(wavelength)에 따른 과학적 시각 특성을 다루고 있으므로 ①이 정답입니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "Red lights have always been used as a signal to stop, but in the past, green meant \"caution\" and white meant \"go.\"...", "c": ["A Deadly Mistake: The Danger of Railway Crossings", "Red, Green, and White: The History and Science of Traffic Signals", "Why Wavelengths Do Not Matter in Visual Design", "The Invention of the First Steam Locomotive in 1914", "Color Psychology: How Colors Influence Shopping Behavior"], "a": 1, "d": "빨간색, 초록색, 흰색 신호등의 변천사와 과학적 원리를 다루므로 ② 'Red, Green, and White: The History and Science of Traffic Signals'가 가장 정확합니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "글의 요지", "q": "윗글의 요지로 가장 적절한 것은?", "p": "Shortly after, white lights were replaced with green lights, which have a calming effect on people due to their short wavelength. Red, on the other hand, has a long wavelength and is easy to see...", "c": ["교통 신호등의 색상은 과거 열차 사고를 계기로 정립되었으며, 빛의 파장 특성과 밀접하게 연관되어 있다.", "모든 교통 신호는 운전자의 편의를 위해 단일 색상으로 통일되어야 한다.", "1914년 이후 철도 신호등의 렌즈는 유리 대신 플라스틱으로 전면 교체되었다.", "초록색 빛은 파장이 길기 때문에 위험 경고 신호로 가장 적합하다.", "신호등 고장으로 인한 인명 피해를 줄이기 위해 AI 카메라 도입이 시급하다."], "a": 0, "d": "신호등 색상이 1914년 기차 사고 후 초록색으로 대체되었고, 빛의 파장(빨간색은 장파장으로 경고에 적합, 초록색은 단파장으로 진정 효과)에 기반해 정립되었다는 요지입니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "빈칸 추론", "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?", "p": "Red, on the other hand, has a __________ and is easy to see, which makes it the perfect choice for warning drivers to stop.", "c": ["long wavelength", "short frequency", "neutral shade", "calming effect", "complex pattern"], "a": 0, "d": "초록색의 short wavelength(짧은 파장)와 대조적으로 빨간색은 눈에 잘 띄는 '긴 파장(long wavelength)'을 가집니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "함축 의미 추론", "q": "밑줄 친 <u>causing it to appear white</u>가 초래한 결과로 가장 적절한 것은?", "p": "A train signal's red lens fell out, <u>causing it to appear white</u>. So, although the train was supposed to stop, it kept going and crashed.", "c": ["The train engineer mistook the broken signal for a go light and failed to stop", "The station master immediately halted all train operations along the track", "Passengers aboard the train panicked and jumped out of the moving cars", "The traffic signal manufacturer went bankrupt due to severe financial penalties", "Railway workers replaced all colored lenses with electric bells"], "a": 0, "d": "빨간색 렌즈가 떨어져 신호가 흰색(당시 '출발' 의미)으로 보이는 바람에, 기차 기관사가 출발 신호로 오인하여 멈추지 않고 달리다 충돌했습니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "어법 오류", "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?", "p": "This changed in 1914 after a white light caused a confusion which ① <u>led</u> to a serious train accident. A train signal's red lens fell out, ② <u>causing</u> it ③ <u>appear</u> white. So, although the train was supposed ④ <u>to stop</u>, it kept going. Shortly after, white lights were replaced ⑤ <u>with</u> green lights...", "c": ["①", "②", "③", "④", "⑤"], "a": 2, "d": "③번: cause는 5형식에서 목적격 보어로 to부정사를 취하므로 appear가 아니라 to appear가 와야 올바릅니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "어법 양자택일", "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?", "p": "Have you ever wondered (A) [why / what] green means \"go\" on traffic signals?... Shortly after, white lights were replaced with green lights, (B) [which / that] have a calming effect... due to (C) [their / its] short wavelength.", "c": ["why — which — their", "why — that — its", "what — which — their", "what — that — its", "why — which — its"], "a": 0, "d": "(A) 뒤 문장이 완전(green means \"go\")하므로 의문부사 why가 올바릅니다.<br>(B) 콤마 뒤 계속적 용법이므로 which가 올바릅니다.<br>(C) 선행사가 복수 명사 green lights이므로 소유격 대명사 their가 올바릅니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "문맥 어휘", "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?", "p": "in the past, green meant \"caution\" and white meant \"go.\" This changed in 1914 after a white light caused a ① <u>confusion</u> which led to a serious train accident... Shortly after, white lights were replaced with green lights, which have a ② <u>calming</u> effect on people due to their ③ <u>short</u> wavelength. Red, on the other hand, has a ④ <u>short</u> wavelength and is easy to see, which makes it the ⑤ <u>perfect</u> choice for warning drivers.", "c": ["①", "②", "③", "④", "⑤"], "a": 3, "d": "④번: 빨간색은 눈에 잘 띄고 멀리서도 경고하기 적합한 이유가 파장이 '길기(long)' 때문입니다. 따라서 short는 반대말로 문맥상 어색합니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "글의 순서", "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?", "p": "Red lights have always been used as a signal to stop, but in the past, green meant \"caution\" and white meant \"go.\"\n\n(A) Shortly after, white lights were replaced with green lights, which have a calming effect on people due to their short wavelength.\n(B) This changed in 1914 after a white light caused a confusion which led to a serious train accident.\n(C) Red, on the other hand, has a long wavelength and is easy to see, which makes it the perfect choice for warning drivers to stop.", "c": ["(A) - (C) - (B)", "(B) - (A) - (C)", "(B) - (C) - (A)", "(C) - (A) - (B)", "(C) - (B) - (A)"], "a": 1, "d": "과거 신호 체계를 소개한 뒤, (B) 'This changed in 1914'로 사고를 통한 변화의 계기를 설명하고, (A) 초록색 불빛 도입과 진정 효과를 제시한 후, (C) 'Red, on the other hand'로 빨간색의 장파장 특성으로 정리하는 (B)-(A)-(C)가 가장 자연스럽습니다."}, {"pass": "The Origin of Traffic Signal Colors", "type": "문장 삽입", "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?", "p": "<b>[주어진 문장]</b> A train signal's red lens fell out, causing it to appear white.\n\nRed lights have always been used as a signal to stop, but in the past, green meant \"caution\" and white meant \"go.\" ( ① ) This changed in 1914 after a white light caused a confusion which led to a serious train accident. ( ② ) So, although the train was supposed to stop, it kept going and crashed. ( ③ ) Shortly after, white lights were replaced with green lights. ( ④ ) Red, on the other hand, has a long wavelength and is easy to see. ( ⑤ )", "c": ["①", "②", "③", "④", "⑤"], "a": 1, "d": "주어진 문장은 1914년 기차 사고의 구체적인 원인(빨간 렌즈가 떨어져 흰색으로 보임)입니다. 따라서 사고 언급 바로 뒤이자, 'So(그래서) 기차가 멈추지 않고 충돌했다'는 결과 앞인 ②번 자리가 가장 적절합니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "주제 추론", "q": "윗글의 주제로 가장 적절한 것은?", "p": "The peppered moth is a common insect in Britain... Because the peppered moth has a short lifespan, natural selection happened quite quickly.", "c": ["Industrial melanism of the peppered moth as evidence of Darwin's natural selection", "The economic consequences of burning coal in 19th-century Britain", "How lichens protect tree bark from industrial acidic rain", "The life cycle and seasonal migration patterns of British moths", "Artificial breeding experiments to change insect pigmentation"], "a": 0, "d": "석탄 오염으로 환경이 어두워지자 어두운 색 후추나방이 살아남아 다윈의 자연선택설을 입증한 공업 암화(industrial melanism)를 다루므로 ①이 정답입니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "제목 추론", "q": "What is the best title for the passage?", "p": "Because it provides a clear example of Darwin's theory of natural selection, it is sometimes called \"Darwin's moth.\"...", "c": ["Darwin's Moth: Evolution in Action in Industrial Britain", "The Complete Guide to Identifying British Lichen Species", "Why Coal Was Banned in Victorian Era Cities", "The Extinction of Gray Insects in Modern Europe", "How to Protect Forest Trees from Insect Attacks"], "a": 0, "d": "다윈의 나방으로 불리는 후추나방이 산업화 과정에서 실제 진화를 보여준 사례를 다루므로 ① 'Darwin's Moth: Evolution in Action in Industrial Britain'이 가장 적절합니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "글의 요지", "q": "윗글의 요지로 가장 적절한 것은?", "p": "Suddenly, a darker color was a survival advantage for peppered moths. Because the peppered moth has a short lifespan, natural selection happened quite quickly.", "c": ["환경 변화(대기 오염)로 위장 조건이 달라지자 어두운 색 후추나방의 자연선택이 급격히 일어났다.", "수명이 긴 생물일수록 환경 오염에 대한 진화 속도가 더 빠르다.", "도시의 대기 오염은 영국 내 모든 곤충의 개체수를 급감시켰다.", "다윈의 자연선택설은 실험실 연구를 통해서만 입증될 수 있다.", "나무에 자라는 지의류는 석탄 매연을 정화하는 중요한 공기 정화원이다."], "a": 0, "d": "석탄 연기로 나무가 검게 변하자 어두운 색 나방이 생존에 유리해져 자연선택이 빠르게 일어났다는 것이 글의 핵심 요지입니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "빈칸 추론", "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?", "p": "This caused air pollution that killed the lichen and turned the trees black. Suddenly, a darker color was a __________ for peppered moths.", "c": ["survival advantage", "genetic defect", "fatal hazard", "temporary burden", "social conflict"], "a": 0, "d": "검게 변한 나무 환경에서 어두운 색은 포식자의 눈을 피할 수 있는 '생존상의 이점(survival advantage)'이 되었습니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "함축 의미 추론", "q": "밑줄 친 <u>turned the trees black</u>이 후추나방 집단에 미친 영향으로 가장 적절한 것은?", "p": "This caused air pollution that killed the lichen and <u>turned the trees black</u>. Suddenly, a darker color was a survival advantage for peppered moths.", "c": ["Dark-colored moths became harder for predators to spot compared to light-colored ones", "Light-colored moths developed the ability to consume coal dust for food", "All peppered moths permanently lost their ability to fly between trees", "Birds stopped preying on insects living in urban forests", "Moths were forced to abandon trees and nest exclusively underground"], "a": 0, "d": "나무가 검게 변했다는 것은 어두운 색 나방이 밝은색 나방에 비해 포식자(새)의 눈에 덜 띄게 되어 생존에 유리해졌음을 뜻합니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "어법 오류", "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?", "p": "Because it provides a clear example of Darwin's theory of natural selection, it is sometimes ① <u>called</u> \"Darwin's moth.\" Originally, most peppered moths were light gray with small black spots. This allowed them ② <u>to blend</u> in with the lichen that ③ <u>grew</u> on trees... This caused air pollution that killed the lichen and turned the trees ④ <u>blackly</u>. Because the peppered moth has a short lifespan, natural selection ⑤ <u>happened</u> quite quickly.", "c": ["①", "②", "③", "④", "⑤"], "a": 3, "d": "④번: turned는 여기서 5형식 동사로 목적어 the trees 뒤에 목적격 보어가 와야 합니다. 보어 자리에는 부사(blackly)가 올 수 없고 형용사 black이 와야 올바릅니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "어법 양자택일", "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?", "p": "This allowed them to blend in with the lichen that (A) [grew / grown] on trees... This caused air pollution that killed the lichen and (B) [turned / turning] the trees black. Because the peppered moth has a short lifespan, natural selection (C) [happened / was happened] quite quickly.", "c": ["grew — turned — happened", "grew — turning — happened", "grown — turned — was happened", "grown — turning — happened", "grew — turned — was happened"], "a": 0, "d": "(A) 주격 관계대명사 that 뒤에 과거 시제 본동사 grew가 올바릅니다.<br>(B) killed and turned로 과거동사 병렬 연결이므로 turned가 올바릅니다.<br>(C) happen은 대표적인 1형식 자동사로 수동태(was happened)가 절대 불가하므로 happened가 올바릅니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "문맥 어휘", "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?", "p": "Originally, most peppered moths were light gray with small black spots. This allowed them to ① <u>blend</u> in with the lichen that grew on trees. But in the mid-19th century, people in cities began to burn coal. This caused air pollution that ② <u>killed</u> the lichen and turned the trees black. Suddenly, a darker color was a survival ③ <u>advantage</u> for peppered moths. Because the peppered moth has a short lifespan, natural selection happened quite ④ <u>slowly</u>.", "c": ["①", "②", "③", "④"], "a": 3, "d": "④번: 후추나방은 수명이 '짧았기(short lifespan)' 때문에 자연선택이 느리게 일어난 것이 아니라 '매우 빠르게(quite quickly)' 일어났습니다. 따라서 slowly는 반대말 오류입니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "글의 순서", "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?", "p": "The peppered moth is a common insect in Britain. However, the story of its evolution is amazing.\n\n(A) But in the mid-19th century, people in cities began to burn coal. This caused air pollution that killed the lichen and turned the trees black.\n(B) Because it provides a clear example of Darwin's theory of natural selection, it is sometimes called \"Darwin's moth.\" Originally, most peppered moths were light gray with small black spots.\n(C) Suddenly, a darker color was a survival advantage for peppered moths. Because the peppered moth has a short lifespan, natural selection happened quite quickly.", "c": ["(A) - (C) - (B)", "(B) - (A) - (C)", "(B) - (C) - (A)", "(C) - (A) - (B)", "(C) - (B) - (A)"], "a": 1, "d": "다윈의 나방 소개와 원래 밝은 회색이었다는 배경(B) ➔ 19세기 중반 석탄 사용으로 나무가 검게 변한 환경 변화(A) ➔ 어두운 색이 생존 이점이 되어 자연선택이 일어난 결과(C)로 이어지는 (B)-(A)-(C)가 가장 논리적입니다."}, {"pass": "Natural Selection of the Peppered Moth", "type": "문장 삽입", "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?", "p": "<b>[주어진 문장]</b> This caused air pollution that killed the lichen and turned the trees black.\n\nOriginally, most peppered moths were light gray with small black spots. ( ① ) This allowed them to blend in with the lichen that grew on trees. ( ② ) But in the mid-19th century, people in cities began to burn coal. ( ③ ) Suddenly, a darker color was a survival advantage for peppered moths. ( ④ ) Because the peppered moth has a short lifespan, natural selection happened quite quickly. ( ⑤ )", "c": ["①", "②", "③", "④", "⑤"], "a": 2, "d": "주어진 문장의 'This'는 바로 앞 문장의 '석탄을 태우기 시작했다(began to burn coal)'를 가리킵니다. 또한 뒷 문장에서 '나무가 검게 변했기 때문에' 갑자기 어두운 색이 생존 이점이 되었다는 흐름이 이어지므로 ③번 자리가 가장 적절합니다."}],
+  '수지중1': [{"type": "어법 (동명사 주어)", "q": "다음 중 어법상 옳은 문장은?", "p": "", "c": ["Reuse and recycle things is really good for the environment.", "Reusing and recycling things are really good for the environment.", "Reusing and recycling things is really good for the environment.", "Reusing and recycling things is really good to the environment."], "a": 2, "d": "동명사(Reusing and recycling)가 주어일 때 동사는 단수 취급하므로 is가 맞고, '~에 좋다'는 good for ~입니다."}, {"type": "접속사 that", "q": "빈칸에 들어갈 말로 가장 알맞은 것은?  \"I learned ____ reusing is important for zero-waste living.\"", "p": "", "c": ["that", "what", "which", "whose"], "a": 0, "d": "learn 뒤에 '주어+동사'가 완전한 절이 오면 접속사 that을 씁니다. (what은 불완전한 절을 이끌어요)"}, {"type": "to부정사 (목적)", "q": "우리말과 뜻이 같도록 빈칸에 알맞은 것은?  We can plant trees ____ the Earth. (우리는 지구를 구하기 위해 나무를 심을 수 있다.)", "p": "", "c": ["to save", "saving", "saved", "save"], "a": 0, "d": "'~하기 위해'라는 목적을 나타낼 때는 to부정사(to save)를 씁니다."}, {"type": "비교급 and 비교급", "q": "빈칸에 알맞은 것은?  Every day, we produce lots of waste, and the Earth is getting ____.", "p": "", "c": ["sick and sick", "sicker and sicker", "more sick and more sick", "the sickest and the sickest"], "a": 1, "d": "'점점 더 ~해지고 있다'는 비교급 and 비교급(sicker and sicker)으로 표현합니다."}, {"type": "감정 분사", "q": "빈칸에 알맞은 것은?  Her followers, however, soon got ____.", "p": "", "c": ["boring", "bored", "bore", "to bore"], "a": 1, "d": "사람이 지루함을 '느끼면' bored, 사물이 지루하게 '만들면' boring입니다. (followers는 사람)"}, {"type": "접속사 but", "q": "빈칸에 알맞은 것은?  I often use food delivery services, ____ today I walked to the restaurant.", "p": "", "c": ["so", "but", "because", "or"], "a": 1, "d": "앞(배달 이용)과 뒤(걸어감)가 반대되는 내용이므로 역접 but이 맞습니다."}, {"type": "to부정사 (보어)", "q": "빈칸에 알맞은 것은?  My job is ____ perfect places for shooting.", "p": "", "c": ["find", "finding", "to find", "found"], "a": 2, "d": "be동사 뒤에서 주어(My job)의 내용을 설명하는 to부정사(명사적 용법·보어)가 필요합니다."}, {"type": "최상급", "q": "우리말과 뜻이 같도록 빈칸에 알맞은 것은?  She ate the ____ one and took selfies with a smile. (그녀는 가장 작은 것을 먹고)", "p": "", "c": ["small", "smaller", "smallest", "most small"], "a": 2, "d": "여럿 중 '가장 ~한'은 최상급 smallest입니다. (the + 최상급)"}, {"type": "조동사 should", "q": "빈칸에 알맞은 것은?  What ____ I do to get more likes?  ('좋아요를 더 많이 받으려면 어떻게 해야 하지?')", "p": "", "c": ["should", "do", "am", "have"], "a": 0, "d": "'무엇을 해야 하지?' 하고 조언·의무를 물을 때는 조동사 should를 씁니다."}, {"type": "독해 · 주제", "q": "윗글의 주제로 가장 적절한 것은?", "p": "Every day, we produce lots of waste, and our planet is getting sicker and sicker. We can help the Earth by reusing old things, buying secondhand items, and walking instead of using delivery services. Small actions by many people can make a big difference.", "c": ["음식 배달 서비스가 환경에 미치는 좋은 영향", "일상에서 실천할 수 있는 환경 보호 방법", "재활용을 막는 법과 규제의 필요성", "나무를 심어 돈을 버는 방법"], "a": 1, "d": "본문은 재사용·중고 구매·걷기 같은 일상의 작은 실천이 지구를 돕는다는 내용이므로 ②가 주제입니다."}, {"type": "독해 · 제목", "q": "윗글의 제목으로 가장 적절한 것은?", "p": "Last month, I decided to fix my broken umbrella instead of buying a new one. It took only ten minutes. Now I always think twice before I throw things away.", "c": ["A New Umbrella Shop in Town", "Why Recycling Is Expensive", "Ten Minutes That Changed My Habit", "How to Make an Umbrella"], "a": 2, "d": "우산을 고친 10분의 경험이 '버리기 전에 한 번 더 생각하는 습관'을 만들었다는 글이므로 ③이 제목으로 가장 알맞습니다."}]
+};
+
+/* ================= v97: ⏱️ 자기주도 1시간 모드 =================
+   보조 교사 없이 아이들끼리 자기주도실에 있어도, 앱 하나로 50~60분 안에
+   [1단계 단어 Day 4개 → 2단계 문장 어순배열 → 3단계 문법·독해]를 완주한다.
+   · 전체화면(Fullscreen) + 화면꺼짐 방지(Wake Lock) + 뒤로가기·창닫기 방어
+   · 이탈 감시(visibilitychange·blur·pagehide·fullscreenchange) → 경고음 + 빨간 잠금 오버레이
+   · 2회 이상(또는 5초 이상) 이탈 시 원장님 ntfy 알림
+   · 원장님 화면: 실시간 자기주도실 현황판 + 설정 + 학부모 문자
+   상태는 MQTT(실시간) + localStorage(같은 폰) 두 길로 오가요. */
+var SS_CFG_KEY = 'topedu_ss97_cfg';
+var SS_ST_KEY = 'topedu_ss97_st';
+var SS_SESS_KEY = 'topedu_ss97_sess_';
+var SS_SNAP_KEY = 'topedu_ss97_snap';
+var SS_PARENTS_KEY = 'topedu_parents_v97';
+var SS_TOPIC_ST = 'topedu/ss97/st/';
+var SS_TOPIC_SESS = 'topedu/ss97/sess/';
+var SS_BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker-cn.emqx.io:8084/mqtt'];
+var SS_DEF = { goal: 60, dayMode: 'auto', dayBook: '', dayStart: 1, dayCount: 4, testCount: 10, sentCount: 8, probCount: 8 };
+
+var SS = {
+  on: false, done: false, warnOn: false, ban: '', name: '',
+  goal: 60, t0: 0, el: 0, tick: null, seed: 1, scr: 'hub',
+  stage: 1, leaveCnt: 0, leaveSec: 0, leaveT: 0, lastInc: 0, lastPush: 0,
+  s1: { days: [], cur: -1 }, s2: { qs: [], i: 0, tries: 0, ok: 0 }, s3: { qs: [], i: 0, ok: 0 },
+  stats: { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 },
+  wrongWords: [], wrongProbs: [], session: null, lastPush: null
+};
+var SS_WAKE = null, SS_WAKE_WANT = false;
+var SS_NET = { lib: null, pub: null, pubOk: false, sub: null, subOk: false, stage: 0, teacher: null, teacherOk: false, board: {}, boardAt: 0 };
+
+function ssq(id) { return document.getElementById(id); }
+function ssMMSS(sec) { sec = Math.max(0, Math.round(sec)); var m = Math.floor(sec / 60), s = sec % 60; return m + ':' + ('0' + s).slice(-2); }
+function ssPct(n, d) { return d ? Math.round(n / d * 100) : 0; }
+/* 읽기 지문의 <u>·<b>·<br> 만 남기고 나머지는 글자로 */
+function ssH(t) {
+  return esc(String(t == null ? '' : t))
+    .replace(/&lt;br\s*\/?&gt;/gi, '<br>')
+    .replace(/&lt;(\/?)(u|b|i|em|strong)&gt;/gi, '<$1$2>')
+    .replace(/&lt;span style=&#39;([^&]*)&#39;&gt;/gi, '<span style="$1">')
+    .replace(/&lt;(\/?)span&gt;/gi, '<$1span>');
+}
+
+/* ---------- 설정 ---------- */
+function ssCfgAll() { try { return store(SS_CFG_KEY) || {}; } catch (e) { return {}; } }
+function ssCfg(ban) {
+  var a = ssCfgAll(), c = a[ban] || {};
+  var o = {}, k;
+  for (k in SS_DEF) o[k] = SS_DEF[k];
+  for (k in c) { if (k !== '__ts' && c[k] !== undefined && c[k] !== null && c[k] !== '') o[k] = c[k]; }
+  o.goal = Number(o.goal) === 50 ? 50 : 60;
+  o.dayCount = Math.max(2, Math.min(6, Number(o.dayCount) || 4));
+  o.testCount = Math.max(4, Math.min(20, Number(o.testCount) || 10));
+  o.sentCount = Math.max(4, Math.min(16, Number(o.sentCount) || 8));
+  o.probCount = Math.max(4, Math.min(16, Number(o.probCount) || 8));
+  return o;
+}
+function ssCfgSave(ban, c) {
+  var a = ssCfgAll(); a[ban] = c; try { store(SS_CFG_KEY, a); } catch (e) {}
+}
+
+/* ---------- 교재·Day 찾기 ---------- */
+function ssBooksFor(ban) {
+  var map = {};
+  Object.keys(ALL_WORD_SETS).forEach(function (k) {
+    var m = String(k).match(/^(.*?)\s*Day\s+(\d+)/);
+    if (!m) return;
+    var s = ALL_WORD_SETS[k] || {};
+    var tg = String(s.target || '전체').split(/[,，\/]/).map(function (x) { return x.trim(); });
+    if (tg.indexOf('전체') < 0 && tg.indexOf(ban) < 0) return;
+    var p = m[1].trim();
+    if (!map[p]) map[p] = { prefix: p, days: [] };
+    if (map[p].days.indexOf(+m[2]) < 0) map[p].days.push(+m[2]);
+  });
+  var arr = [];
+  for (var k in map) { map[k].days.sort(function (a, b) { return a - b; }); map[k].n = map[k].days.length; arr.push(map[k]); }
+  arr.sort(function (a, b) { return b.n - a.n; });
+  return arr;
+}
+function ssGuessBook(ban) { var b = ssBooksFor(ban); return b.length ? b[0].prefix : ''; }
+function ssSetNameFor(prefix, day) {
+  if (!prefix) return '';
+  var exact = prefix + ' Day ' + bbPad(day);
+  if (ALL_WORD_SETS[exact]) return exact;
+  var keys = Object.keys(ALL_WORD_SETS), found = '';
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    if (k.indexOf(prefix) !== 0) continue;
+    var m = k.match(/Day\s+(\d+)\s*[~\-]\s*(\d+)/);
+    if (m && day >= +m[1] && day <= +m[2]) { found = k; break; }
+  }
+  return found;
+}
+function ssLastDayFor(ban, name, book) {
+  var db = {};
+  try { db = getStudentProgressDB(ban, name) || {}; } catch (e) {}
+  var best = 0;
+  Object.keys(db).forEach(function (k) {
+    if (book && k.indexOf(book) !== 0) return;
+    var m = k.match(/Day\s+(\d+)/);
+    if (m) best = Math.max(best, +m[1]);
+  });
+  return best;
+}
+/* 오늘 자기주도 1단계에서 외울 Day 목록 (기본: 오늘 계획 Day 로 끝나는 4일치) */
+function ssBuildDays(ban) {
+  var cfg = ssCfg(ban), hp = null, book = cfg.dayBook || '', out = [], days = [];
+  try { hp = hpGet(ban); } catch (e) {}
+  if (!book && hp && hp.book) book = hp.book;
+  if (!book) book = ssGuessBook(ban);
+  if (cfg.dayMode === 'manual' && Number(cfg.dayStart) > 0) {
+    for (var i = 0; i < cfg.dayCount; i++) days.push(Number(cfg.dayStart) + i);
+  } else {
+    var w = null;
+    try { if (hp) w = hpWalkCfg(hp, hpToday()); } catch (e) {}
+    var endDay = 0;
+    if (w && (w.type === 'new' || w.type === 'review') && w.to) endDay = w.to;
+    else if (w && w.type === 'class') {
+      /* 수업일이면 오늘 단어시험 범위가 '복습할 Day'예요 */
+      try {
+        var ti = hpTestInfo(hp, hpToday());
+        if (ti && !ti.empty && ti.to) endDay = ti.to;
+      } catch (e) {}
+    }
+    if (endDay) {
+      for (var j = 0; j < cfg.dayCount; j++) days.push(Math.max(1, endDay - (cfg.dayCount - 1) + j));
+    } else {
+      var bk = ssBooksFor(ban), pool = (bk.length ? bk[0].days : []);
+      var last = ssLastDayFor(ban, (S.cred && S.cred.name) || '', book);
+      if (last) { for (var q = 0; q < cfg.dayCount; q++) days.push(Math.max(1, last - (cfg.dayCount - 1) + q)); }
+      else if (pool.length) { for (var r = 0; r < cfg.dayCount; r++) if (pool[r]) days.push(pool[r]); }
+    }
+  }
+  var seen = {};
+  days.forEach(function (d) {
+    if (seen[d]) return;
+    seen[d] = 1;
+    var nm = ssSetNameFor(book, d);
+    if (!nm) nm = ssSetNameFor(ssGuessBook(ban), d);
+    if (!nm) return;
+    out.push({ day: d, name: nm, status: 'todo', score: null, attempts: 0 });
+  });
+  return out;
+}
+
+/* ---------- 세션(원장님이 여는 자기주도실) ---------- */
+function ssSessionLocal(ban) { try { return store(SS_SESS_KEY + ban) || null; } catch (e) { return null; } }
+function ssSessionActive(ban) {
+  var s = ssSessionLocal(ban);
+  if (!s || !s.active) return null;
+  if (s.startAt && (Date.now() - s.startAt) > (s.goal || 60) * 60000 * 3) return null;
+  return s;
+}
+function ssStatusKey(ban, name) { return ban + '|' + name; }
+function ssTopicSafe(s) { return String(s || '').replace(/[\/#+\s]/g, '_'); }
+
+/* MQTT 한 줄 연결 (학생 폰 → 교사 화면 실시간) */
+function ssNetLib() {
+  if (SS_NET.lib !== null) return Promise.resolve(SS_NET.lib);
+  return new Promise(function (res) {
+    try {
+      bnLoadLib().then(function (ok) { SS_NET.lib = !!ok; res(!!ok); })
+        .catch(function () { SS_NET.lib = false; res(false); });
+    } catch (e) { SS_NET.lib = false; res(false); }
+  });
+}
+function ssNetPub() {
+  if (SS_NET.pub) return;
+  ssNetLib().then(function (ok) {
+    if (!ok || SS_NET.pub) return;
+    try {
+      var c = window.mqtt.connect(SS_BROKERS[0], { clientId: 'sst' + Math.random().toString(16).slice(2, 10), clean: true, keepalive: 30, connectTimeout: 8000, reconnectPeriod: 5000, protocolVersion: 4 });
+      SS_NET.pub = c;
+      c.on('connect', function () { SS_NET.pubOk = true; try { ssStatusPub(); } catch (e) {} });
+      c.on('close', function () { SS_NET.pubOk = false; });
+      c.on('error', function () {});
+    } catch (e) { SS_NET.pub = null; }
+  });
+}
+function ssPub(topic, payload, retain) {
+  var msg = JSON.stringify(payload);
+  /* 1) MQTT (다른 폰·태블릿 실시간) */
+  try {
+    if (SS_NET.pub && SS_NET.pubOk) SS_NET.pub.publish(topic, msg, { qos: 0, retain: !!retain });
+    else ssNetPub();
+  } catch (e) {}
+  /* 2) 같은 폰 저장(폴백) */
+  try {
+    var kk = topic.indexOf(SS_TOPIC_ST) === 0 ? 'st:' + topic.slice(SS_TOPIC_ST.length) : 'sess:' + topic.slice(SS_TOPIC_SESS.length);
+    if (kk.indexOf('st:') === 0) {
+      var parts = kk.slice(3).split('/');
+      var key = parts[0] + '|' + parts.slice(1).join('/');
+      var all = store(SS_ST_KEY) || {};
+      all[key] = payload;
+      store(SS_ST_KEY, all);
+    } else {
+      store(SS_SESS_KEY + kk.slice(5), payload);
+    }
+  } catch (e) {}
+}
+
+/* ---------- 학생 상태(현황판) ---------- */
+function ssStatusObj() {
+  var st = SS.stage, prog = ssStageProgress();
+  return {
+    n: SS.name, b: SS.ban, st: SS.done ? 99 : st, pg: prog,
+    lv: SS.leaveCnt, ls: Math.round(SS.leaveSec), t0: SS.t0,
+    el: Math.round((Date.now() - SS.t0) / 1000), done: !!SS.done,
+    a1: ssPct(SS.stats.s1ok, SS.stats.s1tot),
+    a2: ssPct(SS.s2.ok, SS.s2.qs.length || 0),
+    a3: ssPct(SS.stats.s3ok, SS.stats.s3tot),
+    d: ssDayTxt(), at: Date.now(), v: 97
+  };
+}
+function ssDayTxt() {
+  var d = SS.s1.days || [];
+  if (!d.length) return '';
+  return 'Day ' + d[0].day + '~' + d[d.length - 1].day;
+}
+function ssStageProgress() {
+  if (SS.done) return 100;
+  var a = ssPct(SS.s1.days.filter(function (x) { return x.status !== 'todo'; }).length, SS.s1.days.length || 1);
+  var b = SS.s2.qs.length ? ssPct(SS.s2.i, SS.s2.qs.length) : 0;
+  var c = SS.s3.qs.length ? ssPct(SS.s3.i, SS.s3.qs.length) : 0;
+  if (SS.stage === 1) return Math.round(a * 0.34);
+  if (SS.stage === 2) return Math.round(34 + b * 0.33);
+  return Math.round(67 + c * 0.33);
+}
+function ssStatusPub() {
+  if (!SS.on || !SS.ban || !SS.name) return;
+  try { ssPub(SS_TOPIC_ST + ssTopicSafe(SS.ban) + '/' + ssTopicSafe(SS.name), ssStatusObj(), true); } catch (e) {}
+}
+function ssStatusAll() { try { return store(SS_ST_KEY) || {}; } catch (e) { return {}; } }
+function ssStatusOf(ban, name) {
+  var a = ssStatusAll(), k = ssStatusKey(ban, name);
+  var mq = SS_NET.board[k];
+  if (mq && a[k] && (mq.at || 0) < (a[k].at || 0)) return a[k];
+  return mq || a[k] || null;
+}
+
+/* ---------- ntfy: 원장님 폰 알림 ---------- */
+function ssNtfy(title, body, tag) {
+  var p = { title: title, body: body, tag: tag || 'ss', at: Date.now() };
+  SS.lastPush = p;   /* 점검용 기록(실제 전송과 별개) */
+  try { sendDirectorPushNotification(title, body, tag || 'notice'); } catch (e) {}
+}
+function ssNtfyLeave(dur) {
+  var now = Date.now();
+  if (now - SS.lastPushAt < 45000 || (SS.pushCnt || 0) >= 4) return;
+  SS.lastPushAt = now; SS.pushCnt = (SS.pushCnt || 0) + 1;
+  var why = SS.leaveWhy || '화면 이탈';
+  ssNtfy('🚨 [자기주도 이탈] ' + SS.name + ' (' + SS.ban + ')',
+    why + ' · 이탈 ' + SS.leaveCnt + '회 / 누적 ' + Math.round(SS.leaveSec) + '초 · 현재 ' + ssStageName() + ' 진행 중', 'study');
+}
+
+/* ---------- 시작/종료 ---------- */
+function ssHomeCard(ban) {
+  try { if (!S.cred || ban === '선생님') return ''; } catch (e) { return ''; }
+  ssSessionSub(ban);
+  var cfg = ssCfg(ban), sess = SS.session || ssSessionActive(ban);
+  var days = ssBuildDays(ban);
+  var range = days.length ? ('Day ' + days[0].day + '~' + days[days.length - 1].day) : 'Day 준비 중';
+  var live = !!(sess && sess.active);
+  var h = '<div id="ss_home_card" style="margin:10px 0 12px;padding:14px 15px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#134e4a 70%);color:#fff;box-shadow:0 6px 18px rgba(15,23,42,.28)">';
+  h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+    + '<span style="font-family:Maplestory,sans-serif;font-size:16px;font-weight:700;color:#5eead4">⏱️ 자기주도 1시간 모드</span>'
+    + (live ? '<span class="ssx-badge-live">원장님이 열었어요</span>' : '')
+    + '<span style="margin-left:auto;font-size:11px;font-weight:800;color:#99f6e4;background:rgba(20,184,166,.25);border-radius:999px;padding:3px 9px">' + (sess && sess.goal ? sess.goal : cfg.goal) + '분</span></div>';
+  h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55">단어 <b style="color:#fff">' + range + '</b> 암기·시험 → 문장 어순배열 → 문법·독해<br>보조 선생님 없이 여기서 50~60분 안에 끝내요. 화면을 벗어나면 기록돼요.</div>';
+  h += '<button type="button" id="ss_go" style="width:100%;margin-top:10px;border:none;border-radius:13px;padding:12px;font-size:15px;font-weight:900;font-family:inherit;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;box-shadow:0 4px 12px rgba(20,184,166,.35)">'
+    + (live ? '🔴 지금 입장하기 →' : '▶ 자기주도 시작하기') + '</button>';
+  h += '</div>';
+  return h;
+}
+function ssSessionSub(ban) {
+  if (SS_NET.stage >= 1) return;
+  SS_NET.stage = 1;
+  ssNetLib().then(function (ok) {
+    if (!ok) return;
+    try {
+      var c = window.mqtt.connect(SS_BROKERS[0], { clientId: 'sss' + Math.random().toString(16).slice(2, 10), clean: true, keepalive: 40, connectTimeout: 8000, reconnectPeriod: 6000, protocolVersion: 4 });
+      SS_NET.sub = c;
+      c.on('connect', function () {
+        SS_NET.subOk = true;
+        try { c.subscribe(SS_TOPIC_SESS + ssTopicSafe(ban), { qos: 0 }); } catch (e) {}
+      });
+      c.on('message', function (t, m) {
+        try {
+          var o = JSON.parse(m.toString());
+          if (o && o.ban === ban) {
+            SS.session = o.active ? o : null;
+            try { store(SS_SESS_KEY + ban, o); } catch (e) {}
+            ssHomeCardRefresh();
+          }
+        } catch (e) {}
+      });
+      c.on('error', function () {});
+    } catch (e) {}
+  });
+}
+function ssHomeCardRefresh() {
+  try {
+    if (!S.home || !S.home.me) return;
+    var card = document.getElementById('ss_home_card');
+    if (!card) return;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = ssHomeCard(S.home.me.ban);
+    if (tmp.firstChild) card.parentNode.replaceChild(tmp.firstChild, card);
+    var b = document.getElementById('ss_go');
+    if (b) b.onclick = ssEntry;
+  } catch (e) {}
+}
+function ssEntry() {
+  try { unlockAudio(); } catch (e) {}
+  var me = S.cred || {};
+  if (!me.name || !me.ban) { alert('학생으로 로그인해야 자기주도 모드를 쓸 수 있어요.'); return; }
+  if (me.ban === '선생님') { alert('선생님 계정에서는 자기주도실에 들어가지 않아요. 학생 폰으로 접속해 주세요.'); return; }
+  SS.session = ssSessionActive(me.ban);
+  var snap = ssSnapGet();
+  if (snap && !snap.done && (Date.now() - (snap.at || 0)) < 3 * 3600000) {
+    if (confirm('오늘 자기주도 기록이 남아 있어요.\n(' + (snap.stage === 99 ? '완료' : snap.stage + '단계') + ' · 경과 ' + ssMMSS((Date.now() - snap.t0) / 1000) + ')\n\n이어서 할까요?\n[취소]를 누르면 처음부터 다시 시작해요.')) {
+      ssResume(snap); return;
+    }
+  }
+  ssStart();
+}
+function ssStart() {
+  var me = S.cred;
+  SS.on = true; SS.done = false; SS.warnOn = false; SS.scr = 'hub'; SS.stage = 1;
+  SS.ban = me.ban; SS.name = me.name;
+  var cfg = ssCfg(me.ban), sess = SS.session || ssSessionActive(me.ban);
+  SS.goal = (sess && Number(sess.goal)) || cfg.goal;
+  SS.seed = (new Date().getFullYear() * 372 + (new Date().getMonth() + 1) * 31 + new Date().getDate()) % 9973 + 1;
+  SS.t0 = Date.now(); SS.leaveCnt = 0; SS.leaveSec = 0; SS.leaveT = 0; SS.pushCnt = 0; SS.lastPushAt = 0;
+  SS.wrongWords = []; SS.wrongProbs = [];
+  SS.stats = { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
+  SS.s1 = { days: ssBuildDays(me.ban), cur: -1 };
+  SS.s2 = { qs: ssBuildS2(me.ban, SS.seed, (sess && sess.sentCount) || cfg.sentCount), i: 0, tries: 0, ok: 0 };
+  SS.s3 = { qs: ssBuildS3(me.ban, SS.seed, (sess && sess.probCount) || cfg.probCount), i: 0, ok: 0 };
+  if (!SS.s1.days.length) { alert('오늘 외울 단어 Day를 찾지 못했어요. 원장님께 반별 Day 설정을 부탁해 주세요.'); SS.on = false; return; }
+  ssOverlayOn(true);
+  ssFullscreen(); ssWake(true); ssBind(true); ssHistPush(); ssNetPub(); ssSessionSub(me.ban);
+  ssTickStart(); ssSaveSnap(); ssStatusPub(); ssRender();
+}
+function ssResume(snap) {
+  SS.on = true; SS.done = false; SS.scr = snap.scr || 'hub';
+  SS.ban = snap.ban; SS.name = snap.name; SS.goal = snap.goal || 60; SS.t0 = snap.t0 || Date.now();
+  SS.stage = snap.stage || 1; SS.leaveCnt = snap.leaveCnt || 0; SS.leaveSec = snap.leaveSec || 0;
+  SS.seed = snap.seed || 1;
+  SS.stats = snap.stats || { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
+  SS.s1 = { days: snap.days || ssBuildDays(SS.ban), cur: -1 };
+  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: 0 };
+  SS.s3 = { qs: ssBuildS3(SS.ban, SS.seed, snap.probCount || ssCfg(SS.ban).probCount), i: snap.s3i || 0, ok: 0 };
+  SS.wrongWords = snap.wrongWords || []; SS.wrongProbs = snap.wrongProbs || [];
+  ssOverlayOn(true);
+  ssFullscreen(); ssWake(true); ssBind(true); ssHistPush(); ssNetPub(); ssTickStart(); ssStatusPub();
+  if (SS.stage === 2) { SS.scr = 's2'; } else if (SS.stage === 3) { SS.scr = 's3'; } else { SS.scr = 'hub'; }
+  ssRender();
+}
+function ssSaveSnap() {
+  var s = {
+    ban: SS.ban, name: SS.name, t0: SS.t0, goal: SS.goal, stage: SS.done ? 99 : SS.stage,
+    leaveCnt: SS.leaveCnt, leaveSec: SS.leaveSec, seed: SS.seed, stats: SS.stats,
+    days: SS.s1.days.map(function (d) { return { day: d.day, name: d.name, status: d.status, score: d.score, attempts: d.attempts }; }),
+    s2i: SS.s2.i, s3i: SS.s3.i, scr: SS.scr, done: SS.done,
+    sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
+    wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now()
+  };
+  try { store(SS_SNAP_KEY, s); } catch (e) {}
+}
+function ssSnapGet() { try { return store(SS_SNAP_KEY) || null; } catch (e) { return null; } }
+
+function ssExit(force) {
+  if (!SS.on) return;
+  if (!force) {
+    var ok = true;
+    if (!SS.done) ok = confirm('자기주도 모드를 그만둘까요?\n지금까지 한 기록은 저장돼요.\n(나중에 이어서 할 수 있어요)');
+    if (!ok) return;
+  }
+  SS.on = false; SS.warnOn = false;
+  try { ssq('ssxWarn').classList.remove('on'); } catch (e) {}
+  ssOverlayOn(false);
+  ssWake(false); ssBind(false); ssTickStop();
+  try { if (history.state && history.state.ssx) history.back(); } catch (e) {}
+  ssSaveSnap();
+  try { ssStatusPub(); } catch (e) {}
+  try { ssExitFullscreen(); } catch (e) {}
+  try { refreshHome(); } catch (e) {}
+}
+
+/* ---------- 화면 유지/감시 ---------- */
+function ssOverlayOn(on) {
+  var o = ssq('ssOverlay');
+  if (!o) return;
+  o.classList.toggle('on', !!on);
+  o.setAttribute('aria-hidden', on ? 'false' : 'true');
+  try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {}
+}
+function ssFullscreen() {
+  var o = ssq('ssOverlay');
+  if (!o) return;
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement) return;
+    var p = o.requestFullscreen ? o.requestFullscreen({ navigationUI: 'hide' })
+      : (o.webkitRequestFullscreen ? o.webkitRequestFullscreen() : null);
+    if (p && p.catch) p.catch(function () {});
+  } catch (e) {}
+}
+function ssExitFullscreen() {
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      (document.exitFullscreen || document.webkitExitFullscreen || function () {}).call(document);
+    }
+  } catch (e) {}
+}
+function ssWake(on) {
+  SS_WAKE_WANT = !!on;
+  if (!on) { try { if (SS_WAKE) { SS_WAKE.release(); SS_WAKE = null; } } catch (e) {} return; }
+  try {
+    if (SS_WAKE) return;
+    if (!navigator.wakeLock || !navigator.wakeLock.request) return;
+    navigator.wakeLock.request('screen').then(function (s) {
+      SS_WAKE = s;
+      try { s.addEventListener('release', function () { SS_WAKE = null; }); } catch (e) {}
+      if (!SS_WAKE_WANT) { try { s.release(); } catch (e) {} SS_WAKE = null; }
+    }).catch(function () {});
+  } catch (e) {}
+}
+function ssBind(on) {
+  var m = on ? 'addEventListener' : 'removeEventListener';
+  try { document[m]('visibilitychange', ssVis); } catch (e) {}
+  try { window[m]('blur', ssBlur); } catch (e) {}
+  try { window[m]('focus', ssFocus); } catch (e) {}
+  try { window[m]('pagehide', ssPageHide); } catch (e) {}
+  try { document[m]('fullscreenchange', ssFsChange); } catch (e) {}
+  try { window[m]('popstate', ssPop); } catch (e) {}
+  try { window[m]('beforeunload', ssBeforeUnload); } catch (e) {}
+}
+function ssHistPush() { try { history.pushState({ ssx: 1 }, ''); } catch (e) {} }
+function ssPop() {
+  if (!SS.on || SS.done) return;
+  ssHistPush();
+  ssHit('뒤로가기로 나가려 했어요');
+}
+function ssBeforeUnload(e) {
+  if (!SS.on || SS.done) return;
+  ssSaveSnap();
+  try { e.preventDefault(); e.returnValue = '자기주도 모드를 끝내지 않았어요. 정말 나갈까요?'; } catch (x) {}
+  return '자기주도 모드를 끝내지 않았어요.';
+}
+function ssVis() {
+  if (!SS.on || SS.done) return;
+  if (document.visibilityState === 'hidden') ssLeaveBegin('다른 앱으로 넘어감');
+  else { ssLeaveEnd(); ssWake(true); }
+}
+function ssBlur() { if (!SS.on || SS.done) return; ssLeaveBegin('다른 앱·창으로 이동'); }
+function ssFocus() { if (!SS.on || SS.done) return; ssLeaveEnd(); }
+function ssPageHide() { if (!SS.on || SS.done) return; ssLeaveBegin('앱을 닫음'); ssLeaveEnd(); }
+function ssFsChange() {
+  if (!SS.on || SS.done) return;
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) ssHit('전체화면을 벗어났어요');
+}
+function ssLeaveBegin(why) {
+  if (SS.leaveT) return;
+  SS.leaveT = Date.now(); SS.leaveWhy = why;
+}
+function ssLeaveEnd() {
+  if (!SS.leaveT) return;
+  var dur = (Date.now() - SS.leaveT) / 1000;
+  SS.leaveT = 0;
+  if (dur < 0.9) return;                       /* 주소창 터치 정도는 넘어가요 */
+  SS.leaveCnt++; SS.leaveSec += dur;
+  ssAfterLeave(dur);
+}
+/* 순간 이탈 시도(뒤로가기·전체화면 해제) */
+function ssHit(why) {
+  var now = Date.now();
+  if (now - SS.lastInc < 1500) return;
+  SS.lastInc = now;
+  SS.leaveCnt++;
+  ssAfterLeave(0, why);
+}
+function ssAfterLeave(dur, why) {
+  ssStatusPub(); ssSaveSnap();
+  ssWarnShow(dur, why);
+  try { if (SS.leaveCnt >= 2 || dur >= 5) ssNtfyLeave(dur); } catch (e) {}
+}
+function ssWarnShow(dur, why) {
+  SS.warnOn = true;
+  var b = ssq('ssxWarnBody'), c = ssq('ssxWarnCnt');
+  if (b) b.innerHTML = (why ? esc(why) : '화면을 벗어났어요') + '. '
+    + (dur ? ('<b>' + dur.toFixed(1) + '초</b> 동안 학습 화면이 꺼져 있었어요. ') : '')
+    + '이탈 기록이 원장님께 전송돼요.';
+  if (c) c.textContent = '이번 이탈 ' + SS.leaveCnt + '회 · 누적 ' + Math.round(SS.leaveSec) + '초';
+  try { ssq('ssxWarn').classList.add('on'); } catch (e) {}
+  ssAlarm();
+}
+function ssWarnClose() {
+  SS.warnOn = false;
+  try { ssq('ssxWarn').classList.remove('on'); } catch (e) {}
+  ssFullscreen();
+  ssStatusPub();
+}
+function ssAlarm() {
+  try {
+    if (navigator.vibrate) navigator.vibrate([220, 90, 220, 90, 320]);
+    _playWhenReady(function (ctx) {
+      var t = ctx.currentTime;
+      for (var k = 0; k < 3; k++) {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'square';
+        o.frequency.setValueAtTime(k % 2 ? 660 : 880, t + k * 0.32);
+        g.gain.setValueAtTime(0.0001, t + k * 0.32);
+        g.gain.exponentialRampToValueAtTime(0.18, t + k * 0.32 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + k * 0.32 + 0.28);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t + k * 0.32); o.stop(t + k * 0.32 + 0.3);
+      }
+    });
+  } catch (e) {}
+}
+function ssTickStart() {
+  ssTickStop();
+  SS.tick = setInterval(function () { if (SS.on) ssTick(); }, 1000);
+  ssTick();
+}
+function ssTickStop() { if (SS.tick) { clearInterval(SS.tick); SS.tick = null; } }
+function ssTick() {
+  SS.el = (Date.now() - SS.t0) / 1000;
+  var c = ssq('ssxClock'), l = ssq('ssxLeave');
+  if (c) {
+    var left = SS.goal * 60 - SS.el;
+    c.textContent = (left >= 0 ? '남은 ' : '초과 +') + ssMMSS(Math.abs(left));
+    c.style.color = left < 0 ? '#fde68a' : '#fff';
+  }
+  if (l) {
+    l.textContent = '이탈 ' + SS.leaveCnt + '회';
+    l.style.background = SS.leaveCnt ? 'rgba(239,68,68,.9)' : 'rgba(255,255,255,.18)';
+  }
+  if (Math.round(SS.el) % 15 === 0) { try { ssStatusPub(); } catch (e) {} }
+}
+
+/* ---------- 2단계: 문장 어순배열 ---------- */
+function ssBuildS2(ban, seed, n) {
+  var pool = [];
+  try {
+    var sets = sentSetsForBan(ban);
+    sets.forEach(function (st) {
+      (st.items || []).forEach(function (it) {
+        if (it && it.en && it.ko) pool.push({ ko: it.ko, en: it.en, tag: it.tag || '', set: st.name });
+      });
+    });
+  } catch (e) {}
+  if (!pool.length) return [];
+  var rnd = sbRand((Number(seed) || 1) * 7919 + 13);
+  for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
+  return pool.slice(0, Math.min(n || 8, pool.length));
+}
+/* ---------- 3단계: 문법·독해 ---------- */
+function ssBuildS3(ban, seed, n) {
+  var bank = null;
+  try {
+    if (typeof SS3_BANK !== 'undefined') bank = SS3_BANK[ban] || (/(고|고1|고2|고3)/.test(ban) ? SS3_BANK['예비고1'] : SS3_BANK['수지중1']);
+  } catch (e) {}
+  if (!bank || !bank.length) return [];
+  var pool = bank.slice();
+  var rnd = sbRand((Number(seed) || 1) * 104729 + 7);
+  for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
+  return pool.slice(0, Math.min(n || 8, pool.length));
+}
+function ssStageName() {
+  if (SS.done) return '완료';
+  return SS.stage === 1 ? '1단계 단어' : (SS.stage === 2 ? '2단계 문장' : '3단계 독해·문법');
+}
+
+/* ---------- v97 자기주도: 화면 ---------- */
+function ssBookLabel(name) { return String(name || '').replace(/\s*Day\s*\d+.*$/, ''); }
+function ssTestN(d) { var c = ssCfg(SS.ban); return Math.min(Number(c.testCount) || 10, (d.words || []).length || 10); }
+function ssS1AllDone() { return SS.s1.days.length && SS.s1.days.every(function (d) { return d.status !== 'todo'; }); }
+function ssS2Done() { return SS.s2.qs.length && SS.s2.i >= SS.s2.qs.length; }
+
+function ssHead() {
+  var st = SS.stage, done = SS.done;
+  var s1 = SS.done || SS.stage > 1 || ssS1AllDone();
+  var s2 = SS.done || SS.stage > 2 || ssS2Done();
+  function cls(on, d) { return 'ssx-step ' + (d ? 'done' : (on ? 'on' : '')); }
+  return '<div class="ssx-top">'
+    + '<div class="ssx-t">⏱️ 자기주도</div>'
+    + '<div class="ssx-steps">'
+    + '<span class="' + cls(st === 1, s1) + '">1</span>'
+    + '<span class="' + cls(st === 2, s2) + '">2</span>'
+    + '<span class="' + cls(st === 3, done) + '">3</span>'
+    + '</div>'
+    + '<span class="ssx-leave" id="ssxLeave">이탈 0회</span>'
+    + '<span class="ssx-clock" id="ssxClock">0:00</span>'
+    + '<button type="button" class="ssx-x" onclick="ssExit()">나가기</button>'
+    + '</div>';
+}
+function ssRender() {
+  var c = ssq('ssxCard');
+  if (!c) return;
+  var body = '';
+  if (SS.scr === 's1') body = ssViewS1();
+  else if (SS.scr === 's1learn') body = ssViewS1Learn();
+  else if (SS.scr === 's1quiz') body = ssViewS1Quiz();
+  else if (SS.scr === 's1res') body = ssViewS1Res();
+  else if (SS.scr === 's2') body = ssViewS2();
+  else if (SS.scr === 's3') body = ssViewS3();
+  else if (SS.scr === 'done') body = ssViewDone();
+  else if (SS.scr === 'bonus') body = ssViewBonus();
+  else body = ssViewHub();
+  c.innerHTML = ssHead() + body;
+  ssTick();
+}
+
+/* ---------- 허브 ---------- */
+function ssViewHub() {
+  var days = SS.s1.days, cfg = ssCfg(SS.ban);
+  var doneDays = days.filter(function (d) { return d.status !== 'todo'; }).length;
+  var s1 = ssS1AllDone(), s2 = SS.stage > 2 || ssS2Done();
+  var h = '<div class="ssx-pane">'
+    + '<div class="ssx-h1">⏱️ 자기주도 1시간 모드</div>'
+    + '<div class="ssx-sub">' + esc(SS.name) + ' · ' + esc(SS.ban) + ' · 목표 ' + SS.goal + '분 · 단어 Day '
+    + (days.length ? (days[0].day + '~' + days[days.length - 1].day) : '-') + '</div>'
+    + '<div class="ssx-prog"><i style="width:' + ssStageProgress() + '%"></i></div>'
+    + '<div class="ssx-sub" style="margin-top:4px">지금 ' + ssStageName() + ' · 진행률 ' + ssStageProgress() + '%</div>'
+    + '</div>';
+
+  h += '<div class="ssx-stage ' + (s1 ? '' : 'on') + '">'
+    + '<div class="num">1</div>'
+    + '<div class="tx"><b>단어 Day ' + days.length + '일치 암기 + 앱 단어 시험</b>'
+    + '<span>' + (days.length ? (esc(ssBookLabel(days[0].name)) + ' · Day ' + ssDayTxt().replace('Day ', '')) : '') + ' · 시험 ' + (Number(cfg.testCount) || 10) + '문항 · 약 ' + Math.round(SS.goal * 0.42) + '분</span></div>'
+    + (s1 ? '<span class="ssx-chip ok">완료</span>' : '<span class="ssx-chip pri">' + doneDays + '/' + days.length + '</span>')
+    + '<button type="button" class="ssx-btn sm pri" onclick="ssGoS1()">' + (doneDays ? '이어서' : '시작') + '</button>'
+    + '</div>';
+
+  h += '<div class="ssx-stage ' + (s1 ? (s2 ? '' : 'on') : 'lock') + '">'
+    + '<div class="num">2</div>'
+    + '<div class="tx"><b>문장 암기 · 어순배열</b><span>' + SS.s2.qs.length + '문장 · 약 ' + Math.round(SS.goal * 0.25) + '분' + (s1 ? '' : ' · 1단계를 끝내면 열려요') + '</span></div>'
+    + (s2 ? '<span class="ssx-chip ok">완료</span>' : '')
+    + '<button type="button" class="ssx-btn sm ' + (s1 ? 'pri' : '') + '" ' + (s1 ? '' : 'disabled') + ' onclick="ssGoS2()">' + (s2 ? '다시' : '열기') + '</button>'
+    + '</div>';
+
+  h += '<div class="ssx-stage ' + (s2 ? (SS.done ? '' : 'on') : 'lock') + '">'
+    + '<div class="num">3</div>'
+    + '<div class="tx"><b>문법 · 독해 문제</b><span>' + SS.s3.qs.length + '문제 · 약 ' + Math.round(SS.goal * 0.33) + '분' + (s2 ? '' : ' · 2단계를 끝내면 열려요') + '</span></div>'
+    + (SS.done ? '<span class="ssx-chip ok">완료</span>' : '')
+    + '<button type="button" class="ssx-btn sm ' + (s2 ? 'pri' : '') + '" ' + (s2 ? '' : 'disabled') + ' onclick="ssGoS3()">열기</button>'
+    + '</div>';
+
+  h += '<div class="ssx-pane" style="margin-top:12px"><div class="ssx-note">✔ 화면을 벗어나거나(카톡·유튜브) 뒤로가기를 누르면 <b>이탈로 기록</b>되고 경고음이 울려요. 2회 이상(또는 5초 이상)이면 원장님 폰으로 알림이 가요.<br>✔ 단어만 먼저 끝내고 나가도 기록은 남아서 다음에 이어서 할 수 있어요.</div></div>';
+  return h;
+}
+
+/* ---------- 1단계 ---------- */
+function ssGoS1() { SS.stage = 1; SS.scr = 's1'; ssSaveSnap(); ssStatusPub(); ssRender(); }
+function ssViewS1() {
+  var days = SS.s1.days, cfg = ssCfg(SS.ban);
+  var h = '<div class="ssx-pane"><div class="ssx-h1">1단계 · 단어 암기 + 시험</div>'
+    + '<div class="ssx-sub">Day를 하나씩 [암기 → 시험]. <b>80% 넘으면 통과</b>예요. 두 번 못 넘기면 보충으로 표시하고 넘어가요.</div></div>';
+  days.forEach(function (d, i) {
+    var chip = d.status === 'ok' ? '<span class="ssx-chip ok">통과 ' + (d.score == null ? '' : d.score + '점') + '</span>'
+      : (d.status === 'part' ? '<span class="ssx-chip warn">보충 ' + (d.score || 0) + '점</span>'
+        : '<span class="ssx-chip">대기</span>');
+    h += '<div class="ssx-day ' + (d.status === 'ok' ? 'ok' : (d.status === 'part' ? 'part' : '')) + '">'
+      + '<span class="dnum">Day ' + bbPad(d.day) + '</span>'
+      + '<div class="dname">' + esc(ssBookLabel(d.name)) + '<br><span style="color:#94a3b8;font-size:11px">' + (d.words ? d.words.length + '단어' : '단어 불러오기') + '</span></div>'
+      + chip
+      + '<button type="button" class="ssx-btn sm ' + (d.status === 'ok' ? '' : 'pri') + '" onclick="ssS1Open(' + i + ')">' + (d.status === 'ok' ? '다시' : (d.status === 'part' ? '한번 더' : '암기·시험')) + '</button>'
+      + '</div>';
+  });
+  if (ssS1AllDone()) {
+    h += '<button type="button" class="ssx-btn pri" onclick="ssGoS2()">1단계 끝! 2단계 문장으로 →</button>';
+  }
+  h += '<button type="button" class="ssx-btn" onclick="SS.scr=\'hub\';ssRender()">← 처음으로</button>';
+  return h;
+}
+function ssS1Open(i) {
+  var d = SS.s1.days[i];
+  if (!d) return;
+  SS.s1.cur = i; SS.scr = 's1learn';
+  if (d.words && d.words.length) { ssRender(); return; }
+  load(true);
+  call('getWordSet', S.cred, d.name).then(function (ws) {
+    load(false);
+    d.words = (ws || []).filter(function (w) { return w && w.w; });
+    if (!d.words.length) { alert('이 Day의 단어를 찾지 못했어요.\n' + d.name); SS.scr = 's1'; ssRender(); return; }
+    ssRender();
+  }).catch(function (e) { load(false); alert('단어를 불러오지 못했어요: ' + errMsg(e)); SS.scr = 's1'; ssRender(); });
+}
+function ssViewS1Learn() {
+  var d = SS.s1.days[SS.s1.cur];
+  if (!d) return ssViewS1();
+  var words = d.words || [];
+  var h = '<div class="ssx-pane"><div class="ssx-h1">' + esc(ssBookLabel(d.name)) + ' · Day ' + bbPad(d.day) + '</div>'
+    + '<div class="ssx-sub">' + words.length + '단어 · 🔊로 발음을 듣고 한 번 훑은 뒤 [외웠어요]를 눌러요.</div></div>';
+  h += '<div class="ssx-pane"><div class="ssx-list">';
+  words.forEach(function (w, i) {
+    h += '<div class="ssx-wrow"><b>' + esc(w.w) + '</b><span>' + esc(w.m || '') + '</span>'
+      + '<button type="button" class="ssx-spk" onclick="ssSpeak(' + i + ')">🔊</button></div>';
+  });
+  h += '</div>';
+  h += '<button type="button" class="ssx-btn pri" onclick="ssS1Quiz()">✔ 외웠어요 · 시험 시작 (' + ssTestN(d) + '문항)</button>';
+  h += '<button type="button" class="ssx-btn" onclick="ssGoS1()">← Day 목록</button></div>';
+  return h;
+}
+function ssSpeak(i) {
+  try {
+    var d = SS.s1.days[SS.s1.cur];
+    var w = d && d.words && d.words[i];
+    if (w) speak(w.w);
+  } catch (e) {}
+}
+function ssS1Quiz() {
+  var d = SS.s1.days[SS.s1.cur], words = d.words || [];
+  var n = ssTestN(d);
+  var pool = shuffle(words).slice(0, n);
+  d.quiz = pool.map(function (c) {
+    var others = shuffle(words.filter(function (x) { return x.w !== c.w; })).slice(0, 3);
+    var opts = shuffle(others.concat([c]));
+    return { w: c.w, m: c.m || '', opts: opts.map(function (o) { return o.m || ''; }), ans: opts.indexOf(c) };
+  });
+  d.qi = 0; d.qok = 0; d.qwrong = []; d.answered = false;
+  SS.scr = 's1quiz'; ssRender();
+}
+function ssViewS1Quiz() {
+  var d = SS.s1.days[SS.s1.cur];
+  if (!d || !d.quiz) return ssViewS1();
+  var q = d.quiz[d.qi];
+  if (!q) return ssViewS1();
+  var h = '<div class="ssx-pane">'
+    + '<div class="ssx-row"><span class="ssx-chip pri">Day ' + bbPad(d.day) + '</span>'
+    + '<span class="ssx-sub" style="margin-left:auto">' + (d.qi + 1) + ' / ' + d.quiz.length + ' · 맞은 개수 ' + d.qok + '</span></div>'
+    + '<div class="ssx-prog"><i style="width:' + ssPct(d.qi, d.quiz.length) + '%"></i></div>'
+    + '<div class="ssx-word">' + esc(q.w) + '</div>'
+    + '<div class="ssx-sub" style="text-align:center;margin-bottom:10px">뜻을 고르세요</div>';
+  q.opts.forEach(function (o, k) {
+    h += '<button type="button" class="ssx-opt" onclick="ssS1Ans(' + k + ')">' + esc(o) + '</button>';
+  });
+  h += '<div class="ssx-fb" id="ssxFB" style="display:none"></div></div>';
+  return h;
+}
+function ssS1Ans(k) {
+  var d = SS.s1.days[SS.s1.cur];
+  if (!d || !d.quiz || d.answered) return;
+  var q = d.quiz[d.qi];
+  d.answered = true;
+  var ok = (k === q.ans);
+  if (ok) { d.qok++; try { playCorrectSound(); } catch (e) {} }
+  else { d.qwrong.push(q.w); try { playWrongSound(); } catch (e) {} }
+  var btns = document.querySelectorAll('#ssxCard .ssx-opt');
+  [].forEach.call(btns, function (b, i) {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('ok');
+    else if (i === k) b.classList.add('no');
+  });
+  var fb = ssq('ssxFB');
+  if (fb) {
+    fb.style.display = 'block';
+    fb.className = 'ssx-fb ' + (ok ? 'ok' : 'no');
+    fb.innerHTML = ok ? ('정답! <b>' + esc(q.w) + '</b> — ' + esc(q.m))
+      : ('오답 · 정답은 <b>' + esc(q.opts[q.ans]) + '</b> (' + esc(q.w) + ')');
+  }
+  setTimeout(function () {
+    d.answered = false;
+    d.qi++;
+    if (d.qi >= d.quiz.length) ssS1Result();
+    else ssRender();
+  }, ok ? 850 : 1600);
+}
+function ssS1Result() {
+  var d = SS.s1.days[SS.s1.cur];
+  var tot = d.quiz.length, ok = d.qok, score = ssPct(ok, tot);
+  d.attempts = (d.attempts || 0) + 1;
+  SS.stats.s1ok += ok; SS.stats.s1tot += tot;
+  (d.qwrong || []).forEach(function (w) { if (SS.wrongWords.indexOf(w) < 0) SS.wrongWords.push(w); });
+  d.score = Math.max(d.score || 0, score);
+  if (score >= 80) { d.status = 'ok'; try { playFanfareSound(); } catch (e) {} }
+  else { d.status = d.attempts >= 2 ? 'part' : 'todo'; }
+  try { saveStudentProgressDB(SS.ban, SS.name, d.name, '테스트', score); } catch (e) {}
+  try { call('submitWord', S.cred, d.name, '테스트', ok, tot, d.qwrong || [], 0); } catch (e) {}
+  d.pass = ok >= 0;
+  SS.scr = 's1res'; ssSaveSnap(); ssStatusPub(); ssRender();
+}
+function ssViewS1Res() {
+  var d = SS.s1.days[SS.s1.cur];
+  var tot = d.quiz.length, ok = d.qok, score = ssPct(ok, tot);
+  var pass = score >= 80;
+  var last = SS.s1.cur >= SS.s1.days.length - 1;
+  var h = '<div class="ssx-pane" style="text-align:center">'
+    + '<div class="ssx-sub">Day ' + bbPad(d.day) + ' 단어 시험</div>'
+    + '<div class="ssx-big">' + score + '점</div>'
+    + '<div>' + tot + '문항 중 <b>' + ok + '</b>개 정답 · ' + (pass ? '✅ 통과!' : (d.attempts >= 2 ? '⚠️ 보충 대상' : '❌ 다시 도전')) + '</div>';
+  h += '<div class="ssx-prog" style="margin-top:10px"><i style="width:' + score + '%"></i></div></div>';
+  if ((d.qwrong || []).length) {
+    h += '<div class="ssx-pane"><div class="ssx-h2">틀린 단어 ' + d.qwrong.length + '개</div>'
+      + '<div class="ssx-sub">' + d.qwrong.map(function (w) { return esc(w); }).join(', ') + '</div></div>';
+  }
+  if (!pass && d.attempts < 2) h += '<button type="button" class="ssx-btn pri" onclick="ssS1Quiz()">🔄 다시 시험 보기</button>';
+  if (last) h += '<button type="button" class="ssx-btn pri" onclick="' + (ssS1AllDone() ? 'ssGoS2()' : 'ssGoS1()') + '">' + (ssS1AllDone() ? '1단계 끝 · 2단계로 →' : '← Day 목록') + '</button>';
+  else h += '<button type="button" class="ssx-btn pri" onclick="ssS1Next()">다음 Day →</button>';
+  h += '<button type="button" class="ssx-btn" onclick="ssGoS1()">← Day 목록</button>';
+  return h;
+}
+function ssS1Next() {
+  var i = SS.s1.cur + 1;
+  if (i >= SS.s1.days.length) { ssGoS1(); return; }
+  ssS1Open(i);
+}
+
+/* ---------- 2단계: 문장 어순배열 ---------- */
+function ssGoS2() {
+  if (!ssS1AllDone()) { alert('1단계 단어 시험을 먼저 끝내 주세요.'); return; }
+  SS.stage = 2; SS.scr = 's2';
+  if (SS.s2.i >= SS.s2.qs.length) { SS.s2.i = 0; SS.s2.ok = 0; }
+  SS.s2.built = []; SS.s2.tries = 0;
+  ssSaveSnap(); ssStatusPub(); ssRender();
+}
+function ssViewS2() {
+  if (!SS.s2.qs.length) return '<div class="ssx-pane">문장 세트를 찾지 못했어요.</div>';
+  if (SS.s2.i >= SS.s2.qs.length) {
+    return '<div class="ssx-pane" style="text-align:center"><div class="ssx-h1">2단계 완료 🎉</div>'
+      + '<div class="ssx-sub">' + SS.s2.qs.length + '문장 중 첫 시도 정답 ' + SS.s2.ok + '개</div>'
+      + '<button type="button" class="ssx-btn pri" onclick="ssGoS3()">3단계 문법·독해로 →</button></div>';
+  }
+  var q = SS.s2.qs[SS.s2.i];
+  var words = String(q.en || '').trim().split(/\s+/).filter(Boolean);
+  var chips = sentChips({ en: q.en }, SS.seed, SS.s2.i);
+  var built = SS.s2.built || [];
+  var used = {};
+  built.forEach(function (i) { used[i] = 1; });
+  var h = '<div class="ssx-pane">'
+    + '<div class="ssx-row"><span class="ssx-chip pri">2단계 · 어순배열</span>'
+    + '<span class="ssx-sub" style="margin-left:auto">' + (SS.s2.i + 1) + ' / ' + SS.s2.qs.length + '</span></div>'
+    + '<div class="ssx-prog"><i style="width:' + ssPct(SS.s2.i, SS.s2.qs.length) + '%"></i></div>'
+    + '<div class="ssx-ko" style="margin-top:10px">' + esc(q.ko) + '</div>'
+    + (q.tag ? '<div class="ssx-hint">' + esc(q.tag) + '</div>' : '')
+    + '<div class="ssx-slot" id="ssxSlot">'
+    + (built.length ? built.map(function (i) {
+      return '<button type="button" class="ssx-chipw" onclick="ssS2Tap(' + i + ',1)">' + esc(words[i]) + '</button>';
+    }).join('') : '<span class="ssx-hint">단어를 순서대로 누르면 여기에 쌓여요</span>')
+    + '</div>'
+    + '<div class="ssx-chips">'
+    + chips.filter(function (c) { return !used[c.i]; }).map(function (c) {
+      return '<button type="button" class="ssx-chipw" onclick="ssS2Tap(' + c.i + ',0)">' + esc(c.w) + '</button>';
+    }).join('')
+    + '</div>'
+    + '<div class="ssx-fb" id="ssxFB" style="display:none"></div>'
+    + '</div>';
+  h += '<div class="ssx-pane"><div class="ssx-note">한 단어씩 누르면 아래 칸에 쌓여요. 다 쌓이면 자동으로 채점! 틀리면 다시 섞여요.</div></div>';
+  return h;
+}
+function ssS2Tap(i, fromSlot) {
+  if (!SS.s2.built) SS.s2.built = [];
+  var q = SS.s2.qs[SS.s2.i];
+  if (!q) return;
+  var words = String(q.en || '').trim().split(/\s+/).filter(Boolean);
+  if (fromSlot) {
+    SS.s2.built = SS.s2.built.filter(function (x) { return x !== i; });
+    ssRender(); return;
+  }
+  if (SS.s2.built.indexOf(i) >= 0) return;
+  SS.s2.built.push(i);
+  if (SS.s2.built.length < words.length) { ssRender(); return; }
+  /* 다 쌓임 → 채점 */
+  var mine = SS.s2.built.map(function (x) { return words[x]; }).join(' ');
+  var ok = sbNorm(mine) === sbNorm(q.en);
+  var slot = ssq('ssxSlot'), fb = ssq('ssxFB');
+  if (ok) {
+    if (slot) slot.classList.add('good');
+    if (SS.s2.tries === 0) SS.s2.ok++;
+    try { playCorrectSound(); } catch (e) {}
+    if (fb) { fb.style.display = 'block'; fb.className = 'ssx-fb ok'; fb.innerHTML = '정답! 🎉 <b>' + esc(q.en) + '</b>'; }
+    SS.s2.tries = 0; SS.s2.i++;
+    SS.stats.s2ok = SS.s2.ok;
+    ssSaveSnap(); ssStatusPub();
+    setTimeout(function () { SS.s2.built = []; ssRender(); }, 950);
+  } else {
+    SS.s2.tries++;
+    if (slot) slot.classList.add('bad');
+    try { playWrongSound(); } catch (e) {}
+    if (fb) { fb.style.display = 'block'; fb.className = 'ssx-fb no'; fb.innerHTML = '한 번 더! 정답 순서는 <b>' + esc(q.en) + '</b>'; }
+    setTimeout(function () { SS.s2.built = []; ssRender(); }, 1700);
+  }
+}
+
+/* ---------- 3단계: 문법·독해 ---------- */
+function ssGoS3() {
+  if (!ssS2Done()) { alert('2단계 문장을 먼저 끝내 주세요.'); return; }
+  SS.stage = 3; SS.scr = 's3';
+  if (!SS.s3.qs.length) { ssFinish(); return; }
+  ssSaveSnap(); ssStatusPub(); ssRender();
+}
+function ssViewS3() {
+  if (!SS.s3.qs.length) return '<div class="ssx-pane">문제 세트를 찾지 못했어요.</div>';
+  if (SS.s3.i >= SS.s3.qs.length) {
+    if (!SS._finPending) { SS._finPending = true; setTimeout(function () { SS._finPending = false; ssFinish(); }, 30); }
+    return '<div class="ssx-pane">집계 중…</div>';
+  }
+  var q = SS.s3.qs[SS.s3.i];
+  var h = '<div class="ssx-pane">'
+    + '<div class="ssx-row"><span class="ssx-chip pri">3단계 · ' + esc(q.type || '문법·독해') + '</span>'
+    + '<span class="ssx-sub" style="margin-left:auto">' + (SS.s3.i + 1) + ' / ' + SS.s3.qs.length + '</span></div>'
+    + '<div class="ssx-prog"><i style="width:' + ssPct(SS.s3.i, SS.s3.qs.length) + '%"></i></div>';
+  if (q.pass) h += '<div class="ssx-hint" style="margin:6px 0 2px">📖 ' + esc(q.pass) + '</div>';
+  if (q.p) h += '<div class="ssx-passage">' + ssH(q.p) + '</div>';
+  h += '<div class="ssx-q" style="margin-top:8px">' + ssH(q.q) + '</div>';
+  (q.c || []).forEach(function (c, k) {
+    h += '<button type="button" class="ssx-opt" onclick="ssS3Ans(' + k + ')">' + ssH(c) + '</button>';
+  });
+  h += '<div id="ssxFB3"></div></div>';
+  h += '<div class="ssx-pane"><div class="ssx-note">답을 누르면 바로 해설이 나와요. 해설을 읽고 [다음 문제]를 눌러 넘어가요.</div></div>';
+  return h;
+}
+function ssS3Ans(k) {
+  var q = SS.s3.qs[SS.s3.i];
+  if (!q || SS.s3.answered) return;
+  SS.s3.answered = true;
+  var ok = (k === Number(q.a));
+  if (ok) { SS.s3.ok++; try { playCorrectSound(); } catch (e) {} }
+  else { SS.wrongProbs.push(q); try { playWrongSound(); } catch (e) {} }
+  SS.stats.s3ok = SS.s3.ok; SS.stats.s3tot = SS.s3.i + 1;
+  var btns = document.querySelectorAll('#ssxCard .ssx-opt');
+  [].forEach.call(btns, function (b, i) {
+    b.disabled = true;
+    if (i === Number(q.a)) b.classList.add('ok');
+    else if (i === k) b.classList.add('no');
+  });
+  var fb = ssq('ssxFB3');
+  if (fb) {
+    var num = ['①', '②', '③', '④', '⑤'][Number(q.a)] || '';
+    fb.innerHTML = '<div class="ssx-fb ' + (ok ? 'ok' : 'no') + '"><b>' + (ok ? '정답! ' : '오답 · 정답은 ' + num + ' ') + '</b>'
+      + (q.d ? '<div style="margin-top:6px;font-weight:500">' + ssH(q.d) + '</div>' : '') + '</div>'
+      + '<button type="button" class="ssx-btn pri" onclick="ssS3Next()">' + (SS.s3.i + 1 >= SS.s3.qs.length ? '3단계 끝내기 →' : '다음 문제 →') + '</button>';
+  }
+  ssSaveSnap(); ssStatusPub();
+}
+function ssS3Next() {
+  SS.s3.answered = false;
+  SS.s3.i++;
+  if (SS.s3.i >= SS.s3.qs.length) { ssFinish(); return; }
+  ssRender();
+}
+
+/* ---------- 완료 ---------- */
+function ssFinish() {
+  if (SS.done) { SS.scr = 'done'; ssRender(); return; }
+  SS.done = true; SS.stage = 3; SS.scr = 'done'; SS.s2.built = [];
+  var el = (Date.now() - SS.t0) / 1000;
+  try { playFanfareSound(); } catch (e) {}
+  ssSaveSnap(); ssStatusPub();
+  try {
+    ssNtfy('✅ [자기주도 완주] ' + SS.name + ' (' + SS.ban + ')',
+      '소요 ' + ssMMSS(el) + ' · 이탈 ' + SS.leaveCnt + '회(' + Math.round(SS.leaveSec) + '초) · 단어 ' + ssPct(SS.stats.s1ok, SS.stats.s1tot)
+      + '% / 문장 ' + ssPct(SS.s2.ok, SS.s2.qs.length || 0) + '% / 독해 ' + ssPct(SS.stats.s3ok, SS.stats.s3tot) + '%', 'study');
+  } catch (e) {}
+  ssRender();
+}
+function ssViewDone() {
+  var el = (Date.now() - SS.t0) / 1000;
+  var left = Math.max(0, SS.goal * 60 - el);
+  var cert = SS.leaveCnt === 0;
+  var h = '<div class="ssx-pane" style="text-align:center">'
+    + '<div style="font-size:44px">🎉</div>'
+    + '<div class="ssx-h1">자기주도 1시간 모드 완주!</div>'
+    + '<div class="ssx-sub">' + esc(SS.name) + ' · ' + esc(SS.ban) + ' · 목표 ' + SS.goal + '분</div>'
+    + '<div class="ssx-big" style="margin-top:8px">' + ssMMSS(el) + '</div>'
+    + '<div class="ssx-sub">걸린 시간</div></div>';
+  h += '<div class="ssx-pane"><div class="ssx-grid2">'
+    + '<div class="ssx-stat"><b>' + ssPct(SS.stats.s1ok, SS.stats.s1tot) + '%</b><span>단어 정답률</span></div>'
+    + '<div class="ssx-stat"><b>' + ssPct(SS.s2.ok, SS.s2.qs.length || 0) + '%</b><span>문장 정답률</span></div>'
+    + '<div class="ssx-stat"><b>' + ssPct(SS.stats.s3ok, SS.stats.s3tot) + '%</b><span>독해·문법</span></div>'
+    + '<div class="ssx-stat"><b style="color:' + (SS.leaveCnt ? '#dc2626' : '#16a34a') + '">' + SS.leaveCnt + '회</b><span>화면 이탈</span></div>'
+    + '</div></div>';
+  h += '<div class="ssx-cert">'
+    + '<div style="font-size:26px">' + (cert ? '🏅' : '📋') + '</div>'
+    + '<div class="big">' + (cert ? '이탈 0회 · 자기주도 완주 인증' : '완주 인증 (이탈 ' + SS.leaveCnt + '회)') + '</div>'
+    + '<div class="ssx-sub">' + (cert ? '한 번도 화면을 벗어나지 않고 끝냈어요. 원장님께 보고할 수 있어요!' : '다음엔 이탈 0회에 도전해 보자!') + '</div>'
+    + '</div>';
+  if (left > 60) {
+    h += '<div class="ssx-pane amber" style="margin-top:10px"><div class="ssx-h2">⏳ 남은 시간 ' + Math.round(left / 60) + '분 — 보너스 복습</div>'
+      + '<div class="ssx-sub">일찍 끝냈으니 약한 부분만 한 번 더!</div>'
+      + '<div class="ssx-row" style="gap:8px;margin-top:8px">'
+      + '<button type="button" class="ssx-btn sm" style="flex:1" onclick="SS.bonus=\'words\';SS.scr=\'bonus\';ssRender()">틀린 단어 ' + SS.wrongWords.length + '</button>'
+      + '<button type="button" class="ssx-btn sm" style="flex:1" onclick="SS.bonus=\'probs\';SS.scr=\'bonus\';ssRender()">틀린 문제 ' + SS.wrongProbs.length + '</button>'
+      + '<button type="button" class="ssx-btn sm" style="flex:1" onclick="SS.bonus=\'sent\';SS.scr=\'bonus\';ssRender()">문장 다시</button>'
+      + '</div></div>';
+  }
+  h += '<button type="button" class="ssx-btn pri" style="margin-top:12px" onclick="ssExit(true)">확인 · 나가기</button>';
+  return h;
+}
+function ssViewBonus() {
+  var kind = SS.bonus || 'words';
+  var h = '<div class="ssx-pane"><div class="ssx-h1">보너스 복습</div><div class="ssx-sub">완료 후 남은 시간에 약한 부분만 다시 봐요.</div></div>';
+  if (kind === 'words') {
+    var seen = {}, list = [];
+    SS.wrongWords.forEach(function (w) {
+      if (seen[w]) return;
+      seen[w] = 1;
+      var mean = '';
+      SS.s1.days.forEach(function (d) {
+        (d.words || []).forEach(function (x) { if (x.w === w) mean = x.m || ''; });
+      });
+      list.push({ w: w, m: mean });
+    });
+    h += '<div class="ssx-pane"><div class="ssx-list">'
+      + (list.length ? list.map(function (x) {
+        return '<div class="ssx-wrow"><b>' + esc(x.w) + '</b><span>' + esc(x.m) + '</span></div>';
+      }).join('') : '<div class="ssx-wrow">틀린 단어가 없어요. 완벽해요! 🎉</div>')
+      + '</div></div>';
+  } else if (kind === 'probs') {
+    h += '<div class="ssx-pane">'
+      + (SS.wrongProbs.length ? SS.wrongProbs.map(function (q) {
+        var num = ['①', '②', '③', '④', '⑤'][Number(q.a)] || '';
+        return '<div style="border-bottom:1px dashed #e2e8f0;padding:8px 0">'
+          + '<div style="font-weight:800;font-size:13.5px;color:#0f172a">' + ssH(q.q) + '</div>'
+          + '<div style="font-size:13px;color:#15803d;margin-top:3px">정답 ' + num + ' ' + ssH((q.c || [])[Number(q.a)] || '') + '</div>'
+          + (q.d ? '<div class="ssx-hint" style="margin-top:3px">' + ssH(q.d) + '</div>' : '')
+          + '</div>';
+      }).join('') : '<div class="ssx-sub">틀린 문제가 없어요. 완벽해요! 🎉</div>')
+      + '</div>';
+  } else {
+    h += '<div class="ssx-pane"><div class="ssx-list">'
+      + SS.s2.qs.map(function (q, i) {
+        return '<div class="ssx-wrow" style="display:block">'
+          + '<div class="ssx-ko" style="font-size:13px">' + esc(q.ko) + '</div>'
+          + '<div class="ssx-row"><span style="color:#334155;font-size:12.5px;flex:1">' + esc(q.en) + '</span>'
+          + '<button type="button" class="ssx-spk" onclick="ssSpeakSent(' + i + ')">🔊</button></div></div>';
+      }).join('') + '</div></div>';
+  }
+  h += '<button type="button" class="ssx-btn" onclick="SS.scr=\'done\';ssRender()">← 완료 화면</button>';
+  return h;
+}
+function ssSpeakSent(i) {
+  try { var q = SS.s2.qs[i]; if (q) speak(q.en); } catch (e) {}
+}
+
+/* ---------- v97 원장님 화면: 자기주도 설정 · 실시간 현황판 · 학부모 문자 ---------- */
+var SS_VIEW = { ban: '', filter: 'all', timer: null };
+
+function ssBans() {
+  var out = [];
+  try {
+    (S.admin && S.admin.info && S.admin.info.classes || []).forEach(function (c) { if (c !== '선생님' && out.indexOf(c) < 0) out.push(c); });
+  } catch (e) {}
+  if (!out.length) out = ['수지중1', '수지중2', '예비고1', '초5', '풍덕초6', '홍천고1', '한빛중2', '현암고1', '현암고2', '수지고2', '죽전고2'];
+  return out;
+}
+function ssRoster(ban) {
+  var out = [];
+  try {
+    (TOPEDU_ALL_STUDENTS || []).forEach(function (s) {
+      if (!s || !s.name) return;
+      if (s.ban === '선생님') return;
+      if (ban && s.ban !== ban) return;
+      out.push({ ban: s.ban, name: s.name });
+    });
+  } catch (e) {}
+  return out;
+}
+function ssTdKey() { try { return tdKey(); } catch (e) { return ''; } }
+/* 오늘 완료 여부: ① 자기주도 완주 ② 오늘 학습 완료(학생 폰이 올린 실시간 기록) */
+function ssDoneInfo(ban, name) {
+  var st = ssStatusOf(ban, name);
+  if (st && st.done) return { done: true, why: '자기주도 완주', st: st };
+  var key = ban + '|' + name, row = null;
+  try { row = (typeof STREAK_BOARD !== 'undefined' && STREAK_BOARD) ? STREAK_BOARD[key] : null; } catch (e) { row = null; }
+  var today = ssTdKey();
+  if (!row) { try { row = getRealStreakMap()[key] || null; } catch (e) {} }
+  if (row && row.d && (!row.t || row.t === today)) return { done: true, why: '오늘 학습 완료', st: st, row: row };
+  return { done: false, why: (st ? '진행 중' : '미시작'), st: st, row: row };
+}
+function ssStateChip(info) {
+  var st = info.st;
+  if (info.done) return '<span class="ssx-chip ok">완료</span>';
+  if (!st) return '<span class="ssx-chip">미시작</span>';
+  var lab = st.st === 99 ? '완료' : (st.st === 1 ? '1단계' : (st.st === 2 ? '2단계' : '3단계'));
+  return '<span class="ssx-chip ' + (st.st >= 2 ? 'pri' : '') + '">' + lab + ' ' + (st.pg || 0) + '%</span>';
+}
+
+/* ---------- 학부모 문자 ---------- */
+function ssParents() { try { return store(SS_PARENTS_KEY) || {}; } catch (e) { return {}; } }
+function ssParentOf(name) { var m = ssParents(); return m[name] || ''; }
+function ssParentSave(obj) { try { store(SS_PARENTS_KEY, obj); } catch (e) {} }
+function ssParentLine(name, phone) { var n = String(phone || '').replace(/[^0-9]/g, ''); return n; }
+function ssSmsMsg(name, done) {
+  var today = (function () { var d = new Date(); return (d.getMonth() + 1) + '월 ' + d.getDate() + '일'; })();
+  if (done) {
+    return '[수지탑에듀학원] 안녕하세요, ' + name + ' 어머님! 오늘 ' + today + ' ' + name
+      + ' 학생이 탑에듀 앱 학습(단어·자기주도)을 100% 완료했습니다. 가정에서도 칭찬 부탁드립니다 :)';
+  }
+  return '[수지탑에듀학원] 안녕하세요, ' + name + ' 어머님! 오늘 ' + today + ' ' + name
+    + ' 학생의 탑에듀 앱 학습이 아직 완료되지 않았습니다. 집에서 마무리할 수 있도록 지도 부탁드립니다.';
+}
+function ssCopyText(txt, cb) {
+  var out = { ok: false, at: Date.now(), txt: txt };
+  function done(ok) { out.ok = ok; SS.lastCopy = out; try { if (cb) cb(ok); } catch (e) {} }
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { fb(); });
+      return;
+    }
+  } catch (e) {}
+  fb();
+  function fb() {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      done(!!ok);
+    } catch (e) { done(false); }
+  }
+}
+/* 📩 버튼: 문자 앱 열기 + 클립보드 복사 (둘 다) */
+function ssSmsGo(name, done) {
+  var phone = ssParentOf(name);
+  var msg = ssSmsMsg(name, done);
+  var digits = ssParentLine(name, phone).replace(/^0/, '010').replace(/^10/, '010');
+  if (phone) digits = phone.replace(/[^0-9+]/g, '');
+  var href = 'sms:' + digits + '?body=' + encodeURIComponent(msg);
+  SS.lastSms = { name: name, phone: phone, digits: digits, href: href, msg: msg, at: Date.now(), opened: false };
+  ssCopyText(msg, function () { ssToast(SS.lastCopy && SS.lastCopy.ok ? '📋 문구를 복사했어요' : '문구 복사 실패 — 길게 눌러 복사해 주세요'); });
+  if (!phone) {
+    alert(name + ' 학생의 학부모 전화번호가 아직 없어요.\n\n아래 [📇 학부모 연락처]에 번호를 붙여넣고 저장하면\n다음부터 버튼 한 번으로 문자 앱이 열려요.\n\n(문구는 이미 복사해 두었어요 — 에듀스탭·카톡에 붙여넣으세요)');
+    return;
+  }
+  try {
+    var a = document.createElement('a');
+    a.href = href;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    SS.lastSms.a = a;
+    a.click();
+    SS.lastSms.opened = true;
+    setTimeout(function () { try { a.parentNode.removeChild(a); } catch (e) {} }, 1500);
+  } catch (e) { alert('문자 앱을 열지 못했어요. 문구는 복사해 두었으니 붙여넣어 주세요.'); }
+}
+function ssSmsSummary(done) {
+  var ban = SS_VIEW.ban, roster = ssRoster(ban), lines = [];
+  roster.forEach(function (r) {
+    var info = ssDoneInfo(r.ban, r.name);
+    if (info.done !== !!done) return;
+    lines.push('- ' + (ban ? '' : r.ban + ' ') + r.name + ' (' + info.why + ')');
+  });
+  var d = new Date();
+  var head = '[수지탑에듀학원] ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 탑에듀 앱 학습 '
+    + (done ? '완료' : '미완료') + ' 안내 (' + (ban || '전체') + ')';
+  return head + '\n' + (lines.length ? lines.join('\n') : '- 대상 없음');
+}
+function ssToast(msg) {
+  try {
+    var t = document.getElementById('ssxToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'ssxToast'; t.className = 'ssx-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(SS._toastT);
+    SS._toastT = setTimeout(function () { t.classList.remove('on'); }, 1800);
+  } catch (e) {}
+}
+
+/* ---------- 설정 카드 ---------- */
+function ssAdminHtml() {
+  var bans = ssBans();
+  if (bans.indexOf(SS_VIEW.ban) < 0) SS_VIEW.ban = bans[0];
+  var ban = SS_VIEW.ban, cfg = ssCfg(ban);
+  var books = ssBooksFor(ban);
+  var sess = ssSessionLocal(ban);
+  var live = !!(sess && sess.active);
+  var h = '';
+  /* 1) 설정 */
+  h += '<div class="card" style="border:2px solid #14b8a6;background:#f0fdfa;border-radius:16px;padding:16px;margin-bottom:12px">'
+    + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:20px">⏱️</span>'
+    + '<b style="font-size:16px;color:#0f766e;font-family:Maplestory,sans-serif">자기주도 1시간 모드 설정</b>'
+    + (live ? '<span class="ssx-badge-live" style="margin-left:auto">진행 중</span>' : '') + '</div>'
+    + '<div style="font-size:12.5px;color:#0f766e;line-height:1.5;margin-bottom:12px">보조 교사 없이 50~60분 완주용 분량을 반별로 정해요. 학생 홈 화면에 <b>⏱️ 자기주도 1시간 모드</b> 카드가 뜨고, [시작]을 누르면 전체화면으로 들어갑니다.</div>'
+    + '<label style="font-weight:700;color:#134e4a">반</label>'
+    + '<select id="ssBan" style="width:100%;padding:10px 12px;border:1.5px solid #99f6e4;border-radius:10px;font-size:14px;margin-bottom:10px">'
+    + bans.map(function (b) { return '<option value="' + esc(b) + '"' + (b === ban ? ' selected' : '') + '>' + esc(b) + '</option>'; }).join('')
+    + '</select>'
+    + '<div style="display:flex;gap:8px">'
+    + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">목표 시간</label>'
+    + '<select id="ssGoal" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
+    + [50, 60].map(function (g) { return '<option value="' + g + '"' + (Number(cfg.goal) === g ? ' selected' : '') + '>' + g + '분</option>'; }).join('')
+    + '</select></div>'
+    + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">1단계 Day 수</label>'
+    + '<select id="ssDayCount" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
+    + [3, 4, 5].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.dayCount) === n ? ' selected' : '') + '>Day ' + n + '개</option>'; }).join('')
+    + '</select></div>'
+    + '</div>'
+    + '<div style="height:10px"></div>'
+    + '<div style="display:flex;gap:8px">'
+    + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">Day 지정 방식</label>'
+    + '<select id="ssDayMode" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
+    + '<option value="auto"' + (cfg.dayMode === 'auto' ? ' selected' : '') + '>자동 (오늘 집 숙제 Day 기준)</option>'
+    + '<option value="manual"' + (cfg.dayMode === 'manual' ? ' selected' : '') + '>직접 지정</option>'
+    + '</select></div>'
+    + '<div style="width:96px"><label style="font-weight:700;color:#134e4a">시작 Day</label>'
+    + '<input type="number" id="ssDayStart" min="1" max="60" value="' + (Number(cfg.dayStart) || 1) + '" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px"></div>'
+    + '</div>'
+    + '<div style="height:10px"></div>'
+    + '<label style="font-weight:700;color:#134e4a">교재 (Day 단어장)</label>'
+    + '<select id="ssDayBook" style="width:100%;padding:10px 12px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px;margin-bottom:10px">'
+    + '<option value="">자동 (' + esc(ssGuessBook(ban) || '없음') + ')</option>'
+    + books.map(function (b) { return '<option value="' + esc(b.prefix) + '"' + (cfg.dayBook === b.prefix ? ' selected' : '') + '>' + esc(b.prefix) + ' (Day ' + b.n + '개)</option>'; }).join('')
+    + '</select>'
+    + '<div style="display:flex;gap:8px">'
+    + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">Day별 시험 문항</label>'
+    + '<select id="ssTestCount" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
+    + [5, 8, 10, 15].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.testCount) === n ? ' selected' : '') + '>' + n + '문항</option>'; }).join('')
+    + '</select></div>'
+    + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">2단계 문장</label>'
+    + '<select id="ssSentCount" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
+    + [6, 8, 10, 12].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.sentCount) === n ? ' selected' : '') + '>' + n + '문장</option>'; }).join('')
+    + '</select></div>'
+    + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">3단계 문제</label>'
+    + '<select id="ssProbCount" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
+    + [6, 8, 10, 12].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.probCount) === n ? ' selected' : '') + '>' + n + '문제</option>'; }).join('')
+    + '</select></div>'
+    + '</div>'
+    + '<div id="ssPrev" style="margin-top:12px;padding:11px 13px;background:#fff;border:1.5px solid #99f6e4;border-radius:12px;font-size:12.5px;color:#0f766e;line-height:1.6"></div>'
+    + '<div style="display:flex;gap:8px;margin-top:10px">'
+    + '<button type="button" class="btn" id="ssSave" style="flex:1;margin:0;background:#0d9488;color:#fff;font-weight:800">💾 저장</button>'
+    + '<button type="button" class="btn" id="ssSess" style="flex:1.2;margin:0;background:' + (live ? '#b91c1c' : 'linear-gradient(135deg,#f97316,#fb923c)') + ';color:#fff;font-weight:800">'
+    + (live ? '🛑 자기주도실 닫기' : '🔔 지금 자기주도실 열기') + '</button>'
+    + '</div>'
+    + '</div>';
+
+  /* 2) 현황판 + 학부모 문자 */
+  h += '<div class="card" style="border:2px solid #0ea5e9;background:#f0f9ff;border-radius:16px;padding:14px;margin-bottom:12px">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+    + '<b style="font-size:15.5px;color:#075985;font-family:Maplestory,sans-serif">📡 실시간 자기주도실 현황판</b>'
+    + '<button type="button" class="btn-sm" id="ssBoardRe" style="background:#fff;border:1.5px solid #7dd3fc;color:#0369a1;font-size:11.5px">🔄 새로고침</button>'
+    + '</div>'
+    + '<div style="font-size:12px;color:#0369a1;line-height:1.5;margin-bottom:8px">학생이 [자기주도 시작]을 누르면 단계·진행률·이탈 횟수가 <b>실시간</b>으로 올라와요. 완료 여부에 따라 <b>[📩 완료문자] / [📩 미완료문자]</b>를 바로 보낼 수 있어요.</div>'
+    + '<div id="ssBoard"></div>'
+    + '</div>';
+
+  /* 3) 학부모 연락처 */
+  var par = ssParents();
+  var parCnt = Object.keys(par).length;
+  h += '<div class="card" style="border:1.5px solid #cbd5e1;border-radius:16px;padding:14px;margin-bottom:12px">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+    + '<b style="font-size:14.5px;color:#334155">📇 학부모 연락처 (이 폰에만 저장 · ' + parCnt + '명)</b></div>'
+    + '<div style="font-size:12px;color:#64748b;line-height:1.5;margin-bottom:8px">학생 이름과 학부모 번호를 한 줄에 하나씩 <b>이름,010-0000-0000</b> 형식으로 붙여넣고 [저장]을 누르세요. (주소록 .vcf 파일 내용을 통째로 붙여넣어도 인식해요)<br>※ 번호는 공개 웹에 올리지 않고 <b>이 원장님 폰에만</b> 저장됩니다.</div>'
+    + '<textarea id="ssParTa" style="width:100%;height:110px;padding:10px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:13px;font-family:inherit" placeholder="김수현,010-0000-0000&#10;박도윤,010-1111-2222"></textarea>'
+    + '<div style="display:flex;gap:8px;margin-top:8px">'
+    + '<button type="button" class="btn" id="ssParSave" style="flex:1;margin:0;background:#334155;color:#fff;font-weight:800;font-size:13px;padding:11px">💾 연락처 저장</button>'
+    + '<button type="button" class="btn" id="ssParCopy" style="flex:1;margin:0;background:#e2e8f0;color:#334155;font-weight:800;font-size:13px;padding:11px">📋 현재 목록 복사</button>'
+    + '</div></div>';
+
+  /* 4) 안내 */
+  h += '<div class="card" style="border:1.5px solid #fcd34d;background:#fffbeb;border-radius:16px;padding:14px">'
+    + '<b style="font-size:14.5px;color:#92400e">📱 안드로이드 "앱 고정(화면 고정)" 3초 설정</b>'
+    + '<div style="font-size:12.5px;color:#78350f;line-height:1.7;margin-top:6px">'
+    + '① <b>설정</b> → <b>보안 및 개인정보 보호</b> → <b>기타 보안 설정</b> → <b>앱 고정</b> 켜기<br>'
+    + '② 학생 폰에서 탑에듀 앱을 연 뒤 <b>최근 앱 버튼</b> → 앱 화면 위 <b>아이콘</b> 누르기 → <b>고정</b><br>'
+    + '③ 해제는 <b>뒤로가기 + 홈 버튼</b>을 동시에 길게 (또는 위로 쓸어올리기)<br>'
+    + '※ 앱 고정을 켜 두면 학생이 홈·최근 앱으로 빠져나갈 수 없어서 자기주도실 이탈이 거의 사라져요.'
+    + '</div></div>';
+  return h;
+}
+
+function ssPrevText() {
+  var ban = SS_VIEW.ban, c = ssCfg(ban);
+  var days = ssBuildDays(ban);
+  var txt = days.length
+    ? ('오늘 1단계 → <b>Day ' + days[0].day + '~' + days[days.length - 1].day + '</b> (' + esc(ssBookLabel(days[0].name)) + ')' + (days.length !== Number(c.dayCount) ? ' · 찾은 Day ' + days.length + '개' : ''))
+    : '오늘 1단계 → <b>Day를 찾지 못했어요</b> (교재·시작 Day를 직접 지정해 주세요)';
+  txt += '<br>2단계 문장 ' + (Number(c.sentCount) || 8) + '개 · 3단계 문제 ' + (Number(c.probCount) || 8) + '개 · Day 시험 ' + (Number(c.testCount) || 10) + '문항';
+  txt += '<br>예상 시간 → 1단계 ' + Math.round((Number(c.goal) || 60) * 0.42) + '분 · 2단계 ' + Math.round((Number(c.goal) || 60) * 0.25) + '분 · 3단계 ' + Math.round((Number(c.goal) || 60) * 0.33) + '분';
+  return txt;
+}
+
+function ssBoardHtml() {
+  var ban = SS_VIEW.ban, f = SS_VIEW.filter;
+  var roster = ssRoster(ban);
+  var rows = [], cnt = { all: 0, done: 0, und: 0 };
+  roster.forEach(function (r) {
+    var info = ssDoneInfo(r.ban, r.name);
+    var phone = ssParentOf(r.name);
+    var item = { r: r, info: info, phone: phone };
+    cnt.all++;
+    if (info.done) cnt.done++; else cnt.und++;
+    if (f === 'done' && !info.done) return;
+    if (f === 'und' && info.done) return;
+    rows.push(item);
+  });
+  var h = '<div style="display:flex;gap:6px;margin-bottom:8px">'
+    + [['all', '전체 ' + cnt.all], ['done', '완료 ' + cnt.done], ['und', '미완료 ' + cnt.und]].map(function (x) {
+      return '<button type="button" class="btn-sm" data-f="' + x[0] + '" onclick="ssSetFilter(\'' + x[0] + '\')" style="flex:1;background:' + (f === x[0] ? '#0284c7' : '#fff') + ';color:' + (f === x[0] ? '#fff' : '#0369a1') + ';border:1.5px solid #7dd3fc;border-radius:10px;padding:8px;font-size:12px;font-weight:800">' + x[1] + '</button>';
+    }).join('') + '</div>';
+  h += '<div style="display:flex;gap:6px;margin-bottom:10px">'
+    + '<button type="button" class="btn-sm" onclick="ssSummaryCopy(0)" style="flex:1;background:#dc2626;color:#fff;border:none;border-radius:10px;padding:8px;font-size:11.5px;font-weight:800">📋 미완료 ' + cnt.und + '명 요약 복사</button>'
+    + '<button type="button" class="btn-sm" onclick="ssSummaryCopy(1)" style="flex:1;background:#059669;color:#fff;border:none;border-radius:10px;padding:8px;font-size:11.5px;font-weight:800">📋 완료 ' + cnt.done + '명 요약 복사</button>'
+    + '</div>';
+  if (!rows.length) h += '<div style="text-align:center;padding:18px;color:#64748b;font-size:12.5px">해당하는 학생이 없어요.</div>';
+  rows.forEach(function (it) {
+    var st = it.info.st;
+    h += '<div style="background:#fff;border:1.5px solid ' + (it.info.done ? '#86efac' : '#e2e8f0') + ';border-radius:12px;padding:10px;margin-bottom:7px">'
+      + '<div style="display:flex;align-items:center;gap:6px">'
+      + '<b style="font-size:13.5px;color:#0f172a">' + esc(it.r.name) + '</b>'
+      + '<span style="font-size:10.5px;color:#94a3b8">' + esc(it.r.ban) + '</span>'
+      + ssStateChip(it.info)
+      + (st && st.lv ? '<span class="ssx-chip no">이탈 ' + st.lv + '회</span>' : '')
+      + (st ? '<span style="margin-left:auto;font-size:10.5px;color:#94a3b8">' + (st.el != null ? ssMMSS(st.el) : '') + '</span>' : '')
+      + '</div>'
+      + (st ? '<div class="ssx-prog" style="margin:7px 0 2px"><i style="width:' + (st.pg || 0) + '%"></i></div>' : '')
+      + '<div style="display:flex;gap:6px;margin-top:7px">'
+      + '<button type="button" class="btn-sm" onclick="ssSmsGo(\'' + esc(it.r.name).replace(/'/g, "\\'") + '\',1)" style="flex:1;background:' + (it.info.done ? '#059669' : '#e2e8f0') + ';color:' + (it.info.done ? '#fff' : '#475569') + ';border:none;border-radius:9px;padding:8px;font-size:11.5px;font-weight:800">📩 완료문자</button>'
+      + '<button type="button" class="btn-sm" onclick="ssSmsGo(\'' + esc(it.r.name).replace(/'/g, "\\'") + '\',0)" style="flex:1;background:' + (!it.info.done ? '#dc2626' : '#e2e8f0') + ';color:' + (!it.info.done ? '#fff' : '#475569') + ';border:none;border-radius:9px;padding:8px;font-size:11.5px;font-weight:800">📩 미완료문자</button>'
+      + '</div>'
+      + (it.phone ? '<div style="font-size:10.5px;color:#94a3b8;margin-top:4px">학부모 ' + esc(it.phone) + '</div>'
+        : '<div style="font-size:10.5px;color:#f59e0b;margin-top:4px">학부모 번호 없음 — 아래 [📇 학부모 연락처]에 저장</div>')
+      + '</div>';
+  });
+  h += '<div style="font-size:11px;color:#0369a1;line-height:1.5;margin-top:6px">완료 판정 = ① 자기주도 완주 ② 오늘 학생 폰에서 올린 학습 완료 기록. 기록이 없는 학생은 미완료로 표시돼요.</div>';
+  return h;
+}
+function ssSetFilter(f) { SS_VIEW.filter = f; ssBoardRefresh(); }
+function ssBoardRefresh() {
+  var b = document.getElementById('ssBoard');
+  if (!b) return;
+  b.innerHTML = ssBoardHtml();
+}
+function ssSummaryCopy(done) {
+  var txt = ssSmsSummary(!!done);
+  ssCopyText(txt, function (ok) {
+    ssToast(ok ? (done ? '📋 완료 요약을 복사했어요' : '📋 미완료 요약을 복사했어요') : '복사 실패 — 다시 눌러 주세요');
+  });
+}
+
+/* 원장님 폰: 학생 상태 실시간 구독 */
+function ssTeacherSub() {
+  if (SS_NET.teacher) return;
+  ssNetLib().then(function (ok) {
+    if (!ok) return;
+    try {
+      var c = window.mqtt.connect(SS_BROKERS[0], { clientId: 'ssv' + Math.random().toString(16).slice(2, 10), clean: true, keepalive: 40, connectTimeout: 8000, reconnectPeriod: 6000, protocolVersion: 4 });
+      SS_NET.teacher = c;
+      c.on('connect', function () {
+        SS_NET.teacherOk = true;
+        try { c.subscribe(SS_TOPIC_ST + '#', { qos: 0 }); } catch (e) {}
+      });
+      c.on('message', function (t, m) {
+        try {
+          var topic = String(t || '');
+          if (topic.indexOf(SS_TOPIC_ST) !== 0) return;
+          var rest = topic.slice(SS_TOPIC_ST.length).split('/');
+          var ban = rest[0], name = rest.slice(1).join('/');
+          var o = JSON.parse(m.toString());
+          if (!o || !name) return;
+          o.b = o.b || ban; o.n = o.n || name;
+          SS_NET.board[ban + '|' + name] = o;
+          SS_NET.boardAt = Date.now();
+          ssBoardRefresh();
+        } catch (e) {}
+      });
+      c.on('error', function () {});
+    } catch (e) {}
+  });
+}
+function ssAdminBind() {
+  var banSel = document.getElementById('ssBan');
+  if (banSel) banSel.onchange = function () { SS_VIEW.ban = this.value; showAdmin(); };
+  var prev = document.getElementById('ssPrev');
+  if (prev) prev.innerHTML = ssPrevText();
+  var bSave = document.getElementById('ssSave');
+  if (bSave) bSave.onclick = function () {
+    var ban = SS_VIEW.ban;
+    var g = function (id) { var e = document.getElementById(id); return e ? e.value : ''; };
+    var c = {
+      goal: Number(g('ssGoal')) || 60,
+      dayMode: g('ssDayMode') || 'auto',
+      dayBook: g('ssDayBook') || '',
+      dayStart: Math.max(1, Number(g('ssDayStart')) || 1),
+      dayCount: Math.max(2, Number(g('ssDayCount')) || 4),
+      testCount: Number(g('ssTestCount')) || 10,
+      sentCount: Number(g('ssSentCount')) || 8,
+      probCount: Number(g('ssProbCount')) || 8
+    };
+    ssCfgSave(ban, c);
+    try { hpPublish(); } catch (e) {}
+    ssToast('💾 ' + ban + ' 자기주도 설정을 저장했어요');
+    showAdmin();
+  };
+  var bSess = document.getElementById('ssSess');
+  if (bSess) bSess.onclick = function () {
+    var ban = SS_VIEW.ban, cur = ssSessionLocal(ban);
+    var live = !!(cur && cur.active);
+    var o = { ban: ban, active: !live, at: Date.now() };
+    if (!live) {
+      var c = ssCfg(ban);
+      o.goal = c.goal; o.dayMode = c.dayMode; o.dayBook = c.dayBook; o.dayStart = c.dayStart;
+      o.dayCount = c.dayCount; o.testCount = c.testCount; o.sentCount = c.sentCount; o.probCount = c.probCount;
+      o.startAt = Date.now();
+      o.title = ban + ' 자기주도 1시간';
+    }
+    ssPub(SS_TOPIC_SESS + ssTopicSafe(ban), o, true);
+    ssToast(live ? '🛑 자기주도실을 닫았어요' : '🔔 ' + ban + ' 자기주도실을 열었어요');
+    showAdmin();
+  };
+  var bRe = document.getElementById('ssBoardRe');
+  if (bRe) bRe.onclick = function () { ssBoardRefresh(); ssToast('🔄 현황판을 새로 불러왔어요'); };
+  var bPar = document.getElementById('ssParSave');
+  if (bPar) bPar.onclick = function () {
+    var ta = document.getElementById('ssParTa');
+    var txt = ta ? ta.value : '';
+    var map = ssParseParents(txt);
+    var all = ssParents(), n = 0;
+    for (var k in map) { all[k] = map[k]; n++; }
+    ssParentSave(all);
+    ssToast('📇 학부모 연락처 ' + n + '명 저장 (총 ' + Object.keys(all).length + '명)');
+    showAdmin();
+  };
+  var bCp = document.getElementById('ssParCopy');
+  if (bCp) bCp.onclick = function () {
+    var p = ssParents(), lines = Object.keys(p).map(function (k) { return k + ',' + p[k]; });
+    ssCopyText(lines.join('\n'), function (ok) { ssToast(ok ? '📋 연락처 목록을 복사했어요' : '복사 실패'); });
+  };
+  var ta = document.getElementById('ssParTa');
+  if (ta && !ta.value) {
+    var p2 = ssParents();
+    var keys = Object.keys(p2);
+    if (keys.length) ta.value = keys.map(function (k) { return k + ',' + p2[k]; }).join('\n');
+  }
+  ssBoardRefresh();
+  ssTeacherSub();
+  if (SS_VIEW.timer) clearInterval(SS_VIEW.timer);
+  SS_VIEW.timer = setInterval(function () {
+    if (!document.getElementById('ssBoard')) { clearInterval(SS_VIEW.timer); SS_VIEW.timer = null; return; }
+    ssBoardRefresh();
+  }, 4000);
+}
+/* "이름,번호" 줄 또는 주소록(.vcf) 텍스트에서 학부모 번호 뽑기 */
+function ssParseParents(txt) {
+  var out = {};
+  var s = String(txt || '');
+  if (/BEGIN:VCARD/i.test(s)) {
+    s.split(/BEGIN:VCARD/i).forEach(function (card) {
+      if (!/학부모|모\/부|어머니|아버지/.test(card)) return;
+      var tel = card.match(/TEL[^:]*:([0-9+\- ]{7,})/);
+      if (!tel) return;
+      var nm = '';
+      var m = card.match(/NOTE:([^\n]*)/);
+      if (m) { var mm = m[1].match(/학생\s*:\s*([^\|]+)/); if (mm) nm = mm[1].trim(); }
+      if (!nm) {
+        var fn = card.match(/FN:([^\n]*)/);
+        if (fn) nm = fn[1].replace(/^\[[^\]]*\]/, '').replace(/모\/부/g, '').trim();
+      }
+      if (nm) out[nm] = tel[1].trim();
+    });
+    return out;
+  }
+  s.split(/\n/).forEach(function (line) {
+    var l = line.trim();
+    if (!l) return;
+    var m = l.match(/^(.+?)[,\t\s]+((?:0\d{1,2}-?\d{3,4}-?\d{4})|(?:\+82\s?)?1\d{9,10})$/);
+    if (m) out[m[1].trim()] = m[2].trim();
+  });
+  return out;
 }
 
 /* ============ 시작 ============ */
