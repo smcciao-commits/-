@@ -9190,12 +9190,12 @@ function ssViewS2() {
     + (q.tag ? '<div class="ssx-hint">' + esc(q.tag) + '</div>' : '')
     + '<div class="ssx-slot" id="ssxSlot">'
     + (built.length ? built.map(function (i) {
-      return '<button type="button" class="ssx-chipw" onclick="ssS2Tap(' + i + ',1)">' + esc(words[i]) + '</button>';
-    }).join('') : '<span class="ssx-hint">단어를 순서대로 누르면 여기에 쌓여요</span>')
+      return '<button type="button" class="ssx-chipw" data-i="' + i + '" onclick="ssS2Tap(' + i + ',1)">' + esc(words[i]) + '</button>';
+    }).join('') : '<span class="ssx-hint" id="ssxPh">단어를 순서대로 누르면 여기에 쌓여요</span>')
     + '</div>'
-    + '<div class="ssx-chips">'
+    + '<div class="ssx-chips" id="ssxTray">'
     + chips.filter(function (c) { return !used[c.i]; }).map(function (c) {
-      return '<button type="button" class="ssx-chipw" onclick="ssS2Tap(' + c.i + ',0)">' + esc(c.w) + '</button>';
+      return '<button type="button" class="ssx-chipw" data-i="' + c.i + '" onclick="ssS2Tap(' + c.i + ',0)">' + esc(c.w) + '</button>';
     }).join('')
     + '</div>'
     + '<div class="ssx-fb" id="ssxFB" style="display:none"></div>'
@@ -9203,18 +9203,32 @@ function ssViewS2() {
   h += '<div class="ssx-pane"><div class="ssx-note">한 단어씩 누르면 아래 칸에 쌓여요. 다 쌓이면 자동으로 채점! 틀리면 다시 섞여요.</div></div>';
   return h;
 }
+/* 칩은 화면 전체를 다시 그리지 않고 그 자리에서 위/아래 칸으로 옮긴다(깜빡임·터치 튐 방지) */
 function ssS2Tap(i, fromSlot) {
   if (!SS.s2.built) SS.s2.built = [];
   var q = SS.s2.qs[SS.s2.i];
   if (!q) return;
   var words = String(q.en || '').trim().split(/\s+/).filter(Boolean);
+  var slot = ssq('ssxSlot'), tray = ssq('ssxTray');
+  var btn = document.querySelector('#ssxCard .ssx-chipw[data-i="' + i + '"]');
+  if (!slot || !tray || !btn) return;
+  var ph = ssq('ssxPh');
   if (fromSlot) {
     SS.s2.built = SS.s2.built.filter(function (x) { return x !== i; });
-    ssRender(); return;
+    try { tray.appendChild(btn); } catch (e) { return; }
+  } else {
+    if (SS.s2.built.indexOf(i) >= 0) return;
+    SS.s2.built.push(i);
+    if (ph) { try { slot.removeChild(ph); } catch (e) {} }
+    try { slot.appendChild(btn); } catch (e) { return; }
   }
-  if (SS.s2.built.indexOf(i) >= 0) return;
-  SS.s2.built.push(i);
-  if (SS.s2.built.length < words.length) { ssRender(); return; }
+  if (!SS.s2.built.length && !ssq('ssxPh')) {
+    var sp = document.createElement('span');
+    sp.className = 'ssx-hint'; sp.id = 'ssxPh';
+    sp.textContent = '단어를 순서대로 누르면 여기에 쌓여요';
+    slot.appendChild(sp);
+  }
+  if (SS.s2.built.length < words.length) return;
   /* 다 쌓임 → 채점 */
   var mine = SS.s2.built.map(function (x) { return words[x]; }).join(' ');
   var ok = sbNorm(mine) === sbNorm(q.en);
