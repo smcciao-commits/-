@@ -3557,6 +3557,7 @@ function bbToggleDone() {
     bbMark(BB_SEL.ch, true);
     bbWarnBox('', '');
     try { playCorrectSound(); } catch (e) {}
+    try { ssBoardEvent('인강', (bbCurBook() && bbCurBook().name ? bbCurBook().name : '') + ' ' + bbPad(BB_SEL.ch) + '강 완료'); } catch (e) {}
     bbRenderInfo();
     bbRenderBooks();
     return;
@@ -4677,6 +4678,7 @@ function hpToggleItem(k){
     var on = !hpTick(ban, hpToday(), k);
     hpTickSet(ban, hpToday(), k, on);
     if (on) { try { playCorrectSound(); } catch (e) {} }
+    try { if (on) ssBoardEvent('숙제', (k === 'sent' ? '문장 암기' : '변형·독해') + ' 완료'); } catch (e) {}
     showHome();
   } catch (e) {}
 }
@@ -8421,7 +8423,9 @@ function ssBuildDays(ban) {
       } catch (e) {}
     }
     if (endDay) {
-      for (var j = 0; j < cfg.dayCount; j++) days.push(Math.max(1, endDay - (cfg.dayCount - 1) + j));
+      /* 오늘 분량이 Day 1~3처럼 앞쪽이면 뒤로 채워서 항상 Day 4개를 만든다 */
+      var dstart = Math.max(1, endDay - (cfg.dayCount - 1));
+      for (var j = 0; j < cfg.dayCount; j++) days.push(dstart + j);
     } else {
       var bk = ssBooksFor(ban), pool = (bk.length ? bk[0].days : []);
       var last = ssLastDayFor(ban, (S.cred && S.cred.name) || '', book);
@@ -8524,9 +8528,52 @@ function ssStageProgress() {
   if (SS.stage === 2) return Math.round(34 + b * 0.33);
   return Math.round(67 + c * 0.33);
 }
-function ssStatusPub() {
+function ssStatusPub(force) {
   if (!SS.on || !SS.ban || !SS.name) return;
   try { ssPub(SS_TOPIC_ST + ssTopicSafe(SS.ban) + '/' + ssTopicSafe(SS.name), ssStatusObj(), true); } catch (e) {}
+  try { ssBoardPush(!!force); } catch (e) {}
+}
+/* v97: 기존 ntfy 보드(topedu_streak_board_chosumin)로도 상태 이벤트를 보내
+   학생 폰에서 한 기록이 다른 기기의 원장님 화면(현황판·문자 목록)에 12시간 동안 남아요. */
+var SS_PUSH_AT = 0, SS_PUSH_SIG = '';
+function ssBoardPush(force) {
+  if (!SS.on || !SS.ban || !SS.name) return;
+  var now = Date.now();
+  var sig = (SS.done ? 99 : SS.stage) + '|' + SS.leaveCnt + '|' + ssStageProgress();
+  if (!force) {
+    if (sig === SS_PUSH_SIG && now - SS_PUSH_AT < 45000) return;
+    if (now - SS_PUSH_AT < 9000) return;
+  }
+  SS_PUSH_AT = now; SS_PUSH_SIG = sig;
+  var o = ssStatusObj();
+  o.k = 'ss97';
+  o.st = SS.done ? 99 : SS.stage;
+  try {
+    var info = getStreakInfo(SS.ban, SS.name);
+    o.s = info.streak || 0;
+    o.d = (SS.done || info.todayDone) ? 1 : 0;
+  } catch (e) { o.s = 0; o.d = SS.done ? 1 : 0; }
+  o.t = tdKey(); o.ts = now;
+  try {
+    fetch('https://ntfy.sh', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: TOPEDU_STREAK_BOARD_TOPIC, title: 'ss97', message: JSON.stringify(o), priority: 2 })
+    }).catch(function () {});
+  } catch (e) {}
+}
+/* 인강·숙제 완료 같은 일반 이벤트도 같은 보드에 남긴다 */
+function ssBoardEvent(kind, label) {
+  try {
+    var ban = SS.on ? SS.ban : ((S.cred && S.cred.ban) || '');
+    var name = SS.on ? SS.name : ((S.cred && S.cred.name) || '');
+    if (!ban || !name || ban === '선생님') return;
+    var info = getStreakInfo(ban, name);
+    var row = { n: name, b: ban, s: info.streak || 0, d: info.todayDone ? 1 : 0, t: tdKey(), ts: Date.now(), k: 'ev', ev: kind, lb: String(label || '').slice(0, 40) };
+    fetch('https://ntfy.sh', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: TOPEDU_STREAK_BOARD_TOPIC, title: 'ev', message: JSON.stringify(row), priority: 2 })
+    }).catch(function () {});
+  } catch (e) {}
 }
 function ssStatusAll() { try { return store(SS_ST_KEY) || {}; } catch (e) { return {}; } }
 function ssStatusOf(ban, name) {
@@ -8779,7 +8826,7 @@ function ssHit(why) {
   ssAfterLeave(0, why);
 }
 function ssAfterLeave(dur, why) {
-  ssStatusPub(); ssSaveSnap();
+  ssStatusPub(true); ssSaveSnap();
   ssWarnShow(dur, why);
   try { if (SS.leaveCnt >= 2 || dur >= 5) ssNtfyLeave(dur); } catch (e) {}
 }
@@ -9112,7 +9159,7 @@ function ssGoS2() {
   SS.stage = 2; SS.scr = 's2';
   if (SS.s2.i >= SS.s2.qs.length) { SS.s2.i = 0; SS.s2.ok = 0; }
   SS.s2.built = []; SS.s2.tries = 0;
-  ssSaveSnap(); ssStatusPub(); ssRender();
+  ssSaveSnap(); ssStatusPub(true); ssRender();
 }
 function ssViewS2() {
   if (!SS.s2.qs.length) return '<div class="ssx-pane">문장 세트를 찾지 못했어요.</div>';
@@ -9187,7 +9234,7 @@ function ssGoS3() {
   if (!ssS2Done()) { alert('2단계 문장을 먼저 끝내 주세요.'); return; }
   SS.stage = 3; SS.scr = 's3';
   if (!SS.s3.qs.length) { ssFinish(); return; }
-  ssSaveSnap(); ssStatusPub(); ssRender();
+  ssSaveSnap(); ssStatusPub(true); ssRender();
 }
 function ssViewS3() {
   if (!SS.s3.qs.length) return '<div class="ssx-pane">문제 세트를 찾지 못했어요.</div>';
@@ -9246,7 +9293,7 @@ function ssFinish() {
   SS.done = true; SS.stage = 3; SS.scr = 'done'; SS.s2.built = [];
   var el = (Date.now() - SS.t0) / 1000;
   try { playFanfareSound(); } catch (e) {}
-  ssSaveSnap(); ssStatusPub();
+  ssSaveSnap(); ssStatusPub(true);
   try {
     ssNtfy('✅ [자기주도 완주] ' + SS.name + ' (' + SS.ban + ')',
       '소요 ' + ssMMSS(el) + ' · 이탈 ' + SS.leaveCnt + '회(' + Math.round(SS.leaveSec) + '초) · 단어 ' + ssPct(SS.stats.s1ok, SS.stats.s1tot)
@@ -9514,11 +9561,11 @@ function ssAdminHtml() {
     + '</select></div>'
     + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">2단계 문장</label>'
     + '<select id="ssSentCount" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
-    + [6, 8, 10, 12].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.sentCount) === n ? ' selected' : '') + '>' + n + '문장</option>'; }).join('')
+    + [4, 6, 8, 10, 12].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.sentCount) === n ? ' selected' : '') + '>' + n + '문장</option>'; }).join('')
     + '</select></div>'
     + '<div style="flex:1"><label style="font-weight:700;color:#134e4a">3단계 문제</label>'
     + '<select id="ssProbCount" style="width:100%;padding:10px 8px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px">'
-    + [6, 8, 10, 12].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.probCount) === n ? ' selected' : '') + '>' + n + '문제</option>'; }).join('')
+    + [4, 6, 8, 10, 12].map(function (n) { return '<option value="' + n + '"' + (Number(cfg.probCount) === n ? ' selected' : '') + '>' + n + '문제</option>'; }).join('')
     + '</select></div>'
     + '</div>'
     + '<div id="ssPrev" style="margin-top:12px;padding:11px 13px;background:#fff;border:1.5px solid #99f6e4;border-radius:12px;font-size:12.5px;color:#0f766e;line-height:1.6"></div>'
@@ -9633,6 +9680,35 @@ function ssSummaryCopy(done) {
   });
 }
 
+/* 원장님 폰: 기존 ntfy 보드에서 최근 12시간 상태를 받아온다(다른 기기 학생 기록) */
+function ssBoardPull(force) {
+  var now = Date.now();
+  if (!force && now - (SS_NET.pullAt || 0) < 15000) return;
+  SS_NET.pullAt = now;
+  try {
+    fetch('https://ntfy.sh/' + TOPEDU_STREAK_BOARD_TOPIC + '/json?poll=1&since=12h')
+      .then(function (r) { return r.text(); })
+      .then(function (txt) {
+        String(txt || '').trim().split('\n').forEach(function (l) {
+          if (!l.trim()) return;
+          try {
+            var d = JSON.parse(l);
+            if (!d || d.event !== 'message' || !d.message) return;
+            var row = JSON.parse(d.message);
+            if (!row || !row.n) return;
+            if (!row.ts) row.ts = (d.time || 0) * 1000;
+            if (row.k === 'ss97' && (row.st != null || row.pg != null)) {
+              row.b = row.b || '';
+              SS_NET.board[row.b + '|' + row.n] = row;
+            }
+            try { mergeStreakBoard(row); } catch (e) {}
+          } catch (e) {}
+        });
+        ssBoardRefresh();
+      }).catch(function () {});
+  } catch (e) {}
+}
+
 /* 원장님 폰: 학생 상태 실시간 구독 */
 function ssTeacherSub() {
   if (SS_NET.teacher) return;
@@ -9729,11 +9805,14 @@ function ssAdminBind() {
   }
   ssBoardRefresh();
   ssTeacherSub();
+  ssBoardPull(true);
+  try { pullStreakBoard(); } catch (e) {}
   if (SS_VIEW.timer) clearInterval(SS_VIEW.timer);
   SS_VIEW.timer = setInterval(function () {
     if (!document.getElementById('ssBoard')) { clearInterval(SS_VIEW.timer); SS_VIEW.timer = null; return; }
     ssBoardRefresh();
-  }, 4000);
+    ssBoardPull();
+  }, 5000);
 }
 /* "이름,번호" 줄 또는 주소록(.vcf) 텍스트에서 학부모 번호 뽑기 */
 function ssParseParents(txt) {
