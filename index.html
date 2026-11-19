@@ -8740,6 +8740,14 @@ function ssOverlayOn(on) {
   o.classList.toggle('on', !!on);
   o.setAttribute('aria-hidden', on ? 'false' : 'true');
   try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {}
+  /* 학습 화면이 떠 있는 동안 뒤의 홈 화면은 가려 둔다(두 번 눌림·스크롤 튐 방지) */
+  try {
+    var ap = document.getElementById('app');
+    if (ap) {
+      ap.style.display = on ? 'none' : '';
+      ap.setAttribute('aria-hidden', on ? 'true' : 'false');
+    }
+  } catch (e) {}
 }
 function ssFullscreen() {
   var o = ssq('ssOverlay');
