@@ -1,5 +1,5 @@
 // TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림
-const CACHE_NAME = 'topedu-pwa-v93';
+const CACHE_NAME = 'topedu-pwa-v94';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.

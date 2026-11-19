@@ -559,6 +559,46 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .rk .s.brs { white-space: nowrap; }
 .list li .brs { white-space: nowrap; font-weight: 800; font-size: 15.5px; text-align: right; }
 
+/* ===== v94: 대결 유형 선택 + 문장 대결(어순 배열) ===== */
+.bmmode { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 14px; }
+.bmode { background: #fff; border: 2px solid var(--line); border-radius: 16px; padding: 14px 10px; text-align: center; cursor: pointer; font-family: inherit; color: var(--ink); box-shadow: var(--shadow); }
+.bmode .em { font-size: 26px; line-height: 1.1; }
+.bmode .nm { font-family: Maplestory, sans-serif; font-weight: 700; font-size: 17px; color: var(--pri3); margin: 4px 0 2px; }
+.bmode .small { font-size: 12px; line-height: 1.35; }
+.bmode.on { border-color: var(--pri); background: #f0fdfa; box-shadow: 0 0 0 3px rgba(13,148,136,0.14); }
+.bsentlist { display: flex; flex-direction: column; gap: 8px; }
+.bsentlist .srow { display: flex; align-items: center; gap: 10px; background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+.bsentlist .srow.on { border-color: var(--pri); background: #f0fdfa; }
+.bsentlist .srow input { width: 20px; height: 20px; accent-color: var(--pri); margin: 0; flex: none; }
+.bsentlist .srow .grow { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.bsentlist .srow .grow b { font-size: 15px; }
+.bsentlist .srow .grow .small { font-size: 11.5px; }
+.bsentlist .srow .cnt { font-size: 12px; font-weight: 800; color: var(--pri); background: var(--pri2); border-radius: 999px; padding: 2px 9px; flex: none; }
+.sbcard { background: #fff; border: 1.5px solid var(--line); border-radius: 20px; padding: 13px 13px 10px; box-shadow: var(--shadow); }
+.sbhead { display: flex; align-items: center; gap: 8px; }
+.sbno { font-family: Maplestory, sans-serif; font-weight: 700; font-size: 13.5px; color: var(--pri3); background: var(--pri2); border-radius: 999px; padding: 3px 10px; flex: none; }
+.sbtag { font-size: 11.5px; color: var(--sub); margin-left: auto; text-align: right; }
+.sbko { font-size: 18px; font-weight: 800; line-height: 1.45; color: var(--ink); margin: 8px 0 10px; word-break: keep-all; }
+.sbslot { min-height: 66px; border: 2px dashed #99f6e4; border-radius: 14px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; background: #f7fffe; }
+.sbslot-hint { font-size: 12.5px; color: #94a3b8; padding: 4px 6px; }
+.sbslot .sbc { background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; border: 0; border-radius: 10px; padding: 9px 11px; font-size: 15.5px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.sbchips { display: flex; flex-wrap: wrap; gap: 7px; margin: 11px 0 4px; }
+.sbchips .sbc { background: #fff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 9px 11px; font-size: 15.5px; font-weight: 700; color: var(--ink); font-family: inherit; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.sbchips .sbc.used { visibility: hidden; }
+.sbact { display: flex; gap: 8px; margin-top: 8px; }
+.sbfb { min-height: 26px; text-align: center; font-weight: 900; font-size: 17px; letter-spacing: -0.3px; padding-top: 2px; }
+.sbfb.ok { color: var(--ok); }
+.sbfb.no { color: var(--no); }
+.sbans { font-size: 13.5px; color: var(--pri3); font-weight: 700; margin-top: 3px; word-break: keep-all; line-height: 1.4; }
+@media (max-width: 800px) {
+  .bmmode { gap: 8px; }
+  .bmode { padding: 11px 8px; }
+  .bmode .nm { font-size: 15.5px; }
+  .bmode .small { font-size: 11px; }
+  .sbko { font-size: 16.5px; }
+  .sbslot .sbc, .sbchips .sbc { font-size: 14.5px; padding: 8px 10px; }
+}
+
 @media (max-width: 800px) {
   .bcode { font-size: 96px; letter-spacing: 10px; }
   .bp { font-size: 44px; }
@@ -1512,6 +1552,70 @@ function generateBattleQs(ban, dir, setNames) {
   }).filter(function(q) { return q.o.length === 4; });
 }
 
+var SENT_SETS=[{"id":"suji1","name":"수지중1","sub":"2022 개정 동아(윤정미) 6·7·8과","bans":["수지중1"],"items":[{"ko":"매일 우리는 많은 쓰레기를 만들어내고, 지구는 점점 더 아파지고 있다.","en":"Every day, we produce lots of waste, and the Earth is getting sicker and sicker.","tag":"6과 · 비교급(and 비교급)"},{"ko":"물건을 재사용하고 재활용하는 것은 환경에 정말 좋다.","en":"Reusing and recycling things is really good for the environment.","tag":"6과 · 동명사 주어"},{"ko":"중고 물품을 사는 것은 쓰레기를 줄이는 데 도움이 된다.","en":"Buying secondhand items helps reduce waste.","tag":"6과 · 동명사 주어"},{"ko":"나는 재사용하는 것이 제로 웨이스트 생활에 중요하다는 것을 배웠다.","en":"I learned that reusing is important for zero-waste living.","tag":"6과 · 접속사 that"},{"ko":"나는 플라스틱이 절대 완전히 사라지지 않는다고 들었다.","en":"I heard that plastic never goes away completely.","tag":"6과 · 접속사 that"},{"ko":"우리는 지구를 구하기 위해 나무를 심을 수 있다.","en":"We can plant trees to save the Earth.","tag":"6과 · 조동사 can + to부정사"},{"ko":"그래서 나는 그것을 고쳐서 재사용하기로 결심했다.","en":"So, I decided to fix it and reuse it.","tag":"6과 · to부정사(목적어)"},{"ko":"나는 자주 음식 배달 서비스를 이용하지만, 오늘은 식당까지 걸어갔다.","en":"I often use food delivery services, but today I walked to the restaurant.","tag":"6과 · 접속사 but"},{"ko":"내 일은 촬영을 위한 완벽한 장소를 찾는 것이다.","en":"My job is to find perfect places for shooting.","tag":"7과 · to부정사(명사적·보어)"},{"ko":"그들의 행복한 순간을 포착하기 위해 나는 드론을 사용할 예정이다.","en":"To capture their happy moments, I'm going to use drones.","tag":"7과 · to부정사(목적)"},{"ko":"그래서 나는 그를 진정시키기 위해 손 신호를 사용한다.","en":"So, I use hand signals to calm him.","tag":"7과 · to부정사(목적)"},{"ko":"더 좋은 이야기를 만들기 위해서, 나는 장면의 순서를 바꾸거나 일부를 삭제할 수도 있다.","en":"I can change the order of scenes to create a better story.","tag":"7과 · to부정사(목적)"},{"ko":"스토리텔링 기술이 내 일에 중요하기 때문에 나는 책을 많이 읽는다.","en":"Storytelling skills are important for my job, so I read a lot.","tag":"7과 · 접속사 so"},{"ko":"Max는 주변에 사람들이 많을 때 가끔 너무 흥분한다.","en":"Max sometimes gets too excited when a lot of people are around.","tag":"7과 · 접속사 when"},{"ko":"어느 날 그녀는 숲을 걷다가 오두막을 발견했다.","en":"One day, she was taking a walk in the forest and found a cottage.","tag":"8과 · 과거진행"},{"ko":"그녀는 가장 작은 것을 먹고 웃으며 셀카를 찍었다.","en":"She ate the smallest one and took selfies with a smile.","tag":"8과 · 최상급"},{"ko":"'좋아요를 더 많이 받으려면 어떻게 해야 하지?' 하고 그녀는 생각했다.","en":"What should I do to get more likes?","tag":"8과 · 조동사 should"},{"ko":"이제부터는 '게시'를 누르기 전에 두 번 생각할게요.","en":"I'll think twice before I press POST.","tag":"8과 · 접속사 before"},{"ko":"그녀의 팔로워들은 곧 지루해졌다.","en":"Her followers, however, soon got bored.","tag":"8과 · 감정분사(bored)"},{"ko":"그래서 그녀는 더 충격적인 사진을 올리기로 결심했다.","en":"She decided to post more shocking pictures.","tag":"8과 · to부정사(목적어)"}]},{"id":"suji2","name":"수지중2","sub":"동아(윤정미) 7·8과 + 7과 외부지문 2개","bans":["수지중2","한빛중2"],"items":[{"ko":"놀랍게도 팔라스는 축제 마지막 날에 태워진다.","en":"Surprisingly, the fallas are burned on the last day of the festival.","tag":"7과 · 수동태"},{"ko":"그것들을 태우는 것은 옛것에 작별을 고하고 새로운 시작을 맞이하는 것을 상징한다.","en":"Burning them symbolizes saying goodbye to old things and hello to a new start.","tag":"7과 · 동명사"},{"ko":"스웨덴에서는 1년 중 이맘때 해가 거의 지지 않기 때문에 사람들은 밤새도록 축제를 즐길 수 있다.","en":"Because the sun hardly sets at this time of year in Sweden, people can enjoy the festival all night long.","tag":"7과 · 접속사(because)"},{"ko":"스웨덴의 겨울은 길고 어두워서 그곳 사람들은 특히 여름을 반긴다.","en":"Winter in Sweden is long and dark, so the people there especially welcome summer.","tag":"7과 · 접속사(so)"},{"ko":"많은 멕시코 사람들은 1년에 한 번 죽은 사람들이 가족과 친구들을 만나러 집에 돌아온다고 믿는다.","en":"Many Mexicans believe that once a year dead people come back home to meet their family and friends.","tag":"7과 · 접속사 that"},{"ko":"그들은 죽은 사람들을 기억하는 것이 중요하다고 믿는다.","en":"They believe it is important to remember dead people.","tag":"7과 · 가주어 it"},{"ko":"사람들은 다른 이들과 자신들의 전통을 공유하기 위해 축제를 연다.","en":"People celebrate festivals to share their traditions with others.","tag":"7과 외부1 · to부정사(목적)"},{"ko":"이 축제 기간 동안 방문객들은 다양한 겨울 스포츠와 알래스카 전통 놀이를 즐길 수 있다.","en":"During this festival, visitors can enjoy various winter sports and Alaskan traditional games.","tag":"7과 · 조동사(can)"},{"ko":"저는 항상 공룡을 보고 싶었습니다.","en":"I've always wanted to see a dinosaur.","tag":"8과 · 현재완료"},{"ko":"우리는 방금 6천만 년 전의 밀림에 도착했습니다.","en":"We've just arrived in the jungle of 60 million years ago.","tag":"8과 · 현재완료"},{"ko":"저는 이렇게 거대한 것을 본 적이 없어요.","en":"I've never seen such a huge thing.","tag":"8과 · 현재완료(경험)"},{"ko":"어떤 때라도 그 길을 벗어나서는 안 됩니다.","en":"You must not leave it at any time.","tag":"8과 · 조동사(must not)"},{"ko":"어떤 것도 만지지 마세요. 실수로 무언가를 죽일 수도 있습니다.","en":"Do not touch anything. You might kill something by accident.","tag":"8과 · 조동사(might)"},{"ko":"그는 너무 공포에 질려서 실수로 길을 벗어났다.","en":"He was so terrified that he left the path by accident.","tag":"8과 · so~that"},{"ko":"안전을 지키기 위해, 당신은 그의 지시를 따라야만 합니다.","en":"To stay safe, you must follow his instructions.","tag":"8과 · to부정사(목적)"},{"ko":"당신이 어떤 바보 같은 짓도 하지 않기를 바랍니다.","en":"I don't want you to do anything foolish.","tag":"8과 · to부정사(목적격보어)"},{"ko":"밀림은 안개로 뒤덮여 있었다.","en":"The jungle was covered in fog.","tag":"8과 · 수동태"},{"ko":"그것은 큰 포효와 함께 그들을 향해 갑자기 뛰기 시작했다.","en":"It suddenly started to run toward them with a loud roar.","tag":"8과 · to부정사(목적어)"},{"ko":"축제는 음악, 음식, 즐거움으로 가득 찬 특별한 날 그 이상이다.","en":"Festivals are more than special days filled with music, food, and fun.","tag":"7과 외부1 · 분사(수식)"},{"ko":"가족들은 식사를 나누고 자신들이 가진 것에 감사를 표현하기 위해 모인다.","en":"Families gather to share a meal and express gratitude for what they have.","tag":"7과 외부1 · 관계대명사 what"},{"ko":"둘 다 사람들이 축하 행사를 통해 자신들의 감정과 가치를 어떻게 표현하는지 보여준다.","en":"Both show how people express their feelings and values through celebrations.","tag":"7과 외부1 · 간접의문문"},{"ko":"이러한 방식으로, 축제는 문화가 한 세대에서 다음 세대로 전해지도록 돕는다.","en":"In this way, festivals help pass culture from one generation to the next.","tag":"7과 외부1 · help + 동사원형"},{"ko":"기억은 우리로 하여금 과거의 경험들을 회상할 수 있게 한다.","en":"Memory enables us to recollect past experiences.","tag":"7과 외부2 · to부정사(목적격보어)"},{"ko":"그것은 글, 그림, 기념비, 의식, 그리고 다른 상징들을 통해 전해진다.","en":"It is passed through text, paintings, monuments, rites, and other symbols.","tag":"7과 외부2 · 수동태"}]},{"id":"pre1","name":"예비고1","sub":"고1 핵심 구문 · 분사구문·관계사·가정법·수동태","bans":["예비고1"],"items":[{"ko":"그는 피곤해서 일찍 잤다.","en":"Being tired, he went to bed early.","tag":"분사구문"},{"ko":"그는 영어를 몰라서 그 질문을 이해하지 못했다.","en":"Not knowing English, he couldn't understand the question.","tag":"분사구문(부정)"},{"ko":"그 소식을 듣고 나서, 그는 집으로 돌아갔다.","en":"Having heard the news, he returned home.","tag":"분사구문(완료)"},{"ko":"그가 한 말은 모두를 놀라게 했다.","en":"What he said surprised everyone.","tag":"관계대명사 what"},{"ko":"이것이 내가 원하는 것이다.","en":"This is what I want.","tag":"관계대명사 what"},{"ko":"그녀는 시험에 합격했는데, 그것은 우리 모두를 기쁘게 했다.","en":"She passed the exam, which made all of us happy.","tag":"계속적 용법(which)"},{"ko":"나는 토니를 만났는데, 그는 나를 도와주었다.","en":"I met Tony, who helped me.","tag":"계속적 용법(who)"},{"ko":"내가 너라면 그렇게 하지 않을 것이다.","en":"If I were you, I would not do that.","tag":"가정법 과거"},{"ko":"내가 더 열심히 공부했더라면, 시험에 합격했을 것이다.","en":"If I had studied harder, I would have passed the exam.","tag":"가정법 과거완료"},{"ko":"나는 그가 여기 있으면 좋겠다.","en":"I wish he were here.","tag":"I wish 가정법"},{"ko":"영어는 전 세계에서 말해진다.","en":"English is spoken all over the world.","tag":"수동태"},{"ko":"그 다리는 1990년에 지어졌다.","en":"The bridge was built in 1990.","tag":"수동태(과거)"},{"ko":"그 문제는 곧 해결될 것이다.","en":"The problem will be solved soon.","tag":"수동태(조동사)"},{"ko":"그는 그 책을 받았다.","en":"He was given the book.","tag":"수동태(4형식)"},{"ko":"새 학교가 지어지고 있다.","en":"A new school is being built.","tag":"수동태(진행)"},{"ko":"날씨가 좋아서, 우리는 산책을 나갔다.","en":"The weather being fine, we went out for a walk.","tag":"독립분사구문"},{"ko":"그는 마치 왕인 것처럼 행동한다.","en":"He acts as if he were a king.","tag":"as if 가정법"},{"ko":"이 책은 언제 쓰였니?","en":"When was this book written?","tag":"수동태(의문문)"}]},{"id":"hong1","name":"홍천고1","sub":"고1 핵심 구문 · 도치·강조·복합관계사·가주어","bans":["홍천고1"],"items":[{"ko":"그가 그 문제를 혼자 해결하는 것은 불가능하다.","en":"It is impossible for him to solve the problem alone.","tag":"가주어·진주어"},{"ko":"그렇게 말해 주다니 너는 참 친절했구나.","en":"It was kind of you to say so.","tag":"가주어(of)"},{"ko":"그가 거짓말을 했다는 것은 분명하다.","en":"It is clear that he lied.","tag":"가주어·that절"},{"ko":"나는 그런 아름다운 풍경을 본 적이 없다.","en":"Never have I seen such a beautiful view.","tag":"도치(부정어)"},{"ko":"언덕 위에 오래된 성이 서 있다.","en":"On the hill stands an old castle.","tag":"도치(장소)"},{"ko":"그제야 나는 진실을 알았다.","en":"Only then did I realize the truth.","tag":"도치(only)"},{"ko":"누구든지 그 규칙을 어기는 사람은 벌을 받는다.","en":"Whoever breaks the rule will be punished.","tag":"복합관계사(whoever)"},{"ko":"네가 무엇을 선택하든지 나는 너를 지지할 것이다.","en":"Whatever you choose, I will support you.","tag":"복합관계사(whatever)"},{"ko":"그는 올 때마다 선물을 가져온다.","en":"Whenever he comes, he brings a gift.","tag":"복합관계사(whenever)"},{"ko":"그가 어제 도서관에서 읽은 것은 바로 그 책이었다.","en":"It was the book that he read in the library yesterday.","tag":"강조구문(it~that)"},{"ko":"어제 나를 도와준 사람은 바로 그녀였다.","en":"It was she who helped me yesterday.","tag":"강조구문(사람)"},{"ko":"그 책을 읽고 나서, 그는 편지를 썼다.","en":"Having read the book, he wrote a letter.","tag":"분사구문(완료)"},{"ko":"그는 팔짱을 낀 채 서 있었다.","en":"He stood there with his arms folded.","tag":"분사구문(with)"},{"ko":"내가 진실을 알았더라면 너에게 말했을 것이다.","en":"Had I known the truth, I would have told you.","tag":"도치(가정법)"},{"ko":"어느 쪽 길을 택하든지, 그것은 긴 여정이다.","en":"Whichever way you take, it is a long journey.","tag":"복합관계사(whichever)"},{"ko":"그와 논쟁하는 것은 소용없다.","en":"It is no use arguing with him.","tag":"가주어(no use ~ing)"},{"ko":"그녀는 정말로 가고 싶어 한다.","en":"She does want to go.","tag":"강조(do)"},{"ko":"나는 축구를 좋아하고 내 동생도 그렇다.","en":"I like soccer, and so does my brother.","tag":"도치(so)"}]},{"id":"sujigo2","name":"수지고2","sub":"수특 Light 9~12강 1~4번 · Minitest 1·2 · 10월 학평 31~39","bans":["수지고2"],"items":[{"ko":"비가 그친 뒤에야 우리는 경기장을 떠났다.","en":"Not until the rain stopped did we leave the stadium.","tag":"수특 Light · 도치(부정어)"},{"ko":"그녀의 지지가 없었다면, 그 프로젝트는 실패했을 것이다.","en":"Had it not been for her support, the project would have failed.","tag":"수특 Light · 가정법 도치"},{"ko":"나를 가장 감명시킨 것은 그녀의 기꺼이 귀를 기울이려는 태도였다.","en":"What impressed me most was her willingness to listen.","tag":"수특 Light · what 강조"},{"ko":"지문을 더 꼼꼼히 읽을수록, 너는 실수를 더 적게 할 것이다.","en":"The more carefully you read the passage, the fewer mistakes you will make.","tag":"수특 Light · the 비교급"},{"ko":"폭풍에 대해 경고를 받았기 때문에, 선원들은 항구에 머물렀다.","en":"Having been warned about the storm, the crew stayed in the harbor.","tag":"수특 Light · 분사구문(완료)"},{"ko":"결과는 금요일까지 제출되어야 한다.","en":"The results must be submitted by Friday.","tag":"Minitest · 수동태"},{"ko":"그녀는 사과하기를 거부했고, 그것은 상황을 더 나쁘게 만들 뿐이었다.","en":"She refused to apologize, which only made the situation worse.","tag":"수특 Light · 계속적 which"},{"ko":"아무리 그가 애를 써도, 그는 그들을 설득할 수 없었다.","en":"However hard he tried, he could not convince them.","tag":"Minitest · 양보 However"},{"ko":"그녀가 그 제안을 받아들인다면, 해외로 이사해야 할 것이다.","en":"Were she to accept the offer, she would have to move abroad.","tag":"수특 Light · 가정법(if 생략)"},{"ko":"재능은 고정되어 있다는 믿음은 많은 학생들의 의욕을 꺾는다.","en":"The belief that talent is fixed discourages many students.","tag":"Minitest · 동격 that"},{"ko":"사람들은 자신의 기존 신념을 뒷받침하는 정보를 기억하는 경향이 있다.","en":"People tend to remember information that supports their existing beliefs.","tag":"학평 31~34 · 관계대명사 that"},{"ko":"보고서를 읽는 동안, 그녀는 심각한 오류를 발견했다.","en":"While reading the report, she noticed a serious error.","tag":"학평 36~39 · 분사구문(시간)"},{"ko":"중요한 것은 네가 얼마나 많이 아는지가 아니라 그것을 어떻게 사용하는지다.","en":"What matters is not how much you know but how you use it.","tag":"학평 36~39 · not A but B"},{"ko":"기술이 너무 빠르게 발전해서 법이 따라가지 못했다.","en":"So rapidly did the technology develop that laws could not keep up.","tag":"수특 Light · so~that 도치"},{"ko":"모든 학생이 월요일까지 양식을 제출하는 것이 필수적이다.","en":"It is essential that every student submit the form by Monday.","tag":"Minitest · 가주어 that"},{"ko":"아직 어떤 결정도 내려지지 않았다.","en":"No decision has been made yet.","tag":"Minitest · 현재완료 수동"},{"ko":"이것이 바로 우리가 지금 행동해야 하는 이유다.","en":"This is the very reason why we must act now.","tag":"수특 Light · 관계부사 why"},{"ko":"새 정책은 예전 것보다 훨씬 더 효과적이다.","en":"The new policy is far more effective than the old one.","tag":"학평 31~34 · 비교급 강조"},{"ko":"우리가 쓰레기를 줄이지 않으면, 그 문제는 더 악화될 뿐이다.","en":"Unless we reduce waste, the problem will only get worse.","tag":"학평 31~34 · 조건사 unless"},{"ko":"예상치 못한 비판에 직면하여, 팀은 계획을 수정하기로 했다.","en":"Faced with unexpected criticism, the team decided to revise the plan.","tag":"수특 Light · 분사구문(수동)"}]},{"id":"practice1","name":"고1 핵심 구문 연습","sub":"분사구문·도치·강조·가정법 (반 지정 없는 연습용)","bans":[],"items":[{"ko":"그가 그 제안을 거절한 이유는 그 조건이 불공평했기 때문이었다.","en":"The reason why he rejected the offer was that the conditions were unfair.","tag":"이유의 that절"},{"ko":"이것은 내가 어릴 때 살았던 집이다.","en":"This is the house where I lived when I was young.","tag":"관계부사(where)"},{"ko":"그 문제가 해결된 상태여서, 우리는 다음 단계로 넘어갈 수 있었다.","en":"With the problem solved, we could move on to the next step.","tag":"독립분사구문(with)"},{"ko":"그가 시험에 합격했다는 소식은 놀라웠다.","en":"The news that he had passed the exam was surprising.","tag":"동격의 that절"},{"ko":"그는 열심히 일했을 뿐만 아니라 결코 포기하지도 않았다.","en":"Not only did he work hard, but he also never gave up.","tag":"도치(not only)"},{"ko":"내가 강조하고 싶은 것은 협동의 중요성이다.","en":"What I want to emphasize is the importance of teamwork.","tag":"관계대명사 what"},{"ko":"네가 최선을 다하는 한, 결과는 중요하지 않다.","en":"As long as you do your best, the result doesn't matter.","tag":"조건사(as long as)"},{"ko":"그가 도착하고 나서야 우리는 식사를 시작했다.","en":"It was not until he arrived that we started eating.","tag":"강조(not until)"},{"ko":"그의 도움이 없다면, 나는 그것을 해낼 수 없을 것이다.","en":"Were it not for his help, I could not do it.","tag":"가정법(if 생략)"},{"ko":"연습하면 할수록, 너는 더 나아진다.","en":"The more you practice, the better you become.","tag":"비교급 강조(the 비교급)"},{"ko":"그녀가 그렇게 짧은 시간에 이 모든 것을 해냈다는 것이 믿기지 않는다.","en":"It is hard to believe that she accomplished all this in such a short time.","tag":"가주어·진주어"},{"ko":"그 프로젝트는 지난달까지 끝났어야 했다.","en":"The project should have been finished by last month.","tag":"수동태(조동사 완료)"},{"ko":"이것은 내가 어제 본 영화다.","en":"This is the movie I saw yesterday.","tag":"관계대명사 목적격 생략"},{"ko":"그는 창밖을 바라보며 조용히 앉아 있었다.","en":"He sat quietly looking out the window.","tag":"분사구문(동시동작)"},{"ko":"그것이 그녀가 화가 난 이유다.","en":"That is why she got angry.","tag":"관계부사(why)"},{"ko":"아무리 그가 바빠도, 그는 매일 운동한다.","en":"However busy he is, he exercises every day.","tag":"양보(however)"},{"ko":"그 영화는 너무 지루해서 나는 중간에 잠이 들었다.","en":"The movie was so boring that I fell asleep in the middle.","tag":"so~that"},{"ko":"중요한 것은 네가 무엇을 말하는지가 아니라 어떻게 말하는지다.","en":"It is not what you say but how you say it that matters.","tag":"강조구문(not A but B)"}]}];
+
+/* ===== v94: 문장 대결(어순 배열) =====
+   writing.html(내신 서술형·어순배열)의 반별 문장 SETS와 같은 원본을 단어 앱에 내장했다.
+   교사가 [시작하기]를 누를 때 순서·칩 섞기를 '시드'로 한 번만 정하고, 그 시드와 문장 목록을
+   MQTT로 함께 보내기 때문에 모든 학생 폰이 같은 순서·같은 문제로 동시에 출발한다. */
+function sentSetsForBan(ban){
+  return SENT_SETS.filter(function(s){
+    if(!ban) return true;
+    if(!s.bans || !s.bans.length) return true;   // 반 지정 없는 연습용 세트
+    return s.bans.indexOf(ban) >= 0;
+  });
+}
+function sentSetByName(n){
+  for(var i=0;i<SENT_SETS.length;i++){ if(SENT_SETS[i].name===n) return SENT_SETS[i]; }
+  return null;
+}
+function sbRand(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+/* 고른 문장 세트들을 하나로 섞어 출제 목록을 만든다 (시드가 같으면 어느 기기에서든 같은 순서) */
+function buildSentenceQs(sentNames, seed){
+  var names = (sentNames && sentNames.length) ? sentNames : SENT_SETS.map(function(x){ return x.name; });
+  var pool = [], seen = {};
+  names.forEach(function(n){
+    var st = sentSetByName(n);
+    if(!st) return;
+    st.items.forEach(function(it){
+      if(!it || !it.en) return;
+      var en = String(it.en).trim();
+      if(!en || seen[en]) return;
+      seen[en] = 1;
+      pool.push({ ko: String(it.ko || ''), en: en, tag: String(it.tag || '') });
+    });
+  });
+  var rnd = sbRand((Number(seed) || 1) * 2654435761);
+  for(var i=pool.length-1;i>0;i--){
+    var j = Math.floor(rnd() * (i + 1)), t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  return pool;
+}
+/* 문장 하나의 섞인 단어 칩 — (시드, 문제번호)로 고정해 모든 기기가 같은 칩 순서를 본다 */
+function sentChips(q, seed, idx){
+  var w = String((q && q.en) || '').trim().split(/\s+/).filter(Boolean);
+  var a = w.map(function(_, i){ return i; });
+  var rnd = sbRand(((Number(seed) || 1) + (Number(idx) || 0) * 7919) * 40503);
+  for(var i=a.length-1;i>0;i--){
+    var j = Math.floor(rnd() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  var straight = a.every(function(v, i){ return v === i; });
+  if(straight && a.length > 1){ var f = a.shift(); a.push(f); }
+  return a.map(function(i){ return { i: i, w: w[i] }; });
+}
+function sbNorm(t){
+  return String(t || '').toLowerCase()
+    .replace(/[.,!?;:"'“”‘’]/g, '')
+    .replace(/\s+/g, ' ').trim();
+}
+
 
 /* ============ 학생 학습 진도 & 점수 영구 저장소 (초기화 방지 엔진) ============ */
 function getStudentProgressDB(ban, name){
@@ -1756,19 +1860,27 @@ function mockCall(fn, args) {
     if (!Array.isArray(setNames)) setNames = [setNames];
     var mins = Math.max(1, Math.min(30, Number(args[2]) || 3));
     var dir = args[3] === 'ko' ? 'ko' : 'en';
+    /* v94: 대결 유형 — 'word'(단어) / 'sentence'(문장 어순배열) */
+    var mode = args[4] === 'sentence' ? 'sentence' : 'word';
+    var sentNames = Array.isArray(args[5]) ? args[5] : [];
+    var seed = Math.max(1, Number(args[6]) || (Math.floor(Math.random() * 900000) + 1));
 
     var code = String(Math.floor(1000 + Math.random() * 9000));
-    var label = setNames.join(', ');
+    var label = (mode === 'sentence' ? sentNames.join(', ') : setNames.join(', '));
+    if (mode === 'sentence' && !label) label = '문장 대결';
     if (label.length > 28) label = label.slice(0, 26) + '…';
 
-    var qs = generateBattleQs('', dir, setNames);
+    var qs = mode === 'sentence' ? [] : generateBattleQs('', dir, setNames);
 
     var room = {
       code: code,
       rid: 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       status: 'lobby',
+      mode: mode,
       set: label,
       setNames: setNames,
+      sentNames: sentNames,
+      seed: seed,
       mins: mins,
       dir: dir,
       qs: qs,
@@ -1788,8 +1900,11 @@ function mockCall(fn, args) {
       code: code,
       rid: room.rid,
       status: 'lobby',
+      mode: mode,
       set: label,
       setNames: setNames,
+      sentNames: sentNames,
+      seed: seed,
       mins: mins,
       dir: dir,
       names: [],
@@ -3076,12 +3191,12 @@ function showHome(){
   if (me.ban === '초5') {
     html += '<div style="display:flex;gap:8px;margin:4px 0 12px">'+
       '<button class="btn" onclick="location.href=\'cats.html\'" style="flex:1.2;margin:0;background:linear-gradient(135deg,#7c4dff,#ec4899);color:#fff;font-weight:700">🐱 캐츠 훈련관</button>'+
-      '<button class="btn dark" id="bjoin" style="flex:1;margin:0">⚔️ 단어 대결</button>'+
+      '<button class="btn dark" id="bjoin" style="flex:1;margin:0">⚔️ 대결</button>'+
       '<button class="btn" id="bjoinlive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 화상수업</button>'+
       '</div>';
   } else {
     html += '<div style="display:flex;gap:8px;margin:4px 0 12px">'+
-      '<button class="btn dark" id="bjoin" style="flex:1;margin:0">⚔️ 단어 대결 참여</button>'+
+      '<button class="btn dark" id="bjoin" style="flex:1;margin:0">⚔️ 대결 참여</button>'+
       '<button class="btn" id="bjoinlive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 우리 반 화상수업</button>'+
       '</div>';
   }
@@ -3939,7 +4054,7 @@ function showAdmin(){
   if(!A.tab) A.tab = 'dash';
   var html = '<div class="top"><button class="back" id="back">← 나가기</button><div class="grow"><div class="title">선생님 관리 화면 🌸 <span style="font-size:11px;font-weight:700;color:#0d9488;background:#ccfbf1;border-radius:999px;padding:2px 8px;vertical-align:middle">' + TOPEDU_APP_VERSION + '</span></div></div></div>'+
     '<div style="display:flex;gap:8px;margin:6px 0 10px">'+
-    '<button class="btn dark" id="bnew" style="flex:1;margin:0">⚔️ 단어 대결 (칠판)</button>'+
+    '<button class="btn dark" id="bnew" style="flex:1;margin:0">⚔️ 퀴즈 대결 (칠판)</button>'+
     '<button class="btn" id="blive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 화상수업 열기</button>'+
     '</div>'+
     '<div style="display:flex;gap:8px;margin:0 0 10px">'+
@@ -4700,16 +4815,31 @@ function sendBattleNet(code, payload){ bnSend(payload); }
 function showBattleSetup(){
   var A=S.admin;
   call('battleSets',A.pw).then(function(sets){
-    B.sets=sets; var picked=(B.opt&&B.opt.sets)?B.opt.sets.slice():[];
-    var html=topBar('⚔️ 단어 대결 만들기')+'<div class="card">'+
-      '<label style="margin-top:0">반</label><select id="bban"><option value="">전체 반</option>'+A.info.classes.map(function(c){return '<option'+(c===A.ban?' selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select>'+
-      '<label>단어 세트 <span class="small">(여러 개 고르면 단어가 모두 섞여서 나와요)</span></label><select id="bset"></select>'+
-      '<button class="btn ghost" id="badd" style="padding:11px;font-size:16px">＋ 세트 추가</button><div id="bpicked" style="margin-top:10px"></div>'+
+    B.sets=sets;
+    var picked=(B.opt&&B.opt.sets)?B.opt.sets.slice():[];
+    var spicked=(B.opt&&B.opt.sentSets)?B.opt.sentSets.slice():[];
+    var mode=(B.opt&&B.opt.mode==='sentence')?'sentence':'word';
+    var html=topBar('⚔️ 퀴즈 대결 만들기')+'<div class="card">'+
+      '<label style="margin-top:0">대결 유형</label>'+
+      '<div class="bmmode">'+
+        '<button type="button" class="bmode" data-m="word"><div class="em">📝</div><div class="nm">단어 대결</div><div class="small">영어 단어 보고 뜻 고르기</div></button>'+
+        '<button type="button" class="bmode" data-m="sentence"><div class="em">🔤</div><div class="nm">문장 대결</div><div class="small">섞인 단어를 순서대로 배열</div></button>'+
+      '</div>'+
+      '<label>반</label><select id="bban"><option value="">전체 반</option>'+A.info.classes.map(function(c){return '<option'+(c===A.ban?' selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select>'+
+      '<div id="bword">'+
+        '<label>단어 세트 <span class="small">(여러 개 고르면 단어가 모두 섞여서 나와요)</span></label><select id="bset"></select>'+
+        '<button class="btn ghost" id="badd" style="padding:11px;font-size:16px">＋ 세트 추가</button><div id="bpicked" style="margin-top:10px"></div>'+
+      '</div>'+
+      '<div id="bsentbox" style="display:none">'+
+        '<label>문장 세트 <span class="small">(체크한 세트의 문장이 섞여서 나와요 · 1개 이상)</span></label>'+
+        '<div id="bsent" class="bsentlist"></div>'+
+      '</div>'+
       '<div class="row"><div><label>게임 시간</label><select id="bmin">'+[1,2,3,4,5,7,10,15].map(function(m){return '<option value="'+m+'"'+(m===((B.opt&&B.opt.mins)||3)?' selected':'')+'>'+m+'분</option>';}).join('')+'</select></div>'+
-      '<div><label>문제 방식</label><select id="bdir"><option value="en">영어 보고 뜻 고르기</option><option value="ko"'+(B.opt&&B.opt.dir==='ko'?' selected':'')+'>뜻 보고 영어 고르기</option></select></div></div>'+
+      '<div id="bdirbox"><label>문제 방식</label><select id="bdir"><option value="en">영어 보고 뜻 고르기</option><option value="ko"'+(B.opt&&B.opt.dir==='ko'?' selected':'')+'>뜻 보고 영어 고르기</option></select></div></div>'+
       '<button class="btn" id="bmake">방 만들기</button><div class="err" id="err"></div></div>'+
-      '<div class="small">시작하면 학생마다 자기 속도로 문제를 계속 풀어요. 게임 시간이 끝났을 때 맞힌 개수가 많은 순서로 순위가 정해져요 (같으면 덜 틀린 학생이 위). 결과는 기록 탭에 "대결"로 남아요.</div>';
+      '<div class="small" id="bnote">시작하면 학생마다 자기 속도로 문제를 계속 풀어요. 게임 시간이 끝났을 때 맞힌 개수가 많은 순서로 순위가 정해져요 (같으면 덜 틀린 학생이 위).</div>';
     app.innerHTML=html;
+
     function fill(){
       var ban=$('#bban').value;
       var list=B.sets.filter(function(s){ return !ban||!s.target||s.target==='전체'||s.target.split(/[,，\/]/).map(function(x){return x.trim();}).indexOf(ban)>=0; });
@@ -4720,14 +4850,63 @@ function showBattleSetup(){
       $('#bpicked').innerHTML=picked.length?picked.map(function(n,i){ return '<span class="chip done" style="margin:0 6px 6px 0;font-size:14px;padding:7px 10px">'+esc(n)+' <b data-x="'+i+'" style="cursor:pointer;margin-left:4px">✕</b></span>'; }).join('')+'<div class="small">고른 세트 '+picked.length+'개 · 단어 약 '+cnt+'개</div>':'<div class="small">위에서 세트를 고르고 "＋ 세트 추가"를 누르세요. (안 누르면 위에 보이는 세트 하나로 시작해요)</div>';
       [].forEach.call($('#bpicked').querySelectorAll('[data-x]'),function(x){ x.onclick=function(){ picked.splice(+x.dataset.x,1); drawPicked(); }; });
     }
-    fill(); drawPicked(); $('#bban').onchange=function(){ A.ban=this.value; fill(); };
+    function drawSent(){
+      var ban=$('#bban').value;
+      var list=sentSetsForBan(ban);
+      var cnt=0; spicked.forEach(function(n){ var st=sentSetByName(n); if(st) cnt+=st.items.length; });
+      $('#bsent').innerHTML=(list.map(function(st){
+        var on=spicked.indexOf(st.name)>=0;
+        return '<label class="srow'+(on?' on':'')+'"><input type="checkbox" value="'+esc(st.name)+'"'+(on?' checked':'')+'>'+
+          '<span class="grow"><b>'+esc(st.name)+'</b><span class="small">'+esc(st.sub||'')+' · '+st.items.length+'문장</span></span>'+
+          '<span class="cnt">'+st.items.length+'</span></label>';
+      }).join('')||'<div class="small">이 반 문장 세트가 없어요.</div>')+
+        '<div class="small" style="margin-top:8px">체크한 세트 '+spicked.length+'개 · 문장 약 '+cnt+'개</div>';
+      [].forEach.call($('#bsent').querySelectorAll('input[type=checkbox]'),function(cb){
+        cb.onchange=function(){
+          var v=cb.value;
+          if(cb.checked){ if(spicked.indexOf(v)<0) spicked.push(v); }
+          else { spicked=spicked.filter(function(x){ return x!==v; }); }
+          drawSent();
+        };
+      });
+    }
+    function syncMode(){
+      [].forEach.call(app.querySelectorAll('.bmode'),function(b){ b.className='bmode'+(b.dataset.m===mode?' on':''); });
+      $('#bword').style.display = mode==='sentence' ? 'none' : '';
+      $('#bsentbox').style.display = mode==='sentence' ? '' : 'none';
+      $('#bdirbox').style.display = mode==='sentence' ? 'none' : '';
+      $('#bnote').innerHTML = mode==='sentence'
+        ? '학생 폰에는 <b>한글 뜻</b>이 뜨고, 섞인 영어 단어 카드를 순서대로 눌러 문장을 만들어요. 다 배열하면 자동 채점되고, 틀리면 한 번 더 도전할 수 있어요(2번 틀리면 정답을 보여 주고 넘어감). 점수는 단어 대결과 같아요 — 맞힘 − 틀림 순, 같으면 덜 틀린 학생이 위.'
+        : '시작하면 학생마다 자기 속도로 문제를 계속 풀어요. 게임 시간이 끝났을 때 맞힌 개수가 많은 순서로 순위가 정해져요 (같으면 덜 틀린 학생이 위). 결과는 기록 탭에 "대결"로 남아요.';
+    }
+    fill(); drawPicked(); syncMode(); drawSent();
+    [].forEach.call(app.querySelectorAll('.bmode'),function(b){
+      b.onclick=function(){
+        mode = b.dataset.m==='sentence' ? 'sentence' : 'word';
+        /* 문장 대결을 처음 열면 그 반 문장 세트를 미리 체크해 둔다(선생님이 손 안 대도 바로 시작 가능) */
+        if(mode==='sentence' && !spicked.length){
+          var ban=$('#bban').value;
+          if(ban) sentSetsForBan(ban).forEach(function(st){ if(spicked.indexOf(st.name)<0) spicked.push(st.name); });
+        }
+        syncMode(); drawSent();
+      };
+    });
+    $('#bban').onchange=function(){ A.ban=this.value; fill(); drawSent(); };
     $('#badd').onclick=function(){ var v=$('#bset').value; if(v&&picked.indexOf(v)<0){ picked.push(v); drawPicked(); } };
     bindBack(showAdmin);
     $('#bmake').onclick=function(){
+      var mins=+$('#bmin').value;
+      if(mode==='sentence'){
+        var sl=spicked.slice();
+        if(!sl.length){ $('#err').textContent='문장 세트를 1개 이상 체크해 주세요.'; return; }
+        B.opt={mode:'sentence',sets:[],sentSets:sl,mins:mins,dir:'en'};
+        call('battleCreate',A.pw,[],mins,'en','sentence',sl,Math.floor(Math.random()*900000)+1).then(hostEnter).catch(function(e){ $('#err').textContent=errMsg(e); });
+        return;
+      }
       var list=picked.slice(); if(!list.length&&$('#bset').value) list=[$('#bset').value];
       if(!list.length){ $('#err').textContent='세트를 골라 주세요.'; return; }
-      B.opt={sets:list,mins:+$('#bmin').value,dir:$('#bdir').value};
-      call('battleCreate',A.pw,list,B.opt.mins,B.opt.dir).then(hostEnter).catch(function(e){ $('#err').textContent=errMsg(e); });
+      B.opt={mode:'word',sets:list,sentSets:[],mins:mins,dir:$('#bdir').value};
+      call('battleCreate',A.pw,list,B.opt.mins,B.opt.dir,'word',[],0).then(hostEnter).catch(function(e){ $('#err').textContent=errMsg(e); });
     };
   }).catch(function(e){ alert(errMsg(e)); });
 }
@@ -4745,6 +4924,9 @@ function hostEnter(v){
   B.room.players = B.room.players || {};
   B.room.names = B.room.names || [];
   B.room.rank = B.room.rank || [];
+  B.room.mode = B.room.mode === 'sentence' ? 'sentence' : 'word';
+  B.room.sentNames = B.room.sentNames || [];
+  if(!B.room.seed) B.room.seed = Math.floor(Math.random() * 900000) + 1;
   hostRender(B.room);
 
   // 1. Same-device cross-tab instant sync (?nobc=1 이면 끔)
@@ -4808,6 +4990,8 @@ function hostEnter(v){
     }
     if(changed){
       updateHostRosterAndRanks();
+      /* v94: 이미 시작된 뒤에 들어온 학생에게도 같은 문제·같은 시각을 다시 보내 준다 */
+      if(B.room.status === 'run' && B.startPayload){ try { bnSend(B.startPayload); } catch(e){} }
     }
   }
 
@@ -4843,6 +5027,9 @@ function hostEnter(v){
       endAt: B.room.endAt || 0,
       mins: B.room.mins || 3,
       dir: B.room.dir || 'en',
+      mode: B.room.mode || 'word',
+      sentNames: B.room.sentNames || [],
+      seed: B.room.seed || 0,
       setNames: B.room.setNames || [],
       names: B.room.names || [],
       count: (B.room.names || []).length
@@ -4863,16 +5050,26 @@ function hostAct(a){
     try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(B.room)); } catch(e){}
     hostRender(B.room);
 
+    var mode = B.room.mode === 'sentence' ? 'sentence' : 'word';
     var startPayload = {
       type: 'start',
       code: B.code,
       rid: B.room.rid || B.rid || '',
       status: 'run',
+      mode: mode,
       startAt: B.room.startAt,
       endAt: B.room.endAt,
       dir: B.room.dir,
       setNames: B.room.setNames || []
     };
+    if(mode === 'sentence'){
+      B.room.sents = buildSentenceQs(B.room.sentNames || [], B.room.seed || 1);
+      try { localStorage.setItem('topedu_battle_' + B.code, JSON.stringify(B.room)); } catch(e){}
+      startPayload.sentences = B.room.sents;
+      startPayload.sentNames = B.room.sentNames || [];
+      startPayload.seed = B.room.seed || 1;
+    }
+    B.startPayload = startPayload;
     bnSend(startPayload);
     setTimeout(function(){ bnSend(startPayload); }, 400);
     setTimeout(function(){ bnSend(startPayload); }, 1200);
@@ -4932,9 +5129,11 @@ function hostRender(v){
   if(B.tick){ clearInterval(B.tick); B.tick=null; }
   var html='';
   if(v.status==='lobby'){
-    html=hostHead(v)+'<div class="bguide">폰에서 <b>tinyurl.com/topedu-voca</b> → <b>⚔️ 단어 대결 참여</b> → 방 번호 입력</div>'+
+    html=hostHead(v)+'<div class="bguide">폰에서 <b>tinyurl.com/topedu-voca</b> → <b>⚔️ 대결 참여</b> → 방 번호 입력</div>'+
       '<div class="bcode">'+esc(v.code)+'</div><div style="text-align:center;margin:0 0 6px"><span class="chip '+(B.net==='on'?'done':'todo')+'" id="bnet">'+(B.net==='on'?'🟢 실시간 연결됨':'🟡 연결 중…')+'</span></div>'+
-      '<div class="bguide">게임 '+v.mins+'분 · '+(v.dir==='ko'?'뜻 보고 영어 고르기':'영어 보고 뜻 고르기')+' · 각자 자기 속도로 풀어요</div>'+
+      '<div class="bguide">'+(v.mode==='sentence'
+        ? ('🔤 <b>문장 대결</b> · 게임 '+v.mins+'분 · '+esc((v.sentNames||[]).join(', '))+'<br><span style="font-size:18px">학생 폰에 한글 뜻이 뜨고, 섞인 단어를 순서대로 눌러 배열해요</span>')
+        : ('📝 단어 대결 · 게임 '+v.mins+'분 · '+(v.dir==='ko'?'뜻 보고 영어 고르기':'영어 보고 뜻 고르기')+' · 각자 자기 속도로 풀어요'))+'</div>'+
       '<div class="card small" id="bwarn" style="display:none;background:#fef2f2;border-color:#fecaca;color:#991b1b;text-align:center;max-width:720px;margin:10px auto;font-size:15px;line-height:1.6"></div>'+
       '<div class="names" id="names"></div><button class="btn" id="bstart" style="max-width:480px;margin:10px auto;font-size:24px;padding:20px" disabled>시작하기 (0명)</button>';
     app.innerHTML=html; lobbyNames(v);
@@ -4962,7 +5161,14 @@ function hostRender(v){
       (r.length>3?'<div class="rk" style="max-width:640px;margin:0 auto"><ul class="list">'+r.slice(3).map(function(x){ return '<li><span class="r">'+x.rank+'</span><span>'+esc(x.name)+'</span><span class="s brs">'+btScoreTxt(x)+'</span></li>'; }).join('')+'</ul></div>':'')+
       '<div class="row" style="max-width:640px;margin:20px auto 0"><button class="btn" id="bagain">같은 세트로 한 번 더</button><button class="btn ghost" id="bout">끝내기</button></div>';
     app.innerHTML=html; B.gen++;
-    $('#bagain').onclick=function(){ var o=B.opt; call('battleCreate',S.admin.pw,o.sets,o.mins,o.dir).then(hostEnter).catch(function(e){ alert(errMsg(e)); }); };
+    $('#bagain').onclick=function(){
+      var o=B.opt||{}, rm=B.room||{};
+      var mode=(rm.mode||o.mode)==='sentence'?'sentence':'word';
+      var sNs=(rm.sentNames&&rm.sentNames.length)?rm.sentNames:(o.sentSets||[]);
+      var wNs=(rm.setNames&&rm.setNames.length)?rm.setNames:(o.sets||[]);
+      var mins=rm.mins||o.mins||3, dir=rm.dir||o.dir||'en';
+      call('battleCreate',S.admin.pw,wNs,mins,dir,mode,sNs,Math.floor(Math.random()*900000)+1).then(hostEnter).catch(function(e){ alert(errMsg(e)); });
+    };
     $('#bout').onclick=function(){ bStop(); showAdmin(); };
   }
   var bx=$('#bx'); if(bx) bx.onclick=hostExit;
@@ -4981,7 +5187,7 @@ function btMaybeResume(){
 }
 function showBattleJoin(){
   bStop();
-  app.innerHTML=topBar('⚔️ 단어 대결')+'<div class="card"><label style="margin-top:0">방 번호 (전자칠판에 나온 4자리)</label>'+
+  app.innerHTML=topBar('⚔️ 대결 참여')+'<div class="card"><label style="margin-top:0">방 번호 (전자칠판에 나온 4자리)</label>'+
     '<input id="bcode" type="tel" inputmode="numeric" maxlength="4" style="font-size:34px;text-align:center;letter-spacing:10px;font-weight:800" autocomplete="off">'+
     '<button class="btn" id="bgo">참여하기</button><div class="err" id="err"></div></div>';
   bindBack(refreshHome);
@@ -5005,7 +5211,8 @@ function playerExit(){
 function playerEnter(v){
   bStop(); B.code = v.code; var g = B.gen;
   R = { c: 0, x: 0, wrong: [], order: [], i: 0, qs: null, rank: 0, done: false, busy: false,
-        rid: v.rid || '', setNames: [], sawRoom: false, result: null, ended: false };
+        rid: v.rid || '', setNames: [], sawRoom: false, result: null, ended: false,
+        mode: '', sents: null, seed: 0, sentNames: [], qidx: 0, round: 0, sq: null };
   // 새로고침·화면 꺼짐으로 다시 들어온 경우: 아직 안 끝난 대결이면 내 점수를 그대로 되살린다
   try {
     var s0 = btLoadSess();
@@ -5050,6 +5257,9 @@ function playerEnter(v){
       if(m.rid && !R.rid) R.rid = m.rid;
       if(m.setNames && m.setNames.length) R.setNames = m.setNames;
       if(m.set) R.setName = m.set;
+      if(m.mode) R.mode = m.mode === 'sentence' ? 'sentence' : 'word';
+      if(m.sentNames && m.sentNames.length) R.sentNames = m.sentNames;
+      if(m.seed) R.seed = m.seed;
       var pb = $('#joinprob'); if(pb) pb.style.display = 'none';
     }
 
@@ -5077,7 +5287,13 @@ function playerEnter(v){
     // 시작 — type 'start' 또는 방 비콘의 status 'run'
     if(((m.type === 'start') || (m.type === 'room' && m.status === 'run')) && !R.startAt){
       var sets = (m.setNames && m.setNames.length) ? m.setNames : R.setNames;
-      if(!R.qs || !R.qs.length){
+      R.mode = (m.mode === 'sentence' || R.mode === 'sentence') ? 'sentence' : 'word';
+      if(R.mode === 'sentence'){
+        if(m.sentNames && m.sentNames.length) R.sentNames = m.sentNames;
+        if(m.seed) R.seed = m.seed;
+        if(m.sentences && m.sentences.length) R.sents = m.sentences;
+        else R.sents = buildSentenceQs(R.sentNames || [], R.seed || 1);
+      } else if(!R.qs || !R.qs.length){
         R.qs = generateBattleQs(S.cred ? S.cred.ban : '', m.dir || 'en', sets || []);
       }
       var now = Date.now();
@@ -5170,20 +5386,35 @@ function pWait(v){
 
 function raceStart(v,g){
   if(B.stuTimer){ clearTimeout(B.stuTimer); B.stuTimer = null; }
-  if(!R.qs || !R.qs.length){
+  var sent = (R.mode === 'sentence');
+  if(sent){
+    if(!R.sents || !R.sents.length) R.sents = buildSentenceQs(R.sentNames || [], R.seed || 1);
+  } else if(!R.qs || !R.qs.length){
     R.qs = generateBattleQs(S.cred ? S.cred.ban : '', 'en', R.setNames || []);
   }
-  if(!R.qs || !R.qs.length){
-    app.innerHTML = topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">😥</div><div class="t">출제할 단어가 없어요</div><div class="s">선생님께 세트를 다시 골라 달라고 해 주세요.</div></div><button class="btn" id="bhome">처음 화면으로</button>';
+  if((sent && (!R.sents || !R.sents.length)) || (!sent && (!R.qs || !R.qs.length))){
+    app.innerHTML = topBar('⚔️ 대결 '+B.code)+'<div class="mres"><div class="e">😥</div><div class="t">'+(sent?'출제할 문장이 없어요':'출제할 단어가 없어요')+'</div><div class="s">선생님께 세트를 다시 골라 달라고 해 주세요.</div></div><button class="btn" id="bhome">처음 화면으로</button>';
     bindBack(playerExit); var bh0=$('#bhome'); if(bh0) bh0.onclick=playerExit; return;
   }
   R.startAt=Date.now()+v.startIn; R.endAt=Date.now()+v.endIn;
+  R.qidx = 0; R.round = 0;
   btSaveSess({ code: B.code, rid: R.rid || '', endAt: R.endAt, c: R.c, x: R.x, wrong: R.wrong });
   try { btWakeOn(); } catch(e) {}
   app.innerHTML=topBar('⚔️ 대결 '+B.code)+
     '<div class="rbar"><span>✅ <b id="rc">'+R.c+'</b></span><span id="rrk"></span><span>⏱ <b id="rt">'+mmss(v.endIn)+'</b></span></div>'+
-    '<div id="rdy" class="ready" style="padding:40px 0"><div class="n" id="rdn" style="font-size:110px">3</div><div class="t" style="font-size:22px">준비!</div></div>'+
-    '<div id="qbox" style="display:none"><div class="q" id="rq"></div><div class="bt mbt" id="rtiles"></div></div>';
+    '<div id="rdy" class="ready" style="padding:40px 0"><div class="n" id="rdn" style="font-size:110px">3</div><div class="t" style="font-size:22px">'+(sent?'문장 대결 준비!':'준비!')+'</div></div>'+
+    (sent ? sbBoxHtml() : '<div id="qbox" style="display:none"><div class="q" id="rq"></div><div class="bt mbt" id="rtiles"></div></div>');
+  if(sent){
+    var cl=$('#sbclear'); if(cl) cl.onclick=function(){ if(R.busy||!R.sq) return; R.sq.order=[]; sbRender(); };
+    var sub=$('#sbsub'); if(sub) sub.onclick=function(){
+      if(R.busy||!R.sq) return;
+      if(R.sq.order.length < R.sq.chips.length){
+        var f=$('#sbfb'); if(f){ f.className='sbfb'; f.innerHTML='<span style="color:#94a3b8;font-size:14px">아직 넣지 않은 단어가 있어요</span>'; }
+        return;
+      }
+      sbGrade();
+    };
+  }
   var bBack = $('#back');
   if(bBack){
     bBack.onclick = function(){
@@ -5193,7 +5424,10 @@ function raceStart(v,g){
   bClock(function(){
     var now=Date.now();
     if(now<R.startAt){ var n=$('#rdn'); if(n) n.textContent=Math.ceil((R.startAt-now)/1000); return; }
-    if($('#rdy')&&$('#rdy').style.display!=='none'){ $('#rdy').style.display='none'; $('#qbox').style.display=''; nextQ(); }
+    if($('#rdy')&&$('#rdy').style.display!=='none'){
+      $('#rdy').style.display='none'; $('#qbox').style.display='';
+      if(sent) sbLoadQ(); else nextQ();
+    }
     var t=$('#rt'); if(t) t.textContent=mmss(R.endAt-now);
     if(now>=R.endAt && !R.done){
       R.done=true; reportScore();
@@ -5217,6 +5451,100 @@ function raceStart(v,g){
     rep();
   },2000); })();
 }
+
+/* ===== v94: 문장 대결(어순 배열) 학생 화면 ===== */
+function sbBoxHtml(){
+  return '<div id="qbox" style="display:none">'+
+    '<div class="sbcard">'+
+      '<div class="sbhead"><span class="sbno" id="sbno">문제 1</span><span class="sbtag" id="sbtag"></span></div>'+
+      '<div class="sbko" id="sbko"></div>'+
+      '<div class="sbslot" id="sbslot"><span class="sbslot-hint">단어를 순서대로 눌러 보세요</span></div>'+
+      '<div class="sbchips" id="sbchips"></div>'+
+      '<div class="sbact"><button type="button" class="btn ghost" id="sbclear" style="margin:0;flex:1;font-size:15px;padding:12px">↩ 처음부터</button><button type="button" class="btn" id="sbsub" style="margin:0;flex:1;font-size:15px;padding:12px">제출</button></div>'+
+      '<div class="sbfb" id="sbfb"></div>'+
+    '</div>'+
+  '</div>';
+}
+function sbLoadQ(){
+  if(R.done) return;
+  if(!R.sents || !R.sents.length) return;
+  if(R.qidx == null) R.qidx = 0;
+  if(R.qidx >= R.sents.length){
+    R.round = (R.round||0) + 1;
+    R.sents = buildSentenceQs(R.sentNames || [], (R.seed||1) + R.round * 137);
+    R.qidx = 0;
+    if(!R.sents.length) return;
+  }
+  var q = R.sents[R.qidx];
+  R.sq = { q: q, chips: sentChips(q, R.seed||1, R.qidx), order: [], tries: 0 };
+  R.busy = false;
+  var no=$('#sbno'), tg=$('#sbtag'), ko=$('#sbko'), fb=$('#sbfb');
+  if(no) no.textContent = '문제 ' + (R.qidx+1) + ' / ' + R.sents.length;
+  if(tg) tg.textContent = q.tag || '';
+  if(ko) ko.textContent = q.ko || '';
+  if(fb){ fb.className='sbfb'; fb.innerHTML=''; }
+  sbRender();
+}
+function sbRender(){
+  var q=R.sq; if(!q) return;
+  var slot=$('#sbslot'), chips=$('#sbchips');
+  if(slot){
+    slot.innerHTML = q.order.length ? q.order.map(function(ci,k){
+      return '<button type="button" class="sbc" data-slot="'+k+'">'+esc(q.chips[ci].w)+'</button>';
+    }).join('') : '<span class="sbslot-hint">단어를 순서대로 눌러 보세요</span>';
+    [].forEach.call(slot.querySelectorAll('[data-slot]'), function(b){
+      b.onclick=function(){ if(R.busy||!R.sq) return; R.sq.order.splice(+b.dataset.slot,1); sbRender(); };
+    });
+  }
+  if(chips){
+    chips.innerHTML = q.chips.map(function(c,ci){
+      var used = q.order.indexOf(ci) >= 0;
+      return '<button type="button" class="sbc'+(used?' used':'')+'" data-chip="'+ci+'">'+esc(c.w)+'</button>';
+    }).join('');
+    [].forEach.call(chips.querySelectorAll('[data-chip]'), function(b){
+      b.onclick=function(){
+        if(R.busy||!R.sq) return;
+        var ci=+b.dataset.chip;
+        if(R.sq.order.indexOf(ci)>=0) return;
+        R.sq.order.push(ci); sbRender();
+        if(R.sq.order.length === R.sq.chips.length) setTimeout(function(){
+          if(!R.busy && R.sq && R.sq.order.length === R.sq.chips.length) sbGrade();
+        }, 280);
+      };
+    });
+  }
+}
+function sbGrade(){
+  var q=R.sq; if(!q || R.busy || R.done) return;
+  R.busy = true;
+  var mine = q.order.map(function(ci){ return q.chips[ci].w; }).join(' ');
+  var ok = sbNorm(mine) === sbNorm(q.q.en);
+  var fb=$('#sbfb');
+  if(ok){
+    try { playCorrectSound(); } catch(e){}
+    R.c++; var rc=$('#rc'); if(rc) rc.textContent=R.c;
+    if(fb){ fb.className='sbfb ok'; fb.innerHTML='⭕ 정답!'; }
+    reportScore();
+    setTimeout(function(){ R.qidx++; sbLoadQ(); }, 700);
+  } else {
+    try { playWrongSound(); } catch(e){}
+    R.x++; R.wrong.push(q.q.en);
+    if(fb){ fb.className='sbfb no'; fb.innerHTML='✕ 다시 배열해 보세요'; }
+    reportScore();
+    q.tries = (q.tries||0) + 1;
+    if(q.tries >= 2){
+      if(fb) fb.innerHTML='✕ 다시 배열해 보세요<div class="sbans">정답: '+esc(q.q.en)+'</div>';
+      setTimeout(function(){ R.qidx++; sbLoadQ(); }, 2100);
+    } else {
+      setTimeout(function(){
+        if(R.done || !R.sq) return;
+        R.sq.order=[]; R.busy=false; sbRender();
+        var f2=$('#sbfb'); if(f2){ f2.className='sbfb'; f2.innerHTML=''; }
+      }, 800);
+    }
+  }
+}
+
 
 function reportScore(){
   R.sentC = R.c; R.sentX = R.x;
@@ -5292,7 +5620,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v93';
+var TOPEDU_APP_VERSION = 'v94';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
