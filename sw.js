@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v100: 숙제 1초 체크 전체 해제·항목별 토글)
-const CACHE_NAME = 'topedu-pwa-v100';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v101: 홍천고1 10월 모고 6개 지문 단어 세트)
+const CACHE_NAME = 'topedu-pwa-v101';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
