@@ -870,6 +870,7 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .hwc-cnt.app { background: #f0f9ff; border-color: #bae6fd; color: #0369a1; }
 .hwc-bulk { display: flex; gap: 6px; overflow-x: auto; margin-top: 7px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
 .hwc-bulkb { flex: 0 0 auto; padding: 7px 10px; border-radius: 999px; border: 1.5px solid #bbf7d0; background: #f0fdf4; color: #15803d; font-size: 11.5px; font-weight: 800; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.hwc-bulkb.off { border-color: #fecaca; background: #fff1f2; color: #b91c1c; }
 .hwc-panel { flex: 0 0 auto; border-bottom: 1px solid #fde68a; background: #fffbeb; }
 .hwc-ptog { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: none; border: none; font-family: inherit; font-size: 12.5px; font-weight: 800; color: #b45309; cursor: pointer; }
 .hwc-ptog .ar { font-size: 10px; color: #d97706; }
@@ -915,6 +916,8 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .hwc-sub { flex: 1 1 auto; min-width: 0; padding: 12px 8px; border-radius: 14px; border: 1.5px solid #99f6e4; background: #f0fdfa; color: #0d9488; font-size: 12.5px; font-weight: 800; line-height: 1.2; font-family: inherit; cursor: pointer; }
 .hwc-sub.app { border-color: #bae6fd; background: #f0f9ff; color: #0369a1; }
 .hwc-sub.fill { border-color: #bbf7d0; background: #f0fdf4; color: #15803d; }
+.hwc-sub.done { border-color: #86efac; background: #dcfce7; color: #15803d; }
+.hwc-sub.clear { border-color: #fca5a5; background: #fff5f5; color: #b91c1c; }
 .hwc-prev { display: none; margin-top: 9px; padding: 9px 11px; border-radius: 12px; border: 1.5px dashed #99f6e4; background: #f0fdfa; font-size: 9.5px; line-height: 1.55; color: #0f766e; white-space: pre-wrap; word-break: break-all; max-height: 118px; overflow: auto; }
 .hwc-prev.on { display: block; }
 .hwc-prev b { display: block; margin-bottom: 4px; font-size: 11px; color: #0d9488; }
@@ -3075,6 +3078,7 @@ function hwcAutoFillWord(){
     n++;
   });
   hwcRefreshCounts();
+  hwcRefreshBulk();
   var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
   hwcToast(n ? ('📱 앱 완료 ' + n + '명 → ' + word + ' ⭕ 채웠어요') : '앱에서 완료한 학생이 없어요');
 }
@@ -3139,6 +3143,38 @@ function hwcRefreshCounts(){
   });
   box.innerHTML = hwcCountsHTML(list, day, items);
 }
+/* v100: 일괄 버튼 글자·색을 현재 명단 상태에 맞춰 다시 맞춤 (전원 ○ 이면 '전체 해제'로) */
+function hwcRefreshBulk(){
+  var el = document.getElementById('hwModal');
+  if(!el) return;
+  var rows = el.querySelectorAll('.hwc-row');
+  [].forEach.call(el.querySelectorAll('.hwc-bulkb'), function(b){
+    var it = b.dataset.bit, allO = rows.length > 0;
+    [].forEach.call(rows, function(row){
+      [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
+        if(c.dataset.item === it && (c.dataset.v || '') !== 'o') allO = false;
+      });
+    });
+    b.textContent = hwcShort(it) + (allO ? ' 전체 해제' : ' 전체 ○');
+    if(allO) b.classList.add('off'); else b.classList.remove('off');
+    b.setAttribute('aria-pressed', allO ? 'true' : 'false');
+    b.setAttribute('title', allO ? (it + ' 기록을 모두 해제') : (it + ' 보이는 학생 전원 ○'));
+  });
+  var full = rows.length > 0;
+  [].forEach.call(rows, function(row){
+    [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
+      if((c.dataset.v || '') !== 'o') full = false;
+    });
+  });
+  var ba = document.getElementById('hwAllO');
+  if(ba){
+    ba.textContent = full ? '전체 ⭕ 해제' : '전체 ⭕ 처리';
+    if(full) ba.classList.add('done'); else ba.classList.remove('done');
+    ba.setAttribute('aria-pressed', full ? 'true' : 'false');
+  }
+  var bc = document.getElementById('hwAllClear');
+  if(bc) bc.setAttribute('title', '보이는 학생의 모든 숙제 기록을 비웁니다');
+}
 
 /* ---------- 항목 설정 패널 ---------- */
 function hwcPanelHTML(date, items){
@@ -3177,6 +3213,17 @@ function renderHwCheck(){
   var list = hwcStudents().filter(function(s){ return HWC_FILTER === '전체' || hwcGroup(s.ban) === HWC_FILTER; });
   var chips = ['전체', '초등', '중1', '중2', '예비고1', '고등'];
   HWC_APP = hwcAppBuild();
+  /* v100: 일괄 버튼 상태 — 보이는 학생이 그 항목을 전부 ○ 로 채워져 있나 */
+  var itAllO = {}, allFull = list.length > 0;
+  items.forEach(function(it){
+    var ok = list.length > 0;
+    list.forEach(function(s){
+      var rec0 = day[s.ban + '|' + s.name] || {};
+      if(rec0[it] !== 'o') ok = false;
+    });
+    itAllO[it] = ok;
+    if(!ok) allFull = false;
+  });
 
   var h = '';
   h += '<div class="hwc-head"><div style="flex:1;font-size:15.5px;font-weight:800;font-family:Maplestory,sans-serif">✅ 숙제 1초 체크 <span class="nc-vtag">' + TOPEDU_APP_VERSION + '</span></div><button type="button" class="prt-x" id="hwClose">✕</button></div>';
@@ -3185,7 +3232,7 @@ function renderHwCheck(){
   h += '<div class="hwc-chips">' + chips.map(function(x){ return '<button type="button" class="hwc-chip' + (x === HWC_FILTER ? ' on' : '') + '" data-f="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>';
   h += '<div class="hwc-counts" id="hwCounts">' + hwcCountsHTML(list, day, items) + '</div>';
   h += '<div class="hwc-bulk">' + items.map(function(it){
-    return '<button type="button" class="hwc-bulkb" data-bit="' + esc(it) + '">' + esc(hwcShort(it)) + ' 전체 ⭕</button>';
+    return '<button type="button" class="hwc-bulkb' + (itAllO[it] ? ' off' : '') + '" data-bit="' + esc(it) + '" aria-pressed="' + (itAllO[it] ? 'true' : 'false') + '" title="' + (itAllO[it] ? esc(it + ' 기록 전체 해제') : esc(it + ' 보이는 학생 전원 ○')) + '">' + esc(hwcShort(it)) + (itAllO[it] ? ' 전체 해제' : ' 전체 ○') + '</button>';
   }).join('') + '</div>';
   h += '</div>';
   h += hwcPanelHTML(date, items);
@@ -3228,8 +3275,9 @@ function renderHwCheck(){
   h += '<div class="hwc-foot">'
     + '<div class="hwc-frow"><button type="button" class="hwc-sub app" id="hwAppPull">🔄 앱 단어 불러오기</button>'
     + '<button type="button" class="hwc-sub fill" id="hwAppFill">📱 앱 완료 → ' + esc(hwcShort(hwcWordItem())) + ' ⭕</button></div>'
-    + '<div class="hwc-frow"><button type="button" class="hwc-sub" id="hwAllO">전체 ⭕ 처리</button>'
-    + '<button type="button" class="hwc-big" id="hwCopy">📋 에듀스탭/피클용 요약 복사</button></div>'
+    + '<div class="hwc-frow"><button type="button" class="hwc-sub' + (allFull ? ' done' : '') + '" id="hwAllO" aria-pressed="' + (allFull ? 'true' : 'false') + '">' + (allFull ? '전체 ⭕ 해제' : '전체 ⭕ 처리') + '</button>'
+    + '<button type="button" class="hwc-sub clear" id="hwAllClear">전체 해제</button></div>'
+    + '<div class="hwc-frow"><button type="button" class="hwc-big" id="hwCopy">📋 에듀스탭/피클용 요약 복사</button></div>'
     + '<div class="hwc-prev" id="hwPrev"></div>'
     + '</div>';
   el.innerHTML = h;
@@ -3248,27 +3296,45 @@ function renderHwCheck(){
         hwcPaintCell(btn, next);
         hwcSaveCell(HWC_DATE || hwcToday(), row.dataset.ban, row.dataset.name, btn.dataset.item, next);
         hwcRefreshCounts();
+        hwcRefreshBulk();
         var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
         try { if(navigator.vibrate) navigator.vibrate(8); } catch(e){}
         if(typeof playCorrectSound === 'function' && next === 'o'){ try { playCorrectSound(); } catch(e){} }
       };
     });
   });
-  /* 항목 일괄 ⭕ */
+  /* 항목 일괄 — 전원 ○ 이면 누를 때 그 항목만 전체 해제(토글) */
   [].forEach.call(el.querySelectorAll('.hwc-bulkb'), function(b){
     b.onclick = function(){
       var it = b.dataset.bit, date0 = HWC_DATE || hwcToday(), n = 0;
-      [].forEach.call(el.querySelectorAll('.hwc-row'), function(row){
-        var cell = null;
-        [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){ if(c.dataset.item === it) cell = c; });
-        if(!cell || cell.dataset.v === 'o') return;
-        hwcPaintCell(cell, 'o');
-        hwcSaveCell(date0, row.dataset.ban, row.dataset.name, it, 'o');
-        n++;
+      var rows = el.querySelectorAll('.hwc-row');
+      if(!rows.length) return;
+      var allO = true;
+      [].forEach.call(rows, function(row){
+        [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
+          if(c.dataset.item === it && (c.dataset.v || '') !== 'o') allO = false;
+        });
+      });
+      [].forEach.call(rows, function(row){
+        [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
+          if(c.dataset.item !== it) return;
+          if(allO){
+            if(!c.dataset.v) return;
+            hwcPaintCell(c, '');
+            hwcSaveCell(date0, row.dataset.ban, row.dataset.name, it, '');
+            n++;
+          } else {
+            if(c.dataset.v === 'o') return;
+            hwcPaintCell(c, 'o');
+            hwcSaveCell(date0, row.dataset.ban, row.dataset.name, it, 'o');
+            n++;
+          }
+        });
       });
       hwcRefreshCounts();
+      hwcRefreshBulk();
       var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
-      hwcToast(it + ' ' + n + '명 ⭕ 처리했어요');
+      hwcToast(allO ? (it + ' 숙제 ' + n + '명 해제했어요') : (it + ' ' + n + '명 ○ 처리했어요'));
     };
   });
   var btog = document.getElementById('hwPanelTog');
@@ -3319,17 +3385,50 @@ function renderHwCheck(){
   if(ba) ba.onclick = function(){
     var rows = el.querySelectorAll('.hwc-row');
     if(!rows.length) return;
-    var date0 = HWC_DATE || hwcToday();
+    var date0 = HWC_DATE || hwcToday(), n = 0;
+    var full = true;
+    [].forEach.call(rows, function(row){
+      [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){ if((c.dataset.v || '') !== 'o') full = false; });
+    });
     [].forEach.call(rows, function(row){
       [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
-        if(c.dataset.v === 'o') return;
-        hwcPaintCell(c, 'o');
-        hwcSaveCell(date0, row.dataset.ban, row.dataset.name, c.dataset.item, 'o');
+        if(full){
+          if(!c.dataset.v) return;
+          hwcPaintCell(c, '');
+          hwcSaveCell(date0, row.dataset.ban, row.dataset.name, c.dataset.item, '');
+          n++;
+        } else {
+          if(c.dataset.v === 'o') return;
+          hwcPaintCell(c, 'o');
+          hwcSaveCell(date0, row.dataset.ban, row.dataset.name, c.dataset.item, 'o');
+          n++;
+        }
       });
     });
     hwcRefreshCounts();
+    hwcRefreshBulk();
     var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
-    hwcToast('보이는 학생 ' + rows.length + '명 · 4항목 모두 ⭕ 처리했어요');
+    hwcToast(full ? ('보이는 학생 ' + rows.length + '명 · 모든 항목 해제했어요') : ('보이는 학생 ' + rows.length + '명 · ' + hwcItems().length + '항목 모두 ⭕ 처리했어요'));
+  };
+  var bclr = document.getElementById('hwAllClear');
+  if(bclr) bclr.onclick = function(){
+    var rows = el.querySelectorAll('.hwc-row');
+    if(!rows.length) return;
+    var date0 = HWC_DATE || hwcToday(), n = 0;
+    [].forEach.call(rows, function(row){
+      var touched = false;
+      [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
+        if(!c.dataset.v) return;
+        touched = true;
+        hwcPaintCell(c, '');
+        hwcSaveCell(date0, row.dataset.ban, row.dataset.name, c.dataset.item, '');
+      });
+      if(touched) n++;
+    });
+    hwcRefreshCounts();
+    hwcRefreshBulk();
+    var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+    hwcToast(n ? ('보이는 학생 ' + n + '명 · 모든 숙제 기록을 해제했어요') : '해제할 기록이 없어요');
   };
   var bcp = document.getElementById('hwCopy');
   if(bcp) bcp.onclick = function(){
@@ -3338,6 +3437,7 @@ function renderHwCheck(){
     if(!txt){ alert('아직 체크한 학생이 없어요.\n학생 칸(○ △ ✕)을 눌러 주세요.'); return; }
     hwcCopy(txt, this, pv);
   };
+  hwcRefreshBulk();
 }
 function hwcPaintCell(btn, v){
   v = v || '';
@@ -7221,7 +7321,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v99';
+var TOPEDU_APP_VERSION = 'v100';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
