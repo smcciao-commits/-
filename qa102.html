@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>QA102 · 390×844</title>
+<style>
+  html,body{margin:0;background:#0f172a;font-family:system-ui,sans-serif}
+  .wrap{position:absolute;left:20px;top:20px;width:390px;height:844px;overflow:hidden;background:#fff;border-radius:12px}
+  iframe{width:390px;height:844px;border:0;display:block}
+  #log{position:absolute;left:430px;top:20px;width:900px;color:#4ade80;font:12px/1.4 monospace;white-space:pre-wrap}
+  #log b{color:#fca5a5}
+</style>
+</head>
+<body>
+<div class="wrap"><iframe id="f" src="./index.html"></iframe></div>
+<div id="log"></div>
+<script>
+var errs = [];
+var f = document.getElementById('f');
+function render(){
+  document.getElementById('log').innerHTML = errs.length
+    ? '<b>errors(' + errs.length + ')</b>\n' + errs.join('\n')
+    : 'errors(0) · 콘솔 에러 없음';
+}
+function hook(){
+  try{
+    var w = f.contentWindow;
+    w.addEventListener('error', function(e){
+      errs.push('ERR ' + (e.message || '') + ' @' + (e.filename || '').split('/').pop() + ':' + (e.lineno || ''));
+      render();
+    });
+    w.addEventListener('unhandledrejection', function(e){
+      errs.push('REJECT ' + ((e.reason && (e.reason.message || e.reason)) || ''));
+      render();
+    });
+    var ce = w.console.error;
+    w.console.error = function(){
+      errs.push('CONSOLE ' + Array.prototype.slice.call(arguments).join(' '));
+      render();
+      return ce.apply(w.console, arguments);
+    };
+    var ver = w.TOPEDU_APP_VERSION || '?';
+    errs.push = errs.push.bind(errs);
+    document.getElementById('log').setAttribute('data-ver', ver);
+    render();
+  }catch(e){ errs.push('HOOK ' + e); render(); }
+}
+f.addEventListener('load', function(){ setTimeout(hook, 50); });
+</script>
+</body>
+</html>

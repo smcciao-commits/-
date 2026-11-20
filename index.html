@@ -5895,6 +5895,15 @@ function showAdminLogin(){
 var DASH_FILTER = 'all';
 var SEL_STU = {};
 
+/* v102: 쪽지 로그 중복 판정 — 같은 문구를 다시 보내도 시각이 다르면 새 쪽지로 본다 */
+function noticeAlready(curLogs, d, msgTitle, msgBody, msgTime){
+  return (curLogs || []).some(function(item){
+    if(!item) return false;
+    if(item.id && d && d.id) return item.id === d.id;
+    if(item.title !== msgTitle || item.body !== msgBody) return false;
+    return String(item.time || '') === String(msgTime);
+  });
+}
 function showAdmin(){
   try { dbAdminPull(); } catch(e){}
   var A = S.admin, I = A.info;
@@ -5994,12 +6003,7 @@ function showAdmin(){
                 if(!msgTitle) msgTitle = '학생 쪽지';
                 /* v102: 같은 문구라도 다른 시각에 다시 보낸 쪽지는 살린다 (id → 시각+문구 순으로 비교) */
                 var msgTime = new Date((d.time || 0) * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-                var already = curLogs.some(function(item){
-                  if(!item) return false;
-                  if(item.id && d.id) return item.id === d.id;
-                  if(item.title !== msgTitle || item.body !== msgBody) return false;
-                  return String(item.time || '') === String(msgTime);
-                });
+                var already = noticeAlready(curLogs, d, msgTitle, msgBody, msgTime);
                 if(!already){
                   try { var _bc = bbCheatOfLog({ body: msgBody }); if(_bc) bbCheatSave(_bc); } catch(e){}
                   curLogs.unshift({
