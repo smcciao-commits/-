@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v98: 홍천고1 학교 2차어휘 9~13번 탑재)
-const CACHE_NAME = 'topedu-pwa-v98';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v99: 숙제 1초 체크 4항목·단어앱 자동 연동)
+const CACHE_NAME = 'topedu-pwa-v99';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
