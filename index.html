@@ -5899,7 +5899,7 @@ var SEL_STU = {};
 function noticeAlready(curLogs, d, msgTitle, msgBody, msgTime){
   return (curLogs || []).some(function(item){
     if(!item) return false;
-    if(item.id && d && d.id) return item.id === d.id;
+    if(item.id && d && d.id && item.id === d.id) return true;
     if(item.title !== msgTitle || item.body !== msgBody) return false;
     return String(item.time || '') === String(msgTime);
   });
