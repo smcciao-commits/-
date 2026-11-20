@@ -1861,6 +1861,9 @@ function saveStudentProgressDB(ban, name, setName, mode, score){
     db[setName].updatedAt = Date.now();
     localStorage.setItem(k, JSON.stringify(db));
 
+    /* v102: 구글 시트 공용 DB에도 비동기 저장 (카톡 인앱·다른 폰에서도 기록 유지) */
+    try { dbSaveAsync(ban, name, setName, mode, score); } catch(e){}
+
     // 교사용 전체 기록 대시보드 동기화
     var gKey = 'topedu_all_records';
     var gRaw = localStorage.getItem(gKey);
@@ -1884,6 +1887,155 @@ function saveStudentProgressDB(ban, name, setName, mode, score){
       }
     } catch(e){}
   } catch(e){}
+}
+
+/* ============ v102: 구글 시트 공용 진도 DB (Apps Script 웹앱) ============ */
+var TOPEDU_DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
+var TOPEDU_DB_ROWS = [], TOPEDU_DB_AT = 0, TOPEDU_DB_PULL_AT = 0, TOPEDU_DB_SEQ = 0, TOPEDU_PROG_DIRTY = 0;
+var TOPEDU_DB_RESTORE_AT = {};
+function dbKey(b,n,s,m){ return (b||'')+'|'+(n||'')+'|'+(s||'')+'|'+(m||''); }
+function dbDay(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+/* 진도 1건 저장 — 화면을 붙잡지 않도록 no-cors POST (응답은 읽지 않음) */
+function dbSaveAsync(ban,name,setName,mode,score){
+  if(!ban||!name||!setName||!mode||!TOPEDU_DB_URL) return;
+  var sc = Number(score)||0;
+  try {
+    fetch(TOPEDU_DB_URL, {
+      method:'POST', mode:'no-cors', keepalive:true,
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({action:'save',ban:ban,name:name,setName:setName,mode:mode,score:sc})
+    }).catch(function(){});
+  } catch(e){}
+  try {
+    var k = dbKey(ban,name,setName,mode), cur = null;
+    for(var i=0;i<TOPEDU_DB_ROWS.length;i++){ if(dbKey(TOPEDU_DB_ROWS[i].b,TOPEDU_DB_ROWS[i].n,TOPEDU_DB_ROWS[i].s,TOPEDU_DB_ROWS[i].m)===k){ cur=TOPEDU_DB_ROWS[i]; break; } }
+    if(cur){ cur.sc = Math.max(Number(cur.sc)||0, sc); cur.d = dbDay(); cur.u = new Date().toISOString(); }
+    else TOPEDU_DB_ROWS.push({b:ban,n:name,s:setName,m:mode,sc:sc,u:new Date().toISOString(),d:dbDay()});
+  } catch(e){}
+}
+/* JSONP 읽기 — Apps Script ContentService(JAVASCRIPT) 로 CORS 없이 받아온다 */
+function dbFetch(params, cb){
+  var called = false;
+  function done(data){ if(called) return; called = true; try{ cb && cb(data); }catch(e){} }
+  if(!TOPEDU_DB_URL){ done(null); return; }
+  var name = 'topeduDbCb' + (++TOPEDU_DB_SEQ);
+  var q = [];
+  Object.keys(params||{}).forEach(function(k){
+    var v = params[k];
+    if(v===undefined || v===null || v==='') return;
+    q.push(encodeURIComponent(k)+'='+encodeURIComponent(v));
+  });
+  q.push('callback=' + name);
+  q.push('_=' + Date.now());
+  var tag = document.createElement('script');
+  tag.async = true;
+  tag.src = TOPEDU_DB_URL + '?' + q.join('&');
+  window[name] = function(d){ done(d && d.ok ? d : null); };
+  tag.onerror = function(){ done(null); };
+  tag.onload = function(){ setTimeout(function(){ done(null); }, 0); };
+  (document.head||document.body).appendChild(tag);
+  setTimeout(function(){ done(null); }, 15000);
+}
+/* 시트 기록 → 이 폰의 localStorage 비파괴 병합 (세트·모드별 최고점 유지) */
+function dbMergeRows(ban,name,rows){
+  if(!rows||!rows.length) return false;
+  var k = 'topedu_prog_' + (ban||'') + '_' + (name||'');
+  var db = getStudentProgressDB(ban,name), changed = false;
+  rows.forEach(function(r){
+    if(!r||!r.s||!r.m) return;
+    var sc = Number(r.sc)||0;
+    var cur = db[r.s] || {modes:{}, test:null, updatedAt:0};
+    cur.modes = cur.modes || {};
+    if(sc > (Number(cur.modes[r.m])||0)){ cur.modes[r.m] = sc; changed = true; }
+    if(r.m === '테스트'){
+      var t0 = (cur.test === null || cur.test === undefined) ? -1 : Number(cur.test);
+      if(sc > t0){ cur.test = sc; changed = true; }
+    }
+    if(!cur.updatedAt) cur.updatedAt = Date.now();
+    db[r.s] = cur;
+  });
+  if(changed){ try{ localStorage.setItem(k, JSON.stringify(db)); }catch(e){} }
+  return changed;
+}
+/* 이 폰에만 있던 기록을 시트로 올려 둔다(앱을 새로 깔았던 학생도 서버에 남도록) */
+function dbPushLocal(ban,name){
+  if(!ban||!name||!TOPEDU_DB_URL) return;
+  try {
+    var db = getStudentProgressDB(ban,name), items = [];
+    Object.keys(db||{}).forEach(function(set){
+      var p = db[set] || {}, modes = p.modes || {};
+      Object.keys(modes).forEach(function(m){ items.push({ban:ban,name:name,setName:set,mode:m,score:Number(modes[m])||0}); });
+      if(p.test !== null && p.test !== undefined && modes['테스트'] === undefined) items.push({ban:ban,name:name,setName:set,mode:'테스트',score:Number(p.test)||0});
+    });
+    if(!items.length) return;
+    fetch(TOPEDU_DB_URL, {
+      method:'POST', mode:'no-cors', keepalive:true,
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({action:'save', items: items.slice(0,120)})
+    }).catch(function(){});
+  } catch(e){}
+}
+/* 로그인·홈 진입 때 시트에서 복구 (60초에 한 번) */
+function dbRestoreStudent(ban,name,force){
+  if(!ban||!name) return;
+  var key = ban+'|'+name, now = Date.now();
+  if(!force && TOPEDU_DB_RESTORE_AT[key] && now - TOPEDU_DB_RESTORE_AT[key] < 60000) return;
+  TOPEDU_DB_RESTORE_AT[key] = now;
+  dbFetch({action:'student', ban:ban, name:name}, function(d){
+    dbPushLocal(ban,name);
+    var rows = (d && d.rows) ? d.rows : null;
+    if(!rows || !rows.length) return;
+    if(!dbMergeRows(ban,name,rows)) return;
+    TOPEDU_PROG_DIRTY = 1;
+    if(document.getElementById('btn_app_refresh')){ try { showHome(); } catch(e){} }
+  });
+}
+/* 교사 화면: 시트 전체 기록 당겨오기 (20초 캐시) */
+function dbAdminPull(force){
+  var now = Date.now();
+  if(!force && TOPEDU_DB_PULL_AT && now - TOPEDU_DB_PULL_AT < 20000) return;
+  if(!TOPEDU_DB_URL) return;
+  TOPEDU_DB_PULL_AT = now;
+  dbFetch({action:'all'}, function(d){
+    if(!d || !d.rows) return;
+    TOPEDU_DB_ROWS = d.rows;
+    TOPEDU_DB_AT = Date.now();
+    try { hwcAppSync(); hwcAppPaint(); } catch(e){}
+    try { if(S.admin && S.admin.tab === 'dash' && document.getElementById('aout')) loadAdminDashboard(); } catch(e){}
+  });
+}
+/* 오늘 날짜의 시트 기록 → { '반|이름': {modes, done, score, last} } */
+function dbTodayMap(){
+  var out = {}, today = dbDay();
+  (TOPEDU_DB_ROWS||[]).forEach(function(r){
+    if(!r || !r.b || !r.n) return;
+    if(String(r.d||'') !== today) return;
+    var k = r.b + '|' + r.n;
+    var o = out[k] || (out[k] = { modes:0, done:0, score:null, last:'' });
+    o.modes++;
+    if(r.m === '테스트'){ var sc = Number(r.sc)||0; o.score = (o.score===null) ? sc : Math.max(o.score, sc); o.done = 1; }
+    if(String(r.u||'') > o.last) o.last = String(r.u||'');
+  });
+  return out;
+}
+/* 교사 대시보드 학생 상태를 시트 기록 기준으로 덮어쓴다 */
+function dbOverlayStudents(students){
+  if(!TOPEDU_DB_AT) return students;
+  var m = dbTodayMap();
+  return (students||[]).map(function(s){
+    if(!s || s.ban === '선생님') return s;
+    var o = m[s.ban + '|' + s.name], c = {};
+    for(var k in s) c[k] = s[k];
+    if(o){
+      c.status = o.done ? 'done' : 'mid';
+      c.did = !!o.done;
+      if(o.score !== null) c.score = o.score;
+      if(o.last) c.lastTime = o.last.slice(5, 16);
+    } else {
+      c.status = 'none'; c.did = false; c.score = 0; c.lastTime = '미접속';
+    }
+    return c;
+  });
 }
 
 function mockCall(fn, args) {
@@ -2455,7 +2607,7 @@ function showLogin(){
   $('#adm').onclick=showAdminLogin;
 }
 function login(c){
-  return call('studentLogin',c).then(function(r){ S.cred=c; S.home=r; store('cred',c); store('topedu_student',c); store('last_user',c); showHome(); try { btMaybeResume(); } catch(e){} })
+  return call('studentLogin',c).then(function(r){ S.cred=c; S.home=r; store('cred',c); store('topedu_student',c); store('last_user',c); showHome(); try { btMaybeResume(); } catch(e){} try { dbRestoreStudent(c.ban, c.name, true); } catch(e){} })
   .catch(function(e){ store('cred',null); showLogin(); var er=$('#err'); if(er) er.textContent=errMsg(e); });
 }
 
@@ -3019,6 +3171,15 @@ function hwcAppBuild(){
         if(out[k] && out[k].score == null) out[k].score = sc;
       });
     }
+  } catch(e){}
+  /* 5) v102: 구글 시트 공용 DB의 오늘 기록 (다른 폰·카톡 인앱에서 한 학습도 여기로) */
+  try {
+    var dbm = dbTodayMap();
+    Object.keys(dbm).forEach(function(k){
+      var o = dbm[k] || {}, p = k.split('|'), ban = p[0], nm = p.slice(1).join('|');
+      var done = !!o.done, ing = (o.modes || 0) > 0 && !done;
+      put(ban, nm, { done: done, ing: ing, pct: (o.score !== null ? o.score : Math.min(95, (o.modes || 0) * 20)), ev: '시트', score: (o.score !== null ? o.score : null), t: today, at: (TOPEDU_DB_AT || 1) });
+    });
   } catch(e){}
   return out;
 }
@@ -4274,7 +4435,13 @@ document.addEventListener('fullscreenchange', function () {
 });
 
 function showHome(){
+  /* v102: 시트에서 복구된 기록이 있으면 홈 정보를 최신으로 다시 계산 */
+  if(TOPEDU_PROG_DIRTY && S.cred){
+    TOPEDU_PROG_DIRTY = 0;
+    try { S.home = mockCall('studentLogin', [S.cred]); } catch(e){}
+  }
   var h=S.home, me=h.me;
+  try { dbRestoreStudent(me.ban, me.name); } catch(e){}
   var todo=h.sets.filter(function(s){ if (s.type==='문제') return s.progress.test===null||s.progress.test===undefined; return !getWordSetCompletion(s).isComplete; }).length;
   var html='<div style="display:flex;justify-content:space-between;align-items:center;"><h1>'+esc(me.name)+' 안녕! 👋</h1><button id="btn_app_refresh" onclick="forceAppRefresh(event)" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1.5px solid #14b8a6;padding:6px 12px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">🔄 최신 새로고침</button></div><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
   var meInfo = getStreakInfo(me.ban, me.name);
@@ -5729,6 +5896,7 @@ var DASH_FILTER = 'all';
 var SEL_STU = {};
 
 function showAdmin(){
+  try { dbAdminPull(); } catch(e){}
   var A = S.admin, I = A.info;
   if(!A.tab) A.tab = 'dash';
   var html = '<div class="top"><button class="back" id="back">← 나가기</button><div class="grow"><div class="title">선생님 관리 화면 🌸 <span style="font-size:11px;font-weight:700;color:#0d9488;background:#ccfbf1;border-radius:999px;padding:2px 8px;vertical-align:middle">' + TOPEDU_APP_VERSION + '</span></div></div></div>'+
@@ -5824,11 +5992,20 @@ function showAdmin(){
                   msgBody = msgBody.slice(nlIdx + 1).trim();
                 }
                 if(!msgTitle) msgTitle = '학생 쪽지';
-                var already = curLogs.some(function(item){ return item.title === msgTitle && item.body === msgBody; });
+                /* v102: 같은 문구라도 다른 시각에 다시 보낸 쪽지는 살린다 (id → 시각+문구 순으로 비교) */
+                var msgTime = new Date((d.time || 0) * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+                var already = curLogs.some(function(item){
+                  if(!item) return false;
+                  if(item.id && d.id) return item.id === d.id;
+                  if(item.title !== msgTitle || item.body !== msgBody) return false;
+                  return String(item.time || '') === String(msgTime);
+                });
                 if(!already){
                   try { var _bc = bbCheatOfLog({ body: msgBody }); if(_bc) bbCheatSave(_bc); } catch(e){}
                   curLogs.unshift({
                     type: (d.tags && d.tags.indexOf('trophy') >= 0) ? 'study' : 'note',
+                    id: d.id || '',
+                    ts: d.time || 0,
                     title: msgTitle,
                     body: msgBody,
                     time: new Date(d.time * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
@@ -6082,6 +6259,7 @@ function loadAdminDashboard(){
 }
 
 function drawScienceTeacherDashboard(students){
+  try { students = dbOverlayStudents(students); } catch(e){}
   var tot = students.length;
   var realMap = getRealStreakMap();
   var doneList = students.filter(function(s){ return s.status === 'done' || s.did; });
@@ -6119,7 +6297,7 @@ function drawScienceTeacherDashboard(students){
   '</div>';
 
   html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-    '<div style="font-size:13px;font-weight:700;color:var(--muted)">총 ' + filtered.length + '명 표시 중</div>' +
+    '<div style="font-size:13px;font-weight:700;color:var(--muted)">총 ' + filtered.length + '명 표시 중 · <span style="color:#0d9488;font-weight:800">📄 시트 DB ' + (TOPEDU_DB_AT ? ('동기화 ' + new Date(TOPEDU_DB_AT).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })) : '불러오는 중') + '</span></div>' +
     '<button class="btn-sm" id="cp_selected" style="background:var(--pri);color:white;border:none">선택한 학생 독려 카톡 복사</button>' +
   '</div>';
 
@@ -7332,7 +7510,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v101';
+var TOPEDU_APP_VERSION = 'v102';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
