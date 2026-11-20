@@ -1957,15 +1957,20 @@ function dbMergeRows(ban,name,rows){
   if(changed){ try{ localStorage.setItem(k, JSON.stringify(db)); }catch(e){} }
   return changed;
 }
-/* 이 폰에만 있던 기록을 시트로 올려 둔다(앱을 새로 깔았던 학생도 서버에 남도록) */
-function dbPushLocal(ban,name){
+/* 이 폰에만 있던 기록을 시트로 올린다 — 시트에 이미 있는 더 높은 점수는 다시 쓰지 않음 */
+function dbPushLocal(ban,name,sheetMap){
   if(!ban||!name||!TOPEDU_DB_URL) return;
+  sheetMap = sheetMap || {};
   try {
     var db = getStudentProgressDB(ban,name), items = [];
+    function add(set, mode, sc){
+      var have = Number(sheetMap[dbKey(ban,name,set,mode)] || 0);
+      if((Number(sc)||0) > have) items.push({ban:ban,name:name,setName:set,mode:mode,score:Number(sc)||0});
+    }
     Object.keys(db||{}).forEach(function(set){
       var p = db[set] || {}, modes = p.modes || {};
-      Object.keys(modes).forEach(function(m){ items.push({ban:ban,name:name,setName:set,mode:m,score:Number(modes[m])||0}); });
-      if(p.test !== null && p.test !== undefined && modes['테스트'] === undefined) items.push({ban:ban,name:name,setName:set,mode:'테스트',score:Number(p.test)||0});
+      Object.keys(modes).forEach(function(m){ add(set, m, modes[m]); });
+      if(p.test !== null && p.test !== undefined && modes['테스트'] === undefined) add(set, '테스트', p.test);
     });
     if(!items.length) return;
     fetch(TOPEDU_DB_URL, {
@@ -1982,9 +1987,11 @@ function dbRestoreStudent(ban,name,force){
   if(!force && TOPEDU_DB_RESTORE_AT[key] && now - TOPEDU_DB_RESTORE_AT[key] < 60000) return;
   TOPEDU_DB_RESTORE_AT[key] = now;
   dbFetch({action:'student', ban:ban, name:name}, function(d){
-    dbPushLocal(ban,name);
-    var rows = (d && d.rows) ? d.rows : null;
-    if(!rows || !rows.length) return;
+    var rows = (d && d.rows) ? d.rows : [];
+    var sheetMap = {};
+    rows.forEach(function(r){ if(r && r.s && r.m) sheetMap[dbKey(ban,name,r.s,r.m)] = Number(r.sc)||0; });
+    dbPushLocal(ban,name,sheetMap);
+    if(!rows.length) return;
     if(!dbMergeRows(ban,name,rows)) return;
     TOPEDU_PROG_DIRTY = 1;
     if(document.getElementById('btn_app_refresh')){ try { showHome(); } catch(e){} }
@@ -2032,7 +2039,17 @@ function dbOverlayStudents(students){
       if(o.score !== null) c.score = o.score;
       if(o.last) c.lastTime = o.last.slice(5, 16);
     } else {
-      c.status = 'none'; c.did = false; c.score = 0; c.lastTime = '미접속';
+      /* 시트에 오늘 기록이 없으면, 앱이 남긴 최근 신호(연속학습·ntfy 보드·숙제 체크)로 판단하고
+         아무 신호도 없을 때만 미접속으로 본다 */
+      var rk = null, sb = null, hw = null;
+      try { rk = getRealStreakMap()[s.ban + '|' + s.name] || null; } catch(e){}
+      try { sb = (typeof STREAK_BOARD !== 'undefined' && STREAK_BOARD) ? STREAK_BOARD[s.ban + '|' + s.name] || null : null; } catch(e){}
+      try { hw = (typeof HWC_APP !== 'undefined' && HWC_APP) ? HWC_APP[s.ban + '|' + s.name] || null : null; } catch(e){}
+      var dDone = !!(rk && rk.d) || !!(sb && sb.d) || !!(hw && hw.done);
+      var dIng = !!(rk && (Number(rk.s) || 0) > 0) || (sb && (Number(sb.s) || 0) > 0) || !!(hw && hw.ing);
+      if(dDone){ c.status = 'done'; c.did = true; if(hw && hw.score != null) c.score = hw.score; }
+      else if(dIng){ c.status = 'mid'; c.did = false; }
+      else { c.status = 'none'; c.did = false; c.score = 0; c.lastTime = '미접속'; }
     }
     return c;
   });
