@@ -2876,22 +2876,20 @@ function hwcDeleteItem(name){
 
 /* ---------- 하루 기록 ---------- */
 function hwcAll(){ return store(HWC_KEY2) || {}; }
-/* 그 날짜 기록을 읽으면서, v86 단일 o/t/x 기록은 첫 항목(단어) 값으로 한 번만 이관해요 */
+/* 그 날짜 기록: v2 기록이 있으면 그걸 쓰고, 없을 때만 v86 단일 o/t/x 기록을
+   첫 항목(단어) 값으로 복사해 옵니다(원본 v1 은 지우지 않아요). */
 function hwcDayRaw(date){
-  var all = hwcAll(), d = (all[date] && typeof all[date] === 'object') ? all[date] : {};
+  var all = hwcAll(), d = all[date];
+  if(d && typeof d === 'object') return d;
+  d = {};
   var v1 = store(HWC_KEY), old = (v1 && typeof v1 === 'object') ? v1[date] : null;
   if(old && typeof old === 'object'){
-    var first = hwcItems()[0], moved = 0;
+    var first = hwcItems()[0];
     Object.keys(old).forEach(function(k){
       if(typeof old[k] !== 'string' || !old[k]) return;
-      var rec = (d[k] && typeof d[k] === 'object') ? d[k] : null;
-      if(!rec) rec = d[k] = {};
-      if(!rec[first]) rec[first] = old[k];
-      moved++;
+      d[k] = {}; d[k][first] = old[k];
     });
-    if(moved){ all[date] = d; store(HWC_KEY2, all); }
-    try { delete v1[date]; } catch(e){}
-    if(Object.keys(v1).length) store(HWC_KEY, v1); else store(HWC_KEY, null);
+    if(Object.keys(d).length){ all[date] = d; store(HWC_KEY2, all); }
   }
   return d;
 }
