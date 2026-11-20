@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><title>v99 QA seed</title></head>
+<body style="font-family:sans-serif;padding:20px">
+<p>v86 단일 체크(v1) 기록을 심고 v99 화면에서 이관을 확인하는 임시 페이지입니다.</p>
+<script>
+  var t = '2026-11-20';
+  try {
+    localStorage.removeItem('topedu_hw_check_v2');
+    localStorage.removeItem('topedu_hw_items_v1');
+    localStorage.removeItem('topedu_hw_memo_v1');
+    var old = {};
+    old[t] = { '수지중1|김수현': 'o', '수지중1|남민준': 't', '수지중1|박도윤': 'x' };
+    localStorage.setItem('topedu_hw_check_v1', JSON.stringify(old));
+  } catch (e) {}
+  location.replace('qa99.html?x=seed&t=' + Date.now());
+</script>
+</body></html>
