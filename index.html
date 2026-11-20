@@ -868,8 +868,11 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .hwc-cnt b { color: #334155; }
 .hwc-cnt.all { background: #f0fdfa; border-color: #99f6e4; color: #0f766e; }
 .hwc-cnt.app { background: #f0f9ff; border-color: #bae6fd; color: #0369a1; }
-.hwc-bulk { display: flex; gap: 6px; overflow-x: auto; margin-top: 7px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
-.hwc-bulkb { flex: 0 0 auto; padding: 7px 10px; border-radius: 999px; border: 1.5px solid #bbf7d0; background: #f0fdf4; color: #15803d; font-size: 11.5px; font-weight: 800; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.hwc-bulk { display: flex; gap: 6px; overflow-x: auto; margin-top: 7px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.hwc-bulk::-webkit-scrollbar { display: none; }
+.hwc-bulkb { flex: 1 1 0; min-width: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 6px 8px; border-radius: 12px; border: 1.5px solid #bbf7d0; background: #f0fdf4; color: #15803d; font-family: inherit; font-weight: 800; line-height: 1.12; cursor: pointer; white-space: nowrap; }
+.hwc-bl1 { font-size: 10px; letter-spacing: -0.3px; opacity: 0.85; }
+.hwc-bl2 { font-size: 12.5px; letter-spacing: -0.2px; }
 .hwc-bulkb.off { border-color: #fecaca; background: #fff1f2; color: #b91c1c; }
 .hwc-panel { flex: 0 0 auto; border-bottom: 1px solid #fde68a; background: #fffbeb; }
 .hwc-ptog { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: none; border: none; font-family: inherit; font-size: 12.5px; font-weight: 800; color: #b45309; cursor: pointer; }
@@ -3155,7 +3158,8 @@ function hwcRefreshBulk(){
         if(c.dataset.item === it && (c.dataset.v || '') !== 'o') allO = false;
       });
     });
-    b.textContent = hwcShort(it) + (allO ? ' 전체 해제' : ' 전체 ○');
+    var bl2 = b.querySelector('.hwc-bl2');
+    if(bl2) bl2.textContent = allO ? '해제' : '○';
     if(allO) b.classList.add('off'); else b.classList.remove('off');
     b.setAttribute('aria-pressed', allO ? 'true' : 'false');
     b.setAttribute('title', allO ? (it + ' 기록을 모두 해제') : (it + ' 보이는 학생 전원 ○'));
@@ -3232,7 +3236,7 @@ function renderHwCheck(){
   h += '<div class="hwc-chips">' + chips.map(function(x){ return '<button type="button" class="hwc-chip' + (x === HWC_FILTER ? ' on' : '') + '" data-f="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>';
   h += '<div class="hwc-counts" id="hwCounts">' + hwcCountsHTML(list, day, items) + '</div>';
   h += '<div class="hwc-bulk">' + items.map(function(it){
-    return '<button type="button" class="hwc-bulkb' + (itAllO[it] ? ' off' : '') + '" data-bit="' + esc(it) + '" aria-pressed="' + (itAllO[it] ? 'true' : 'false') + '" title="' + (itAllO[it] ? esc(it + ' 기록 전체 해제') : esc(it + ' 보이는 학생 전원 ○')) + '">' + esc(hwcShort(it)) + (itAllO[it] ? ' 전체 해제' : ' 전체 ○') + '</button>';
+    return '<button type="button" class="hwc-bulkb' + (itAllO[it] ? ' off' : '') + '" data-bit="' + esc(it) + '" aria-pressed="' + (itAllO[it] ? 'true' : 'false') + '" title="' + (itAllO[it] ? esc(it + ' 기록 전체 해제') : esc(it + ' 보이는 학생 전원 ○')) + '"><span class="hwc-bl1">' + esc(hwcShort(it)) + ' 전체</span><span class="hwc-bl2">' + (itAllO[it] ? '해제' : '○') + '</span></button>';
   }).join('') + '</div>';
   h += '</div>';
   h += hwcPanelHTML(date, items);
