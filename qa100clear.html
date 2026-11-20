@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><title>v100 QA clear</title></head>
+<body style="font-family:sans-serif;padding:20px">
+<p>v100 검증용 숙제 체크 데이터를 지웁니다.</p>
+<script>
+  var removed = [];
+  try {
+    ['topedu_hw_check_v2', 'topedu_hw_check_v1', 'topedu_hw_items_v1', 'topedu_hw_memo_v1'].forEach(function(k){
+      if(localStorage.getItem(k) !== null){ localStorage.removeItem(k); removed.push(k); }
+    });
+  } catch (e) {}
+  document.body.insertAdjacentHTML('beforeend', '<p id="res">지운 항목: ' + (removed.join(', ') || '없음') + '</p>');
+</script>
+</body></html>
