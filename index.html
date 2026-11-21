@@ -3746,7 +3746,7 @@ function hwcSmsHasJong(word){
   if(c < 0xAC00 || c > 0xD7A3) return false;
   return (c - 0xAC00) % 28 !== 0;
 }
-/* 예) 김수현 → 11/21 수현이의 / 오정우 → 정우의 / 문지혁 → 지혁이의 */
+/* 예) 11/21 받침 있으면 ○○이의, 없으면 ○○의 */
 function hwcSmsText(ban, name, date){
   var d = String(date || HWC_DATE || hwcToday());
   var mm = parseInt(d.slice(5, 7), 10), dd = parseInt(d.slice(8, 10), 10);
