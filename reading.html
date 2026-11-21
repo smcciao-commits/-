@@ -1161,28 +1161,207 @@ const qBan = urlParams.get('ban');
 const qCourse = urlParams.get('course');
 const qPassage = urlParams.get('passage');
 
-let curStudent = '김영인';
-let curBan = '수지중2';
+/* v104: 이름은 로그인(서버 검증) 후에 정해집니다. 소스에 이름을 두지 않습니다. */
+let curStudent = '';
+let curBan = '';
+let AUTH_READY = false;
 
-if (qStudent) curStudent = decodeURIComponent(qStudent);
-if (qBan) curBan = decodeURIComponent(qBan);
-
-if (!qStudent || !qBan) {
+function applyStudentIdentity(me) {
+  curStudent = me.name;
+  curBan = me.ban;
+  curCourseFilter = (qCourse) ? decodeURIComponent(qCourse) : ((curBan === '예비고1') ? '예비고1' : ((curBan === '수지중2') ? '수지중2' : 'all'));
+  if (curCourseFilter === '예비고1' && !qPassage) curPassage = 3;
   try {
-    const credSaved = localStorage.getItem('cred') || localStorage.getItem('topedu_student') || localStorage.getItem('last_user');
-    if (credSaved) {
-      const obj = JSON.parse(credSaved);
-      if (obj.name && !qStudent) curStudent = obj.name;
-      if (obj.ban && !qBan) curBan = obj.ban;
-    }
+    localStorage.setItem('topedu_student', JSON.stringify({ name: curStudent, ban: curBan }));
+    localStorage.setItem('last_user', JSON.stringify({ name: curStudent, ban: curBan }));
   } catch(e) {}
 }
 
-// Always persist resolved student credentials so they don't get lost
-try {
-  localStorage.setItem('topedu_student', JSON.stringify({ name: curStudent, ban: curBan }));
-  localStorage.setItem('last_user', JSON.stringify({ name: curStudent, ban: curBan }));
-} catch(e) {}
+/* ============ v104: Apps Script 서버 인증 (학생 이름·비밀번호 소스 미포함) ============ */
+const TOPEDU_DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
+const TOPEDU_NO_NET = '인터넷 연결을 확인해 주세요';
+let SRV_SEQ = 0, AUTH_BUSY = false, ADMIN_PW = '';
+let CLASSES = [], CLASSES_STATE = 0, CLASSES_CB = [];
+
+function srvCall(fn, params) {
+  return new Promise(function(resolve, reject) {
+    const netErr = new Error(TOPEDU_NO_NET); netErr.offline = true;
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) { reject(netErr); return; }
+    const name = 'topeduSrvCb' + (++SRV_SEQ);
+    let done = false, tag = null, timer = null;
+    function cleanup() {
+      try { delete window[name]; } catch(e) { window[name] = undefined; }
+      if (tag && tag.parentNode) tag.parentNode.removeChild(tag);
+      if (timer) clearTimeout(timer);
+    }
+    function fail() { if (done) return; done = true; cleanup(); reject(netErr); }
+    const q = ['action=app', 'fn=' + encodeURIComponent(fn || '')];
+    Object.keys(params || {}).forEach(function(k) {
+      const v = params[k];
+      if (v === undefined || v === null || v === '') return;
+      q.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+    });
+    q.push('callback=' + name); q.push('_=' + Date.now());
+    window[name] = function(d) {
+      if (done) return; done = true; cleanup();
+      if (d && d.ok) { resolve(d); return; }
+      const e = new Error((d && d.error) || '서버 응답을 받지 못했어요.'); e.server = true; e.data = d; reject(e);
+    };
+    tag = document.createElement('script'); tag.async = true;
+    tag.onerror = fail;
+    tag.src = TOPEDU_DB_URL + '?' + q.join('&');
+    timer = setTimeout(fail, 15000);
+    (document.head || document.body).appendChild(tag);
+  });
+}
+function loadClasses(cb) {
+  if (cb) CLASSES_CB.push(cb);
+  if (CLASSES_STATE === 1 || CLASSES_STATE === 2 || CLASSES_STATE === 3) { flushClasses(); return; }
+  CLASSES_STATE = 1;
+  srvCall('getClasses', {}).then(function(d) {
+    CLASSES = (d.classes || []).filter(function(b) { return b !== '선생님'; });
+    CLASSES_STATE = CLASSES.length ? 2 : 3;
+    flushClasses();
+  }).catch(function() { CLASSES_STATE = 3; flushClasses(); });
+}
+function flushClasses() {
+  const cbs = CLASSES_CB.slice(); CLASSES_CB = [];
+  cbs.forEach(function(f) { try { f(); } catch(e) {} });
+}
+function readJson(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e) { return null; } }
+function savedCred() {
+  /* index.html 이 남기는 cred(반·이름·비번) 우선, 다음으로 이 앱의 세션 */
+  const c = readJson('cred');
+  if (c && c.ban && c.name && c.pw) return { ban: c.ban, name: c.name, pw: String(c.pw) };
+  const r = readJson('topedu_reading_user');
+  if (r && r.ban && r.name && r.pw) return { ban: r.ban, name: r.name, pw: String(r.pw) };
+  return null;
+}
+function gateBox() {
+  let g = document.getElementById('authGate');
+  if (!g) {
+    g = document.createElement('div');
+    g.id = 'authGate';
+    g.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#fff;overflow:auto;padding:28px 16px;display:flex;align-items:flex-start;justify-content:center;';
+    document.body.appendChild(g);
+  }
+  return g;
+}
+function gateCard(inner) {
+  const g = gateBox();
+  g.style.display = 'flex';
+  g.innerHTML = '<div style="width:100%;max-width:420px;margin-top:24px;font-family:-apple-system,BlinkMacSystemFont,\'Apple SD Gothic Neo\',sans-serif;">' +
+    '<div style="text-align:center;margin-bottom:16px;">' +
+      '<div style="font-size:26px;font-weight:800;color:#1e293b;">📖 탑에듀 지문 독해</div>' +
+      '<div style="font-size:13px;color:#64748b;margin-top:4px;">지문 정독 · 빈칸 암기 · 변형 모의</div>' +
+    '</div>' +
+    '<div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;box-shadow:0 6px 20px rgba(0,0,0,0.06);">' + inner + '</div>' +
+  '</div>';
+}
+const gateInputStyle = 'width:100%;padding:12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:16px;margin-bottom:10px;';
+const gateBtnStyle = 'width:100%;padding:14px;background:#ff6b9d;color:#fff;font-weight:800;font-size:16px;border:none;border-radius:12px;cursor:pointer;';
+const gateLabelStyle = 'display:block;font-size:13px;font-weight:700;color:#475569;margin-bottom:6px;';
+
+function showAuthForm(msg, pre) {
+  const p = pre || readJson('last_user') || {};
+  const bans = CLASSES.filter(function(b) { return b !== '선생님'; });
+  const banField = bans.length
+    ? '<select id="gateBan" style="' + gateInputStyle + '"><option value="">반을 골라주세요</option>' +
+        bans.map(function(b) { return '<option value="' + b + '">' + b + '</option>'; }).join('') + '</select>'
+    : '<input id="gateBan" placeholder="반 (예: 수지중2)" style="' + gateInputStyle + '" value="' + (p.ban && p.ban !== '선생님' ? p.ban : '') + '">';
+  gateCard(
+    '<label style="' + gateLabelStyle + '">반</label>' + banField +
+    '<label style="' + gateLabelStyle + '">이름</label><input id="gateName" placeholder="예: 홍길동" style="' + gateInputStyle + '" value="' + (p.name || '') + '">' +
+    '<label style="' + gateLabelStyle + '">비밀번호</label><input id="gatePw" type="tel" inputmode="numeric" placeholder="선생님이 알려준 4자리" style="' + gateInputStyle + '">' +
+    '<button id="gateGo" style="' + gateBtnStyle + '">시작하기</button>' +
+    '<div id="gateErr" style="color:#ef4444;font-size:13px;min-height:18px;margin-top:8px;text-align:center;">' + (msg || '') + '</div>' +
+    '<a href="index.html" style="display:block;text-align:center;margin-top:10px;font-size:13px;color:#94a3b8;text-decoration:none;">🏠 단어앱으로</a>'
+  );
+  const sel = document.getElementById('gateBan');
+  if (sel && sel.tagName === 'SELECT' && p.ban && bans.indexOf(p.ban) >= 0) sel.value = p.ban;
+  const go = document.getElementById('gateGo');
+  if (go) go.onclick = function() { gateSubmit(); };
+  const pw = document.getElementById('gatePw');
+  if (pw) pw.onkeydown = function(e) { if (e.key === 'Enter') gateSubmit(); };
+  if (CLASSES_STATE === 0) loadClasses(function() { if (!AUTH_READY) showAuthForm(msg, pre); });
+}
+function gateSubmit() {
+  if (AUTH_BUSY) return;
+  const banEl = document.getElementById('gateBan');
+  const ban = banEl ? String(banEl.value || '').trim() : '';
+  const name = (document.getElementById('gateName') || {}).value ? document.getElementById('gateName').value.trim() : '';
+  const pwEl = document.getElementById('gatePw');
+  const pw = pwEl ? pwEl.value.trim() : '';
+  const err = document.getElementById('gateErr');
+  const go = document.getElementById('gateGo');
+  if (!ban || !name || !pw) { if (err) err.textContent = '반, 이름, 비밀번호를 모두 입력해 주세요.'; return; }
+  AUTH_BUSY = true; if (err) err.textContent = ''; if (go) { go.disabled = true; go.textContent = '확인 중…'; }
+  srvCall('studentLogin', { ban: ban, name: name, pw: pw }).then(function(d) {
+    AUTH_BUSY = false;
+    const me = (d && d.me) || { ban: ban, name: name };
+    try { localStorage.setItem('topedu_reading_user', JSON.stringify({ ban: me.ban, name: me.name, pw: pw })); } catch(e) {}
+    applyStudentIdentity({ ban: me.ban, name: me.name });
+    hideAuthGate();
+    runReadingApp();
+  }).catch(function(e) {
+    AUTH_BUSY = false;
+    if (go) { go.disabled = false; go.textContent = '시작하기'; }
+    if (err) err.textContent = (e && e.offline) ? TOPEDU_NO_NET : ((e && e.message) || '다시 확인해 주세요.');
+  });
+}
+function showGateOffline(c, msg, retry) {
+  gateCard(
+    '<div style="font-size:15px;font-weight:800;color:#1e293b;margin-bottom:6px;">연결을 확인해 주세요</div>' +
+    '<div style="font-size:13px;color:#64748b;margin-bottom:14px;">' + (msg || TOPEDU_NO_NET) + '</div>' +
+    '<button id="gateRetry" style="' + gateBtnStyle + '">🔄 다시 시도</button>' +
+    '<button id="gateOther" style="width:100%;margin-top:8px;padding:12px;background:#fff;border:1.5px solid #cbd5e1;border-radius:12px;font-size:14px;color:#64748b;cursor:pointer;">다른 학생으로 로그인</button>'
+  );
+  const r = document.getElementById('gateRetry');
+  if (r) r.onclick = function() { retry(); };
+  const o = document.getElementById('gateOther');
+  if (o) o.onclick = function() { showAuthForm('', c); };
+}
+function hideAuthGate() {
+  const g = document.getElementById('authGate');
+  if (g) g.style.display = 'none';
+}
+/* onload 에서 호출: 서버 검증을 통과해야 수업 화면을 그립니다 */
+function topeduAuthGate() {
+  const qc = (qStudent && qBan) ? { ban: qBan, name: qStudent } : null;
+  const saved = savedCred();
+  if ((qc && qc.ban === '선생님') || (saved && saved.ban === '선생님')) {
+    curStudent = (qc && qc.name) || '조수민';
+    curBan = '선생님';
+    hideAuthGate();
+    runReadingApp();
+    return;
+  }
+  if (saved && saved.pw) {
+    gateCard('<div style="font-size:14px;color:#64748b;text-align:center;padding:12px 0;">로그인을 확인하고 있어요…</div>');
+    verifySaved(saved);
+    return;
+  }
+  showAuthForm('', qc || saved || null);
+}
+function verifySaved(c) {
+  srvCall('studentLogin', { ban: c.ban, name: c.name, pw: c.pw }).then(function(d) {
+    const me = (d && d.me) || { ban: c.ban, name: c.name };
+    applyStudentIdentity({ ban: me.ban, name: me.name });
+    hideAuthGate();
+    runReadingApp();
+  }).catch(function(e) {
+    if (e && e.offline) { showGateOffline(c, TOPEDU_NO_NET, function() { verifySaved(c); }); return; }
+    showAuthForm('다시 로그인해 주세요.', c);
+  });
+}
+function runReadingApp() {
+  if (AUTH_READY) return;
+  AUTH_READY = true;
+  updateSoundBtn();
+  updateHeaderSummary();
+  if (typeof initCourseFiltersUI === 'function') initCourseFiltersUI();
+  render();
+}
 
 // Wrong answer database in localStorage
 function getWrongList(pId) {
@@ -3547,7 +3726,7 @@ function renderExamMode(p, area) {
       <div style="text-align:center; padding:30px 10px;">
         <div style="font-size:42px; margin-bottom:10px;">🎉</div>
         <div style="font-family:'MaplestoryOTFBold'; font-size:18px; color:#10b981; margin-bottom:6px;">오답 0개! 10문제를 완벽히 정복했습니다!</div>
-        <div style="font-size:14px; color:#64748b; margin-bottom:20px;">김영인 학생의 실력이 1등급 수준으로 탄탄해졌어요.</div>
+        <div style="font-size:14px; color:#64748b; margin-bottom:20px;">${curStudent} 학생의 실력이 1등급 수준으로 탄탄해졌어요.</div>
         <button class="btn-main" onclick="filterWrongOnly=false; render();">전체 10문제 다시 풀기</button>
       </div>
     `;
@@ -3948,7 +4127,9 @@ function lookupWord(e, word) {
 }
 
 // === TOP EDU SMART SECURITY & DIRECTOR SUITE ===
-const ALL_STUDENTS = [{"ban": "초5", "name": "이하린", "pw": "4653"}, {"ban": "풍덕초6", "name": "서호준", "pw": "7494"}, {"ban": "수지중1", "name": "김수현", "pw": "3751"}, {"ban": "수지중1", "name": "남민준", "pw": "5195"}, {"ban": "수지중1", "name": "박도윤", "pw": "8219"}, {"ban": "수지중1", "name": "성아림", "pw": "5701"}, {"ban": "수지중1", "name": "이가은", "pw": "0907"}, {"ban": "수지중2", "name": "김영인", "pw": "7568"}, {"ban": "수지중2", "name": "김지안", "pw": "7399"}, {"ban": "수지중2", "name": "문지혁", "pw": "1808"}, {"ban": "수지중2", "name": "오정우", "pw": "1731"}, {"ban": "수지중2", "name": "이우진", "pw": "5718"}, {"ban": "수지중2", "name": "지시현", "pw": "3470"}, {"ban": "한빛중2", "name": "이유안", "pw": "9337"}, {"ban": "예비고1", "name": "오지민", "pw": "7134"}, {"ban": "예비고1", "name": "최수린", "pw": "7595"}, {"ban": "예비고1", "name": "남서연", "pw": "5195"}, {"ban": "예비고1", "name": "배정연", "pw": "5752"}, {"ban": "예비고1", "name": "손해준", "pw": "0980"}, {"ban": "예비고1", "name": "신유림", "pw": "0998"}, {"ban": "예비고1", "name": "이가현", "pw": "9990"}, {"ban": "예비고1", "name": "이다인", "pw": "2314"}, {"ban": "예비고1", "name": "이서연", "pw": "3784"}, {"ban": "예비고1", "name": "이혜원", "pw": "2362"}, {"ban": "예비고1", "name": "장하윤", "pw": "4806"}, {"ban": "예비고1", "name": "조윤아", "pw": "6454"}, {"ban": "홍천고1", "name": "여예진", "pw": "9007"}, {"ban": "홍천고1", "name": "한서은", "pw": "1737"}, {"ban": "현암고1", "name": "이여원", "pw": "3697"}, {"ban": "현암고2", "name": "정민기", "pw": "9103"}, {"ban": "수지고2", "name": "김승현", "pw": "9643"}, {"ban": "수지고2", "name": "박예원", "pw": "7023"}, {"ban": "죽전고2", "name": "박민서", "pw": "4322"}, {"ban": "선생님", "name": "조수민", "pw": "4653"}];
+/* v104: 학생 명단은 소스에 두지 않습니다. 선생님 비밀번호(adminLogin) 검증 후 서버 roster로 불러옵니다. */
+let ALL_STUDENTS = [];
+let ROSTER_AT = 0;
 
 let tabLeaveCount = parseInt(localStorage.getItem('topedu_tab_leaves') || '0', 10);
 let qStartTimes = {};
@@ -4091,7 +4272,54 @@ function generateAlimtalkMsg(sName, ban, bLabel, pLabel, att) {
   return `안녕하세요. 탑에듀학원입니다^^\n${md} [${sName}] 학생의 오늘 학습 결과입니다.\n\n· 종이 교재: ${bLabel}\n· 외부지문 프린트: ${pLabel}\n· 온라인 단어: 100/100 (통과)${vocabNote}\n${examReport}`;
 }
 
+function renderAdminLoginCard(area) {
+  area.innerHTML = `
+    <div class="card" style="max-width:460px;margin:0 auto;">
+      <div class="card-header"><div class="card-title">🔑 원장님 숙제·알림톡</div></div>
+      <div style="font-size:13px; color:#64748b; margin-bottom:14px;">선생님 비밀번호를 입력하면 명단과 알림톡 보드가 열립니다.</div>
+      <input id="admPwInput" type="password" placeholder="선생님 비밀번호" autocomplete="off"
+        style="width:100%;padding:12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:16px;margin-bottom:10px;">
+      <button class="btn-main" onclick="doAdminGate()">들어가기</button>
+      <div id="admPwErr" style="color:#ef4444;font-size:13px;min-height:18px;margin-top:8px;text-align:center;"></div>
+      <div style="margin-top:14px;text-align:center;">
+        <button onclick="switchMode(1)" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;">📖 지문 정독으로 돌아가기</button>
+      </div>
+    </div>`;
+  const inp = document.getElementById('admPwInput');
+  if (inp) inp.onkeydown = function(e) { if (e.key === 'Enter') doAdminGate(); };
+}
+function doAdminGate() {
+  const inp = document.getElementById('admPwInput');
+  const err = document.getElementById('admPwErr');
+  const pw = inp ? inp.value.trim() : '';
+  if (!pw) { if (err) err.textContent = '비밀번호를 입력해 주세요.'; return; }
+  if (err) err.textContent = '확인 중…';
+  srvCall('adminLogin', { pw: pw }).then(function() {
+    ADMIN_PW = pw;
+    loadRoster();
+  }).catch(function(e) {
+    if (err) err.textContent = (e && e.offline) ? TOPEDU_NO_NET : '비밀번호가 맞지 않아요.';
+  });
+}
+function loadRoster() {
+  const area = document.getElementById('contentArea');
+  if (area) area.innerHTML = '<div class="card"><div style="font-size:13px;color:#64748b;text-align:center;padding:10px 0;">명단을 불러오는 중…</div></div>';
+  srvCall('roster', { pw: ADMIN_PW }).then(function(d) {
+    ALL_STUDENTS = (d.roster || []).map(function(s) { return { ban: s.ban, name: s.name, memo: s.memo || '' }; });
+    ROSTER_AT = Date.now();
+    renderHomeworkBoardMode(document.getElementById('contentArea'));
+  }).catch(function(e) {
+    const ar = document.getElementById('contentArea');
+    if (!ar) return;
+    ar.innerHTML = '<div class="card"><div style="font-size:13px;color:#ef4444;text-align:center;padding:8px 0;">' +
+      ((e && e.offline) ? TOPEDU_NO_NET : '명단을 불러오지 못했어요.') + '</div>' +
+      '<button class="btn-main" onclick="loadRoster()">🔄 다시 시도</button>' +
+      '<div style="margin-top:10px;text-align:center;"><button onclick="switchMode(1)" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;">📖 지문 정독으로 돌아가기</button></div></div>';
+  });
+}
 function renderHomeworkBoardMode(area) {
+  if (!ADMIN_PW) { renderAdminLoginCard(area); return; }
+  if (!ALL_STUDENTS.length) { loadRoster(); return; }
   const hwData = getHwData();
   const bans = ['초·중등부(알림톡대상)', '수지중2', '예비고1(중3)', '수지중1', '한빛중2', '초등부', '고등부(제외)', '전체'];
 
@@ -4265,14 +4493,9 @@ function copyAllAlimtalk() {
   });
 }
 
-// Initial Boot
+// Initial Boot — v104: 서버 로그인 검증을 통과한 뒤에만 수업 화면을 그립니다
 window.onload = function() {
-  updateSoundBtn();
-  updateHeaderSummary();
-  if (typeof initCourseFiltersUI === 'function') {
-    initCourseFiltersUI();
-  }
-  render();
+  topeduAuthGate();
 };
 </script>
 </body>

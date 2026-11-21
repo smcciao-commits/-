@@ -285,11 +285,12 @@
     <div class="badge">11월 11일 빼빼로데이 스페셜 🎉</div>
     <h1>수지탑에듀 행운의 룰렛 🎡</h1>
     <div class="sub">열심히 공부한 탑에듀 학생들을 위한 달콤한 선물! 🍫</div>
+    <div style="margin-top:8px; font-size:12.5px; color:#9f1239; background:#fff; border:1.5px dashed #fda4af; border-radius:10px; padding:8px 12px; display:inline-block;">이벤트가 종료되어 학생 이름 목록은 표시하지 않아요.</div>
   </div>
 
   <div class="top-bar">
-    <select id="studentSelect" class="student-select">
-      <option value="직접 도전">👤 도전할 학생 선택 (33명)</option>
+    <select id="studentSelect" class="student-select" disabled>
+      <option value="직접 도전">🎡 11.11 이벤트 종료 · 이름 없이 도전</option>
     </select>
     <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊 소리 ON</button>
   </div>
@@ -321,7 +322,7 @@
   <div class="modal-overlay" id="winModal">
     <div class="modal-box">
       <div class="modal-emoji" id="winEmoji">🎉</div>
-      <div class="modal-stu" id="winStudent">김영인 학생</div>
+      <div class="modal-stu" id="winStudent">탑에듀 학생</div>
       <div style="font-size:14px; color:#64748b;">축하합니다! 빼빼로데이 선물에 당첨되었어요!</div>
       <div class="modal-prize" id="winPrize">🥜 아몬드 빼빼로</div>
       <button class="modal-close-btn" onclick="closeModal()">달콤하게 맛있게 먹기! 😋</button>
@@ -390,23 +391,8 @@
       { name: "초코필드 빼빼로", emoji: "✨", color: "#f43f5e", bg: "#fff1f2", weight: 15 }
     ];
 
-    // Academy Students (33 students)
-    const STUDENTS = [
-      "이하린 (초5)", "서호준 (풍덕초6)", "김수현 (수지중1)", "남민준 (수지중1)", "박도윤 (수지중1)", "성아림 (수지중1)", "이가은 (수지중1)",
-      "김영인 (수지중2)", "김지안 (수지중2)", "문지혁 (수지중2)", "오정우 (수지중2)", "이우진 (수지중2)", "지시현 (수지중2)", "이유안 (한빛중2)",
-      "오지민 (예비고1)", "최수린 (예비고1)", "남서연 (예비고1)", "배정연 (예비고1)", "손해준 (예비고1)", "신유림 (예비고1)", "이가현 (예비고1)",
-      "이다인 (예비고1)", "이서연 (예비고1)", "이혜원 (예비고1)", "장하윤 (예비고1)", "조윤아 (예비고1)",
-      "여예진 (홍천고1)", "한서은 (홍천고1)", "이여원 (현암고1)", "정민기 (현암고2)", "김승현 (수지고2)", "박예원 (수지고2)", "박민서 (죽전고2)"
-    ];
-
-    // Populate Student Select
+    // v104: 이벤트 종료 — 학생 명단은 소스에서 제거했습니다.
     const sel = document.getElementById('studentSelect');
-    STUDENTS.forEach(st => {
-      const opt = document.createElement('option');
-      opt.value = st.split(' ')[0];
-      opt.innerText = st;
-      sel.appendChild(opt);
-    });
 
     // Draw Roulette Wheel
     const canvas = document.getElementById('wheelCanvas');
@@ -506,7 +492,7 @@
       playFanfare();
       fireConfetti();
 
-      const stuName = sel.value === '직접 도전' ? '탑에듀 학생' : sel.value;
+      const stuName = '탑에듀';
       document.getElementById('winStudent').innerText = `${stuName} 학생!`;
       document.getElementById('winPrize').innerText = `${prize.emoji} ${prize.name}`;
       document.getElementById('winEmoji').innerText = prize.emoji;
