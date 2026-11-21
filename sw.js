@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v107: 숙제 1초 체크 시트 저장 + 시트 단어세트 연동)
-const CACHE_NAME = 'topedu-pwa-v107';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v108: 정민기 수지고2 이동 — 현암고2 태그·칩 숨김 정리)
+const CACHE_NAME = 'topedu-pwa-v108';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
