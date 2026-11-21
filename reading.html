@@ -1283,7 +1283,20 @@ function showAuthForm(msg, pre) {
   if (go) go.onclick = function() { gateSubmit(); };
   const pw = document.getElementById('gatePw');
   if (pw) pw.onkeydown = function(e) { if (e.key === 'Enter') gateSubmit(); };
-  if (CLASSES_STATE === 0) loadClasses(function() { if (!AUTH_READY) showAuthForm(msg, pre); });
+  if (CLASSES_STATE === 0) loadClasses(function() { if (!AUTH_READY && !fillGateBan()) showAuthForm(msg, pre); });
+}
+function fillGateBan() {
+  /* 반 목록이 늦게 도착해도 입력 중인 이름·비밀번호를 지우지 않고 선택지만 채웁니다 */
+  const sel = document.getElementById('gateBan');
+  if (!sel || sel.tagName !== 'SELECT') return false;
+  const bans = CLASSES.filter(function(b) { return b !== '선생님'; });
+  if (!bans.length) return false;
+  const cur = String(sel.value || '');
+  sel.innerHTML = '<option value="">반을 골라주세요</option>' +
+    bans.map(function(b) { return '<option value="' + b + '">' + b + '</option>'; }).join('');
+  const want = cur || ((readJson('last_user') || {}).ban || '');
+  if (want && bans.indexOf(want) >= 0) sel.value = want;
+  return true;
 }
 function gateSubmit() {
   if (AUTH_BUSY) return;
