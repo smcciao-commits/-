@@ -2441,7 +2441,7 @@ function localCall(fn, args) {
 /* ============ v103: 서버(Apps Script) 호출 ============
    GitHub Pages에는 google.script.run이 없으므로 JSONP(script 태그)로 웹앱에 물어봅니다.
    인터넷이 없으면 로그인·명단·현황은 진행되지 않고 "인터넷 연결을 확인해 주세요"로 막힙니다. */
-var TOPEDU_SERVER_FNS = { getClasses: 1, studentLogin: 1, adminLogin: 1, roster: 1, adminDayReport: 1, adminSetReport: 1, wordSets: 1 };
+var TOPEDU_SERVER_FNS = { getClasses: 1, studentLogin: 1, adminLogin: 1, roster: 1, adminDayReport: 1, adminSetReport: 1, wordSets: 1, hwSave: 1, hwLoad: 1 };
 var TOPEDU_NO_NET = '인터넷 연결을 확인해 주세요';
 function srvParams(fn, args){
   args = args || [];
@@ -2452,6 +2452,8 @@ function srvParams(fn, args){
   if (fn === 'roster') return { pw: g(0) };
   if (fn === 'adminDayReport') return { pw: g(0), ban: g(1), day: g(2) };
   if (fn === 'adminSetReport') return { pw: g(0), ban: g(1), type: g(2), setName: g(3) };
+  if (fn === 'hwSave') return { pw: g(0), data: g(1) };
+  if (fn === 'hwLoad') return { pw: g(0), date: g(1) };
   return {};
 }
 function srvCall(fn, args){
@@ -3224,6 +3226,8 @@ function hwcSaveCell(date, ban, name, item, val){
   if(Object.keys(rec).length) d[key] = rec; else delete d[key];
   if(Object.keys(d).length) all[date] = d; else delete all[date];
   store(HWC_KEY2, all);
+  /* v107: 시트에도 보냅니다(1~2초 모아서) */
+  try { if(typeof hwsAdd === 'function') hwsAdd({ op:'c', date:date, ban:ban, name:String(name), item:item, v:val || '', ts:hwsStamp(), keep:false }); } catch(e){}
 }
 
 /* ---------- 반별 숙제 메모 ---------- */
@@ -3239,6 +3243,7 @@ function hwcMemoSet(date, group, txt){
   if(txt) d[group || '전체'] = txt; else delete d[group || '전체'];
   if(Object.keys(d).length) all[date] = d; else delete all[date];
   store(HWC_MEMO_KEY, all);
+  try { if(typeof hwsAdd === 'function') hwsAdd({ op:'m', date:date, group:(group || '전체'), memo:txt, ts:hwsStamp(), keep:false }); } catch(e){}
 }
 
 function hwcGroup(ban){
@@ -3424,6 +3429,7 @@ function openHwCheck(){
   ov.onclick = function(e){ if(e.target === ov) closeHwCheck(); };
   try { document.body.style.overflow = 'hidden'; } catch(e){}
   try { hwcAppRefresh(false); } catch(e){}
+  try { hwsOpen(); } catch(e){}   /* v107: 시트에서 그날 기록 받아오기 + 첫 이관 */
 }
 function closeHwCheck(){
   var ov = document.getElementById('hwOverlay');
@@ -3558,6 +3564,7 @@ function renderHwCheck(){
 
   var h = '';
   h += '<div class="hwc-head"><div style="flex:1;font-size:15.5px;font-weight:800;font-family:Maplestory,sans-serif">✅ 숙제 1초 체크 <span class="nc-vtag">' + TOPEDU_APP_VERSION + '</span></div><button type="button" class="prt-x" id="hwClose">✕</button></div>';
+  h += '<div id="hwSync" style="margin:0 12px 8px;font-size:12px;font-weight:700;color:#0f766e"></div>';
   h += '<div class="hwc-top">';
   h += '<div class="hwc-daterow"><input type="date" class="hwc-date" id="hwDate" value="' + esc(date) + '"><button type="button" class="hwc-today" id="hwToday">오늘</button></div>';
   h += '<div class="hwc-chips">' + chips.map(function(x){ return '<button type="button" class="hwc-chip' + (x === HWC_FILTER ? ' on' : '') + '" data-f="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>';
@@ -3617,8 +3624,10 @@ function renderHwCheck(){
 
   /* ---- 이벤트 ---- */
   var bc = document.getElementById('hwClose'); if(bc) bc.onclick = closeHwCheck;
-  var bd0 = document.getElementById('hwDate'); if(bd0) bd0.onchange = function(){ HWC_DATE = this.value || hwcToday(); renderHwCheck(); };
-  var bt = document.getElementById('hwToday'); if(bt) bt.onclick = function(){ HWC_DATE = hwcToday(); renderHwCheck(); };
+  var bd0 = document.getElementById('hwDate'); if(bd0) bd0.onchange = function(){ HWC_DATE = this.value || hwcToday(); renderHwCheck(); try { hwsSyncDay(HWC_DATE); } catch(e){} };
+  var bt = document.getElementById('hwToday'); if(bt) bt.onclick = function(){ HWC_DATE = hwcToday(); renderHwCheck(); try { hwsSyncDay(HWC_DATE); } catch(e){} };
+  var bsy = document.getElementById('hwSync'); if(bsy) bsy.onclick = function(){ try { hwsFlush(); } catch(e){} };
+  try { hwsPaint(); } catch(e){}
   [].forEach.call(el.querySelectorAll('.hwc-chip'), function(chip){
     chip.onclick = function(){ HWC_FILTER = chip.dataset.f; renderHwCheck(); };
   });
@@ -3835,6 +3844,7 @@ function hwcSmsSetSent(date, ban, name, on){
   if(on) day[k] = 1; else delete day[k];
   if(Object.keys(day).length) all[date] = day; else delete all[date];
   store(HWC_SMS_KEY, all);
+  try { if(typeof hwsAdd === 'function') hwsAdd({ op:'s', date:date, ban:ban, name:String(name), on:on ? 1 : 0, ts:hwsStamp(), keep:false }); } catch(e){}
 }
 /* 성을 뺀 이름 (3글자 이상이면 앞 1글자 빼기) */
 function hwcSmsGiven(name){
@@ -3943,6 +3953,183 @@ function hwcCopy(txt, btn, pv){
 }
 
 /* ================= v91: 📺 빠바 기초세우기 인강관 (예비고1 전용) ================= */
+/* ================= v107: 숙제 체크 → 구글 시트 저장 =================
+   체크·반별 메모·📩 보냄을 화면에 바로 저장하고 1~2초 모아 시트로 보냅니다.
+   인터넷이 끊기면 보낼 목록(로컬 큐)에 쌓아 두었다가 다시 보냅니다.
+   다른 기기에서 열면 시트에서 받아와 합칩니다(수정시각이 늦은 쪽이 이김).
+   문자 자동 발송은 없습니다 — 📩 는 문구 복사 + 에듀스탭 열기까지. */
+var HWS_OUT_KEY = 'topedu_hw_outbox_v1';
+var HWS_TS_KEY = 'topedu_hw_ts_v1';
+var HWS_MIG_KEY = 'topedu_hw_migrated_v1';
+var HWS = { q: [], busy: false, timer: 0, retry: 0, status: 'connecting' };
+
+function hwsStamp(ts) {
+  var d = ts ? new Date(ts) : new Date();
+  try { return d.toLocaleString('sv-SE', { timeZone: 'Asia/Seoul' }).replace('T', ' '); } catch (e) {}
+  function p(n) { return (n < 10 ? '0' : '') + n; }
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+}
+function hwsTsAll() { var a = store(HWS_TS_KEY); return (a && typeof a === 'object') ? a : {}; }
+function hwsTsGet(k) { return hwsTsAll()[k] || ''; }
+function hwsTsSet(k, v) { var a = hwsTsAll(); if (v) a[k] = v; else delete a[k]; store(HWS_TS_KEY, a); }
+function hwsOpKey(o) {
+  if (!o) return '';
+  if (o.op === 'c') return 'c|' + o.date + '|' + o.ban + '|' + o.name + '|' + o.item;
+  if (o.op === 'm') return 'm|' + o.date + '|' + (o.group || '전체');
+  return 's|' + o.date + '|' + o.ban + '|' + o.name;
+}
+function hwsQ() { try { var a = JSON.parse(localStorage.getItem(HWS_OUT_KEY) || '[]'); HWS.q = Array.isArray(a) ? a : []; } catch (e) { HWS.q = []; } return HWS.q; }
+function hwsQSave() { try { localStorage.setItem(HWS_OUT_KEY, JSON.stringify(HWS.q)); } catch (e) {} }
+function hwsPaint() {
+  var el = document.getElementById('hwSync');
+  if (!el) return;
+  var st = HWS.status, n = HWS.q.length;
+  if (n && st !== 'fail') st = 'pending';
+  var txt = st === 'fail' ? ('⚠️ 저장 실패' + (n ? ' — 다시 시도 (' + n + '건)' : ' — 다시 시도'))
+    : (st === 'pending' ? ('⏳ 저장 대기 ' + n + '건') : (st === 'saved' ? '☁️ 시트 저장됨' : '⏳ 시트 연결 중…'));
+  el.textContent = txt;
+  el.style.color = st === 'fail' ? '#b91c1c' : (st === 'pending' ? '#b45309' : '#0f766e');
+  el.style.cursor = (st === 'fail' || st === 'pending') ? 'pointer' : 'default';
+}
+function hwsAdd(o) {
+  var k = hwsOpKey(o), hit = -1;
+  for (var i = 0; i < HWS.q.length; i++) { if (hwsOpKey(HWS.q[i]) === k) { hit = i; break; } }
+  if (hit >= 0) HWS.q[hit] = o; else HWS.q.push(o);
+  if (!o.keep) hwsTsSet(k, o.ts);
+  hwsQSave(); hwsPaint(); hwsSoon();
+}
+function hwsSoon() { clearTimeout(HWS.timer); HWS.timer = setTimeout(hwsFlush, 1200); }
+function hwsWire(o) {
+  if (o.op === 'c') return ['c', o.date, o.ban, o.name, o.item, o.v || '', o.ts || '', o.keep ? 1 : 0];
+  if (o.op === 'm') return ['m', o.date, o.group || '전체', o.memo || '', o.ts || '', o.keep ? 1 : 0];
+  return ['s', o.date, o.ban, o.name, o.on ? 1 : 0, o.ts || '', o.keep ? 1 : 0];
+}
+function hwsFlush() {
+  if (HWS.busy) return;
+  if (!HWS.q.length) { HWS.status = 'saved'; hwsPaint(); return; }
+  var pw = store('apw') || '';
+  if (!pw) { HWS.status = 'fail'; hwsPaint(); return; }
+  var all = HWS.q.slice(), chunks = [], i;
+  for (i = 0; i < all.length; i += 25) chunks.push(all.slice(i, i + 25));
+  HWS.busy = true;
+  var idx = 0;
+  function done(ok) {
+    HWS.busy = false;
+    HWS.status = ok ? (HWS.q.length ? 'pending' : 'saved') : 'fail';
+    hwsPaint();
+    clearTimeout(HWS.retry);
+    if (!ok) HWS.retry = setTimeout(hwsFlush, 20000);
+  }
+  function step() {
+    if (idx >= chunks.length) { done(true); return; }
+    var batch = chunks[idx++], wire = JSON.stringify(batch.map(hwsWire));
+    srvCall('hwSave', [pw, wire]).then(function (d) {
+      if (!d || !d.ok) { done(false); return; }
+      var keys = {};
+      batch.forEach(function (o) { keys[hwsOpKey(o)] = 1; });
+      HWS.q = HWS.q.filter(function (o) { return !keys[hwsOpKey(o)]; });
+      hwsQSave(); hwsPaint(); step();
+    }).catch(function () { done(false); });
+  }
+  step();
+}
+function hwsMerge(d) {
+  if (!d || !d.date) return false;
+  var date = d.date, changed = false;
+
+  var all = hwcAll(), day = all[date] || {};
+  if (!day || typeof day !== 'object') day = {};
+  Object.keys(d.check || {}).forEach(function (bn) {
+    var rec = d.check[bn] || {};
+    Object.keys(rec).forEach(function (it) {
+      var v = rec[it]; if (!v) return;
+      var sts = (d.tsCheck || {})[bn + '|' + it] || '', k = 'c|' + date + '|' + bn + '|' + it, lts = hwsTsGet(k);
+      if (!sts || (lts && lts >= sts)) return;
+      var cur = day[bn]; if (!cur || typeof cur !== 'object') cur = {};
+      if (cur[it] !== v) { cur[it] = v; day[bn] = cur; changed = true; }
+      hwsTsSet(k, sts);
+    });
+  });
+  if (Object.keys(day).length) all[date] = day;
+  store(HWC_KEY2, all);
+
+  var memoAll = hwcMemoAll(), dm = memoAll[date] || {};
+  Object.keys(d.memo || {}).forEach(function (g) {
+    var txt = d.memo[g] || '', sts = (d.tsMemo || {})[g] || '', k = 'm|' + date + '|' + g, lts = hwsTsGet(k);
+    if (!sts || (lts && lts >= sts)) return;
+    if (txt) dm[g] = txt; else delete dm[g];
+    hwsTsSet(k, sts); changed = true;
+  });
+  if (Object.keys(dm).length) memoAll[date] = dm; else delete memoAll[date];
+  store(HWC_MEMO_KEY, memoAll);
+
+  var smsAll = hwcSmsAll(), ds = smsAll[date] || {};
+  (d.sent || []).forEach(function (bn) {
+    var sts = (d.tsSent || {})[bn] || '', k = 's|' + date + '|' + bn, lts = hwsTsGet(k);
+    if (!sts || (lts && lts >= sts)) return;
+    ds[bn] = 1; hwsTsSet(k, sts); changed = true;
+  });
+  if (Object.keys(ds).length) smsAll[date] = ds; else delete smsAll[date];
+  store(HWC_SMS_KEY, smsAll);
+
+  return changed;
+}
+function hwsSyncDay(date) {
+  date = date || HWC_DATE || hwcToday();
+  var pw = store('apw') || '';
+  if (!pw || !TOPEDU_DB_URL) return Promise.resolve(false);
+  return srvCall('hwLoad', [pw, date]).then(function (d) {
+    if (!d || !d.ok) return false;
+    var changed = hwsMerge(d);
+    HWS.status = HWS.q.length ? 'pending' : 'saved';
+    hwsPaint();
+    if (changed) { try { renderHwCheck(); } catch (e) {} }
+    return true;
+  }).catch(function () { return false; });
+}
+/* 이 기기에 남은 예전 기록을 처음 한 번만 시트로 올립니다(시트에 있는 칸은 건드리지 않음) */
+function hwsMigrate() {
+  if (localStorage.getItem(HWS_MIG_KEY)) return 0;
+  var n = 0;
+  try {
+    var all = hwcAll();
+    Object.keys(all).forEach(function (date) {
+      var day = all[date] || {};
+      Object.keys(day).forEach(function (bn) {
+        var p = bn.split('|'), ban = p[0], name = p.slice(1).join('|'), rec = day[bn] || {};
+        Object.keys(rec).forEach(function (it) {
+          if (!rec[it]) return;
+          hwsAdd({ op: 'c', date: date, ban: ban, name: name, item: it, v: rec[it], ts: '', keep: true }); n++;
+        });
+      });
+    });
+    var memos = hwcMemoAll();
+    Object.keys(memos).forEach(function (date) {
+      Object.keys(memos[date] || {}).forEach(function (g) {
+        if (!memos[date][g]) return;
+        hwsAdd({ op: 'm', date: date, group: g, memo: memos[date][g], ts: '', keep: true }); n++;
+      });
+    });
+    var sent = hwcSmsAll();
+    Object.keys(sent).forEach(function (date) {
+      Object.keys(sent[date] || {}).forEach(function (bn) {
+        var p = bn.split('|');
+        hwsAdd({ op: 's', date: date, ban: p[0], name: p.slice(1).join('|'), on: 1, ts: '', keep: true }); n++;
+      });
+    });
+  } catch (e) {}
+  try { localStorage.setItem(HWS_MIG_KEY, String(n)); } catch (e) {}
+  return n;
+}
+function hwsOpen() {
+  hwsQ();
+  HWS.status = HWS.q.length ? 'pending' : 'connecting';
+  hwsPaint();
+  if (HWS.q.length) hwsSoon();
+  hwsSyncDay(HWC_DATE).then(function () { try { hwsMigrate(); } catch (e) {} });
+}
+window.addEventListener('online', function () { try { if (HWS.q.length) hwsFlush(); } catch (e) {} });
+
 /* 무료로 공개된 유튜브 강의만 담았어요. ed:'new' = 2024 개정판 강의, ed:'sub' = 구판 보충 강의 */
 var BB_LECTURES = [
   { n: 1,  t: '영문의 기본 구조', v: [
@@ -7857,7 +8044,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v106';
+var TOPEDU_APP_VERSION = 'v107';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
