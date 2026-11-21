@@ -1427,7 +1427,7 @@ window.onerror = function(msg, url, line) {
   var ap = document.getElementById('app');
   var ld = document.getElementById('load');
   if (ld) ld.classList.remove('on');
-  if (ap && !ap.innerHTML.trim()) {
+  if (ap && !ap.innerHTML.trim() && !TOPEDU_AUTH_BUSY) {
     if (typeof showLogin === 'function') showLogin();
   }
 };
@@ -2639,8 +2639,11 @@ function showLogin(){
   $('#pw').onkeydown=function(e){ if(e.key==='Enter') $('#go').click(); };
   $('#adm').onclick=showAdminLogin;
 }
+var TOPEDU_AUTH_BUSY = 0;
 function login(c){
+  TOPEDU_AUTH_BUSY = 1;
   return call('studentLogin', c).then(function(r){
+    TOPEDU_AUTH_BUSY = 0;
     var me = (r && r.me) ? r.me : { ban: c.ban, name: c.name };
     S.cred = { ban: me.ban, name: me.name, pw: c.pw };
     S.home = buildStudentHome(S.cred);
@@ -2649,6 +2652,7 @@ function login(c){
     try { btMaybeResume(); } catch(e){}
     try { dbRestoreStudent(me.ban, me.name, true); } catch(e){}
   }).catch(function(e){
+    TOPEDU_AUTH_BUSY = 0;
     /* v103: 인터넷이 없으면 로그인을 막되, 이미 로그인해 둔 폰의 정보는 지우지 않는다 */
     if (e && e.offline) {
       if (c && c.ban && c.name) { showOffline(c, e.message); return; }
@@ -10797,7 +10801,7 @@ setTimeout(function() {
   var ap = document.getElementById('app');
   var ld = document.getElementById('load');
   if (ld) ld.classList.remove('on');
-  if (ap && !ap.innerHTML.trim()) {
+  if (ap && !ap.innerHTML.trim() && !TOPEDU_AUTH_BUSY) {
     showLogin();
   }
 }, 300);
