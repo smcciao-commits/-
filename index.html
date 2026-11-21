@@ -3840,12 +3840,22 @@ function hwcSmsAllShow(){
 }
 
 function hwcCopy(txt, btn, pv){
+  var doneOnce = false;
   function done(){
+    if(doneOnce) return; doneOnce = true;
     if(btn){ var o = btn.getAttribute('data-o') || btn.textContent; btn.setAttribute('data-o', o); btn.textContent = '복사됨 ✔'; setTimeout(function(){ btn.textContent = o; }, 1400); }
     if(pv){ pv.innerHTML = '<b>📋 복사된 문자 내용 — 에듀스탭/피클에 붙여넣기</b>' + esc(txt); pv.classList.add('on'); }
   }
   function fb(){ var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e){} document.body.removeChild(ta); done(); }
-  try { navigator.clipboard.writeText(txt).then(done, fb); } catch(e){ fb(); }
+  /* v103: 클립보드 권한 대기창이 떠도 복사가 되도록 0.7초 뒤 예비 방식으로 넘어간다 */
+  try {
+    var settled = false;
+    var pr = navigator.clipboard.writeText(txt);
+    if(pr && pr.then){
+      pr.then(function(){ settled = true; done(); }, function(){ settled = true; fb(); });
+      setTimeout(function(){ if(!settled) fb(); }, 700);
+    } else { fb(); }
+  } catch(e){ fb(); }
 }
 
 /* ================= v91: 📺 빠바 기초세우기 인강관 (예비고1 전용) ================= */
