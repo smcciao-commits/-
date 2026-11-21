@@ -816,8 +816,6 @@ function doPrint(){window.print();}
   if(saved&&saved.teacher&&saved.ban==='선생님'){ S.me=saved; showTeacher(); return; }
   var c=savedStudent();
   if(c){ autoEnter(c); return; }          /* 서버 studentLogin 검증 후 자동 진입 */
-  var last=store('topedu_writing_last');
-  if(saved&&saved.ban&&saved.name){ showLogin(); return; }
   showLogin();
 })();
 </script>
