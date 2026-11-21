@@ -2011,17 +2011,29 @@ var TOPEDU_DB_ROWS = [], TOPEDU_DB_AT = 0, TOPEDU_DB_PULL_AT = 0, TOPEDU_DB_SEQ 
 var TOPEDU_DB_RESTORE_AT = {};
 function dbKey(b,n,s,m){ return (b||'')+'|'+(n||'')+'|'+(s||'')+'|'+(m||''); }
 function dbDay(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+/* v109: 시트 진도 DB는 본인 확인이 필요하다 — 이 기기에 저장된 로그인 정보에서 비밀번호를 꺼내 함께 보낸다.
+   (선생님이 학생 화면을 대신 볼 때는 선생님 비밀번호를 쓴다) */
+function dbCredPw(ban,name){
+  function pick(c){ return (c && c.pw && String(c.name||'') === String(name||'')) ? String(c.pw) : ''; }
+  try { var p = pick(S && S.cred); if(p) return p; } catch(e){}
+  try { if (S && S.cred && S.cred.ban === '선생님' && S.cred.pw) return String(S.cred.pw); } catch(e){}
+  try { var p2 = pick(store('cred')); if(p2) return p2; } catch(e){}
+  return '';
+}
 /* 진도 1건 저장 — 화면을 붙잡지 않도록 no-cors POST (응답은 읽지 않음) */
 function dbSaveAsync(ban,name,setName,mode,score){
   if(!ban||!name||!setName||!mode||!TOPEDU_DB_URL) return;
   var sc = Number(score)||0;
-  try {
-    fetch(TOPEDU_DB_URL, {
-      method:'POST', mode:'no-cors', keepalive:true,
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify({action:'save',ban:ban,name:name,setName:setName,mode:mode,score:sc})
-    }).catch(function(){});
-  } catch(e){}
+  var pw = dbCredPw(ban,name);
+  if(pw){
+    try {
+      fetch(TOPEDU_DB_URL, {
+        method:'POST', mode:'no-cors', keepalive:true,
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({action:'save',ban:ban,name:name,pw:pw,setName:setName,mode:mode,score:sc})
+      }).catch(function(){});
+    } catch(e){}
+  }
   try {
     var k = dbKey(ban,name,setName,mode), cur = null;
     for(var i=0;i<TOPEDU_DB_ROWS.length;i++){ if(dbKey(TOPEDU_DB_ROWS[i].b,TOPEDU_DB_ROWS[i].n,TOPEDU_DB_ROWS[i].s,TOPEDU_DB_ROWS[i].m)===k){ cur=TOPEDU_DB_ROWS[i]; break; } }
@@ -2076,6 +2088,8 @@ function dbMergeRows(ban,name,rows){
 /* 이 폰에만 있던 기록을 시트로 올린다 — 시트에 이미 있는 더 높은 점수는 다시 쓰지 않음 */
 function dbPushLocal(ban,name,sheetMap){
   if(!ban||!name||!TOPEDU_DB_URL) return;
+  var pw = dbCredPw(ban,name);
+  if(!pw) return;
   sheetMap = sheetMap || {};
   try {
     var db = getStudentProgressDB(ban,name), items = [];
@@ -2092,17 +2106,19 @@ function dbPushLocal(ban,name,sheetMap){
     fetch(TOPEDU_DB_URL, {
       method:'POST', mode:'no-cors', keepalive:true,
       headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify({action:'save', items: items.slice(0,120)})
+      body: JSON.stringify({action:'save', ban:ban, name:name, pw:pw, items: items.slice(0,120)})
     }).catch(function(){});
   } catch(e){}
 }
 /* 로그인·홈 진입 때 시트에서 복구 (60초에 한 번) */
 function dbRestoreStudent(ban,name,force){
   if(!ban||!name) return;
+  var pw = dbCredPw(ban,name);
+  if(!pw) return;
   var key = ban+'|'+name, now = Date.now();
   if(!force && TOPEDU_DB_RESTORE_AT[key] && now - TOPEDU_DB_RESTORE_AT[key] < 60000) return;
   TOPEDU_DB_RESTORE_AT[key] = now;
-  dbFetch({action:'student', ban:ban, name:name}, function(d){
+  dbFetch({action:'student', ban:ban, name:name, pw:pw}, function(d){
     var rows = (d && d.rows) ? d.rows : [];
     var sheetMap = {};
     rows.forEach(function(r){ if(r && r.s && r.m) sheetMap[dbKey(ban,name,r.s,r.m)] = Number(r.sc)||0; });
@@ -2118,8 +2134,12 @@ function dbAdminPull(force){
   var now = Date.now();
   if(!force && TOPEDU_DB_PULL_AT && now - TOPEDU_DB_PULL_AT < 20000) return;
   if(!TOPEDU_DB_URL) return;
+  var pw = '';
+  try { if (S.admin && S.admin.pw) pw = String(S.admin.pw); } catch(e){}
+  if(!pw){ try { pw = String(store('apw') || ''); } catch(e){} }
+  if(!pw) return;
   TOPEDU_DB_PULL_AT = now;
-  dbFetch({action:'all'}, function(d){
+  dbFetch({action:'all', pw:pw}, function(d){
     if(!d || !d.rows) return;
     TOPEDU_DB_ROWS = d.rows;
     TOPEDU_DB_AT = Date.now();
@@ -8046,7 +8066,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v108';
+var TOPEDU_APP_VERSION = 'v109';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };

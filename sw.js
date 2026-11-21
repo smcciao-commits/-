@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v108: 정민기 수지고2 이동 — 현암고2 태그·칩 숨김 정리)
-const CACHE_NAME = 'topedu-pwa-v108';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v109: 진도DB 읽기·쓰기 본인 확인)
+const CACHE_NAME = 'topedu-pwa-v109';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
