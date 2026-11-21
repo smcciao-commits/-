@@ -175,8 +175,9 @@ var TOPEDU_NO_NET='인터넷 연결을 확인해 주세요';
 var SRV_SEQ=0, AUTH_BUSY=false, CLASSES=[], CLASSES_STATE=0, CLASSES_CB=[];
 function srvCall(fn,params){
   return new Promise(function(resolve,reject){
-    var netErr=new Error(TOPEDU_NO_NET); netErr.offline=true;
-    if(typeof navigator!=='undefined'&&navigator.onLine===false){reject(netErr);return;}
+    var offErr=new Error(TOPEDU_NO_NET); offErr.offline=true;
+    if(typeof navigator!=='undefined'&&navigator.onLine===false){reject(offErr);return;}
+    var netErr=new Error('서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.'); netErr.network=true;
     var name='topeduSrvCb'+(++SRV_SEQ), done=false, tag, timer;
     function cleanup(){try{delete window[name];}catch(e){window[name]=undefined;} if(tag&&tag.parentNode)tag.parentNode.removeChild(tag); if(timer)clearTimeout(timer);}
     function fail(){ if(done)return; done=true; cleanup(); reject(netErr); }
@@ -194,7 +195,7 @@ function srvCall(fn,params){
     tag=document.createElement('script'); tag.async=true;
     tag.onerror=fail;
     tag.src=TOPEDU_DB_URL+'?'+q.join('&');
-    timer=setTimeout(fail,15000);
+    timer=setTimeout(fail,25000);
     (document.head||document.body).appendChild(tag);
   });
 }
@@ -372,7 +373,7 @@ function doLogin(){
     AUTH_BUSY=false;
     if(go){go.disabled=false;go.textContent='시작하기';}
     if(e&&e.offline){err.textContent=TOPEDU_NO_NET;return;}
-    err.textContent=(e&&e.server)?((e.message)||'반·이름·비밀번호가 맞지 않아요.'):'서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.';
+    err.textContent=(e&&e.server)?((e.message)||'반·이름·비밀번호가 맞지 않아요.'):((e&&e.message)||'서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');
   });
 }
 /* index.html 등에서 이미 로그인한 학생 — 서버 검증 후 바로 들어가기 */
@@ -385,6 +386,7 @@ function autoEnter(c){
     showHome();
   }).catch(function(e){
     if(e&&e.offline){offlineCard(TOPEDU_NO_NET,function(){autoEnter(c);});return;}
+    if(!(e&&e.server)){offlineCard((e&&e.message)||'서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.',function(){autoEnter(c);});return;}
     store(UK,null);
     showLogin('다시 로그인해 주세요.');
   });
@@ -414,7 +416,7 @@ function doTeacherLogin(){
     showTeacher();
   }).catch(function(e){
     AUTH_BUSY=false;
-    err.textContent=(e&&e.offline)?TOPEDU_NO_NET:'비밀번호가 맞지 않습니다.';
+    err.textContent=(e&&e.offline)?TOPEDU_NO_NET:((e&&e.server)?'비밀번호가 맞지 않습니다.':((e&&e.message)||'서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.'));
   });
 }
 

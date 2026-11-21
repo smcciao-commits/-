@@ -1185,8 +1185,9 @@ let CLASSES = [], CLASSES_STATE = 0, CLASSES_CB = [];
 
 function srvCall(fn, params) {
   return new Promise(function(resolve, reject) {
-    const netErr = new Error(TOPEDU_NO_NET); netErr.offline = true;
-    if (typeof navigator !== 'undefined' && navigator.onLine === false) { reject(netErr); return; }
+    const offErr = new Error(TOPEDU_NO_NET); offErr.offline = true;
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) { reject(offErr); return; }
+    const netErr = new Error('서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.'); netErr.network = true;
     const name = 'topeduSrvCb' + (++SRV_SEQ);
     let done = false, tag = null, timer = null;
     function cleanup() {
@@ -1210,7 +1211,7 @@ function srvCall(fn, params) {
     tag = document.createElement('script'); tag.async = true;
     tag.onerror = fail;
     tag.src = TOPEDU_DB_URL + '?' + q.join('&');
-    timer = setTimeout(fail, 15000);
+    timer = setTimeout(fail, 25000);
     (document.head || document.body).appendChild(tag);
   });
 }
@@ -1319,7 +1320,7 @@ function gateSubmit() {
   }).catch(function(e) {
     AUTH_BUSY = false;
     if (go) { go.disabled = false; go.textContent = '시작하기'; }
-    if (err) err.textContent = (e && e.offline) ? TOPEDU_NO_NET : ((e && e.message) || '다시 확인해 주세요.');
+    if (err) err.textContent = (e && e.offline) ? TOPEDU_NO_NET : ((e && e.message) || '서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');
   });
 }
 function showGateOffline(c, msg, retry) {
@@ -1364,6 +1365,7 @@ function verifySaved(c) {
     runReadingApp();
   }).catch(function(e) {
     if (e && e.offline) { showGateOffline(c, TOPEDU_NO_NET, function() { verifySaved(c); }); return; }
+    if (e && !e.server) { showGateOffline(c, (e.message) || '서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.', function() { verifySaved(c); }); return; }
     showAuthForm('다시 로그인해 주세요.', c);
   });
 }
@@ -4311,7 +4313,7 @@ function doAdminGate() {
     ADMIN_PW = pw;
     loadRoster();
   }).catch(function(e) {
-    if (err) err.textContent = (e && e.offline) ? TOPEDU_NO_NET : '비밀번호가 맞지 않아요.';
+    if (err) err.textContent = (e && e.offline) ? TOPEDU_NO_NET : ((e && e.server) ? '비밀번호가 맞지 않아요.' : '서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');
   });
 }
 function loadRoster() {
@@ -4325,7 +4327,7 @@ function loadRoster() {
     const ar = document.getElementById('contentArea');
     if (!ar) return;
     ar.innerHTML = '<div class="card"><div style="font-size:13px;color:#ef4444;text-align:center;padding:8px 0;">' +
-      ((e && e.offline) ? TOPEDU_NO_NET : '명단을 불러오지 못했어요.') + '</div>' +
+      ((e && e.offline) ? TOPEDU_NO_NET : '명단을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.') + '</div>' +
       '<button class="btn-main" onclick="loadRoster()">🔄 다시 시도</button>' +
       '<div style="margin-top:10px;text-align:center;"><button onclick="switchMode(1)" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;">📖 지문 정독으로 돌아가기</button></div></div>';
   });
