@@ -4633,6 +4633,31 @@ document.addEventListener('fullscreenchange', function () {
   }
 });
 
+/* ============ v105: 🏆 12월 성실왕 명예의 전당 안내 배너 (학생 홈 전용) ============ */
+function drawHallOfFameBanner(){
+  var prizes = [
+    { m: '🥇', t: '1등 1만원' },
+    { m: '🥈', t: '2등 7천원' },
+    { m: '🥉', t: '3등 5천원' },
+    { m: '4등', t: '3천원' },
+    { m: '5등', t: '2천원' }
+  ];
+  var chips = prizes.map(function(p){
+    return '<span style="display:inline-block;background:#fff;border:1px solid #ccfbf1;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;color:#0f766e;line-height:1.5;white-space:nowrap;">' + p.m + ' ' + p.t + '</span>';
+  }).join('');
+  chips += '<span style="display:inline-block;background:#f5f3ff;border:1px solid #e9d5ff;border-radius:999px;padding:2px 8px;font-size:10.5px;font-weight:700;color:#7c6a9c;line-height:1.5;white-space:nowrap;">🎁 기프티콘</span>';
+  var h = '';
+  h += '<div id="hofBanner" style="margin:10px 0 14px;padding:12px 13px;background:linear-gradient(135deg,#f0fdfa 0%,#ecfeff 58%,#f5f3ff 100%);border:1.5px solid #99f6e4;border-radius:18px;box-shadow:0 3px 12px rgba(13,148,136,0.10);">';
+  h +=   '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">';
+  h +=     '<div style="font-family:Maplestory,Pretendard,sans-serif;font-size:15px;font-weight:700;color:#0f766e;line-height:1.35;min-width:0;">🏆 12월 성실왕 명예의 전당</div>';
+  h +=     '<span style="flex:0 0 auto;background:#ccfbf1;border:1px solid #5eead4;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;color:#0f766e;white-space:nowrap;">1/1 발표</span>';
+  h +=   '</div>';
+  h +=   '<div style="margin-top:5px;font-size:12.5px;line-height:1.55;color:#475569;word-break:keep-all;">시험 점수보다 <b style="color:#0d9488;font-weight:800">성실도!</b> 12월 한 달 단어 완주·꾸준한 학습으로 도전해요</div>';
+  h +=   '<div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:5px;">' + chips + '</div>';
+  h += '</div>';
+  return h;
+}
+
 function showHome(){
   /* v102: 시트에서 복구된 기록이 있으면 홈 정보를 최신으로 다시 계산 */
   if(TOPEDU_PROG_DIRTY && S.cred){
@@ -4646,6 +4671,8 @@ function showHome(){
   var meInfo = getStreakInfo(me.ban, me.name);
   html += drawStreakHero(me);
   html += drawStudentInAppNoteCard(me.name);
+  /* v105: 🏆 12월 성실왕 명예의 전당 — 학생 홈 상단(도착 쪽지 아래) 안내, 선생님 화면에는 안 띄움 */
+  if (me.ban !== '선생님') { try { html += drawHallOfFameBanner(); } catch(e){} }
   /* v97: ⏱️ 자기주도 1시간 모드 (보조 교사 없이 50~60분 완주) */
   try { html += ssHomeCard(me.ban); } catch(e){}
   /* v96: 📌 오늘의 집 숙제 — 반별 단어 Day 분량 (원장님이 정한 계획표) */
@@ -7726,7 +7753,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v103';
+var TOPEDU_APP_VERSION = 'v105';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };

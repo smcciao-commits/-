@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v104: writing·reading·pepero 서버 로그인 전환 · 소스에서 학생 명단 제거)
-const CACHE_NAME = 'topedu-pwa-v104';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v105: 학생 홈 12월 성실왕 명예의 전당 배너)
+const CACHE_NAME = 'topedu-pwa-v105';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
