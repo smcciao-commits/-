@@ -924,6 +924,21 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .hwc-prev { display: none; margin-top: 9px; padding: 9px 11px; border-radius: 12px; border: 1.5px dashed #99f6e4; background: #f0fdfa; font-size: 9.5px; line-height: 1.55; color: #0f766e; white-space: pre-wrap; word-break: break-all; max-height: 118px; overflow: auto; }
 .hwc-prev.on { display: block; }
 .hwc-prev b { display: block; margin-bottom: 4px; font-size: 11px; color: #0d9488; }
+/* v103: 📩 학부모 문자 버튼 · 한꺼번에 보기 목록 */
+.hwc-sms { flex: 0 0 auto; padding: 5px 9px; border-radius: 999px; border: 1.5px solid #bae6fd; background: #f0f9ff; color: #0369a1; font-family: inherit; font-size: 11px; font-weight: 800; line-height: 1.2; white-space: nowrap; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.hwc-sms:active { transform: scale(0.96); }
+.hwc-sms.sent { border-color: #e2e8f0; background: #f1f5f9; color: #94a3b8; }
+.hwc-big.sms { background: linear-gradient(135deg,#0369a1,#0ea5e9); box-shadow: 0 4px 12px rgba(3,105,161,0.28); }
+.hwc-prev.many { max-height: 200px; }
+.hwc-prev-line { display: flex; align-items: flex-start; gap: 6px; padding: 5px 0; border-top: 1px dashed #99f6e4; }
+.hwc-prev-line:first-of-type { border-top: 0; padding-top: 0; }
+.hwc-prev-txt { flex: 1 1 auto; min-width: 0; font-size: 10px; line-height: 1.45; color: #0f766e; word-break: break-all; }
+.hwc-prev-cp { flex: 0 0 auto; padding: 3px 9px; border-radius: 8px; border: 1.5px solid #99f6e4; background: #fff; color: #0d9488; font-family: inherit; font-size: 10.5px; font-weight: 800; white-space: nowrap; cursor: pointer; }
+.hwc-prev-all { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #99f6e4; font-size: 10px; color: #0d9488; }
+@media (max-width: 420px) {
+  .hwc-sms { font-size: 10.5px; padding: 4px 7px; }
+  .hwc-prev-txt { font-size: 9.5px; }
+}
 @media (max-width: 420px) {
   .hwc-overlay { padding: 8px; }
   .hwc-card { max-height: calc(100vh - 16px); border-radius: 16px; }
@@ -3493,6 +3508,7 @@ function renderHwCheck(){
     var bd = hwcBadgeHtml(HWC_APP[hwcAppKey(s.ban, s.name)]);
     h += '<div class="hwc-row" data-ban="' + esc(s.ban) + '" data-name="' + esc(s.name) + '">'
       + '<div class="hwc-r1"><div class="hwc-nm">' + esc(s.name) + (HWC_FILTER === '전체' ? '<u>' + esc(s.ban) + '</u>' : '') + '</div>'
+      + hwcSmsBtnHtml(date, s.ban, s.name)
       + '<div class="hwc-badge">' + bd + '</div></div>'
       + '<div class="hwc-cells" style="grid-template-columns:repeat(' + items.length + ',minmax(0,1fr))">'
       + items.map(function(it){
