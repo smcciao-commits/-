@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v106 QA · 390x844</title>
+<title>v107 QA</title>
 <style>
   html,body{margin:0;padding:0;background:#eef2f6;font-family:-apple-system,'Malgun Gothic',sans-serif}
   .row{display:flex;gap:14px;align-items:flex-start;padding:10px}
@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="row">
-  <div class="slot"><iframe id="f" src="./index.html?qa106=1"></iframe></div>
+  <div class="slot"><iframe id="f" src="./index.html?qa107=1"></iframe></div>
   <div id="log">측정 준비 중…</div>
 </div>
 <script>
@@ -23,7 +23,7 @@ window.__errs = [];
 var f = document.getElementById('f');
 var logEl = document.getElementById('log');
 function render() {
-  var t = 'v106 실서버 390×844 QA\n· 콘솔 에러 ' + window.__errs.length + '건' +
+  var t = 'v107 실서버 QA\n· 콘솔 에러 ' + window.__errs.length + '건' +
     (window.__errs.length ? ':\n· ' + window.__errs.join('\n· ') : ' (0건)') + '\n' + (window.__extra || '');
   logEl.innerHTML = '<pre style="margin:0;white-space:pre-wrap">' +
     t.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</pre>';
@@ -50,7 +50,7 @@ function hook(w) {
 f.addEventListener('load', function () { hook(f.contentWindow); render(); });
 function probe() {
   var w = f.contentWindow, d = w.document;
-  var ov = Math.max(0, d.documentElement.scrollWidth - 390);
+  var ov = Math.max(0, d.documentElement.scrollWidth - (window.__size ? window.__size.w : 390));
   return {
     ver: w.TOPEDU_APP_VERSION,
     user: (w.S && w.S.cred) ? (w.S.cred.ban + ' · ' + w.S.cred.name) : null,
@@ -60,6 +60,14 @@ function probe() {
     errs: window.__errs.length
   };
 }
+/* ?w=1280&h=800 처럼 크기 바꿔 PC 화면 검증 */
+(function(){
+  var q = new URLSearchParams(location.search);
+  var w = parseInt(q.get('w') || '390', 10), h = parseInt(q.get('h') || '844', 10);
+  var fr = document.getElementById('f');
+  fr.style.width = w + 'px'; fr.style.height = h + 'px';
+  window.__size = { w: w, h: h };
+})();
 window.__probe = probe;
 window.__render = render;
 window.__setExtra = function (t) { window.__extra = t; render(); };
