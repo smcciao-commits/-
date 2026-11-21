@@ -1657,6 +1657,19 @@ try { topeduRosterLoad(); } catch(e){}
 var TOPEDU_WS_KEY = 'topedu_wordsets_v1';
 var TOPEDU_WS = { count: 0, words: 0, at: '', skipped: [], names: {} };
 var TOPEDU_WS_P = null;
+/* v110: 시트 '뜻'에 "뜻 [어원: ...]"로 적어도 카드에는 뜻만 크게, 어원은 카드 뒷면 '어원' 줄로 깔끔히 보이게 나눕니다 */
+function wsSplitEtym(o) {
+  if (!o || typeof o.m !== 'string') return o;
+  var s = o.m, a = s.lastIndexOf('['), b = s.lastIndexOf(']');
+  if (a > 0 && b === s.length - 1) {
+    var tag = s.slice(a + 1, b), c = tag.indexOf(':');
+    if (c > 0 && (tag.slice(0, c).trim() === '어원' || tag.slice(0, c).trim() === 'etym')) {
+      var mm = s.slice(0, a).trim(), rr = tag.slice(c + 1).trim();
+      if (mm) { o.m = mm; if (!o.r) o.r = rr; }
+    }
+  }
+  return o;
+}
 function wsApply(d, at, skipped) {
   if (!d || typeof d !== 'object') return false;
   var n = 0, w = 0, names = {};
@@ -1664,6 +1677,7 @@ function wsApply(d, at, skipped) {
     if (!Object.prototype.hasOwnProperty.call(d, k)) continue;
     var s = d[k] || {}, list = Array.isArray(s.words) ? s.words : [];
     if (!k || !list.length) continue;
+    for (var wi = 0; wi < list.length; wi++) wsSplitEtym(list[wi]);
     ALL_WORD_SETS[k] = { target: s.target || '전체', words: list };
     names[k] = 1; n++; w += list.length;
   }
@@ -8066,7 +8080,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v109';
+var TOPEDU_APP_VERSION = 'v110';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
