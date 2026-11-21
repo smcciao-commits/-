@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="tag">QA103 <span id="mode"></span> · 390×844 (배율 92%)</div>
-<div id="wrap"><iframe id="fr" src="./index.html?qa103=1"></iframe></div>
+<div id="wrap"><iframe id="fr"></iframe></div>
 <script>
 window.QA = { errs: [], mode: '' };
 (function () {
@@ -42,6 +42,8 @@ window.QA = { errs: [], mode: '' };
       } catch (e) { QA.errs.push('offline-fail:' + e.message); }
     }
   });
+  /* 캐시된 옛 index.html 대신 항상 새로 받아온다 */
+  fr.src = './index.html?qa103=' + Date.now();
 })();
 </script>
 </body>
