@@ -10793,7 +10793,12 @@ function ssParseParents(txt) {
 /* ============ 시작 ============ */
 function start(){
   var c=store('cred');
-  if(c&&c.ban&&c.name&&c.pw) login(c); else showLogin();
+  if(c&&c.ban&&c.name&&c.pw){
+    /* v103: 서버 확인 동안 화면이 비어 보이지 않도록 안내를 먼저 띄운다 */
+    TOPEDU_AUTH_BUSY = 1;
+    try { app.innerHTML='<div class="card" style="margin-top:24px;text-align:center;font-weight:800;color:#0d9488">불러오는 중…</div>'; } catch(e){}
+    login(c);
+  } else showLogin();
 }
 start();
 // Safety net: ensure app never stays blank
