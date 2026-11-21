@@ -1265,10 +1265,10 @@ const gateLabelStyle = 'display:block;font-size:13px;font-weight:700;color:#4755
 function showAuthForm(msg, pre) {
   const p = pre || readJson('last_user') || {};
   const bans = CLASSES.filter(function(b) { return b !== '선생님'; });
-  const banField = bans.length
-    ? '<select id="gateBan" style="' + gateInputStyle + '"><option value="">반을 골라주세요</option>' +
-        bans.map(function(b) { return '<option value="' + b + '">' + b + '</option>'; }).join('') + '</select>'
-    : '<input id="gateBan" placeholder="반 (예: 수지중2)" style="' + gateInputStyle + '" value="' + (p.ban && p.ban !== '선생님' ? p.ban : '') + '">';
+  const banField = (CLASSES_STATE === 3)
+    ? '<input id="gateBan" placeholder="반 (예: 수지중2)" style="' + gateInputStyle + '" value="' + (p.ban && p.ban !== '선생님' ? p.ban : '') + '">'
+    : '<select id="gateBan" style="' + gateInputStyle + '"><option value="">' + (bans.length ? '반을 골라주세요' : '반 목록 불러오는 중…') + '</option>' +
+        bans.map(function(b) { return '<option value="' + b + '">' + b + '</option>'; }).join('') + '</select>';
   gateCard(
     '<label style="' + gateLabelStyle + '">반</label>' + banField +
     '<label style="' + gateLabelStyle + '">이름</label><input id="gateName" placeholder="예: 홍길동" style="' + gateInputStyle + '" value="' + (p.name || '') + '">' +

@@ -306,12 +306,13 @@ function renderLogin(msg){
   try{ var qs=new URLSearchParams(location.search); qb=qs.get('ban')||''; qn=qs.get('name')||''; }catch(e){}
   var last=store('topedu_writing_last');
   if(!qb&&last&&last.ban&&last.ban!=='선생님'){qb=last.ban;qn=last.name||'';}
+  var opts=bans.map(function(b){return '<option value="'+esc(b)+'">'+esc(b)+'</option>';}).join('');
   var banField;
-  if(bans.length){
-    var opts=bans.map(function(b){return '<option value="'+esc(b)+'">'+esc(b)+'</option>';}).join('');
-    banField='<select id="ban"><option value="">반을 골라주세요</option>'+opts+'</select>';
-  }else{
+  if(CLASSES_STATE===3){
+    /* 반 목록을 못 받아온 경우(오프라인)에만 직접 입력 */
     banField='<input id="ban" placeholder="예: 수지중2" autocomplete="off">';
+  }else{
+    banField='<select id="ban"><option value="">'+(bans.length?'반을 골라주세요':'반 목록 불러오는 중…')+'</option>'+opts+'</select>';
   }
   app.innerHTML=
    '<div class="top"><div class="grow"><div class="title">✍️ 탑에듀 내신 서술형 <span class="ver">'+APP_VER+'</span></div>'+
