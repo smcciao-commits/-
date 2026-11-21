@@ -6228,9 +6228,22 @@ function noticeAlready(curLogs, d, msgTitle, msgBody, msgTime){
     return String(item.time || '') === String(msgTime);
   });
 }
+function adminMergeSets(I){
+  if (!I) return;
+  var have = {};
+  (I.sets || []).forEach(function(s){ if (s && s.name) have[s.name] = 1; });
+  I.sets = I.sets || [];
+  var keys = Object.keys(ALL_WORD_SETS || {});
+  for (var i = 0; i < keys.length; i++) {
+    if (have[keys[i]]) continue;
+    var st = ALL_WORD_SETS[keys[i]] || {};
+    I.sets.push({ type: '단어', name: keys[i], target: st.target || '전체', count: (st.words || []).length });
+  }
+}
 function showAdmin(){
   try { dbAdminPull(); } catch(e){}
   var A = S.admin, I = A.info;
+  try { adminMergeSets(I); } catch(e){}
   if(!A.tab) A.tab = 'dash';
   var html = '<div class="top"><button class="back" id="back">← 나가기</button><div class="grow"><div class="title">선생님 관리 화면 🌸 <span style="font-size:11px;font-weight:700;color:#0d9488;background:#ccfbf1;border-radius:999px;padding:2px 8px;vertical-align:middle">' + TOPEDU_APP_VERSION + '</span></div></div></div>'+
     wsAdminStrip()+
