@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>QA v103 (390×844)</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #dbe3ec; }
+  #wrap { width: 390px; height: 844px; overflow: hidden; background: #fff;
+          box-shadow: 0 6px 22px rgba(15,23,42,.18); transform: scale(0.92); transform-origin: top left; }
+  iframe { width: 390px; height: 844px; border: 0; display: block; }
+  #tag { position: fixed; right: 6px; top: 4px; font: 11px monospace; color: #64748b; z-index: 9; }
+</style>
+</head>
+<body>
+<div id="tag">QA103 <span id="mode"></span></div>
+<div id="wrap"><iframe id="fr" src="./index.html?qa103=1"></iframe></div>
+<script>
+window.QA = { errs: [], mode: '' };
+(function () {
+  var q = String(location.search || '');
+  var m = q.match(/mode=([a-z0-9_]+)/i);
+  QA.mode = m ? m[1] : 'normal';
+  document.getElementById('mode').textContent = '· ' + QA.mode;
+  var fr = document.getElementById('fr');
+  fr.addEventListener('load', function () {
+    var w = null;
+    try { w = fr.contentWindow; } catch (e) { QA.errs.push('win-fail:' + e.message); return; }
+    try {
+      w.addEventListener('error', function (e) { QA.errs.push('error:' + (e.message || '') + '@' + (e.lineno || 0)); });
+      w.addEventListener('unhandledrejection', function (e) { QA.errs.push('reject:' + ((e.reason && e.reason.message) || e.reason || '')); });
+      var ce = w.console.error;
+      w.console.error = function () {
+        QA.errs.push('console.error:' + Array.prototype.join.call(arguments, ' '));
+        if (ce) { try { ce.apply(w.console, arguments); } catch (e) {} }
+      };
+    } catch (e) { QA.errs.push('hook-fail:' + e.message); }
+
+    if (QA.mode === 'offline') {
+      try {
+        w.TOPEDU_DB_URL = 'https://offline-sim.invalid/exec';
+        w.login({ ban: '홍천고1', name: '여예진', pw: '9007' });
+      } catch (e) { QA.errs.push('offline-fail:' + e.message); }
+    }
+  });
+})();
+</script>
+</body>
+</html>
