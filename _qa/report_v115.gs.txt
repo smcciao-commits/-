@@ -2,6 +2,7 @@
  * v115: 날짜별·세트별 현황을 '진도DB' 탭 기준으로 집계
  *  - 지금 앱(index/writing/reading)은 진도 기록을 '진도DB' 탭에만 저장합니다.
  *  - 그래서 기존 '기록' 탭(2026-11-10 이전 자료)과 진도DB를 함께 병합해 보여줍니다.
+ *  - 모드별 점수(짝맞추기 95점 · 뜻고르기 100점)도 함께 보여줍니다.
  *  - 인증: 기존과 똑같이 선생님 비밀번호를 매번 확인합니다(admin_).
  * ============================================================ */
 
@@ -33,11 +34,27 @@ function repV115ScoreMode_(mode) {
   return m === '테스트' || m === '문제' || m === '문제풀이';
 }
 
+/* '짝맞추기 95점, 뜻고르기 100점' 처럼 모드별 점수 문구 */
+function repV115ModeText_(e) {
+  var parts = [];
+  (e.modes || []).forEach(function (m) {
+    var sc = (e.scores && e.scores[m] !== undefined) ? e.scores[m] : null;
+    parts.push(sc === null ? m : (m + ' ' + sc + '점'));
+  });
+  return parts.join(', ');
+}
+
+function repV115SetScore_(e, mode, sc) {
+  if (!e.scores) e.scores = {};
+  var cur = e.scores[mode];
+  if (cur === undefined || sc > cur) e.scores[mode] = sc;
+}
+
 function repV115DaySlot_(by, ban, name, type, set) {
   var k = ban + '|' + name;
   if (!by[k]) by[k] = {};
   var sk = type + '|' + set;
-  if (!by[k][sk]) by[k][sk] = { type: type, set: set, modes: [], best: null };
+  if (!by[k][sk]) by[k][sk] = { type: type, set: set, modes: [], best: null, scores: {} };
   return by[k][sk];
 }
 
@@ -55,10 +72,10 @@ function adminDayReportV115(pw, ban, day) {
     if (t.slice(0, 10) !== day) return;
     if (ban && s_(r[1]) !== ban) return;
     var e = repV115DaySlot_(by, s_(r[1]), s_(r[2]), s_(r[3]), s_(r[4]));
-    var mode = s_(r[5]);
+    var mode = s_(r[5]), sc0 = Number(r[6]) || 0;
     if (e.modes.indexOf(mode) < 0) e.modes.push(mode);
+    repV115SetScore_(e, mode, sc0);
     if (mode === '테스트' || mode === '문제풀이') {
-      var sc0 = Number(r[6]) || 0;
       if (!e.best || sc0 > e.best.score) {
         e.best = { score: sc0, correct: Number(r[7]) || 0, total: Number(r[8]) || 0, wrong: s_(r[9]) };
       }
@@ -75,10 +92,9 @@ function adminDayReportV115(pw, ban, day) {
     var e = repV115DaySlot_(by, b, n, '단어', st);
     if (e.modes.indexOf(m) < 0) e.modes.push(m);
     var sc = Number(r.sc) || 0;
-    if (repV115ScoreMode_(m)) {
-      if (!e.best || sc > e.best.score) {
-        e.best = { score: sc, correct: null, total: null, wrong: '', at: pdText_(r.u) };
-      }
+    repV115SetScore_(e, m, sc);
+    if (!e.best || sc > e.best.score) {
+      e.best = { score: sc, correct: null, total: null, wrong: '' };
     }
   });
 
@@ -92,15 +108,13 @@ function adminDayReportV115(pw, ban, day) {
       msg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + nick + '는 아직 영어 온라인 학습을 하지 않았습니다. 가정에서도 한 번 챙겨봐 주세요. 감사합니다♡';
     } else {
       var lines = items.map(function (e) {
-        if (e.best) {
-          if (e.best.correct === null || e.best.correct === undefined) {
-            return '· ' + e.set + ' ' + e.best.score + '점 (' + e.modes.join(', ') + ')';
-          }
+        if (e.best && e.best.correct !== null && e.best.correct !== undefined) {
           var line = '· ' + e.set + (e.type === '단어' ? ' 테스트 ' : ' ') + e.best.correct + '/' + e.best.total;
           if (e.best.wrong && e.type === '단어') line += ' (틀린 단어: ' + e.best.wrong + ')';
           return line;
         }
-        return '· ' + e.set + ' ' + e.modes.join(', ') + ' 학습';
+        var body = repV115ModeText_(e);
+        return '· ' + e.set + ' ' + body + ' 학습';
       });
       msg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + nick + '의 영어 온라인 학습 결과입니다.\n' + lines.join('\n') + '\n감사합니다♡';
     }
@@ -118,8 +132,12 @@ function adminSetReportV115(pw, ban, type, setName) {
 
   var by = {}, miss = {};
   function slot(k) {
-    if (!by[k]) by[k] = { modes: {}, best: null, last: '', count: 0 };
+    if (!by[k]) by[k] = { modes: {}, scores: {}, best: null, last: '', count: 0 };
     return by[k];
+  }
+  function saveScore(o, mode, sc) {
+    var cur = o.scores[mode];
+    if (cur === undefined || sc > cur) o.scores[mode] = sc;
   }
 
   /* 1) 옛 기록 탭 */
@@ -130,6 +148,7 @@ function adminSetReportV115(pw, ban, type, setName) {
     var mode = s_(r[5]), sc = Number(r[6]) || 0, t = timeStr_(r[0]);
     o.modes[mode] = (o.modes[mode] || 0) + 1;
     o.count++;
+    saveScore(o, mode, sc);
     if (t > o.last) o.last = t;
     if (mode === '테스트' || mode === '문제풀이') {
       if (o.best === null || sc > o.best.score) {
@@ -153,11 +172,10 @@ function adminSetReportV115(pw, ban, type, setName) {
     var o = slot(b + '|' + n);
     o.modes[mode] = (o.modes[mode] || 0) + 1;
     o.count++;
+    saveScore(o, mode, sc);
     if (t > o.last) o.last = t;
-    if (repV115ScoreMode_(mode)) {
-      if (o.best === null || sc > o.best.score) {
-        o.best = { score: sc, correct: null, total: null, wrong: '' };
-      }
+    if (o.best === null || sc > o.best.score) {
+      o.best = { score: sc, correct: null, total: null, wrong: '' };
     }
   });
 
@@ -169,8 +187,8 @@ function adminSetReportV115(pw, ban, type, setName) {
   });
 
   var out = studs.map(function (st) {
-    var d = by[st.ban + '|' + st.name] || { modes: {}, best: null, last: '', count: 0 };
-    return { ban: st.ban, name: st.name, done: d.best !== null, best: d.best, modes: d.modes, last: d.last, count: d.count };
+    var d = by[st.ban + '|' + st.name] || { modes: {}, scores: {}, best: null, last: '', count: 0 };
+    return { ban: st.ban, name: st.name, done: d.best !== null, best: d.best, modes: d.modes, scores: d.scores, last: d.last, count: d.count };
   });
   var top = Object.keys(miss).map(function (k) { return { item: k, n: miss[k] }; })
     .sort(function (a, b) { return b.n - a.n; }).slice(0, 10);
