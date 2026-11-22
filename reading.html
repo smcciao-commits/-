@@ -935,17 +935,19 @@
       background: linear-gradient(transparent 62%, #d9f3ea 62%);
       font-weight: 600;
     }
+    .hm-tail { white-space: nowrap; }
     .hm-spk {
-      font-size: 11px;
+      font-size: 10.5px;
       line-height: 1;
       border: 1px solid #d9ece7;
       background: #f7fdfb;
       color: #0f766e;
       border-radius: 999px;
-      padding: 3px 5px;
-      margin-left: 1px;
-      vertical-align: 2px;
+      padding: 2px 5px;
+      margin: 0 1px 0 3px;
+      vertical-align: 1px;
       cursor: pointer;
+      opacity: .9;
     }
     .hm-spk:active { background: #d9f3ea; }
     .hm-sec {
@@ -4490,15 +4492,16 @@ function hmCoreIdx(p, token) {
 }
 
 /* ---------- 본문을 "누를 수 있는 단어"로 만들기 ---------- */
-function hmWordsHtml(text, p, si) {
-  let out = '', i = 0;
-  const n = text.length, low = text.toLowerCase();
+function hmWordsPieces(text, p, si) {
+  const out = [];
+  let i = 0;
+  const n = text.length;
   while (i < n) {
     const ch = text[i];
     if (!/[A-Za-z]/.test(ch)) {
       let j = i;
       while (j < n && !/[A-Za-z]/.test(text[j])) j++;
-      out += hmEsc(text.slice(i, j));
+      out.push(hmEsc(text.slice(i, j)));
       i = j;
       continue;
     }
@@ -4516,17 +4519,29 @@ function hmWordsHtml(text, p, si) {
       }
     }
     if (phrSurf) {
-      out += '<span class="hm-word core" data-w="' + hmEsc(phrSurf) + '" data-ci="' + p._core[phrKey] +
-        '" data-s="' + si + '" data-p="' + p.id + '">' + hmEsc(phrSurf) + '</span>';
+      out.push('<span class="hm-word core" data-w="' + hmEsc(phrSurf) + '" data-ci="' + p._core[phrKey] +
+        '" data-s="' + si + '" data-p="' + p.id + '">' + hmEsc(phrSurf) + '</span>');
       i += phrSurf.length;
       continue;
     }
     const ci = hmCoreIdx(p, m[0]);
-    out += '<span class="hm-word' + (ci >= 0 ? ' core' : '') + '" data-w="' + hmEsc(m[0]) +
-      '" data-ci="' + ci + '" data-s="' + si + '" data-p="' + p.id + '">' + hmEsc(m[0]) + '</span>';
+    out.push('<span class="hm-word' + (ci >= 0 ? ' core' : '') + '" data-w="' + hmEsc(m[0]) +
+      '" data-ci="' + ci + '" data-s="' + si + '" data-p="' + p.id + '">' + hmEsc(m[0]) + '</span>');
     i += m[0].length;
   }
   return out;
+}
+function hmWordsHtml(text, p, si) {
+  return hmWordsPieces(text, p, si).join('');
+}
+/* 문장 끝 🎧 버튼이 다음 줄로 떨어져 나가지 않도록 마지막 조각과 묶습니다 */
+function hmSentenceHtml(sent, p, si) {
+  const pieces = hmWordsPieces(sent, p, si);
+  const btn = '<button type="button" class="hm-spk" data-ps="' + p.id + ':' + si +
+    '" title="이 문장 듣기" aria-label="이 문장 듣기">🎧</button>';
+  if (!pieces.length) return btn;
+  const tail = pieces.pop();
+  return pieces.join('') + '<span class="hm-tail">' + tail + btn + '</span>';
 }
 
 /* ---------- 지문 읽기 화면 ---------- */
@@ -4539,8 +4554,7 @@ function renderHalfReading(p, area) {
     body += '<div class="p-para hm-para">';
     arr.forEach(function (sent) {
       const si = flat.length; flat.push(sent);
-      body += '<span class="hm-sent">' + hmWordsHtml(sent, p, si) + '</span>' +
-        '<button type="button" class="hm-spk" data-ps="' + p.id + ':' + si + '" title="이 문장 듣기" aria-label="이 문장 듣기">🎧</button> ';
+      body += '<span class="hm-sent">' + hmSentenceHtml(sent, p, si) + '</span> ';
     });
     body += '</div>';
   });
