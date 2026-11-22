@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v115: 선생님 진도 조회를 진도DB 기준으로)
-const CACHE_NAME = 'topedu-pwa-v115';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v116: 인강관 가로 전체화면 수리 + 유튜브 외부 이동 원천 차단)
+const CACHE_NAME = 'topedu-pwa-v116';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.

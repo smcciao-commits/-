@@ -1193,6 +1193,9 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .bb-player iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 .bb-guard-top { position: absolute; top: 0; left: 0; right: 0; height: 54px; z-index: 12; background: transparent; }
 .bb-guard-br { position: absolute; bottom: 0; right: 0; width: 100px; height: 42px; z-index: 12; background: transparent; }
+/* v116: 유튜브로 나가는 길 원천 차단 — 재생기(iframe) 전체를 덮는 투명 차단막.
+   1픽셀도 유튜브 클릭이 닿지 않게 하고, 탭하면 앱의 재생/멈춤이 동작해요. */
+.bb-shield { position: absolute; inset: 0; z-index: 15; background: transparent; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
 .bb-start { position: absolute; inset: 0; z-index: 18; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; background: rgba(15,23,42,.32); }
 .bb-start.off { display: none; }
 .bb-play { border: none; border-radius: 999px; padding: 13px 26px; font-size: 15px; font-weight: 800; font-family: inherit; color: #fff; background: linear-gradient(135deg,#0d9488,#14b8a6); box-shadow: 0 6px 18px rgba(13,148,136,.45); cursor: pointer; }
@@ -1297,15 +1300,26 @@ button.hp-ck.tap { cursor: pointer; font-family: inherit; }
   .bb-ctrl { margin-top: 6px; }
 }
 
-/* 가로 전체화면 공통 스테이지 */
-/* (네이티브 전체화면 단독 사용 시의 크기 — 회전·채우기 규칙보다 앞에 두어 아래 규칙이 이겨요) */
+/* ===== v116: 가로 전체화면 공통 스테이지 =====
+   네이티브 전체화면(:fullscreen)은 '화면 꽉 채우기'만 하고, 회전(transform)은 절대 겹치지 않아요.
+   회전(90도)은 네이티브를 못 쓰는 폴백에서만 써요. */
 .bb-player:fullscreen, .bb-player:-webkit-full-screen {
   padding-top: 0 !important;
   border-radius: 0 !important;
-  width: 100vw; height: 100vh;
+  width: 100% !important; height: 100% !important;
+  max-width: none !important; max-height: none !important;
+  margin: 0 !important;
   background: #000;
+  transform: none !important;
+  z-index: 99999;
 }
 .bb-player::backdrop { background: #000; }
+/* 방어용: 네이티브 전체화면 중에 회전 클래스가 남아 있어도 회전은 먹지 않게 */
+.bb-player:fullscreen.bb-fs-rot, .bb-player:-webkit-full-screen.bb-fs-rot {
+  transform: none !important;
+  width: 100% !important; height: 100% !important;
+  position: fixed !important;
+}
 .bb-player.bb-fs-rot {
   position: fixed !important;
   top: 0; left: 0;
@@ -1548,6 +1562,8 @@ function forceAppRefresh(e) {
       </div>
       <div class="bb-guard-top" onclick="event.stopPropagation();event.preventDefault();return false;"></div>
       <div class="bb-guard-br" onclick="event.stopPropagation();event.preventDefault();return false;"></div>
+      <!-- v116: 유튜브 링크·로고·추천영상·'다음에서 보기'를 1픽셀도 못 누르게 덮는 차단막 (탭 = 재생/멈춤) -->
+      <div class="bb-shield" id="bbShield" aria-label="영상 재생·멈춤" onclick="bbShieldTap(event)" oncontextmenu="event.preventDefault();return false;"></div>
       <div class="bb-start off" id="bbStartCover">
         <button type="button" class="bb-play" onclick="bbResume()">▶ 강의 재생</button>
         <div class="bb-start-s" id="bbStartS">누르면 바로 재생돼요</div>
@@ -1587,7 +1603,7 @@ function forceAppRefresh(e) {
     <div class="bb-listttl"><span id="bbGridTtl">📚 01강 ~ 16강</span><span class="bb-prog" id="bbProgTxt"></span></div>
     <div class="bb-grid" id="bbGrid"></div>
     <button type="button" class="bb-donebtn" id="bbDoneBtn" onclick="bbToggleDone()">✓ 이 강의 다 봤어요</button>
-    <div class="bb-foot">※ 무료로 공개된 유튜브 강의를 앱 안에서만 재생해요. 유튜브 앱·사이트로 나가는 버튼은 가려 뒀어요.<br>※ 빠바는 한 단원을 1·2편으로 나눠 올려서 두 편을 다 봐야 한 단원이 끝나요. (04·05강은 구판 개념 강의로 채웠어요)<br>※ 능률보카 3종은 하루(Day) 분량씩 이어져 있어요. Day를 누르면 그 날 분량 지점부터 재생돼요.<br>※ 중2·중1 능률보카는 단어·뜻·발음 암기형 강의예요.</div>
+    <div class="bb-foot">※ 무료로 공개된 유튜브 강의를 앱 안에서만 재생해요. 화면 전체를 차단막으로 막아 유튜브 앱·사이트로 나갈 수 없어요. (화면을 한 번 누르면 재생/멈춤)<br>※ 빠바는 한 단원을 1·2편으로 나눠 올려서 두 편을 다 봐야 한 단원이 끝나요. (04·05강은 구판 개념 강의로 채웠어요)<br>※ 능률보카 3종은 하루(Day) 분량씩 이어져 있어요. Day를 누르면 그 날 분량 지점부터 재생돼요.<br>※ 중2·중1 능률보카는 단어·뜻·발음 암기형 강의예요.</div>
   </div>
 </div>
 
@@ -4771,14 +4787,15 @@ window.onYouTubeIframeAPIReady = function () {
 /* v95: Day 딥링크 — start 초를 embed URL·playerVars 양쪽에 넣어 그 지점부터 재생 */
 function bbSrc(id, auto, st) {
   /* origin 은 인코딩하지 않고 그대로 넣어야 유튜브가 받아요(에듀키즈와 같은 방식) */
+  /* v116: controls=0·fs=0·disablekb=1 → 유튜브 자체 버튼·전체화면·키보드 조작을 꺼서 외부 이동을 막아요 */
   return 'https://www.youtube-nocookie.com/embed/' + id +
-    '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1' +
+    '?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&controls=0&fs=0&disablekb=1&iv_load_policy=3' +
     ((st && st > 0) ? ('&start=' + Math.floor(st)) : '') +
     (auto ? '&autoplay=1' : '') + '&origin=' +
     location.protocol + '//' + location.host;
 }
 function bbFrameHtml(id, auto, st) {
-  return '<iframe id="bbFrame" src="' + bbSrc(id, auto, st) + '" title="탑에듀 인강" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
+  return '<iframe id="bbFrame" src="' + bbSrc(id, auto, st) + '" title="탑에듀 인강" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe>';
 }
 
 function openBbaba(key) {
@@ -4875,14 +4892,18 @@ function bbMountVideo(id, st) {
         videoId: id,
         host: 'https://www.youtube-nocookie.com',
         width: '100%', height: '100%',
-        playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, start: st, origin: location.protocol + '//' + location.host },
+        playerVars: { rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, controls: 0, fs: 0, disablekb: 1, iv_load_policy: 3, start: st, origin: location.protocol + '//' + location.host },
         events: { onStateChange: bbOnState, onError: bbOnError, onReady: bbOnReady }
       });
       bbShowStart(true);
       setTimeout(function () {
         try {
           var f = BB_YT.getIframe();
-          if (f) { f.style.position = 'absolute'; f.style.top = '0'; f.style.left = '0'; f.style.width = '100%'; f.style.height = '100%'; f.style.border = '0'; }
+          if (f) {
+            f.style.position = 'absolute'; f.style.top = '0'; f.style.left = '0'; f.style.width = '100%'; f.style.height = '100%'; f.style.border = '0';
+            /* v116: 유튜브 iframe 자체의 전체화면 권한도 회수 (앱 무대만 전체화면) */
+            try { f.removeAttribute('allowfullscreen'); f.removeAttribute('allowFullScreen'); } catch (e) {}
+          }
         } catch (e) {}
       }, 400);
       return;
@@ -5117,51 +5138,67 @@ function bbHomeCards(ban) {
   return h;
 }
 
-/* ===== v92: ⛶ 가로 전체화면 =====
-   1) 네이티브 전체화면(requestFullscreen) + 화면 방향 잠금(landscape)을 먼저 시도하고,
-   2) 그게 안 되는 웹뷰·PWA·iOS에서도 무조건 넓은 가로 화면이 되도록 CSS 90도 회전 전체화면으로 전환해요. */
+/* ===== v116: ⛶ 가로 전체화면 (네이티브 ↔ CSS 회전 분리) =====
+   - 세로로 들고 있을 때: CSS 90도 회전 전체화면만 사용 (네이티브 전체화면과 동시에 걸리면 화면이 꺾여 잘렸어요)
+   - 실제로 가로일 때: 네이티브 전체화면을 먼저 시도하고, 안 되면 CSS '꽉 채우기'로 폴백
+   - 그래서 어느 상태에서도 회전(transform)과 네이티브 전체화면이 겹치지 않아요. */
+var BB_FS_MODE = '';           /* '' | 'css' | 'native' */
+var BB_FS_SELF_EXIT = false;   /* 우리가 닫는 중인지(OS 종료 이벤트와 구분) */
+
 function bbStage() { return document.getElementById('bbPlayerStage'); }
-function bbInFs() {
-  var st = bbStage();
-  return !!(st && (st.classList.contains('bb-fs-rot') || st.classList.contains('bb-fs-land')));
+function bbNativeEl() {
+  return document.fullscreenElement || document.webkitFullscreenElement ||
+         document.mozFullScreenElement || document.msFullscreenElement || null;
 }
-function bbFsPortrait() { return window.innerHeight > window.innerWidth; }
-function bbApplyFs() {
+function bbInFs() { return !!BB_FS_MODE; }
+function bbFsPortrait() { return window.innerHeight >= window.innerWidth; }
+function bbFsUi(on) {
+  var bar = document.getElementById('bbFsBar');
+  if (bar) bar.classList.toggle('on', !!on);
+  var btn = document.getElementById('bbFsBtn');
+  if (btn) {
+    btn.textContent = on ? '✕ 가로 전체화면 닫기' : '⛶ 가로 전체화면';
+    btn.classList.toggle('on', !!on);
+  }
+  var ov = document.getElementById('bbOverlay');
+  if (ov) ov.style.overflow = on ? 'hidden' : '';
+  try {
+    var ovOn = !!(ov && ov.classList.contains('on'));
+    document.body.style.overflow = (on || ovOn) ? 'hidden' : '';
+  } catch (e) {}
+}
+function bbApplyFsCss(portrait) {
   var st = bbStage();
   if (!st) return;
-  var portrait = bbFsPortrait();
   st.classList.add('bb-fs');
-  st.classList.toggle('bb-fs-rot', portrait);
+  st.classList.toggle('bb-fs-rot', !!portrait);
   st.classList.toggle('bb-fs-land', !portrait);
-  var bar = document.getElementById('bbFsBar');
-  if (bar) bar.classList.add('on');
-  var btn = document.getElementById('bbFsBtn');
-  if (btn) { btn.textContent = '✕ 가로 전체화면 닫기'; btn.classList.add('on'); }
-  var ov = document.getElementById('bbOverlay');
-  if (ov) ov.style.overflow = 'hidden';
-  try { document.body.style.overflow = 'hidden'; } catch (e) {}
+}
+function bbApplyFs() {   /* CSS 전체화면(폴백) 시작 */
+  BB_FS_MODE = 'css';
+  bbApplyFsCss(bbFsPortrait());
+  bbFsUi(true);
 }
 function bbExitFs() {
   var st = bbStage();
   if (!st) return;
+  BB_FS_MODE = '';
   st.classList.remove('bb-fs', 'bb-fs-rot', 'bb-fs-land');
-  var bar = document.getElementById('bbFsBar');
-  if (bar) bar.classList.remove('on');
-  var btn = document.getElementById('bbFsBtn');
-  if (btn) { btn.textContent = '⛶ 가로 전체화면'; btn.classList.remove('on'); }
-  var ov = document.getElementById('bbOverlay');
-  if (ov) ov.style.overflow = '';
-  try { document.body.style.overflow = (ov && ov.classList.contains('on')) ? 'hidden' : ''; } catch (e) {}
-  try {
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-      (document.exitFullscreen || document.webkitExitFullscreen || function () {}).call(document);
-    }
-  } catch (e) {}
+  bbFsUi(false);
+  if (bbNativeEl()) {
+    BB_FS_SELF_EXIT = true;
+    try {
+      var ex = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+      if (ex) { var p = ex.call(document); if (p && p.catch) p.catch(function () {}); }
+    } catch (e) {}
+    setTimeout(function () { BB_FS_SELF_EXIT = false; }, 600);
+  }
   try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
 }
 function bbLockLandscape() {
   try {
-    if (screen.orientation && screen.orientation.lock) {
+    /* 전체화면이 실제로 열린 다음에 방향을 잠가야 안드로이드 크롬이 받아줘요 */
+    if (screen.orientation && screen.orientation.lock && bbNativeEl()) {
       var lp = screen.orientation.lock('landscape');
       if (lp && lp.catch) lp.catch(function () {});
     }
@@ -5171,38 +5208,64 @@ function bbFullscreen() {
   var st = bbStage();
   if (!st) return;
   if (bbInFs()) { bbExitFs(); return; }
-  /* 1차: 네이티브 전체화면 + 가로 방향 잠금 (전체화면이 열린 다음에 방향을 잠가야 안드로이드 크롬이 받아줘요) */
-  var opened = false;
+  /* 세로: CSS 90도 회전만 — 네이티브를 같이 걸면 화면이 깨지던 원인 */
+  if (bbFsPortrait()) { bbApplyFs(); return; }
+  /* 가로: 네이티브 전체화면 먼저, 실패하면 CSS 꽉 채우기 */
+  var req = st.requestFullscreen || st.webkitRequestFullscreen || st.mozRequestFullScreen || st.msRequestFullscreen;
+  if (!req) { bbApplyFs(); return; }
+  var settled = false;
+  function ok() {
+    if (settled) return;
+    settled = true;
+    if (!bbNativeEl()) { bbApplyFs(); return; }   /* 브라우저가 열어주지 않았으면 CSS 폴백 */
+    BB_FS_MODE = 'native';
+    st.classList.add('bb-fs');
+    st.classList.remove('bb-fs-rot', 'bb-fs-land');
+    bbFsUi(true);
+    bbLockLandscape();
+  }
+  function no() { if (settled) return; settled = true; bbApplyFs(); }
   try {
-    var p = st.requestFullscreen ? st.requestFullscreen({ navigationUI: 'hide' })
-      : (st.webkitRequestFullscreen ? st.webkitRequestFullscreen() : null);
-    if (p && p.then) {
-      opened = true;
-      p.then(function () { bbLockLandscape(); }, function () { bbLockLandscape(); });
-    }
-  } catch (e) {}
-  if (!opened) bbLockLandscape();
-  /* 2차(핵심): 지원이 안 돼도 무조건 넓은 가로 — 세로로 들고 있으면 90도 회전 */
-  bbApplyFs();
+    var p = req.call(st, { navigationUI: 'hide' });
+    if (p && p.then) p.then(ok, no); else ok();
+  } catch (e) { no(); }
 }
 function bbFsResize() {
-  var st = bbStage();
-  if (!st || !st.classList.contains('bb-fs')) return;
-  bbApplyFs(); /* 폰을 돌리면 회전 ↔ 꽉 찬 가로 채우기를 다시 계산 */
+  if (BB_FS_MODE !== 'css') return;
+  bbApplyFsCss(bbFsPortrait()); /* 폰을 돌리면 회전 ↔ 꽉 찬 가로 채우기를 다시 계산 */
 }
 window.addEventListener('resize', bbFsResize);
-window.addEventListener('orientationchange', function () { setTimeout(bbFsResize, 260); });
-document.addEventListener('fullscreenchange', function () {
+window.addEventListener('orientationchange', function () { setTimeout(bbFsResize, 260); setTimeout(bbFsResize, 700); });
+try { if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener('change', function () { setTimeout(bbFsResize, 120); }); } catch (e) {}
+function bbFsChange() {
   var st = bbStage();
-  if (!st || !st.classList.contains('bb-fs')) return;
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    /* OS 전체화면이 풀리면(ESC·뒤로가기) CSS 가로 화면도 같이 닫아요 */
-    var nativeWasOn = st.getAttribute('data-bbfs-native') === '1';
-    if (nativeWasOn) { st.setAttribute('data-bbfs-native', '0'); bbExitFs(); }
-  } else {
-    st.setAttribute('data-bbfs-native', '1');
+  if (!st) return;
+  if (bbNativeEl()) {
+    /* 네이티브 전체화면이 열렸다면 회전 클래스는 즉시 걷어내요 (겹치면 화면이 꺾여요) */
+    if (BB_FS_MODE === 'css') BB_FS_MODE = 'native';
+    if (BB_FS_MODE === 'native') {
+      st.classList.add('bb-fs');
+      st.classList.remove('bb-fs-rot', 'bb-fs-land');
+      bbFsUi(true);
+    }
+    return;
   }
-});
+  if (BB_FS_MODE !== 'native') return;
+  if (BB_FS_SELF_EXIT) return;
+  /* ESC·뒤로가기로 OS 전체화면이 풀리면 앱 전체화면도 같이 정리해요 */
+  BB_FS_MODE = '';
+  st.classList.remove('bb-fs', 'bb-fs-rot', 'bb-fs-land');
+  bbFsUi(false);
+  try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
+}
+document.addEventListener('fullscreenchange', bbFsChange);
+document.addEventListener('webkitfullscreenchange', bbFsChange);
+
+/* v116: 차단막 탭 = 앱의 재생/멈춤 (유튜브로는 절대 나가지 않아요) */
+function bbShieldTap(e) {
+  if (e) { try { e.stopPropagation(); e.preventDefault(); } catch (x) {} }
+  bbTogglePlay();
+}
 
 /* ============ v105: 🏆 12월 성실왕 명예의 전당 안내 배너 (학생 홈 전용) ============ */
 function drawHallOfFameBanner(){
@@ -8352,7 +8415,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v115';
+var TOPEDU_APP_VERSION = 'v116';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
