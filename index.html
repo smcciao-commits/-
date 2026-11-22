@@ -2399,12 +2399,15 @@ function ch5DailyInfo(ban, name){
     if (doneNames.indexOf(list[i].name) >= 0 && isSetCompleteByName(ban, name, list[i].name)) { dOne = list[i]; break; }
   }
   if (!dOne) {
-    var dbu = getStudentProgressDB(ban, name), t0 = new Date();
-    t0.setHours(0, 0, 0, 0);
-    for (i = 0; i < list.length; i++) {
-      var p = dbu[list[i].name];
-      if (p && p.updatedAt && Number(p.updatedAt) >= t0.getTime() && isSetCompleteByName(ban, name, list[i].name)) { dOne = list[i]; break; }
-    }
+    /* 보조 기록: 실제로 그 Day를 끝낸 날짜를 따로 적어 둠 (시트 복구 기록의 updatedAt은 복구 시각이라 쓰지 않음) */
+    try {
+      var mk = JSON.parse(localStorage.getItem('topedu_ch5_doneday') || 'null');
+      if (mk && mk.date === tdKey() && mk.set) {
+        for (i = 0; i < list.length; i++) {
+          if (list[i].name === mk.set && isSetCompleteByName(ban, name, mk.set)) { dOne = list[i]; break; }
+        }
+      }
+    } catch(e){}
   }
   var first = null;
   for (i = 0; i < list.length; i++) { if (!isSetCompleteByName(ban, name, list[i].name)) { first = list[i]; break; } }
@@ -9005,6 +9008,10 @@ function recordDailyStudy(ban,name,setName,isComplete){
     d.done = 1; d.doneAt = Date.now();
     if(setName) d.doneSet = setName;
     db.lastDone = t;
+    /* v111: 초5 '능률VOCA 초등필수 Day' 세트를 끝낸 날짜 기록 (하루 1 Day 오늘의 학습 판정용) */
+    if(ban === '초5' && setName && String(setName).indexOf('능률VOCA 초등필수 Day ') === 0){
+      try { localStorage.setItem('topedu_ch5_doneday', JSON.stringify({ date: t, set: setName, at: Date.now() })); } catch(e){}
+    }
   }
   db.days[t] = d;
   var st = computeStreak(db.days);
