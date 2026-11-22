@@ -4752,9 +4752,12 @@ function hmSpeakSeq(text, rate, done) {
     const v = hmVoice();
     if (v) u.voice = v;
     let fired = false;
-    const next = function () { if (fired) return; fired = true; if (done) done(); };
+    let timer = null;
+    const next = function () { if (fired) return; fired = true; if (timer) clearTimeout(timer); if (done) done(); };
     u.onend = next;
     u.onerror = next;
+    /* 안드로이드 크롬이 화면이 꺼지거나 onend를 못 보내도 멈추지 않게 안전장치 */
+    timer = setTimeout(next, Math.min(20000, 1600 + String(text).length * 95));
     window.speechSynthesis.speak(u);
   } catch (e) { if (done) done(); }
 }
