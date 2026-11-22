@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v110: 시트 세트 어원 줄 분리)
-const CACHE_NAME = 'topedu-pwa-v110';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v111: 초5 Day-by-Day 오늘의 학습 · Hand in Hand Unit 06~12)
+const CACHE_NAME = 'topedu-pwa-v111';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
