@@ -5371,6 +5371,8 @@ function showHome(){
   html += drawAttendanceCalendar(meInfo);
   html += drawNotifCard(me);
   
+  /* v118: 📖 지문·어법·변형 마스터 배너 — 실제 자료가 있는 반(수지중2·예비고1)과 선생님 화면에만 표시 */
+  if (me.ban === '수지중2' || me.ban === '예비고1' || me.ban === '선생님') {
   var rTitle = '📖 수지중2 외부지문 독해·어법 변형 마스터';
   var rSub = 'Lesson 7 외부 1·2번 지문 정독 & 7대 킬러 변형 모의';
   if (me.ban === '예비고1') {
@@ -5385,12 +5387,16 @@ function showHome(){
     '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#0d9488">' + rTitle + '</div>' +
     '<div style="font-size:12px;color:#718096;margin-top:2px">' + rSub + '</div></div>' +
     '<button style="background:#0d9488;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">풀러가기 →</button></div>';
+  }
 
   /* v86: ✍️ 내신 서술형(writing.html) 바로가기 — 로그인 세션 그대로 이어짐 */
+  /* v118: writing.html은 중·고등부용 — 초등부(초5·풍덕초6)에서는 배너 숨김 */
+  if (me.ban !== '초5' && me.ban !== '풍덕초6') {
   html += '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg,#f5f3ff,#faf5ff);border:2px solid #a78bfa;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(139,92,246,0.14)" onclick="openWritingApp()">' +
     '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#6d28d9">✍️ 내신 서술형 · 어순배열 마스터</div>' +
     '<div style="font-size:12px;color:#7c6a9c;margin-top:2px">어순배열 · 어형변화 · 조건영작 서술형 실전 훈련</div></div>' +
     '<button style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">쓰러가기 →</button></div>';
+  }
   /* v95: 📺 반별 유튜브 인강관 — 예비고1(빠바+능률VOCA 어원편)·중2(주니어 실력)·중1(중등필수), 원장님은 4종 전부 */
   html += bbHomeCards(me.ban);
   
@@ -8761,7 +8767,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v117';
+var TOPEDU_APP_VERSION = 'v118';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };

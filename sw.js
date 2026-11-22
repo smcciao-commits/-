@@ -1,5 +1,5 @@
 // TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v117: 틀린 단어 복습 모드 + 선생님 진도 그래프)
-const CACHE_NAME = 'topedu-pwa-v117';
+const CACHE_NAME = 'topedu-pwa-v118';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
