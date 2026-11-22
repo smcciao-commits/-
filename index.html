@@ -982,6 +982,15 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .hwc-prev-line:first-of-type { border-top: 0; padding-top: 0; }
 .hwc-prev-txt { flex: 1 1 auto; min-width: 0; font-size: 10px; line-height: 1.45; color: #0f766e; word-break: break-all; }
 .hwc-prev-cp { flex: 0 0 auto; padding: 3px 9px; border-radius: 8px; border: 1.5px solid #99f6e4; background: #fff; color: #0d9488; font-family: inherit; font-size: 10.5px; font-weight: 800; white-space: nowrap; cursor: pointer; }
+.hwc-cell.on-s { border-color: #2563eb; background: #dbeafe; box-shadow: 0 2px 8px rgba(37,99,235,0.16); }
+.hwc-cell.on-s .hwc-cl, .hwc-cell.on-s .hwc-cs { color: #1d4ed8; }
+.hwc-cell[data-kind="score"] .hwc-cs { font-size: 15px; }
+.hwc-prev.rep { max-height: 46vh; font-size: 11.5px; line-height: 1.6; color: #134e4a; }
+.hwc-prev.rep .hwc-prev-txt { font-size: 11px; white-space: pre-wrap; color: #134e4a; }
+.hwc-rep-warn { margin: 6px 0 0; padding: 6px 8px; border-radius: 8px; background: #fff7ed; border: 1px solid #fdba74; color: #9a3412; font-size: 11px; font-weight: 700; white-space: normal; }
+.hwc-rep-acts { display: flex; gap: 6px; margin-top: 8px; }
+.hwc-rep-act { flex: 1 1 0; min-width: 0; padding: 9px 6px; border-radius: 10px; border: none; background: linear-gradient(135deg,#0369a1,#0ea5e9); color: #fff; font-family: inherit; font-size: 12px; font-weight: 800; line-height: 1.25; cursor: pointer; }
+.hwc-rep-act[disabled] { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
 .hwc-prev-all { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #99f6e4; font-size: 10px; color: #0d9488; }
 @media (max-width: 420px) {
   .hwc-sms { font-size: 10.5px; padding: 4px 7px; }
@@ -3530,6 +3539,89 @@ function hwcItemsSave(list){
 }
 function hwcShort(it){ return HWC_SHORT[it] || it; }
 function hwcWordItem(){ var a = hwcItems(); for(var i = 0; i < a.length; i++){ if(a[i] === '단어') return a[i]; } return a[0] || '단어'; }
+
+/* ================= v119: 반별 숙제 항목 + 반별 학부모 리포트 =================
+   · 수지중1·수지중2·예비고1 은 반마다 정해진 항목으로 체크합니다(다른 반은 위 공통 항목 그대로).
+   · 시트 '숙제체크' 탭은 지금처럼 한 칸 = 한 줄(날짜|반|이름|항목|값|수정시각)이라
+     항목 이름만 반별로 달라지고 형식은 그대로예요. 단어시험(/130점)은 값 칸에 점수 숫자.
+   · 문자는 미리보기 → [복사·에듀스탭 열기] 까지만. 자동 발송 버튼은 만들어 두었지만 꺼져 있어요. */
+var HWC_CLASS_ITEMS = {
+  '수지중1': {
+    title: '수지중1반', exam: true,
+    items: [
+      { name: '리딩튜터 독해/워크북', short: '리딩튜터' },
+      { name: '쓰작 영작', short: '쓰작' },
+      { name: '단어시험', short: '단어시험' },
+      { name: '탑에듀 단어앱', short: '단어앱', app: true },
+      { name: '문법/내신대비 숙제', short: '문법·내신' }
+    ]
+  },
+  '수지중2': {
+    title: '수지중2반', exam: true,
+    items: [
+      { name: '수능딥독 독해/워크북', short: '수능딥독' },
+      { name: '쓰작 영작', short: '쓰작' },
+      { name: '단어시험', short: '단어시험' },
+      { name: '탑에듀 단어앱', short: '단어앱', app: true },
+      { name: '문법/내신대비 숙제', short: '문법·내신' }
+    ]
+  },
+  '예비고1': {
+    title: '예비고1', exam: false,
+    items: [
+      { name: '빠른독해 바른독해/해석쓰기', short: '빠독바독' },
+      { name: '올림포스 고등모의고사', short: '올림포스' },
+      { name: '쓰작 작문', short: '쓰작' },
+      { name: '탑에듀 단어앱', short: '단어앱', app: true },
+      { name: '기타 숙제', short: '기타' },
+      { name: '단어시험 점수', short: '단어시험', label: '단어시험', max: 130 }
+    ]
+  }
+};
+/* 자동 발송 스위치 — 원장님이 켜라고 하시기 전까지 false 로 둡니다. */
+var HWC_SMS_AUTO = false;
+function hwcClassCfg(ban){ return HWC_CLASS_ITEMS[String(ban || '')] || null; }
+/* 그 반의 항목 정보 [{name, short, max?, app?}] — 반별 설정이 없으면 공통 항목 */
+function hwcItemDefs(ban){
+  var c = hwcClassCfg(ban);
+  if(c) return c.items;
+  return hwcItems().map(function(it){ return { name: it, short: hwcShort(it), app: it === '단어' }; });
+}
+function hwcItemsFor(ban){ return hwcItemDefs(ban).map(function(d){ return d.name; }); }
+function hwcItemDef(ban, name){
+  var a = hwcItemDefs(ban);
+  for(var i = 0; i < a.length; i++){ if(a[i].name === name) return a[i]; }
+  return { name: name, short: hwcShort(name) };
+}
+function hwcIsScore(ban, name){ return !!hwcItemDef(ban, name).max; }
+/* ⭕ 체크 항목만 (점수 항목은 빼고) */
+function hwcCheckItemsFor(ban){ return hwcItemDefs(ban).filter(function(d){ return !d.max; }).map(function(d){ return d.name; }); }
+function hwcAppItemFor(ban){
+  var a = hwcItemDefs(ban);
+  for(var i = 0; i < a.length; i++){ if(a[i].app) return a[i].name; }
+  return a.length ? a[0].name : '단어';
+}
+/* 보이는 학생들의 항목을 순서대로 합친 목록 (반이 섞여 있을 때 일괄 버튼용) */
+function hwcUnionDefs(list){
+  var seen = {}, out = [];
+  (list || []).forEach(function(s){
+    hwcItemDefs(s.ban).forEach(function(d){ if(!seen[d.name]){ seen[d.name] = 1; out.push(d); } });
+  });
+  return out;
+}
+/* 학생 한 명이 ⭕ 체크 항목을 모두 ⭕ 로 받았나 (점수 항목은 빼고 봄) */
+function hwcRecAllO(ban, rec){
+  var its = hwcCheckItemsFor(ban);
+  if(!its.length) return false;
+  for(var i = 0; i < its.length; i++){ if((rec || {})[its[i]] !== 'o') return false; }
+  return true;
+}
+function hwcRecAny(ban, rec){
+  var its = hwcItemsFor(ban);
+  for(var i = 0; i < its.length; i++){ if((rec || {})[its[i]]) return true; }
+  return false;
+}
+function hwcScoreText(v, max){ return (v === '' || v == null) ? '' : (String(v) + '/' + max + '점'); }
 function hwcRenameItem(oldName, newName){
   oldName = String(oldName || '').trim(); newName = String(newName || '').trim();
   if(!oldName || !newName || oldName === newName) return false;
@@ -3759,8 +3851,9 @@ function hwcAppRefresh(force){
 function hwcAutoFillWord(){
   var listEl = document.getElementById('hwList');
   if(!listEl) return;
-  var word = hwcWordItem(), date = HWC_DATE || hwcToday(), n = 0;
+  var date = HWC_DATE || hwcToday(), n = 0;
   [].forEach.call(listEl.querySelectorAll('.hwc-row'), function(row){
+    var word = hwcAppItemFor(row.dataset.ban);   /* v119: 반별 '탑에듀 단어앱' 항목 */
     var rec = HWC_APP[hwcAppKey(row.dataset.ban, row.dataset.name)];
     if(!rec || !rec.done) return;
     var cell = null;
@@ -3773,7 +3866,7 @@ function hwcAutoFillWord(){
   hwcRefreshCounts();
   hwcRefreshBulk();
   var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
-  hwcToast(n ? ('📱 앱 완료 ' + n + '명 → ' + word + ' ⭕ 채웠어요') : '앱에서 완료한 학생이 없어요');
+  hwcToast(n ? ('📱 앱 완료 ' + n + '명 → 단어앱 ⭕ 채웠어요') : '앱에서 완료한 학생이 없어요');
 }
 
 /* ---------- 열기 / 닫기 ---------- */
@@ -3798,24 +3891,31 @@ function closeHwCheck(){
 }
 
 /* ---------- 카운트 ---------- */
-function hwcCountsHTML(list, day, items){
+function hwcCountsHTML(list, day){
   var allO = 0, appDone = 0, h = '';
   list.forEach(function(s){
-    var rec = day[s.ban + '|' + s.name] || {}, any = false, okAll = true;
-    items.forEach(function(it){ if(rec[it]) any = true; if(rec[it] !== 'o') okAll = false; });
-    if(any && okAll) allO++;
+    var rec = day[s.ban + '|' + s.name] || {};
+    if(hwcRecAllO(s.ban, rec)) allO++;
     var ar = HWC_APP[hwcAppKey(s.ban, s.name)];
     if(ar && ar.done) appDone++;
   });
-  h += '<span class="hwc-cnt all">학생 <b>' + list.length + '</b>명 · ' + items.length + '항목 모두⭕ <b>' + allO + '</b>명</span>';
+  h += '<span class="hwc-cnt all">학생 <b>' + list.length + '</b>명 · 모두⭕ <b>' + allO + '</b>명</span>';
   h += '<span class="hwc-cnt app">📱 앱 완료 <b>' + appDone + '</b>명</span>';
-  items.forEach(function(it){
+  hwcUnionDefs(list).forEach(function(d){
+    var it = d.name;
+    var who = list.filter(function(s){ return hwcItemsFor(s.ban).indexOf(it) >= 0; });
+    if(d.max){
+      var sum = 0, n = 0;
+      who.forEach(function(s){ var v = (day[s.ban + '|' + s.name] || {})[it]; if(v !== undefined && v !== '' && !isNaN(Number(v))){ sum += Number(v); n++; } });
+      h += '<span class="hwc-cnt"><b>' + esc(d.short) + '</b> 입력 ' + n + '/' + who.length + (n ? ' · 평균 ' + Math.round(sum / n) + '/' + d.max : '') + '</span>';
+      return;
+    }
     var c = { o: 0, t: 0, x: 0, u: 0 };
-    list.forEach(function(s){
+    who.forEach(function(s){
       var v = (day[s.ban + '|' + s.name] || {})[it];
       if(v === 'o' || v === 't' || v === 'x') c[v]++; else c.u++;
     });
-    h += '<span class="hwc-cnt"><b>' + esc(hwcShort(it)) + '</b> <i style="font-style:normal;color:#15803d">⭕' + c.o + '</i>'
+    h += '<span class="hwc-cnt"><b>' + esc(d.short) + '</b> <i style="font-style:normal;color:#15803d">⭕' + c.o + '</i>'
       + ' <i style="font-style:normal;color:#b45309">△' + c.t + '</i>'
       + ' <i style="font-style:normal;color:#b91c1c">✕' + c.x + '</i>'
       + (c.u ? ' <i style="font-style:normal;color:#94a3b8">–' + c.u + '</i>' : '') + '</span>';
@@ -3846,7 +3946,7 @@ function hwcRefreshBulk(){
     var it = b.dataset.bit, allO = rows.length > 0;
     [].forEach.call(rows, function(row){
       [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
-        if(c.dataset.item === it && (c.dataset.v || '') !== 'o') allO = false;
+        if(c.dataset.kind !== 'score' && c.dataset.item === it && (c.dataset.v || '') !== 'o') allO = false;
       });
     });
     var bl2 = b.querySelector('.hwc-bl2');
@@ -3858,7 +3958,7 @@ function hwcRefreshBulk(){
   var full = rows.length > 0;
   [].forEach.call(rows, function(row){
     [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
-      if((c.dataset.v || '') !== 'o') full = false;
+      if(c.dataset.kind !== 'score' && (c.dataset.v || '') !== 'o') full = false;
     });
   });
   var ba = document.getElementById('hwAllO');
@@ -3882,7 +3982,7 @@ function hwcPanelHTML(date, items){
     h += '<div class="hwc-pbody">';
     h += '<div class="hwc-plab">' + esc(label) + ' · 내신숙제 오늘 내용</div>';
     h += '<div class="hwc-prow"><input type="text" class="hwc-pin" id="hwMemo" value="' + esc(memo) + '" maxlength="90" placeholder="예) 프린트 3장 / 교재 p.42~45"><button type="button" class="hwc-psave" id="hwMemoSave">저장</button></div>';
-    h += '<div class="hwc-plab" style="margin-top:11px">숙제 항목 (이름을 바꾸면 저장된 기록도 함께 옮겨져요 · 모든 반 공통)</div>';
+    h += '<div class="hwc-plab" style="margin-top:11px">공통 숙제 항목 (이름을 바꾸면 저장된 기록도 함께 옮겨져요 · 수지중1·수지중2·예비고1은 반별 고정 항목이라 여기서 안 바뀌어요)</div>';
     h += '<div class="hwc-items">';
     items.forEach(function(it){
       h += '<div class="hwc-itemrow"><input type="text" class="hwc-item-in" data-old="' + esc(it) + '" value="' + esc(it) + '" maxlength="8">'
@@ -3904,15 +4004,18 @@ function renderHwCheck(){
   if(!el) return;
   var date = HWC_DATE || hwcToday();
   var day = hwcDayRaw(date);
-  var items = hwcItems();
   var list = hwcStudents().filter(function(s){ return HWC_FILTER === '전체' || hwcGroup(s.ban) === HWC_FILTER; });
   var chips = ['전체', '초등', '중1', '중2', '예비고1', '고등'];
   HWC_APP = hwcAppBuild();
+  /* v119: 반마다 항목이 달라서, 보이는 학생들의 ⭕ 항목을 합쳐 일괄 버튼을 만들어요(점수 항목 제외) */
+  var bulkDefs = hwcUnionDefs(list).filter(function(d){ return !d.max; });
+  var items = bulkDefs.map(function(d){ return d.name; });
   /* v100: 일괄 버튼 상태 — 보이는 학생이 그 항목을 전부 ○ 로 채워져 있나 */
   var itAllO = {}, allFull = list.length > 0;
   items.forEach(function(it){
-    var ok = list.length > 0;
-    list.forEach(function(s){
+    var who = list.filter(function(s){ return hwcItemsFor(s.ban).indexOf(it) >= 0; });
+    var ok = who.length > 0;
+    who.forEach(function(s){
       var rec0 = day[s.ban + '|' + s.name] || {};
       if(rec0[it] !== 'o') ok = false;
     });
@@ -3926,9 +4029,10 @@ function renderHwCheck(){
   h += '<div class="hwc-top">';
   h += '<div class="hwc-daterow"><input type="date" class="hwc-date" id="hwDate" value="' + esc(date) + '"><button type="button" class="hwc-today" id="hwToday">오늘</button></div>';
   h += '<div class="hwc-chips">' + chips.map(function(x){ return '<button type="button" class="hwc-chip' + (x === HWC_FILTER ? ' on' : '') + '" data-f="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>';
-  h += '<div class="hwc-counts" id="hwCounts">' + hwcCountsHTML(list, day, items) + '</div>';
-  h += '<div class="hwc-bulk">' + items.map(function(it){
-    return '<button type="button" class="hwc-bulkb' + (itAllO[it] ? ' off' : '') + '" data-bit="' + esc(it) + '" aria-pressed="' + (itAllO[it] ? 'true' : 'false') + '" title="' + (itAllO[it] ? esc(it + ' 기록 전체 해제') : esc(it + ' 보이는 학생 전원 ○')) + '"><span class="hwc-bl1">' + esc(hwcShort(it)) + ' 전체</span><span class="hwc-bl2">' + (itAllO[it] ? '해제' : '○') + '</span></button>';
+  h += '<div class="hwc-counts" id="hwCounts">' + hwcCountsHTML(list, day) + '</div>';
+  h += '<div class="hwc-bulk">' + bulkDefs.map(function(d){
+    var it = d.name;
+    return '<button type="button" class="hwc-bulkb' + (itAllO[it] ? ' off' : '') + '" data-bit="' + esc(it) + '" aria-pressed="' + (itAllO[it] ? 'true' : 'false') + '" title="' + (itAllO[it] ? esc(it + ' 기록 전체 해제') : esc(it + ' 보이는 학생 전원 ○')) + '"><span class="hwc-bl1">' + esc(d.short) + ' 전체</span><span class="hwc-bl2">' + (itAllO[it] ? '해제' : '○') + '</span></button>';
   }).join('') + '</div>';
   h += '</div>';
   h += hwcPanelHTML(date, items);
@@ -3954,16 +4058,21 @@ function renderHwCheck(){
   if(!list.length) h += '<div class="hwc-empty">이 반 학생이 없어요. 다른 반을 골라 주세요.</div>';
   list.forEach(function(s){
     var rec = day[s.ban + '|' + s.name] || {};
+    var defs = hwcItemDefs(s.ban);
     var bd = hwcBadgeHtml(HWC_APP[hwcAppKey(s.ban, s.name)]);
     h += '<div class="hwc-row" data-ban="' + esc(s.ban) + '" data-name="' + esc(s.name) + '">'
       + '<div class="hwc-r1"><div class="hwc-nm">' + esc(s.name) + (HWC_FILTER === '전체' ? '<u>' + esc(s.ban) + '</u>' : '') + '</div>'
       + hwcSmsBtnHtml(date, s.ban, s.name)
       + '<div class="hwc-badge">' + bd + '</div></div>'
-      + '<div class="hwc-cells" style="grid-template-columns:repeat(' + items.length + ',minmax(0,1fr))">'
-      + items.map(function(it){
-          var v = rec[it] || '';
+      + '<div class="hwc-cells" style="grid-template-columns:repeat(' + defs.length + ',minmax(0,1fr))">'
+      + defs.map(function(d){
+          var it = d.name, v = (rec[it] === undefined || rec[it] === null) ? '' : String(rec[it]);
+          if(d.max){
+            return '<button type="button" class="hwc-cell' + (v !== '' ? ' on-s' : '') + '" data-kind="score" data-max="' + d.max + '" data-item="' + esc(it) + '" data-v="' + esc(v) + '" aria-pressed="' + (v !== '' ? 'true' : 'false') + '" title="' + esc(it + ' ' + (v !== '' ? hwcScoreText(v, d.max) : '점수 입력')) + '">'
+              + '<span class="hwc-cl">' + esc(d.short) + '</span><span class="hwc-cs">' + (v !== '' ? esc(v) : '/' + d.max) + '</span></button>';
+          }
           return '<button type="button" class="hwc-cell' + (v ? ' on-' + v : '') + '" data-item="' + esc(it) + '" data-v="' + v + '" aria-pressed="' + (v ? 'true' : 'false') + '" title="' + esc(it + ' ' + hwcLabel(v)) + '">'
-            + '<span class="hwc-cl">' + esc(hwcShort(it)) + '</span><span class="hwc-cs">' + hwcGlyph(v) + '</span></button>';
+            + '<span class="hwc-cl">' + esc(d.short) + '</span><span class="hwc-cs">' + hwcGlyph(v) + '</span></button>';
         }).join('')
       + '</div></div>';
   });
@@ -3971,11 +4080,11 @@ function renderHwCheck(){
 
   h += '<div class="hwc-foot">'
     + '<div class="hwc-frow"><button type="button" class="hwc-sub app" id="hwAppPull">🔄 앱 단어 불러오기</button>'
-    + '<button type="button" class="hwc-sub fill" id="hwAppFill">📱 앱 완료 → ' + esc(hwcShort(hwcWordItem())) + ' ⭕</button></div>'
+    + '<button type="button" class="hwc-sub fill" id="hwAppFill">📱 앱 완료 → 단어앱 ⭕</button></div>'
     + '<div class="hwc-frow"><button type="button" class="hwc-sub' + (allFull ? ' done' : '') + '" id="hwAllO" aria-pressed="' + (allFull ? 'true' : 'false') + '">' + (allFull ? '전체 ⭕ 해제' : '전체 ⭕ 처리') + '</button>'
     + '<button type="button" class="hwc-sub clear" id="hwAllClear">전체 해제</button></div>'
     + '<div class="hwc-frow"><button type="button" class="hwc-big" id="hwCopy">📋 에듀스탭/피클용 요약 복사</button></div>'
-    + '<div class="hwc-frow"><button type="button" class="hwc-big sms" id="hwSmsAll">📩 ⭕ 학생 문자 한꺼번에 보기</button></div>'
+    + '<div class="hwc-frow"><button type="button" class="hwc-big sms" id="hwSmsAll">📩 학부모 리포트 한꺼번에 보기</button></div>'
     + '<div class="hwc-prev" id="hwPrev"></div>'
     + '</div>';
   el.innerHTML = h;
@@ -3992,6 +4101,7 @@ function renderHwCheck(){
   [].forEach.call(el.querySelectorAll('.hwc-row'), function(row){
     [].forEach.call(row.querySelectorAll('.hwc-cell'), function(btn){
       btn.onclick = function(){
+        if(btn.dataset.kind === 'score'){ hwcAskScore(row, btn); return; }
         var next = hwcNextVal(btn.dataset.v || '');
         hwcPaintCell(btn, next);
         hwcSaveCell(HWC_DATE || hwcToday(), row.dataset.ban, row.dataset.name, btn.dataset.item, next);
@@ -4012,12 +4122,12 @@ function renderHwCheck(){
       var allO = true;
       [].forEach.call(rows, function(row){
         [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
-          if(c.dataset.item === it && (c.dataset.v || '') !== 'o') allO = false;
+          if(c.dataset.kind !== 'score' && c.dataset.item === it && (c.dataset.v || '') !== 'o') allO = false;
         });
       });
       [].forEach.call(rows, function(row){
         [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
-          if(c.dataset.item !== it) return;
+          if(c.dataset.item !== it || c.dataset.kind === 'score') return;
           if(allO){
             if(!c.dataset.v) return;
             hwcPaintCell(c, '');
@@ -4088,10 +4198,11 @@ function renderHwCheck(){
     var date0 = HWC_DATE || hwcToday(), n = 0;
     var full = true;
     [].forEach.call(rows, function(row){
-      [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){ if((c.dataset.v || '') !== 'o') full = false; });
+      [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){ if(c.dataset.kind !== 'score' && (c.dataset.v || '') !== 'o') full = false; });
     });
     [].forEach.call(rows, function(row){
       [].forEach.call(row.querySelectorAll('.hwc-cell'), function(c){
+        if(c.dataset.kind === 'score') return;   /* v119: 단어시험 점수는 일괄 처리에서 빼요 */
         if(full){
           if(!c.dataset.v) return;
           hwcPaintCell(c, '');
@@ -4108,7 +4219,7 @@ function renderHwCheck(){
     hwcRefreshCounts();
     hwcRefreshBulk();
     var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
-    hwcToast(full ? ('보이는 학생 ' + rows.length + '명 · 모든 항목 해제했어요') : ('보이는 학생 ' + rows.length + '명 · ' + hwcItems().length + '항목 모두 ⭕ 처리했어요'));
+    hwcToast(full ? ('보이는 학생 ' + rows.length + '명 · 모든 항목 해제했어요') : ('보이는 학생 ' + rows.length + '명 · 모든 항목 ⭕ 처리했어요'));
   };
   var bclr = document.getElementById('hwAllClear');
   if(bclr) bclr.onclick = function(){
@@ -4145,13 +4256,41 @@ function renderHwCheck(){
   hwcRefreshBulk();
 }
 function hwcPaintCell(btn, v){
-  v = v || '';
+  v = (v === undefined || v === null) ? '' : String(v);
+  if(btn.dataset.kind === 'score'){
+    var mx = Number(btn.dataset.max) || 100;
+    btn.dataset.v = v;
+    btn.className = 'hwc-cell' + (v !== '' ? ' on-s' : '');
+    btn.setAttribute('aria-pressed', v !== '' ? 'true' : 'false');
+    btn.setAttribute('title', btn.dataset.item + ' ' + (v !== '' ? hwcScoreText(v, mx) : '점수 입력'));
+    var s0 = btn.querySelector('.hwc-cs');
+    if(s0) s0.textContent = v !== '' ? v : ('/' + mx);
+    return;
+  }
   btn.dataset.v = v;
   btn.className = 'hwc-cell' + (v ? ' on-' + v : '');
   btn.setAttribute('aria-pressed', v ? 'true' : 'false');
   btn.setAttribute('title', btn.dataset.item + ' ' + hwcLabel(v));
   var s = btn.querySelector('.hwc-cs');
   if(s) s.textContent = hwcGlyph(v);
+}
+
+/* v119: 단어시험 점수 칸 — 누르면 점수 입력(비우면 지움) */
+function hwcAskScore(row, btn){
+  var mx = Number(btn.dataset.max) || 100, cur = btn.dataset.v || '';
+  var ans = prompt(row.dataset.name + ' · ' + (btn.dataset.item || '단어시험') + ' (0~' + mx + '점)\n비우고 확인하면 지워져요', cur);
+  if(ans === null) return;
+  ans = String(ans).replace(/[^0-9]/g, '');
+  if(ans !== ''){
+    var n = parseInt(ans, 10);
+    if(isNaN(n) || n < 0 || n > mx){ hwcToast('0~' + mx + ' 사이 숫자로 넣어 주세요'); return; }
+    ans = String(n);
+  }
+  if(ans === cur) return;
+  hwcPaintCell(btn, ans);
+  hwcSaveCell(HWC_DATE || hwcToday(), row.dataset.ban, row.dataset.name, btn.dataset.item, ans);
+  hwcRefreshCounts();
+  var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
 }
 
 /* ---------- 요약 문자 만들기 ---------- */
@@ -4161,26 +4300,25 @@ function hwcBuildText(){
   var di = document.getElementById('hwDate');
   var date = (di && di.value) ? di.value : (HWC_DATE || hwcToday());
   var mm = parseInt(date.slice(5, 7), 10), dd = parseInt(date.slice(8, 10), 10);
-  var items = hwcItems();
   var memo = hwcMemoGet(date, HWC_FILTER);
   var group = (HWC_FILTER === '전체') ? '전체' : HWC_FILTER;
   var lines = [], un = 0, allDone = 0;
   [].forEach.call(listEl.querySelectorAll('.hwc-row'), function(r){
     var rec = hwcRowRec(r), parts = [], any = false;
-    items.forEach(function(it){
-      var v = rec[it] || ''; if(v) any = true;
-      parts.push(hwcShort(it) + (v === 'o' ? '⭕' : (v === 't' ? '△' : (v === 'x' ? '✕' : '–'))));
+    hwcItemDefs(r.dataset.ban).forEach(function(d){
+      var v = rec[d.name] || ''; if(v) any = true;
+      if(d.max){ parts.push(d.short + ' ' + (v ? v + '/' + d.max : '–')); return; }
+      parts.push(d.short + (v === 'o' ? '⭕' : (v === 't' ? '△' : (v === 'x' ? '✕' : '–'))));
     });
     if(!any){ un++; return; }
-    var okAll = items.every(function(it){ return rec[it] === 'o'; });
-    if(okAll) allDone++;
+    if(hwcRecAllO(r.dataset.ban, rec)) allDone++;
     lines.push('- ' + r.dataset.name + (HWC_FILTER === '전체' ? '(' + r.dataset.ban + ')' : '') + ': ' + parts.join(' '));
   });
   if(!lines.length) return '';
   var txt = '[' + mm + '/' + dd + ' ' + group + ' 숙제 현황]';
   if(memo) txt += '\n📌 내신숙제: ' + memo;
   txt += '\n' + lines.join('\n');
-  txt += '\n(' + items.length + '항목 모두 ⭕ ' + allDone + '명' + (un ? ' · 미확인 ' + un + '명' : '') + ')';
+  txt += '\n(모두 ⭕ ' + allDone + '명' + (un ? ' · 미확인 ' + un + '명' : '') + ')';
   return txt;
 }
 /* ================= v103: 📩 학부모 문자 =================
@@ -4220,12 +4358,76 @@ function hwcSmsHasJong(word){
 }
 /* 예) 11/21 받침 있으면 ○○이의, 없으면 ○○의 */
 function hwcSmsText(ban, name, date){
+  if(hwcClassCfg(ban)) return hwcReportText(ban, name, date);   /* v119: 반별 리포트 */
   var d = String(date || HWC_DATE || hwcToday());
   var mm = parseInt(d.slice(5, 7), 10), dd = parseInt(d.slice(8, 10), 10);
   if(!mm || !dd){ var t = hwcToday(); mm = parseInt(t.slice(5, 7), 10); dd = parseInt(t.slice(8, 10), 10); }
   var given = hwcSmsGiven(name);
   var nick = given + (hwcSmsHasJong(given) ? '이' : '');
   return '안녕하세요.탑에듀학원입니다^^ ' + mm + '/' + dd + ' ' + nick + '의 숙제 확인했습니다. 감사합니다♡';
+}
+/* ---------- v119: 반별 학부모 리포트 (수지중1·수지중2·예비고1) ---------- */
+function hwcMark(v){ return v === 'o' ? 'O' : (v === 'x' ? 'X' : (v === 't' ? '△(일부)' : '')); }
+/* 그날 기록에서 리포트 줄 만들기 · 체크 안 한 항목은 문자에서 빼고 missing 으로 알려 줘요 */
+function hwcReportLines(ban, name, date){
+  var rec = (hwcDayRaw(date || HWC_DATE || hwcToday()) || {})[ban + '|' + name] || {};
+  var lines = [], missing = [];
+  hwcItemDefs(ban).forEach(function(d){
+    var v = rec[d.name];
+    v = (v === undefined || v === null) ? '' : String(v);
+    if(v === ''){ missing.push(d.label || d.name); return; }
+    lines.push('• ' + (d.label || d.name) + ': ' + (d.max ? hwcScoreText(v, d.max) : hwcMark(v)));
+  });
+  return { lines: lines, missing: missing };
+}
+function hwcReportText(ban, name, date){
+  var c = hwcClassCfg(ban) || { title: ban, exam: false };
+  var r = hwcReportLines(ban, name, date);
+  var t = '안녕하세요, 수지탑에듀학원입니다.\n'
+    + c.title + ' 수업 리포트를 보내드립니다.\n\n'
+    + name + ' 학생 학부모님께 ❤️\n\n'
+    + '✅ 오늘의 숙제 수행 현황\n'
+    + r.lines.join('\n') + '\n\n'
+    + '💬 가정에서 모든 숙제를 완료하고 탑에듀 단어앱으로 단어를 반복 학습할 수 있도록 지도 부탁드립니다^^\n';
+  if(c.exam) t += '📝 시험대비 기간 동안은 기본 숙제(문법·독해) 대신 내신 교재 및 변형문제 프린트가 진행됩니다.\n';
+  t += '\n문의사항은 학원으로 연락 부탁드립니다. 감사합니다.';
+  return t;
+}
+/* 자동 발송 자리 — HWC_SMS_AUTO 가 false 인 동안은 아무것도 보내지 않아요.
+   켜게 되면 서버(앱스 스크립트)에 문자 발송 함수를 따로 만든 뒤 여기서 부르도록 연결합니다. */
+function hwcSmsAutoSend(ban, name, txt){
+  if(!HWC_SMS_AUTO){ hwcToast('자동 발송은 아직 꺼져 있어요 · [복사·에듀스탭 열기]로 보내 주세요'); return false; }
+  return false;
+}
+/* 📩 누르면: 리포트 미리보기 → [복사·에듀스탭 열기] / [자동 발송(꺼짐)] */
+function hwcReportPreview(ban, name, btn){
+  var date = HWC_DATE || hwcToday();
+  var pv = document.getElementById('hwPrev');
+  var r = hwcReportLines(ban, name, date), txt = hwcReportText(ban, name, date);
+  if(!pv){ hwcCopy(txt, null, null); return; }
+  pv.classList.remove('many'); pv.classList.add('rep');
+  var warn = '';
+  if(!r.lines.length) warn = '아직 체크한 항목이 없어요. 칸을 먼저 눌러 주세요.';
+  else if(r.missing.length) warn = '체크 안 한 항목은 문자에서 빠져요: ' + r.missing.join(', ');
+  pv.innerHTML = '<b>📩 ' + esc(name) + ' 학부모 리포트 미리보기 (' + esc(ban) + ')</b>'
+    + '<div class="hwc-prev-txt">' + esc(txt) + '</div>'
+    + (warn ? '<div class="hwc-rep-warn">⚠️ ' + esc(warn) + '</div>' : '')
+    + '<div class="hwc-rep-acts">'
+    + '<button type="button" class="hwc-rep-act" id="hwRepCopy"' + (r.lines.length ? '' : ' disabled') + '>📋 복사 · 에듀스탭 열기</button>'
+    + '<button type="button" class="hwc-rep-act" id="hwRepAuto" disabled title="자동 발송은 아직 꺼져 있어요">🚀 자동 발송 (준비 중)</button>'
+    + '</div>';
+  pv.classList.add('on');
+  try { pv.scrollIntoView({ block: 'nearest' }); } catch(e){}
+  var bc = document.getElementById('hwRepCopy');
+  if(bc) bc.onclick = function(){
+    try { window.open('https://edustaff.co.kr', 'edustaff'); } catch(e){}
+    hwcCopy(txt, bc, null);
+    hwcSmsSetSent(date, ban, name, true);
+    hwcSmsPaint(btn, true);
+    hwcToast('📩 ' + name + ' 리포트를 복사했어요 · 에듀스탭에서 붙여넣기');
+  };
+  var ba = document.getElementById('hwRepAuto');
+  if(ba) ba.onclick = function(){ hwcSmsAutoSend(ban, name, txt); };
 }
 function hwcSmsBtnHtml(date, ban, name){
   var sent = hwcSmsIsSent(date, ban, name);
@@ -4242,13 +4444,14 @@ function hwcSmsPaint(btn, sent){
 }
 /* (1) 문구 복사 (2) 에듀스탭 탭 열기(이미 열려 있으면 재사용) (3) 미리보기 (4) 보냄 표시 */
 function hwcSmsSend(ban, name, btn){
+  if(hwcClassCfg(ban)){ hwcReportPreview(ban, name, btn); return; }   /* v119: 미리보기 먼저 */
   var date = HWC_DATE || hwcToday();
   var txt = hwcSmsText(ban, name, date);
   try { window.open('https://edustaff.co.kr', 'edustaff'); } catch(e){}
   hwcCopy(txt, null, null);
   var pv = document.getElementById('hwPrev');
   if(pv){
-    pv.classList.remove('many');
+    pv.classList.remove('many'); pv.classList.remove('rep');
     pv.innerHTML = '<b>📩 ' + esc(name) + ' 학부모 문자 — 에듀스탭에 붙여넣고 보내 주세요</b>' + esc(txt);
     pv.classList.add('on');
   }
@@ -4261,32 +4464,37 @@ function hwcSmsSend(ban, name, btn){
 function hwcSmsAllShow(){
   var el = document.getElementById('hwList'), pv = document.getElementById('hwPrev');
   if(!el || !pv) return;
-  var date = HWC_DATE || hwcToday(), items = hwcItems(), rows = [], all = [];
+  /* v119: 수지중1·수지중2·예비고1 은 하나라도 체크한 학생 리포트, 다른 반은 지금처럼 모두 ⭕ 학생 */
+  var date = HWC_DATE || hwcToday(), rows = [], all = [], anyRep = false;
   [].forEach.call(el.querySelectorAll('.hwc-row'), function(r){
-    var rec = hwcRowRec(r), okAll = items.length > 0;
-    items.forEach(function(it){ if(rec[it] !== 'o') okAll = false; });
-    if(!okAll) return;
-    var ban = r.dataset.ban, name = r.dataset.name, txt = hwcSmsText(ban, name, date);
+    var rec = hwcRowRec(r), ban = r.dataset.ban, name = r.dataset.name;
+    var isRep = !!hwcClassCfg(ban);
+    if(isRep ? !hwcRecAny(ban, rec) : !hwcRecAllO(ban, rec)) return;
+    if(isRep) anyRep = true;
+    var txt = hwcSmsText(ban, name, date);
     all.push(txt);
     rows.push('<div class="hwc-prev-line"><span class="hwc-prev-txt">' + esc(txt) + '</span>'
       + '<button type="button" class="hwc-prev-cp" data-txt="' + esc(txt) + '">복사</button></div>');
   });
   if(!rows.length){
-    pv.classList.remove('on'); pv.classList.remove('many');
-    hwcToast('지금 보이는 학생 중 모든 항목이 ⭕ 인 학생이 없어요');
+    pv.classList.remove('on'); pv.classList.remove('many'); pv.classList.remove('rep');
+    hwcToast('지금 보이는 학생 중 보낼 문자가 없어요 (칸을 먼저 체크해 주세요)');
     return;
   }
-  HWC_SMS_BULK = all.join('\n');
-  pv.innerHTML = '<b>📩 ⭕ ' + rows.length + '명 학부모 문자 — 줄마다 [복사]</b>' + rows.join('')
+  HWC_SMS_BULK = all.join(anyRep ? '\n\n────────────\n\n' : '\n');
+  pv.innerHTML = '<b>📩 ' + rows.length + '명 학부모 문자 미리보기 — 학생마다 [복사]</b>' + rows.join('')
     + '<div class="hwc-prev-all"><button type="button" class="hwc-prev-cp" data-bulk="1">전체 복사</button>'
+    + '<button type="button" class="hwc-prev-cp" disabled style="opacity:.5;cursor:not-allowed" title="자동 발송은 아직 꺼져 있어요">🚀 전체 자동 발송 (준비 중)</button>'
     + '<span>' + rows.length + '명</span></div>';
   pv.classList.add('on'); pv.classList.add('many');
+  if(anyRep) pv.classList.add('rep'); else pv.classList.remove('rep');
   [].forEach.call(pv.querySelectorAll('.hwc-prev-cp'), function(b){
+    if(b.disabled) return;
     b.onclick = function(){
       var t = this.dataset.bulk ? HWC_SMS_BULK : (this.dataset.txt || '');
       if(!t) return;
       hwcCopy(t, this, null);
-      hwcToast(this.dataset.bulk ? (rows.length + '명 문구를 한꺼번에 복사했어요') : '한 줄 복사했어요 · 에듀스탭에 붙여넣기');
+      hwcToast(this.dataset.bulk ? (rows.length + '명 문구를 한꺼번에 복사했어요') : '복사했어요 · 에듀스탭에 붙여넣기');
     };
   });
 }
@@ -4345,6 +4553,7 @@ function hwsPaint() {
   if (n && st !== 'fail') st = 'pending';
   var txt = st === 'fail' ? ('⚠️ 저장 실패' + (n ? ' — 다시 시도 (' + n + '건)' : ' — 다시 시도'))
     : (st === 'pending' ? ('⏳ 저장 대기 ' + n + '건') : (st === 'saved' ? '☁️ 시트 저장됨' : '⏳ 시트 연결 중…'));
+  if (HWS.scoreFail && st !== 'fail') { txt = '⚠️ 단어시험 점수만 시트 저장 실패 — 이 기기에는 저장됨 (다시 시도)'; st = 'pending'; }
   el.textContent = txt;
   el.style.color = st === 'fail' ? '#b91c1c' : (st === 'pending' ? '#b45309' : '#0f766e');
   el.style.cursor = (st === 'fail' || st === 'pending') ? 'pointer' : 'default';
@@ -4356,6 +4565,7 @@ function hwsAdd(o) {
   if (!o.keep) hwsTsSet(k, o.ts);
   hwsQSave(); hwsPaint(); hwsSoon();
 }
+function hwsIsScoreOp(o) { return !!(o && o.op === 'c' && /^[0-9]+$/.test(String(o.v || ''))); }
 function hwsSoon() { clearTimeout(HWS.timer); HWS.timer = setTimeout(hwsFlush, 1200); }
 function hwsWire(o) {
   if (o.op === 'c') return ['c', o.date, o.ban, o.name, o.item, o.v || '', o.ts || '', o.keep ? 1 : 0];
@@ -4367,9 +4577,14 @@ function hwsFlush() {
   if (!HWS.q.length) { HWS.status = 'saved'; hwsPaint(); return; }
   var pw = store('apw') || '';
   if (!pw) { HWS.status = 'fail'; hwsPaint(); return; }
+  /* v119: 단어시험 점수(숫자 값)는 따로 묶어 맨 뒤에 보내요.
+     서버가 점수 값을 못 받아도 ⭕△✕ 저장은 막히지 않게 하려는 것(점수는 이 기기에 남고 나중에 다시 보냄). */
   var all = HWS.q.slice(), chunks = [], i;
-  for (i = 0; i < all.length; i += 25) chunks.push(all.slice(i, i + 25));
+  var normal = all.filter(function (o) { return !hwsIsScoreOp(o); }), scores = all.filter(hwsIsScoreOp);
+  for (i = 0; i < normal.length; i += 25) chunks.push(normal.slice(i, i + 25));
+  for (i = 0; i < scores.length; i += 25) chunks.push(scores.slice(i, i + 25));
   HWS.busy = true;
+  HWS.scoreFail = false;
   var idx = 0;
   function done(ok) {
     HWS.busy = false;
@@ -4377,17 +4592,25 @@ function hwsFlush() {
     hwsPaint();
     clearTimeout(HWS.retry);
     if (!ok) HWS.retry = setTimeout(hwsFlush, 20000);
+    else if (HWS.scoreFail) HWS.retry = setTimeout(hwsFlush, 60000);
   }
   function step() {
     if (idx >= chunks.length) { done(true); return; }
     var batch = chunks[idx++], wire = JSON.stringify(batch.map(hwsWire));
+    var scoreOnly = batch.every(hwsIsScoreOp);
     srvCall('hwSave', [pw, wire]).then(function (d) {
-      if (!d || !d.ok) { done(false); return; }
+      if (!d || !d.ok) {
+        if (scoreOnly) { HWS.scoreFail = true; step(); return; }
+        done(false); return;
+      }
       var keys = {};
       batch.forEach(function (o) { keys[hwsOpKey(o)] = 1; });
       HWS.q = HWS.q.filter(function (o) { return !keys[hwsOpKey(o)]; });
       hwsQSave(); hwsPaint(); step();
-    }).catch(function () { done(false); });
+    }).catch(function () {
+      if (scoreOnly) { HWS.scoreFail = true; step(); return; }
+      done(false);
+    });
   }
   step();
 }
@@ -4400,7 +4623,8 @@ function hwsMerge(d) {
   Object.keys(d.check || {}).forEach(function (bn) {
     var rec = d.check[bn] || {};
     Object.keys(rec).forEach(function (it) {
-      var v = rec[it]; if (!v) return;
+      var v = rec[it]; if (v === '' || v === null || v === undefined) return;
+      v = String(v);   /* v119: 단어시험 점수가 숫자로 와도 글자로 맞춰요 */
       var sts = (d.tsCheck || {})[bn + '|' + it] || '', k = 'c|' + date + '|' + bn + '|' + it, lts = hwsTsGet(k);
       if (!sts || (lts && lts >= sts)) return;
       var cur = day[bn]; if (!cur || typeof cur !== 'object') cur = {};
@@ -8767,7 +8991,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v118';
+var TOPEDU_APP_VERSION = 'v119';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
