@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v114: 능률VOCA 어원편 Day 41~60 예슬쌤 인강 교체)
-const CACHE_NAME = 'topedu-pwa-v114';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v115: 선생님 진도 조회를 진도DB 기준으로)
+const CACHE_NAME = 'topedu-pwa-v115';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.

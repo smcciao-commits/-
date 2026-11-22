@@ -7290,12 +7290,18 @@ function drawDay(r){
   [].forEach.call($('#aout').querySelectorAll('button[data-k]'),function(b){ b.onclick=function(){ copy(r.students[+b.dataset.k].msg,b); }; });
   $('#cpall').onclick=function(){ copy(r.students.map(function(s){return '['+s.name+']\n'+s.msg;}).join('\n\n'),this); };
 }
+/* v115: 진도DB 기반 세트별 현황 — 모드별 점수 문구(짝맞추기 95 · 뜻고르기 100) */
+function v115ScoreLine(sc){
+  var a=[];
+  for(var k in (sc||{})) a.push(k+' '+sc[k]);
+  return a.join(' · ');
+}
 function drawSetRep(r){
   var done=r.students.filter(function(s){return s.done;}).length;
   var html='<div class="card"><h2>완료 '+done+'명 / 전체 '+r.students.length+'명</h2><table><tr><th>이름</th><th>상태</th><th>점수</th><th>마지막</th></tr>'+
     r.students.map(function(s){
       return '<tr><td><b>'+esc(s.name)+'</b><div class="small">'+esc(s.ban)+'</div></td><td>'+(s.done?'<span class="chip done">완료</span>':(s.count?'<span class="chip mid">하는 중</span>':'<span class="chip todo">안 함</span>'))+'</td>'+
-      '<td>'+(s.best?'<b>'+s.best.score+'</b> ('+s.best.correct+'/'+s.best.total+')'+(s.best.wrong?'<div class="small">틀림: '+esc(s.best.wrong)+'</div>':''):'-')+'</td><td class="small">'+esc(s.last?s.last.slice(5,16):'-')+'</td></tr>';
+      '<td>'+(s.best?('<b>'+s.best.score+'</b>'+(s.best.correct===null||s.best.correct===undefined?'점':' ('+s.best.correct+'/'+s.best.total+')')+(s.best.wrong?'<div class="small">틀림: '+esc(s.best.wrong)+'</div>':'')+((s.best.correct===null||s.best.correct===undefined)&&s.scores?'<div class="small">'+esc(v115ScoreLine(s.scores))+'</div>':'')):'-')+'</td><td class="small">'+esc(s.last?s.last.slice(5,16):'-')+'</td></tr>';
     }).join('')+'</table></div>';
   if(r.missed.length) html+='<div class="card"><h2>많이 틀린 것</h2><ul class="list">'+r.missed.map(function(m){return '<li><b>'+esc(m.item)+'</b><span>'+m.n+'번</span></li>';}).join('')+'</ul></div>';
   $('#aout').innerHTML=html;
@@ -8346,7 +8352,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v114';
+var TOPEDU_APP_VERSION = 'v115';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
