@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QA v118 · 390×844</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0f172a; font-family: pretendard, sans-serif; }
+  iframe { border: 0; display: block; background: #fff; width: 390px; height: 844px; position: fixed; left: 0; top: 0; }
+  .bar { position: fixed; left: 400px; top: 8px; color: #e2e8f0; font-size: 13px; font-weight: 700; line-height: 1.7; max-width: 640px; }
+  .bar b { color: #5eead4; }
+  .bar .e { color: #fca5a5; font-size: 11px; display: block; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<iframe id="fr" src="index.html?qa=118"></iframe>
+<div class="bar" id="bar">v118 QA · 390×844 · console/error <b id="ec">0</b>건<span class="e" id="el"></span></div>
+<script>
+var fr = document.getElementById('fr'), ec = document.getElementById('ec'), el = document.getElementById('el');
+window.__errs = [];
+function add(m){
+  window.__errs.push(String(m));
+  ec.textContent = window.__errs.length;
+  el.textContent = window.__errs.slice(-4).join('\n');
+}
+var hooked = false;
+function hook(){
+  try {
+    var w = fr.contentWindow;
+    if (!w || hooked) return;
+    hooked = true;
+    w.addEventListener('error', function(e){ add('error: ' + ((e && (e.message || e.error)) || '')); });
+    w.addEventListener('unhandledrejection', function(e){ add('reject: ' + String(e && e.reason)); });
+    if (w.console) {
+      ['error','warn'].forEach(function(k){
+        var o = w.console[k];
+        w.console[k] = function(){ if (k === 'warn') { return o.apply(w.console, arguments); } add('console.' + k + ': ' + Array.prototype.join.call(arguments, ' ')); return o.apply(w.console, arguments); };
+      });
+    }
+  } catch(e){ add('hook fail: ' + e); }
+}
+fr.addEventListener('load', function(){ hooked = false; hook(); setTimeout(hook, 300); setTimeout(hook, 1500); });
+/* 배너 노출 여부 검사 도우미: 부모에서 __banners() 로 호출 */
+window.__banners = function(){
+  var d = fr.contentWindow.document;
+  var t = (d.body && d.body.innerText) || '';
+  return {
+    version: (t.match(/v1\d\d/) || [''])[0],
+    reading: t.indexOf('지문·어법·변형 마스터') >= 0,
+    writing: t.indexOf('내신 서술형') >= 0,
+    eduKids: t.indexOf('에듀키즈') >= 0,
+    errs: window.__errs
+  };
+};
+</script>
+</body>
+</html>
