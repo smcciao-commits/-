@@ -265,6 +265,49 @@ label { display: block; font-weight: 700; margin: 14px 0 6px; }
   transition: transform 0.12s ease;
 }
 .mode:active { transform: scale(0.97); }
+/* v117: 틀린 단어 복습 · 진도 그래프 */
+.wn-box { margin: 14px 0 4px; padding: 14px; border: 2px dashed var(--pri); border-radius: 16px; background: #fff; }
+.wn-box.wn-empty { border-color: #cbd5e1; display: flex; flex-direction: column; gap: 4px; }
+.wn-box.wn-empty span { font-size: 12.5px; color: var(--sub); }
+.wn-head { display: flex; justify-content: space-between; align-items: center; }
+.wn-head b { font-size: 15px; }
+.wn-cnt { font-size: 12.5px; font-weight: 800; border: 1.5px solid var(--no); color: var(--no); border-radius: 999px; padding: 2px 10px; }
+.wn-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.wn-list span { font-size: 12.5px; border: 1px solid #94a3b8; border-radius: 8px; padding: 2px 8px; }
+.wn-btns { display: flex; gap: 8px; }
+.wn-btns .btn { flex: 1; margin: 0; padding: 11px 8px; font-size: 14px; }
+.wn-tip { margin-top: 8px; }
+.pg-ctrl { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pg-ctrl select { flex: 1; min-width: 120px; margin: 0; }
+.pg-card { padding: 6px 10px; }
+.pg-row { display: flex; align-items: center; gap: 6px; padding: 9px 2px; border-bottom: 1px solid #e2e8f0; cursor: pointer; }
+.pg-row:last-child { border-bottom: 0; }
+.pg-row:active { background: #f1f5f9; }
+.pg-row .small { display: block; font-size: 11px; white-space: nowrap; }
+.pg-name { flex: 1; min-width: 0; overflow: hidden; }
+.pg-name b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+.pg-streak { width: 52px; text-align: center; flex: none; }
+.pg-streak b { font-size: 13.5px; white-space: nowrap; }
+.pg-mid { flex: none; }
+.pg-score { width: 58px; flex: none; }
+.pg-strip { display: grid; grid-template-columns: repeat(14, 7px); gap: 2px; margin: 2px 0 3px; }
+.pg-strip i { display: block; width: 7px; height: 7px; border: 1px solid #94a3b8; border-radius: 2px; background: #fff; }
+.pg-strip i.on { background: var(--ink); border-color: var(--ink); }
+.pg-strip i.today { outline: 1.5px solid var(--pri); outline-offset: 1px; }
+.pg-bar { position: relative; height: 16px; border: 1px solid #94a3b8; border-radius: 4px; overflow: hidden; background: #fff; }
+.pg-bar i { position: absolute; left: 0; top: 0; bottom: 0; background: repeating-linear-gradient(45deg, #475569 0 3px, #cbd5e1 3px 6px); }
+.pg-bar b { position: relative; display: block; text-align: right; padding-right: 4px; font-size: 11.5px; line-height: 14px; color: var(--ink); text-shadow: 0 0 3px #fff, 0 0 3px #fff; }
+.pg-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
+.pg-stats div { border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 8px 4px; text-align: center; }
+.pg-stats b { display: block; font-size: 18px; }
+.pg-stats span { font-size: 11.5px; color: var(--sub); }
+.pg-svg { width: 100%; height: auto; display: block; }
+.pg-svg text { font-size: 9px; fill: #64748b; }
+.pg-svg text.v { fill: var(--ink); font-weight: 700; }
+.pg-svg line.g { stroke: #e2e8f0; stroke-width: 1; }
+.pg-svg line.g80 { stroke: #64748b; stroke-width: 1; stroke-dasharray: 3 3; }
+.pg-svg rect.t { fill: #334155; }
+.pg-svg rect.p { fill: #fff; stroke: #334155; stroke-width: 1; }
 .mode .n { font-size: 28px; }
 .mode b {
   display: block;
@@ -2315,6 +2358,7 @@ function dbAdminPull(force){
     TOPEDU_DB_AT = Date.now();
     try { hwcAppSync(); hwcAppPaint(); } catch(e){}
     try { if(S.admin && S.admin.tab === 'dash' && document.getElementById('aout')) loadAdminDashboard(); } catch(e){}
+    try { if(S.admin && S.admin.tab === 'graph' && !document.getElementById('pg_back')) renderProgGraph(); } catch(e){}
   });
 }
 /* 오늘 날짜의 시트 기록 → { '반|이름': {modes, done, score, last} } */
@@ -5485,11 +5529,12 @@ function showWordMenu(){
       '<button class="mode" data-m="match">' + tick('짝맞추기') + '<div class="n">🧩</div><b>⑤ 짝 맞추기 <span class="badge-tag req">필수</span></b><span>단어와 뜻 연결</span></button>' +
       clozeBtn +
       '<button class="mode final" data-m="test">' + tick('테스트') + '<div class="n">🏁</div><b>' + testNum + ' 마지막 테스트 <span class="badge-tag req-final">필수</span></b><span>필수 4개 완료 시 최종 학습 완료!</span></button>' +
-    '</div>';
+    '</div>' + wnMenuHtml();
 
   bindBack(function(){ refreshHome(); });
   var bPrintSet = $('#btn_print_set');
   if (bPrintSet) bPrintSet.onclick = function(){ openPrintSheet(W.set && W.set.name); };
+  try { wnMenuBind(); } catch(e){}
   [].forEach.call(app.querySelectorAll('.mode'),function(b){
     b.onclick=function(){
       ({card:runCard,speak:runSpeak,choice:runChoice,spell:runSpell,match:runMatch,cloze:runCloze,test:runTest})[b.dataset.m](W.words);
@@ -5498,6 +5543,7 @@ function showWordMenu(){
 }
 function finish(mode,label,correct,total,wrong,extra){
   var sec=secs();
+  try { wnAdd(mode, wrong); } catch(e){} /* v117: 오답 노트에 모으기 */
   saveStudentProgressDB(S.cred.ban, S.cred.name, W.set.name, mode, Math.round((correct/(total||1))*100));
   call('submitWord',S.cred,W.set.name,mode,correct,total,wrong,sec).then(function(r){
     W.set.progress=W.set.progress||{modes:{},test:null};
@@ -5531,7 +5577,7 @@ function finish(mode,label,correct,total,wrong,extra){
     html+='<button class="btn ghost" id="menu">학습 메뉴로</button>';
     app.innerHTML=html;
     bindBack(showWordMenu); $('#menu').onclick=showWordMenu;
-    var ag=$('#again'); if(ag) ag.onclick=function(){ var ws=W.words.filter(function(o){return wrong.indexOf(o.w)>=0;}); runChoice(ws,true); };
+    var ag=$('#again'); if(ag) ag.onclick=function(){ var ws=W.words.filter(function(o){return wrong.indexOf(o.w)>=0;}); runWrongReview(ws,'choice'); };
   }).catch(function(e){ alert('저장이 안 됐어요. 인터넷을 확인하고 다시 해 주세요.\n'+errMsg(e)); showWordMenu(); });
 }
 
@@ -6815,7 +6861,7 @@ function showAdmin(){
     '<button type="button" class="btn" id="bwrite" onclick="openWritingApp(true)" style="flex:1;margin:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(124,58,237,0.24)">✍️ 내신 서술형</button>'+
     '<button type="button" class="btn" id="bhw" onclick="openHwCheck()" style="flex:1;margin:0;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#78350f;font-weight:800;box-shadow:0 4px 12px rgba(245,158,11,0.28)">✅ 숙제 1초 체크</button>'+
     '</div>'+
-    '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="ss" class="'+(A.tab==='ss'?'on':'')+'" style="color:#0891b2;font-weight:700">⏱️ 자기주도·학부모문자</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button></div>';
+    '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="ss" class="'+(A.tab==='ss'?'on':'')+'" style="color:#0891b2;font-weight:700">⏱️ 자기주도·학부모문자</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button><button data-t="graph" class="'+(A.tab==='graph'?'on':'')+'" style="font-weight:700">📈 진도 그래프</button></div>';
 
   
   if(A.tab === 'alerts'){
@@ -6962,6 +7008,17 @@ function showAdmin(){
     $('#bnew').onclick = showBattleSetup; var bl = $('#blive'); if(bl) bl.onclick = showLiveClassSetup;
     [].forEach.call(app.querySelectorAll('.tabs button'), function(b){ b.onclick = function(){ A.tab = b.dataset.t; showAdmin(); }; });
     loadAdminDashboard();
+    return;
+  }
+
+  if(A.tab === 'graph'){ /* v117: 학생별 누적 진도 그래프 */
+    app.innerHTML = html + '<div id="aout"></div>';
+    $('#back').onclick = start;
+    $('#bnew').onclick = showBattleSetup; var blg = $('#blive'); if(blg) blg.onclick = showLiveClassSetup;
+    [].forEach.call(app.querySelectorAll('.tabs button'), function(b){ b.onclick = function(){ A.tab = b.dataset.t; showAdmin(); }; });
+    try { pullStreakBoard(); } catch(e){}
+    if(!TOPEDU_DB_AT || Date.now() - TOPEDU_DB_AT > 20000){ TOPEDU_DB_PULL_AT = 0; dbAdminPull(true); }
+    renderProgGraph();
     return;
   }
 
@@ -7368,6 +7425,295 @@ function drawSetRep(r){
     }).join('')+'</table></div>';
   if(r.missed.length) html+='<div class="card"><h2>많이 틀린 것</h2><ul class="list">'+r.missed.map(function(m){return '<li><b>'+esc(m.item)+'</b><span>'+m.n+'번</span></li>';}).join('')+'</ul></div>';
   $('#aout').innerHTML=html;
+}
+
+/* ============ v117: 틀린 단어 복습 (오답 노트) ============
+   뜻고르기·짝맞추기·스펠링·예문빈칸·테스트에서 틀린 단어를 학생별·세트별로 모아 둔다 (이 폰 저장).
+   복습에서 첫 시도에 맞히면 오답 노트에서 빠지고(졸업), 틀리면 남는다. */
+var WN_MODES = { '뜻고르기':1, '짝맞추기':1, '스펠링':1, '예문빈칸':1, '테스트':1 };
+function wnKey(ban,name){ return 'topedu_wrong_' + (ban||'') + '_' + (name||''); }
+function wnGet(ban,name){
+  try { var o = JSON.parse(localStorage.getItem(wnKey(ban,name)) || '{}'); return (o && typeof o === 'object') ? o : {}; } catch(e){ return {}; }
+}
+function wnPut(ban,name,db){ try { localStorage.setItem(wnKey(ban,name), JSON.stringify(db)); } catch(e){} }
+function wnMe(){ return (S && S.cred) ? S.cred : null; }
+/* 학습이 끝날 때 틀린 단어 추가 */
+function wnAdd(mode, wrong){
+  var me = wnMe();
+  if(!me || !W.set || !WN_MODES[mode] || !wrong || !wrong.length) return;
+  var db = wnGet(me.ban, me.name), set = db[W.set.name] || {}, now = Date.now();
+  wrong.forEach(function(w){
+    var x = W.words.filter(function(o){ return o.w === w; })[0];
+    if(!x) return;
+    var cur = set[w] || { m: x.m, n: 0 };
+    cur.m = x.m; cur.n = (cur.n||0) + 1; cur.at = now;
+    set[w] = cur;
+  });
+  db[W.set.name] = set;
+  wnPut(me.ban, me.name, db);
+}
+/* 지금 세트의 오답 노트 단어 (W.words 원본 객체, 많이 틀린 순) */
+function wnWordsOfSet(){
+  var me = wnMe();
+  if(!me || !W.set) return [];
+  var set = wnGet(me.ban, me.name)[W.set.name] || {};
+  return W.words.filter(function(o){ return !!set[o.w]; })
+    .sort(function(a,b){ return (set[b.w].n||0) - (set[a.w].n||0); });
+}
+function wnCountAll(ban,name){
+  var db = wnGet(ban,name), n = 0;
+  Object.keys(db).forEach(function(s){ n += Object.keys(db[s]||{}).length; });
+  return n;
+}
+/* 복습 결과 반영: passed 는 졸업, failed 는 틀린 횟수 +1 */
+function wnApply(passed, failed){
+  var me = wnMe();
+  if(!me || !W.set) return 0;
+  var db = wnGet(me.ban, me.name), set = db[W.set.name] || {};
+  passed.forEach(function(w){ delete set[w]; });
+  failed.forEach(function(w){
+    var x = W.words.filter(function(o){ return o.w === w; })[0];
+    var cur = set[w] || { m: x ? x.m : '', n: 0 };
+    cur.n = (cur.n||0) + 1; cur.at = Date.now(); set[w] = cur;
+  });
+  if(Object.keys(set).length) db[W.set.name] = set; else delete db[W.set.name];
+  wnPut(me.ban, me.name, db);
+  return Object.keys(set).length;
+}
+/* 학습 메뉴에 붙는 오답 노트 카드 */
+function wnMenuHtml(){
+  var ws = wnWordsOfSet();
+  if(!ws.length){
+    return '<div class="wn-box wn-empty"><b>🔁 틀린 단어 복습</b><span>아직 틀린 단어가 없어요. 학습하다 틀린 단어는 여기에 자동으로 모여요.</span></div>';
+  }
+  return '<div class="wn-box">' +
+    '<div class="wn-head"><b>🔁 틀린 단어 복습</b><span class="wn-cnt">' + ws.length + '개 남음</span></div>' +
+    '<div class="wn-list">' + ws.slice(0,8).map(function(o){ return '<span>' + esc(o.w) + '</span>'; }).join('') + (ws.length > 8 ? '<span>외 ' + (ws.length-8) + '개</span>' : '') + '</div>' +
+    '<div class="wn-btns"><button type="button" class="btn" id="wn_choice">✅ 뜻 고르기로 복습</button>' +
+    (ws.length >= 2 ? '<button type="button" class="btn ghost" id="wn_match">🧩 짝 맞추기로 복습</button>' : '') + '</div>' +
+    '<div class="small wn-tip">처음에 바로 맞히면 오답 노트에서 빠져요. 다 빠질 때까지 복습해 보세요!</div>' +
+  '</div>';
+}
+function wnMenuBind(){
+  var a = $('#wn_choice'), b = $('#wn_match');
+  if(a) a.onclick = function(){ runWrongReview(wnWordsOfSet(), 'choice'); };
+  if(b) b.onclick = function(){ runWrongReview(wnWordsOfSet(), 'match'); };
+}
+/* 복습 실행: 틀린 단어는 맞힐 때까지 한 번 더 나온다 */
+function runWrongReview(words, how){
+  if(!words || !words.length){ showWordMenu(); return; }
+  var first = {}; /* w -> true(첫 시도 정답) / false */
+  if(how === 'match' && words.length >= 2) return wnMatch(words, first);
+  var queue = shuffle(words.slice()), i = 0, total = queue.length, solved = 0;
+  startClock();
+  function draw(){
+    if(i >= queue.length){ wnDone(words, first); return; }
+    var c = queue[i], ops = options(c, W.words, 'm');
+    app.innerHTML = topBar('🔁 틀린 단어 복습') +
+      '<div class="sub">맞힌 단어 ' + solved + ' / ' + total + (first[c.w] === false ? ' · <b>다시 나온 단어</b>' : '') + '</div>' +
+      '<div class="bar"><i style="width:' + (solved/total*100) + '%"></i></div>' +
+      '<div class="q">' + esc(c.w) + '</div><div style="text-align:center"><button class="say" id="say">🔊 발음 다시 듣기</button></div>' +
+      ops.map(function(o,k){ return '<button class="opt" data-k="' + k + '">' + esc(o.m) + '</button>'; }).join('') + '<div class="fb" id="fb"></div>';
+    bindBack(showWordMenu); $('#say').onclick = function(){ speak(c.w); };
+    speak(c.w);
+    var done = false;
+    [].forEach.call(app.querySelectorAll('.opt'), function(b){ b.onclick = function(){
+      if(done) return; done = true;
+      var ok = ops[+b.dataset.k] === c;
+      if(first[c.w] === undefined) first[c.w] = ok;
+      if(ok){ playCorrectSound(); solved++; b.classList.add('ok'); $('#fb').className = 'fb ok'; $('#fb').textContent = '정답! 👍'; }
+      else {
+        playWrongSound(); b.classList.add('no'); app.querySelectorAll('.opt')[ops.indexOf(c)].classList.add('ok');
+        $('#fb').className = 'fb no'; $('#fb').textContent = '아쉬워요! 잠시 후 한 번 더 나와요';
+        queue.push(c); /* 맞힐 때까지 다시 */
+      }
+      setTimeout(function(){ i++; draw(); }, ok ? 700 : 1600);
+    }; });
+  }
+  draw();
+}
+function wnMatch(words, first){
+  var rounds = [], all = shuffle(words.slice()), r = 0;
+  for(var k = 0; k < all.length; k += 6) rounds.push(all.slice(k, k+6));
+  /* 마지막 판이 1개뿐이면 앞 판에 붙인다 */
+  if(rounds.length > 1 && rounds[rounds.length-1].length < 2){ var last = rounds.pop(); rounds[rounds.length-1] = rounds[rounds.length-1].concat(last); }
+  startClock();
+  function draw(){
+    if(r >= rounds.length){ wnDone(words, first); return; }
+    var set = rounds[r], tiles = shuffle(set.map(function(o){ return {o:o,t:o.w,en:1}; }).concat(set.map(function(o){ return {o:o,t:o.m,en:0}; }))), sel = null, left = set.length;
+    app.innerHTML = topBar('🔁 틀린 단어 복습') + '<div class="sub">' + (r+1) + ' / ' + rounds.length + ' 판 · 단어와 뜻을 차례로 눌러요</div><div class="bar"><i style="width:' + (r/rounds.length*100) + '%"></i></div>' +
+      '<div class="grid">' + tiles.map(function(x,k){ return '<button class="tile" data-k="' + k + '">' + esc(x.t) + '</button>'; }).join('') + '</div>';
+    bindBack(showWordMenu);
+    var btns = app.querySelectorAll('.tile');
+    [].forEach.call(btns, function(b){ b.onclick = function(){
+      var x = tiles[+b.dataset.k];
+      if(sel === null){ sel = +b.dataset.k; b.classList.add('sel'); if(x.en) speak(x.t); return; }
+      var y = tiles[sel], bs = btns[sel];
+      if(sel === +b.dataset.k){ b.classList.remove('sel'); sel = null; return; }
+      if(y.o === x.o && y.en !== x.en){
+        playCorrectSound(); b.classList.add('gone'); bs.classList.add('gone'); sel = null; left--;
+        if(first[x.o.w] === undefined) first[x.o.w] = true;
+        if(!left){ r++; setTimeout(draw, 300); }
+      } else {
+        playWrongSound();
+        var a = (y.en ? y : x).o; first[a.w] = false;
+        b.classList.add('no'); bs.classList.remove('sel'); bs.classList.add('no'); sel = null;
+        setTimeout(function(){ b.classList.remove('no'); bs.classList.remove('no'); }, 500);
+      }
+    }; });
+  }
+  draw();
+}
+function wnDone(words, first){
+  var passed = [], failed = [];
+  words.forEach(function(o){ if(first[o.w] === true) passed.push(o.w); else if(first[o.w] === false) failed.push(o.w); });
+  var left = wnApply(passed, failed);
+  try { if(S && S.cred && typeof recordDailyStudy === 'function') recordDailyStudy(S.cred.ban, S.cred.name, W.set.name, isSetCompleteByName(S.cred.ban, S.cred.name, W.set.name)); } catch(e){}
+  if(!left){ try { playFanfareSound(); } catch(e){} }
+  var html = topBar(W.set.name) + '<div class="card" style="text-align:center"><div class="sub">🔁 틀린 단어 복습 끝!</div>' +
+    '<div class="big">' + passed.length + ' / ' + words.length + '</div>' +
+    '<div>처음에 바로 맞혀서 <b>' + passed.length + '개</b>가 오답 노트에서 빠졌어요' + (left ? '' : ' 🎉') + '</div>' +
+    '<div class="small" style="margin-top:6px">' + (left ? '오답 노트에 아직 <b>' + left + '개</b> 남았어요. 한 번 더 해 볼까요?' : '이 세트 오답 노트를 모두 비웠어요! 최고예요 🏆') + '</div></div>';
+  if(failed.length){
+    html += '<div class="card"><h2>아직 헷갈리는 단어 ' + failed.length + '개</h2><ul class="list">' +
+      failed.map(function(w){ var x = W.words.filter(function(o){ return o.w === w; })[0]; return '<li><b>' + esc(w) + '</b><span>' + esc(x ? x.m : '') + '</span></li>'; }).join('') + '</ul></div>';
+  }
+  if(left) html += '<button class="btn" id="wn_again">🔁 남은 단어 다시 복습</button>';
+  html += '<button class="btn ghost" id="menu">학습 메뉴로</button>';
+  app.innerHTML = html;
+  bindBack(showWordMenu); $('#menu').onclick = showWordMenu;
+  var ag = $('#wn_again'); if(ag) ag.onclick = function(){ runWrongReview(wnWordsOfSet(), 'choice'); };
+}
+
+/* ============ v117: 선생님 화면 — 학생별 누적 진도 그래프 (진도DB 기반) ============ */
+function pgDateAdd(key, n){ var d = tdParse(key); d.setDate(d.getDate() + n); return tdKey(d); }
+/* 진도DB 줄 → 학생별 요약 */
+function pgBuild(){
+  var by = {}, today = tdKey();
+  (TOPEDU_DB_ROWS || []).forEach(function(r){
+    if(!r || !r.b || !r.n || r.b === '선생님') return;
+    var k = r.b + '|' + r.n;
+    var o = by[k] || (by[k] = { ban: r.b, name: r.n, days: {}, sets: {}, rows: 0, last: '' });
+    o.rows++;
+    var d = String(r.d || '').slice(0, 10);
+    if(/^\d{4}-\d{2}-\d{2}$/.test(d)) o.days[d] = (o.days[d] || 0) + 1;
+    if(String(r.u || '') > o.last) o.last = String(r.u || '');
+    var s = o.sets[r.s] || (o.sets[r.s] = { name: r.s, modes: {}, test: null, d: '', u: '' });
+    var sc = Number(r.sc) || 0;
+    s.modes[r.m] = Math.max(s.modes[r.m] || 0, sc);
+    if(r.m === '테스트') s.test = Math.max(s.test === null ? -1 : s.test, sc);
+    if(d > s.d) s.d = d;
+    if(String(r.u || '') > s.u) s.u = String(r.u || '');
+  });
+  Object.keys(by).forEach(function(k){
+    var o = by[k], keys = Object.keys(o.days).sort();
+    /* 지금 연속: 오늘(또는 어제)부터 거꾸로 */
+    var cur = 0, start = o.days[today] ? today : pgDateAdd(today, -1);
+    while(o.days[start]){ cur++; start = pgDateAdd(start, -1); }
+    /* 최고 연속 */
+    var best = 0, run = 0, prev = '';
+    keys.forEach(function(d){ run = (prev && pgDateAdd(prev, 1) === d) ? run + 1 : 1; if(run > best) best = run; prev = d; });
+    /* 학생 폰에서 올라온 스트릭(있으면 더 큰 값) */
+    try {
+      var sb = (typeof STREAK_BOARD !== 'undefined') ? STREAK_BOARD[k] : null;
+      if(sb && (sb.t === today || sb.t === pgDateAdd(today, -1))) cur = Math.max(cur, Number(sb.s) || 0);
+    } catch(e){}
+    o.streak = cur; o.best = Math.max(best, cur);
+    var sets = Object.keys(o.sets).map(function(n){ return o.sets[n]; });
+    o.setList = sets.sort(function(a,b){ return (a.u || a.d) < (b.u || b.d) ? -1 : 1; });
+    var tests = sets.filter(function(s){ return s.test !== null; }).map(function(s){ return s.test; });
+    o.testCnt = tests.length;
+    o.bestTest = tests.length ? Math.max.apply(null, tests) : null;
+    o.avgTest = tests.length ? Math.round(tests.reduce(function(a,b){ return a + b; }, 0) / tests.length) : null;
+    var d28 = 0; for(var i = 0; i < 28; i++){ if(o.days[pgDateAdd(today, -i)]) d28++; }
+    o.d28 = d28; o.totalDays = keys.length;
+  });
+  return by;
+}
+/* 최근 28일 출석 칸 (공부한 날 = 채운 칸, 흑백 인쇄해도 보임) */
+function pgStrip(o){
+  var today = tdKey(), h = '<div class="pg-strip" title="최근 4주 (왼쪽이 오래된 날)">';
+  for(var i = 27; i >= 0; i--){
+    var d = pgDateAdd(today, -i);
+    h += '<i class="' + (o.days[d] ? 'on' : '') + (i === 0 ? ' today' : '') + '" title="' + d + (o.days[d] ? ' 공부함' : '') + '"></i>';
+  }
+  return h + '</div>';
+}
+function pgBar(v){
+  if(v === null || v === undefined) return '<span class="small">-</span>';
+  return '<div class="pg-bar"><i style="width:' + Math.max(2, Math.min(100, v)) + '%"></i><b>' + v + '</b></div>';
+}
+function renderProgGraph(){
+  var box = document.getElementById('aout');
+  var A = S.admin;
+  if(!box || !A || A.tab !== 'graph') return;
+  if(!TOPEDU_DB_AT){ box.innerHTML = '<div class="card" style="text-align:center;color:var(--sub)">진도DB(구글 시트) 기록을 불러오는 중이에요...</div>'; return; }
+  var by = pgBuild(), I = A.info || {}, ban = A.pgBan || '', sort = A.pgSort || 'streak';
+  var list = Object.keys(by).map(function(k){ return by[k]; }).filter(function(o){ return !ban || o.ban === ban; });
+  list.sort(function(a,b){
+    if(sort === 'name') return a.name < b.name ? -1 : 1;
+    if(sort === 'score') return (b.bestTest === null ? -1 : b.bestTest) - (a.bestTest === null ? -1 : a.bestTest) || b.streak - a.streak;
+    if(sort === 'days') return b.d28 - a.d28 || b.streak - a.streak;
+    return b.streak - a.streak || b.best - a.best || b.d28 - a.d28;
+  });
+  var studying = list.filter(function(o){ return o.streak > 0; }).length;
+  var html = '<div class="card"><div class="pg-ctrl"><select id="pg_ban"><option value="">전체 반</option>' +
+    (I.classes || []).filter(function(c){ return c !== '선생님'; }).map(function(c){ return '<option' + (c === ban ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('') + '</select>' +
+    '<select id="pg_sort">' + [['streak','연속 일수순'],['score','최고 점수순'],['days','최근 4주 학습일순'],['name','이름순']].map(function(x){ return '<option value="' + x[0] + '"' + (x[0] === sort ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select>' +
+    '<button type="button" class="btn gray" id="pg_reload" style="margin:0;padding:8px 12px;width:auto">새로고침</button></div>' +
+    '<div class="small" style="margin-top:8px">학생 ' + list.length + '명 · 지금 연속 학습 중 <b>' + studying + '명</b> · 칸 하나가 하루예요(■ 공부한 날, 맨 오른쪽이 오늘). 이름을 누르면 세트별 점수 그래프가 나와요.</div></div>';
+  if(!list.length){
+    html += '<div class="card" style="text-align:center;color:var(--sub)">아직 진도DB에 이 반 기록이 없어요.</div>';
+  } else {
+    html += '<div class="card pg-card">' +
+      list.map(function(o){
+        var key = o.ban + '|' + o.name;
+        return '<div class="pg-row" data-k="' + esc(key) + '">' +
+          '<div class="pg-name"><b>' + esc(o.name) + '</b>' + (ban ? '' : '<span class="small">' + esc(o.ban) + '</span>') + '</div>' +
+          '<div class="pg-streak"><b>🔥 ' + o.streak + '일</b><span class="small">최고 ' + o.best + '일</span></div>' +
+          '<div class="pg-mid">' + pgStrip(o) + '<span class="small">4주 ' + o.d28 + '일 · 세트 ' + o.setList.length + '개</span></div>' +
+          '<div class="pg-score">' + pgBar(o.bestTest) + '<span class="small">' + (o.avgTest !== null ? '평균 ' + o.avgTest : '테스트 전') + '</span></div>' +
+        '</div>';
+      }).join('') + '</div>';
+  }
+  html += '<div class="small" style="margin:0 4px 10px">※ 시트에는 세트·모드마다 마지막 날짜만 남아서, 같은 세트를 여러 날 반복한 경우 연속 일수가 실제보다 조금 적게 보일 수 있어요.</div>';
+  box.innerHTML = html;
+  $('#pg_ban').onchange = function(){ A.pgBan = this.value; renderProgGraph(); };
+  $('#pg_sort').onchange = function(){ A.pgSort = this.value; renderProgGraph(); };
+  $('#pg_reload').onclick = function(){ TOPEDU_DB_PULL_AT = 0; dbAdminPull(true); try { pullStreakBoard(); } catch(e){} box.querySelector('.small').textContent = '불러오는 중...'; };
+  [].forEach.call(box.querySelectorAll('.pg-row'), function(tr){ tr.onclick = function(){ renderProgDetail(by[tr.dataset.k]); }; });
+}
+/* 학생 1명: 세트별 점수 막대 그래프 (오래된 세트 → 최근 세트) */
+function renderProgDetail(o){
+  var box = document.getElementById('aout');
+  if(!box || !o) return;
+  var sets = o.setList.slice(-20);
+  var W0 = 320, H0 = 150, padL = 26, padB = 18, n = Math.max(sets.length, 1), bw = (W0 - padL - 6) / n;
+  var svg = '<svg class="pg-svg" viewBox="0 0 ' + W0 + ' ' + H0 + '" role="img" aria-label="세트별 점수">';
+  [0, 50, 80, 100].forEach(function(v){
+    var y = (H0 - padB) - v / 100 * (H0 - padB - 8);
+    svg += '<line x1="' + padL + '" x2="' + W0 + '" y1="' + y + '" y2="' + y + '" class="' + (v === 80 ? 'g80' : 'g') + '"/><text x="' + (padL - 4) + '" y="' + (y + 3) + '" text-anchor="end">' + v + '</text>';
+  });
+  sets.forEach(function(s, i){
+    var v = s.test !== null ? s.test : Math.max.apply(null, Object.keys(s.modes).map(function(m){ return s.modes[m]; }).concat([0]));
+    var h = v / 100 * (H0 - padB - 8), x = padL + 3 + i * bw, y = (H0 - padB) - h;
+    svg += '<rect x="' + (x + bw * 0.15) + '" y="' + y + '" width="' + Math.max(2, bw * 0.7) + '" height="' + h + '" class="' + (s.test !== null ? 't' : 'p') + '"><title>' + esc(s.name) + ' ' + v + '점</title></rect>';
+    if(bw >= 14) svg += '<text x="' + (x + bw / 2) + '" y="' + (y - 2) + '" text-anchor="middle" class="v">' + v + '</text>';
+    svg += '<text x="' + (x + bw / 2) + '" y="' + (H0 - 5) + '" text-anchor="middle">' + (i + 1) + '</text>';
+  });
+  svg += '</svg>';
+  var html = '<button class="btn ghost" id="pg_back" style="margin-top:0">← 학생 목록으로</button>' +
+    '<div class="card"><h2>' + esc(o.name) + ' <span class="small">' + esc(o.ban) + '</span></h2>' +
+    '<div class="pg-stats"><div><b>' + o.streak + '일</b><span>지금 연속</span></div><div><b>' + o.best + '일</b><span>최고 연속</span></div><div><b>' + (o.bestTest === null ? '-' : o.bestTest) + '</b><span>최고 점수</span></div><div><b>' + (o.avgTest === null ? '-' : o.avgTest) + '</b><span>테스트 평균</span></div></div>' +
+    '<div style="margin:10px 0 4px"><b style="font-size:13px">최근 4주 학습</b> <span class="small">(' + o.d28 + '일 · 누적 ' + o.totalDays + '일)</span></div>' + pgStrip(o) +
+    '<div style="margin:14px 0 4px"><b style="font-size:13px">세트별 점수</b> <span class="small">(■ 테스트 점수 · □ 테스트 전 최고 점수 · 점선 80점)</span></div>' + svg + '</div>' +
+    '<div class="card"><table><tr><th>#</th><th>세트</th><th>테스트</th><th>날짜</th></tr>' +
+    sets.map(function(s, i){
+      return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(s.name) + '</b><div class="small">' + esc(v115ScoreLine(s.modes)) + '</div></td><td>' + (s.test !== null ? '<b>' + s.test + '</b>' : '-') + '</td><td class="small">' + esc((s.d || '').slice(5)) + '</td></tr>';
+    }).join('') + '</table>' + (o.setList.length > 20 ? '<div class="small">최근 20개 세트만 보여요 (전체 ' + o.setList.length + '개)</div>' : '') + '</div>';
+  box.innerHTML = html;
+  $('#pg_back').onclick = renderProgGraph;
+  try { box.scrollIntoView({ block: 'start' }); } catch(e){}
 }
 
 /* ============ 단어 대결 (개인전 · 레이스) ============ */
@@ -8415,7 +8761,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v116';
+var TOPEDU_APP_VERSION = 'v117';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };

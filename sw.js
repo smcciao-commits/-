@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v116: 인강관 가로 전체화면 수리 + 유튜브 외부 이동 원천 차단)
-const CACHE_NAME = 'topedu-pwa-v116';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v117: 틀린 단어 복습 모드 + 선생님 진도 그래프)
+const CACHE_NAME = 'topedu-pwa-v117';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
