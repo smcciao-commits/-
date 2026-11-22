@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v111: 초5 Day-by-Day 오늘의 학습 · Hand in Hand Unit 06~12)
-const CACHE_NAME = 'topedu-pwa-v111';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v112: 능률VOCA 초등필수 복습일 Day 05~40 8세트 추가)
+const CACHE_NAME = 'topedu-pwa-v112';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
