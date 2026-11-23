@@ -9108,7 +9108,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v128';
+var TOPEDU_APP_VERSION = 'v129';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -11547,6 +11547,85 @@ function ssTick() {
   if (Math.round(SS.el) % 15 === 0) { try { ssStatusPub(); } catch (e) {} }
 }
 
+/* ---------- v129: 원장님이 직접 넣는 문장·문제 ----------
+   cfg.myS = [{ko,en}], cfg.myP = [{p,q,c[],a,d}], cfg.myOnly = true 면 기본 세트는 빼고 내 것만.
+   v128 동기화(숙제 계획 payload.ss)로 학생 폰에 그대로 전달돼요. */
+function ssParseMyS(txt) {
+  var out = [], bad = [];
+  String(txt || '').split(/\r?\n/).forEach(function (line, i) {
+    var t = line.trim();
+    if (!t) return;
+    var m = t.split(/\s*(?:\t|\s\/\s|\|)\s*/);
+    var ko = '', en = '';
+    if (m.length >= 2) {
+      /* 한글이 들어 있는 쪽을 해석으로 */
+      if (/[가-힣]/.test(m[0]) && !/[가-힣]/.test(m[m.length - 1])) { ko = m[0]; en = m.slice(1).join(' '); }
+      else if (/[가-힣]/.test(m[m.length - 1])) { en = m.slice(0, -1).join(' '); ko = m[m.length - 1]; }
+      else { ko = m[0]; en = m.slice(1).join(' '); }
+    }
+    en = en.trim(); ko = ko.trim();
+    if (!en || !ko || en.split(/\s+/).length < 2) { bad.push(i + 1); return; }
+    out.push({ ko: ko, en: en });
+  });
+  return { items: out, bad: bad };
+}
+function ssMySText(arr) { return (arr || []).map(function (x) { return x.ko + ' / ' + x.en; }).join('\n'); }
+var SS_NUMS = ['①', '②', '③', '④', '⑤'];
+function ssParseMyP(txt) {
+  var out = [], bad = [];
+  var blocks = String(txt || '').replace(/\r/g, '').split(/\n\s*\n+/);
+  blocks.forEach(function (b, bi) {
+    if (!b.trim()) return;
+    var q = { p: '', q: '', c: [], a: -1, d: '', type: '원장님 문제' }, cur = '';
+    b.split('\n').forEach(function (line) {
+      var t = line.trim(), m;
+      if (!t) return;
+      if ((m = t.match(/^지문\s*[:：]\s*(.*)$/))) { cur = 'p'; q.p = m[1]; return; }
+      if ((m = t.match(/^(?:질문|문제)\s*[:：]\s*(.*)$/))) { cur = 'q'; q.q = m[1]; return; }
+      if ((m = t.match(/^정답\s*[:：]\s*(.*)$/))) {
+        cur = '';
+        var v = m[1].trim(), k = SS_NUMS.indexOf(v.charAt(0));
+        q.a = k >= 0 ? k : (Number((v.match(/\d/) || [''])[0]) - 1);
+        return;
+      }
+      if ((m = t.match(/^해설\s*[:：]\s*(.*)$/))) { cur = 'd'; q.d = m[1]; return; }
+      if ((m = t.match(/^(?:유형)\s*[:：]\s*(.*)$/))) { cur = ''; q.type = m[1] || q.type; return; }
+      if ((m = t.match(/^(?:[①②③④⑤]|\(?[1-5][\).]|[1-5]\s*[.)])\s*(.*)$/))) { cur = 'c'; q.c.push(m[1]); return; }
+      /* 이어지는 줄 */
+      if (cur === 'p') q.p += '<br>' + t;
+      else if (cur === 'q') q.q += ' ' + t;
+      else if (cur === 'd') q.d += ' ' + t;
+      else if (cur === 'c' && q.c.length) q.c[q.c.length - 1] += ' ' + t;
+      else if (!q.q) q.q = t;
+    });
+    if (!q.q || q.c.length < 2 || q.a < 0 || q.a >= q.c.length) { bad.push(bi + 1); return; }
+    out.push(q);
+  });
+  return { items: out, bad: bad };
+}
+function ssMyPText(arr) {
+  return (arr || []).map(function (q) {
+    var L = [];
+    if (q.type && q.type !== '원장님 문제') L.push('유형: ' + q.type);
+    if (q.p) L.push('지문: ' + String(q.p).replace(/<br>/g, '\n'));
+    L.push('질문: ' + q.q);
+    (q.c || []).forEach(function (c, k) { L.push(SS_NUMS[k] + ' ' + c); });
+    L.push('정답: ' + SS_NUMS[q.a]);
+    if (q.d) L.push('해설: ' + q.d);
+    return L.join('\n');
+  }).join('\n\n');
+}
+/* 내 것 먼저 + 모자라면 기본 세트에서 채우기 (myOnly 면 내 것만) */
+function ssMixMine(mine, base, n, myOnly, seed) {
+  mine = (mine || []).slice();
+  if (mine.length) {
+    var rnd = sbRand((Number(seed) || 1) * 31337 + 3);
+    for (var i = mine.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = mine[i]; mine[i] = mine[j]; mine[j] = t; }
+  }
+  if (myOnly && mine.length) return mine.slice(0, n);
+  return mine.slice(0, n).concat(base).slice(0, n);
+}
+
 /* ---------- 2단계: 문장 어순배열 ---------- */
 function ssBuildS2(ban, seed, n) {
   var pool = [];
@@ -11560,10 +11639,12 @@ function ssBuildS2(ban, seed, n) {
       });
     });
   } catch (e) {}
-  if (!pool.length) return [];
   var rnd = sbRand((Number(seed) || 1) * 7919 + 13);
   for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
-  return pool.slice(0, Math.min(n || 8, pool.length));
+  /* v129: 원장님이 넣은 문장 */
+  var cfg = ssCfg(ban);
+  var mine = (cfg.myS || []).map(function (x) { return { ko: x.ko, en: x.en, tag: '원장님 문장', set: '원장님 문장' }; });
+  return ssMixMine(mine, pool, n || 8, !!cfg.myOnly, seed);
 }
 /* ---------- 3단계: 문법·독해 ---------- */
 function ssBuildS3(ban, seed, n) {
@@ -11571,11 +11652,12 @@ function ssBuildS3(ban, seed, n) {
   try {
     if (typeof SS3_BANK !== 'undefined') bank = SS3_BANK[ban] || (/(고|고1|고2|고3)/.test(ban) ? SS3_BANK['예비고1'] : SS3_BANK['수지중1']);
   } catch (e) {}
-  if (!bank || !bank.length) return [];
-  var pool = bank.slice();
+  var pool = (bank || []).slice();
   var rnd = sbRand((Number(seed) || 1) * 104729 + 7);
   for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
-  return pool.slice(0, Math.min(n || 8, pool.length));
+  /* v129: 원장님이 넣은 문제 */
+  var cfg = ssCfg(ban);
+  return ssMixMine(cfg.myP || [], pool, n || 8, !!cfg.myOnly, seed);
 }
 function ssStageName() {
   if (SS.done) return '완료';
@@ -12255,6 +12337,24 @@ function ssAdminHtml() {
     + '</div>'
     + '</div>';
 
+  /* 1-2) v129: 내가 직접 넣는 문장·문제 */
+  var taSt = 'width:100%;box-sizing:border-box;padding:10px 11px;border:1.5px solid #c4b5fd;border-radius:10px;font-size:13px;line-height:1.5;font-family:inherit';
+  h += '<div class="card" style="border:2px solid #8b5cf6;background:#faf5ff;border-radius:16px;padding:16px;margin-bottom:12px">'
+    + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:20px">✍️</span>'
+    + '<b style="font-size:16px;color:#6d28d9;font-family:Maplestory,sans-serif">' + esc(ban) + ' 자기주도 · 내가 넣는 문장·문제</b></div>'
+    + '<div style="font-size:12.5px;color:#6d28d9;line-height:1.55;margin-bottom:10px">여기 넣은 것이 <b>먼저</b> 나오고, 모자라면 기본 문장·문제로 채워요. 저장하면 학생 폰에도 바로 가요.</div>'
+    + '<label style="font-weight:700;color:#4c1d95">2단계 문장 (한 줄에 하나 · <b>한글 / 영어</b>)</label>'
+    + '<textarea id="ssMyS" rows="6" style="' + taSt + '" placeholder="축제는 공동체를 하나로 묶어 준다. / Festivals bring communities together.">' + esc(ssMySText(cfg.myS)) + '</textarea>'
+    + '<div style="height:10px"></div>'
+    + '<label style="font-weight:700;color:#4c1d95">3단계 문제 (문제 사이는 <b>빈 줄</b>로 구분)</label>'
+    + '<textarea id="ssMyP" rows="10" style="' + taSt + '" placeholder="지문: Festivals are more than special days...&#10;질문: 윗글의 주제로 가장 적절한 것은?&#10;① ...&#10;② ...&#10;③ ...&#10;④ ...&#10;⑤ ...&#10;정답: ②&#10;해설: ...">' + esc(ssMyPText(cfg.myP)) + '</textarea>'
+    + '<div style="font-size:11.5px;color:#7c3aed;line-height:1.5;margin-top:4px">지문·해설은 없어도 돼요. 보기는 ①~⑤ 또는 1) 2) 로 써도 되고, 정답은 ② 또는 2 로 쓰면 돼요.</div>'
+    + '<label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px;font-weight:700;color:#4c1d95">'
+    + '<input type="checkbox" id="ssMyOnly"' + (cfg.myOnly ? ' checked' : '') + ' style="width:18px;height:18px"> 내가 넣은 것만 내기 (기본 문장·문제 빼기)</label>'
+    + '<div id="ssMyMsg" style="font-size:12.5px;color:#6d28d9;margin-top:8px;line-height:1.5">지금 저장된 것: 문장 ' + (cfg.myS || []).length + '개 · 문제 ' + (cfg.myP || []).length + '개</div>'
+    + '<button type="button" class="btn" id="ssMySave" style="width:100%;margin:10px 0 0;background:#7c3aed;color:#fff;font-weight:800">💾 문장·문제 저장 (학생 폰에 보내기)</button>'
+    + '</div>';
+
   /* 2) 현황판 + 학부모 문자 */
   h += '<div class="card" style="border:2px solid #0ea5e9;background:#f0f9ff;border-radius:16px;padding:14px;margin-bottom:12px">'
     + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
@@ -12297,6 +12397,7 @@ function ssPrevText() {
     ? ('오늘 1단계 → <b>Day ' + days[0].day + '~' + days[days.length - 1].day + '</b> (' + esc(ssBookLabel(days[0].name)) + ')' + (days.length !== Number(c.dayCount) ? ' · 찾은 Day ' + days.length + '개' : ''))
     : '오늘 1단계 → <b>Day를 찾지 못했어요</b> (교재·시작 Day를 직접 지정해 주세요)';
   txt += '<br>2단계 문장 ' + (Number(c.sentCount) || 8) + '개 · 3단계 문제 ' + (Number(c.probCount) || 8) + '개 · Day 시험 ' + (Number(c.testCount) || 10) + '문항';
+  if ((c.myS || []).length || (c.myP || []).length) txt += '<br>✍️ 내가 넣은 것: 문장 ' + (c.myS || []).length + '개 · 문제 ' + (c.myP || []).length + '개' + (c.myOnly ? ' (이것만 출제)' : ' (먼저 출제)');
   txt += '<br>예상 시간 → 1단계 ' + Math.round((Number(c.goal) || 60) * 0.42) + '분 · 2단계 ' + Math.round((Number(c.goal) || 60) * 0.25) + '분 · 3단계 ' + Math.round((Number(c.goal) || 60) * 0.33) + '분';
   return txt;
 }
@@ -12444,9 +12545,34 @@ function ssAdminBind() {
       sentCount: Number(g('ssSentCount')) || 8,
       probCount: Number(g('ssProbCount')) || 8
     };
+    /* v129: 직접 넣은 문장·문제는 그대로 유지 */
+    var old = (ssCfgAll()[ban]) || {};
+    if (old.myS) c.myS = old.myS;
+    if (old.myP) c.myP = old.myP;
+    if (old.myOnly) c.myOnly = old.myOnly;
     ssCfgSave(ban, c);
     try { hpPublish(); } catch (e) {}
     ssToast('💾 ' + ban + ' 자기주도 설정을 저장했어요');
+    showAdmin();
+  };
+  var bMy = document.getElementById('ssMySave');
+  if (bMy) bMy.onclick = function () {
+    var ban = SS_VIEW.ban;
+    var ps = ssParseMyS((document.getElementById('ssMyS') || {}).value);
+    var pp = ssParseMyP((document.getElementById('ssMyP') || {}).value);
+    var only = !!((document.getElementById('ssMyOnly') || {}).checked);
+    var msg = document.getElementById('ssMyMsg');
+    if (ps.bad.length || pp.bad.length) {
+      if (msg) msg.innerHTML = '<b style="color:#dc2626">저장 안 됨 · 확인해 주세요</b><br>'
+        + (ps.bad.length ? '문장 ' + ps.bad.join(', ') + '번째 줄: "한글 / 영어" 모양이 아니에요.<br>' : '')
+        + (pp.bad.length ? '문제 ' + pp.bad.join(', ') + '번째: 질문·보기(2개 이상)·정답이 필요해요.' : '');
+      return;
+    }
+    var all = ssCfgAll(), c = all[ban] || {};
+    c.myS = ps.items; c.myP = pp.items; c.myOnly = only;
+    ssCfgSave(ban, c);
+    try { hpPublish(); } catch (e) {}
+    ssToast('💾 ' + ban + ' 문장 ' + ps.items.length + '개 · 문제 ' + pp.items.length + '개 저장');
     showAdmin();
   };
   var bSess = document.getElementById('ssSess');
