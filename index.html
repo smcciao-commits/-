@@ -2263,28 +2263,58 @@ function dbSaveAsync(ban,name,setName,mode,score){
     else TOPEDU_DB_ROWS.push({b:ban,n:name,s:setName,m:mode,sc:sc,u:new Date().toISOString(),d:dbDay()});
   } catch(e){}
 }
-/* JSONP 읽기 — Apps Script ContentService(JAVASCRIPT) 로 CORS 없이 받아온다 */
+/* 읽기 — v123: 쿠키 없는 fetch(순수 JSON) 우선, 막히면 예전 JSONP로 폴백 */
 function dbFetch(params, cb){
-  var called = false;
-  function done(data){ if(called) return; called = true; try{ cb && cb(data); }catch(e){} }
+  var called = false, tag = null, name = '', timer = 0, timedOut = false;
+  function done(data){
+    if(called) return; called = true;
+    try { clearTimeout(timer); } catch(e){}
+    if (name) { try { delete window[name]; } catch(e){ window[name] = null; } name = ''; }
+    try { if (tag && tag.parentNode) tag.parentNode.removeChild(tag); } catch(e){}
+    try{ cb && cb(data); }catch(e){}
+  }
   if(!TOPEDU_DB_URL){ done(null); return; }
-  var name = 'topeduDbCb' + (++TOPEDU_DB_SEQ);
   var q = [];
   Object.keys(params||{}).forEach(function(k){
     var v = params[k];
     if(v===undefined || v===null || v==='') return;
     q.push(encodeURIComponent(k)+'='+encodeURIComponent(v));
   });
-  q.push('callback=' + name);
-  q.push('_=' + Date.now());
-  var tag = document.createElement('script');
-  tag.async = true;
-  tag.src = TOPEDU_DB_URL + '?' + q.join('&');
-  window[name] = function(d){ done(d && d.ok ? d : null); };
-  tag.onerror = function(){ done(null); };
-  tag.onload = function(){ setTimeout(function(){ done(null); }, 0); };
-  (document.head||document.body).appendChild(tag);
-  setTimeout(function(){ done(null); }, 15000);
+  var qs = q.join('&');
+  timer = setTimeout(function(){ timedOut = true; done(null); }, 15000);
+  function viaJsonp(){
+    if (called) return;
+    try { clearTimeout(timer); } catch(e){}
+    name = 'topeduDbCb' + (++TOPEDU_DB_SEQ);
+    tag = document.createElement('script');
+    tag.async = true;
+    tag.src = TOPEDU_DB_URL + '?' + qs + '&callback=' + name + '&_=' + Date.now();
+    window[name] = function(d){ done(d && d.ok ? d : null); };
+    tag.onerror = function(){ done(null); };
+    tag.onload = function(){ setTimeout(function(){ done(null); }, 0); };
+    (document.head||document.body).appendChild(tag);
+    timer = setTimeout(function(){ done(null); }, 15000);
+  }
+  function viaFetch(){
+    var ctrl = null;
+    try { if (typeof AbortController !== 'undefined') ctrl = new AbortController(); } catch(e){ ctrl = null; }
+    var opt = { method: 'GET', mode: 'cors', cache: 'no-store', credentials: 'omit' };
+    if (ctrl) opt.signal = ctrl.signal;
+    fetch(TOPEDU_DB_URL + '?' + (qs ? qs + '&' : '') + '_=' + Date.now(), opt).then(function(r){
+      if (!r || !r.ok) throw new Error('http ' + (r ? r.status : '?'));
+      return r.text();
+    }).then(function(txt){
+      var d = null;
+      try { d = JSON.parse(txt); } catch(e){ d = null; }
+      if (d && typeof d === 'object') { done(d.ok ? d : null); return; }
+      viaJsonp();
+    })['catch'](function(){
+      if (timedOut) { done(null); return; }
+      viaJsonp();
+    });
+  }
+  try { if (typeof fetch === 'function') { viaFetch(); return; } } catch(e){}
+  viaJsonp();
 }
 /* 시트 기록 → 이 폰의 localStorage 비파괴 병합 (세트·모드별 최고점 유지) */
 function dbMergeRows(ban,name,rows){
@@ -2787,8 +2817,12 @@ function localCall(fn, args) {
 }
 
 /* ============ v103: 서버(Apps Script) 호출 ============
-   GitHub Pages에는 google.script.run이 없으므로 JSONP(script 태그)로 웹앱에 물어봅니다.
-   인터넷이 없으면 로그인·명단·현황은 진행되지 않고 "인터넷 연결을 확인해 주세요"로 막힙니다. */
+   GitHub Pages에는 google.script.run이 없으므로 웹앱에 직접 물어봅니다.
+   인터넷이 없으면 로그인·명단·현황은 진행되지 않고 "인터넷 연결을 확인해 주세요"로 막힙니다.
+   v123: 만 14세 미만 Google 계정이 로그인된 폰(하린이 폰)에서는 script 태그(JSONP) 요청에
+   Google 쿠키가 함께 실려 Google이 families.google.com(13세 미만 이용 불가) 페이지로 돌려보냅니다.
+   그래서 먼저 쿠키를 빼고(credentials:'omit') 순수 JSON(fetch)로 물어보고,
+   fetch가 막히는 환경에서만 예전 JSONP로 한 번 더 시도합니다. */
 var TOPEDU_SERVER_FNS = { getClasses: 1, studentLogin: 1, adminLogin: 1, roster: 1, adminDayReport: 1, adminSetReport: 1, wordSets: 1, hwSave: 1, hwLoad: 1, savePushToken: 1, sendPush: 1, sendDirectorPush: 1 };
 var TOPEDU_NO_NET = '인터넷 연결을 확인해 주세요';
 function srvParams(fn, args){
@@ -2814,25 +2848,56 @@ function srvCall(fn, args){
     if (!TOPEDU_DB_URL) { rej(netErr); return; }
     var params = srvParams(fn, args), q = ['action=app', 'fn=' + encodeURIComponent(fn)];
     Object.keys(params).forEach(function(k){ q.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k])); });
-    var cb = 'topeduSrvCb' + (++TOPEDU_DB_SEQ), done = false, timer = 0;
-    var tag = document.createElement('script');
-    function finish(d, err){
+    var qs = q.join('&'), wait = fn === 'sendPush' ? 60000 : 12000;
+    var done = false, timedOut = false, fetchTimer = 0, jsonpTimer = 0, cb = '', tag = null;
+    function settle(d, err){
       if (done) return;
       done = true;
-      try { clearTimeout(timer); } catch(e){}
-      try { delete window[cb]; } catch(e){ window[cb] = null; }
-      try { if (tag.parentNode) tag.parentNode.removeChild(tag); } catch(e){}
+      try { clearTimeout(fetchTimer); } catch(e){}
+      try { clearTimeout(jsonpTimer); } catch(e){}
+      if (cb) { try { delete window[cb]; } catch(e){ window[cb] = null; } cb = ''; }
+      try { if (tag && tag.parentNode) tag.parentNode.removeChild(tag); } catch(e){}
       if (err) { rej(err); return; }
       if (!d) { rej(netErr); return; }
       if (d.ok) { res(d); return; }
       rej(new Error(d.error || '요청을 처리하지 못했어요.'));
     }
-    window[cb] = function(d){ finish(d || null, null); };
-    tag.async = true;
-    tag.onerror = function(){ finish(null, netErr); };
-    tag.src = TOPEDU_DB_URL + '?' + q.join('&') + '&callback=' + cb + '&_=' + Date.now();
-    (document.head || document.body).appendChild(tag);
-    timer = setTimeout(function(){ finish(null, netErr); }, fn === 'sendPush' ? 60000 : 12000);
+    /* 예전 방식(script 태그 JSONP) — fetch가 막히는 환경에서만 씁니다. */
+    function viaJsonp(){
+      if (done) return;
+      try { if (tag && tag.parentNode) tag.parentNode.removeChild(tag); } catch(e){}
+      tag = document.createElement('script');
+      cb = 'topeduSrvCb' + (++TOPEDU_DB_SEQ);
+      window[cb] = function(d){ settle(d || null, null); };
+      tag.async = true;
+      tag.onerror = function(){ settle(null, netErr); };
+      tag.src = TOPEDU_DB_URL + '?' + qs + '&callback=' + cb + '&_=' + Date.now();
+      (document.head || document.body).appendChild(tag);
+      jsonpTimer = setTimeout(function(){ settle(null, netErr); }, wait);
+    }
+    /* v123: 쿠키 없는 fetch → 순수 JSON. JSON이 아니면(차단 페이지 등) JSONP로 폴백. */
+    function viaFetch(){
+      if (done) return;
+      var ctrl = null;
+      try { if (typeof AbortController !== 'undefined') ctrl = new AbortController(); } catch(e){ ctrl = null; }
+      var opt = { method: 'GET', mode: 'cors', cache: 'no-store', credentials: 'omit' };
+      if (ctrl) opt.signal = ctrl.signal;
+      fetchTimer = setTimeout(function(){ timedOut = true; try { if (ctrl) ctrl.abort(); } catch(e){} }, wait);
+      fetch(TOPEDU_DB_URL + '?' + qs + '&_=' + Date.now(), opt).then(function(r){
+        if (!r || !r.ok) throw new Error('http ' + (r ? r.status : '?'));
+        return r.text();
+      }).then(function(txt){
+        var d = null;
+        try { d = JSON.parse(txt); } catch(e){ d = null; }
+        if (d && typeof d === 'object') { settle(d, null); return; }
+        viaJsonp();
+      })['catch'](function(){
+        if (timedOut) { settle(null, netErr); return; }
+        viaJsonp();
+      });
+    }
+    try { if (typeof fetch === 'function') { viaFetch(); return; } } catch(e){}
+    viaJsonp();
   });
 }
 function call(fn){
@@ -9028,7 +9093,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v122';
+var TOPEDU_APP_VERSION = 'v123';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
