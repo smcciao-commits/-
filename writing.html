@@ -316,7 +316,7 @@ function forceAppRefresh(e){
   if(btn){btn.textContent='⏳ 갱신 중...';btn.style.opacity='.7';}
   var t=document.createElement('div');t.className='toast';t.textContent='🔄 최신 버전으로 새로고침하고 있습니다...';document.body.appendChild(t);
   var p1=Promise.resolve(),p2=Promise.resolve();
-  if('serviceWorker' in navigator){p1=navigator.serviceWorker.getRegistrations().then(function(rs){return Promise.all(rs.map(function(r){return r.unregister();}));}).catch(function(){});}
+  if('serviceWorker' in navigator){p1=navigator.serviceWorker.getRegistrations().then(function(rs){return Promise.all(rs.map(function(r){return r.update?r.update().catch(function(){}):null;}));}).catch(function(){});}
   if('caches' in window){p2=caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return caches.delete(k);}));}).catch(function(){});}
   try{sessionStorage.clear();}catch(err){}
   Promise.all([p1,p2]).then(function(){
@@ -326,8 +326,9 @@ function forceAppRefresh(e){
     },350);
   });
 }
+/* v126: 서비스워커를 지우지 않습니다 — 지우면 폰 알림(FCM) 구독이 끊겨요. 업데이트만 확인. */
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.getRegistrations().then(function(rs){for(var r of rs)r.unregister();}).catch(function(){});
+  navigator.serviceWorker.getRegistrations().then(function(rs){for(var r of rs){try{r.update();}catch(e){}}}).catch(function(){});
 }
 if('caches' in window){caches.keys().then(function(ns){for(var n of ns)caches.delete(n);}).catch(function(){});}
 

@@ -2314,10 +2314,11 @@ function forceAppRefresh(e) {
   toast.innerHTML = '<span>🔄</span> <span>최신 버전으로 새로고침하고 있습니다...</span>';
   document.body.appendChild(toast);
 
+  /* v126: 새로고침 버튼도 서비스워커를 지우지 않고 업데이트만 합니다(폰 알림 구독 유지). */
   var unregisterPromise = Promise.resolve();
   if ('serviceWorker' in navigator) {
     unregisterPromise = navigator.serviceWorker.getRegistrations().then(function(regs) {
-      return Promise.all(regs.map(function(reg) { return reg.unregister(); }));
+      return Promise.all(regs.map(function(reg) { return reg.update ? reg.update().catch(function(){}) : null; }));
     }).catch(function(err){ console.log(err); });
   }
 

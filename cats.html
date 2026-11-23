@@ -2162,7 +2162,7 @@ function forceAppRefresh(e) {
   var unregisterPromise = Promise.resolve();
   if ('serviceWorker' in navigator) {
     unregisterPromise = navigator.serviceWorker.getRegistrations().then(function(regs) {
-      return Promise.all(regs.map(function(reg) { return reg.unregister(); }));
+      return Promise.all(regs.map(function(reg) { return reg.update ? reg.update().catch(function(){}) : null; })); /* v126: unregister 금지(폰 알림 유지) */
     }).catch(function(err){ console.log(err); });
   }
 
