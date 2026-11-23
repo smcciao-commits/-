@@ -7539,6 +7539,18 @@ function loadAdminDashboard(){
   });
 }
 
+/* v125: 반 필터 버튼 목록 — 기본 반 순서를 먼저 두고, 명단에만 있는 새 반은 뒤에 붙입니다. */
+var DASH_BAN_PRI = ['초5', '풍덕초6', '수지중1', '수지중2', '한빛중2', '예비고1', '홍천고1', '현암고1', '수지고2', '죽전고2'];
+function dashBanList(students){
+  var list = DASH_BAN_PRI.slice();
+  (students || []).forEach(function(s){
+    var b = (s && s.ban) ? String(s.ban).trim() : '';
+    if(!b || b === '전체') return;
+    if(list.indexOf(b) < 0) list.push(b);   /* 선생님 계정이 명단에 있으면 여기서 뒤에 붙고, 없으면 안 나옴 */
+  });
+  return list;
+}
+
 function drawScienceTeacherDashboard(students){
   try { students = dbOverlayStudents(students); } catch(e){}
   var tot = students.length;
@@ -7552,7 +7564,7 @@ function drawScienceTeacherDashboard(students){
     if(DASH_FILTER === 'none') return s.status === 'none' || (!s.did && s.status !== 'mid');
     if(DASH_FILTER === 'mid') return s.status === 'mid';
     if(DASH_FILTER === 'done') return s.status === 'done' || s.did;
-    return s.ban === DASH_FILTER;
+    return String(s.ban || '').trim() === DASH_FILTER;
   });
 
   var html = '<div class="dash-kpis">' +
@@ -7568,14 +7580,12 @@ function drawScienceTeacherDashboard(students){
     '<button class="dash-chip ' + (DASH_FILTER==='all'?'on':'') + '" data-df="all">🌸 전체 (' + tot + ')</button>' +
     '<button class="dash-chip ' + (DASH_FILTER==='none'?'on':'') + '" data-df="none">🚨 오늘 미접속 (' + noneList.length + ')</button>' +
     '<button class="dash-chip ' + (DASH_FILTER==='mid'?'on':'') + '" data-df="mid">⏳ 학습 중 (' + midList.length + ')</button>' +
-    '<button class="dash-chip ' + (DASH_FILTER==='done'?'on':'') + '" data-df="done">✅ 완료 (' + doneList.length + ')</button>' +
-    '<button class="dash-chip ' + (DASH_FILTER==='수지중2'?'on':'') + '" data-df="수지중2">수지중2</button>' +
-    '<button class="dash-chip ' + (DASH_FILTER==='홍천고1'?'on':'') + '" data-df="홍천고1">홍천고1</button>' +
-    '<button class="dash-chip ' + (DASH_FILTER==='예비고1'?'on':'') + '" data-df="예비고1">예비고1</button>' +
-    '<button class="dash-chip ' + (DASH_FILTER==='수지중1'?'on':'') + '" data-df="수지중1">수지중1</button>' +
-    '<button class="dash-chip ' + (DASH_FILTER==='풍덕초6'?'on':'') + '" data-df="풍덕초6">풍덕초6</button>' +
-    '<button class="dash-chip ' + (DASH_FILTER==='한빛중2'?'on':'') + '" data-df="한빛중2">한빛중2</button>' +
-  '</div>';
+    '<button class="dash-chip ' + (DASH_FILTER==='done'?'on':'') + '" data-df="done">✅ 완료 (' + doneList.length + ')</button>';
+  /* v125: 반 버튼은 하드코딩 6개 대신 실제 명단의 모든 반을 정해진 순서로 (초5·현암고1·수지고2·죽전고2 누락 수정) */
+  dashBanList(students).forEach(function(b){
+    html += '<button class="dash-chip ' + (DASH_FILTER===b?'on':'') + '" data-df="' + esc(b) + '">' + esc(b) + '</button>';
+  });
+  html += '</div>';
 
   html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
     '<div style="font-size:13px;font-weight:700;color:var(--muted)">총 ' + filtered.length + '명 표시 중 · <span style="color:#0d9488;font-weight:800">📄 시트 DB ' + (TOPEDU_DB_AT ? ('동기화 ' + new Date(TOPEDU_DB_AT).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })) : '불러오는 중') + '</span></div>' +
@@ -9093,7 +9103,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v123';
+var TOPEDU_APP_VERSION = 'v125';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
