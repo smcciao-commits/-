@@ -5728,7 +5728,7 @@ function showHome(){
     /* v107: 실제 반만 버튼으로 — '전체'는 [전체 보기]가 하므로 빼고, 예전 테스트 태그도 숨김 */
     var _hideB = { '예시반':1, '중1':1, '중1반':1, '중등부':1, '초5반':1, '풍덕초5':1 };
     var bans=[]; h.sets.forEach(function(s){ (s.target||'전체').split(/[,，\/]/).forEach(function(b){ b=b.trim(); if(b&&b!=='전체'&&!_hideB[b]&&bans.indexOf(b)<0) bans.push(b); }); });
-    var _bp=['초5','풍덕초6','수지중1','수지중2','한빛중2','예비고1','홍천고1','현암고1','수지고2','죽전고2','선생님','전체'];
+    var _bp=['초5','풍덕초6','수지중1','수지중2','예비고1','홍천고1','현암고1','수지고2','죽전고2','선생님','전체'];
     bans.sort(function(a,b){ var ia=_bp.indexOf(a), ib=_bp.indexOf(b); if(ia<0)ia=99; if(ib<0)ib=99; return ia-ib || (a<b?-1:a>b?1:0); });
     html+='<div class="sub">반을 고르면 그 반 학생이 보는 세트만 보여요.</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px">'+
       ['전체 보기'].concat(bans).map(function(b){ var v=b==='전체 보기'?'':b; return '<button class="chip tf'+(v===tf?' done':' todo')+'" data-b="'+esc(v)+'" style="border:0;cursor:pointer;padding:8px 12px">'+esc(b)+'</button>'; }).join('')+'</div>';
@@ -6901,6 +6901,8 @@ var HP_NET = { started: false, open: 0 };
 function hpPublish(){
   var plans = hpAll();
   var payload = { v: 96, ts: Date.now(), plans: plans };
+  /* v128: 원장님 폰에서 저장한 자기주도 설정도 같이 보내 학생 폰에 적용 */
+  try { if (typeof ssCfgAll === 'function') payload.ss = ssCfgAll(); } catch (e) {}
   try {
     bnLoadLib().then(function (ok) {
       if (!ok) return;
@@ -6926,6 +6928,8 @@ function hpApplyRemote(p){
   for (k in p.plans) { if (k !== '__ts' && p.plans[k]) out[k] = p.plans[k]; }
   out.__ts = p.ts;
   try { store(HP_KEY, out); } catch (e) {}
+  /* v128: 자기주도 설정 동기화 */
+  try { if (p.ss && typeof p.ss === 'object') store('topedu_ss97_cfg', p.ss); } catch (e) {}
   try { if (document.getElementById('hpCard') && S.home && S.home.me) showHome(); } catch (e) {}
 }
 function hpSubscribe(){
@@ -7021,7 +7025,7 @@ function drawLiveClassBanner(ban) {
 
 function showLiveClassSetup() {
   var A = S.admin;
-  var classes = (A.info && A.info.classes) ? A.info.classes : ['수지중2', '수지중1', '초5', '예비고1', '홍천고1', '풍덕초6', '한빛중2'];
+  var classes = (A.info && A.info.classes) ? A.info.classes : ['수지중2', '수지중1', '초5', '예비고1', '홍천고1', '풍덕초6'];
   var selBan = A.ban || '수지중2';
 
   var html = topBar('📹 실시간 화상수업 개설 (호스트)') + '<div class="card">' +
@@ -7541,7 +7545,7 @@ function loadAdminDashboard(){
 }
 
 /* v125: 반 필터 버튼 목록 — 기본 반 순서를 먼저 두고, 명단에만 있는 새 반은 뒤에 붙입니다. */
-var DASH_BAN_PRI = ['초5', '풍덕초6', '수지중1', '수지중2', '한빛중2', '예비고1', '홍천고1', '현암고1', '수지고2', '죽전고2'];
+var DASH_BAN_PRI = ['초5', '풍덕초6', '수지중1', '수지중2', '예비고1', '홍천고1', '현암고1', '수지고2', '죽전고2'];
 function dashBanList(students){
   var list = DASH_BAN_PRI.slice();
   (students || []).forEach(function(s){
@@ -9104,7 +9108,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v127';
+var TOPEDU_APP_VERSION = 'v128';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -11364,6 +11368,14 @@ function ssExit(force) {
     if (!SS.done) ok = confirm('자기주도 모드를 그만둘까요?\n지금까지 한 기록은 저장돼요.\n(나중에 이어서 할 수 있어요)');
     if (!ok) return;
   }
+  /* v128: 끝내기 전에 [나가기]를 누르면 원장님 폰·현황판에 '중도 나가기'로 남김 */
+  if (!SS.done && !force) {
+    try { ssStatusPub(true); } catch (e) {}
+    try {
+      ssNtfy('🚪 [자기주도 중도 나가기] ' + SS.name + ' (' + SS.ban + ')',
+        '경과 ' + ssMMSS((Date.now() - SS.t0) / 1000) + ' · ' + ssStageName() + ' 진행률 ' + ssStageProgress() + '% · 이탈 ' + SS.leaveCnt + '회', 'study');
+    } catch (e) {}
+  }
   SS.on = false; SS.warnOn = false;
   try { ssq('ssxWarn').classList.remove('on'); } catch (e) {}
   ssOverlayOn(false);
@@ -11539,7 +11551,9 @@ function ssTick() {
 function ssBuildS2(ban, seed, n) {
   var pool = [];
   try {
-    var sets = sentSetsForBan(ban);
+    /* v128: 자기주도 2단계는 '이 반에 지정된' 문장 세트만 (반 지정 없는 고1 연습 세트가 중2에 섞이던 문제 수정) */
+    var sets = sentSetsForBan(ban).filter(function (st) { return st.bans && st.bans.indexOf(ban) >= 0; });
+    if (!sets.length) sets = sentSetsForBan(ban);
     sets.forEach(function (st) {
       (st.items || []).forEach(function (it) {
         if (it && it.en && it.ko) pool.push({ ko: it.ko, en: it.en, tag: it.tag || '', set: st.name });
@@ -12052,7 +12066,7 @@ function ssBans() {
   try {
     (S.admin && S.admin.info && S.admin.info.classes || []).forEach(function (c) { if (c !== '선생님' && out.indexOf(c) < 0) out.push(c); });
   } catch (e) {}
-  if (!out.length) out = ['수지중1', '수지중2', '예비고1', '초5', '풍덕초6', '홍천고1', '한빛중2', '현암고1', '수지고2', '죽전고2'];
+  if (!out.length) out = ['수지중1', '수지중2', '예비고1', '초5', '풍덕초6', '홍천고1', '현암고1', '수지고2', '죽전고2'];
   return out;
 }
 function ssRoster(ban) {
