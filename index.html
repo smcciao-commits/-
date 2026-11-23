@@ -1492,6 +1492,15 @@ button.hp-ck.tap { cursor: pointer; font-family: inherit; }
 .ssx-warnbox h2 { color: #fff; font-size: 21px; margin: 0; font-family: Maplestory, pretendard, sans-serif; }
 .ssx-warnbox p { color: #fee2e2; font-size: 13.5px; line-height: 1.6; margin: 0; max-width: 320px; }
 .ssx-warnbox .k { font-size: 12px; color: #fecaca; }
+/* v130: 🦉 자기주도 자동 경고 쪽지 카드 (빨강·검정) */
+@keyframes owlWarnPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.55); } 50% { box-shadow: 0 0 0 10px rgba(220,38,38,0); } }
+@keyframes owlWarnBlink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+.owl-warn-card { border:3px solid #dc2626 !important; background:#0b0b0b !important; color:#fff; animation: owlWarnPulse 1.4s infinite; }
+.owl-warn-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; }
+.owl-warn-title { font-family:Maplestory,sans-serif; font-size:17px; font-weight:900; color:#ef4444; letter-spacing:.5px; animation: owlWarnBlink 1s infinite; }
+.owl-warn-msg { word-break:keep-all; font-size:15px; font-weight:800; line-height:1.55; color:#fff; background:#1a0000; border:2px solid #7f1d1d; border-radius:12px; padding:12px 14px; }
+.owl-warn-msg .owl-red { color:#f87171; }
+.owl-warn-go { display:block; width:100%; margin-top:12px; padding:13px 0; border:none; border-radius:12px; background:#dc2626; color:#fff; font-size:16px; font-weight:900; font-family:Maplestory,sans-serif; cursor:pointer; box-shadow:0 4px 0 #7f1d1d; }
 @keyframes ssxshake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
 .ssx-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); z-index: 99997; background: #0f172a; color: #fff; font-size: 12.5px; font-weight: 700; padding: 9px 14px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0,0,0,.3); opacity: 0; transition: opacity .2s; pointer-events: none; }
 .ssx-toast.on { opacity: 1; }
@@ -3512,6 +3521,8 @@ function drawStudentInAppNoteCard(name){
   var note = db[name] || {};
   var hasTeacherMsg = !!note.teacherMsg;
   var replied = note.studentReply ? true : false;
+  /* v130: 서버 자동 경고(🦉로 시작하는 쪽지)는 빨강·검정 경고 카드로 */
+  if (hasTeacherMsg && /^🦉/.test(String(note.teacherMsg))) return drawOwlWarnCard(name, note);
 
   var cardContent = '';
   if(hasTeacherMsg) {
@@ -3557,6 +3568,24 @@ function drawStudentInAppNoteCard(name){
   return '<div class="card teacher-note-card" id="card_note_' + esc(name) + '" style="border:2px solid #0d9488;background:linear-gradient(135deg, #f0fdfa, #f8fafc);border-radius:18px;padding:14px 16px;box-shadow:0 4px 16px rgba(13,148,136,0.15);margin:10px 0 14px">' +
     cardContent +
     customInputHtml +
+  '</div>';
+}
+
+function owlWarnMsgHtml(msg){
+  /* '원장님', '부모님', 'N분', 'H:MM까지' 를 빨간 글씨로 */
+  return esc(msg).replace(/(원장님|부모님|\d+분 남았[다어]|\d{1,2}:\d{2}까지|지금 당장|지금 바로|알림 간다\??|알게 된다)/g, '<span class="owl-red">$1</span>');
+}
+function drawOwlWarnCard(name, note){
+  var done = false;
+  try { var sn = ssSnapGet(); done = !!(sn && sn.done && sn.ban && sn.name === name && sn.t0 && new Date(sn.t0).toDateString() === new Date().toDateString()); } catch (e) {}
+  return '<div class="card teacher-note-card owl-warn-card" id="card_note_' + esc(name) + '" style="border-radius:18px;padding:14px 16px;margin:10px 0 14px">' +
+    '<div class="owl-warn-head">' +
+      '<div class="owl-warn-title">🚨 부엉이 경고 🚨</div>' +
+      '<span style="font-size:11.5px;color:#fca5a5">' + esc(note.teacherTime || '방금 전') + '</span>' +
+    '</div>' +
+    '<div class="owl-warn-msg">' + owlWarnMsgHtml(note.teacherMsg) + '</div>' +
+    (done ? '' : '<button type="button" class="owl-warn-go" onclick="try{ssEntry()}catch(e){}">' + (/남았/.test(String(note.teacherMsg)) ? '⏱️ 자기주도 이어서 끝내기' : '⏱️ 지금 바로 자기주도 시작') + '</button>') +
+    '<div style="text-align:right;margin-top:8px"><button type="button" style="background:none;border:1px solid #7f1d1d;color:#fca5a5;border-radius:999px;padding:4px 10px;font-size:11px;cursor:pointer" onclick="clearStudentNote(\'' + esc(name) + '\')">확인 ✕</button></div>' +
   '</div>';
 }
 
@@ -9108,7 +9137,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v129';
+var TOPEDU_APP_VERSION = 'v130';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
