@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 (v120: 예비고1 하프모고 복습 지문 + 단어 터치 뜻·발음)
-const CACHE_NAME = 'topedu-pwa-v120';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 + v121 Firebase 웹 푸시(FCM)
+const CACHE_NAME = 'topedu-pwa-v121';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
@@ -50,6 +50,43 @@ function notifOptions(data) {
   try { opts.vibrate = [140, 70, 140, 70, 220]; } catch (e) {}
   return opts;
 }
+
+/* ===== v121: Firebase 웹 푸시(FCM) — 앱을 꺼 둬도 학원 공지·쪽지가 폰 상단에 뜹니다.
+   gstatic SDK를 못 받아오면(오프라인 등) 조용히 넘어가고 기존 PWA 기능은 그대로 동작합니다. */
+var TOPEDU_FCM_CONFIG = {
+  apiKey: 'AIzaSyB7dY-zIk5p9gvM7OVV7plOLAPGZfx8eEI',
+  authDomain: 'topedu-push.firebaseapp.com',
+  projectId: 'topedu-push',
+  storageBucket: 'topedu-push.firebasestorage.app',
+  messagingSenderId: '799252180174',
+  appId: '1:799252180174:web:0d49cfa9d24f848b7d349f',
+  measurementId: 'G-3RCPXNE3S0'
+};
+
+try {
+  importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
+  importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
+} catch (e) { /* SDK 없이도 앱은 정상 동작 */ }
+
+try {
+  if (self.firebase && firebase.messaging) {
+    if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(TOPEDU_FCM_CONFIG);
+    var topeduMessaging = firebase.messaging();
+    /* notification 페이로드가 있으면 브라우저가 자동 표시하므로 여기서 또 띄우지 않습니다.
+       data-only 메시지가 오면 여기서 직접 띄웁니다. */
+    topeduMessaging.onBackgroundMessage(function(payload) {
+      payload = payload || {};
+      var n = payload.notification || {};
+      var d = payload.data || {};
+      if (!n.title && !d.body) return;
+      return self.registration.showNotification(n.title || '📢 수지탑에듀 알림', notifOptions({
+        body: n.body || d.body || '',
+        tag: 'topedu-note',
+        url: d.url || './index.html'
+      }));
+    });
+  }
+} catch (e) { /* FCM 초기화 실패해도 PWA 기능은 유지 */ }
 
 // 페이지에서 직접 띄울 때(안드로이드 크롬은 new Notification() 미지원 → SW 필수)
 self.addEventListener('message', function(e) {

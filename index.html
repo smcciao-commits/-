@@ -2789,7 +2789,7 @@ function localCall(fn, args) {
 /* ============ v103: 서버(Apps Script) 호출 ============
    GitHub Pages에는 google.script.run이 없으므로 JSONP(script 태그)로 웹앱에 물어봅니다.
    인터넷이 없으면 로그인·명단·현황은 진행되지 않고 "인터넷 연결을 확인해 주세요"로 막힙니다. */
-var TOPEDU_SERVER_FNS = { getClasses: 1, studentLogin: 1, adminLogin: 1, roster: 1, adminDayReport: 1, adminSetReport: 1, wordSets: 1, hwSave: 1, hwLoad: 1 };
+var TOPEDU_SERVER_FNS = { getClasses: 1, studentLogin: 1, adminLogin: 1, roster: 1, adminDayReport: 1, adminSetReport: 1, wordSets: 1, hwSave: 1, hwLoad: 1, savePushToken: 1, sendPush: 1 };
 var TOPEDU_NO_NET = '인터넷 연결을 확인해 주세요';
 function srvParams(fn, args){
   args = args || [];
@@ -2802,6 +2802,8 @@ function srvParams(fn, args){
   if (fn === 'adminSetReport') return { pw: g(0), ban: g(1), type: g(2), setName: g(3) };
   if (fn === 'hwSave') return { pw: g(0), data: g(1) };
   if (fn === 'hwLoad') return { pw: g(0), date: g(1) };
+  if (fn === 'savePushToken') return { pw: g(0), ban: g(1), name: g(2), token: g(3), ua: g(4) };
+  if (fn === 'sendPush') return { pw: g(0), targets: g(1), title: g(2), text: g(3) };
   return {};
 }
 function srvCall(fn, args){
@@ -2829,7 +2831,7 @@ function srvCall(fn, args){
     tag.onerror = function(){ finish(null, netErr); };
     tag.src = TOPEDU_DB_URL + '?' + q.join('&') + '&callback=' + cb + '&_=' + Date.now();
     (document.head || document.body).appendChild(tag);
-    timer = setTimeout(function(){ finish(null, netErr); }, 12000);
+    timer = setTimeout(function(){ finish(null, netErr); }, fn === 'sendPush' ? 60000 : 12000);
   });
 }
 function call(fn){
@@ -5573,6 +5575,8 @@ function showHome(){
   var meInfo = getStreakInfo(me.ban, me.name);
   html += drawStreakHero(me);
   html += drawStudentInAppNoteCard(me.name);
+  /* v121: 🔔 학원 공지·쪽지 상단 푸시(FCM) 안내 카드 */
+  try { html += drawPushOptInCard(me); } catch(e){}
   /* v105: 🏆 12월 성실왕 명예의 전당 — 학생 홈 상단(도착 쪽지 아래) 안내, 선생님 화면에는 안 띄움 */
   if (me.ban !== '선생님') { try { html += drawHallOfFameBanner(); } catch(e){} }
   /* v97: ⏱️ 자기주도 1시간 모드 (보조 교사 없이 50~60분 완주) */
@@ -5684,6 +5688,11 @@ function showHome(){
   var bjl = $('#bjoinlive'); if(bjl) bjl.onclick = function(){ enterLiveClass(me.ban, false); };
   var cLive = $('#card_live_join'); if(cLive) cLive.onclick = function(){ enterLiveClass(this.dataset.ban || me.ban, false, this.dataset.title); };
   var bDq=$('#btn_daily_quest'); if(bDq){ bDq.onclick=function(){ openDailyQuest(me); }; }
+  /* v121: 🔔 푸시 알림 카드 버튼 */
+  var pBtn = $('#btn_push_enable'); if(pBtn){ pBtn.onclick = function(){ enablePushNotify(this); }; }
+  var pIos = $('#btn_push_ios_guide'); if(pIos){ pIos.onclick = function(){ alert(IOS_PUSH_GUIDE); }; }
+  var pG2 = $('#btn_push_guide2'); if(pG2){ pG2.onclick = function(){ alert(PUSH_ON_GUIDE); }; }
+  try { pushSilentSync(me); } catch(e){}
   /* v82: 스트릭 배너 · 매일 알림 버튼 연결 */
   var ssGoB = $('#ss_go'); if(ssGoB) ssGoB.onclick = ssEntry;
   var sGo = $('#streak_go');
@@ -7609,7 +7618,14 @@ function openStudentCommentModal(s){
     sendTeacherNote(s.name, msg);
     try { publishStudentNote(s.name, s.ban, msg); } catch(e){}
     if(typeof playCorrectSound === 'function') playCorrectSound();
+    var _pushBtn = this;
     this.textContent = '💌 쪽지 전송 완료! 학생 앱에 뜹니다 ✔';
+    try {
+      pushTeacherSend([[s.ban, s.name]], '💌 수지탑에듀 쪽지', msg).then(function(r){
+        if(r && r.ok && r.sent){ _pushBtn.textContent = '💌 쪽지 + 🔔 폰 알림 ' + r.sent + '대 발송 완료 ✔'; }
+        else if(r && r.ok){ _pushBtn.textContent = '💌 쪽지 전송 완료 (알림 꺼둔 학생) ✔'; }
+      }).catch(function(){});
+    } catch(e){}
     this.style.background = '#2b8a3e';
     setTimeout(function(){
       if(typeof drawScienceTeacherDashboard === 'function' && typeof TOPEDU_ALL_STUDENTS !== 'undefined'){
@@ -8991,7 +9007,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v119';
+var TOPEDU_APP_VERSION = 'v121';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -10282,6 +10298,196 @@ function renderStreakBoard(){
   if(bn) bn.onclick = function(){ openBulkNagModal(); };
 }
 
+/* ============ v121: 🔔 Firebase 웹 푸시(FCM) — 학원 공지·쪽지 상단 알림 ============ */
+var TOPEDU_FCM_CONFIG = {
+  apiKey: 'AIzaSyB7dY-zIk5p9gvM7OVV7plOLAPGZfx8eEI',
+  authDomain: 'topedu-push.firebaseapp.com',
+  projectId: 'topedu-push',
+  storageBucket: 'topedu-push.firebasestorage.app',
+  messagingSenderId: '799252180174',
+  appId: '1:799252180174:web:0d49cfa9d24f848b7d349f',
+  measurementId: 'G-3RCPXNE3S0'
+};
+var TOPEDU_VAPID_KEY = 'BKxIQGnCjJsu-EcoOg4H0LBK0kuCZAO-1SWRXUjLqvy_SF66E6nYvojIdkYIsOOoOCxuop8BP7ST_pkF6DeVC5c';
+var FCM_SDK_APP = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js';
+var FCM_SDK_MSG = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js';
+var IOS_PUSH_GUIDE = '📱 아이폰은 \'홈 화면에 추가\' 후 열면 알림을 받을 수 있어요.\n\n1) 사파리 아래 공유(⬆️) 버튼\n2) \'홈 화면에 추가\' 선택\n3) 홈 화면의 \'탑에듀\' 아이콘으로 다시 열기\n4) 홈 상단 [🔔 알림 켜기] 누르기';
+var PUSH_ON_GUIDE = '🔔 알림이 켜져 있어요.\n\n· 앱을 꺼 둬도 원장님 쪽지가 폰 상단에 떠요.\n· 폰을 바꾸거나 앱을 지웠다 다시 깔면 이 화면에서 [알림 켜기]를 다시 눌러 주세요.\n· 알림이 안 보이면 크롬 주소창의 🔒 → 알림 → 허용을 확인해 주세요.';
+var FCM_LOADING = null, FCM_MSG = null;
+
+function pushMe(){
+  try { if(S && S.cred && S.cred.ban && S.cred.name) return S.cred; } catch(e){}
+  var c = null;
+  try { c = store('cred'); } catch(e){}
+  return (c && c.ban && c.name) ? c : null;
+}
+function pushState(){ try { return JSON.parse(localStorage.getItem('topedu_push_state') || '{}') || {}; } catch(e){ return {}; } }
+function pushSetState(o){ try { localStorage.setItem('topedu_push_state', JSON.stringify(o || {})); } catch(e){} }
+function pushIsIOSWeb(){
+  var ua = navigator.userAgent || '';
+  var ios = /iPhone|iPad|iPod/.test(ua);
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  return ios && !standalone;
+}
+function pushHasApi(){ return (typeof Notification !== 'undefined') && ('serviceWorker' in navigator) && !!window.Promise; }
+function pushLoadScript(src){
+  return new Promise(function(res, rej){
+    var t = document.createElement('script');
+    t.src = src; t.async = true;
+    t.onload = function(){ res(true); };
+    t.onerror = function(){ rej(new Error('sdk-load')); };
+    (document.head || document.body).appendChild(t);
+  });
+}
+function fcmLoad(){
+  if (FCM_MSG) return Promise.resolve(FCM_MSG);
+  if (FCM_LOADING) return FCM_LOADING;
+  FCM_LOADING = pushLoadScript(FCM_SDK_APP)
+    .then(function(){ return pushLoadScript(FCM_SDK_MSG); })
+    .then(function(){
+      if (!window.firebase) throw new Error('sdk');
+      if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(TOPEDU_FCM_CONFIG);
+      FCM_MSG = firebase.messaging();
+      return FCM_MSG;
+    });
+  return FCM_LOADING;
+}
+function fcmToken(messaging){
+  var regP = (navigator.serviceWorker && navigator.serviceWorker.getRegistration) ? navigator.serviceWorker.getRegistration() : Promise.resolve(null);
+  return regP.then(function(reg){
+    var opt = { vapidKey: TOPEDU_VAPID_KEY };
+    if (reg) opt.serviceWorkerRegistration = reg;
+    return messaging.getToken(opt);
+  });
+}
+function pushSaveToServer(token){
+  var me = pushMe();
+  if (!me || !token) return Promise.resolve(null);
+  return srvCall('savePushToken', [me.pw || '', me.ban, me.name, token, String(navigator.userAgent || '').slice(0, 170)]);
+}
+function pushToast(title, body){
+  try {
+    var old = document.getElementById('push_toast');
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var d = document.createElement('div');
+    d.id = 'push_toast';
+    d.style.cssText = 'position:fixed;left:10px;right:10px;top:10px;z-index:99999;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 8px 24px rgba(13,148,136,0.35);font-family:Maplestory,sans-serif;';
+    d.innerHTML = '<div style="font-size:13.5px;font-weight:800;">' + esc(title) + '</div>' +
+      '<div style="font-size:12.5px;font-weight:600;opacity:0.95;margin-top:3px;line-height:1.45;word-break:keep-all;">' + esc(body) + '</div>';
+    d.onclick = function(){ try { d.parentNode.removeChild(d); } catch(e){} };
+    document.body.appendChild(d);
+    setTimeout(function(){ try { if (d.parentNode) d.parentNode.removeChild(d); } catch(e){} }, 7000);
+  } catch(e){}
+}
+function pushStoreNote(ban, name, text){
+  try {
+    if (!name || !text) return;
+    var db = getNoteDB();
+    var cur = db[name] || {};
+    cur.teacherMsg = text;
+    cur.teacherTime = '방금 전';
+    cur.unread = true;
+    db[name] = cur;
+    saveNoteDB(db);
+  } catch(e){}
+}
+function pushOnMessage(messaging){
+  if (!messaging || messaging._topeduHooked) return;
+  messaging._topeduHooked = true;
+  messaging.onMessage(function(payload){
+    payload = payload || {};
+    var n = payload.notification || {};
+    var d = payload.data || {};
+    var title = n.title || '📢 수지탑에듀 알림';
+    var body = n.body || d.body || '';
+    pushToast(title, body);
+    if ((d.type === 'note') && d.name && d.body) pushStoreNote(d.ban, d.name, d.body);
+    try { if (typeof playCorrectSound === 'function') playCorrectSound(); } catch(e){}
+  });
+}
+/* 학생이 [🔔 알림 켜기]를 눌렀을 때 — 알림 권한 → FCM 토큰 → 서버 저장 */
+function enablePushNotify(btn){
+  if (pushIsIOSWeb()) { alert(IOS_PUSH_GUIDE); return; }
+  if (!pushHasApi()) { alert('이 브라우저에서는 알림을 쓸 수 없어요.\n크롬 앱으로 열거나 홈 화면에 추가해서 열어 주세요.'); return; }
+  var me = pushMe();
+  if (!me) { alert('로그인 후 이용해 주세요.'); return; }
+  var old = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = '켜는 중…'; btn.disabled = true; }
+  var permP = (Notification.permission === 'granted') ? Promise.resolve('granted') : Notification.requestPermission();
+  permP.then(function(perm){
+    if (perm !== 'granted') throw new Error('denied');
+    return fcmLoad();
+  }).then(function(messaging){
+    pushOnMessage(messaging);
+    return fcmToken(messaging);
+  }).then(function(token){
+    if (!token) throw new Error('no-token');
+    return pushSaveToServer(token).then(function(){
+      pushSetState({ on: true, at: Date.now(), ban: me.ban, name: me.name, tail: String(token).slice(-10) });
+      try { if (typeof playCorrectSound === 'function') playCorrectSound(); } catch(e){}
+      if (typeof showHome === 'function') showHome();
+      setTimeout(function(){ pushToast('🔔 알림이 켜졌어요', '이제 앱을 꺼 둬도 원장님 쪽지가 폰 상단에 떠요.'); }, 400);
+    });
+  }).catch(function(e){
+    if (btn) { btn.textContent = old || '알림 켜기'; btn.disabled = false; }
+    var m = String((e && e.message) || e);
+    if (m === 'denied') alert('알림 권한이 꺼져 있어요.\n\n크롬 주소창의 🔒 → 알림 → 허용으로 바꾼 뒤 다시 눌러 주세요.');
+    else if (m === 'no-token') alert('알림 등록에 실패했어요. 잠시 뒤 다시 눌러 주세요.');
+    else alert('알림을 켜지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.');
+  });
+}
+/* 이미 켜 둔 학생: 앱을 열 때마다 조용히 토큰을 갱신해 둡니다 */
+function pushSilentSync(me){
+  if (!me || me.ban === '선생님') return;
+  if (!pushHasApi() || pushIsIOSWeb()) return;
+  try { if (Notification.permission !== 'granted') return; } catch(e) { return; }
+  var st = pushState();
+  if (!st || !st.on || st.name !== me.name) return;
+  if (window.__pushSyncedAt && (Date.now() - window.__pushSyncedAt) < 600000) return;
+  window.__pushSyncedAt = Date.now();
+  fcmLoad().then(function(messaging){
+    pushOnMessage(messaging);
+    return fcmToken(messaging);
+  }).then(function(token){
+    if (token) return pushSaveToServer(token);
+  }).catch(function(){});
+}
+/* 학생 홈 상단 카드 — 꺼져 있으면 [🔔 알림 켜기], 켜져 있으면 [🔔 알림 켜짐] */
+function drawPushOptInCard(me){
+  if (!me || me.ban === '선생님') return '';
+  var st = pushState();
+  var perm = 'default';
+  try { perm = (typeof Notification !== 'undefined') ? Notification.permission : 'unsupported'; } catch(e) { perm = 'unsupported'; }
+  if ((perm === 'granted') && st.on && st.name === me.name) {
+    return '<div style="margin:6px 0 10px;padding:9px 12px;background:#f0fdfa;border:1.5px solid #99f6e4;border-radius:14px;display:flex;align-items:center;gap:8px">' +
+      '<span style="font-size:16px">🔔</span>' +
+      '<div style="flex:1;min-width:0;font-size:12px;font-weight:700;color:#0f766e">알림 켜짐 — 앱을 꺼 둬도 쪽지가 폰 상단에 떠요</div>' +
+      '<button type="button" id="btn_push_guide2" style="background:white;border:1px solid #99f6e4;color:#0f766e;border-radius:9px;padding:4px 8px;font-size:11px;font-weight:700">설명</button>' +
+      '</div>';
+  }
+  var ios = pushIsIOSWeb();
+  var btn = ios
+    ? '<button type="button" id="btn_push_ios_guide" style="background:#0d9488;color:#fff;border:none;border-radius:10px;padding:8px 11px;font-weight:700;font-size:11.5px;white-space:nowrap">설정 방법</button>'
+    : '<button type="button" id="btn_push_enable" style="background:#0d9488;color:#fff;border:none;border-radius:10px;padding:8px 11px;font-weight:700;font-size:11.5px;white-space:nowrap">알림 켜기</button>';
+  var sub = ios ? "아이폰은 '홈 화면에 추가' 후 열면 알림을 받을 수 있어요" : '앱을 꺼 둬도 학원 공지·쪽지가 폰 상단에 바로 떠요';
+  return '<div id="card_push_optin" style="margin:6px 0 10px;padding:11px 12px;background:linear-gradient(135deg,#f0fdfa,#f8fafc);border:1.5px solid #99f6e4;border-radius:16px;display:flex;align-items:center;gap:9px">' +
+    '<span style="font-size:18px">🔔</span>' +
+    '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:13px;color:#0f766e;font-family:Maplestory,sans-serif">학원 공지·쪽지 알림</div>' +
+    '<div style="font-size:11px;color:#64748b;margin-top:2px;line-height:1.35">' + esc(sub) + '</div></div>' +
+    btn + '</div>';
+}
+/* 선생님 쪽지 발송 시 학생 폰으로 실제 푸시 */
+function pushTeacherPw(){
+  try { if (S && S.cred && S.cred.ban === '선생님' && S.cred.pw) return String(S.cred.pw); } catch(e){}
+  try { var c = store('cred'); if (c && c.ban === '선생님' && c.pw) return String(c.pw); } catch(e){}
+  return '';
+}
+function pushTeacherSend(targets, title, text){
+  var pw = pushTeacherPw();
+  if (!pw) return Promise.resolve({ ok: false, error: '선생님 로그인 정보가 없어요.' });
+  return srvCall('sendPush', [pw, JSON.stringify(targets || []), title || '', text || '']);
+}
+
 /* ================= v83: 📢 오늘 미완료 학생 전원 일괄 독촉 쪽지 ================= */
 var TOPEDU_NOTE_TOPIC = 'topedu_note_chosumin';
 var NAG_TARGETS = [];
@@ -10492,12 +10698,31 @@ function sendBulkNag(){
   });
   try { if(typeof playCorrectSound === 'function') playCorrectSound(); } catch(e){}
 
+  /* v121: 학생 폰 상단 푸시도 함께 발송 */
+  var pushP = null;
+  try {
+    pushP = pushTeacherSend(list.map(function(x){ return [x.ban, x.name]; }), '📢 미완료 독촉 쪽지', tpl);
+  } catch(e){}
+
   var box = document.getElementById('nagResult');
   if(box){
     box.style.display = 'block';
     box.className = 'nc-testbox good';
     box.innerHTML = '<b>✅ ' + done + '명에게 독촉 쪽지를 보냈어요!</b><br>' +
       '학생이 앱을 열면 홈 맨 위 <b>[조수민 원장님의 도착 쪽지]</b>에 이 문구가 그대로 떠요. (앱을 꺼둔 학생은 다음에 열 때 받습니다)';
+  }
+  if(pushP && pushP.then){
+    pushP.then(function(r){
+      var b2 = document.getElementById('nagResult');
+      if(!b2 || !r || !r.ok) return;
+      if(r.sent){
+        b2.innerHTML += '<br>🔔 학생 폰 상단 알림 <b>' + r.sent + '대</b> 발송' +
+          (r.failed ? (' · 실패 ' + r.failed) : '') +
+          (r.removed ? (' · 만료 기기 정리 ' + r.removed) : '');
+      } else {
+        b2.innerHTML += '<br>🔔 알림을 켜 둔 기기가 아직 없어요. 학생이 홈에서 <b>[🔔 알림 켜기]</b>를 누르면 다음부터 폰 상단에 떠요.';
+      }
+    }).catch(function(){});
   }
   var sd = document.getElementById('nagSend');
   if(sd){ sd.textContent = '✅ ' + done + '명 발송 완료'; sd.disabled = true; sd.style.opacity = '0.75'; }
