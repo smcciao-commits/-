@@ -9200,7 +9200,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v132';
+var TOPEDU_APP_VERSION = 'v133';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -11364,6 +11364,8 @@ function ssBuildDays(ban) {
   var cfg = ssCfg(ban), hp = null, book = cfg.dayBook || '', out = [], days = [];
   try { hp = hpGet(ban); } catch (e) {}
   if (!book && hp && hp.book) book = hp.book;
+  /* v133: 초등반은 교재를 따로 안 골랐으면 능률VOCA 초등필수로 */
+  if (!book && ssIsElem(ban) && ssSetNameFor('능률VOCA 초등필수', 1)) book = '능률VOCA 초등필수';
   if (!book) book = ssGuessBook(ban);
   if (cfg.dayMode === 'manual' && Number(cfg.dayStart) > 0) {
     for (var i = 0; i < cfg.dayCount; i++) days.push(Number(cfg.dayStart) + i);
@@ -11371,7 +11373,15 @@ function ssBuildDays(ban) {
     var w = null;
     try { if (hp) w = hpWalkCfg(hp, hpToday()); } catch (e) {}
     var endDay = 0;
-    if (w && (w.type === 'new' || w.type === 'review') && w.to) endDay = w.to;
+    /* v133: 초5는 매일 숙제(오늘의 학습)와 같은 Day 진도 — 오늘 할 Day로 끝나는 Day들 */
+    if (ban === '초5' && book === '능률VOCA 초등필수' && typeof ch5DailyInfo === 'function') {
+      try {
+        var c5 = ch5DailyInfo(ban, (S.cred && S.cred.name) || '');
+        if (c5 && c5.todaySet && c5.todaySet.day) endDay = c5.todaySet.day;
+      } catch (e) {}
+    }
+    if (endDay) {}
+    else if (w && (w.type === 'new' || w.type === 'review') && w.to) endDay = w.to;
     else if (w && w.type === 'class') {
       /* 수업일이면 오늘 단어시험 범위가 '복습할 Day'예요 */
       try {
