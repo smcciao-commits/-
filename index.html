@@ -1165,6 +1165,67 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
   .sh-btn { font-size: 12.5px; padding: 10px 8px; }
 }
 
+/* ================= v131: 🦉 홈 부엉이 캐릭터 — 숙제·자기주도 상태에 따라 변신 ================= */
+.sh-char.owl-box { width: 86px; height: 86px; padding: 5px; border-radius: 26px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.owl-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.owl-svg .owl-body, .owl-svg .owl-blink, .owl-svg .owl-spark, .owl-svg .owl-fire path, .owl-svg .owl-thumb, .owl-svg .owl-tear, .owl-svg .owl-eyes-glow, .owl-svg .owl-anger { transform-box: fill-box; }
+.owl-svg .owl-body { transform-origin: 50% 100%; }
+.owl-happy .owl-body, .owl-proud .owl-body { animation: owlBob 2.4s ease-in-out infinite; }
+.owl-sad .owl-body { animation: owlSway 3.4s ease-in-out infinite; }
+.owl-angry .owl-body { animation: owlHuff 0.7s ease-in-out infinite; }
+.owl-scary .owl-body { animation: owlShake 0.42s linear infinite; }
+.owl-svg .owl-blink { transform-origin: 50% 50%; animation: owlBlink 4.2s ease-in-out infinite; }
+.owl-svg .owl-spark { transform-origin: 50% 50%; animation: owlTwinkle 1.5s ease-in-out infinite; }
+.owl-svg .owl-spark.d2 { animation-delay: .5s; }
+.owl-svg .owl-spark.d3 { animation-delay: 1s; }
+.owl-svg .owl-tear { animation: owlTear 1.9s ease-in infinite; }
+.owl-svg .owl-thumb { transform-origin: 20% 100%; animation: owlThumb 1.3s ease-in-out infinite; }
+.owl-svg .owl-fire path { transform-origin: 50% 100%; animation: owlFlame .38s ease-in-out infinite alternate; }
+.owl-svg .owl-fire path.f2 { animation-duration: .5s; animation-delay: .12s; }
+.owl-svg .owl-eyes-glow { animation: owlEyeFlash 0.9s ease-in-out infinite; }
+.owl-svg .owl-anger { transform-origin: 50% 50%; animation: owlTwinkle 0.9s ease-in-out infinite; }
+.owl-box.owl-morph .owl-svg { animation: owlMorph .95s cubic-bezier(.3,1.4,.5,1); }
+.owl-box.owl-poke .owl-svg { animation: owlPoke .5s ease; }
+@keyframes owlBob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-4px) rotate(2deg); } }
+@keyframes owlSway { 0%,100% { transform: rotate(-3deg) translateY(1px); } 50% { transform: rotate(3deg) translateY(2px); } }
+@keyframes owlHuff { 0%,100% { transform: scale(1) rotate(0); } 25% { transform: scale(1.04) rotate(-3deg); } 75% { transform: scale(1.04) rotate(3deg); } }
+@keyframes owlShake { 0%,100% { transform: translate(0,0) rotate(0); } 20% { transform: translate(-2px,1px) rotate(-3deg); } 40% { transform: translate(2px,-1px) rotate(3deg); } 60% { transform: translate(-2px,0) rotate(-2deg); } 80% { transform: translate(2px,1px) rotate(2deg); } }
+@keyframes owlBlink { 0%,90%,100% { transform: scaleY(1); } 94% { transform: scaleY(.08); } }
+@keyframes owlTwinkle { 0%,100% { transform: scale(.45); opacity: .35; } 50% { transform: scale(1.15); opacity: 1; } }
+@keyframes owlTear { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(16px); opacity: 0; } }
+@keyframes owlThumb { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-14deg) translateY(-2px); } }
+@keyframes owlFlame { from { transform: scaleY(.82) scaleX(1.06); } to { transform: scaleY(1.12) scaleX(.94); } }
+@keyframes owlEyeFlash { 0%,100% { opacity: 1; } 45% { opacity: .55; } 50% { opacity: 1; } 55% { opacity: .7; } }
+@keyframes owlMorph { 0% { transform: scale(1) rotate(0); filter: none; } 35% { transform: scale(.25) rotate(-220deg); filter: brightness(3); } 70% { transform: scale(1.22) rotate(12deg); filter: brightness(1.4); } 100% { transform: scale(1) rotate(0); filter: none; } }
+@keyframes owlPoke { 0%,100% { transform: scale(1); } 40% { transform: scale(.86, 1.12); } 70% { transform: scale(1.1, .92); } }
+/* 부엉이 말풍선 */
+.sh-say { position: relative; display: inline-block; max-width: 100%; margin: 0 0 6px 6px; padding: 6px 11px; border-radius: 13px; font-family: Maplestory, sans-serif; font-size: 13px; font-weight: 700; line-height: 1.35; word-break: keep-all; background: #fff; border: 1.5px solid #99f6e4; color: #0f766e; box-shadow: 0 2px 6px rgba(0,0,0,.06); }
+.sh-say::before { content: ''; position: absolute; left: -7px; top: 10px; border: 6px solid transparent; border-right-color: inherit; border-left: 0; }
+.sh-say.say-happy { border-color: #5eead4; color: #0f766e; }
+.sh-say.say-proud { border-color: #6ee7b7; color: #047857; background: #f0fdf4; }
+.sh-say.say-sad { border-color: #93c5fd; color: #1d4ed8; background: #eff6ff; }
+.sh-say.say-angry { border-color: #fdba74; color: #c2410c; background: #fff7ed; }
+.sh-say.say-scary { border-color: #ef4444; color: #fde047; background: #0b0b0b; animation: owlWarnBlink 1.1s infinite; }
+/* 무서운 부엉이 (자기주도 경고 시간) — 카드 전체가 검정·빨강으로 */
+.streak-hero.s-owl-scary { border-color: #dc2626; background: linear-gradient(135deg, #140606 0%, #3b0b0b 75%); box-shadow: 0 6px 22px rgba(220,38,38,0.45); animation: shGlow 1.2s ease-in-out infinite; }
+.streak-hero.s-owl-scary::after { background: rgba(239,68,68,0.16); }
+.s-owl-scary .sh-char { background: radial-gradient(circle at 50% 45%, #4c0d0d 0%, #0b0b0b 75%); border-color: #ef4444; box-shadow: 0 0 16px rgba(239,68,68,0.65); }
+.s-owl-scary .sh-days { color: #fca5a5; }
+.s-owl-scary .sh-tag { background: #7f1d1d; color: #fff; border-color: #ef4444; }
+.s-owl-scary .sh-msg { color: #fecaca; }
+.s-owl-scary .sh-msg b { color: #fde047; }
+.s-owl-scary .sh-bar { background: #3f1d1d; }
+.s-owl-scary .sh-bar > i { background: linear-gradient(90deg, #f87171, #dc2626); }
+.s-owl-scary .sh-btn { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 3px 12px rgba(239,68,68,0.5); }
+.s-owl-scary .sh-bell { background: #1c0a0a; border-color: #7f1d1d; }
+@media (max-width: 380px) {
+  .sh-char.owl-box { width: 72px; height: 72px; border-radius: 22px; }
+  .sh-say { font-size: 12.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .owl-svg *, .owl-box .owl-svg, .sh-say.say-scary, .streak-hero.s-owl-scary { animation: none !important; }
+}
+
 /* ================= v82: 🔔 매일 학습 알림 설정 모달 ================= */
 .notif-overlay { position: fixed; inset: 0; z-index: 9500; display: none; background: rgba(15,23,42,0.55); padding: 16px; overflow: auto; }
 .notif-overlay.on { display: flex; align-items: center; justify-content: center; }
@@ -5803,9 +5864,9 @@ function showHome(){
   try { pushSilentSync(me); } catch(e){}
   /* v82: 스트릭 배너 · 매일 알림 버튼 연결 */
   var ssGoB = $('#ss_go'); if(ssGoB) ssGoB.onclick = ssEntry;
-  var sGo = $('#streak_go');
-  if(sGo) sGo.onclick = function(){ openDailyQuest(me); };
-  var sBell = $('#streak_bell'); if(sBell) sBell.onclick = openNotifModal;
+  /* v131: 부엉이 상태에 따라 버튼이 자기주도/오늘 학습으로 */
+  owlBindHero(me);
+  try { owlWatch(); } catch(e){}
   var nOpen = $('#btn_notif_open'); if(nOpen) nOpen.onclick = openNotifModal;
   var nIcs = $('#btn_ics_save'); if(nIcs) nIcs.onclick = function(){
     var t = getStreakDB(me.ban, me.name).notif.time || '20:00';
@@ -9137,7 +9198,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v130';
+var TOPEDU_APP_VERSION = 'v131';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -9868,21 +9929,233 @@ function drawStreakHero(me){
     tag = '오늘 미완료'; btn = '지금 10분만 하기';
   }
 
+  /* v131: 🦉 부엉이 상태 (숙제·자기주도) */
+  var owl = 'happy', act = 'quest';
+  try { owl = owlState(me, info); } catch (e) {}
+  if (owl === 'scary') {
+    cls = 's-owl-scary'; act = 'ss';
+    var _snapS = null; try { _snapS = owlSsSnapToday(me.name); } catch (e) {}
+    msg = (_snapS && !_snapS.done) ? '<b>자기주도 아직 안 끝났어!</b> 지금 바로 이어서 끝내자.' : '<b>자기주도 시간이 됐어!</b> 지금 바로 시작하면 부엉이가 다시 웃어.';
+    tag = '🚨 자기주도 경고'; btn = (_snapS && !_snapS.done) ? '⏱️ 이어서 끝내기' : '⏱️ 자기주도 시작';
+  }
+
   var pct = done ? 100 : Math.min(90, (info.acts || 0) * 20);
   var bestLine = (info.best > info.streak && info.best > 0) ? ' · 최고 🔥' + info.best + '일' : '';
 
-  return '<div class="streak-hero ' + cls + '" id="streak_hero">' +
-    '<div class="sh-char"><div class="sh-owl">🦉</div><div class="sh-mood">' + mood + '</div><div class="sh-flame">🔥</div></div>' +
+  return '<div class="streak-hero ' + cls + '" id="streak_hero" data-owl="' + owl + '">' +
+    '<div class="sh-char owl-box' + owlMorphClass(owl) + '" onclick="owlPoke(this)" title="부엉이를 눌러 보세요">' + owlSvg(owl) + '</div>' +
     '<div class="sh-main">' +
+      '<div class="sh-say say-' + owl + '" id="owl_say">' + esc(owlSay(owl, me)) + '</div>' +
       '<div class="sh-row"><span class="sh-days">' + (streak > 0 ? ('🔥 ' + streak + '일 연속') : '🔥 오늘 1일차') + '</span><span class="sh-tag">' + tag + '</span></div>' +
       '<div class="sh-msg">' + msg + bestLine + '</div>' +
       '<div class="sh-bar"><i style="width:' + pct + '%"></i></div>' +
       '<div class="sh-actions">' +
-        '<button type="button" class="sh-btn" id="streak_go">' + btn + ' →</button>' +
+        '<button type="button" class="sh-btn" id="streak_go" data-act="' + act + '">' + btn + ' →</button>' +
         '<button type="button" class="sh-bell" id="streak_bell" title="매일 학습 알림 설정">🔔</button>' +
       '</div>' +
     '</div>' +
   '</div>';
+}
+
+/* ================= v131: 🦉 홈 부엉이 캐릭터 — 학생 상태에 따라 변신 =================
+   · 무서운 부엉이 🔥 : 반별 자기주도 경고 시간(서버 ssWarn과 같은 시간)인데 오늘 자기주도를 안 끝냈을 때,
+                        또는 오늘 서버가 보낸 🦉 경고 쪽지가 남아 있을 때
+   · 뿌듯한 부엉이 👍 : 오늘 자기주도 1시간 완료
+   · 행복한 부엉이 ✨ : 오늘 숙제 완료 (오늘 단어 목표 완료, 또는 📌 오늘의 집 숙제 체크리스트 전부 ✓)
+   · 슬픈/화난 부엉이 : 오늘 숙제 미완료 (저녁 6시 전 = 눈물, 6시부터 = 찡그림)
+   별도 이미지 파일 없이 SVG + CSS 애니메이션으로 그려요. */
+var OWL_SS_WIN = {
+  '수지중2': { days: [2, 4], from: '17:35', to: '18:30' },  /* 화·목 */
+  '예비고1': { days: [2, 4], from: '18:40', to: '19:40' },  /* 화·목 */
+  '수지중1': { days: [3, 5], from: '18:30', to: '19:30' }   /* 수·금 */
+};
+var OWL_LAST_KEY = 'topedu_owl_last_state';
+function owlHM(s) { var p = String(s || '0:0').split(':'); return (+p[0] || 0) * 60 + (+p[1] || 0); }
+function owlIsToday(ms) { return !!ms && new Date(ms).toDateString() === new Date().toDateString(); }
+function owlSsSnapToday(name) {
+  try { var sn = ssSnapGet(); if (sn && sn.name === name && owlIsToday(sn.t0)) return sn; } catch (e) {}
+  return null;
+}
+function owlSsWarnNow(ban, now) {
+  var r = OWL_SS_WIN[ban]; if (!r) return false;
+  now = now || new Date();
+  if (r.days.indexOf(now.getDay()) < 0) return false;
+  var m = now.getHours() * 60 + now.getMinutes();
+  return m >= owlHM(r.from) && m < owlHM(r.to);
+}
+function owlWarnNoteToday(name) {
+  try {
+    var n = getNoteDB()[name] || {};
+    if (!n.teacherMsg || !/^🦉/.test(String(n.teacherMsg))) return false;
+    return owlIsToday(getAppliedNoteTs(name));
+  } catch (e) { return false; }
+}
+/* 📌 오늘의 집 숙제 체크리스트가 모두 ✓ 인지 (drawHomePlanCard와 같은 기준) */
+function owlPlanAllDone(ban) {
+  try {
+    var cfg = hpGet(ban); if (!cfg) return false;
+    var today = hpToday(), w = hpWalkCfg(cfg, today); if (!w) return false;
+    var word = Number(cfg.itemWord) ? 1 : 0, sent = Number(cfg.itemSent) ? 1 : 0, read = Number(cfg.itemRead) ? 1 : 0;
+    if (!word && !sent && !read) word = 1;
+    var need = 0, got = 0;
+    if (word && (w.type === 'new' || w.type === 'review')) {
+      var bk = bbBook(cfg.book), tt = 0, dd = 0;
+      for (var d = w.from; d <= w.to; d++) { tt++; if (bbIsDoneIn(bk, d)) dd++; }
+      need++; if (tt && dd >= tt) got++;
+    }
+    if (sent) { need++; if (hpTick(ban, today, 'sent')) got++; }
+    if (read) { need++; if (hpTick(ban, today, 'read')) got++; }
+    return need > 0 && got >= need;
+  } catch (e) { return false; }
+}
+function owlState(me, info) {
+  if (!me) return 'happy';
+  info = info || getStreakInfo(me.ban, me.name);
+  var now = new Date(), student = me.ban !== '선생님';
+  var snap = student ? owlSsSnapToday(me.name) : null;
+  var ssDone = !!(snap && snap.done);
+  if (student && !ssDone && (owlSsWarnNow(me.ban, now) || owlWarnNoteToday(me.name))) return 'scary';
+  if (ssDone) return 'proud';
+  if (info.todayDone || (student && owlPlanAllDone(me.ban))) return 'happy';
+  return now.getHours() >= 18 ? 'angry' : 'sad';
+}
+function owlSay(st, me) {
+  var started = false;
+  try { var sn = owlSsSnapToday(me.name); started = !!(sn && !sn.done); } catch (e) {}
+  var L = {
+    scary: started ? ['아직 안 끝났어… 끝까지 해!! 🔥', '도망가면 안 돼… 이어서 끝내!! 🔥']
+                   : ['자기주도 시간이야… 아직 시작 안 했지? 🔥', '원장님이 지켜보고 있어… 지금 당장 시작해!! 🔥'],
+    proud: ['자기주도 1시간 완주! 엄지 척 👍', '오늘 진짜 멋있었어! 최고야 👍'],
+    happy: ['숙제 끝! 눈이 반짝반짝 ✨', '오늘 숙제 다 했구나! 행복해 ✨'],
+    sad:   ['오늘 숙제 아직이야… 부엉이 슬퍼 😢', '10분만 같이 하자… 기다릴게 😢'],
+    angry: ['숙제 아직도 안 했어?! 😤', '부엉이 화났다! 지금 바로 시작해 😤']
+  }[st] || ['안녕! 🦉'];
+  return L[new Date().getMinutes() % L.length];
+}
+function owlSvg(st) {
+  var dark = st === 'scary';
+  var body = dark ? '#5b3427' : '#a8743f', wing = dark ? '#2a1510' : '#87592c';
+  var face = dark ? '#7a2a22' : '#f7e4c2', belly = dark ? '#6a3a2c' : '#f2dab0';
+  var ink = '#1f2937', s = '';
+  s += '<svg class="owl-svg owl-' + st + '" viewBox="0 0 120 120" aria-hidden="true">';
+  if (dark) {
+    s += '<defs><filter id="owlGlowF" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+    /* 불꽃 (뒤쪽) */
+    s += '<g class="owl-fire">'
+      + '<path d="M14 116 C2 96 14 84 10 62 C24 76 30 88 26 100 C32 92 32 82 38 76 C46 94 40 110 26 118 Z" fill="#f97316"/>'
+      + '<path class="f2" d="M20 116 C14 104 20 96 18 86 C26 94 28 102 26 108 C30 104 31 98 34 95 C38 106 34 114 26 118 Z" fill="#fde047"/>'
+      + '<path d="M106 116 C118 96 106 84 110 62 C96 76 90 88 94 100 C88 92 88 82 82 76 C74 94 80 110 94 118 Z" fill="#f97316"/>'
+      + '<path class="f2" d="M100 116 C106 104 100 96 102 86 C94 94 92 102 94 108 C90 104 89 98 86 95 C82 106 86 114 94 118 Z" fill="#fde047"/>'
+      + '<path d="M54 22 C50 14 56 10 55 2 C62 9 64 14 62 19 C65 16 65 12 68 10 C70 17 66 22 60 24 Z" fill="#ef4444"/>'
+      + '</g>';
+  }
+  s += '<g class="owl-body">';
+  /* 귀깃 · 몸통 · 날개 · 배 */
+  s += '<path d="M30 40 L22 12 L48 30 Z" fill="' + wing + '"/><path d="M90 40 L98 12 L72 30 Z" fill="' + wing + '"/>';
+  s += '<ellipse cx="60" cy="68" rx="40" ry="44" fill="' + body + '"/>';
+  s += '<ellipse cx="22" cy="80" rx="10" ry="23" fill="' + wing + '" transform="rotate(14 22 80)"/>';
+  if (st === 'proud') {
+    s += '<g class="owl-thumb"><ellipse cx="99" cy="62" rx="9" ry="20" fill="' + wing + '" transform="rotate(32 99 62)"/>'
+      + '<text x="104" y="42" font-size="22" text-anchor="middle">👍</text></g>';
+  } else {
+    s += '<ellipse cx="98" cy="80" rx="10" ry="23" fill="' + wing + '" transform="rotate(-14 98 80)"/>';
+  }
+  s += '<ellipse cx="60" cy="89" rx="24" ry="20" fill="' + belly + '"/>';
+  s += '<path d="M50 84 l3 3 l3 -3 M64 84 l3 3 l3 -3 M57 93 l3 3 l3 -3" stroke="' + wing + '" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>';
+  if (st === 'proud') s += '<path d="M55 78 L60 86 L65 78" stroke="#dc2626" stroke-width="3" fill="none"/><circle cx="60" cy="92" r="7" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/><text x="60" y="95.5" font-size="8" font-weight="900" text-anchor="middle" fill="#92400e">1</text>';
+  /* 발 */
+  s += '<path d="M47 110 l-4 6 M51 111 v6 M55 110 l4 6 M65 110 l-4 6 M69 111 v6 M73 110 l4 6" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>';
+  /* 얼굴 원판 */
+  s += '<circle cx="42" cy="56" r="19" fill="' + face + '"/><circle cx="78" cy="56" r="19" fill="' + face + '"/>';
+  /* 볼터치 */
+  if (st === 'happy' || st === 'proud') s += '<ellipse cx="28" cy="70" rx="6" ry="3.5" fill="#f9a8d4" opacity=".75"/><ellipse cx="92" cy="70" rx="6" ry="3.5" fill="#f9a8d4" opacity=".75"/>';
+  if (st === 'angry') s += '<ellipse cx="28" cy="70" rx="6" ry="3.5" fill="#f87171" opacity=".8"/><ellipse cx="92" cy="70" rx="6" ry="3.5" fill="#f87171" opacity=".8"/>';
+  /* 눈 */
+  if (st === 'happy') {
+    s += '<g class="owl-blink"><circle cx="42" cy="56" r="12" fill="#fff"/><circle cx="78" cy="56" r="12" fill="#fff"/>'
+      + '<circle cx="42" cy="57" r="9" fill="' + ink + '"/><circle cx="78" cy="57" r="9" fill="' + ink + '"/>'
+      + '<circle cx="46" cy="52" r="3.6" fill="#fff"/><circle cx="82" cy="52" r="3.6" fill="#fff"/>'
+      + '<circle cx="39" cy="61" r="1.7" fill="#fff"/><circle cx="75" cy="61" r="1.7" fill="#fff"/></g>';
+  } else if (st === 'proud') {
+    s += '<path d="M32 58 Q42 46 52 58" stroke="' + ink + '" stroke-width="3.6" fill="none" stroke-linecap="round"/>'
+      + '<path d="M68 58 Q78 46 88 58" stroke="' + ink + '" stroke-width="3.6" fill="none" stroke-linecap="round"/>';
+  } else if (st === 'sad') {
+    s += '<g class="owl-blink"><circle cx="42" cy="57" r="11" fill="#fff"/><circle cx="78" cy="57" r="11" fill="#fff"/>'
+      + '<circle cx="42" cy="61" r="6.5" fill="' + ink + '"/><circle cx="78" cy="61" r="6.5" fill="' + ink + '"/>'
+      + '<circle cx="44" cy="59" r="2" fill="#fff"/><circle cx="80" cy="59" r="2" fill="#fff"/></g>'
+      + '<path d="M30 44 L52 37" stroke="' + wing + '" stroke-width="3.5" stroke-linecap="round"/><path d="M90 44 L68 37" stroke="' + wing + '" stroke-width="3.5" stroke-linecap="round"/>'
+      + '<path class="owl-tear" d="M33 66 q4 6 0 9 q-4 -3 0 -9 Z" fill="#60a5fa"/>';
+  } else if (st === 'angry') {
+    s += '<circle cx="42" cy="58" r="10" fill="#fff"/><circle cx="78" cy="58" r="10" fill="#fff"/>'
+      + '<circle cx="43" cy="59" r="5" fill="' + ink + '"/><circle cx="77" cy="59" r="5" fill="' + ink + '"/>'
+      + '<path d="M28 38 L54 49" stroke="' + ink + '" stroke-width="4.5" stroke-linecap="round"/><path d="M92 38 L66 49" stroke="' + ink + '" stroke-width="4.5" stroke-linecap="round"/>'
+      + '<g class="owl-anger"><path d="M100 14 l4 6 M110 12 l-4 6 M98 26 l6 -2 M112 24 l-6 -2" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/></g>';
+  } else { /* scary */
+    s += '<g class="owl-eyes-glow" filter="url(#owlGlowF)"><circle cx="42" cy="56" r="14" fill="#fde047" stroke="#ef4444" stroke-width="2.5"/><circle cx="78" cy="56" r="14" fill="#fde047" stroke="#ef4444" stroke-width="2.5"/></g>'
+      + '<ellipse cx="42" cy="56" rx="2.4" ry="10" fill="#000"/><ellipse cx="78" cy="56" rx="2.4" ry="10" fill="#000"/>'
+      + '<path d="M24 34 L56 48" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/><path d="M96 34 L64 48" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>';
+  }
+  /* 부리 · 입 */
+  if (dark) {
+    s += '<path d="M53 64 L67 64 L60 78 Z" fill="#b91c1c"/><path d="M55 66 L57 70 L59 66 L61 70 L63 66 L65 66" stroke="#fff" stroke-width="1.2" fill="none"/>';
+  } else {
+    s += '<path d="M55 64 L65 64 L60 73 Z" fill="#f59e0b"/>';
+    if (st === 'happy' || st === 'proud') s += '<path d="M54 77 Q60 83 66 77" stroke="#7c2d12" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    if (st === 'sad' || st === 'angry') s += '<path d="M54 80 Q60 75 66 80" stroke="#7c2d12" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  }
+  s += '</g>';
+  /* 반짝이 */
+  if (st === 'happy' || st === 'proud') {
+    var star = 'M0 -6 L1.6 -1.6 L6 0 L1.6 1.6 L0 6 L-1.6 1.6 L-6 0 L-1.6 -1.6 Z';
+    s += '<g transform="translate(12 30)"><path class="owl-spark" d="' + star + '" fill="#facc15"/></g>'
+      + '<g transform="translate(108 24)"><path class="owl-spark d2" d="' + star + '" fill="#facc15"/></g>'
+      + '<g transform="translate(110 96)"><path class="owl-spark d3" d="' + star + '" fill="#fde047"/></g>';
+  }
+  s += '</svg>';
+  return s;
+}
+/* 상태가 바뀌었을 때 한 번 '펑' 변신 애니메이션 */
+function owlMorphClass(st) {
+  var last = '';
+  try { last = sessionStorage.getItem(OWL_LAST_KEY) || ''; sessionStorage.setItem(OWL_LAST_KEY, st); } catch (e) {}
+  return (last && last !== st) ? ' owl-morph' : '';
+}
+function owlPoke(el) {
+  try {
+    el.classList.remove('owl-poke'); void el.offsetWidth; el.classList.add('owl-poke');
+    var say = document.getElementById('owl_say');
+    var me = (S.home && S.home.me) || S.cred;
+    if (say && me) {
+      var st = owlState(me), L = {
+        scary: ['🔥 지금 당장!!', '🔥 시작 버튼 눌러!!'], proud: ['헤헤 👍 칭찬해줘~', '우리 최고! 👍'],
+        happy: ['간지러워 ✨', '헤헤 오늘 최고 ✨'], sad: ['흑흑… 숙제 같이 해줄 거지? 😢'], angry: ['찌르지 말고 숙제해! 😤']
+      }[st] || ['부엉!'];
+      say.textContent = L[Math.floor(Math.random() * L.length)];
+    }
+  } catch (e) {}
+}
+/* 홈 상단 스트릭 카드 버튼 연결 (부엉이 상태에 따라 자기주도/오늘 학습) */
+function owlBindHero(me) {
+  var sGo = document.getElementById('streak_go');
+  if (sGo) sGo.onclick = function () { if (this.getAttribute('data-act') === 'ss') { try { ssEntry(); } catch (e) {} } else openDailyQuest(me); };
+  var sBell = document.getElementById('streak_bell'); if (sBell) sBell.onclick = openNotifModal;
+}
+/* 홈을 켜 둔 채 경고 시간이 되면 새로고침 없이 부엉이가 바뀌어요 (30초마다 확인) */
+var OWL_TIMER = 0;
+function owlWatch() {
+  if (OWL_TIMER) return;
+  OWL_TIMER = setInterval(function () {
+    try {
+      if (typeof SS !== 'undefined' && SS.on) return;
+      var hero = document.getElementById('streak_hero');
+      var me = S.home && S.home.me;
+      if (!hero || !me) return;
+      if (hero.getAttribute('data-owl') === owlState(me)) return;
+      var tmp = document.createElement('div');
+      tmp.innerHTML = drawStreakHero(me);
+      if (tmp.firstChild) { hero.parentNode.replaceChild(tmp.firstChild, hero); owlBindHero(me); }
+    } catch (e) {}
+  }, 30000);
 }
 
 /* ================= v82: 🔔 알림 권한 · 서비스워커 · 매일 알림 ================= */
