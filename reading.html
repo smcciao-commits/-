@@ -1499,38 +1499,73 @@ const TOPEDU_NO_NET = '인터넷 연결을 확인해 주세요';
 let SRV_SEQ = 0, AUTH_BUSY = false, ADMIN_PW = '';
 let CLASSES = [], CLASSES_STATE = 0, CLASSES_CB = [];
 
+/* v124: 만 14세 미만 Google 계정이 로그인된 폰(하린이 폰)에서는 script 태그(JSONP) 요청에
+   Google 쿠키가 함께 실려 Google이 families.google.com(13세 미만 이용 불가) 페이지로 돌려보냅니다.
+   그래서 쿠키를 빼고(credentials:'omit') 순수 JSON(fetch)로 먼저 물어보고,
+   fetch가 막히는 환경에서만 예전 JSONP로 한 번 더 시도합니다. (index.html v123·v124와 같은 방식) */
 function srvCall(fn, params) {
   return new Promise(function(resolve, reject) {
     const offErr = new Error(TOPEDU_NO_NET); offErr.offline = true;
     if (typeof navigator !== 'undefined' && navigator.onLine === false) { reject(offErr); return; }
+    if (!TOPEDU_DB_URL) { reject(offErr); return; }
     const netErr = new Error('서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.'); netErr.network = true;
-    const name = 'topeduSrvCb' + (++SRV_SEQ);
-    let done = false, tag = null, timer = null;
-    function cleanup() {
-      try { delete window[name]; } catch(e) { window[name] = undefined; }
-      if (tag && tag.parentNode) tag.parentNode.removeChild(tag);
-      if (timer) clearTimeout(timer);
-    }
-    function fail() { if (done) return; done = true; cleanup(); reject(netErr); }
     const q = ['action=app', 'fn=' + encodeURIComponent(fn || '')];
     Object.keys(params || {}).forEach(function(k) {
       const v = params[k];
       if (v === undefined || v === null || v === '') return;
       q.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
     });
-    q.push('callback=' + name); q.push('_=' + Date.now());
-    window[name] = function(d) {
+    const qs = q.join('&'), WAIT = 25000;
+    let done = false, tag = null, cbName = '', fetchTimer = null, jsonpTimer = null, timedOut = false;
+    function cleanup() {
+      if (cbName) { try { delete window[cbName]; } catch(e) { window[cbName] = undefined; } cbName = ''; }
+      if (tag && tag.parentNode) tag.parentNode.removeChild(tag);
+      if (fetchTimer) clearTimeout(fetchTimer);
+      if (jsonpTimer) clearTimeout(jsonpTimer);
+    }
+    function settle(d, err) {
       if (done) return; done = true; cleanup();
-      if (d && d.ok) { resolve(d); return; }
-      const e = new Error((d && d.error) || '서버 응답을 받지 못했어요.'); e.server = true; e.data = d; reject(e);
-    };
-    tag = document.createElement('script'); tag.async = true;
-    tag.onerror = fail;
-    tag.src = TOPEDU_DB_URL + '?' + q.join('&');
-    timer = setTimeout(fail, 25000);
-    (document.head || document.body).appendChild(tag);
+      if (err) { reject(err); return; }
+      if (!d) { reject(netErr); return; }
+      if (d.ok) { resolve(d); return; }
+      const e = new Error(d.error || '서버 응답을 받지 못했어요.'); e.server = true; e.data = d; reject(e);
+    }
+    /* 예전 방식(script 태그 JSONP) — fetch가 막히는 환경에서만 한 번 씁니다. */
+    function viaJsonp() {
+      if (done) return;
+      cbName = 'topeduSrvCb' + (++SRV_SEQ);
+      window[cbName] = function(d) { settle(d || null, null); };
+      tag = document.createElement('script'); tag.async = true;
+      tag.onerror = function() { settle(null, netErr); };
+      tag.src = TOPEDU_DB_URL + '?' + qs + '&callback=' + cbName + '&_=' + Date.now();
+      jsonpTimer = setTimeout(function() { settle(null, netErr); }, WAIT);
+      (document.head || document.body).appendChild(tag);
+    }
+    /* 1순위: 쿠키 없는 fetch → 순수 JSON. JSON이 아니면(차단 페이지 등) JSONP로 폴백. */
+    function viaFetch() {
+      let ctrl = null;
+      try { if (typeof AbortController !== 'undefined') ctrl = new AbortController(); } catch(e) { ctrl = null; }
+      const opt = { method: 'GET', mode: 'cors', cache: 'no-store', credentials: 'omit' };
+      if (ctrl) opt.signal = ctrl.signal;
+      fetchTimer = setTimeout(function() { timedOut = true; try { if (ctrl) ctrl.abort(); } catch(e) {} }, WAIT);
+      fetch(TOPEDU_DB_URL + '?' + qs + '&_=' + Date.now(), opt).then(function(r) {
+        if (!r || !r.ok) throw new Error('http ' + (r ? r.status : '?'));
+        return r.text();
+      }).then(function(txt) {
+        let d = null;
+        try { d = JSON.parse(txt); } catch(e) { d = null; }
+        if (d && typeof d === 'object') { settle(d, null); return; }
+        viaJsonp();
+      })['catch'](function() {
+        if (timedOut) { settle(null, netErr); return; }
+        viaJsonp();
+      });
+    }
+    try { if (typeof fetch === 'function') { viaFetch(); return; } } catch(e) {}
+    viaJsonp();
   });
 }
+
 function loadClasses(cb) {
   if (cb) CLASSES_CB.push(cb);
   if (CLASSES_STATE === 1 || CLASSES_STATE === 2 || CLASSES_STATE === 3) { flushClasses(); return; }

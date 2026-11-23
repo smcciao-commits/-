@@ -1783,6 +1783,8 @@
   <div class="content">
     <!-- 🦉 v84: 하린이 연속 학습(스트릭) 캐릭터 배너 (JS 렌더링) -->
     <div id="ekStreakWrap"></div>
+    <!-- v124: 🔔 폰 알림(앱 푸시) 카드 (JS 렌더링) -->
+    <div id="ekPushWrap" style="margin:0 0 10px;"></div>
 
     <!-- Collapsible Daily Alarm Setting Card -->
     <div class="alarm-card" id="alarmCard" style="display:none;">
@@ -7456,6 +7458,8 @@ function ekGoalDone(kind, streak) {
     minkySay(line + ' 🔥' + streak + '일 연속! 내일도 하면 ' + (streak + 1) + '일차야.');
   } catch (e) {}
   try { ekFlashToast('🔥 오늘 목표 완료! ' + streak + '일 연속'); } catch (e) {}
+  /* v124: 하린이가 오늘 목표를 끝내면 원장님 폰으로 알림 */
+  try { ekPushDirector('🎒 하린이 에듀키즈 학습 완료', '[에듀키즈] 오늘 ' + (kind || '학습') + ' 완료 · 🔥' + (streak || 0) + '일 연속', 'harin-study'); } catch (e) {}
 }
 
 function ekFlashToast(txt) {
@@ -8103,5 +8107,338 @@ function closeQrAudioModal() {
   </div>
 </div>
 
+<script>
+/* ================= v124: 🔔 폰 알림(앱 푸시) — 에듀키즈 폰 알림 =================
+   · index.html(v121~v123)과 같은 Firebase 프로젝트(topedu-push)·같은 sw.js 를 씁니다.
+   · 처음 한 번 [🔔 폰 알림 켜기]를 누르면 FCM 토큰을 받아 서버(푸시토큰 시트)에 저장되고,
+     앱을 꺼 둬도 학원 공지·쪽지가 폰 상단에 떠요.
+   · 하린이 계정 비밀번호는 이 공개 페이지 소스에 적지 않습니다. 같은 주소(단어앱)에서 이미
+     로그인해 둔 값을 그대로 읽고, 없을 때만 이 폰에서 4자리를 한 번 입력받아 저장합니다.
+   · 서버 호출은 v123 방식 그대로 쿠키 없는 fetch(credentials:'omit') 우선 + 실패 시 JSONP 1회 폴백. */
+var EK_PUSH = {
+  dbUrl: 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec',
+  ban: '초5',
+  name: '이하린',
+  stateKey: 'edukids_push_state',
+  pinKey: 'topedu_child_pin',
+  wrapId: 'ekPushWrap',
+  label: '에듀키즈 폰 알림',
+  accent: '#7c4dff'
+};
+var EK_PUSH_FCM_CONFIG = {
+  apiKey: 'AIzaSyB7dY-zIk5p9gvM7OVV7plOLAPGZfx8eEI',
+  authDomain: 'topedu-push.firebaseapp.com',
+  projectId: 'topedu-push',
+  storageBucket: 'topedu-push.firebasestorage.app',
+  messagingSenderId: '799252180174',
+  appId: '1:799252180174:web:0d49cfa9d24f848b7d349f',
+  measurementId: 'G-3RCPXNE3S0'
+};
+var EK_PUSH_VAPID = 'BKxIQGnCjJsu-EcoOg4H0LBK0kuCZAO-1SWRXUjLqvy_SF66E6nYvojIdkYIsOOoOCxuop8BP7ST_pkF6DeVC5c';
+var EK_PUSH_SDK_APP = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js';
+var EK_PUSH_SDK_MSG = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js';
+var EK_PUSH_IOS_GUIDE = '📱 아이폰은 \'홈 화면에 추가\' 후 열면 알림을 받을 수 있어요.\n\n1) 사파리 아래 공유(⬆️) 버튼\n2) \'홈 화면에 추가\' 선택\n3) 홈 화면 아이콘으로 다시 열기\n4) 홈의 [🔔 폰 알림 켜기] 누르기';
+var EK_PUSH_ON_GUIDE = '🔔 알림이 켜져 있어요.\n\n· 앱을 꺼 둬도 학원 공지·쪽지·숙제 알림이 폰 상단에 떠요.\n· 폰을 바꾸거나 앱을 지웠다 다시 깔면 이 화면에서 [알림 켜기]를 다시 눌러 주세요.\n· 알림이 안 보이면 크롬 주소창의 🔒 → 알림 → 허용을 확인해 주세요.';
+var _ekPushMsg = null, _ekPushLoading = null, _ekPushSeq = 0;
+
+function ekPushEsc(s) {
+  return String(s === undefined || s === null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function ekPushStateGet() { try { return JSON.parse(localStorage.getItem(EK_PUSH.stateKey) || '{}') || {}; } catch (e) { return {}; } }
+function ekPushStateSet(o) { try { localStorage.setItem(EK_PUSH.stateKey, JSON.stringify(o || {})); } catch (e) {} }
+function ekPushPerm() { try { return (typeof Notification !== 'undefined') ? Notification.permission : 'unsupported'; } catch (e) { return 'unsupported'; } }
+function ekPushIOSWeb() {
+  var ua = navigator.userAgent || '';
+  var ios = /iPhone|iPad|iPod/.test(ua);
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  return ios && !standalone;
+}
+function ekPushApi() { return (typeof Notification !== 'undefined') && ('serviceWorker' in navigator) && !!window.Promise; }
+
+/* 하린이 계정 비밀번호: ① 같은 주소(단어앱)에 저장된 로그인 값을 그대로 ② 이 폰에서 한 번 입력해 둔 값 */
+function ekPushPin() {
+  var keys = ['cred', 'topedu_student'];
+  for (var i = 0; i < keys.length; i++) {
+    try {
+      var c = JSON.parse(localStorage.getItem(keys[i]) || 'null');
+      if (c && String(c.ban || '') === EK_PUSH.ban && String(c.name || '') === EK_PUSH.name && c.pw) return String(c.pw);
+    } catch (e) {}
+  }
+  try { var p = localStorage.getItem(EK_PUSH.pinKey); if (p) return String(p); } catch (e) {}
+  return '';
+}
+
+/* 서버(Apps Script) 호출 — v123 방식: 쿠키 없는 fetch(JSON) 우선, 막히면 JSONP 1회 폴백 */
+function ekPushSrv(fn, params) {
+  return new Promise(function (res, rej) {
+    var netErr = new Error('인터넷 연결을 확인해 주세요');
+    netErr.offline = true;
+    try { if (typeof navigator !== 'undefined' && navigator.onLine === false) { rej(netErr); return; } } catch (e) {}
+    if (!EK_PUSH.dbUrl) { rej(netErr); return; }
+    var q = ['action=app', 'fn=' + encodeURIComponent(fn || '')];
+    Object.keys(params || {}).forEach(function (k) {
+      var v = params[k];
+      if (v === undefined || v === null || v === '') return;
+      q.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+    });
+    var qs = q.join('&'), wait = 15000;
+    var done = false, timedOut = false, cb = '', tag = null, fetchTimer = 0, jsonpTimer = 0;
+    function settle(d, err) {
+      if (done) return;
+      done = true;
+      try { clearTimeout(fetchTimer); } catch (e) {}
+      try { clearTimeout(jsonpTimer); } catch (e) {}
+      if (cb) { try { delete window[cb]; } catch (e) { window[cb] = null; } cb = ''; }
+      try { if (tag && tag.parentNode) tag.parentNode.removeChild(tag); } catch (e) {}
+      if (err) { rej(err); return; }
+      if (!d) { rej(netErr); return; }
+      if (d.ok) { res(d); return; }
+      rej(new Error(d.error || '요청을 처리하지 못했어요.'));
+    }
+    function viaJsonp() {
+      if (done) return;
+      try { if (tag && tag.parentNode) tag.parentNode.removeChild(tag); } catch (e) {}
+      tag = document.createElement('script');
+      cb = 'ekPushCb' + (++_ekPushSeq);
+      window[cb] = function (d) { settle(d || null, null); };
+      tag.async = true;
+      tag.onerror = function () { settle(null, netErr); };
+      tag.src = EK_PUSH.dbUrl + '?' + qs + '&callback=' + cb + '&_=' + Date.now();
+      (document.head || document.body).appendChild(tag);
+      jsonpTimer = setTimeout(function () { settle(null, netErr); }, wait);
+    }
+    function viaFetch() {
+      if (done) return;
+      var ctrl = null;
+      try { if (typeof AbortController !== 'undefined') ctrl = new AbortController(); } catch (e) { ctrl = null; }
+      var opt = { method: 'GET', mode: 'cors', cache: 'no-store', credentials: 'omit' };
+      if (ctrl) opt.signal = ctrl.signal;
+      fetchTimer = setTimeout(function () { timedOut = true; try { if (ctrl) ctrl.abort(); } catch (e) {} }, wait);
+      fetch(EK_PUSH.dbUrl + '?' + qs + '&_=' + Date.now(), opt).then(function (r) {
+        if (!r || !r.ok) throw new Error('http ' + (r ? r.status : '?'));
+        return r.text();
+      }).then(function (txt) {
+        var d = null;
+        try { d = JSON.parse(txt); } catch (e) { d = null; }
+        if (d && typeof d === 'object') { settle(d, null); return; }
+        viaJsonp();
+      })['catch'](function () {
+        if (timedOut) { settle(null, netErr); return; }
+        viaJsonp();
+      });
+    }
+    try { if (typeof fetch === 'function') { viaFetch(); return; } } catch (e) {}
+    viaJsonp();
+  });
+}
+
+function ekPushLoadScript(src) {
+  return new Promise(function (res, rej) {
+    var t = document.createElement('script');
+    t.src = src; t.async = true;
+    t.onload = function () { res(true); };
+    t.onerror = function () { rej(new Error('sdk-load')); };
+    (document.head || document.body).appendChild(t);
+  });
+}
+function ekPushFcm() {
+  if (_ekPushMsg) return Promise.resolve(_ekPushMsg);
+  if (_ekPushLoading) return _ekPushLoading;
+  _ekPushLoading = ekPushLoadScript(EK_PUSH_SDK_APP)
+    .then(function () { return ekPushLoadScript(EK_PUSH_SDK_MSG); })
+    .then(function () {
+      if (!window.firebase) throw new Error('sdk');
+      if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(EK_PUSH_FCM_CONFIG);
+      _ekPushMsg = firebase.messaging();
+      return _ekPushMsg;
+    });
+  return _ekPushLoading;
+}
+function ekPushEnsureSW() {
+  if (!('serviceWorker' in navigator)) return Promise.resolve(null);
+  var p = (navigator.serviceWorker.getRegistration && navigator.serviceWorker.getRegistration()) || Promise.resolve(null);
+  return Promise.resolve(p).catch(function () { return null; }).then(function (reg) {
+    if (reg) return reg;
+    return navigator.serviceWorker.register('sw.js').catch(function () { return null; });
+  });
+}
+function ekPushToken(messaging) {
+  return ekPushEnsureSW().then(function (reg) {
+    var opt = { vapidKey: EK_PUSH_VAPID };
+    if (reg) opt.serviceWorkerRegistration = reg;
+    return messaging.getToken(opt);
+  });
+}
+function ekPushSave(pin, token) {
+  return ekPushSrv('savePushToken', {
+    pw: pin, ban: EK_PUSH.ban, name: EK_PUSH.name,
+    token: token, ua: String(navigator.userAgent || '').slice(0, 170)
+  });
+}
+
+/* 앱이 켜져 있을 때 도착한 알림을 화면 위쪽 토스트로도 보여 줍니다 */
+function ekPushToast(title, body) {
+  try {
+    var old = document.getElementById('ekPushToast');
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var d = document.createElement('div');
+    d.id = 'ekPushToast';
+    d.style.cssText = 'position:fixed;left:10px;right:10px;top:10px;z-index:99999;background:linear-gradient(135deg,' + EK_PUSH.accent + ',#14b8a6);color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 8px 24px rgba(76,29,149,0.32);font-family:Maplestory,sans-serif;';
+    d.innerHTML = '<div style="font-size:13.5px;font-weight:800;">' + ekPushEsc(title) + '</div>' +
+      '<div style="font-size:12.5px;font-weight:600;opacity:0.95;margin-top:3px;line-height:1.45;word-break:keep-all;">' + ekPushEsc(body) + '</div>';
+    d.onclick = function () { try { d.parentNode.removeChild(d); } catch (e) {} };
+    document.body.appendChild(d);
+    setTimeout(function () { try { if (d.parentNode) d.parentNode.removeChild(d); } catch (e) {} }, 7000);
+  } catch (e) {}
+}
+function ekPushHook(messaging) {
+  if (!messaging || messaging._ekHooked) return;
+  messaging._ekHooked = true;
+  try {
+    messaging.onMessage(function (payload) {
+      payload = payload || {};
+      var n = payload.notification || {};
+      var d = payload.data || {};
+      var title = n.title || '📢 수지탑에듀 알림';
+      var body = n.body || d.body || '';
+      ekPushToast(title, body);
+      try { if (typeof playCorrectSound === 'function') playCorrectSound(); } catch (e) {}
+    });
+  } catch (e) {}
+}
+
+/* 홈 맨 위 카드 — 꺼져 있으면 [🔔 폰 알림 켜기], 켜져 있으면 ✅ 알림 켜짐 */
+function ekPushCardHtml() {
+  var perm = ekPushPerm();
+  var st = ekPushStateGet();
+  if (perm === 'granted' && st && st.on) {
+    return '<div id="card_ek_push" style="margin:0 0 12px;padding:10px 12px;background:#f0fdfa;border:1.5px solid #99f6e4;border-radius:16px;display:flex;align-items:center;gap:9px">' +
+      '<span style="font-size:17px">✅</span>' +
+      '<div style="flex:1;min-width:0;font-size:12px;font-weight:800;color:#0f766e;line-height:1.4">알림 켜짐 — 앱을 꺼 둬도 알림이 폰 상단에 떠요</div>' +
+      '<button type="button" id="ekPushGuide" style="background:#fff;border:1px solid #99f6e4;color:#0f766e;border-radius:9px;padding:5px 9px;font-size:11px;font-weight:700;white-space:nowrap">설명</button>' +
+      '</div>';
+  }
+  var sub = '앱을 꺼 둬도 학원 공지·쪽지·오늘 숙제 알림이 이 폰 상단에 떠요';
+  if (perm === 'denied') sub = '알림 권한이 꺼져 있어요 — 크롬 주소창 🔒 → 알림 → 허용으로 바꿔 주세요';
+  else if (perm === 'unsupported') sub = '이 브라우저는 알림을 지원하지 않아요. 크롬이나 홈 화면 앱으로 열어 주세요';
+  var btn = ekPushIOSWeb()
+    ? '<button type="button" id="ekPushBtn" style="background:' + EK_PUSH.accent + ';color:#fff;border:none;border-radius:11px;padding:9px 11px;font-weight:800;font-size:11.5px;white-space:nowrap">설정 방법</button>'
+    : '<button type="button" id="ekPushBtn" style="background:linear-gradient(135deg,' + EK_PUSH.accent + ',#14b8a6);color:#fff;border:none;border-radius:11px;padding:9px 11px;font-weight:800;font-size:11.5px;white-space:nowrap;box-shadow:0 3px 10px rgba(76,29,149,0.24)">🔔 폰 알림 켜기</button>';
+  return '<div id="card_ek_push" style="margin:0 0 12px;padding:11px 12px;background:linear-gradient(135deg,#f5f3ff,#f8fafc);border:2px solid ' + EK_PUSH.accent + '33;border-radius:18px;box-shadow:0 4px 14px rgba(76,29,149,0.10)">' +
+    '<div style="display:flex;align-items:center;gap:9px">' +
+      '<span style="font-size:19px">🔔</span>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="font-family:Maplestory,sans-serif;font-weight:800;font-size:13px;color:#4c1d95">' + ekPushEsc(EK_PUSH.label) + '</div>' +
+        '<div style="font-size:11px;color:#64748b;margin-top:2px;line-height:1.4">' + ekPushEsc(sub) + '</div>' +
+      '</div>' + btn +
+    '</div>' +
+    '<div id="ekPushPinRow" style="display:none;gap:6px;margin-top:9px">' +
+      '<input id="ekPushPinInput" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="하린이 앱 4자리 비밀번호" style="flex:1;min-width:0;border:1.5px solid #ddd6fe;border-radius:10px;padding:9px 11px;font-size:13px;font-weight:700;color:#4c1d95;background:#fff">' +
+      '<button type="button" id="ekPushPinGo" style="background:' + EK_PUSH.accent + ';color:#fff;border:none;border-radius:10px;padding:9px 13px;font-weight:800;font-size:12.5px;white-space:nowrap">켜기</button>' +
+    '</div>' +
+    '<div id="ekPushPinMsg" style="display:none;margin-top:6px;font-size:11.5px;font-weight:700;color:#b91c1c;line-height:1.4"></div>' +
+    '</div>';
+}
+function ekPushRender() {
+  var host = document.getElementById(EK_PUSH.wrapId);
+  if (!host) return;
+  host.innerHTML = ekPushCardHtml();
+  var b = document.getElementById('ekPushBtn');
+  if (b) b.onclick = ekPushEnable;
+  var g = document.getElementById('ekPushGuide');
+  if (g) g.onclick = function () { alert(EK_PUSH_ON_GUIDE); };
+  var go = document.getElementById('ekPushPinGo');
+  if (go) go.onclick = function () { ekPushSubmitPin(); };
+  var inp = document.getElementById('ekPushPinInput');
+  if (inp) inp.onkeydown = function (e) { if (e && e.key === 'Enter') { e.preventDefault(); ekPushSubmitPin(); } };
+}
+function ekPushShowPin(msg) {
+  var row = document.getElementById('ekPushPinRow');
+  if (row) { row.style.display = 'flex'; }
+  var m = document.getElementById('ekPushPinMsg');
+  if (m && msg) { m.style.display = 'block'; m.textContent = msg; }
+  var inp = document.getElementById('ekPushPinInput');
+  if (inp) { try { inp.focus(); } catch (e) {} }
+}
+function ekPushSubmitPin() {
+  var inp = document.getElementById('ekPushPinInput');
+  var pin = inp ? String(inp.value || '').replace(/\D/g, '') : '';
+  if (pin.length !== 4) { ekPushShowPin('하린이 앱 비밀번호 4자리를 넣어 주세요.'); return; }
+  try { localStorage.setItem(EK_PUSH.pinKey, pin); } catch (e) {}
+  ekPushGo(pin);
+}
+function ekPushEnable() {
+  if (ekPushIOSWeb()) { alert(EK_PUSH_IOS_GUIDE); return; }
+  if (!ekPushApi()) { alert('이 브라우저에서는 알림을 쓸 수 없어요.\n크롬 앱으로 열거나 홈 화면에 추가해서 열어 주세요.'); return; }
+  var pin = ekPushPin();
+  if (!pin) { ekPushShowPin('처음 한 번만 넣으면 돼요. (이 폰에만 저장되고 소스에는 없어요)'); return; }
+  ekPushGo(pin);
+}
+function ekPushGo(pin) {
+  var btn = document.getElementById('ekPushBtn');
+  if (btn) { btn.textContent = '켜는 중…'; btn.disabled = true; }
+  var permP;
+  try {
+    permP = (ekPushPerm() === 'granted') ? Promise.resolve('granted') : Notification.requestPermission();
+  } catch (e) { permP = Promise.resolve('denied'); }
+  permP.then(function (perm) {
+    if (perm !== 'granted') throw new Error('denied');
+    return ekPushFcm();
+  }).then(function (messaging) {
+    ekPushHook(messaging);
+    return ekPushToken(messaging);
+  }).then(function (token) {
+    if (!token) throw new Error('no-token');
+    return ekPushSave(pin, token).then(function () {
+      ekPushStateSet({ on: true, at: Date.now(), ban: EK_PUSH.ban, name: EK_PUSH.name, tail: String(token).slice(-10) });
+      try { if (typeof playCorrectSound === 'function') playCorrectSound(); } catch (e) {}
+      ekPushRender();
+      ekPushToast('🔔 폰 알림이 켜졌어요', '이제 앱을 꺼 둬도 학원 알림이 폰 상단에 떠요.');
+    });
+  })['catch'](function (e) {
+    var m = String((e && e.message) || e);
+    ekPushRender();
+    if (m === 'denied') alert('알림 권한이 꺼져 있어요.\n\n크롬 주소창의 🔒 → 알림 → 허용으로 바꾼 뒤 다시 눌러 주세요.');
+    else if (m === 'no-token') alert('알림 등록에 실패했어요. 잠시 뒤 다시 눌러 주세요.');
+    else if (/비밀번호/.test(m)) { try { localStorage.removeItem(EK_PUSH.pinKey); } catch (e2) {} ekPushShowPin('비밀번호가 맞지 않아요. 다시 넣어 주세요.'); }
+    else alert('알림을 켜지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.');
+  });
+}
+/* 이미 켜 둔 폰: 앱을 열 때마다 10분에 한 번 조용히 토큰을 갱신합니다 */
+function ekPushSilentSync() {
+  if (!ekPushApi() || ekPushIOSWeb()) return;
+  if (ekPushPerm() !== 'granted') return;
+  var st = ekPushStateGet();
+  if (!st || !st.on) return;
+  if (window.__ekPushSyncedAt && (Date.now() - window.__ekPushSyncedAt) < 600000) return;
+  var pin = ekPushPin();
+  if (!pin) return;
+  window.__ekPushSyncedAt = Date.now();
+  ekPushFcm().then(function (messaging) {
+    ekPushHook(messaging);
+    return ekPushToken(messaging);
+  }).then(function (token) {
+    if (token) return ekPushSave(pin, token);
+  })['catch'](function () {});
+}
+/* 하린이가 오늘 목표를 끝냈을 때 원장님 폰으로 알림 (pw 는 없어도 명단으로 확인됩니다) */
+function ekPushDirector(title, body, tag) {
+  var pin = ekPushPin();
+  try {
+    ekPushSrv('sendDirectorPush', {
+      ban: EK_PUSH.ban, name: EK_PUSH.name, pw: pin || '',
+      title: String(title || '').slice(0, 120), body: String(body || '').slice(0, 350), tag: tag || 'harin'
+    })['catch'](function () {});
+  } catch (e) {}
+}
+function ekPushInit() {
+  ekPushRender();
+  setTimeout(function () { try { ekPushSilentSync(); } catch (e) {} }, 2500);
+}
+
+/* ===== v124: 카드 그리기 + 이미 켜 둔 폰 조용한 갱신 ===== */
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekPushInit); else ekPushInit();
+</script>
 </body>
 </html>
