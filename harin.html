@@ -1718,6 +1718,114 @@ function ekPushInit() {
 
 /* ===== v124: 카드 그리기 + 이미 켜 둔 폰 조용한 갱신 ===== */
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekPushInit); else ekPushInit();
+
+/* ===== v127: 💌 원장님 쪽지 카드 (하린플래너·에듀키즈) =====
+   단어앱(index.html)의 [조수민 원장님의 도착 쪽지]와 같은 통로를 씁니다.
+   · 받기: 선생님 화면 💬 코멘트 → ntfy 'topedu_note_chosumin' 에서 내 이름(초5 이하린) 것만 골라 표시
+   · 보내기: 서버 sendDirectorPush(원장님 폰 FCM) + ntfy 'topedu_director_chosumin' (선생님 화면 쪽지 피드) */
+var EK_NOTE_TOPIC = 'topedu_note_chosumin';
+var EK_NOTE_DIRECTOR = 'topedu_director_chosumin';
+var EK_NOTE_KEY = 'ek_note_' + EK_PUSH.ban + '_' + EK_PUSH.name;
+var _ekNotePullAt = 0, _ekNoteBusy = false;
+function ekNoteGet() { try { return JSON.parse(localStorage.getItem(EK_NOTE_KEY) || '{}') || {}; } catch (e) { return {}; } }
+function ekNoteSet(o) { try { localStorage.setItem(EK_NOTE_KEY, JSON.stringify(o || {})); } catch (e) {} }
+function ekNoteTime(ts) {
+  try { var d = new Date(ts); return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); } catch (e) { return ''; }
+}
+function ekNoteHost() {
+  var el = document.getElementById(EK_PUSH.wrapId + 'Note');
+  if (el) return el;
+  var push = document.getElementById(EK_PUSH.wrapId);
+  if (!push || !push.parentNode) return null;
+  el = document.createElement('div');
+  el.id = EK_PUSH.wrapId + 'Note';
+  el.style.cssText = push.getAttribute('style') || '';
+  push.parentNode.insertBefore(el, push.nextSibling);
+  return el;
+}
+function ekNoteRender() {
+  var host = ekNoteHost();
+  if (!host) return;
+  var st = ekNoteGet();
+  var a = EK_PUSH.accent;
+  var h = '<div id="card_ek_note" style="margin:0 0 12px;padding:12px 13px;background:linear-gradient(135deg,#fff7fb,#f8fafc);border:2px solid ' + a + '33;border-radius:18px;box-shadow:0 4px 14px rgba(76,29,149,0.08)">';
+  if (st.msg) {
+    h += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><span style="font-size:18px">💌</span>' +
+      '<b style="flex:1;font-family:Maplestory,sans-serif;font-size:14px;color:#4c1d95">원장님 쪽지</b>' +
+      '<span style="font-size:11px;color:#94a3b8">' + ekPushEsc(ekNoteTime(st.ts)) + '</span></div>' +
+      '<div style="font-size:13.5px;font-weight:700;color:#334155;background:#fff;border:1.5px solid #ede9fe;border-radius:12px;padding:10px 12px;line-height:1.5;word-break:keep-all">' + ekPushEsc(st.msg) + '</div>';
+  }
+  h += '<div style="' + (st.msg ? 'margin-top:10px;padding-top:9px;border-top:1px dashed #e9d5ff;' : '') + '">' +
+    '<div style="font-size:12.5px;font-weight:800;color:#be185d;margin-bottom:6px">✉️ 원장님께 쪽지 보내기 <span style="font-weight:600;color:#94a3b8;font-size:11px">원장님 폰에 바로 떠요</span></div>' +
+    '<div style="display:flex;gap:6px">' +
+      '<input id="ekNoteInput" type="text" maxlength="300" placeholder="원장님께 하고 싶은 말을 적어 보세요" style="flex:1;min-width:0;border:1.5px solid #ddd6fe;border-radius:10px;padding:9px 11px;font-size:13px;background:#fff">' +
+      '<button type="button" id="ekNoteSend" style="background:linear-gradient(135deg,' + a + ',#14b8a6);color:#fff;border:none;border-radius:10px;padding:9px 13px;font-weight:800;font-size:12.5px;white-space:nowrap">보내기</button>' +
+    '</div>' +
+    (st.sent ? '<div style="font-size:11.5px;color:#0f766e;font-weight:700;margin-top:6px">보낸 쪽지: "' + ekPushEsc(st.sent) + '" (' + ekPushEsc(ekNoteTime(st.sentAt)) + ')</div>' : '') +
+  '</div></div>';
+  host.innerHTML = h;
+  var b = document.getElementById('ekNoteSend');
+  if (b) b.onclick = ekNoteSend;
+  var inp = document.getElementById('ekNoteInput');
+  if (inp) inp.onkeydown = function (e) { if (e && e.key === 'Enter') { e.preventDefault(); ekNoteSend(); } };
+}
+function ekNoteSend() {
+  var inp = document.getElementById('ekNoteInput');
+  var txt = inp ? String(inp.value || '').trim() : '';
+  if (!txt) { alert('원장님께 보낼 쪽지 내용을 적어 주세요.'); return; }
+  var title = '[수지탑에듀 쪽지] ' + EK_PUSH.name + ' (' + EK_PUSH.ban + ')';
+  ekPushDirector(title, txt, 'note');
+  try {
+    fetch('https://ntfy.sh', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: EK_NOTE_DIRECTOR, title: title, message: txt, priority: 4, tags: ['envelope', 'speech_balloon'] })
+    })['catch'](function () {});
+  } catch (e) {}
+  var st = ekNoteGet();
+  st.sent = txt; st.sentAt = Date.now();
+  ekNoteSet(st);
+  try { if (typeof playCorrectSound === 'function') playCorrectSound(); } catch (e) {}
+  ekNoteRender();
+  ekPushToast('💌 쪽지를 보냈어요', '원장님 폰으로 바로 전달돼요.');
+}
+function ekNotePull(force) {
+  if (!window.fetch || _ekNoteBusy) return;
+  if (!force && (Date.now() - _ekNotePullAt) < 10000) return;
+  _ekNotePullAt = Date.now(); _ekNoteBusy = true;
+  fetch('https://ntfy.sh/' + EK_NOTE_TOPIC + '/json?poll=1&since=all').then(function (r) { return r.text(); }).then(function (txt) {
+    _ekNoteBusy = false;
+    var best = null;
+    String(txt || '').trim().split('\n').forEach(function (l) {
+      if (!l.trim()) return;
+      try {
+        var d = JSON.parse(l);
+        if (!d || d.event !== 'message' || !d.message) return;
+        var row = JSON.parse(d.message);
+        if (!row || row.n !== EK_PUSH.name || !row.msg) return;
+        if (row.b && row.b !== EK_PUSH.ban) return;
+        var ts = row.ts || ((d.time || 0) * 1000);
+        if (!best || ts > best.ts) { row.ts = ts; best = row; }
+      } catch (e) {}
+    });
+    if (!best) return;
+    var st = ekNoteGet();
+    if ((best.ts || 0) <= (st.ts || 0)) return;
+    st.msg = best.msg; st.ts = best.ts;
+    ekNoteSet(st);
+    ekNoteRender();
+    try { if (typeof playCorrectSound === 'function') playCorrectSound(); } catch (e) {}
+  })['catch'](function () { _ekNoteBusy = false; });
+}
+/* 쪽지 푸시가 앱 켜진 상태로 도착하면 바로 다시 받아오기 */
+var _ekNoteToastOrig = ekPushToast;
+ekPushToast = function (title, body) { _ekNoteToastOrig(title, body); if (/쪽지/.test(String(title || ''))) setTimeout(function () { ekNotePull(true); }, 1500); };
+function ekNoteInit() {
+  ekNoteRender();
+  setTimeout(function () { try { ekNotePull(true); } catch (e) {} }, 1200);
+  setInterval(function () { try { if (!document.hidden) ekNotePull(false); } catch (e) {} }, 60000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) ekNotePull(false); });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekNoteInit); else ekNoteInit();
 </script>
 </body>
 </html>
