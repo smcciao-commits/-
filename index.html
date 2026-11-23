@@ -1519,14 +1519,14 @@ window.onerror = function(msg, url, line) {
 };
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(regs) {
-    return Promise.all(regs.map(function(reg) { return reg.unregister(); }));
-  }).then(function() {
-    // v82: 알림 표시에는 서비스워커가 필요해요. 기존 등록을 지운 뒤 새로 등록합니다(캐시는 비우므로 구버전 고정 없음).
-    if (navigator.serviceWorker.register) {
-      return navigator.serviceWorker.register('sw.js', { scope: './' });
-    }
-  }).catch(function(){});
+  /* v126: 서비스워커 등록을 지우지 않습니다(unregister 금지).
+     등록을 지우면 폰 알림(FCM) 구독도 같이 지워져서, 하린플래너·에듀키즈에서 켜 둔 알림이
+     단어앱을 여는 순간 끊겼어요. 대신 register + update 로 최신 sw.js 만 받아 옵니다. */
+  try {
+    navigator.serviceWorker.register('sw.js', { scope: './', updateViaCache: 'none' }).then(function(reg) {
+      try { if (reg && reg.update) reg.update(); } catch(e){}
+    }).catch(function(){});
+  } catch(e){}
 }
 if ('caches' in window) {
   caches.keys().then(function(names) {
@@ -1548,10 +1548,11 @@ function forceAppRefresh(e) {
   toast.innerHTML = '<span>🔄</span> <span>최신 버전으로 새로고침하고 있습니다...</span>';
   document.body.appendChild(toast);
 
+  /* v126: 새로고침 버튼도 서비스워커를 지우지 않고 업데이트만 합니다(폰 알림 구독 유지). */
   var unregisterPromise = Promise.resolve();
   if ('serviceWorker' in navigator) {
     unregisterPromise = navigator.serviceWorker.getRegistrations().then(function(regs) {
-      return Promise.all(regs.map(function(reg) { return reg.unregister(); }));
+      return Promise.all(regs.map(function(reg) { return reg.update ? reg.update().catch(function(){}) : null; }));
     }).catch(function(err){ console.log(err); });
   }
 
@@ -9103,7 +9104,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v125';
+var TOPEDU_APP_VERSION = 'v126';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
