@@ -12444,6 +12444,8 @@ function ssParseParents(txt) {
 function start(){
   try { wsCacheLoad(); } catch(e){}
   try { wsEnsure(); } catch(e){}
+  /* v122: 원장님 폰 알림을 켜 두었으면, 앱을 열 때마다 알림 수신 연결과 토큰을 조용히 갱신합니다 */
+  try { directorPushSilentSync(); } catch(e){}
   var c=store('cred');
   if(c&&c.ban&&c.name&&c.pw){
     /* v103: 서버 확인 동안 화면이 비어 보이지 않도록 안내를 먼저 띄운다 */
