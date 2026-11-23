@@ -10478,6 +10478,8 @@ function drawPushOptInCard(me){
 }
 /* 선생님 쪽지 발송 시 학생 폰으로 실제 푸시 */
 function pushTeacherPw(){
+  /* 선생님 화면은 비밀번호를 'apw' 에 저장합니다(숙제 체크 시트 저장과 같은 값) */
+  try { var a = store('apw'); if (a) return String(a); } catch(e){}
   try { if (S && S.cred && S.cred.ban === '선생님' && S.cred.pw) return String(S.cred.pw); } catch(e){}
   try { var c = store('cred'); if (c && c.ban === '선생님' && c.pw) return String(c.pw); } catch(e){}
   return '';
