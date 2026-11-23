@@ -402,7 +402,8 @@ function seedCred(pw){
   /* 4) 켜진 뒤 카드 */
   ekPushRender();
   var onCard = document.getElementById('card_ek_push');
-  ok('T4 ✅ 알림 켜짐 카드로 변경', !!onCard && /알림 켜짐/.test(onCard.textContent));
+  ok('T4 ✅ 알림 켜짐 카드로 변경', !!onCard && /알림 켜짐/.test(onCard.textContent),
+     'perm=' + ekPushPerm() + ' state=' + JSON.stringify(ekPushStateGet()) + ' text=' + (onCard ? onCard.textContent.slice(0, 40) : 'none') + ' html=' + ekPushCardHtml().slice(0, 50));
 
   /* 5) 비번이 없을 때 → 4자리 입력칸이 뜨고, 틀린 비번은 서버 오류로 안내 */
   clearState();
@@ -420,9 +421,11 @@ function seedCred(pw){
   /* 6) fetch가 막히면 JSONP(script 태그)로 한 번 폴백 */
   window.__fetchMode = 'reject'; window.__fetchCalls = [];
   var before = document.getElementsByTagName('script').length;
-  ekPushSrv('getClasses', {}).then(function(){ ok('T6 JSONP 폴백', false, 'unexpected resolve'); })
-    .catch(function(){ ok('T6 fetch 차단 → script 태그 폴백', document.getElementsByTagName('script').length > before); });
-  await sleep(600);
+  var t6res = 'pending';
+  ekPushSrv('getClasses', {}).then(function(d){ t6res = 'resolved(진짜 서버 응답)'; })
+    .catch(function(e){ t6res = 'rejected:' + (e && e.message); });
+  await sleep(1200);
+  ok('T6 fetch 차단 → JSONP(script 태그) 폴백', document.getElementsByTagName('script').length > before, 'result=' + t6res + ' scripts+' + (document.getElementsByTagName('script').length - before));
 
   /* 7) 차단 HTML(비 JSON) 응답도 JSONP 폴백 */
   window.__fetchMode = 'html';
