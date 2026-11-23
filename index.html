@@ -5824,7 +5824,7 @@ function extraHtml(c){
   if(c.a) rows.push('<div class="xr"><span class="xl">반의어</span>'+esc(c.a)+'</div>');
   if(c.l) rows.push('<div class="xr"><span class="xl">관련어</span>'+esc(c.l)+'</div>');
   if(c.e){ var en=c.e.split(' | '), ko=(c.k||c.ek||c.ko||'').split(' | ');
-    rows.push('<div class="xr"><span class="xl" style="background:#fff0f6;color:#d6336c">교과서 예문</span>'+en.slice(0,2).map(function(x,i){ return '<div style="margin-bottom:6px"><div style="font-weight:600;color:var(--ink)">'+esc(x)+'</div>'+(ko[i]?'<div class="xk" style="color:#d6336c;font-size:13px;margin-top:2px;font-weight:500">👉 '+esc(ko[i])+'</div>':'')+'</div>'; }).join('')+'</div>'); }
+    rows.push('<div class="xr"><span class="xl" style="background:#fff0f6;color:#d6336c">본문 예문</span>'+en.slice(0,2).map(function(x,i){ return '<div style="margin-bottom:6px"><div style="font-weight:600;color:var(--ink)">'+esc(x)+'</div>'+(ko[i]?'<div class="xk" style="color:#d6336c;font-size:13px;margin-top:2px;font-weight:500">👉 '+esc(ko[i])+'</div>':'')+'</div>'; }).join('')+'</div>'); }
   return rows.length?'<div class="xx" id="xx" hidden>'+rows.join('')+'</div>':'';
 }
 function clozeOf(c){
