@@ -2789,7 +2789,7 @@ function localCall(fn, args) {
 /* ============ v103: 서버(Apps Script) 호출 ============
    GitHub Pages에는 google.script.run이 없으므로 JSONP(script 태그)로 웹앱에 물어봅니다.
    인터넷이 없으면 로그인·명단·현황은 진행되지 않고 "인터넷 연결을 확인해 주세요"로 막힙니다. */
-var TOPEDU_SERVER_FNS = { getClasses: 1, studentLogin: 1, adminLogin: 1, roster: 1, adminDayReport: 1, adminSetReport: 1, wordSets: 1, hwSave: 1, hwLoad: 1, savePushToken: 1, sendPush: 1 };
+var TOPEDU_SERVER_FNS = { getClasses: 1, studentLogin: 1, adminLogin: 1, roster: 1, adminDayReport: 1, adminSetReport: 1, wordSets: 1, hwSave: 1, hwLoad: 1, savePushToken: 1, sendPush: 1, sendDirectorPush: 1 };
 var TOPEDU_NO_NET = '인터넷 연결을 확인해 주세요';
 function srvParams(fn, args){
   args = args || [];
@@ -2803,6 +2803,7 @@ function srvParams(fn, args){
   if (fn === 'hwSave') return { pw: g(0), data: g(1) };
   if (fn === 'hwLoad') return { pw: g(0), date: g(1) };
   if (fn === 'savePushToken') return { pw: g(0), ban: g(1), name: g(2), token: g(3), ua: g(4) };
+  if (fn === 'sendDirectorPush') return { ban: g(0), name: g(1), pw: g(2), title: g(3), body: g(4), tag: g(5) };
   if (fn === 'sendPush') return { pw: g(0), targets: g(1), title: g(2), text: g(3) };
   return {};
 }
@@ -3298,6 +3299,18 @@ function addDirectorNoticeLog(type, title, body, sender){
 
 function sendDirectorPushNotification(title, body, tag){
   addDirectorNoticeLog(tag || 'notice', title, body);
+
+  // 0. v122: Firebase FCM — 학생이 보낸 쪽지·학습완료·인강 이탈을 앱을 꺼 둔 원장님 폰으로도 보냅니다
+  try {
+    var _dm = null, _adminMode = false;
+    try { _adminMode = !!(S && S.admin); } catch(e){}
+    if (!_adminMode) { try { _dm = pushMe(); } catch(e){} }
+    if (_dm && _dm.ban && _dm.ban !== '선생님' && _dm.name) {
+      srvCall('sendDirectorPush', [_dm.ban, _dm.name, _dm.pw || '',
+        String(title || '').slice(0, 120), String(body || '').slice(0, 350), tag || 'note'])
+        .catch(function(){});
+    }
+  } catch(e){}
 
   // 1. ntfy.sh UTF-8 JSON POST (한글 완벽 지원, 모바일 잠금화면 실시간 푸시)
   try {
@@ -7084,11 +7097,13 @@ function adminMergeSets(I){
 }
 function showAdmin(){
   try { dbAdminPull(); } catch(e){}
+  try { directorPushSilentSync(); } catch(e){}
   var A = S.admin, I = A.info;
   try { adminMergeSets(I); } catch(e){}
   if(!A.tab) A.tab = 'dash';
   var html = '<div class="top"><button class="back" id="back">← 나가기</button><div class="grow"><div class="title">선생님 관리 화면 🌸 <span style="font-size:11px;font-weight:700;color:#0d9488;background:#ccfbf1;border-radius:999px;padding:2px 8px;vertical-align:middle">' + TOPEDU_APP_VERSION + '</span></div></div></div>'+
     wsAdminStrip()+
+    directorPushBanner()+
     '<div style="display:flex;gap:8px;margin:6px 0 10px">'+
     '<button class="btn dark" id="bnew" style="flex:1;margin:0">⚔️ 퀴즈 대결 (칠판)</button>'+
     '<button class="btn" id="blive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 화상수업 열기</button>'+
@@ -7109,7 +7124,7 @@ function showAdmin(){
     var isAiPraise = localStorage.getItem('topedu_ai_praise_enabled') !== 'false';
     var notifPerm = ('Notification' in window) ? Notification.permission : 'unsupported';
     
-    var hHtml = '<div class="card" style="border:2px solid #c084fc;background:#faf5ff;border-radius:18px;padding:16px;margin-bottom:14px">' +
+    var hHtml = directorPushCardHtml() + '<div class="card" style="border:2px solid #c084fc;background:#faf5ff;border-radius:18px;padding:16px;margin-bottom:14px">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
         '<div style="font-family:Maplestory,sans-serif;font-size:16px;font-weight:700;color:#6b21a8">📱 스마트폰 실시간 알림 연동 센터</div>' +
         '<span style="font-size:11.5px;padding:3px 8px;border-radius:8px;background:' + (notifPerm==='granted'?'#dcfce7;color:#15803d':'#fee2e2;color:#b91c1c') + ';font-weight:700">' +
@@ -7160,6 +7175,12 @@ function showAdmin(){
     '</div>';
 
     app.innerHTML = html + '<div id="aout">' + hHtml + '</div>';
+    try {
+      var _bDir = $('#btn_dir_push_on');
+      if (_bDir) _bDir.onclick = function(){ enableDirectorPush(_bDir); };
+      var _bDirG = $('#btn_dir_push_guide');
+      if (_bDirG) _bDirG.onclick = function(){ alert(DIRECTOR_PUSH_GUIDE); };
+    } catch(e){}
     if(A.tab === 'alerts'){
       // 학생 쪽지 실시간 ntfy 서버 수집기
       fetch('https://' + 'ntfy.sh/' + TOPEDU_NTFY_DIRECTOR + '/json?poll=1&since=all')
@@ -9007,7 +9028,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v121';
+var TOPEDU_APP_VERSION = 'v122';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -10488,6 +10509,113 @@ function pushTeacherSend(targets, title, text){
   var pw = pushTeacherPw();
   if (!pw) return Promise.resolve({ ok: false, error: '선생님 로그인 정보가 없어요.' });
   return srvCall('sendPush', [pw, JSON.stringify(targets || []), title || '', text || '']);
+}
+
+/* ============ v122: 🔔 원장님(조수민) 폰 Firebase 푸시 — 학생 쪽지가 앱을 꺼 둬도 폰 상단에 ============ */
+var DIRECTOR_PUSH_GUIDE = '🔔 원장님 폰 알림\n\n· 한 번만 켜 두면 학생이 보낸 쪽지·답장·학습완료·인강 이탈이 앱을 꺼 둬도 폰 상단에 떠요.\n· 선생님 화면 → [📱 폰 알림·쪽지함] 탭에서 켜고 끌 수 있어요.\n· 폰을 바꾸거나 앱을 지웠다 다시 깔면 다시 한 번 눌러 주세요.\n· 알림이 안 보이면 크롬 주소창의 🔒 → 알림 → 허용을 확인해 주세요.';
+
+function directorPushState(){ try { return JSON.parse(localStorage.getItem('topedu_director_push_state') || '{}') || {}; } catch(e){ return {}; } }
+function directorPushSetState(o){ try { localStorage.setItem('topedu_director_push_state', JSON.stringify(o || {})); } catch(e){} }
+/* 선생님 화면 비밀번호 — 관리자 비밀번호와 같은 값(보통 9259) */
+function directorPushPw(){
+  try { var a = store('apw'); if (a) return String(a); } catch(e){}
+  try { if (S && S.admin && S.admin.pw) return String(S.admin.pw); } catch(e){}
+  try { if (S && S.cred && S.cred.ban === '선생님' && S.cred.pw) return String(S.cred.pw); } catch(e){}
+  try { var c = store('cred'); if (c && c.ban === '선생님' && c.pw) return String(c.pw); } catch(e){}
+  return '';
+}
+function directorPushPerm(){
+  try { return (typeof Notification !== 'undefined') ? Notification.permission : 'unsupported'; } catch(e){ return 'unsupported'; }
+}
+function directorPushOn(){ var st = directorPushState(); return !!(st && st.on && directorPushPerm() === 'granted'); }
+function directorPushSaveToken(pw, token){
+  return srvCall('savePushToken', [pw, '선생님', '조수민', token, String(navigator.userAgent || '').slice(0, 170)]);
+}
+/* [🔔 원장님 폰 알림 켜기] — 권한 → FCM 토큰 → 서버에 '선생님/조수민' 으로 저장 */
+function enableDirectorPush(btn){
+  if (pushIsIOSWeb()) { alert(IOS_PUSH_GUIDE); return; }
+  if (!pushHasApi()) { alert('이 브라우저에서는 알림을 쓸 수 없어요.\n크롬 앱으로 열거나 홈 화면에 추가해서 열어 주세요.'); return; }
+  var pw = directorPushPw();
+  if (!pw) { alert('선생님 화면으로 먼저 들어와 주세요(비밀번호 필요).'); return; }
+  var old = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = '켜는 중…'; btn.disabled = true; }
+  var permP = (directorPushPerm() === 'granted') ? Promise.resolve('granted') : Notification.requestPermission();
+  permP.then(function(perm){
+    if (perm !== 'granted') throw new Error('denied');
+    return fcmLoad();
+  }).then(function(messaging){
+    pushOnMessage(messaging);
+    return fcmToken(messaging);
+  }).then(function(token){
+    if (!token) throw new Error('no-token');
+    return directorPushSaveToken(pw, token).then(function(){
+      directorPushSetState({ on: true, at: Date.now(), ban: '선생님', name: '조수민', tail: String(token).slice(-10) });
+      try { if (typeof playCorrectSound === 'function') playCorrectSound(); } catch(e){}
+      pushToast('🔔 원장님 폰 알림이 켜졌어요', '이제 학생이 쪽지를 보내면 앱을 꺼 둬도 폰 상단에 떠요.');
+      setTimeout(function(){ try { showAdmin(); } catch(e){} }, 350);
+    });
+  }).catch(function(e){
+    if (btn) { btn.textContent = old || '🔔 원장님 폰 알림 켜기'; btn.disabled = false; }
+    var m = String((e && e.message) || e);
+    if (m === 'denied') alert('알림 권한이 꺼져 있어요.\n\n크롬 주소창의 🔒 → 알림 → 허용으로 바꾼 뒤 다시 눌러 주세요.');
+    else if (m === 'no-token') alert('알림 등록에 실패했어요. 잠시 뒤 다시 눌러 주세요.');
+    else if (/비밀번호/.test(m)) alert('선생님 비밀번호가 맞지 않아요.\n선생님 화면에서 나갔다가 다시 들어온 뒤 눌러 주세요.');
+    else alert('알림을 켜지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.');
+  });
+}
+/* 이미 켜 둔 원장님 폰: 선생님 화면을 열 때마다 10분에 한 번 조용히 토큰 갱신 */
+function directorPushSilentSync(){
+  if (!directorPushOn()) return;
+  if (!pushHasApi() || pushIsIOSWeb()) return;
+  if (window.__dirPushSyncedAt && (Date.now() - window.__dirPushSyncedAt) < 600000) return;
+  var pw = directorPushPw(); if (!pw) return;
+  window.__dirPushSyncedAt = Date.now();
+  fcmLoad().then(function(messaging){
+    pushOnMessage(messaging);
+    return fcmToken(messaging);
+  }).then(function(token){
+    if (token) directorPushSaveToken(pw, token).catch(function(){});
+  }).catch(function(){});
+}
+/* 선생님 화면 맨 위 — 꺼져 있으면 켜러 가는 배너, 켜져 있으면 작은 확인 줄 */
+function directorPushBanner(){
+  if (directorPushOn()) {
+    return '<div style="margin:0 0 10px;padding:8px 12px;background:#f0fdfa;border:1.5px solid #99f6e4;border-radius:12px;display:flex;align-items:center;gap:8px">' +
+      '<span style="font-size:15px">🔔</span>' +
+      '<div style="flex:1;min-width:0;font-size:12px;font-weight:700;color:#0f766e">원장님 폰 알림 켜짐 — 학생 쪽지가 앱을 꺼 둬도 폰 상단에 떠요</div>' +
+      '</div>';
+  }
+  return '<div id="card_dir_push_banner" style="margin:0 0 10px;padding:11px 12px;background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:14px;display:flex;align-items:center;gap:9px;box-shadow:0 4px 14px rgba(13,148,136,0.26)">' +
+    '<span style="font-size:18px">🔔</span>' +
+    '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:13px;color:#fff;font-family:Maplestory,sans-serif">원장님 폰 알림 켜기</div>' +
+    '<div style="font-size:11px;color:#ccfbf1;margin-top:2px;line-height:1.35">한 번만 누르면 학생 쪽지가 앱을 안 열어도 폰 상단에 떠요</div></div>' +
+    '<button type="button" onclick="S.admin.tab=\'alerts\';showAdmin();" style="background:#fff;color:#0d9488;border:none;border-radius:10px;padding:8px 11px;font-weight:800;font-size:11.5px;white-space:nowrap">켜러 가기</button>' +
+    '</div>';
+}
+/* [📱 폰 알림·쪽지함] 탭 맨 위 — FCM 켜기/켜짐 카드 */
+function directorPushCardHtml(){
+  var on = directorPushOn();
+  var perm = directorPushPerm();
+  var head = '<div style="font-family:Maplestory,sans-serif;font-size:15px;font-weight:700;color:#0f766e">🔔 원장님 폰 알림 (학생 쪽지·학습완료)</div>';
+  if (on) {
+    return '<div id="card_dir_push" style="border:2px solid #5eead4;background:#f0fdfa;border-radius:18px;padding:15px;margin-bottom:14px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' + head +
+        '<span style="font-size:11.5px;padding:3px 8px;border-radius:8px;background:#dcfce7;color:#15803d;font-weight:700">✅ 알림 켜짐</span></div>' +
+      '<div style="font-size:12.5px;color:#0f766e;line-height:1.5">앱을 꺼 둬도 학생이 보낸 <b>쪽지·답장·학습완료·인강 이탈</b>이 이 폰 상단에 떠요.</div>' +
+      '<div style="font-size:11.5px;color:#64748b;margin-top:8px;line-height:1.45">· 폰을 바꾸거나 앱 데이터를 지우면 이 화면에서 다시 한 번 켜 주세요.<br>· 알림이 안 보이면 크롬 주소창 🔒 → 알림 → 허용을 확인해 주세요.</div>' +
+      '<button type="button" id="btn_dir_push_guide" style="margin-top:10px;background:#fff;border:1px solid #99f6e4;color:#0f766e;border-radius:10px;padding:8px 12px;font-weight:700;font-size:12px;cursor:pointer">설명 보기</button>' +
+      '</div>';
+  }
+  var permTxt = (perm === 'denied') ? '알림 권한이 꺼져 있어요 — 크롬 주소창 🔒 → 알림 → 허용으로 바꿔 주세요.'
+    : (perm === 'unsupported') ? '이 브라우저는 알림을 지원하지 않아요. 크롬이나 홈 화면 앱으로 열어 주세요.'
+    : '한 번만 누르면 학생 쪽지·학습완료가 앱을 꺼 둬도 이 폰 상단에 떠요.';
+  return '<div id="card_dir_push" style="border:2px solid #0d9488;background:linear-gradient(135deg,#f0fdfa,#f8fafc);border-radius:18px;padding:15px;margin-bottom:14px">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' + head +
+      '<span style="font-size:11.5px;padding:3px 8px;border-radius:8px;background:#fee2e2;color:#b91c1c;font-weight:700">꺼짐</span></div>' +
+    '<div style="font-size:12.5px;color:#0f766e;line-height:1.5">' + esc(permTxt) + '</div>' +
+    '<div style="font-size:11.5px;color:#64748b;margin-top:8px;line-height:1.45">· 이 폰에서 <b>딱 한 번</b> 누르면 돼요. (학생 기기 설정과 별개예요)<br>· 안드로이드: 크롬 또는 홈 화면 ' + "'탑에듀' 앱으로 열어서 켜기" + '</div>' +
+    '<button type="button" id="btn_dir_push_on" style="margin-top:11px;width:100%;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;border:none;border-radius:12px;padding:12px;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 4px 12px rgba(13,148,136,0.3)">🔔 원장님 폰 알림 켜기</button>' +
+    '</div>';
 }
 
 /* ================= v83: 📢 오늘 미완료 학생 전원 일괄 독촉 쪽지 ================= */
