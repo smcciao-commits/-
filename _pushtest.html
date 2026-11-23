@@ -369,7 +369,7 @@ function ok(name, cond, extra){ R.push((cond ? 'PASS' : 'FAIL') + ' | ' + name +
 function render(){ document.getElementById('out').textContent = R.join('\n'); }
 function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 function clearState(){
-  try { localStorage.removeItem('pushtest_state'); localStorage.removeItem('topedu_child_pin'); } catch(e) {}
+  try { localStorage.removeItem('pushtest_state'); localStorage.removeItem('topedu_child_pin'); localStorage.removeItem('cred'); localStorage.removeItem('topedu_student'); } catch(e) {}
   window.__perm = 'default'; window.Notification.permission = 'default';
 }
 function seedCred(pw){
@@ -411,6 +411,7 @@ function seedCred(pw){
   ekPushEnable();
   var row = document.getElementById('ekPushPinRow');
   ok('T5-1 비번 없으면 입력칸 노출', !!row && row.style.display === 'flex');
+  seedCred('1234');
   window.__fetchMode = 'servererror';
   document.getElementById('ekPushPinInput').value = '1234';
   ekPushSubmitPin();
@@ -424,7 +425,7 @@ function seedCred(pw){
   var t6res = 'pending';
   ekPushSrv('getClasses', {}).then(function(d){ t6res = 'resolved(진짜 서버 응답)'; })
     .catch(function(e){ t6res = 'rejected:' + (e && e.message); });
-  await sleep(1200);
+  await sleep(3000);
   ok('T6 fetch 차단 → JSONP(script 태그) 폴백', document.getElementsByTagName('script').length > before, 'result=' + t6res + ' scripts+' + (document.getElementsByTagName('script').length - before));
 
   /* 7) 차단 HTML(비 JSON) 응답도 JSONP 폴백 */
