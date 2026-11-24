@@ -532,8 +532,8 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; }
 th, td { padding: 9px 8px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
 th { color: var(--sub); font-weight: 700; }
 
-.tabs { display: flex; gap: 6px; margin: 10px 0; }
-.tabs button { flex: 1; padding: 11px; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; font-family: 'Maplestory', sans-serif; font-weight: 700; color: var(--ink); }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.tabs button { flex: 1 1 auto; min-width: 118px; padding: 11px; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; font-family: 'Maplestory', sans-serif; font-weight: 700; color: var(--ink); }
 .tabs button.on { background: var(--pri); border-color: var(--pri); color: #fff; }
 /* v106: 폰(390px)에서 탭 글자가 버튼 밖으로 넘치던 문제 → 3개씩 두 줄로 */
 @media (max-width: 560px) {
