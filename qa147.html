@@ -20,7 +20,8 @@ F.addEventListener('load', function () {
   window.__qa.w = w;
   /* ── 외부 쓰기·푸시 전면 차단(학생 DB·시트·ntfy·MQTT·FCM) ── */
   function stub(n) { try { w[n] = function () { blocked.push(n); }; } catch (e) {} }
-  ['dbSaveAsync', 'ssStatusPub', 'ssBoardPush', 'ssBoardEvent', 'ssNtfy', 'ssNtfyLeave',
+  /* ssNtfy는 실제 경로로 돌려 SS.lastPush(알림 문구)를 확인하고, 전송만 막는다 */
+  ['dbSaveAsync', 'ssStatusPub', 'ssBoardPush', 'ssBoardEvent',
    'ssNetPub', 'ssSessionSub', 'ssFullscreen', 'ssExitFullscreen', 'ssWake', 'ssHistPush',
    'sendDirectorPushNotification', 'pushStreakBoard', 'pullMyTeacherNote', 'hpSubscribe',
    'syncSwState', 'startReminderLoop', 'triggerAiPraiseReply', 'playFanfareSound'].forEach(stub);
