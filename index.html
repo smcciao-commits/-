@@ -11615,7 +11615,7 @@ function ssIsElem(ban) { return /초\s*\d|초등/.test(String(ban || '')); }
    보조 교사 없이 아이들끼리 자기주도실에 있어도, 앱 하나로 50~60분 안에
    [1단계 단어 Day 4개 → 2단계 문장 어순배열 → 3단계 문법·독해]를 완주한다.
    · 전체화면(Fullscreen) + 화면꺼짐 방지(Wake Lock) + 뒤로가기·창닫기 방어
-   · 이탈 감시(visibilitychange·blur·pagehide·fullscreenchange) → 경고음 + 빨간 잠금 오버레이
+   · 이탈 감시(visibilitychange → hidden 하나만) → 기록·토스트 안내 (v141: blur·전체화면 오탐 제거, 수업을 막지 않음)
    · 2회 이상(또는 5초 이상) 이탈 시 원장님 ntfy 알림
    · 원장님 화면: 실시간 자기주도실 현황판 + 설정 + 학부모 문자
    상태는 MQTT(실시간) + localStorage(같은 폰) 두 길로 오가요. */
@@ -11632,7 +11632,7 @@ var SS_DEF = { goal: 60, dayMode: 'auto', dayBook: '', dayStart: 1, dayCount: 4,
 var SS = {
   on: false, done: false, warnOn: false, preview: false, ban: '', name: '',
   goal: 60, t0: 0, el: 0, tick: null, seed: 1, scr: 'hub',
-  stage: 1, leaveCnt: 0, leaveSec: 0, leaveT: 0, lastInc: 0, lastPush: 0, graceUsed: false, graceAt: 0,
+  stage: 1, leaveCnt: 0, leaveSec: 0, leaveT: 0, lastInc: 0, lastPush: 0, graceUsed: false, graceAt: 0, lastLeaveAt: 0,
   s1: { days: [], cur: -1 }, s2: { qs: [], i: 0, tries: 0, ok: 0 }, s3: { qs: [], i: 0, ok: 0 },
   stats: { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 },
   wrongWords: [], wrongProbs: [], session: null, lastPush: null
@@ -11945,7 +11945,7 @@ function ssHomeCard(ban) {
     + (live ? '<span class="ssx-badge-live">원장님이 열었어요</span>' : '')
     + '<span style="margin-left:auto;font-size:11px;font-weight:800;color:#99f6e4;background:rgba(20,184,166,.25);border-radius:999px;padding:3px 9px">' + (sess && sess.goal ? sess.goal : cfg.goal) + '분</span></div>';
   if (exm) h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55"><b style="color:#fde68a">📚 ' + esc(exm.title || '기말 대비') + ' (~' + ssExamUntilTxt(exm) + ')</b><br>교과서 단어·영영풀이 <b style="color:#fff">' + days.length + '묶음</b> → 본문 문장 배열 → 문법·독해' + (ssOvAny(ssOvActive(ban)) ? '<br><b style="color:#fdba74">🎯 오늘은 원장님이 고른 복습이에요</b>' : '') + '<br>화면을 벗어나면 기록돼요. (전화·알림 등 첫 1회는 유예)</div>';
-  else h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55">단어 <b style="color:#fff">' + range + '</b> 암기·시험 → 문장 어순배열 → 문법·독해<br>보조 선생님 없이 여기서 50~60분 안에 끝내요. 화면을 벗어나면 기록돼요. (전화·알림 등 첫 1회는 유예)</div>';
+  else h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55">단어 <b style="color:#fff">' + range + '</b> 암기·시험 → 문장 어순배열 → 문법·독해<br>보조 선생님 없이 여기서 50~60분 안에 끝내요. 화면을 실제로 벗어났을 때만 기록되고, 전화·알림 등 첫 1회는 유예돼요.</div>';
   h += '<button type="button" id="ss_go" style="width:100%;margin-top:10px;border:none;border-radius:13px;padding:12px;font-size:15px;font-weight:900;font-family:inherit;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;box-shadow:0 4px 12px rgba(20,184,166,.35)">'
     + (live ? '🔴 지금 입장하기 →' : '▶ 자기주도 시작하기') + '</button>';
   h += '</div>';
@@ -12011,7 +12011,7 @@ function ssStart() {
   var cfg = ssCfg(me.ban), sess = SS.session || ssSessionActive(me.ban);
   SS.goal = (sess && Number(sess.goal)) || cfg.goal;
   SS.seed = (new Date().getFullYear() * 372 + (new Date().getMonth() + 1) * 31 + new Date().getDate()) % 9973 + 1;
-  SS.t0 = Date.now(); SS.leaveCnt = 0; SS.leaveSec = 0; SS.leaveT = 0; SS.pushCnt = 0; SS.lastPushAt = 0; SS.graceUsed = false;
+  SS.t0 = Date.now(); SS.leaveCnt = 0; SS.leaveSec = 0; SS.leaveT = 0; SS.pushCnt = 0; SS.lastPushAt = 0; SS.graceUsed = false; SS.lastLeaveAt = 0; SS.lastInc = 0;
   SS.wrongWords = []; SS.wrongProbs = [];
   SS.stats = { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: ssBuildDays(me.ban), cur: -1 };
@@ -12028,6 +12028,8 @@ function ssResume(snap) {
   SS.ban = snap.ban; SS.name = snap.name; SS.goal = snap.goal || 60; SS.t0 = snap.t0 || Date.now();
   SS.stage = snap.stage || 1; SS.leaveCnt = snap.leaveCnt || 0; SS.leaveSec = snap.leaveSec || 0;
   SS.graceUsed = !!snap.graceUsed || SS.leaveCnt > 0;
+  /* v141: v140까지의 이탈 기록은 blur·전체화면 오탐이 섞여 있어 그대로 쓰지 않고 0회부터 다시 셉니다. */
+  if (!snap.ver || snap.ver < 141) { SS.leaveCnt = 0; SS.leaveSec = 0; SS.graceUsed = false; SS.leaveT = 0; SS.lastInc = 0; SS.lastLeaveAt = 0; }
   SS.seed = snap.seed || 1;
   SS.stats = snap.stats || { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: snap.days || ssBuildDays(SS.ban), cur: -1 };
@@ -12047,7 +12049,7 @@ function ssSaveSnap() {
     days: SS.s1.days.map(function (d) { return { day: d.day, name: d.name, lbl: d.lbl, ex: d.ex, def: d.def, status: d.status, score: d.score, attempts: d.attempts }; }),
     s2i: SS.s2.i, s3i: SS.s3.i, scr: SS.scr, done: SS.done,
     sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
-    wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now()
+    wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now(), ver: 141
   };
   try { store(SS_SNAP_KEY, s); } catch (e) {}
 }
@@ -12132,10 +12134,10 @@ function ssBind(on) {
   if (SS.preview) return;                 /* v135: 미리보기는 이탈 감시(백그라운드·뒤로가기·전체화면)를 걸지 않음 */
   var m = on ? 'addEventListener' : 'removeEventListener';
   try { document[m]('visibilitychange', ssVis); } catch (e) {}
-  try { window[m]('blur', ssBlur); } catch (e) {}
-  try { window[m]('focus', ssFocus); } catch (e) {}
+  /* v141: 창 blur/focus·전체화면 해제는 이탈로 세지 않습니다.
+     폰 알림 배너·키보드 전환·화면 회전·전체화면 자동 해제에서 연달아 틀리게 잡히던 원인이라
+     실제로 브라우저가 백그라운드로 내려간 visibilitychange(hidden)만 이탈로 봅니다. */
   try { window[m]('pagehide', ssPageHide); } catch (e) {}
-  try { document[m]('fullscreenchange', ssFsChange); } catch (e) {}
   try { window[m]('popstate', ssPop); } catch (e) {}
   try { window[m]('beforeunload', ssBeforeUnload); } catch (e) {}
 }
@@ -12156,20 +12158,13 @@ function ssVis() {
   if (document.visibilityState === 'hidden') ssLeaveBegin('다른 앱으로 넘어감');
   else {
     ssLeaveEnd(); ssWake(true);
-    if (SS.graceAt && Date.now() - SS.graceAt < 8000) ssFullscreen();   /* v140: 유예 복귀 시 전체화면 복구 */
+    /* v141: 돌아오면 이탈로 세지 않고 전체화면만 조용히 다시 시도합니다. */
+    ssFullscreen();
   }
 }
-function ssBlur() { if (!SS.on || SS.done) return; ssLeaveBegin('다른 앱·창으로 이동'); }
-function ssFocus() { if (!SS.on || SS.done) return; ssLeaveEnd(); }
+/* v141: ssBlur·ssFocus·ssFsChange(전체화면 이탈 감지)는 오탐의 주범이라 없앴습니다.
+   이탈은 오직 ssVis(visibilitychange → hidden)에서만 셉니다. */
 function ssPageHide() { if (!SS.on || SS.done) return; ssLeaveBegin('앱을 닫음'); ssLeaveEnd(); }
-function ssFsChange() {
-  if (!SS.on || SS.done) return;
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    /* v140: 유예된 1회 이탈에서 돌아온 직후의 전체화면 해제는 이탈로 세지 않고 다시 전체화면만 시도 */
-    if (SS.graceAt && Date.now() - SS.graceAt < 8000) { ssFullscreen(); return; }
-    ssHit('전체화면을 벗어났어요');
-  }
-}
 function ssLeaveBegin(why) {
   if (SS.leaveT) return;
   SS.leaveT = Date.now(); SS.leaveWhy = why;
@@ -12179,8 +12174,9 @@ function ssLeaveEnd() {
   var dur = (Date.now() - SS.leaveT) / 1000;
   SS.leaveT = 0;
   if (dur < 0.9) return;                       /* 주소창 터치 정도는 넘어가요 */
+  if (Date.now() - (SS.lastLeaveAt || 0) < 2000) return;   /* v141: 같은 이탈이 2초 안에 중복으로 세지지 않게 */
   if (ssTakeGrace(dur)) return;                /* v140: 1회차 짧은 이탈은 유예 */
-  SS.leaveCnt++; SS.leaveSec += dur;
+  SS.leaveCnt++; SS.leaveSec += dur; SS.lastLeaveAt = Date.now();
   ssAfterLeave(dur);
 }
 /* v140: 1회차 이탈 유예 — 전화 수신·알림 등으로 잠깐(5초 미만) 화면을 벗어난 첫 1회는
@@ -12207,15 +12203,21 @@ function ssGraceNotice(dur) {
 function ssHit(why) {
   if (SS.preview) return;                 /* v135: 미리보기는 이탈로 세지 않음 */
   var now = Date.now();
-  if (now - SS.lastInc < 1500) return;
+  if (now - SS.lastInc < 2000) return;    /* v141: 순간 이탈 중복 방지 2초 */
   SS.lastInc = now;
   if (ssTakeGrace(0)) return;                  /* v140: 1회차는 유예 */
-  SS.leaveCnt++;
+  SS.leaveCnt++; SS.lastLeaveAt = now;
   ssAfterLeave(0, why);
 }
+/* v141: 이탈이 잡혀도 수업을 막는 빨간 잠금 화면은 띄우지 않습니다.
+   기록·원장님 알림만 남기고, 학생에게는 닫히는 토스트로만 알려요. */
 function ssAfterLeave(dur, why) {
   ssStatusPub(true); ssSaveSnap();
-  ssWarnShow(dur, why);
+  if (!SS.preview) {
+    ssToast('📵 화면 이탈 ' + SS.leaveCnt + '회 기록됨 · 수업은 계속하세요');
+    try { clearTimeout(SS._toastT); } catch (e) {}
+    SS._toastT = setTimeout(function () { try { ssq('ssxToast').classList.remove('on'); } catch (e) {} }, 4200);
+  }
   try { if (SS.leaveCnt >= 2 || dur >= 5) ssNtfyLeave(dur); } catch (e) {}
 }
 function ssWarnShow(dur, why) {

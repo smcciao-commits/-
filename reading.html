@@ -1727,6 +1727,8 @@ function runReadingApp() {
   updateHeaderSummary();
   if (typeof initCourseFiltersUI === 'function') initCourseFiltersUI();
   render();
+  /* v141: 앱을 새로 열면 이탈은 항상 0회 (예전 시험에서 쌓인 기록은 쓰지 않습니다) */
+  if (typeof resetLeaveTracking === 'function') resetLeaveTracking();
 }
 
 // Wrong answer database in localStorage
@@ -3812,6 +3814,8 @@ function switchPassage(id) {
   });
   updateHeaderSummary();
   hmSyncModeNav();
+  /* v141: 지문을 바꾸면 그 지문 시험은 이탈 0회에서 새로 시작 */
+  resetLeaveTracking();
   render();
 }
 
@@ -3828,6 +3832,8 @@ function switchMode(m) {
       else btn.classList.remove('active');
     }
   }
+  /* v141: 모의고사를 시작할 때마다 이탈 기록을 0회로 초기화 (수업 중 잘못 뜨던 누적 이탈 제거) */
+  if (m === 3) resetLeaveTracking();
   render();
 }
 
@@ -5090,7 +5096,11 @@ function lookupWord(e, word) {
 let ALL_STUDENTS = [];
 let ROSTER_AT = 0;
 
-let tabLeaveCount = parseInt(localStorage.getItem('topedu_tab_leaves') || '0', 10);
+/* v141: 이탈 횟수는 '지금 이 시험'에서만 셉니다.
+   예전 시험에서 쌓인 localStorage 값이 남아 '이탈 5회'처럼 잘못 뜨던 문제를 없앴습니다.
+   시험을 새로 시작하거나 지문을 바꾸면 0회에서 다시 셉니다. */
+let tabLeaveCount = 0;
+try { localStorage.removeItem('topedu_tab_leaves'); } catch (e) {}
 let qStartTimes = {};
 let passageStartTime = Date.now();
 let activeHwBan = '초·중등부(알림톡대상)';
@@ -5120,9 +5130,25 @@ document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
    이탈 기록(tabLeaveCount)·경고창에 넣지 않고 안내 토스트만 띄우며,
    2회차 이탈부터 본격 이탈 기록·경고가 작동합니다. (유예 여부는 sessionStorage에 남겨 새로고침해도 유지) */
 let tabLeaveGraceUsed = sessionStorage.getItem('topedu_tab_grace') === '1';
+let lastLeaveAt = 0;
+
+/* v141: 새 시험 시작·지문 전환 때 이탈 기록을 깨끗하게 0으로 되돌립니다. */
+function resetLeaveTracking() {
+  tabLeaveCount = 0;
+  tabLeaveGraceUsed = false;
+  lastLeaveAt = 0;
+  try { localStorage.removeItem('topedu_tab_leaves'); } catch (e) {}
+  try {
+    sessionStorage.removeItem('topedu_tab_grace');
+    sessionStorage.removeItem('just_left_app');
+    sessionStorage.removeItem('just_left_app_grace');
+  } catch (e) {}
+  updateSecurityUI();
+}
 
 document.addEventListener('visibilitychange', function() {
   if (document.hidden && curMode === 3) {
+    if (Date.now() - lastLeaveAt < 2000) return;   /* v141: 같은 이탈이 연달아 중복으로 세지지 않게 */
     if (!tabLeaveGraceUsed) {
       tabLeaveGraceUsed = true;
       sessionStorage.setItem('topedu_tab_grace', '1');
@@ -5131,7 +5157,7 @@ document.addEventListener('visibilitychange', function() {
       return;
     }
     tabLeaveCount++;
-    localStorage.setItem('topedu_tab_leaves', tabLeaveCount);
+    lastLeaveAt = Date.now();
     sessionStorage.setItem('just_left_app', 'true');
     updateSecurityUI();
   } else {
@@ -5178,7 +5204,7 @@ function showCheatWarningModal(cnt) {
       <div style="font-size:14px; color:#334155; line-height:1.6; margin-bottom:16px;">
         다른 앱(ChatGPT, 파파고 번역기, 카카오톡 등)으로 화면을 전환한 기록이 <b>원장님 대시보드로 실시간 전송</b>되었습니다.<br>
         <span style="display:inline-block; margin-top:8px; padding:4px 12px; background:#fee2e2; border-radius:8px; color:#b91c1c; font-weight:700;">
-          누적 이탈 횟수: ${cnt}회 적발
+          이번 시험 이탈 횟수: ${cnt}회
         </span>
       </div>
       <button class="btn-main" onclick="document.getElementById('cheatWarningModal').remove();" style="background:#ef4444;">
