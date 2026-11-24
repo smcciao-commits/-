@@ -7574,7 +7574,7 @@ function showAdmin(){
     '<button type="button" class="btn" id="bwrite" onclick="openWritingApp(true)" style="flex:1;margin:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(124,58,237,0.24)">✍️ 내신 서술형</button>'+
     '<button type="button" class="btn" id="bhw" onclick="openHwCheck()" style="flex:1;margin:0;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#78350f;font-weight:800;box-shadow:0 4px 12px rgba(245,158,11,0.28)">✅ 숙제 1초 체크</button>'+
     '</div>'+
-    '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="ss" class="'+(A.tab==='ss'?'on':'')+'" style="color:#0891b2;font-weight:700">⏱️ 자기주도·학부모문자</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button><button data-t="graph" class="'+(A.tab==='graph'?'on':'')+'" style="font-weight:700">📈 진도 그래프</button></div>';
+    '<div class="tabs"><button data-t="dash" class="'+(A.tab==='dash'?'on':'')+'">📊 학생 현황 대시보드</button><button data-t="alerts" class="'+(A.tab==='alerts'?'on':'')+'" style="color:#7c4dff;font-weight:700">🔔 폰 알림·쪽지함</button><button data-t="hw" class="'+(A.tab==='hw'?'on':'')+'" style="color:#0d9488;font-weight:700">🎯 반별 스페셜 숙제</button><button data-t="ss" class="'+(A.tab==='ss'?'on':'')+'" style="color:#0891b2;font-weight:700">⏱️ 자기주도·학부모문자</button><button data-t="day" class="'+(A.tab==='day'?'on':'')+'">날짜별 · 알림톡</button><button data-t="set" class="'+(A.tab==='set'?'on':'')+'">세트별 현황</button><button data-t="graph" class="'+(A.tab==='graph'?'on':'')+'" style="font-weight:700">📈 진도 그래프</button><button data-t="clog" class="'+(A.tab==='clog'?'on':'')+'" style="color:#0d9488;font-weight:700">📝 수업일지</button></div>';
 
   
   if(A.tab === 'alerts'){
@@ -7750,6 +7750,15 @@ function showAdmin(){
     return;
   }
 
+  if(A.tab === 'clog'){ /* v149: 📝 선생님 전용 반별 수업일지 + 카톡 복사 */
+    app.innerHTML = html + '<div id="aout">' + clogAdminHtml() + '</div>';
+    $('#back').onclick = start;
+    $('#bnew').onclick = showBattleSetup; var blcl = $('#blive'); if(blcl) blcl.onclick = showLiveClassSetup;
+    [].forEach.call(app.querySelectorAll('.tabs button'), function(b){ b.onclick = function(){ A.tab = b.dataset.t; showAdmin(); }; });
+    try { clogBind(); } catch(e){}
+    return;
+  }
+
   if(A.tab === 'hw'){
     app.innerHTML = html + '<div id="aout"></div>';
     $('#back').onclick = start;
@@ -7776,6 +7785,319 @@ function showAdmin(){
 }
 
 
+/* ============ v149: 📝 선생님 전용 반별 수업일지 + 카톡 복사 ============
+   · 선생님 화면(관리자 로그인)에서만 그려집니다. 학생 화면에는 없습니다.
+   · 저장: 구글 시트 '수업일지' 탭 (Apps Script action=classlog) + 이 폰 localStorage 백업
+   · 카톡 복사: 반·날짜 + 오늘 진도 / 숙제 / 다음 시간 3줄 문구를 클립보드로 */
+var CLOG_DOW = ['일', '월', '화', '수', '목', '금', '토'];
+function clogToday() { try { return dbDay(); } catch (e) { return ''; } }
+function clogBans() {
+  var out = [];
+  try {
+    var I = (S && S.admin && S.admin.info) ? S.admin.info.classes : null;
+    if (I && I.length) out = I.slice(0);
+  } catch (e) { }
+  out = out.filter(function (b) { return b && b !== '선생님'; });
+  if (!out.length) out = ['초5', '풍덕초6', '수지중1', '수지중2', '예비고1', '홍천고1', '현암고1', '수지고2', '죽전고2'];
+  return out;
+}
+function clogSt() {
+  if (!S.clog) S.clog = { ban: '', date: '', rows: [], loaded: false, offline: false };
+  var bans = clogBans();
+  if (!S.clog.ban || bans.indexOf(S.clog.ban) < 0) S.clog.ban = bans[0] || '';
+  if (!S.clog.date) S.clog.date = clogToday();
+  return S.clog;
+}
+function clogPw() {
+  var pw = '';
+  try { if (S && S.admin && S.admin.pw) pw = String(S.admin.pw); } catch (e) { }
+  if (!pw) { try { pw = String(store('apw') || ''); } catch (e) { } }
+  return pw;
+}
+function clogPrettyDate(d) {
+  var m = String(d || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return String(d || '');
+  var dt = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return Number(m[2]) + '월 ' + Number(m[3]) + '일 (' + CLOG_DOW[dt.getDay()] + ')';
+}
+function clogCacheListKey(ban) { return 'topedu_classlog_list_' + (ban || ''); }
+function clogCacheGetList(ban) {
+  try {
+    var raw = localStorage.getItem(clogCacheListKey(ban));
+    var v = raw ? JSON.parse(raw) : null;
+    return (v && v.rows) ? v.rows : [];
+  } catch (e) { return []; }
+}
+function clogCacheSetList(ban, rows) {
+  try { localStorage.setItem(clogCacheListKey(ban), JSON.stringify({ at: Date.now(), rows: rows || [] })); } catch (e) { }
+}
+function clogCacheSaveRow(row) {
+  try {
+    var rows = clogCacheGetList(row.ban).filter(function (r) { return !(r && r.date === row.date); });
+    rows.unshift(row);
+    rows.sort(function (a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
+    clogCacheSetList(row.ban, rows.slice(0, 60));
+  } catch (e) { }
+}
+function clogFieldVal(id) {
+  var el = document.getElementById(id);
+  return el ? String(el.value || '') : '';
+}
+function clogOneLine(s) {
+  return String(s || '').split('\n').map(function (x) { return x.trim(); }).filter(function (x) { return !!x; }).join(' / ');
+}
+function clogCopyTextNow() {
+  var st = clogSt();
+  var prog = clogOneLine(clogFieldVal('cl_prog'));
+  var hw = clogOneLine(clogFieldVal('cl_hw'));
+  var next = clogOneLine(clogFieldVal('cl_next'));
+  var lines = ['[' + (st.ban || '수업') + ' · ' + clogPrettyDate(st.date) + ' 수업 안내]'];
+  if (prog) lines.push('📚 오늘 진도: ' + prog);
+  if (hw) lines.push('📝 숙제: ' + hw);
+  if (next) lines.push('📌 다음 시간: ' + next);
+  return lines.join('\n');
+}
+/* 서버(Apps Script) 호출 — 선생님 비밀번호로만 통과합니다 */
+function clogReq(op, params) {
+  return new Promise(function (res, rej) {
+    var pw = clogPw();
+    if (!pw) { rej(new Error('선생님 비밀번호를 먼저 확인해 주세요.')); return; }
+    if (!TOPEDU_DB_URL) { rej(new Error('인터넷 연결을 확인해 주세요')); return; }
+    var q = ['action=classlog', 'op=' + encodeURIComponent(op), 'pw=' + encodeURIComponent(pw)];
+    Object.keys(params || {}).forEach(function (k) {
+      var v = params[k];
+      if (v === undefined || v === null) return;
+      q.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+    });
+    fetch(TOPEDU_DB_URL + '?' + q.join('&') + '&_=' + Date.now(), { method: 'GET', mode: 'cors', cache: 'no-store', credentials: 'omit' })
+      .then(function (r) {
+        if (!r || !r.ok) throw new Error('http ' + (r ? r.status : '?'));
+        return r.text();
+      })
+      .then(function (txt) {
+        var d = null;
+        try { d = JSON.parse(txt); } catch (e) { d = null; }
+        if (!d) throw new Error('서버 응답을 읽지 못했어요.');
+        if (!d.ok) throw new Error(d.error || '요청을 처리하지 못했어요.');
+        res(d);
+      })['catch'](function (e) { rej(e); });
+  });
+}
+function clogPaintPreview() {
+  var pv = document.getElementById('cl_pv');
+  if (!pv) return;
+  var txt = clogCopyTextNow();
+  if (txt.split('\n').length <= 1) {
+    pv.textContent = '칸을 채우면 카톡 단톡방에 붙여넣을 문구가 여기에 그대로 보여요.';
+    return;
+  }
+  pv.textContent = txt;
+}
+function clogPaintList() {
+  var box = document.getElementById('cl_list');
+  if (!box) return;
+  var st = clogSt();
+  var rows = st.rows || [];
+  var cnt = document.getElementById('cl_cnt');
+  if (cnt) cnt.textContent = '(' + rows.length + ')';
+  if (!st.loaded) {
+    box.innerHTML = '<div style="text-align:center;padding:18px;color:#94a3b8;font-size:13px">불러오는 중...</div>';
+    return;
+  }
+  if (!rows.length) {
+    box.innerHTML = '<div style="text-align:center;padding:22px;color:#94a3b8;font-size:13px;line-height:1.6">' + esc(st.ban) + ' 반은 아직 수업일지가 없어요.<br>오늘 수업을 첫 기록으로 남겨 보세요.</div>';
+    return;
+  }
+  box.innerHTML = rows.map(function (r, i) {
+    return '<div class="cl_row" data-i="' + i + '" style="border:1.5px solid #e2e8f0;border-radius:12px;padding:11px 13px;margin-bottom:8px;background:#fff;cursor:pointer">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'
+      + '<b style="font-size:13.5px;color:#0f766e">' + esc(clogPrettyDate(r.date)) + '</b>'
+      + '<span style="font-size:11px;color:#94a3b8">' + esc(r.at || '') + '</span></div>'
+      + (r.prog ? '<div style="font-size:12.5px;color:#334155;margin-top:4px;line-height:1.5">📚 ' + esc(r.prog) + '</div>' : '')
+      + (r.hw ? '<div style="font-size:12.5px;color:#334155;margin-top:2px;line-height:1.5">📝 ' + esc(r.hw) + '</div>' : '')
+      + (r.next ? '<div style="font-size:12.5px;color:#334155;margin-top:2px;line-height:1.5">📌 ' + esc(r.next) + '</div>' : '')
+      + '</div>';
+  }).join('');
+  [].forEach.call(box.querySelectorAll('.cl_row'), function (el) {
+    el.onclick = function () {
+      var list = (S.clog && S.clog.rows) ? S.clog.rows : [];
+      var r = list[Number(el.dataset.i)];
+      if (!r) return;
+      var d = document.getElementById('cl_date'); if (d) d.value = r.date;
+      S.clog.date = r.date;
+      var p = document.getElementById('cl_prog'); if (p) p.value = r.prog || '';
+      var h = document.getElementById('cl_hw'); if (h) h.value = r.hw || '';
+      var n = document.getElementById('cl_next'); if (n) n.value = r.next || '';
+      clogPaintPreview();
+      ssToast('📝 ' + clogPrettyDate(r.date) + ' 기록을 불러왔어요 — 고쳐서 다시 저장할 수 있어요');
+    };
+  });
+}
+function clogLoadList(showToast) {
+  var st = clogSt();
+  var ban = st.ban;
+  try {
+    clogReq('list', { ban: ban, limit: 20 }).then(function (d) {
+      if (!S.clog || S.clog.ban !== ban) return;
+      S.clog.rows = d.rows || [];
+      S.clog.loaded = true;
+      S.clog.offline = false;
+      clogCacheSetList(ban, S.clog.rows);
+      clogPaintList();
+      if (showToast) ssToast('🗂️ ' + ban + ' 수업일지 ' + S.clog.rows.length + '건');
+    })['catch'](function () {
+      if (!S.clog || S.clog.ban !== ban) return;
+      S.clog.rows = clogCacheGetList(ban);
+      S.clog.loaded = true;
+      S.clog.offline = true;
+      clogPaintList();
+      if (showToast) ssToast('시트에 연결하지 못했어요 — 이 폰에 저장된 기록을 보여드려요');
+    });
+  } catch (e) { }
+}
+function clogDoCopy() {
+  var txt = clogCopyTextNow();
+  if (txt.split('\n').length <= 1) { ssToast('먼저 오늘 진도나 숙제를 적어 주세요'); return; }
+  try {
+    ssCopyText(txt, function (ok) {
+      ssToast(ok ? '📋 복사 완료 — 카톡 단톡방에 붙여넣으세요!' : '복사가 막혔어요 — 아래 미리보기를 길게 눌러 복사해 주세요');
+    });
+  } catch (e) { ssToast('복사가 막혔어요 — 미리보기를 길게 눌러 복사해 주세요'); }
+}
+function clogDoSave(btn) {
+  var st = clogSt();
+  var ban = st.ban;
+  var dateEl = document.getElementById('cl_date');
+  var date = (dateEl && dateEl.value) ? dateEl.value : (st.date || clogToday());
+  st.date = date;
+  var prog = clogFieldVal('cl_prog').trim();
+  var hw = clogFieldVal('cl_hw').trim();
+  var next = clogFieldVal('cl_next').trim();
+  if (!ban) { ssToast('반을 먼저 골라 주세요'); return; }
+  if (!prog && !hw && !next) { ssToast('오늘 진도·숙제 중 하나는 적어 주세요'); return; }
+  var pw = clogPw();
+  if (!pw) { alert('선생님 비밀번호 확인이 필요해요.\n\n화면을 나갔다가 다시 들어와 주세요.'); return; }
+  clogCacheSaveRow({ date: date, ban: ban, prog: prog, hw: hw, next: next, at: '방금' });
+  if (btn) { btn.disabled = true; btn.textContent = '💾 저장 중...'; }
+  function restore() { if (btn) { btn.disabled = false; btn.textContent = '💾 수업일지 저장'; } }
+  try {
+    fetch(TOPEDU_DB_URL, {
+      method: 'POST', mode: 'no-cors', keepalive: true,
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'classlog', op: 'save', pw: pw, date: date, ban: ban, prog: prog, hw: hw, next: next })
+    })['catch'](function () { });
+  } catch (e) { }
+  var tries = 0;
+  function showCached() {
+    if (S.clog && S.clog.ban === ban) {
+      S.clog.rows = clogCacheGetList(ban);
+      S.clog.loaded = true;
+      clogPaintList();
+    }
+    restore();
+    ssToast('💾 이 폰에 저장했어요 — 시트 반영은 조금 뒤 확인해 주세요');
+  }
+  function check() {
+    tries++;
+    clogReq('list', { ban: ban, limit: 20 }).then(function (d) {
+      var rows = d.rows || [], hit = null;
+      for (var i = 0; i < rows.length; i++) { if (rows[i].date === date) { hit = rows[i]; break; } }
+      var same = hit && String(hit.prog || '').trim() === prog && String(hit.hw || '').trim() === hw && String(hit.next || '').trim() === next;
+      if (same) {
+        if (S.clog && S.clog.ban === ban) {
+          S.clog.rows = rows; S.clog.loaded = true; S.clog.offline = false;
+          clogCacheSetList(ban, rows); clogPaintList();
+        }
+        restore();
+        ssToast('✅ 구글 시트에 저장 완료 — 다른 폰에서도 보여요');
+        return;
+      }
+      if (tries < 4) { setTimeout(check, 1300); return; }
+      showCached();
+    })['catch'](function () {
+      if (tries < 4) { setTimeout(check, 1300); return; }
+      showCached();
+    });
+  }
+  check();
+}
+function clogAdminHtml() {
+  var st = clogSt(), bans = clogBans();
+  var lbl = 'font-weight:700;color:#134e4a;font-size:12.5px;display:block;margin:10px 0 4px';
+  var inp = 'width:100%;padding:10px 11px;border:1.5px solid #99f6e4;border-radius:10px;font-size:13.5px;line-height:1.55;box-sizing:border-box;font-family:inherit';
+  var h = '';
+  h += '<div class="card" style="border:2px solid #99f6e4;background:#f0fdfa;border-radius:16px;padding:16px;margin-bottom:12px">'
+    + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+    + '<span style="font-size:20px">📝</span>'
+    + '<b style="font-size:16px;color:#0f766e;font-family:Maplestory,sans-serif">반별 수업일지</b>'
+    + '<span style="margin-left:auto;font-size:11px;font-weight:700;color:#0d9488;background:#ccfbf1;border-radius:999px;padding:2px 8px">선생님만 보임</span></div>'
+    + '<div style="font-size:12.5px;color:#0f766e;line-height:1.55;margin-bottom:4px">수업 끝나고 3칸만 적으면 <b>구글 시트</b>에 저장되고, <b>[📋 카톡 복사]</b>로 학부모 단톡방에 그대로 붙여넣을 수 있어요.</div>'
+    + '<div style="display:flex;gap:8px">'
+    + '<div style="flex:1.25"><label style="' + lbl + ';margin-top:6px">반</label>'
+    + '<select id="cl_ban" style="' + inp + '">'
+    + bans.map(function (b) { return '<option value="' + esc(b) + '"' + (b === st.ban ? ' selected' : '') + '>' + esc(b) + '</option>'; }).join('')
+    + '</select></div>'
+    + '<div style="flex:1"><label style="' + lbl + ';margin-top:6px">날짜</label>'
+    + '<input type="date" id="cl_date" value="' + esc(st.date) + '" style="' + inp + '"></div>'
+    + '</div>'
+    + '<label style="' + lbl + '">오늘 나간 진도</label>'
+    + '<textarea id="cl_prog" rows="3" placeholder="예) 수특 Light 9강 1~4번, 10월 학평 31~34번" style="' + inp + ';resize:vertical"></textarea>'
+    + '<label style="' + lbl + '">오늘 내준 숙제</label>'
+    + '<textarea id="cl_hw" rows="3" placeholder="예) 워드마스터 Day 12 암기, 틀린 3지문 다시 풀기" style="' + inp + ';resize:vertical"></textarea>'
+    + '<label style="' + lbl + '">다음 시간에 할 것 (채점 · 나갈 진도)</label>'
+    + '<textarea id="cl_next" rows="3" placeholder="예) 오늘 숙제 채점 / 9강 5~8번 나가기" style="' + inp + ';resize:vertical"></textarea>'
+    + '<div style="display:flex;gap:8px;margin-top:14px">'
+    + '<button type="button" class="btn" id="cl_save" style="flex:1;margin:0;background:#0d9488;color:#fff;font-weight:800">💾 수업일지 저장</button>'
+    + '<button type="button" class="btn" id="cl_copy" style="flex:1;margin:0;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#78350f;font-weight:800">📋 카톡 복사</button>'
+    + '</div>'
+    + '<div id="cl_pv" style="margin-top:10px;padding:11px 13px;background:#fff;border:1.5px dashed #99f6e4;border-radius:12px;font-size:12.5px;color:#0f766e;white-space:pre-wrap;line-height:1.6">칸을 채우면 카톡 단톡방에 붙여넣을 문구가 여기에 그대로 보여요.</div>'
+    + '</div>'
+    + '<div class="card" style="border-radius:16px;padding:14px">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+    + '<b style="font-size:14.5px;color:#1e293b">🗂️ 지난 수업일지 <span id="cl_cnt" style="color:#0d9488;font-size:12.5px"></span></b>'
+    + '<button type="button" id="cl_reload" style="background:#f1f5f9;color:#0f766e;border:1px solid #cbd5e1;border-radius:9px;padding:6px 10px;font-size:11.5px;font-weight:700;cursor:pointer">🔄 새로고침</button>'
+    + '</div>'
+    + '<div id="cl_list"></div>'
+    + '<div style="font-size:11.5px;color:#94a3b8;line-height:1.5;margin-top:6px">카드를 누르면 그 날 기록을 불러와 고칠 수 있어요. 같은 날짜·같은 반은 새 줄이 생기지 않고 덮어써요.</div>'
+    + '</div>';
+  return h;
+}
+function clogBind() {
+  clogSt();
+  var sel = document.getElementById('cl_ban');
+  if (sel) sel.onchange = function () {
+    S.clog.ban = this.value;
+    S.clog.rows = []; S.clog.loaded = false;
+    clogPaintList();
+    clogLoadList(false);
+  };
+  var dt = document.getElementById('cl_date');
+  if (dt) dt.onchange = function () {
+    S.clog.date = this.value || clogToday();
+    var rows = (S.clog && S.clog.rows) ? S.clog.rows : [], hit = null;
+    for (var i = 0; i < rows.length; i++) { if (rows[i].date === S.clog.date) { hit = rows[i]; break; } }
+    if (hit) {
+      var p = document.getElementById('cl_prog'); if (p) p.value = hit.prog || '';
+      var h = document.getElementById('cl_hw'); if (h) h.value = hit.hw || '';
+      var n = document.getElementById('cl_next'); if (n) n.value = hit.next || '';
+      ssToast('📝 이 날짜에 저장된 기록을 불러왔어요');
+    }
+    clogPaintPreview();
+  };
+  ['cl_prog', 'cl_hw', 'cl_next'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.oninput = clogPaintPreview;
+  });
+  var bs = document.getElementById('cl_save');
+  if (bs) bs.onclick = function () { clogDoSave(bs); };
+  var bc = document.getElementById('cl_copy');
+  if (bc) bc.onclick = function () { clogDoCopy(); };
+  var br = document.getElementById('cl_reload');
+  if (br) br.onclick = function () { S.clog.loaded = false; clogPaintList(); clogLoadList(true); };
+  clogPaintList();
+  clogPaintPreview();
+  clogLoadList(false);
+}
 function renderAdminHwManager() {
   var A = S.admin, I = A.info;
   var currentHwAll = getSpecialHw();
@@ -9498,7 +9820,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v148';
+var TOPEDU_APP_VERSION = 'v149';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
