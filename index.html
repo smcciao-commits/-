@@ -5967,6 +5967,8 @@ function showHome(){
   var html='<div style="display:flex;justify-content:space-between;align-items:center;"><h1>'+esc(me.name)+' 안녕! 👋</h1><button id="btn_app_refresh" onclick="forceAppRefresh(event)" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1.5px solid #14b8a6;padding:6px 12px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">🔄 최신 새로고침</button></div><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
   var meInfo = getStreakInfo(me.ban, me.name);
   html += drawStreakHero(me);
+  /* v150: 🔥 초5 이하린 천재(함) 12과 단어·문장 3일 특훈 — 홈 상단 */
+  try { html += drawX12Card(me); } catch(e){}
   html += drawStudentInAppNoteCard(me.name);
   /* v121: 🔔 학원 공지·쪽지 상단 푸시(FCM) 안내 카드 */
   try { html += drawPushOptInCard(me); } catch(e){}
@@ -6730,6 +6732,446 @@ function showProbResult(r){
 
 
 /* ============ 반별 스페셜 숙제 시스템 ============ */
+/* =====================================================================
+   v150: 🔥 초5 이하린 — 천재(함) 12과 단어·문장 3일 특훈
+   (2026-11-27 금 · 11-28 토 · 11-29 일 → 월요일 11/30 단어·문장 스펠링 시험 대비)
+   · 매일 같은 12과 특훈: ① 단어 스펠링 20  ② 문장 어순 배열 12  ③ 문장 빈칸 스펠링 12
+   · 하루 몫(44문항)을 다 끝내면 그날(금/토/일) 완료 체크가 따로 찍힌다.
+   · 완료 기록은 이 폰(localStorage 'topedu_x12_done')에만 남긴다 — 학생 DB 쓰기·푸시 없음.
+   · 원장님(선생님) 화면에서는 11/27 이전에도 미리 체험할 수 있고,
+     미리보기 기록은 실제 금·토·일 카운트에 들어가지 않는다.
+   ===================================================================== */
+var X12_DONE_KEY = 'topedu_x12_done';
+var X12_DAYS = [
+  { key: '2026-11-27', wd: '금', label: '1일차' },
+  { key: '2026-11-28', wd: '토', label: '2일차' },
+  { key: '2026-11-29', wd: '일', label: '3일차' }
+];
+var X12_WORDS = [
+  { w: 'yesterday', m: '어제' },
+  { w: 'weekend', m: '주말' },
+  { w: 'last', m: '지난' },
+  { w: 'visited', m: '방문했다', b: 'visit(방문하다)의 과거형' },
+  { w: 'went', m: '갔다', b: 'go(가다)의 과거형' },
+  { w: 'saw', m: '보았다', b: 'see(보다)의 과거형' },
+  { w: 'ate', m: '먹었다', b: 'eat(먹다)의 과거형' },
+  { w: 'played', m: '놀았다, (경기를) 했다', b: 'play의 과거형' },
+  { w: 'bought', m: '샀다', b: 'buy(사다)의 과거형' },
+  { w: 'cleaned', m: '청소했다', b: 'clean(청소하다)의 과거형' },
+  { w: 'watched', m: '보았다, 시청했다', b: 'watch의 과거형' },
+  { w: 'joined', m: '가입했다, 참여했다', b: 'join의 과거형' },
+  { w: 'museum', m: '박물관' },
+  { w: 'beach', m: '해변, 바닷가' },
+  { w: 'delicious', m: '맛있는' },
+  { w: 'wonderful', m: '멋진, 훌륭한' },
+  { w: 'vacation', m: '방학, 휴가' },
+  { w: 'busy', m: '바쁜' },
+  { w: 'fun', m: '재미있는, 재미' },
+  { w: 'together', m: '함께, 같이' }
+];
+var X12_SENTS = [
+  { en: 'What did you do yesterday?', ko: '너 어제 뭐 했니?', b: 'yesterday', bm: '어제' },
+  { en: 'I went to the museum.', ko: '나는 박물관에 갔어.', b: 'went', bm: '갔다' },
+  { en: 'I saw a big dinosaur.', ko: '나는 커다란 공룡을 봤어.', b: 'saw', bm: '보았다' },
+  { en: 'I visited my grandparents.', ko: '나는 조부모님 댁에 방문했어.', b: 'visited', bm: '방문했다' },
+  { en: 'We ate delicious pizza.', ko: '우리는 맛있는 피자를 먹었어.', b: 'ate', bm: '먹었다' },
+  { en: 'I played badminton with my mom.', ko: '나는 엄마와 배드민턴을 쳤어.', b: 'played', bm: '했다(경기를)' },
+  { en: 'I bought a cute notebook.', ko: '나는 귀여운 공책을 샀어.', b: 'bought', bm: '샀다' },
+  { en: 'I cleaned my room yesterday.', ko: '나는 어제 내 방을 청소했어.', b: 'cleaned', bm: '청소했다' },
+  { en: 'We watched a movie together.', ko: '우리는 함께 영화를 봤어.', b: 'watched', bm: '보았다' },
+  { en: 'How was your weekend?', ko: '주말 어땠어?', b: 'weekend', bm: '주말' },
+  { en: 'It was so much fun.', ko: '정말 재미있었어.', b: 'fun', bm: '재미' },
+  { en: 'I joined a book club.', ko: '나는 독서 클럽에 가입했어.', b: 'joined', bm: '가입했다' }
+];
+var X12_UI = { open: false, day: 0, stage: 'w', preview: false, mem: {}, queue: [], cur: -1, chips: [], ans: [], lock: false, revealed: 0, hashDone: 0 };
+
+function x12Pad2(n) { return (n < 10 ? '0' : '') + n; }
+function x12DateKey(d) { d = d || new Date(); return d.getFullYear() + '-' + x12Pad2(d.getMonth() + 1) + '-' + x12Pad2(d.getDate()); }
+function x12TodayIdx() { var t = x12DateKey(); for (var i = 0; i < X12_DAYS.length; i++) { if (X12_DAYS[i].key === t) return i; } return -1; }
+function x12StageTotal(st) { return st === 'w' ? X12_WORDS.length : X12_SENTS.length; }
+function x12StageName(st) { return st === 'w' ? '① 단어 스펠링' : (st === 'so' ? '② 문장 어순' : '③ 문장 빈칸'); }
+function x12StoreAll() { var o = null; try { o = store(X12_DONE_KEY); } catch (e) { o = null; } return (o && typeof o === 'object') ? o : {}; }
+function x12SaveAll(o) { try { store(X12_DONE_KEY, o); } catch (e) {} }
+function x12BlankRec() { return { w: [], so: [], sb: [], fix: 0, at: '' }; }
+function x12Rec(key) {
+  if (X12_UI.preview) { if (!X12_UI.mem[key]) X12_UI.mem[key] = x12BlankRec(); return X12_UI.mem[key]; }
+  var all = x12StoreAll();
+  if (!all[key] || typeof all[key] !== 'object') all[key] = x12BlankRec();
+  var r = all[key];
+  if (!Array.isArray(r.w)) r.w = [];
+  if (!Array.isArray(r.so)) r.so = [];
+  if (!Array.isArray(r.sb)) r.sb = [];
+  return r;
+}
+function x12Commit(key, rec) {
+  if (X12_UI.preview) { X12_UI.mem[key] = rec; return; }
+  var all = x12StoreAll(); all[key] = rec; x12SaveAll(all);
+}
+function x12DayDone(key) { var r = x12Rec(key); return !!r.at; }
+function x12DayCount(key) {
+  var r = x12Rec(key);
+  return { n: r.w.length + r.so.length + r.sb.length, total: X12_WORDS.length + X12_SENTS.length * 2 };
+}
+function x12AllDone(rec) {
+  return rec.w.length >= X12_WORDS.length && rec.so.length >= X12_SENTS.length && rec.sb.length >= X12_SENTS.length;
+}
+function x12SplitSentence(s) {
+  var t = String(s || ''), end = '';
+  var m = t.match(/[.?!]+$/); if (m) { end = m[0]; t = t.slice(0, m.index); }
+  return { toks: t.split(/\s+/).filter(function (x) { return !!x; }), end: end };
+}
+function x12SafeRe(word) { return String(word || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+/* ---------- 홈 카드 ---------- */
+function drawX12Card(me) {
+  try {
+    if (!me) return '';
+    var isOwner = (me.ban === '선생님');
+    var isHarin = (me.ban === '초5' && String(me.name || '').indexOf('하린') >= 0);
+    if (!isOwner && !isHarin) return '';
+    var tIdx = x12TodayIdx();
+    /* 다른 앱(하린이 플래너)에서 #x12 로 들어온 경우 한 번만 자동으로 연다 */
+    if (!X12_UI.hashDone && String(location.hash || '').indexOf('x12') >= 0) {
+      X12_UI.hashDone = 1;
+      setTimeout(function () {
+        try {
+          var di = x12TodayIdx();
+          var pre = isOwner || di < 0;      /* 시작 전·원장님은 미리보기(기록 저장 안 함) */
+          if (di < 0) di = 0;
+          x12Open(di, pre);
+          try { history.replaceState(null, '', location.pathname + location.search); } catch (e2) {}
+        } catch (e3) {}
+      }, 150);
+    }
+    if (!isOwner && tIdx < 0) return '';   /* 하린: 금·토·일 당일에만 카드가 뜬다 */
+    var h = '';
+    var chips = '', i, d, r, done, on;
+    for (i = 0; i < 3; i++) {
+      d = X12_DAYS[i]; r = x12Rec(d.key); done = !!r.at; on = (i === tIdx);
+      chips += '<span style="flex:1;text-align:center;font-size:11.5px;font-weight:800;border-radius:11px;padding:7px 2px;line-height:1.35;' +
+        'border:1.5px solid ' + (done ? '#16a34a' : (on ? '#14b8a6' : '#e2e8f0')) + ';' +
+        'background:' + (done ? '#dcfce7' : (on ? '#ccfbf1' : '#fff')) + ';' +
+        'color:' + (done ? '#15803d' : (on ? '#0f766e' : '#94a3b8')) + ';">' +
+        d.wd + ' ' + (done ? '✅' : '⬜') + '<br><span style="font-size:10.5px;font-weight:700">' + d.label + '</span></span>';
+    }
+    var doneN = 0; for (i = 0; i < 3; i++) { if (x12DayDone(X12_DAYS[i].key)) doneN++; }
+    var btnTxt, btnFn;
+    if (isOwner && tIdx < 0) { btnTxt = '👀 미리 체험하기 (1일차부터) →'; btnFn = 'x12Open(0,true)'; }
+    else if (tIdx >= 0) {
+      var td = X12_DAYS[tIdx], tr = x12Rec(td.key);
+      btnTxt = tr.at ? ('🔁 ' + td.label + '(' + td.wd + ') 복습하기 →') : ('🚀 ' + td.label + '(' + td.wd + ') 오늘 몫 시작 →');
+      btnFn = 'x12Open(' + tIdx + ',' + (isOwner ? 'true' : 'false') + ')';
+    } else { btnTxt = '👀 미리 체험하기 (1일차부터) →'; btnFn = 'x12Open(0,true)'; }
+    h += '<div class="card" id="x12Card" style="border:2px solid #0d9488;background:linear-gradient(135deg,#f0fdfa,#ecfeff);border-radius:18px;padding:16px;margin:10px 0 14px;box-shadow:0 4px 16px rgba(13,148,136,0.16)">';
+    h += '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap">' +
+      '<span style="font-size:12.5px;font-weight:800;color:#0f766e;background:#fff;border:1.5px solid #14b8a6;padding:3px 10px;border-radius:999px">🔥 월요 시험 대비 3일 특훈</span>' +
+      '<span style="font-size:11.5px;color:#64748b;font-weight:700">11/27(금)~29(일) · 3일 완료 ' + doneN + '/3</span></div>';
+    h += '<div style="font-family:Maplestory,Pretendard,sans-serif;font-size:16px;font-weight:700;color:#134e4a;margin:10px 0 3px">천재(함) 12과 What Did You Do Yesterday?</div>';
+    h += '<div style="font-size:12.5px;color:#0f766e;line-height:1.5;margin-bottom:10px">단어 스펠링 20 + 문장 어순 12 + 문장 빈칸 12 — 매일 1회, 3일 연속이면 월요일 스펠링 시험 완벽 대비! 💪</div>';
+    h += '<div style="display:flex;gap:6px;margin:0 0 11px">' + chips + '</div>';
+    h += '<button type="button" onclick="' + btnFn + '" style="width:100%;font-family:Maplestory,Pretendard,sans-serif;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;font-weight:700;padding:12px;font-size:14px;line-height:1.3;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(13,148,136,0.28);cursor:pointer;">' + btnTxt + '</button>';
+    h += '<div style="font-size:11.5px;color:#0f766e;background:#f0fdfa;border:1px dashed #99f6e4;border-radius:10px;padding:7px 9px;line-height:1.45;margin-top:9px;text-align:center;font-weight:700">' +
+      (isOwner ? '👑 원장님 미리보기 — 11/27(금)부터 하린이 화면에 자동으로 떠요. 여기서 연습한 기록은 실제 금·토·일 카운트에 안 들어갑니다.'
+               : '금·토·일 하루 1회! 한 번 끝낸 날은 ✅로 남아요. 다음 날 또 하면 2일차 ✅') + '</div>';
+    h += '</div>';
+    return h;
+  } catch (e) { return ''; }
+}
+
+/* ---------- 특훈 화면 ---------- */
+function x12Open(day, preview) {
+  X12_UI.open = true;
+  X12_UI.preview = !!preview;
+  X12_UI.mem = {};
+  var d = (day == null || day < 0) ? 0 : day;
+  X12_UI.day = d;
+  X12_UI.wrong = 0;
+  X12_UI.revealed = 0;
+  x12LoadStage('w');
+  x12Render();
+  try { window.scrollTo(0, 0); } catch (e) {}
+}
+function x12Close() {
+  X12_UI.open = false;
+  try { stopSpeak(); } catch (e) {}
+  showHome();
+}
+function x12LoadStage(st) {
+  X12_UI.stage = st;
+  X12_UI.lock = false;
+  X12_UI.revealed = 0;
+  var key = X12_DAYS[X12_UI.day].key;
+  var rec = x12Rec(key);
+  var total = x12StageTotal(st);
+  var left = [];
+  for (var i = 0; i < total; i++) { if (rec[st].indexOf(i) < 0) left.push(i); }
+  X12_UI.queue = shuffle(left);
+  X12_UI.cur = X12_UI.queue.length ? X12_UI.queue[0] : -1;
+  X12_UI.ans = [];
+  X12_UI.chips = [];
+  if (st !== 'w' && X12_UI.cur >= 0) {
+    var sp = x12SplitSentence(X12_SENTS[X12_UI.cur].en);
+    X12_UI.chips = shuffle(sp.toks.map(function (w, k) { return { w: w, k: k }; }));
+  }
+}
+function x12SwitchDay(i) {
+  if (X12_UI.preview) { X12_UI.day = i; x12LoadStage('w'); x12Render(); return; }
+  if (i !== x12TodayIdx()) { alert('이 특훈은 금(11/27)·토(11/28)·일(11/29) 그날에만 열려요.\n오늘은 ' + (x12TodayIdx() < 0 ? '아직 시작 전이에요!' : X12_DAYS[x12TodayIdx()].label + ' 몫을 해요!') ); return; }
+  X12_UI.day = i; x12LoadStage('w'); x12Render();
+}
+function x12SwitchStage(st) {
+  x12LoadStage(st);
+  x12Render();
+}
+function x12Render() {
+  var day = X12_DAYS[X12_UI.day], key = day.key, rec = x12Rec(key);
+  var h = topBar('🔥 12과 3일 특훈');
+  h += '<div class="sub" style="margin-bottom:2px">' + day.label + '(' + day.wd + ') · 천재(함) 12과 · 월요일(11/30) 스펠링 시험 대비</div>';
+  if (X12_UI.preview) h += '<div style="margin:6px 0 0;padding:7px 10px;background:#fef3c7;border:1.5px dashed #f59e0b;border-radius:11px;font-size:11.5px;font-weight:800;color:#92400e">👑 미리보기 모드 — 여기서 연습한 기록은 실제 금·토·일 카운트에 안 들어가요</div>';
+  /* 날짜 칩 */
+  h += '<div style="display:flex;gap:6px;margin:10px 0 10px">';
+  for (var i = 0; i < 3; i++) {
+    var d = X12_DAYS[i], r = x12Rec(d.key), dn = !!r.at, on = (i === X12_UI.day);
+    h += '<button type="button" class="x12day" data-i="' + i + '" style="flex:1;border-radius:13px;padding:7px 2px;font-weight:800;font-size:12px;line-height:1.35;cursor:pointer;' +
+      'border:2px solid ' + (dn ? '#16a34a' : (on ? '#0d9488' : '#e2e8f0')) + ';' +
+      'background:' + (dn ? '#dcfce7' : (on ? '#ccfbf1' : '#fff')) + ';' +
+      'color:' + (dn ? '#15803d' : (on ? '#0f766e' : '#94a3b8')) + ';">' + d.label + '(' + d.wd + ')<br>' + (dn ? '✅' : '⬜') + '</button>';
+  }
+  h += '</div>';
+  /* 단계 칩 */
+  var sts = [['w', '① 단어'], ['so', '② 어순'], ['sb', '③ 빈칸']];
+  h += '<div style="display:flex;gap:6px">';
+  for (i = 0; i < sts.length; i++) {
+    var sid = sts[i][0], n = rec[sid].length, t = x12StageTotal(sid), onS = (sid === X12_UI.stage), full = n >= t;
+    h += '<button type="button" class="x12st" data-s="' + sid + '" style="flex:1;border-radius:12px;padding:7px 2px;font-weight:800;font-size:12px;line-height:1.35;cursor:pointer;' +
+      'border:2px solid ' + (full ? '#16a34a' : (onS ? '#0d9488' : '#e2e8f0')) + ';' +
+      'background:' + (full ? '#dcfce7' : (onS ? '#ccfbf1' : '#fff')) + ';' +
+      'color:' + (full ? '#15803d' : (onS ? '#0f766e' : '#94a3b8')) + ';">' + sts[i][1] + ' ' + n + '/' + t + (full ? ' ✓' : '') + '</button>';
+  }
+  h += '</div>';
+  var tot = X12_WORDS.length + X12_SENTS.length * 2, dn2 = rec.w.length + rec.so.length + rec.sb.length;
+  h += '<div class="bar" style="margin-top:10px"><i style="width:' + Math.round(dn2 / tot * 100) + '%"></i></div>';
+  h += '<div id="x12Panel">' + x12PanelHtml() + '</div>';
+  app.innerHTML = h;
+  bindBack(x12Close);
+  [].forEach.call(app.querySelectorAll('.x12day'), function (b) {
+    b.onclick = function () { x12SwitchDay(Number(this.dataset.i)); };
+  });
+  [].forEach.call(app.querySelectorAll('.x12st'), function (b) {
+    b.onclick = function () { x12SwitchStage(this.dataset.s); };
+  });
+  x12BindPanel();
+}
+function x12PanelHtml() {
+  var rec = x12Rec(X12_DAYS[X12_UI.day].key);
+  if (x12AllDone(rec)) return x12DoneHtml(rec);
+  if (X12_UI.cur < 0) return x12StageDoneHtml();
+  if (X12_UI.stage === 'w') return x12WordHtml(rec);
+  if (X12_UI.stage === 'so') return x12OrderHtml(rec);
+  return x12BlankHtml(rec);
+}
+function x12WordHtml(rec) {
+  var q = X12_WORDS[X12_UI.cur], t = X12_WORDS.length, n = rec.w.length;
+  var h = '<div class="card" style="margin-top:0">';
+  h += '<div class="sub" style="text-align:center;font-weight:700">단어 스펠링 · ' + (n + 1) + ' / ' + t + '</div>';
+  h += '<div class="q ko" style="margin:10px 0 2px">' + esc(q.m) + '</div>';
+  if (q.b) h += '<div class="sub" style="text-align:center">' + esc(q.b) + '</div>';
+  h += '<div class="sub" style="text-align:center;margin-top:6px;font-weight:800;color:#0d9488" id="x12len">' + q.w.length + '글자</div>';
+  h += '<input id="x12in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="영어로 쓰세요" style="text-align:center;margin-top:12px">';
+  h += '<div class="row" style="margin-top:10px"><button class="btn gray" id="x12hint" type="button" style="margin:0">💡 힌트</button><button class="btn" id="x12ok" type="button" style="margin:0">확인</button></div>';
+  h += '<div class="fb" id="x12fb"></div>';
+  h += '<div class="sub" style="text-align:center;font-size:11.5px">틀려도 괜찮아! 다시 나오니까 한 번 더 쓰면 돼요 🔁</div>';
+  h += '</div>';
+  return h;
+}
+function x12OrderHtml(rec) {
+  var q = X12_SENTS[X12_UI.cur], t = X12_SENTS.length, n = rec.so.length;
+  var sp = x12SplitSentence(q.en);
+  var h = '<div class="card" style="margin-top:0">';
+  h += '<div class="sub" style="text-align:center;font-weight:700">문장 어순 배열 · ' + (n + 1) + ' / ' + t + '</div>';
+  h += '<div style="font-size:17px;font-weight:800;color:var(--ink);text-align:center;margin:9px 0 3px;line-height:1.4">' + esc(q.ko) + '</div>';
+  h += '<div class="sub" style="text-align:center;font-size:11.5px">단어 칩을 차례대로 눌러 문장을 만드세요' + (sp.end ? ' (끝 ' + esc(sp.end) + ' 는 자동)' : '') + '</div>';
+  h += '<div id="x12ans" style="min-height:56px;border:2px dashed #5eead4;border-radius:14px;background:#fff;padding:9px;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start;margin-top:10px">';
+  if (!X12_UI.ans.length) h += '<span style="color:#94a3b8;font-size:12.5px;font-weight:700">여기에 문장이 만들어져요</span>';
+  X12_UI.ans.forEach(function (k, pos) {
+    var c = X12_UI.chips[k];
+    if (!c) return;
+    h += '<button type="button" class="x12anschip" data-k="' + k + '" style="background:#ccfbf1;border:1.5px solid #14b8a6;color:#0f766e;border-radius:10px;padding:6px 10px;font-size:14.5px;font-weight:800;cursor:pointer">' + esc(c.w) + '</button>';
+  });
+  h += '</div>';
+  h += '<div id="x12src" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:11px">';
+  X12_UI.chips.forEach(function (c, k) {
+    var used = X12_UI.ans.indexOf(k) >= 0;
+    h += '<button type="button" class="x12chip" data-k="' + k + '" style="' + (used ? 'opacity:.28;' : '') + 'background:#fff;border:1.5px solid #cbd5e1;color:#334155;border-radius:10px;padding:7px 11px;font-size:14.5px;font-weight:700;cursor:pointer;' + (used ? 'pointer-events:none;' : '') + '">' + esc(c.w) + '</button>';
+  });
+  h += '</div>';
+  h += '<div class="row" style="margin-top:12px"><button class="btn gray" id="x12clear" type="button" style="margin:0">↺ 다시</button><button class="btn" id="x12ok" type="button" style="margin:0">정답 확인</button></div>';
+  h += '<div class="fb" id="x12fb"></div>';
+  h += '</div>';
+  return h;
+}
+function x12BlankHtml(rec) {
+  var q = X12_SENTS[X12_UI.cur], t = X12_SENTS.length, n = rec.sb.length;
+  var re = new RegExp('\\b' + x12SafeRe(q.b) + '\\b', 'i');
+  var shown = String(q.en).replace(re, '______');
+  var h = '<div class="card" style="margin-top:0">';
+  h += '<div class="sub" style="text-align:center;font-weight:700">문장 빈칸 스펠링 · ' + (n + 1) + ' / ' + t + '</div>';
+  h += '<div style="font-size:18px;font-weight:800;color:var(--ink);text-align:center;margin:11px 0 4px;line-height:1.5">' + esc(shown) + '</div>';
+  h += '<div class="sub" style="text-align:center">' + esc(q.ko) + '</div>';
+  h += '<div class="sub" style="text-align:center;margin-top:6px;font-weight:800;color:#0d9488" id="x12len">빈칸: ' + q.bm + ' · ' + q.b.length + '글자</div>';
+  h += '<input id="x12in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="빈칸에 들어갈 단어" style="text-align:center;margin-top:12px">';
+  h += '<div class="row" style="margin-top:10px"><button class="btn gray" id="x12hint" type="button" style="margin:0">💡 힌트</button><button class="btn" id="x12ok" type="button" style="margin:0">확인</button></div>';
+  h += '<div class="fb" id="x12fb"></div>';
+  h += '</div>';
+  return h;
+}
+function x12StageDoneHtml() {
+  var st = X12_UI.stage, nxt = st === 'w' ? 'so' : (st === 'so' ? 'sb' : '');
+  var h = '<div class="card" style="text-align:center;margin-top:0">';
+  h += '<div style="font-size:42px">👏</div>';
+  h += '<div style="font-family:Maplestory,Pretendard,sans-serif;font-size:19px;font-weight:700;color:var(--pri);margin:6px 0">' + x12StageName(st) + ' 완료!</div>';
+  h += '<div class="sub">' + x12StageTotal(st) + '개 모두 정답으로 통과했어요.</div>';
+  h += '<button class="btn" id="x12next" type="button">다음 → ' + x12StageName(nxt || 'w') + '</button>';
+  h += '<button class="btn gray" id="x12home" type="button">홈으로</button>';
+  h += '</div>';
+  return h;
+}
+function x12DoneHtml(rec) {
+  var day = X12_DAYS[X12_UI.day];
+  var doneAll = 0; for (var i = 0; i < 3; i++) if (x12DayDone(X12_DAYS[i].key)) doneAll++;
+  var h = '<div class="card" style="text-align:center;margin-top:0;border:2px solid #16a34a;background:linear-gradient(135deg,#f0fdf4,#dcfce7)">';
+  h += '<div style="font-size:48px">🎉</div>';
+  h += '<div style="font-family:Maplestory,Pretendard,sans-serif;font-size:21px;font-weight:700;color:#15803d;margin:6px 0">' + day.label + '(' + day.wd + ') 완료!</div>';
+  h += '<div class="sub" style="color:#166534;font-weight:700">단어 20 · 어순 12 · 빈칸 12 — 오늘 몫 끝냈어요!' + (rec.at ? ' (' + esc(rec.at) + ')' : '') + '</div>';
+  if (rec.fix) h += '<div class="sub" style="color:#166534">틀렸다가 다시 맞힌 문제 ' + rec.fix + '개 — 그게 진짜 실력이에요 👍</div>';
+  h += '<div style="margin:12px 0;padding:10px;background:#fff;border-radius:13px;border:1.5px solid #86efac;font-size:13px;font-weight:800;color:#166534">3일 특훈 ' + doneAll + ' / 3일 완료 ' + (doneAll >= 3 ? '🏆 월요일 시험 준비 끝!' : '— 내일 또 하면 ' + (doneAll + 1) + '일차 ✅') + '</div>';
+  if (X12_UI.preview) h += '<div style="margin:0 0 10px;font-size:11.5px;font-weight:800;color:#92400e;background:#fef3c7;border:1.5px dashed #f59e0b;border-radius:11px;padding:7px 9px">👑 미리보기라 실제 기록(금·토·일 ✅)에는 저장되지 않았어요</div>';
+  h += '<button class="btn" id="x12home" type="button">홈으로</button>';
+  h += '<button class="btn gray" id="x12again" type="button">🔁 오늘 몫 다시 풀기</button>';
+  h += '</div>';
+  return h;
+}
+function x12PaintPanel() {
+  var p = $('#x12Panel');
+  if (p) p.innerHTML = x12PanelHtml();
+  x12BindPanel();
+}
+function x12BindPanel() {
+  var rec = x12Rec(X12_DAYS[X12_UI.day].key);
+  var all = x12AllDone(rec);
+  var okBtn = $('#x12ok'), inp = $('#x12in'), hintBtn = $('#x12hint'), clr = $('#x12clear');
+  var nx = $('#x12next'), hm = $('#x12home'), ag = $('#x12again');
+  if (hm) hm.onclick = x12Close;
+  if (ag) ag.onclick = function () {
+    if (!X12_UI.preview && !confirm('오늘 몫을 처음부터 다시 풀까요?\n지금까지 한 기록이 지워져요.')) return;
+    var key = X12_DAYS[X12_UI.day].key, r = x12Rec(key);
+    r.w = []; r.so = []; r.sb = []; r.fix = 0; r.at = '';
+    x12Commit(key, r);
+    x12LoadStage('w'); x12Render();
+  };
+  if (nx) nx.onclick = function () {
+    var st = X12_UI.stage;
+    var nst = st === 'w' ? 'so' : (st === 'so' ? 'sb' : 'w');
+    x12LoadStage(nst); x12Render();
+  };
+  if (clr) clr.onclick = function () { X12_UI.ans = []; x12PaintPanel(); };
+  [].forEach.call(app.querySelectorAll('.x12chip'), function (b) {
+    b.onclick = function () { if (X12_UI.lock) return; X12_UI.ans.push(Number(this.dataset.k)); x12PaintPanel(); };
+  });
+  [].forEach.call(app.querySelectorAll('.x12anschip'), function (b) {
+    b.onclick = function () {
+      if (X12_UI.lock) return;
+      var k = Number(this.dataset.k);
+      X12_UI.ans = X12_UI.ans.filter(function (x) { return x !== k; });
+      x12PaintPanel();
+    };
+  });
+  if (hintBtn && inp) {
+    hintBtn.onclick = function () {
+      var q = X12_UI.stage === 'w' ? X12_WORDS[X12_UI.cur] : X12_SENTS[X12_UI.cur];
+      var word = X12_UI.stage === 'w' ? q.w : q.b;
+      X12_UI.revealed = Math.min(X12_UI.revealed + 1, word.length - 1);
+      var el = $('#x12len');
+      if (el) el.textContent = '힌트: ' + word.slice(0, X12_UI.revealed) + ' ' + new Array(word.length - X12_UI.revealed + 1).join('_ ');
+    };
+  }
+  if (okBtn) okBtn.onclick = function () { x12Check(); };
+  if (inp) {
+    try { inp.focus(); } catch (e) {}
+    inp.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); x12Check(); } };
+  }
+}
+function x12Check() {
+  if (X12_UI.lock) return;
+  var st = X12_UI.stage, key = X12_DAYS[X12_UI.day].key, rec = x12Rec(key), fb = $('#x12fb');
+  var q = st === 'w' ? X12_WORDS[X12_UI.cur] : X12_SENTS[X12_UI.cur];
+  var idx = X12_UI.cur;
+  var good = false, shown = '';
+  if (st === 'so') {
+    var mine = X12_UI.ans.map(function (k) { return X12_UI.chips[k].w; }).join(' ');
+    good = (norm(mine) === norm(String(q.en).replace(/[.?!]+$/, '')));
+    shown = q.en;
+    if (!X12_UI.ans.length) { if (fb) { fb.className = 'fb'; fb.textContent = '단어 칩을 먼저 골라 보세요'; } return; }
+  } else {
+    var inp = $('#x12in');
+    var val = norm(inp ? inp.value : '');
+    if (!val) { if (fb) { fb.className = 'fb'; fb.textContent = '먼저 써 보세요'; } return; }
+    good = (val === norm(q.w || q.b));
+    shown = (q.w || q.b);
+  }
+  X12_UI.lock = true;
+  if (good) {
+    try { playCorrectSound(); } catch (e) {}
+    if (rec[st].indexOf(idx) < 0) rec[st].push(idx);
+    var justDone = false;
+    if (x12AllDone(rec) && !rec.at) {
+      var d = new Date();
+      rec.at = x12Pad2(d.getHours()) + ':' + x12Pad2(d.getMinutes());
+      justDone = true;
+    }
+    x12Commit(key, rec);
+    if (fb) { fb.className = 'fb ok'; fb.textContent = '정답! 👍'; }
+    if (justDone) { try { playFanfareSound(); } catch (e) {} }
+    setTimeout(function () {
+      X12_UI.lock = false;
+      x12Advance();
+    }, justDone ? 950 : 650);
+  } else {
+    try { playWrongSound(); } catch (e) {}
+    rec.fix = (Number(rec.fix) || 0) + 1;
+    x12Commit(key, rec);
+    if (fb) { fb.className = 'fb no'; fb.innerHTML = '정답: <span style="color:var(--ink)">' + esc(shown) + '</span>'; }
+    setTimeout(function () {
+      X12_UI.lock = false;
+      /* 오답은 맨 뒤로 보내 한 번 더 나오게 한다 */
+      if (X12_UI.queue.length > 1) { X12_UI.queue.push(X12_UI.queue.shift()); X12_UI.cur = X12_UI.queue[0]; } else { X12_UI.cur = X12_UI.queue[0]; }
+      if (X12_UI.stage !== 'w') {
+        X12_UI.ans = [];
+        var sp = x12SplitSentence(X12_SENTS[X12_UI.cur].en);
+        X12_UI.chips = shuffle(sp.toks.map(function (w, k) { return { w: w, k: k }; }));
+      }
+      X12_UI.revealed = 0;
+      x12Render();
+    }, 1650);
+  }
+}
+function x12Advance() {
+  X12_UI.revealed = 0;
+  if (X12_UI.queue.length > 1) {
+    X12_UI.queue.shift();
+    X12_UI.cur = X12_UI.queue[0];
+    X12_UI.ans = [];
+    if (X12_UI.stage !== 'w') {
+      var sp = x12SplitSentence(X12_SENTS[X12_UI.cur].en);
+      X12_UI.chips = shuffle(sp.toks.map(function (w, k) { return { w: w, k: k }; }));
+    }
+  } else {
+    X12_UI.queue.shift();
+    X12_UI.cur = -1;
+  }
+  x12Render();
+}
+
 function getSpecialHw(ban) {
   try {
     var raw = localStorage.getItem('topedu_special_hw');
@@ -9821,7 +10263,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v149';
+var TOPEDU_APP_VERSION = 'v150';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };

@@ -367,6 +367,9 @@
     <!-- v124: 🔔 폰 알림(앱 푸시) 카드 (JS 렌더링) -->
     <div id="harinPushWrap" style="margin:0 16px;"></div>
 
+    <!-- v150: 🔥 초5 12과 단어·문장 3일 특훈 (금 11/27 ~ 일 11/29) -->
+    <div id="x12Sec" style="margin:0 16px 14px;"></div>
+
     <!-- Coach Nagging Card -->
     <div class="coach-card">
       <div class="coach-avatar" id="coach_emoji">🦉</div>
@@ -1826,6 +1829,60 @@ function ekNoteInit() {
   document.addEventListener('visibilitychange', function () { if (!document.hidden) ekNotePull(false); });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekNoteInit); else ekNoteInit();
+/* ===== v150: 🔥 천재(함) 12과 단어·문장 3일 특훈 (금 11/27 ~ 일 11/29) =====
+   단어장 앱(index.html)의 12과 특훈 기록(topedu_x12_done)을 같은 폰에서 그대로 읽어
+   금 ✅ / 토 ✅ / 일 ✅ 를 보여 주고, 누르면 그 특훈 화면(index.html#x12)으로 넘어간다. */
+function renderX12Sec() {
+  var el = document.getElementById('x12Sec');
+  if (!el) return;
+  var DAYS = [{ k: '2026-11-27', wd: '금', n: '1일차' }, { k: '2026-11-28', wd: '토', n: '2일차' }, { k: '2026-11-29', wd: '일', n: '3일차' }];
+  var d = new Date();
+  function p2(x) { return (x < 10 ? '0' : '') + x; }
+  var tk = d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
+  if (tk < '2026-11-25' || tk > '2026-11-30') { el.innerHTML = ''; return; }
+  var all = {};
+  try { all = JSON.parse(localStorage.getItem('topedu_x12_done') || '{}') || {}; } catch (e) { all = {}; }
+  var tIdx = -1, i, doneN = 0;
+  for (i = 0; i < 3; i++) { if (DAYS[i].k === tk) tIdx = i; }
+  var chips = '';
+  for (i = 0; i < 3; i++) {
+    var r = all[DAYS[i].k] || {}, done = !!r.at;
+    if (done) doneN++;
+    var on = (i === tIdx);
+    chips += '<div style="flex:1;text-align:center;font-size:11.5px;font-weight:800;border-radius:11px;padding:6px 2px;line-height:1.35;' +
+      'border:1.5px solid ' + (done ? '#16a34a' : (on ? '#14b8a6' : '#e2e8f0')) + ';' +
+      'background:' + (done ? '#dcfce7' : (on ? '#ccfbf1' : '#fff')) + ';' +
+      'color:' + (done ? '#15803d' : (on ? '#0f766e' : '#94a3b8')) + ';">' + DAYS[i].wd + ' ' + (done ? '✅' : '⬜') +
+      '<br><span style="font-size:10.5px;font-weight:700">' + DAYS[i].n + '</span></div>';
+  }
+  var line, btn;
+  if (tIdx >= 0) {
+    var td = DAYS[tIdx], tr = all[td.k] || {};
+    line = tr.at ? (td.n + '(' + td.wd + ') 완료! 오늘 몫 끝냈어요 🎉') : (td.n + '(' + td.wd + ') — 오늘 12과 특훈 1회!');
+    btn = tr.at ? '🔁 오늘 몫 복습하기 →' : '🚀 12과 특훈 하러 가기 →';
+  } else if (tk < '2026-11-27') {
+    line = '11/27(금)부터 금·토·일 3일 연속!';
+    btn = '👀 미리 보기 →';
+  } else {
+    line = '월요일 12과 스펠링 시험 — 오늘 끝까지 화이팅!';
+    btn = '🔥 3일 특훈 마무리 →';
+  }
+  el.innerHTML = '<div onclick="location.href=\'index.html#x12\'" style="cursor:pointer;padding:14px 16px;background:linear-gradient(135deg,#f0fdfa,#ecfeff);border:2.5px solid #14b8a6;border-radius:20px;box-shadow:0 4px 16px rgba(13,148,136,0.16)">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap">' +
+      '<span style="font-family:\'Maplestory\',sans-serif;font-size:14.5px;font-weight:700;color:#0f766e">🔥 월요 시험 대비 · 12과 3일 특훈</span>' +
+      '<span style="font-size:11px;font-weight:800;color:#0f766e;background:#fff;border:1.5px solid #14b8a6;padding:2px 8px;border-radius:999px">3일 중 ' + doneN + '일 완료</span></div>' +
+    '<div style="font-size:12px;color:#0f766e;font-weight:700;margin:5px 0 9px">천재(함) 12과 단어 스펠링 20 + 문장 어순·빈칸 12 — 하루 1회</div>' +
+    '<div style="display:flex;gap:6px;margin-bottom:10px">' + chips + '</div>' +
+    '<div style="text-align:center;font-size:12.5px;font-weight:800;color:#0d9488;margin-bottom:8px">' + line + '</div>' +
+    '<button type="button" style="width:100%;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;border:none;border-radius:12px;padding:11px;font-family:\'Maplestory\',sans-serif;font-size:13px;font-weight:700;cursor:pointer">' + btn + '</button>' +
+    '</div>';
+}
+(function () {
+  function boot() { try { renderX12Sec(); } catch (e) {} }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) boot(); });
+})();
+
 </script>
 </body>
 </html>
