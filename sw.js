@@ -1,5 +1,5 @@
 // TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 + v121~v122 Firebase 웹 푸시(FCM) / v123~v124 JSONP 차단 우회(fetch omit) / v125 대시보드 반 필터 자동 생성 / v126 SW unregister 제거(푸시 구독 유지) / v127 하린 앱 쪽지 카드 / v128 자기주도 설정 동기화·중2 문장 정리·한빛중2 통합 / v129 자기주도 내 문장·문제 직접 추가
-const CACHE_NAME = 'topedu-pwa-v137';
+const CACHE_NAME = 'topedu-pwa-v138';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
