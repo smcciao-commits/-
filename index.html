@@ -11632,7 +11632,7 @@ var SS_DEF = { goal: 60, dayMode: 'auto', dayBook: '', dayStart: 1, dayCount: 4,
 var SS = {
   on: false, done: false, warnOn: false, preview: false, ban: '', name: '',
   goal: 60, t0: 0, el: 0, tick: null, seed: 1, scr: 'hub',
-  stage: 1, leaveCnt: 0, leaveSec: 0, leaveT: 0, lastInc: 0, lastPush: 0,
+  stage: 1, leaveCnt: 0, leaveSec: 0, leaveT: 0, lastInc: 0, lastPush: 0, graceUsed: false, graceAt: 0,
   s1: { days: [], cur: -1 }, s2: { qs: [], i: 0, tries: 0, ok: 0 }, s3: { qs: [], i: 0, ok: 0 },
   stats: { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 },
   wrongWords: [], wrongProbs: [], session: null, lastPush: null
@@ -12011,7 +12011,7 @@ function ssStart() {
   var cfg = ssCfg(me.ban), sess = SS.session || ssSessionActive(me.ban);
   SS.goal = (sess && Number(sess.goal)) || cfg.goal;
   SS.seed = (new Date().getFullYear() * 372 + (new Date().getMonth() + 1) * 31 + new Date().getDate()) % 9973 + 1;
-  SS.t0 = Date.now(); SS.leaveCnt = 0; SS.leaveSec = 0; SS.leaveT = 0; SS.pushCnt = 0; SS.lastPushAt = 0;
+  SS.t0 = Date.now(); SS.leaveCnt = 0; SS.leaveSec = 0; SS.leaveT = 0; SS.pushCnt = 0; SS.lastPushAt = 0; SS.graceUsed = false;
   SS.wrongWords = []; SS.wrongProbs = [];
   SS.stats = { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: ssBuildDays(me.ban), cur: -1 };
@@ -12027,6 +12027,7 @@ function ssResume(snap) {
   SS.on = true; SS.done = false; SS.scr = snap.scr || 'hub';
   SS.ban = snap.ban; SS.name = snap.name; SS.goal = snap.goal || 60; SS.t0 = snap.t0 || Date.now();
   SS.stage = snap.stage || 1; SS.leaveCnt = snap.leaveCnt || 0; SS.leaveSec = snap.leaveSec || 0;
+  SS.graceUsed = !!snap.graceUsed || SS.leaveCnt > 0;
   SS.seed = snap.seed || 1;
   SS.stats = snap.stats || { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: snap.days || ssBuildDays(SS.ban), cur: -1 };
@@ -12042,7 +12043,7 @@ function ssSaveSnap() {
   if (SS.preview) return;                 /* v135: 미리보기는 이 폰 기록·이어하기 스냅샷도 저장 안 함 */
   var s = {
     ban: SS.ban, name: SS.name, t0: SS.t0, goal: SS.goal, stage: SS.done ? 99 : SS.stage,
-    leaveCnt: SS.leaveCnt, leaveSec: SS.leaveSec, seed: SS.seed, stats: SS.stats,
+    leaveCnt: SS.leaveCnt, leaveSec: SS.leaveSec, graceUsed: !!SS.graceUsed, seed: SS.seed, stats: SS.stats,
     days: SS.s1.days.map(function (d) { return { day: d.day, name: d.name, lbl: d.lbl, ex: d.ex, def: d.def, status: d.status, score: d.score, attempts: d.attempts }; }),
     s2i: SS.s2.i, s3i: SS.s3.i, scr: SS.scr, done: SS.done,
     sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
@@ -12153,14 +12154,21 @@ function ssBeforeUnload(e) {
 function ssVis() {
   if (!SS.on || SS.done) return;
   if (document.visibilityState === 'hidden') ssLeaveBegin('다른 앱으로 넘어감');
-  else { ssLeaveEnd(); ssWake(true); }
+  else {
+    ssLeaveEnd(); ssWake(true);
+    if (SS.graceAt && Date.now() - SS.graceAt < 8000) ssFullscreen();   /* v140: 유예 복귀 시 전체화면 복구 */
+  }
 }
 function ssBlur() { if (!SS.on || SS.done) return; ssLeaveBegin('다른 앱·창으로 이동'); }
 function ssFocus() { if (!SS.on || SS.done) return; ssLeaveEnd(); }
 function ssPageHide() { if (!SS.on || SS.done) return; ssLeaveBegin('앱을 닫음'); ssLeaveEnd(); }
 function ssFsChange() {
   if (!SS.on || SS.done) return;
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) ssHit('전체화면을 벗어났어요');
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    /* v140: 유예된 1회 이탈에서 돌아온 직후의 전체화면 해제는 이탈로 세지 않고 다시 전체화면만 시도 */
+    if (SS.graceAt && Date.now() - SS.graceAt < 8000) { ssFullscreen(); return; }
+    ssHit('전체화면을 벗어났어요');
+  }
 }
 function ssLeaveBegin(why) {
   if (SS.leaveT) return;
@@ -12171,8 +12179,29 @@ function ssLeaveEnd() {
   var dur = (Date.now() - SS.leaveT) / 1000;
   SS.leaveT = 0;
   if (dur < 0.9) return;                       /* 주소창 터치 정도는 넘어가요 */
+  if (ssTakeGrace(dur)) return;                /* v140: 1회차 짧은 이탈은 유예 */
   SS.leaveCnt++; SS.leaveSec += dur;
   ssAfterLeave(dur);
+}
+/* v140: 1회차 이탈 유예 — 전화 수신·알림 등으로 잠깐(5초 미만) 화면을 벗어난 첫 1회는
+   이탈 기록(leaveCnt)·경고음·빨간 잠금·원장님 알림에서 빼고 부드러운 안내만 띄웁니다.
+   2회차부터 기록되고, 5초 이상 길게 벗어난 이탈은 첫 1회라도 그대로 기록됩니다. */
+var SS_GRACE_SEC = 5;
+function ssTakeGrace(dur) {
+  if (SS.graceUsed) return false;
+  if (SS.leaveCnt > 0) return false;
+  if (dur >= SS_GRACE_SEC) return false;
+  SS.graceUsed = true;
+  SS.graceAt = Date.now();
+  ssSaveSnap();
+  ssGraceNotice(dur);
+  return true;
+}
+function ssGraceNotice(dur) {
+  if (SS.preview) return;
+  ssToast('📵 1회 이탈은 괜찮아요' + (dur ? ' (' + dur.toFixed(1) + '초)' : '') + ' · 2회부터 이탈로 기록돼요');
+  try { clearTimeout(SS._toastT); } catch (e) {}
+  SS._toastT = setTimeout(function () { try { ssq('ssxToast').classList.remove('on'); } catch (e) {} }, 4200);
 }
 /* 순간 이탈 시도(뒤로가기·전체화면 해제) */
 function ssHit(why) {
@@ -12180,6 +12209,7 @@ function ssHit(why) {
   var now = Date.now();
   if (now - SS.lastInc < 1500) return;
   SS.lastInc = now;
+  if (ssTakeGrace(0)) return;                  /* v140: 1회차는 유예 */
   SS.leaveCnt++;
   ssAfterLeave(0, why);
 }
@@ -12923,7 +12953,7 @@ function ssPreviewStart(ban) {
   /* 학생 앱과 같은 날짜 시드 → 오늘 학생이 실제로 보는 문장·문제와 같아진다 */
   SS.seed = (new Date().getFullYear() * 372 + (new Date().getMonth() + 1) * 31 + new Date().getDate()) % 9973 + 1;
   SS.t0 = Date.now(); SS.el = 0;
-  SS.leaveCnt = 0; SS.leaveSec = 0; SS.leaveT = 0; SS.pushCnt = 0; SS.lastPushAt = 0; SS.lastPush = null;
+  SS.leaveCnt = 0; SS.leaveSec = 0; SS.leaveT = 0; SS.pushCnt = 0; SS.lastPushAt = 0; SS.graceUsed = false; SS.lastPush = null;
   SS.wrongWords = []; SS.wrongProbs = [];
   SS.stats = { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: ssBuildDays(ban), cur: -1 };

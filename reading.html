@@ -5116,8 +5116,20 @@ document.addEventListener('cut', function(e) { e.preventDefault(); });
 document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
 // Anti-Cheat: Tab/App Switching Detection
+/* v140: 1회차 이탈은 유예합니다. 전화 수신·알림 등으로 처음 한 번 화면을 벗어난 것은
+   이탈 기록(tabLeaveCount)·경고창에 넣지 않고 안내 토스트만 띄우며,
+   2회차 이탈부터 본격 이탈 기록·경고가 작동합니다. (유예 여부는 sessionStorage에 남겨 새로고침해도 유지) */
+let tabLeaveGraceUsed = sessionStorage.getItem('topedu_tab_grace') === '1';
+
 document.addEventListener('visibilitychange', function() {
   if (document.hidden && curMode === 3) {
+    if (!tabLeaveGraceUsed) {
+      tabLeaveGraceUsed = true;
+      sessionStorage.setItem('topedu_tab_grace', '1');
+      sessionStorage.setItem('just_left_app_grace', 'true');
+      updateSecurityUI();
+      return;
+    }
     tabLeaveCount++;
     localStorage.setItem('topedu_tab_leaves', tabLeaveCount);
     sessionStorage.setItem('just_left_app', 'true');
@@ -5128,14 +5140,27 @@ document.addEventListener('visibilitychange', function() {
       showCheatWarningModal(tabLeaveCount);
       updateSecurityUI();
     }
+    if (sessionStorage.getItem('just_left_app_grace')) {
+      sessionStorage.removeItem('just_left_app_grace');
+      showToast('📵 전화·알림 등 1회 이탈은 허용됩니다. 2회부터 이탈로 기록돼요.');
+      updateSecurityUI();
+    }
   }
 });
 
 function updateSecurityUI() {
   const badge = document.getElementById('headerLeaveBadge');
   if (badge) {
-    badge.innerText = `이탈 ${tabLeaveCount}회`;
-    badge.style.color = tabLeaveCount > 0 ? '#ef4444' : '#10b981';
+    if (tabLeaveCount > 0) {
+      badge.innerText = `이탈 ${tabLeaveCount}회`;
+      badge.style.color = '#ef4444';
+    } else if (tabLeaveGraceUsed) {
+      badge.innerText = '이탈 0회 · 1회 유예';
+      badge.style.color = '#f59e0b';
+    } else {
+      badge.innerText = '이탈 0회';
+      badge.style.color = '#10b981';
+    }
   }
 }
 
