@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QA v146 · 자기주도 오답 재도전 검증</title>
+<style>
+html,body{margin:0;background:#0f172a;font-family:system-ui,-apple-system,sans-serif}
+#bar{color:#e2e8f0;font:11px/1.45 ui-monospace,monospace;padding:6px 10px;white-space:pre-wrap;min-height:54px}
+iframe{display:block;width:390px;height:844px;border:0;margin:0 auto;background:#fff}
+</style></head>
+<body>
+<div id="bar">QA v146 · 로딩 중…</div>
+<iframe id="f" src="index.html?qa146=1"></iframe>
+<script>
+var F = document.getElementById('f'), BAR = document.getElementById('bar');
+var LOG = [];
+function say(t) { LOG.push(t); BAR.textContent = 'QA v146\n' + LOG.slice(-5).join('\n'); }
+window.__qa146 = { log: LOG, blocked: [], w: null };
+
+F.addEventListener('load', function () {
+  var w = F.contentWindow, blocked = window.__qa146.blocked;
+  window.__qa146.w = w;
+  /* ── 외부 쓰기·푸시 전면 차단(학생 DB·시트·ntfy·MQTT) ── */
+  function stub(n) { try { w[n] = function () { blocked.push(n); }; } catch (e) {} }
+  ['saveStudentProgressDB', 'ssStatusPub', 'ssBoardPush', 'ssBoardEvent', 'ssNtfy', 'ssNtfyLeave',
+   'ssNetPub', 'ssSessionSub', 'ssFullscreen', 'ssExitFullscreen', 'ssWake', 'ssHistPush',
+   'sendDirectorPushNotification', 'ssStatusPub'].forEach(stub);
+  try { w.fetch = function (u) { blocked.push('fetch:' + u); return Promise.reject(new Error('qa146-blocked')); }; } catch (e) {}
+  try {
+    w.call = function (m, cred, name) {
+      blocked.push('call:' + m);
+      if (m === 'getWordSet') {
+        var sd = w.ALL_WORD_SETS[name] || w.ALL_WORD_SETS[name + ' (복습)'] || null;
+        var list = sd ? (Array.isArray(sd) ? sd : (sd.words || [])) : [];
+        return Promise.resolve(list.map(function (x) { return { w: x.w, m: x.m }; }));
+      }
+      return Promise.resolve([]);
+    };
+  } catch (e) {}
+  say('준비 · 앱버전 ' + (w.TOPEDU_APP_VERSION || '?'));
+});
+
+/* ── 상태 요약(읽기 전용) ── */
+window.__qa146.snap = function () {
+  var w = window.__qa146.w; if (!w) return null;
+  var S = w.SS, d = S.s1.days[S.s1.cur] || {};
+  function badge() { var e = w.document.querySelector('.ssx-rb'); return e ? e.textContent.replace(/\s+/g, ' ').trim() : null; }
+  function txt(sel) { var e = w.document.querySelector(sel); return e ? e.textContent.replace(/\s+/g, ' ').trim() : null; }
+  return {
+    ver: w.TOPEDU_APP_VERSION, preview: S.preview, on: S.on, scr: S.scr, stage: S.stage, done: S.done,
+    badge: badge(), h1: txt('.ssx-h1'),
+    gates: { s1all: w.ssS1AllDone(), s1pending: w.ssS1Pending(), s2done: w.ssS2Done(), s3pending: w.ssS3Pending() },
+    cur: { lbl: d.lbl || d.name || null, status: d.status, score: d.score, fixed: !!d.fixed, qok: d.qok || 0,
+           qwrong: d.qwrong || [], retry: d.retry ? { n: d.retry.quiz.length, qi: d.retry.qi, round: d.retry.round, wrong: d.retry.wrong } : null },
+    days: (S.s1.days || []).map(function (x) { return (x.lbl || x.name) + '|' + x.status + '|오답' + ((x.qwrong || []).length); }),
+    s2: { i: S.s2.i, n: S.s2.qs.length, tries: S.s2.tries, wrongN: S.s2.wrongN || 0, ok: S.s2.ok, built: (S.s2.built || []).length },
+    s3: { i: S.s3.i, n: S.s3.qs.length, ok: S.s3.ok, wrong: (S.s3.wrong || []).length,
+          rt: S.s3.rt ? { n: S.s3.rt.qs.length, i: S.s3.rt.i, round: S.s3.rt.round, wrong: S.s3.rt.wrong.length } : null },
+    stats: S.stats, snapSaved: !!w.ssSnapGet(),
+    blockedTail: blocked.slice(-6), errs: (w.__topeduErrors || []).length
+  };
+};
+/* ── 정답 인덱스(읽기 전용) ── */
+window.__qa146.ans = function () {
+  var w = window.__qa146.w, S = w.SS;
+  if (S.scr === 's1quiz') { var d = S.s1.days[S.s1.cur]; return d.quiz[d.qi].ans; }
+  if (S.scr === 's1rq') { var r = S.s1.days[S.s1.cur].retry; return r.quiz[r.qi].ans; }
+  if (S.scr === 's3') { var q = w.ssS3CurQ(); return q ? Number(q.a) : null; }
+  return null;
+};
+/* ── 2단계: 지금 문장의 정답 단어 순서(칩 data-i) ── */
+window.__qa146.s2 = function () {
+  var w = window.__qa146.w, S = w.SS, q = S.s2.qs[S.s2.i];
+  if (!q) return null;
+  var words = String(q.en || '').trim().split(/\s+/).filter(Boolean);
+  var tray = [].slice.call(w.document.querySelectorAll('#ssxTray .ssx-chipw')).map(function (b) { return { i: +b.getAttribute('data-i'), w: b.textContent }; });
+  return { q: S.s2.i, en: q.en, ko: q.ko, words: words, tray: tray };
+};
+window.__qa146.setup = function (opts) {
+  var w = window.__qa146.w;
+  opts = opts || {};
+  try { w.ssPreviewStop(); } catch (e) {}
+  if (opts.preview) { w.ssPreviewStart(opts.ban || '예비고1'); return 'preview'; }
+  w.ssCfgSave(opts.ban || '예비고1', { goal: 60, dayMode: 'auto', dayBook: '', dayStart: 1, dayCount: opts.days || 2, testCount: opts.test || 4, sentCount: opts.sent || 4, probCount: opts.prob || 4 });
+  w.S.cred = { name: opts.name || 'QA학생', ban: opts.ban || '예비고1' };
+  w.ssStart();
+  return 'student';
+};
+</script>
+</body></html>
