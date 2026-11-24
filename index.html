@@ -2740,12 +2740,24 @@ function dailyPlan(me){
     if (d) { d.ch5 = true; return d; }
   }
   var sets = (S.home && S.home.sets && S.cred && S.cred.ban === ban && S.cred.name === name) ? S.home.sets : [];
-  var series = sets.length ? daySeriesOf(sets, sets[0].name) : null;
+  /* v148: 홈 목록 맨 앞이 'Day NN'이 아닌 세트(과별 본문 어휘·외부지문 단어 등)여도
+     그 반 교재의 Day 시리즈 중 가장 긴 것을 오늘의 학습 교재로 쓴다.
+     (수지중1·수지중2·홍천고1은 앞 세트 때문에 오늘의 학습 2 Day 계산이 아예 안 됐음) */
+  var series = null, bestSeries = null;
+  for (var si = 0; si < sets.length; si++) {
+    var sr = daySeriesOf(sets, sets[si].name);
+    if (!sr || sr.length < 2) continue;
+    if (!bestSeries || sr.length > bestSeries.length) bestSeries = sr;
+  }
+  series = bestSeries;
   if (!series || series.length < 2) return null;
   var t = tdKey(), i;
   var items = series.map(function(it){
     var o = { name: it.name, day: it.day, count: it.count, set: it.s, complete: false };
     try { o.complete = !!getWordSetCompletion(it.s).isComplete; } catch(e){ o.complete = false; }
+    /* v148: 홈을 그릴 때 찍어 둔 진행 스냅샷이 낡아 있으면 방금 끝낸 Day가 미완료로 보였음
+       (그래서 오늘의 학습 카드는 '완료'인데 연속 학습·출석·현황판은 '미완료'로 갈렸음) — 저장된 진도로 한 번 더 확인 */
+    try { if (!o.complete && typeof isSetCompleteByName === 'function') o.complete = !!isSetCompleteByName(ban, name, it.name); } catch(e){}
     o.today = (dayDoneAt(ban, name, it.name) === t);
     return o;
   });
@@ -9486,7 +9498,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v147';
+var TOPEDU_APP_VERSION = 'v148';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -12187,11 +12199,38 @@ function ssBoardEvent(kind, label) {
   } catch (e) {}
 }
 function ssStatusAll() { try { return store(SS_ST_KEY) || {}; } catch (e) { return {}; } }
+/* v148: 학생 폰이 올린 상태를 원장님 폰에도 남긴다 — 새로고침·앱 재시작·ntfy 12시간 경과 후에도
+   '오늘 완료'가 미완료로 바뀌지 않게. (오늘 것만 유지, 오래된 기록은 정리) */
+function ssStSameDay(o) {
+  try {
+    var t = Number((o && (o.at || o.ts)) || 0);
+    if (!t) return false;
+    var d = new Date(t), n = new Date();
+    return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate();
+  } catch (e) { return false; }
+}
+function ssStRemember(ban, name, o) {
+  try {
+    if (!ban || !name || !o) return;
+    var all = store(SS_ST_KEY) || {}, k = ban + '|' + name;
+    var nt = Number(o.at || o.ts || 0);
+    if (all[k] && Number(all[k].at || all[k].ts || 0) > nt) return;
+    all[k] = o;
+    var keys = Object.keys(all);
+    if (keys.length > 400) {
+      keys.sort(function (x, y) { return Number(all[x].at || all[x].ts || 0) - Number(all[y].at || all[y].ts || 0); });
+      for (var i = 0; i < keys.length - 300; i++) delete all[keys[i]];
+    }
+    store(SS_ST_KEY, all);
+  } catch (e) {}
+}
 function ssStatusOf(ban, name) {
   var a = ssStatusAll(), k = ssStatusKey(ban, name);
   var mq = SS_NET.board[k];
-  if (mq && a[k] && (mq.at || 0) < (a[k].at || 0)) return a[k];
-  return mq || a[k] || null;
+  var row = (mq && a[k] && (mq.at || 0) < (a[k].at || 0)) ? a[k] : (mq || a[k] || null);
+  /* v148: 어제 완주한 기록이 오늘 '완료'로 보이지 않게 오늘 것만 인정 */
+  if (row && !ssStSameDay(row)) return null;
+  return row;
 }
 
 /* ---------- ntfy: 원장님 폰 알림 ---------- */
@@ -14102,6 +14141,7 @@ function ssBoardPull(force) {
             if (row.k === 'ss97' && (row.st != null || row.pg != null)) {
               row.b = row.b || '';
               SS_NET.board[row.b + '|' + row.n] = row;
+              try { ssStRemember(row.b, row.n, row); } catch (e) {}
             }
             try { mergeStreakBoard(row); } catch (e) {}
           } catch (e) {}
@@ -14134,6 +14174,7 @@ function ssTeacherSub() {
           o.b = o.b || ban; o.n = o.n || name;
           SS_NET.board[ban + '|' + name] = o;
           SS_NET.boardAt = Date.now();
+          try { ssStRemember(ban, name, o); } catch (e) {}
           ssBoardRefresh();
         } catch (e) {}
       });
