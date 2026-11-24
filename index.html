@@ -6833,6 +6833,7 @@ function drawX12Card(me) {
     var isHarin = (me.ban === '초5' && String(me.name || '').indexOf('하린') >= 0);
     if (!isOwner && !isHarin) return '';
     var tIdx = x12TodayIdx();
+    var examMorning = (x12DateKey() === '2026-11-30');   /* 월요일 시험일 아침에는 복습용으로 열어 준다 */
     /* 다른 앱(하린이 플래너)에서 #x12 로 들어온 경우 한 번만 자동으로 연다 */
     if (!X12_UI.hashDone && String(location.hash || '').indexOf('x12') >= 0) {
       X12_UI.hashDone = 1;
@@ -6846,7 +6847,7 @@ function drawX12Card(me) {
         } catch (e3) {}
       }, 150);
     }
-    if (!isOwner && tIdx < 0) return '';   /* 하린: 금·토·일 당일에만 카드가 뜬다 */
+    if (!isOwner && tIdx < 0 && !examMorning) return '';   /* 하린: 금·토·일 당일(과 시험일 아침)에만 카드가 뜬다 */
     var h = '';
     var chips = '', i, d, r, done, on;
     for (i = 0; i < 3; i++) {
@@ -6864,7 +6865,8 @@ function drawX12Card(me) {
       var td = X12_DAYS[tIdx], tr = x12Rec(td.key);
       btnTxt = tr.at ? ('🔁 ' + td.label + '(' + td.wd + ') 복습하기 →') : ('🚀 ' + td.label + '(' + td.wd + ') 오늘 몫 시작 →');
       btnFn = 'x12Open(' + tIdx + ',' + (isOwner ? 'true' : 'false') + ')';
-    } else { btnTxt = '👀 미리 체험하기 (1일차부터) →'; btnFn = 'x12Open(0,true)'; }
+    } else if (examMorning) { btnTxt = '🔁 시험 전 복습 (1일차부터) →'; btnFn = 'x12Open(0,true)'; }
+    else { btnTxt = '👀 미리 체험하기 (1일차부터) →'; btnFn = 'x12Open(0,true)'; }
     h += '<div class="card" id="x12Card" style="border:2px solid #0d9488;background:linear-gradient(135deg,#f0fdfa,#ecfeff);border-radius:18px;padding:16px;margin:10px 0 14px;box-shadow:0 4px 16px rgba(13,148,136,0.16)">';
     h += '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap">' +
       '<span style="font-size:12.5px;font-weight:800;color:#0f766e;background:#fff;border:1.5px solid #14b8a6;padding:3px 10px;border-radius:999px">🔥 월요 시험 대비 3일 특훈</span>' +
@@ -6875,7 +6877,8 @@ function drawX12Card(me) {
     h += '<button type="button" onclick="' + btnFn + '" style="width:100%;font-family:Maplestory,Pretendard,sans-serif;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;font-weight:700;padding:12px;font-size:14px;line-height:1.3;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(13,148,136,0.28);cursor:pointer;">' + btnTxt + '</button>';
     h += '<div style="font-size:11.5px;color:#0f766e;background:#f0fdfa;border:1px dashed #99f6e4;border-radius:10px;padding:7px 9px;line-height:1.45;margin-top:9px;text-align:center;font-weight:700">' +
       (isOwner ? '👑 원장님 미리보기 — 11/27(금)부터 하린이 화면에 자동으로 떠요. 여기서 연습한 기록은 실제 금·토·일 카운트에 안 들어갑니다.'
-               : '금·토·일 하루 1회! 한 번 끝낸 날은 ✅로 남아요. 다음 날 또 하면 2일차 ✅') + '</div>';
+               : (examMorning ? '🍀 오늘은 시험일! 복습으로 한 번 더 돌려 보고 시험 보러 가요. (오늘 복습은 기록에 저장되지 않아요)'
+                              : '금·토·일 하루 1회! 한 번 끝낸 날은 ✅로 남아요. 다음 날 또 하면 2일차 ✅')) + '</div>';
     h += '</div>';
     return h;
   } catch (e) { return ''; }
