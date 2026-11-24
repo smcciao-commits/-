@@ -1580,6 +1580,9 @@ button.hp-ck.tap { cursor: pointer; font-family: inherit; }
 .ssx-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); z-index: 99997; background: #0f172a; color: #fff; font-size: 12.5px; font-weight: 700; padding: 9px 14px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0,0,0,.3); opacity: 0; transition: opacity .2s; pointer-events: none; }
 .ssx-toast.on { opacity: 1; }
 .ssx-note { font-size: 11px; color: #94a3b8; line-height: 1.55; margin-top: 8px; }
+/* v146: 🔁 오답 100% 재도전 안내 배지 */
+.ssx-rb { background: linear-gradient(135deg, #fff7ed, #fef3c7); border: 1.5px solid #fdba74; border-radius: 13px; padding: 9px 12px; margin: 0 0 10px; font-size: 12.5px; font-weight: 800; color: #9a3412; line-height: 1.45; }
+.ssx-day.retry { border-color: #fdba74; background: #fffbeb; }
 .ssx-badge-live { background: #ef4444; color: #fff; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; animation: ssxblink 1.2s infinite; }
 @keyframes ssxblink { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
 
@@ -9326,7 +9329,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v138';
+var TOPEDU_APP_VERSION = 'v146';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -11708,7 +11711,7 @@ var SS = {
   on: false, done: false, warnOn: false, preview: false, ban: '', name: '',
   goal: 60, t0: 0, el: 0, tick: null, seed: 1, scr: 'hub',
   stage: 1, leaveCnt: 0, leaveSec: 0, leaveT: 0, lastInc: 0, lastPush: 0, graceUsed: false, graceAt: 0, lastLeaveAt: 0,
-  s1: { days: [], cur: -1 }, s2: { qs: [], i: 0, tries: 0, ok: 0 }, s3: { qs: [], i: 0, ok: 0 },
+  s1: { days: [], cur: -1 }, s2: { qs: [], i: 0, tries: 0, ok: 0, wrongN: 0 }, s3: { qs: [], i: 0, ok: 0, wrong: [], rt: null },
   stats: { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 },
   wrongWords: [], wrongProbs: [], session: null, lastPush: null
 };
@@ -12090,8 +12093,8 @@ function ssStart() {
   SS.wrongWords = []; SS.wrongProbs = [];
   SS.stats = { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: ssBuildDays(me.ban), cur: -1 };
-  SS.s2 = { qs: ssBuildS2(me.ban, SS.seed, (sess && sess.sentCount) || cfg.sentCount), i: 0, tries: 0, ok: 0 };
-  SS.s3 = { qs: ssBuildS3(me.ban, SS.seed, (sess && sess.probCount) || cfg.probCount), i: 0, ok: 0 };
+  SS.s2 = { qs: ssBuildS2(me.ban, SS.seed, (sess && sess.sentCount) || cfg.sentCount), i: 0, tries: 0, ok: 0, wrongN: 0, built: [] };
+  SS.s3 = { qs: ssBuildS3(me.ban, SS.seed, (sess && sess.probCount) || cfg.probCount), i: 0, ok: 0, answered: false, wrong: [], rt: null };
   if (!SS.s1.days.length) { alert('오늘 외울 단어 Day를 찾지 못했어요. 원장님께 반별 Day 설정을 부탁해 주세요.'); SS.on = false; return; }
   ssOverlayOn(true);
   ssFullscreen(); ssWake(true); ssBind(true); ssHistPush(); ssNetPub(); ssSessionSub(me.ban);
@@ -12108,8 +12111,14 @@ function ssResume(snap) {
   SS.seed = snap.seed || 1;
   SS.stats = snap.stats || { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: snap.days || ssBuildDays(SS.ban), cur: -1 };
-  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: 0 };
-  SS.s3 = { qs: ssBuildS3(SS.ban, SS.seed, snap.probCount || ssCfg(SS.ban).probCount), i: snap.s3i || 0, ok: 0 };
+  /* v146: 오답을 남긴 Day('보충' 포함)는 통과가 아니므로 다시 시험 대상으로 되돌린다 */
+  (SS.s1.days || []).forEach(function (d) {
+    if (!d) return;
+    if (d.status === 'part' || (d.qwrong && d.qwrong.length)) { d.status = 'todo'; d.fixed = false; }
+    d.answered = false; d.retry = null;
+  });
+  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: 0, wrongN: snap.s2wrong || 0, built: [] };
+  SS.s3 = { qs: ssBuildS3(SS.ban, SS.seed, snap.probCount || ssCfg(SS.ban).probCount), i: snap.s3i || 0, ok: 0, answered: false, wrong: snap.s3wrong || [], rt: null };
   SS.wrongWords = snap.wrongWords || []; SS.wrongProbs = snap.wrongProbs || [];
   ssOverlayOn(true);
   ssFullscreen(); ssWake(true); ssBind(true); ssHistPush(); ssNetPub(); ssTickStart(); ssStatusPub();
@@ -12121,10 +12130,13 @@ function ssSaveSnap() {
   var s = {
     ban: SS.ban, name: SS.name, t0: SS.t0, goal: SS.goal, stage: SS.done ? 99 : SS.stage,
     leaveCnt: SS.leaveCnt, leaveSec: SS.leaveSec, graceUsed: !!SS.graceUsed, seed: SS.seed, stats: SS.stats,
-    days: SS.s1.days.map(function (d) { return { day: d.day, name: d.name, lbl: d.lbl, ex: d.ex, def: d.def, status: d.status, score: d.score, attempts: d.attempts }; }),
-    s2i: SS.s2.i, s3i: SS.s3.i, scr: SS.scr, done: SS.done,
+    days: SS.s1.days.map(function (d) {
+      return { day: d.day, name: d.name, lbl: d.lbl, ex: d.ex, def: d.def, status: d.status, score: d.score, attempts: d.attempts,
+        fixed: !!d.fixed, qwrong: d.qwrong || [], qok: d.qok || 0, quiz: d.quiz || null };
+    }),
+    s2i: SS.s2.i, s3i: SS.s3.i, s2wrong: SS.s2.wrongN || 0, s3wrong: SS.s3.wrong || [], scr: SS.scr, done: SS.done,
     sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
-    wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now(), ver: 141
+    wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now(), ver: 146
   };
   try { store(SS_SNAP_KEY, s); } catch (e) {}
 }
@@ -12504,8 +12516,24 @@ function ssStageName() {
 /* ---------- v97 자기주도: 화면 ---------- */
 function ssBookLabel(name) { return String(name || '').replace(/\s*Day\s*\d+.*$/, ''); }
 function ssTestN(d) { var c = ssCfg(SS.ban); return Math.min(Number(c.testCount) || 10, (d.words || []).length || 10); }
-function ssS1AllDone() { return SS.s1.days.length && SS.s1.days.every(function (d) { return d.status !== 'todo'; }); }
+/* v146: 🔁 오답 100% 재도전 — 틀린 문제를 하나도 남기지 않아야 다음 단계·완주로 넘어간다 */
+function ssS1DayFixed(d) { return !(d && d.qwrong && d.qwrong.length); }
+function ssS1AllDone() { return !!SS.s1.days.length && SS.s1.days.every(function (d) { return d.status !== 'todo' && ssS1DayFixed(d); }); }
 function ssS2Done() { return SS.s2.qs.length && SS.s2.i >= SS.s2.qs.length; }
+function ssS1Pending() { var n = 0; (SS.s1.days || []).forEach(function (d) { n += ((d && d.qwrong) || []).length; }); return n; }
+function ssS3Pending() {
+  if (!SS.s3) return 0;
+  if (SS.s3.rt) return Math.max(0, SS.s3.rt.qs.length - SS.s3.rt.i);
+  return (SS.s3.wrong || []).length;
+}
+function ssRetryBadge() {
+  var d;
+  if (SS.scr === 's1rq') { d = SS.s1.days[SS.s1.cur]; if (d && d.retry) return '<div class="ssx-rb">🔁 틀린 단어 <b>' + d.retry.quiz.length + '개</b> 다시 풀기 — 모두 맞춰야 다음으로 넘어가요!</div>'; }
+  if (SS.scr === 's1res') { d = SS.s1.days[SS.s1.cur]; if (d && (d.qwrong || []).length) return '<div class="ssx-rb">🔁 틀린 단어 <b>' + d.qwrong.length + '개</b> 다시 풀기 — 모두 맞춰야 다음으로 넘어가요!</div>'; }
+  if (SS.scr === 's2' && SS.s2.tries > 0 && SS.s2.i < SS.s2.qs.length) return '<div class="ssx-rb">🔁 이 문장 다시 풀기 — 모두 맞춰야 다음으로 넘어가요!</div>';
+  if (SS.scr === 's3' && SS.s3.rt) return '<div class="ssx-rb">🔁 틀린 문제 <b>' + SS.s3.rt.qs.length + '개</b> 다시 풀기 — 모두 맞춰야 다음으로 넘어가요!</div>';
+  return '';
+}
 
 function ssHead() {
   var st = SS.stage, done = SS.done, pv = !!SS.preview;
@@ -12535,6 +12563,7 @@ function ssRender() {
   if (SS.scr === 's1') body = ssViewS1();
   else if (SS.scr === 's1learn') body = ssViewS1Learn();
   else if (SS.scr === 's1quiz') body = ssViewS1Quiz();
+  else if (SS.scr === 's1rq') body = ssViewS1Retry();
   else if (SS.scr === 's1res') body = ssViewS1Res();
   else if (SS.scr === 's2') body = ssViewS2();
   else if (SS.scr === 's3') body = ssViewS3();
@@ -12542,7 +12571,7 @@ function ssRender() {
   else if (SS.scr === 'done') body = ssViewDone();
   else if (SS.scr === 'bonus') body = ssViewBonus();
   else body = ssViewHub();
-  c.innerHTML = ssHead() + body;
+  c.innerHTML = ssHead() + ssRetryBadge() + body;
   ssTick();
 }
 
@@ -12595,16 +12624,17 @@ function ssGoS1() { SS.stage = 1; SS.scr = 's1'; ssSaveSnap(); ssStatusPub(); ss
 function ssViewS1() {
   var days = SS.s1.days, cfg = ssCfg(SS.ban);
   var h = '<div class="ssx-pane"><div class="ssx-h1">1단계 · 단어 암기 + 시험</div>'
-    + '<div class="ssx-sub">' + (days.length && days[0].lbl ? '기말 범위 묶음을' : 'Day를') + ' 하나씩 [암기 → 시험]. <b>80% 넘으면 통과</b>예요. 두 번 못 넘기면 보충으로 표시하고 넘어가요.</div></div>';
+    + '<div class="ssx-sub">' + (days.length && days[0].lbl ? '기말 범위 묶음을' : 'Day를') + ' 하나씩 [암기 → 시험]. 시험에서 <b>틀린 단어는 오답 재시험으로 모두 맞출 때까지</b> 반복해요. 오답이 0개가 돼야 다음 Day·2단계로 넘어가요.</div></div>';
   days.forEach(function (d, i) {
-    var chip = d.status === 'ok' ? '<span class="ssx-chip ok">통과 ' + (d.score == null ? '' : d.score + '점') + '</span>'
-      : (d.status === 'part' ? '<span class="ssx-chip warn">보충 ' + (d.score || 0) + '점</span>'
+    var pend = (d.qwrong || []).length, okDay = d.status === 'ok' && !pend;
+    var chip = okDay ? '<span class="ssx-chip ok">통과 ' + (d.score == null ? '' : d.score + '점') + '</span>'
+      : (pend ? '<span class="ssx-chip warn">오답 ' + pend + '개</span>'
         : '<span class="ssx-chip">대기</span>');
-    h += '<div class="ssx-day ' + (d.status === 'ok' ? 'ok' : (d.status === 'part' ? 'part' : '')) + '">'
+    h += '<div class="ssx-day ' + (okDay ? 'ok' : (pend ? 'retry' : '')) + '">'
       + '<span class="dnum">' + (d.lbl ? (d.def ? '영영' : '단어') : 'Day ' + bbPad(d.day)) + '</span>'
       + '<div class="dname">' + esc(d.lbl || ssBookLabel(d.name)) + '<br><span style="color:#94a3b8;font-size:11px">' + (d.words ? d.words.length + '단어' : '단어 불러오기') + '</span></div>'
       + chip
-      + '<button type="button" class="ssx-btn sm ' + (d.status === 'ok' ? '' : 'pri') + '" onclick="ssS1Open(' + i + ')">' + (d.status === 'ok' ? '다시' : (d.status === 'part' ? '한번 더' : '암기·시험')) + '</button>'
+      + '<button type="button" class="ssx-btn sm ' + (okDay ? '' : 'pri') + '" onclick="' + (pend ? 'ssS1RetryGo(' + i + ')' : 'ssS1Open(' + i + ')') + '">' + (okDay ? '다시' : (pend ? '🔁 오답 다시' : '암기·시험')) + '</button>'
       + '</div>';
   });
   if (ssS1AllDone()) {
@@ -12658,19 +12688,107 @@ function ssSpeak(i) {
     if (w) speak(w.w);
   } catch (e) {}
 }
+function ssS1MakeQ(c, words, d) {
+  var others = shuffle(words.filter(function (x) { return x.w !== c.w; })).slice(0, 3);
+  var opts = shuffle(others.concat([c]));
+  /* v135: 영영풀이 묶음은 풀이(뒤 괄호 한글 풀이는 숨김)를 보고 단어 고르기 */
+  if (d.def) return { w: c.w, m: c.m || '', show: String(c.m || '').replace(/\s*\([^()]*\)\s*$/, '') || c.m, flip: 1, opts: opts.map(function (o) { return o.w; }), ans: opts.indexOf(c) };
+  return { w: c.w, m: c.m || '', opts: opts.map(function (o) { return o.m || ''; }), ans: opts.indexOf(c) };
+}
 function ssS1Quiz() {
   var d = SS.s1.days[SS.s1.cur], words = d.words || [];
   var n = ssTestN(d);
   var pool = shuffle(words).slice(0, n);
-  d.quiz = pool.map(function (c) {
-    var others = shuffle(words.filter(function (x) { return x.w !== c.w; })).slice(0, 3);
-    var opts = shuffle(others.concat([c]));
-    /* v135: 영영풀이 묶음은 풀이(뒤 괄호 한글 풀이는 숨김)를 보고 단어 고르기 */
-    if (d.def) return { w: c.w, m: c.m || '', show: String(c.m || '').replace(/\s*\([^()]*\)\s*$/, '') || c.m, flip: 1, opts: opts.map(function (o) { return o.w; }), ans: opts.indexOf(c) };
-    return { w: c.w, m: c.m || '', opts: opts.map(function (o) { return o.m || ''; }), ans: opts.indexOf(c) };
-  });
+  d.quiz = pool.map(function (c) { return ssS1MakeQ(c, words, d); });
   d.qi = 0; d.qok = 0; d.qwrong = []; d.answered = false;
-  SS.scr = 's1quiz'; ssRender();
+  d.retry = null; d.fixed = false;
+  SS.scr = 's1quiz'; ssSaveSnap(); ssRender();
+}
+/* ---------- v146: 1단계 오답 재도전 (틀린 단어만 모아 모두 맞출 때까지) ---------- */
+function ssS1RetryGo(i) {
+  var d = SS.s1.days[i];
+  if (!d) return;
+  if (d.words && d.words.length && d.quiz && d.quiz.length && (d.qwrong || []).length) { SS.s1.cur = i; ssS1RetryStart(d); return; }
+  ssS1Open(i);
+}
+function ssS1RetryStart(d) {
+  var words = d.words || [], seen = {};
+  var pool = shuffle((d.qwrong || []).filter(function (w) { if (!w || seen[w]) return false; seen[w] = 1; return true; }).map(function (w) {
+    return words.filter(function (x) { return x && x.w === w; })[0] || { w: w, m: '' };
+  }));
+  if (!pool.length) {
+    d.qwrong = []; d.retry = null; d.fixed = true; d.status = 'ok';
+    SS.scr = 's1res'; ssSaveSnap(); ssStatusPub(); ssRender(); return;
+  }
+  d.retry = { quiz: pool.map(function (c) { return ssS1MakeQ(c, words, d); }), qi: 0, ok: 0, wrong: [], round: ((d.retry && d.retry.round) || 0) + 1 };
+  d.answered = false;
+  SS.scr = 's1rq';
+  ssSaveSnap(); ssStatusPub(); ssRender();
+}
+function ssViewS1Retry() {
+  var d = SS.s1.days[SS.s1.cur];
+  if (!d || !d.retry) return ssViewS1();
+  var r = d.retry, q = r.quiz[r.qi];
+  if (!q) return ssViewS1();
+  var h = '<div class="ssx-pane">'
+    + '<div class="ssx-row"><span class="ssx-chip warn">🔁 오답 재시험' + (r.round > 1 ? ' ' + r.round + '라운드' : '') + '</span>'
+    + '<span class="ssx-sub" style="margin-left:auto">' + (r.qi + 1) + ' / ' + r.quiz.length + '</span></div>'
+    + '<div class="ssx-prog"><i style="width:' + ssPct(r.qi, r.quiz.length) + '%"></i></div>'
+    + '<div class="ssx-sub" style="margin-top:6px">' + esc(ssDLbl(d)) + ' · 처음 시험 <b>' + (d.score == null ? 0 : d.score) + '점</b> (' + ((d.quiz && d.quiz.length) || 0) + '문항 중 ' + (d.qok || 0) + '개 정답) · 틀린 단어만 다시 봐요.</div>'
+    + (q.flip ? '<div class="ssx-word" style="font-size:18px;line-height:1.5;font-weight:600">' + esc(q.show) + '</div>'
+      + '<div class="ssx-sub" style="text-align:center;margin-bottom:10px">이 영영풀이에 맞는 단어를 고르세요</div>'
+      : '<div class="ssx-word">' + esc(q.w) + '</div>'
+      + '<div class="ssx-sub" style="text-align:center;margin-bottom:10px">뜻을 고르세요</div>');
+  q.opts.forEach(function (o, k) {
+    h += '<button type="button" class="ssx-opt" onclick="ssS1RA(' + k + ')">' + esc(o) + '</button>';
+  });
+  h += '<div class="ssx-fb" id="ssxFB" style="display:none"></div></div>';
+  return h;
+}
+function ssS1RA(k) {
+  var d = SS.s1.days[SS.s1.cur];
+  if (!d || !d.retry || d.answered) return;
+  var r = d.retry, q = r.quiz[r.qi];
+  if (!q) return;
+  d.answered = true;
+  var ok = (k === q.ans);
+  if (ok) { r.ok++; try { playCorrectSound(); } catch (e) {} }
+  else { if (r.wrong.indexOf(q.w) < 0) r.wrong.push(q.w); try { playWrongSound(); } catch (e) {} }
+  var btns = document.querySelectorAll('#ssxCard .ssx-opt');
+  [].forEach.call(btns, function (b, i) {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('ok');
+    else if (i === k) b.classList.add('no');
+  });
+  var fb = ssq('ssxFB');
+  if (fb) {
+    fb.style.display = 'block';
+    fb.className = 'ssx-fb ' + (ok ? 'ok' : 'no');
+    fb.innerHTML = ok ? ('정답! <b>' + esc(q.w) + '</b> — ' + esc(q.m))
+      : (q.flip ? ('오답 · 정답은 <b>' + esc(q.w) + '</b> — ' + esc(q.m)) : ('오답 · 정답은 <b>' + esc(q.opts[q.ans]) + '</b> (' + esc(q.w) + ')'));
+  }
+  ssSaveSnap(); ssStatusPub();
+  setTimeout(function () {
+    d.answered = false;
+    r.qi++;
+    if (r.qi >= r.quiz.length) ssS1RetryEnd(d);
+    else { ssSaveSnap(); ssStatusPub(); ssRender(); }
+  }, ok ? 850 : 1700);
+}
+function ssS1RetryEnd(d) {
+  var r = d.retry;
+  if (!r) return;
+  if (r.wrong.length) {                 /* 이번 라운드에서도 틀린 단어만 남겨 다시 */
+    d.qwrong = r.wrong.slice();
+    ssSaveSnap(); ssStatusPub();
+    ssS1RetryStart(d);
+    return;
+  }
+  d.qwrong = []; d.retry = null; d.fixed = true; d.status = 'ok';   /* 오답 0개 → 통과 */
+  d.retryOK = ((d.retryOK || 0) + (r.round || 1));
+  try { playFanfareSound(); } catch (e) {}
+  SS.scr = 's1res';
+  ssSaveSnap(); ssStatusPub(); ssRender();
 }
 function ssViewS1Quiz() {
   var d = SS.s1.days[SS.s1.cur];
@@ -12726,28 +12844,38 @@ function ssS1Result() {
   SS.stats.s1ok += ok; SS.stats.s1tot += tot;
   (d.qwrong || []).forEach(function (w) { if (SS.wrongWords.indexOf(w) < 0) SS.wrongWords.push(w); });
   d.score = Math.max(d.score || 0, score);
-  if (score >= 80) { d.status = 'ok'; try { playFanfareSound(); } catch (e) {} }
-  else { d.status = d.attempts >= 2 ? 'part' : 'todo'; }
+  /* v146: 한 개라도 틀렸으면 통과가 아니다 — 오답 재도전을 돌려 0개를 만든다 */
+  d.fixed = !(d.qwrong || []).length;
+  d.status = d.fixed ? 'ok' : 'todo';
+  if (d.fixed) { try { playFanfareSound(); } catch (e) {} }
   try { if (!SS.preview) saveStudentProgressDB(SS.ban, SS.name, d.name, '테스트', score); } catch (e) {}
   try { if (!SS.preview) call('submitWord', S.cred, d.name, '테스트', ok, tot, d.qwrong || [], 0); } catch (e) {}
-  d.pass = ok >= 0;
+  d.pass = d.fixed;
+  if (!d.fixed) { ssS1RetryStart(d); return; }   /* 틀린 단어가 있으면 곧바로 오답 재시험 라운드 */
   SS.scr = 's1res'; ssSaveSnap(); ssStatusPub(); ssRender();
 }
 function ssViewS1Res() {
   var d = SS.s1.days[SS.s1.cur];
-  var tot = d.quiz.length, ok = d.qok, score = ssPct(ok, tot);
-  var pass = score >= 80;
+  var tot = (d.quiz && d.quiz.length) || 0, ok = d.qok || 0, score = ssPct(ok, tot);
+  var fixed = !(d.qwrong || []).length;
   var last = SS.s1.cur >= SS.s1.days.length - 1;
   var h = '<div class="ssx-pane" style="text-align:center">'
     + '<div class="ssx-sub">' + esc(ssDLbl(d)) + ' 단어 시험</div>'
     + '<div class="ssx-big">' + score + '점</div>'
-    + '<div>' + tot + '문항 중 <b>' + ok + '</b>개 정답 · ' + (pass ? '✅ 통과!' : (d.attempts >= 2 ? '⚠️ 보충 대상' : '❌ 다시 도전')) + '</div>';
+    + '<div>' + tot + '문항 중 <b>' + ok + '</b>개 정답 · ' + (fixed ? (score >= 80 ? '✅ 통과!' : '🔁 오답 모두 해결 — 통과!') : '❌ 오답 재도전 필요') + '</div>';
   h += '<div class="ssx-prog" style="margin-top:10px"><i style="width:' + score + '%"></i></div></div>';
-  if ((d.qwrong || []).length) {
-    h += '<div class="ssx-pane"><div class="ssx-h2">틀린 단어 ' + d.qwrong.length + '개</div>'
-      + '<div class="ssx-sub">' + d.qwrong.map(function (w) { return esc(w); }).join(', ') + '</div></div>';
+  if (!fixed) {
+    h += '<div class="ssx-pane amber"><div class="ssx-h2">틀린 단어 ' + d.qwrong.length + '개</div>'
+      + '<div class="ssx-sub">' + d.qwrong.map(function (w) { return esc(w); }).join(', ') + '</div>'
+      + '<div class="ssx-sub" style="margin-top:6px">이 단어들을 모두 맞춰야 다음으로 넘어갈 수 있어요.</div></div>';
+    h += '<button type="button" class="ssx-btn pri" onclick="ssS1RetryStart(SS.s1.days[SS.s1.cur])">🔁 틀린 단어 ' + d.qwrong.length + '개 다시 풀기</button>';
+    h += '<button type="button" class="ssx-btn" onclick="ssGoS1()">← Day 목록</button>';
+    return h;
   }
-  if (!pass && d.attempts < 2) h += '<button type="button" class="ssx-btn pri" onclick="ssS1Quiz()">🔄 다시 시험 보기</button>';
+  if (d.retryOK > 0) {
+    h += '<div class="ssx-pane"><div class="ssx-h2">오답 정리 완료 🔁</div>'
+      + '<div class="ssx-sub">틀린 단어를 다시 풀어 <b>모두 맞췄어요</b> (' + d.retryOK + '라운드). 처음 점수와 정답률은 그대로 기록돼 있어요.</div></div>';
+  }
   if (last) h += '<button type="button" class="ssx-btn pri" onclick="' + (ssS1AllDone() ? 'ssGoS2()' : 'ssGoS1()') + '">' + (ssS1AllDone() ? '1단계 끝 · 2단계로 →' : '← Day 목록') + '</button>';
   else h += '<button type="button" class="ssx-btn pri" onclick="ssS1Next()">다음 Day →</button>';
   h += '<button type="button" class="ssx-btn" onclick="ssGoS1()">← Day 목록</button>';
@@ -12761,7 +12889,7 @@ function ssS1Next() {
 
 /* ---------- 2단계: 문장 어순배열 ---------- */
 function ssGoS2() {
-  if (!SS.preview && !ssS1AllDone()) { alert('1단계 단어 시험을 먼저 끝내 주세요.'); return; }
+  if (!SS.preview && !ssS1AllDone()) { alert('1단계 단어 시험을 먼저 끝내 주세요.\n(틀린 단어는 오답 재시험으로 모두 맞춰야 2단계로 넘어갈 수 있어요)'); return; }
   SS.stage = 2; SS.scr = 's2';
   if (SS.s2.i >= SS.s2.qs.length) { SS.s2.i = 0; SS.s2.ok = 0; }
   SS.s2.built = []; SS.s2.tries = 0;
@@ -12771,7 +12899,7 @@ function ssViewS2() {
   if (!SS.s2.qs.length) return '<div class="ssx-pane">문장 세트를 찾지 못했어요.</div>';
   if (SS.s2.i >= SS.s2.qs.length) {
     return '<div class="ssx-pane" style="text-align:center"><div class="ssx-h1">2단계 완료 🎉</div>'
-      + '<div class="ssx-sub">' + SS.s2.qs.length + '문장 중 첫 시도 정답 ' + SS.s2.ok + '개</div>'
+      + '<div class="ssx-sub">' + SS.s2.qs.length + '문장을 <b>모두 맞춰서</b> 통과했어요. (첫 시도 정답 ' + SS.s2.ok + '개 · 다시 배열 ' + (SS.s2.wrongN || 0) + '회)</div>'
       + '<button type="button" class="ssx-btn pri" onclick="ssGoS3()">3단계 문법·독해로 →</button></div>';
   }
   var q = SS.s2.qs[SS.s2.i];
@@ -12798,7 +12926,7 @@ function ssViewS2() {
     + '</div>'
     + '<div class="ssx-fb" id="ssxFB" style="display:none"></div>'
     + '</div>';
-  h += '<div class="ssx-pane"><div class="ssx-note">한 단어씩 누르면 아래 칸에 쌓여요. 다 쌓이면 자동으로 채점! 틀리면 다시 섞여요.</div></div>';
+  h += '<div class="ssx-pane"><div class="ssx-note">한 단어씩 누르면 아래 칸에 쌓여요. 다 쌓이면 자동으로 채점! 틀리면 섞여서 다시 나와요 — <b>이 문장을 맞춰야 다음 문장으로 넘어가요.</b></div></div>';
   return h;
 }
 /* 칩은 화면 전체를 다시 그리지 않고 그 자리에서 위/아래 칸으로 옮긴다(깜빡임·터치 튐 방지)
@@ -12848,31 +12976,47 @@ function ssS2Tap(i, fromSlot) {
     setTimeout(function () { SS.s2.built = []; ssRender(); }, 950);
   } else {
     SS.s2.tries++;
+    SS.s2.wrongN = (SS.s2.wrongN || 0) + 1;
     if (slot) slot.classList.add('bad');
     try { playWrongSound(); } catch (e) {}
-    if (fb) { fb.style.display = 'block'; fb.className = 'ssx-fb no'; fb.innerHTML = '한 번 더! 정답 순서는 <b>' + esc(q.en) + '</b>'; }
+    if (fb) {
+      fb.style.display = 'block'; fb.className = 'ssx-fb no';
+      /* v146: 한 번 틀리면 같은 문장을 다시 배열해야 다음 문장으로 넘어간다. 두 번째부터 정답 순서를 보여 준다. */
+      fb.innerHTML = '오답! 이 문장을 맞춰야 다음으로 넘어가요. 다시 배열해 보세요.'
+        + (SS.s2.tries >= 2 ? ' 정답 순서는 <b>' + esc(q.en) + '</b>' : '');
+    }
+    ssSaveSnap(); ssStatusPub();
     setTimeout(function () { SS.s2.built = []; ssRender(); }, 1700);
   }
 }
 
 /* ---------- 3단계: 문법·독해 ---------- */
 function ssGoS3() {
-  if (!SS.preview && !ssS2Done()) { alert('2단계 문장을 먼저 끝내 주세요.'); return; }
+  if (!SS.preview && !ssS2Done()) { alert('2단계 문장을 먼저 끝내 주세요.\n(모든 문장을 맞춰야 3단계로 넘어갈 수 있어요)'); return; }
   SS.stage = 3; SS.scr = 's3';
+  if (SS.preview) { SS.s3.rt = null; SS.s3.wrong = []; SS.s3.answered = false; }  /* v146: 미리보기는 자유롭게 훑어보기 */
   if (!SS.s3.qs.length) { ssFinish(); return; }
   ssSaveSnap(); ssStatusPub(true); ssRender();
 }
+function ssS3CurQ() {
+  if (SS.s3.rt) return SS.s3.rt.qs[SS.s3.rt.i] || null;
+  return SS.s3.qs[SS.s3.i] || null;
+}
 function ssViewS3() {
   if (!SS.s3.qs.length) return '<div class="ssx-pane">문제 세트를 찾지 못했어요.</div>';
-  if (SS.s3.i >= SS.s3.qs.length) {
-    if (!SS._finPending) { SS._finPending = true; setTimeout(function () { SS._finPending = false; ssFinish(); }, 30); }
+  var rt = SS.s3.rt;
+  var wait = rt ? (rt.i >= rt.qs.length) : (SS.s3.i >= SS.s3.qs.length);
+  if (wait) {
+    if (!SS._finPending) { SS._finPending = true; setTimeout(function () { SS._finPending = false; ssS3RoundEnd(); }, 30); }
     return '<div class="ssx-pane">집계 중…</div>';
   }
-  var q = SS.s3.qs[SS.s3.i];
+  var q = ssS3CurQ();
+  if (!q) return '<div class="ssx-pane">집계 중…</div>';
+  var total = rt ? rt.qs.length : SS.s3.qs.length, idx = rt ? rt.i : SS.s3.i;
   var h = '<div class="ssx-pane">'
-    + '<div class="ssx-row"><span class="ssx-chip pri">3단계 · ' + esc(q.type || '문법·독해') + '</span>'
-    + '<span class="ssx-sub" style="margin-left:auto">' + (SS.s3.i + 1) + ' / ' + SS.s3.qs.length + '</span></div>'
-    + '<div class="ssx-prog"><i style="width:' + ssPct(SS.s3.i, SS.s3.qs.length) + '%"></i></div>';
+    + '<div class="ssx-row"><span class="ssx-chip pri">3단계 · ' + esc(q.type || '문법·독해') + (rt ? ' · 오답 재도전' : '') + '</span>'
+    + '<span class="ssx-sub" style="margin-left:auto">' + (idx + 1) + ' / ' + total + '</span></div>'
+    + '<div class="ssx-prog"><i style="width:' + ssPct(idx, total) + '%"></i></div>';
   if (q.pass) h += '<div class="ssx-hint" style="margin:6px 0 2px">📖 ' + esc(q.pass) + '</div>';
   if (q.p) h += '<div class="ssx-passage">' + ssH(q.p) + '</div>';
   h += '<div class="ssx-q" style="margin-top:8px">' + ssH(q.q) + '</div>';
@@ -12880,17 +13024,24 @@ function ssViewS3() {
     h += '<button type="button" class="ssx-opt" onclick="ssS3Ans(' + k + ')">' + ssH(c) + '</button>';
   });
   h += '<div id="ssxFB3"></div></div>';
-  h += '<div class="ssx-pane"><div class="ssx-note">답을 누르면 바로 해설이 나와요. 해설을 읽고 [다음 문제]를 눌러 넘어가요.</div></div>';
+  h += '<div class="ssx-pane"><div class="ssx-note">답을 누르면 바로 해설이 나와요. 해설을 읽고 [다음 문제]를 눌러 넘어가요. <b>틀린 문제는 모두 맞출 때까지 다시 나와요.</b></div></div>';
   return h;
 }
 function ssS3Ans(k) {
-  var q = SS.s3.qs[SS.s3.i];
+  var q = ssS3CurQ();
   if (!q || SS.s3.answered) return;
+  var rt = SS.s3.rt;
   SS.s3.answered = true;
   var ok = (k === Number(q.a));
-  if (ok) { SS.s3.ok++; try { playCorrectSound(); } catch (e) {} }
-  else { SS.wrongProbs.push(q); try { playWrongSound(); } catch (e) {} }
-  SS.stats.s3ok = SS.s3.ok; SS.stats.s3tot = SS.s3.i + 1;
+  if (ok) {
+    if (rt) rt.ok++;
+    else { SS.s3.ok++; SS.stats.s3ok = SS.s3.ok; SS.stats.s3tot = SS.s3.i + 1; }
+    try { playCorrectSound(); } catch (e) {}
+  } else {
+    if (rt) { if (rt.wrong.indexOf(q) < 0) rt.wrong.push(q); }
+    else { if (SS.s3.wrong.indexOf(q) < 0) SS.s3.wrong.push(q); if (SS.wrongProbs.indexOf(q) < 0) SS.wrongProbs.push(q); }
+    try { playWrongSound(); } catch (e) {}
+  }
   var btns = document.querySelectorAll('#ssxCard .ssx-opt');
   [].forEach.call(btns, function (b, i) {
     b.disabled = true;
@@ -12900,23 +13051,61 @@ function ssS3Ans(k) {
   var fb = ssq('ssxFB3');
   if (fb) {
     var num = ['①', '②', '③', '④', '⑤'][Number(q.a)] || '';
+    var lastQ = rt ? (rt.i + 1 >= rt.qs.length) : (SS.s3.i + 1 >= SS.s3.qs.length);
+    var pend = rt ? rt.wrong.length : SS.s3.wrong.length;
     fb.innerHTML = '<div class="ssx-fb ' + (ok ? 'ok' : 'no') + '"><b>' + (ok ? '정답! ' : '오답 · 정답은 ' + num + ' ') + '</b>'
       + (q.d ? '<div style="margin-top:6px;font-weight:500">' + ssH(q.d) + '</div>' : '') + '</div>'
-      + '<button type="button" class="ssx-btn pri" onclick="ssS3Next()">' + (SS.s3.i + 1 >= SS.s3.qs.length ? '3단계 끝내기 →' : '다음 문제 →') + '</button>';
+      + '<button type="button" class="ssx-btn pri" onclick="ssS3Next()">'
+      + (lastQ ? (pend ? '🔁 틀린 문제 ' + pend + '개 다시 풀기 →' : '3단계 끝내기 →') : '다음 문제 →') + '</button>';
   }
   ssSaveSnap(); ssStatusPub();
 }
 function ssS3Next() {
   SS.s3.answered = false;
+  var rt = SS.s3.rt;
+  if (rt) {
+    rt.i++;
+    if (rt.i >= rt.qs.length) { ssS3RoundEnd(); return; }
+    ssSaveSnap(); ssRender(); return;
+  }
   SS.s3.i++;
-  if (SS.s3.i >= SS.s3.qs.length) { ssFinish(); return; }
-  ssRender();
+  if (SS.s3.i >= SS.s3.qs.length) { ssS3RoundEnd(); return; }
+  ssSaveSnap(); ssRender();
+}
+/* v146: 오답 재도전 라운드 — 틀린 문제만 모아 다시, 전부 맞출 때까지 반복한 뒤에야 완주 */
+function ssS3RoundEnd() {
+  var rt = SS.s3.rt;
+  if (rt) {
+    if (rt.wrong.length) {
+      SS.s3.rt = { qs: shuffle(rt.wrong.slice()), i: 0, ok: 0, wrong: [], round: (rt.round || 1) + 1 };
+      SS.s3.answered = false;
+      ssSaveSnap(); ssStatusPub(); ssRender();
+      return;
+    }
+    SS.s3.rtRounds = (SS.s3.rtRounds || 0) + (rt.round || 1);
+    SS.s3.rt = null; SS.s3.wrong = [];
+    ssSaveSnap(); ssStatusPub(true);
+    ssFinish();
+    return;
+  }
+  if (SS.s3.wrong && SS.s3.wrong.length) {
+    SS.s3.rt = { qs: shuffle(SS.s3.wrong.slice()), i: 0, ok: 0, wrong: [], round: 1 };
+    SS.s3.answered = false;
+    ssSaveSnap(); ssStatusPub(); ssRender();
+    return;
+  }
+  ssFinish();
 }
 
 /* ---------- 완료 ---------- */
 function ssFinish() {
   if (SS.preview) { SS.scr = 'prevdone'; ssRender(); return; }   /* v135: 미리보기는 완주 기록·알림 없이 안내 화면만 */
   if (SS.done) { SS.scr = 'done'; ssRender(); return; }
+  /* v146: 오답이 하나라도 남아 있으면 완주가 아니다 — 재도전 라운드로 되돌린다 */
+  if (SS.s3.rt || (SS.s3.wrong || []).length || ssS1Pending()) {
+    if (SS.s3.rt || (SS.s3.wrong || []).length) { ssS3RoundEnd(); return; }
+    SS.stage = 1; SS.scr = 's1'; ssSaveSnap(); ssStatusPub(); ssRender(); return;
+  }
   SS.done = true; SS.stage = 3; SS.scr = 'done'; SS.s2.built = [];
   var el = (Date.now() - SS.t0) / 1000;
   try { playFanfareSound(); } catch (e) {}
@@ -12944,6 +13133,12 @@ function ssViewDone() {
     + '<div class="ssx-stat"><b>' + ssPct(SS.stats.s3ok, SS.stats.s3tot) + '%</b><span>독해·문법</span></div>'
     + '<div class="ssx-stat"><b style="color:' + (SS.leaveCnt ? '#dc2626' : '#16a34a') + '">' + SS.leaveCnt + '회</b><span>화면 이탈</span></div>'
     + '</div></div>';
+  var rtN = 0, rtS3 = SS.s3.rtRounds || 0;
+  (SS.s1.days || []).forEach(function (d) { rtN += (d.retryOK || 0); });
+  var rtTxt = (rtN || rtS3)
+    ? '🔁 <b>틀린 문제는 모두 다시 풀어 맞췄어요.</b>' + (rtN ? ' 단어 오답 재시험 ' + rtN + '라운드' : '') + (rtS3 ? (rtN ? ' · ' : ' ') + '독해 오답 재도전 ' + rtS3 + '라운드' : '') + ' — 완주 조건 충족!'
+    : '✅ 한 문제도 틀리지 않고 한 번에 통과했어요!';
+  h += '<div class="ssx-pane amber" style="margin-top:10px"><div class="ssx-sub">' + rtTxt + '</div></div>';
   h += '<div class="ssx-cert">'
     + '<div style="font-size:26px">' + (cert ? '🏅' : '📋') + '</div>'
     + '<div class="big">' + (cert ? '이탈 0회 · 자기주도 완주 인증' : '완주 인증 (이탈 ' + SS.leaveCnt + '회)') + '</div>'
@@ -13040,8 +13235,8 @@ function ssPreviewStart(ban) {
   SS.wrongWords = []; SS.wrongProbs = [];
   SS.stats = { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.s1 = { days: ssBuildDays(ban), cur: -1 };
-  SS.s2 = { qs: ssBuildS2(ban, SS.seed, cfg.sentCount), i: 0, tries: 0, ok: 0, built: [] };
-  SS.s3 = { qs: ssBuildS3(ban, SS.seed, cfg.probCount), i: 0, ok: 0, answered: false };
+  SS.s2 = { qs: ssBuildS2(ban, SS.seed, cfg.sentCount), i: 0, tries: 0, ok: 0, wrongN: 0, built: [] };
+  SS.s3 = { qs: ssBuildS3(ban, SS.seed, cfg.probCount), i: 0, ok: 0, answered: false, wrong: [], rt: null };
   if (!SS.s1.days.length) {
     SS.preview = false; SS.on = false;
     alert('오늘 ' + ban + '의 단어 Day를 찾지 못했어요.\n교재·시작 Day를 지정한 뒤 다시 눌러 주세요.');
@@ -13056,8 +13251,8 @@ function ssPreviewStop() {
   SS.preview = false; SS.on = false; SS.done = false; SS.warnOn = false;
   SS.scr = 'hub'; SS.stage = 1; SS.bonus = '';
   SS.s1 = { days: [], cur: -1 };
-  SS.s2 = { qs: [], i: 0, tries: 0, ok: 0, built: [] };
-  SS.s3 = { qs: [], i: 0, ok: 0, answered: false };
+  SS.s2 = { qs: [], i: 0, tries: 0, ok: 0, wrongN: 0, built: [] };
+  SS.s3 = { qs: [], i: 0, ok: 0, answered: false, wrong: [], rt: null };
   SS.stats = { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
   SS.wrongWords = []; SS.wrongProbs = [];
   SS.ban = ''; SS.name = '';
