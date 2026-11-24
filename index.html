@@ -11944,8 +11944,8 @@ function ssHomeCard(ban) {
     + '<span style="font-family:Maplestory,sans-serif;font-size:16px;font-weight:700;color:#5eead4">⏱️ 자기주도 1시간 모드</span>'
     + (live ? '<span class="ssx-badge-live">원장님이 열었어요</span>' : '')
     + '<span style="margin-left:auto;font-size:11px;font-weight:800;color:#99f6e4;background:rgba(20,184,166,.25);border-radius:999px;padding:3px 9px">' + (sess && sess.goal ? sess.goal : cfg.goal) + '분</span></div>';
-  if (exm) h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55"><b style="color:#fde68a">📚 ' + esc(exm.title || '기말 대비') + ' (~' + ssExamUntilTxt(exm) + ')</b><br>교과서 단어·영영풀이 <b style="color:#fff">' + days.length + '묶음</b> → 본문 문장 배열 → 문법·독해' + (ssOvAny(ssOvActive(ban)) ? '<br><b style="color:#fdba74">🎯 오늘은 원장님이 고른 복습이에요</b>' : '') + '<br>화면을 벗어나면 기록돼요.</div>';
-  else h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55">단어 <b style="color:#fff">' + range + '</b> 암기·시험 → 문장 어순배열 → 문법·독해<br>보조 선생님 없이 여기서 50~60분 안에 끝내요. 화면을 벗어나면 기록돼요.</div>';
+  if (exm) h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55"><b style="color:#fde68a">📚 ' + esc(exm.title || '기말 대비') + ' (~' + ssExamUntilTxt(exm) + ')</b><br>교과서 단어·영영풀이 <b style="color:#fff">' + days.length + '묶음</b> → 본문 문장 배열 → 문법·독해' + (ssOvAny(ssOvActive(ban)) ? '<br><b style="color:#fdba74">🎯 오늘은 원장님이 고른 복습이에요</b>' : '') + '<br>화면을 벗어나면 기록돼요. (전화·알림 등 첫 1회는 유예)</div>';
+  else h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55">단어 <b style="color:#fff">' + range + '</b> 암기·시험 → 문장 어순배열 → 문법·독해<br>보조 선생님 없이 여기서 50~60분 안에 끝내요. 화면을 벗어나면 기록돼요. (전화·알림 등 첫 1회는 유예)</div>';
   h += '<button type="button" id="ss_go" style="width:100%;margin-top:10px;border:none;border-radius:13px;padding:12px;font-size:15px;font-weight:900;font-family:inherit;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;box-shadow:0 4px 12px rgba(20,184,166,.35)">'
     + (live ? '🔴 지금 입장하기 →' : '▶ 자기주도 시작하기') + '</button>';
   h += '</div>';
