@@ -3342,6 +3342,19 @@ function drawTodayCard(info){
       ch5Line = '<div style="margin:0 0 12px;padding:10px 12px;background:#f0fdfa;border:1.5px solid #14b8a6;border-radius:12px;font-size:13.5px;font-weight:800;color:#0f766e;line-height:1.5">📘 오늘의 미션: ' + esc(tLabel) + ' (' + ch5Cnt + '단어)</div>';
       ch5Btn = '🚀 ' + tLabel.replace('능률VOCA 초등필수 ', '') + ' 학습 시작하기';
     }
+  } else {
+    /* v142: 초5 말고 모든 반도 오늘 필수 학습(카드·뜻고르기·짝맞추기·예문·테스트)을 다 끝냈으면
+       완료 배너를 보여 준다. (전에는 초5반만 완료 표시가 떠서 다른 반은 계속 '시작하기'로 보였음) */
+    try {
+      var h0 = S.home;
+      if (h0 && h0.sets && h0.sets.length && h0.sets[0].count) ch5Cnt = h0.sets[0].count;
+    } catch (e) {}
+    if (info && info.todayDone) {
+      ch5Line = '<div style="margin:0 0 12px;padding:10px 12px;background:#ecfdf5;border:1.5px solid #10b981;border-radius:12px;font-size:13.5px;font-weight:800;color:#065f46;line-height:1.5">✅ 오늘의 학습 완료! (🔥 ' + streakNow + '일 연속 달성)</div>';
+      ch5Btn = '✅ 오늘의 학습 완료 · 복습하기';
+    } else {
+      ch5Btn = '🚀 오늘의 학습 시작하기 (' + ch5Cnt + '단어+복습)';
+    }
   }
 
   return '<div class="card today" style="margin-top:10px;margin-bottom:12px;border:2.5px solid var(--pri);border-radius:18px;padding:16px;background:white;box-shadow:0 4px 14px rgba(255,92,138,0.18)">' +
