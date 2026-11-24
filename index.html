@@ -8069,6 +8069,7 @@ function clogBind() {
     S.clog.ban = this.value;
     S.clog.rows = []; S.clog.loaded = false;
     clogPaintList();
+    clogPaintPreview();   /* v149.1: 반을 바꾸면 미리보기 머리글도 바로 바뀌게 */
     clogLoadList(false);
   };
   var dt = document.getElementById('cl_date');
