@@ -5815,7 +5815,7 @@ function showHome(){
   try { html += ssHomeCard(me.ban); } catch(e){}
   /* v96: 📌 오늘의 집 숙제 — 반별 단어 Day 분량 (원장님이 정한 계획표) */
   html += drawHomePlanCard(me.ban);
-  html += drawSpecialHwCard(me.ban);
+  html += drawSpecialHwCard(me.ban, me.name);
 
   // 초등부 전용 '에듀키즈(edukids)' 독립 전용관 안내 카드
   if (me.ban === '초5' || me.ban === '풍덕초6' || (me.ban === '선생님' && (S.tf === '초5' || S.tf === '풍덕초6' || !S.tf))) {
@@ -6590,17 +6590,62 @@ function setSpecialHw(ban, data) {
   } catch(e) {}
 }
 
-function drawSpecialHwCard(ban) {
+/* ===== v143: 스페셜 숙제 완료 체크 (학생 · 반 · 날짜별, 그 폰에만 저장) ===== */
+var SHW_DONE_KEY = 'topedu_special_hw_done';
+function shwKey(ban, name){ return (ban || '') + '|' + (name || '') + '|' + tdKey(); }
+function isSpecialHwDone(ban, name){
+  try {
+    var a = store(SHW_DONE_KEY) || {};
+    return !!a[shwKey(ban, name)];
+  } catch (e) { return false; }
+}
+function toggleSpecialHwDone(ban, name){
+  try {
+    var me = (S.home && S.home.me) || {};
+    if (!ban) ban = me.ban || (S.cred && S.cred.ban) || '';
+    if (!name) name = me.name || (S.cred && S.cred.name) || '';
+    if (!ban || !name) return;
+    var a = store(SHW_DONE_KEY) || {}, k = shwKey(ban, name), on = !a[k], today = tdKey(), kk;
+    /* 용량이 쌓이지 않게 오늘 날짜 키만 남긴다 */
+    for (kk in a) { if (kk.indexOf('|' + today) !== kk.length - 11) delete a[kk]; }
+    if (on) a[k] = 1; else delete a[k];
+    store(SHW_DONE_KEY, a);
+    if (on) {
+      try { playCorrectSound(); } catch (e) {}
+      try { sbToast('🎉 오늘 스페셜 숙제 완료! 멋져요'); } catch (e) {}
+    } else {
+      try { sbToast('완료 표시를 취소했어요. 다시 화이팅!'); } catch (e) {}
+    }
+    /* 카드만 그 자리에서 다시 그린다(스크롤 위치 유지) */
+    var el = document.getElementById('specialHwCard');
+    if (el && el.parentNode) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = drawSpecialHwCard(ban, name);
+      if (tmp.firstChild) el.parentNode.replaceChild(tmp.firstChild, el);
+      else el.parentNode.removeChild(el);
+    } else { try { showHome(); } catch (e) {} }
+  } catch (e) {}
+}
+
+function drawSpecialHwCard(ban, name) {
   var hw = getSpecialHw(ban);
   if (!hw) return '';
-  return '<div class="card special-hw-card" style="border:2px solid #0d9488;background:linear-gradient(135deg, #f0fdfa, #f8fafc);border-radius:18px;padding:16px;margin:10px 0 14px;box-shadow:0 4px 16px rgba(255,64,129,0.2)">' +
-    '<div style="display:flex;justify-content:space-between;align-items:center">' +
-      '<span style="font-size:12.5px;font-weight:700;color:#0d9488;background:white;border:1.5px solid #14b8a6;padding:3px 10px;border-radius:999px">👑 조수민 원장님의 오늘 스페셜 숙제</span>' +
+  var done = isSpecialHwDone(ban, name);
+  var cardBg = done ? 'border:2px solid #16a34a;background:linear-gradient(135deg, #f0fdf4, #dcfce7)' : 'border:2px solid #0d9488;background:linear-gradient(135deg, #f0fdfa, #f8fafc)';
+  var badge = '<span style="font-size:12.5px;font-weight:700;color:' + (done ? '#15803d' : '#0d9488') + ';background:white;border:1.5px solid ' + (done ? '#16a34a' : '#14b8a6') + ';padding:3px 10px;border-radius:999px">👑 조수민 원장님의 오늘 스페셜 숙제</span>';
+  if (done) badge += '<span style="font-size:11.5px;font-weight:800;color:white;background:#16a34a;padding:3px 9px;border-radius:999px;margin-left:6px;white-space:nowrap">✅ 완료됨</span>';
+  var btnDone = done
+    ? '<button type="button" onclick="toggleSpecialHwDone()" style="flex:1 1 100%;order:1;background:#16a34a;color:white;font-weight:800;padding:10px;font-size:12.5px;line-height:1.3;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(22,163,74,0.3);cursor:pointer;-webkit-tap-highlight-color:transparent;">✅ 오늘 스페셜 숙제 완료! (취소하려면 탭)</button>'
+    : '<button type="button" onclick="toggleSpecialHwDone()" style="flex:1 1 0;min-width:0;order:1;background:white;color:#047857;border:1.8px solid #16a34a;font-weight:800;padding:10px;font-size:13px;line-height:1.3;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;">✅ 스페셜 숙제 완료</button>';
+  var btnGo = '<button type="button" style="flex:1 1 ' + (done ? '100%' : '0') + ';min-width:0;order:2;font-family:Maplestory,Pretendard,sans-serif;background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;font-weight:700;padding:10px;font-size:13px;line-height:1.3;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(13,148,136,0.3);cursor:pointer;" onclick="openReadingApp()">🚀 지금 바로 숙제하러 가기 →</button>';
+  return '<div class="card special-hw-card" id="specialHwCard" style="' + cardBg + ';border-radius:18px;padding:16px;margin:10px 0 14px;box-shadow:0 4px 16px rgba(13,148,136,' + (done ? '0.10' : '0.2') + ')">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap">' +
+      '<span>' + badge + '</span>' +
       '<span style="font-size:12px;color:#888;">' + esc(hw.teacherTime || '오늘') + '</span>' +
     '</div>' +
-    '<div style="font-size:16px;font-weight:700;color:#2d3748;margin:10px 0 4px;font-family:Maplestory,sans-serif">' + esc(hw.title) + '</div>' +
-    '<div style="font-size:13px;color:#4a5568;line-height:1.5;margin-bottom:12px">' + esc(hw.desc) + '</div>' +
-    '<button class="btn" style="background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;font-weight:700;padding:10px;font-size:14px;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(255,64,129,0.3)" onclick="openReadingApp()">🚀 지금 바로 숙제하러 가기 →</button>' +
+    '<div style="font-size:16px;font-weight:700;color:#2d3748;margin:10px 0 4px;font-family:Maplestory,sans-serif">' + (done ? '🎉 ' : '') + esc(hw.title) + '</div>' +
+    '<div style="font-size:13px;color:#4a5568;line-height:1.5;margin-bottom:12px">' + esc(hw.desc) + (done ? '<br><b style="color:#15803d">오늘 몫 끝냈어요! 복습까지 하면 완벽해요 👍</b>' : '') + '</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;">' + btnDone + btnGo + '</div>' +
   '</div>';
 }
 

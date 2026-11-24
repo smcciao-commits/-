@@ -1,5 +1,5 @@
-// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 + v121~v122 Firebase 웹 푸시(FCM) / v123~v124 JSONP 차단 우회(fetch omit) / v125 대시보드 반 필터 자동 생성 / v126 SW unregister 제거(푸시 구독 유지) / v127 하린 앱 쪽지 카드 / v128 자기주도 설정 동기화·중2 문장 정리·한빛중2 통합 / v129 자기주도 내 문장·문제 직접 추가 / v139 어순배열 칩 큰따옴표 이스케이프(reading.html) / v140 화면 이탈 1회 유예(2회부터 기록) - reading.html·index.html / v141 이탈 5회 오탐·누적 수리(블러·전체화면 감지 제거, 시험마다 0회 초기화, 잠금 화면 없이 토스트) / v142 오늘의 학습 완료 표시 전 반 확대(index.html) - reading.html·index.html
-const CACHE_NAME = 'topedu-pwa-v142';
+// TOP EDU PWA Service Worker - Auto Cache Purge + v83 공부 알림 + v121~v122 Firebase 웹 푸시(FCM) / v123~v124 JSONP 차단 우회(fetch omit) / v125 대시보드 반 필터 자동 생성 / v126 SW unregister 제거(푸시 구독 유지) / v127 하린 앱 쪽지 카드 / v128 자기주도 설정 동기화·중2 문장 정리·한빛중2 통합 / v129 자기주도 내 문장·문제 직접 추가 / v139 어순배열 칩 큰따옴표 이스케이프(reading.html) / v140 화면 이탈 1회 유예(2회부터 기록) - reading.html·index.html / v141 이탈 5회 오탐·누적 수리(블러·전체화면 감지 제거, 시험마다 0회 초기화, 잠금 화면 없이 토스트) / v142 오늘의 학습 완료 표시 전 반 확대(index.html) - reading.html·index.html / v143 스페셜 숙제 완료 버튼·완료 배지 추가(index.html)
+const CACHE_NAME = 'topedu-pwa-v143';
 const STATE_DB = 'topedu_sw_state';
 
 /* v83: 알림 아이콘은 실제 PNG 파일만 사용합니다.
