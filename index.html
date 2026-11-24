@@ -2703,8 +2703,13 @@ function ch5DailyInfo(ban, name){
   }
   if (!firstOpen) firstOpen = block[block.length - 1];
   var labels = block.map(function(x){ return dayShort(x); });
+  var doneNow = doneDays >= block.length;
+  /* v147: 오늘 스트릭에 이미 '오늘 학습 완료'가 찍혔으면(예: 다른 폰에서 2 Day를 끝냄) 완료로 맞춘다 */
+  if (!doneNow) {
+    try { var dt = (getStreakDB(ban, name).days || {})[t] || {}; if (dt.done) { doneNow = true; doneDays = block.length; remainCount = 0; } } catch(e){}
+  }
   return {
-    done: doneDays >= block.length, days: block, block: block,
+    done: doneNow, days: block, block: block,
     doneDays: doneDays, needDays: block.length, count: count, remainCount: remainCount,
     label: labels.join(' + '), todaySet: firstOpen, openSet: firstOpen, nextSet: block[block.length - 1]
   };
@@ -2771,8 +2776,12 @@ function dailyPlan(me){
     else { remainCount += Number(block[i].count) || 0; if (!firstOpen) firstOpen = block[i]; }
   }
   if (!firstOpen) firstOpen = block[block.length - 1];
+  var doneNow2 = doneDays >= block.length;
+  if (!doneNow2) {
+    try { var dt2 = (getStreakDB(ban, name).days || {})[t] || {}; if (dt2.done) { doneNow2 = true; doneDays = block.length; remainCount = 0; } } catch(e){}
+  }
   return {
-    ch5: false, done: doneDays >= block.length, days: block, block: block,
+    ch5: false, done: doneNow2, days: block, block: block,
     doneDays: doneDays, needDays: block.length, count: count, remainCount: remainCount,
     label: block.map(function(x){ return dayShort(x); }).join(' + '),
     todaySet: firstOpen, openSet: firstOpen, nextSet: block[block.length - 1]
