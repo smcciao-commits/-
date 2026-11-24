@@ -1270,11 +1270,15 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .sb-pill.done { color: #047857; border-color: #6ee7b7; background: #ecfdf5; }
 .sb-pill.ing { color: #b45309; border-color: #fcd34d; background: #fffbeb; }
 .sb-pill.none { color: #b91c1c; border-color: #fca5a5; background: #fef2f2; }
-.sb-list { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow: auto; }
+.sb-list { display: flex; flex-direction: column; gap: 6px; max-height: 360px; overflow: auto; -webkit-overflow-scrolling: touch; }
 .sb-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 11px; background: #fff; border: 1.5px solid #f1f5f9; font-size: 12.5px; }
 .sb-row b { font-weight: 800; color: #1e293b; }
 .sb-row .fl { font-weight: 800; color: #b45309; }
 .sb-empty { font-size: 12px; color: #92400e; line-height: 1.5; word-break: keep-all; }
+.sb-note { font-size: 10.5px; color: #b45309; margin: -3px 0 9px; line-height: 1.45; word-break: keep-all; }
+.sb-toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 16px); z-index: 9999; background: #065f46; color: #fff; font-weight: 800; font-size: 13px; padding: 12px 18px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.24); opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease; max-width: 88vw; text-align: center; word-break: keep-all; }
+.sb-toast.on { opacity: 1; transform: translate(-50%, 0); }
+.sb-toast.err { background: #b91c1c; }
 /* v83: 오늘 미완료 학생 전원 일괄 독촉 쪽지 */
 .sb-nag { margin: 2px 0 10px; }
 .sb-nag-btn { width: 100%; padding: 12px; border-radius: 14px; border: none; font-family: Maplestory, sans-serif; font-weight: 700; font-size: 13.5px; color: #fff; background: linear-gradient(135deg,#e11d48,#f43f5e); box-shadow: 0 3px 10px rgba(225,29,72,0.26); }
@@ -2455,22 +2459,24 @@ function dbRestoreStudent(ban,name,force){
   });
 }
 /* 교사 화면: 시트 전체 기록 당겨오기 (20초 캐시) */
-function dbAdminPull(force){
+function dbAdminPull(force, cb){
   var now = Date.now();
-  if(!force && TOPEDU_DB_PULL_AT && now - TOPEDU_DB_PULL_AT < 20000) return;
-  if(!TOPEDU_DB_URL) return;
+  if(!force && TOPEDU_DB_PULL_AT && now - TOPEDU_DB_PULL_AT < 20000){ if(typeof cb === 'function'){ try { cb(null); } catch(e){} } return; }
+  if(!TOPEDU_DB_URL){ if(typeof cb === 'function'){ try { cb(null); } catch(e){} } return; }
   var pw = '';
   try { if (S.admin && S.admin.pw) pw = String(S.admin.pw); } catch(e){}
   if(!pw){ try { pw = String(store('apw') || ''); } catch(e){} }
-  if(!pw) return;
+  if(!pw){ if(typeof cb === 'function'){ try { cb(null); } catch(e){} } return; }
   TOPEDU_DB_PULL_AT = now;
   dbFetch({action:'all', pw:pw}, function(d){
-    if(!d || !d.rows) return;
-    TOPEDU_DB_ROWS = d.rows;
-    TOPEDU_DB_AT = Date.now();
-    try { hwcAppSync(); hwcAppPaint(); } catch(e){}
-    try { if(S.admin && S.admin.tab === 'dash' && document.getElementById('aout')) loadAdminDashboard(); } catch(e){}
-    try { if(S.admin && S.admin.tab === 'graph' && !document.getElementById('pg_back')) renderProgGraph(); } catch(e){}
+    if(d && d.rows){
+      TOPEDU_DB_ROWS = d.rows;
+      TOPEDU_DB_AT = Date.now();
+      try { hwcAppSync(); hwcAppPaint(); } catch(e){}
+      try { if(S.admin && S.admin.tab === 'dash' && document.getElementById('aout')) loadAdminDashboard(); } catch(e){}
+      try { if(S.admin && S.admin.tab === 'graph' && !document.getElementById('pg_back')) renderProgGraph(); } catch(e){}
+    }
+    if(typeof cb === 'function'){ try { cb(d || null); } catch(e){} }
   });
 }
 /* 오늘 날짜의 시트 기록 → { '반|이름': {modes, done, score, last} } */
@@ -2486,6 +2492,38 @@ function dbTodayMap(){
     if(String(r.u||'') > o.last) o.last = String(r.u||'');
   });
   return out;
+}
+/* v134: 진도DB 전체 행에서 학생별 '학습한 날짜'를 모아 연속일을 계산한다.
+   (폰 localStorage에는 그 폰의 기록만 있어서, 선생님 폰에서는 남의 연속일이 늘 0으로 보였음) */
+var TOPEDU_DB_DAYMAP = null, TOPEDU_DB_DAYMAP_AT = 0;
+function dbStreakDayMap(){
+  if(TOPEDU_DB_DAYMAP && TOPEDU_DB_DAYMAP_AT === TOPEDU_DB_AT) return TOPEDU_DB_DAYMAP;
+  var done = {}, any = {};
+  (TOPEDU_DB_ROWS || []).forEach(function(r){
+    if(!r || !r.b || !r.n || !r.d) return;
+    var t = String(r.d).trim().replace(/[.\/]/g, '-'), m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(!m) return;
+    var k = r.b + '|' + r.n, day = m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2);
+    (any[k] || (any[k] = {}))[day] = 1;
+    if(String(r.m || '').trim() === '테스트') (done[k] || (done[k] = {}))[day] = 1;
+  });
+  TOPEDU_DB_DAYMAP = { done: done, any: any };
+  TOPEDU_DB_DAYMAP_AT = TOPEDU_DB_AT;
+  return TOPEDU_DB_DAYMAP;
+}
+function dbStreakOf(ban, name){
+  var m = null;
+  try {
+    var dm = dbStreakDayMap();
+    m = dm.done[ban + '|' + name] || dm.any[ban + '|' + name] || null;
+  } catch(e){ m = null; }
+  if(!m) return 0;
+  /* 학생 앱 computeStreak와 같은 규칙: 오늘 안 했으면 어제부터 센다 */
+  var d = new Date(), key = tdKey(d);
+  if(!m[key]){ d.setDate(d.getDate() - 1); key = tdKey(d); if(!m[key]) return 0; }
+  var n = 0;
+  while(m[key] && n < 400){ n++; d.setDate(d.getDate() - 1); key = tdKey(d); }
+  return n;
 }
 /* 교사 대시보드 학생 상태를 시트 기록 기준으로 덮어쓴다 */
 function dbOverlayStudents(students){
@@ -7235,6 +7273,8 @@ function showAdminLogin(){
 }
 var DASH_FILTER = 'all';
 var SEL_STU = {};
+/* v134: 대시보드 KPI(전체·오늘 완료·학습 중·오늘 미접속)를 계산한 그 명단 그대로를 스트릭 관제도 쓴다 */
+var DASH_STUDENTS_LAST = [];
 
 /* v102: 쪽지 로그 중복 판정 — 같은 문구를 다시 보내도 시각이 다르면 새 쪽지로 본다 */
 function noticeAlready(curLogs, d, msgTitle, msgBody, msgTime){
@@ -7650,6 +7690,7 @@ function dashBanList(students){
 
 function drawScienceTeacherDashboard(students){
   try { students = dbOverlayStudents(students); } catch(e){}
+  try { DASH_STUDENTS_LAST = (students || []).slice(); } catch(e){}
   var tot = students.length;
   var realMap = getRealStreakMap();
   var doneList = students.filter(function(s){ return s.status === 'done' || s.did; });
@@ -9200,7 +9241,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v133';
+var TOPEDU_APP_VERSION = 'v134';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -10636,9 +10677,15 @@ function pushStreakBoard(ban, name, done, streak){
     }).catch(function(){});
   } catch(e){}
 }
-function pullStreakBoard(){
+function pullStreakBoard(force, cb){
+  var fire = function(err){
+    try { renderStreakBoard(); } catch(e){}
+    if(typeof cb === 'function'){ try { cb(err || null); } catch(e){} }
+  };
+  /* v134: 8초 안에 이미 읽었으면(그리고 강제가 아니면) 또 부르지 않는다 */
+  if(!force && STREAK_BOARD_FETCHED_AT && Date.now() - STREAK_BOARD_FETCHED_AT < 8000){ fire(null); return; }
   try {
-    fetch('https://ntfy.sh/' + TOPEDU_STREAK_BOARD_TOPIC + '/json?poll=1&since=all')
+    fetch('https://ntfy.sh/' + TOPEDU_STREAK_BOARD_TOPIC + '/json?poll=1&since=all', { cache: 'no-store' })
       .then(function(r){ return r.text(); })
       .then(function(txt){
         var lines = String(txt || '').trim().split('\n');
@@ -10653,52 +10700,122 @@ function pullStreakBoard(){
           } catch(e){}
         });
         STREAK_BOARD_FETCHED_AT = Date.now();
-        renderStreakBoard();
-      }).catch(function(){ renderStreakBoard(); });
-  } catch(e){ renderStreakBoard(); }
+        fire(null);
+      }).catch(function(){ fire('net'); });
+  } catch(e){ fire('net'); }
 }
+
+/* v134: 스트릭 관제 전용 명단 — 대시보드 KPI를 계산한 그 students 배열을 그대로 쓴다 */
+function streakBoardStudents(){
+  var base = [];
+  try { if(DASH_STUDENTS_LAST && DASH_STUDENTS_LAST.length) base = DASH_STUDENTS_LAST; } catch(e){}
+  if(!base.length){
+    var all = (typeof TOPEDU_ALL_STUDENTS !== 'undefined' && TOPEDU_ALL_STUDENTS) ? TOPEDU_ALL_STUDENTS : [];
+    try { base = dbOverlayStudents(all); } catch(e){ base = all; }
+  }
+  return (base || []).filter(function(s){ return !!(s && s.name); });
+}
+function sbIsDone(s){ return !!(s && (s.status === 'done' || s.did)); }
+function sbIsMid(s){ return !!(s && !sbIsDone(s) && s.status === 'mid'); }
+
+/* 국소 알림(토스트) */
+function sbToast(msg, bad){
+  try {
+    var el = document.getElementById('sbToast');
+    if(!el){ el = document.createElement('div'); el.id = 'sbToast'; document.body.appendChild(el); }
+    el.className = 'sb-toast on' + (bad ? ' err' : '');
+    el.textContent = msg;
+    if(el._t) clearTimeout(el._t);
+    el._t = setTimeout(function(){ el.className = 'sb-toast' + (bad ? ' err' : ''); }, 2800);
+  } catch(e){}
+}
+
+/* 🔄 새로고침: 구글 시트 DB 강제 재조회 + 실시간 보드 다시 읽기 → 대시보드 전체 다시 그림 */
+function refreshStreakBoard(){
+  var btn = document.getElementById('sbRefresh');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ 불러오는 중...'; btn.style.opacity = '0.65'; }
+  var pending = 2, closed = false, bad = 0, guard = 0;
+  function finish(){
+    if(closed) return; closed = true;
+    try { clearTimeout(guard); } catch(e){}
+    try { hwcAppSync(); } catch(e){}
+    try { if(typeof DASH_STUDENTS_LAST !== 'undefined' && DASH_STUDENTS_LAST.length) drawScienceTeacherDashboard(DASH_STUDENTS_LAST); } catch(e){}
+    try { renderStreakBoard(); } catch(e){}
+    sbToast(bad ? '⚠ 일부 기록을 못 불러왔어요. 잠시 후 다시 눌러 주세요' : '✅ 최신 기록을 불러왔어요', !!bad);
+  }
+  function one(err){
+    if(err) bad = 1;
+    pending--;
+    if(pending <= 0) finish();
+  }
+  guard = setTimeout(finish, 12000);
+  try { TOPEDU_DB_PULL_AT = 0; dbAdminPull(true, function(d){ one(d ? null : 'db'); }); } catch(e){ one('db'); }
+  try { pullStreakBoard(true, one); } catch(e){ one('net'); }
+}
+
 function renderStreakBoard(){
   var box = document.getElementById('streakBoardBox');
   if(!box) return;
   var t = tdKey();
+  var yd = new Date(); yd.setDate(yd.getDate() - 1);
+  var yKey = tdKey(yd);
   var nagTargets = [];
   try { nagTargets = getTodayNagTargets(); } catch(e){}
-  var local = getRealStreakMap();
-  var keys = Object.keys(STREAK_BOARD);
-  var rows = [];
-  keys.forEach(function(k){ rows.push(STREAK_BOARD[k]); });
-  Object.keys(local).forEach(function(k){
-    var r = local[k], hit = false;
-    for(var i = 0; i < rows.length; i++){ if(rows[i].n === r.n && rows[i].b === r.b){ hit = true; break; } }
-    if(!hit) rows.push(r);
+  var local = {};
+  try { local = getRealStreakMap(); } catch(e){}
+  var roster = [];
+  try { roster = streakBoardStudents(); } catch(e){ roster = []; }
+
+  var rows = roster.map(function(s){
+    var k = (s.ban || '') + '|' + s.name;
+    var st = 0, rk = local[k], sb = STREAK_BOARD[k];
+    if(rk && (rk.t === t || rk.t === yKey)) st = Math.max(st, Number(rk.s) || 0);
+    if(sb && (sb.t === t || sb.t === yKey)) st = Math.max(st, Number(sb.s) || 0);
+    try { st = Math.max(st, dbStreakOf(s.ban, s.name)); } catch(e){}
+    return { n: s.name, b: s.ban || '', s: st, score: s.score, state: sbIsDone(s) ? 'done' : (sbIsMid(s) ? 'ing' : 'none') };
   });
-  var today = rows.filter(function(r){ return r.t === t; });
-  var done = today.filter(function(r){ return r.d; });
-  var ing = today.filter(function(r){ return !r.d && r.s > 0; });
-  var notYet = today.filter(function(r){ return !r.d && !r.s; });
-  rows.sort(function(a,b){ return (b.s || 0) - (a.s || 0); });
+
+  /* 명단을 못 받았을 때만 예전처럼 실시간 보드 기록으로 보여 준다 */
+  if(!rows.length){
+    Object.keys(STREAK_BOARD).forEach(function(k){
+      var r = STREAK_BOARD[k]; if(!r || !r.n) return;
+      rows.push({ n: r.n, b: r.b || '', s: Number(r.s) || 0, state: (r.t === t && r.d) ? 'done' : (Number(r.s) > 0 ? 'ing' : 'none') });
+    });
+  }
+
+  var done = rows.filter(function(r){ return r.state === 'done'; });
+  var ing = rows.filter(function(r){ return r.state === 'ing'; });
+  var none = rows.filter(function(r){ return r.state === 'none'; });
+  var rank = { done: 0, ing: 1, none: 2 };
+  rows.sort(function(a, b){
+    if(rank[a.state] !== rank[b.state]) return rank[a.state] - rank[b.state];
+    if((b.s || 0) !== (a.s || 0)) return (b.s || 0) - (a.s || 0);
+    return String(a.n).localeCompare(String(b.n), 'ko');
+  });
 
   var h = '<div class="sb-head"><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:15px;color:#b45309">🔥 스트릭 관제 (오늘 실시간)</div>' +
     '<button type="button" class="btn-sm" id="sbRefresh" style="background:#fff;border:1.5px solid #fcd34d;color:#b45309">🔄 새로고침</button></div>';
   h += '<div class="sb-counts">' +
     '<span class="sb-pill done">오늘 완료 ' + done.length + '명</span>' +
-    '<span class="sb-pill ing">미완료 ' + ing.length + '명</span>' +
-    '<span class="sb-pill none">아직 시작 전 ' + notYet.length + '명</span>' +
-    '<span class="sb-pill">기록 없음 ' + Math.max(0, ((typeof TOPEDU_ALL_STUDENTS !== 'undefined' ? TOPEDU_ALL_STUDENTS.length : 0)) - today.length) + '명</span>' +
+    '<span class="sb-pill ing">학습 중 ' + ing.length + '명</span>' +
+    '<span class="sb-pill none">오늘 미접속 ' + none.length + '명</span>' +
+    '<span class="sb-pill">전체 ' + rows.length + '명</span>' +
   '</div>';
+  h += '<div class="sb-note">위 KPI 카드와 같은 기준(구글 시트 학습기록 + 학생 폰 실시간 기록)으로 계산했어요.</div>';
   h += '<div class="sb-nag"><button type="button" class="sb-nag-btn" id="sbBulkNag">📢 오늘 미완료 학생 전원 일괄 독촉 쪽지' + (nagTargets.length ? ' (' + nagTargets.length + '명)' : '') + '</button></div>';
   if(rows.length){
-    h += '<div class="sb-list">' + rows.slice(0, 40).map(function(r){
-      var st = r.t === t ? (r.d ? '<span class="st-badge st-done">오늘 완료</span>' : '<span class="st-badge st-none">오늘 미완료</span>') : '<span class="st-badge st-mid">오늘 기록 없음</span>';
+    h += '<div class="sb-list">' + rows.map(function(r){
+      var st = r.state === 'done' ? '<span class="st-badge st-done">오늘 완료</span>' :
+               (r.state === 'ing' ? '<span class="st-badge st-mid">학습 중</span>' : '<span class="st-badge st-none">미접속</span>');
       return '<div class="sb-row"><div><b>' + esc(r.n) + '</b> <span style="color:#94a3b8;font-size:11px">' + esc(r.b || '') + '</span></div>' +
         '<div style="display:flex;align-items:center;gap:8px"><span class="fl">🔥' + (r.s || 0) + '일</span>' + st + '</div></div>';
     }).join('') + '</div>';
   } else {
-    h += '<div class="sb-empty">아직 올라온 스트릭 기록이 없어요. 학생이 폰으로 앱에 들어와 학습하면 <b>하루 1회 자동으로</b> 이 화면에 올라옵니다. (인터넷 연결 필요)<br><span style="color:#b45309;font-size:11px">※ 아래 표의 [학습 현황]은 지난 11/10 기준 예시 데이터이고, 연속 학습은 위 실시간 기록으로만 쌓입니다.</span></div>';
+    h += '<div class="sb-empty">아직 학생 명단을 못 불러왔어요. 위 [🔄 새로고침]을 한 번 눌러 주세요.</div>';
   }
   box.innerHTML = h;
   var br = document.getElementById('sbRefresh');
-  if(br) br.onclick = function(){ STREAK_BOARD = {}; pullStreakBoard(); };
+  if(br) br.onclick = function(){ refreshStreakBoard(); };
   var bn = document.getElementById('sbBulkNag');
   if(bn) bn.onclick = function(){ openBulkNagModal(); };
 }
@@ -11070,23 +11187,27 @@ function pullMyTeacherNote(me, force){
     .catch(function(){ NAG_BUSY = false; });
 }
 
-/* 오늘 아직 완료하지 않은 학생 목록 (실시간 스트릭 기록 기준) */
+/* 오늘 아직 완료하지 않은 학생 목록 (v134: KPI·스트릭 관제와 같은 기준) */
 function getTodayNagTargets(){
   var t = tdKey();
-  var roster = (typeof TOPEDU_ALL_STUDENTS !== 'undefined' && TOPEDU_ALL_STUDENTS) ? TOPEDU_ALL_STUDENTS : [];
+  var roster = [];
+  try { roster = streakBoardStudents(); } catch(e){ roster = []; }
+  if(!roster.length){
+    roster = (typeof TOPEDU_ALL_STUDENTS !== 'undefined' && TOPEDU_ALL_STUDENTS) ? TOPEDU_ALL_STUDENTS : [];
+  }
   var local = {};
   try { local = getRealStreakMap(); } catch(e){}
   var out = [];
   roster.forEach(function(st){
     if(!st || !st.name) return;
-    if(st.ban === '선생님' || st.name === '조수민') return;
+    if(sbIsDone(st)) return;
     var k = (st.ban || '') + '|' + st.name;
     var board = STREAK_BOARD[k];
     var lc = local[k];
-    var doneToday = false, startedToday = false, streak = 0;
-    if(board && board.t === t){ startedToday = true; doneToday = !!board.d; streak = board.s || 0; }
-    if(lc && lc.t === t){ startedToday = true; if(lc.d) doneToday = true; streak = Math.max(streak, lc.s || 0); }
-    if(doneToday) return;
+    var startedToday = sbIsMid(st), streak = 0;
+    if(board && board.t === t){ startedToday = startedToday || true; streak = Number(board.s) || 0; }
+    if(lc && lc.t === t){ startedToday = startedToday || true; streak = Math.max(streak, Number(lc.s) || 0); }
+    try { streak = Math.max(streak, dbStreakOf(st.ban, st.name)); } catch(e){}
     out.push({ ban: st.ban || '', name: st.name, state: startedToday ? 'ing' : 'none', streak: streak });
   });
   out.sort(function(a,b){
@@ -11138,6 +11259,12 @@ function renderBulkNagModal(){
     var r = STREAK_BOARD[k];
     if(r && r.t === t){ boardToday++; if(r.d) boardDone++; }
   });
+  /* v134: '오늘 완료'도 KPI·스트릭 관제와 같은 기준(시트 DB + 폰 기록)으로 센다 */
+  var rosterNow = [];
+  try { rosterNow = streakBoardStudents(); } catch(e){ rosterNow = []; }
+  if(rosterNow.length){
+    boardDone = rosterNow.filter(function(s){ return sbIsDone(s); }).length;
+  }
   var ingN = NAG_TARGETS.filter(function(x){ return x.state === 'ing'; }).length;
   var noneN = NAG_TARGETS.length - ingN;
   var selN = NAG_TARGETS.filter(function(x){ return NAG_SEL[x.ban + '|' + x.name]; }).length;
@@ -11151,7 +11278,7 @@ function renderBulkNagModal(){
       '<span class="sb-pill done">오늘 완료 ' + boardDone + '명</span>' +
     '</div>';
   h += '<div style="font-size:12px;color:#475569;line-height:1.55;margin-bottom:10px;word-break:keep-all">오늘 완료한 학생은 목록에서 빼놨어요. 문구는 <b>{이름}</b>·<b>{반}</b>을 학생별로 바꾸어 들어갑니다. 보낸 쪽지는 학생 홈 맨 위 <b>[조수민 원장님의 도착 쪽지]</b>에 띄워요.' +
-    (boardToday ? '' : '<br><span style="color:#b45309;font-weight:700">⚠ 오늘 폰에서 올라온 실시간 기록이 0건이라 전원이 미완료로 잡혔어요. 아래 [🔄 새로고침]을 한 번 눌러 맞춰 주세요.</span>') +
+    ((boardToday || TOPEDU_DB_AT) ? '' : '<br><span style="color:#b45309;font-weight:700">⚠ 오늘 폰에서 올라온 실시간 기록이 0건이라 전원이 미완료로 잡혔어요. 아래 [🔄 새로고침]을 한 번 눌러 맞춰 주세요.</span>') +
     '</div>';
   h += '<div class="nc-lbl">보낼 쪽지 문구 (학생별로 이름이 자동으로 들어가요)</div>';
   h += '<textarea id="nag_text" style="width:100%;height:86px;padding:10px;border-radius:12px;border:1.5px solid #cbd5e1;font-family:inherit;font-size:13px;line-height:1.5;box-sizing:border-box">' + esc(NAG_DEFAULT_TEXT) + '</textarea>';
