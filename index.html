@@ -5956,6 +5956,8 @@ function drawHallOfFameBanner(){
 }
 
 function showHome(){
+  /* v150: 🔥 12과 특훈 화면이 열려 있으면 뒤따라오는 홈 재렌더로 덮어쓰지 않는다 */
+  try { if (typeof X12_UI !== 'undefined' && X12_UI.open) return; } catch(e){}
   /* v102: 시트에서 복구된 기록이 있으면 홈 정보를 최신으로 다시 계산 */
   if(TOPEDU_PROG_DIRTY && S.cred){
     TOPEDU_PROG_DIRTY = 0;
@@ -6783,6 +6785,7 @@ var X12_SENTS = [
   { en: 'It was so much fun.', ko: '정말 재미있었어.', b: 'fun', bm: '재미' },
   { en: 'I joined a book club.', ko: '나는 독서 클럽에 가입했어.', b: 'joined', bm: '가입했다' }
 ];
+var X12_GUARD = null;
 var X12_UI = { open: false, day: 0, stage: 'w', preview: false, mem: {}, queue: [], cur: -1, chips: [], ans: [], lock: false, revealed: 0, hashDone: 0 };
 
 function x12Pad2(n) { return (n < 10 ? '0' : '') + n; }
@@ -6881,6 +6884,7 @@ function drawX12Card(me) {
 /* ---------- 특훈 화면 ---------- */
 function x12Open(day, preview) {
   X12_UI.open = true;
+  x12GuardStart();
   X12_UI.preview = !!preview;
   X12_UI.mem = {};
   var d = (day == null || day < 0) ? 0 : day;
@@ -6891,8 +6895,18 @@ function x12Open(day, preview) {
   x12Render();
   try { window.scrollTo(0, 0); } catch (e) {}
 }
+function x12GuardStart() {
+  try { if (X12_GUARD) clearInterval(X12_GUARD); } catch (e) {}
+  X12_GUARD = setInterval(function () {
+    try {
+      if (!X12_UI.open) { clearInterval(X12_GUARD); X12_GUARD = null; return; }
+      if (!document.getElementById('x12Panel')) x12Render();
+    } catch (e) {}
+  }, 700);
+}
 function x12Close() {
   X12_UI.open = false;
+  try { if (X12_GUARD) { clearInterval(X12_GUARD); X12_GUARD = null; } } catch (e) {}
   try { stopSpeak(); } catch (e) {}
   showHome();
 }
