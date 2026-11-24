@@ -4286,7 +4286,7 @@ function renderExamMode(p, area) {
           ${ex.choices.map((c, cIdx) => `
             <button class="choice-btn" id="btn_${originalIdx}_${cIdx}" onclick="submitExamAns(${originalIdx}, ${cIdx})">
               <span class="choice-num">${cIdx + 1}</span>
-              <span>${makeWordsClickable(c)}</span>
+              <span>${escChoiceText(c)}</span>
             </button>
           `).join('')}
         </div>
@@ -4326,14 +4326,14 @@ function renderExamMode(p, area) {
           <span>📚 내가 문제 풀며 찾아본 단어</span>
           <span class="badge" style="background:#ffe4ee; color:#e11d48;">총 ${lookedWords.length}개 수록</span>
         </div>
-        <div style="font-size:12px; color:#64748b;">지문/선지 단어를 누르면 자동 저장됩니다!</div>
+        <div style="font-size:12px; color:#64748b;">지문 속 단어를 누르면 자동 저장됩니다!</div>
       </div>
   `;
 
   if (lookedWords.length === 0) {
     html += `
       <div style="font-size:13.5px; color:#94a3b8; text-align:center; padding:15px 0;">
-        💡 선지나 지문에서 모르는 영단어를 톡 누르면 뜻이 뜨고, 여기에 자동으로 나만의 단어장이 만들어집니다!
+        💡 지문에서 모르는 영단어를 톡 누르면 뜻이 뜨고, 여기에 자동으로 나만의 단어장이 만들어집니다! (선지는 누르면 바로 답이 선택됩니다)
       </div>
     `;
   } else {
@@ -5092,13 +5092,13 @@ function updateLookedUpVocabBox() {
         <span>📚 내가 문제 풀며 찾아본 단어</span>
         <span class="badge" style="background:#ffe4ee; color:#e11d48;">총 ${lookedWords.length}개 수록</span>
       </div>
-      <div style="font-size:12px; color:#64748b;">지문/선지 단어를 누르면 자동 저장됩니다!</div>
+      <div style="font-size:12px; color:#64748b;">지문 속 단어를 누르면 자동 저장됩니다!</div>
     </div>
   `;
   if (lookedWords.length === 0) {
     html += `
       <div style="font-size:13.5px; color:#94a3b8; text-align:center; padding:15px 0;">
-        💡 선지나 지문에서 모르는 영단어를 톡 누르면 뜻이 뜨고, 여기에 자동으로 나만의 단어장이 만들어집니다!
+        💡 지문에서 모르는 영단어를 톡 누르면 뜻이 뜨고, 여기에 자동으로 나만의 단어장이 만들어집니다! (선지는 누르면 바로 답이 선택됩니다)
       </div>
     `;
   } else {
@@ -5135,6 +5135,15 @@ function removeLookedUpWord(word) {
   list = list.filter(item => item.word.toLowerCase() !== word.toLowerCase());
   saveLookedUpWords(list);
   updateLookedUpVocabBox();
+}
+
+/* v145: 모의고사 선지는 단어 뜻보기 클릭 가로채기 없이 plain 텍스트로 그립니다.
+   선지 카드의 글자·번호·여백 어디를 눌러도 즉시 답이 선택되게 하기 위함입니다. */
+function escChoiceText(text) {
+  return String(text == null ? '' : text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 // Helper: Wrap words in text with clickable spans
