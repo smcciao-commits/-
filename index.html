@@ -2623,11 +2623,18 @@ function dayDoneMap(){
   return {};
 }
 function dayDoneSave(m){ try { store(DAY_DONEMAP_KEY, m || {}); } catch(e){} }
-function dayMarkDone(setName, when){
+/* 학생별·세트별로 적어 둔다 (같은 폰에서 여러 학생이 써도 섞이지 않게) */
+function dayMapKey(ban, name, setName){ return String(ban || '') + '|' + String(name || '') + '|' + String(setName || ''); }
+function dayMarkDone(ban, name, setName, when){
   if (!setName) return;
-  var m = dayDoneMap(); m[setName] = when || tdKey(); dayDoneSave(m);
+  var m = dayDoneMap(), k = dayMapKey(ban, name, setName);
+  if (m[k]) return;                       /* 이미 끝낸 날짜가 있으면 덮지 않는다 */
+  m[k] = when || tdKey();
+  var ks = Object.keys(m);
+  if (ks.length > 600) { for (var i = 0; i < ks.length - 480; i++) delete m[ks[i]]; }
+  dayDoneSave(m);
 }
-function dayDoneAt(setName){ if (!setName) return ''; return dayDoneMap()[setName] || ''; }
+function dayDoneAt(ban, name, setName){ if (!setName) return ''; return dayDoneMap()[dayMapKey(ban, name, setName)] || ''; }
 /* Day 이름 짧게: 'Day 05' */
 function dayShort(it){
   if (!it) return '';
@@ -2658,15 +2665,15 @@ function ch5DailyInfo(ban, name){
     for (var s = 0; s < seed.length; s++) {
       var nm = seed[s];
       if (!nm || String(nm).indexOf(CH5_DAY_PREFIX) !== 0) continue;
-      if (dayDoneAt(nm)) continue;
-      if (isSetCompleteByName(ban, name, nm)) dayMarkDone(nm, t);
+      if (dayDoneAt(ban, name, nm)) continue;
+      if (isSetCompleteByName(ban, name, nm)) dayMarkDone(ban, name, nm, t);
     }
   } catch(e){}
   var items = [];
   for (i = 0; i < list.length; i++) {
     var complete = false;
     try { complete = isSetCompleteByName(ban, name, list[i].name); } catch(e){}
-    items.push({ name: list[i].name, day: list[i].day, count: list[i].count, complete: complete, today: (dayDoneAt(list[i].name) === t) });
+    items.push({ name: list[i].name, day: list[i].day, count: list[i].count, complete: complete, today: (dayDoneAt(ban, name, list[i].name) === t) });
   }
   var start = 0, found = false;
   /* v147: 오늘 이미 2 Day 이상 끝냈으면(그 뒤 더 해도) 오늘 목표는 완료로 본다 */
@@ -2734,7 +2741,7 @@ function dailyPlan(me){
   var items = series.map(function(it){
     var o = { name: it.name, day: it.day, count: it.count, set: it.s, complete: false };
     try { o.complete = !!getWordSetCompletion(it.s).isComplete; } catch(e){ o.complete = false; }
-    o.today = (dayDoneAt(it.name) === t);
+    o.today = (dayDoneAt(ban, name, it.name) === t);
     return o;
   });
   var start = 0, found = false;
@@ -10139,8 +10146,8 @@ function recordDailyStudy(ban,name,setName,isComplete,justCompleted){
   var setDone = false;
   try { setDone = !!isComplete || (setName ? isSetCompleteByName(ban, name, setName) : false); } catch(e){}
   var markToday = false;
-  if (setDone && setName && justCompleted !== false) markToday = !dayDoneAt(setName);
-  if (markToday) dayMarkDone(setName, t);
+  if (setDone && setName && justCompleted !== false) markToday = !dayDoneAt(ban, name, setName);
+  if (markToday) dayMarkDone(ban, name, setName, t);
   /* v147: 오늘의 학습은 하루 2 Day — 두 Day를 모두 끝내야 일일 학습 완료(스트릭)로 인정 */
   var goalDone = !!isComplete;
   try {
