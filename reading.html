@@ -361,9 +361,10 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.04);
       transition: all 0.15s;
     }
+    /* v144: 한 번 넣은 칩(회색)을 다시 눌러도 취소되도록 터치는 계속 받는다 */
     .word-chip.used {
       opacity: 0.35;
-      pointer-events: none;
+      cursor: pointer;
     }
 
     /* Section 3: Exam Problem Solving */
@@ -4076,40 +4077,64 @@ function escAttr(t) {
 }
 
 // Scramble Interaction Logic
+/* v144: 답안 칸(scrambleState)을 기준으로 화면을 다시 그린다.
+   · 위 답안 칸의 칩을 한 번 누르면 그 칩만 빠지고 아래 선택지가 다시 살아난다
+   · 아래에서 이미 고른 회색 칩을 다시 눌러도 똑같이 취소된다
+   · 같은 단어가 두 번 나와도 자리(순서)로 구분해 엉뚱한 칩이 지워지지 않는다 */
 const scrambleState = {};
 
-function pickWord(btn, idx) {
-  if (btn.classList.contains('used')) return;
-  if (!scrambleState[idx]) scrambleState[idx] = [];
-  
-  const word = btn.getAttribute('data-word');
-  scrambleState[idx].push({ word: word, btn: btn });
-  btn.classList.add('used');
-
+function scRenderSlot(idx) {
   const target = document.getElementById('scTarget_' + idx);
-  const ph = document.getElementById('scPlaceholder_' + idx);
-  if (ph) ph.style.display = 'none';
+  if (!target) return;
+  const items = scrambleState[idx] || [];
+  target.innerHTML = '';
+  if (!items.length) {
+    const ph = document.createElement('span');
+    ph.id = 'scPlaceholder_' + idx;
+    ph.style.cssText = 'color:#94a3b8; font-size:13px;';
+    ph.textContent = '단어 칩을 순서대로 터치하세요... (위 칸의 단어를 다시 누르면 취소돼요)';
+    target.appendChild(ph);
+    return;
+  }
+  items.forEach((item, k) => {
+    const span = document.createElement('span');
+    span.className = 'word-chip';
+    span.style.background = '#fdf2f8';
+    span.textContent = item.word;
+    span.title = '누르면 이 칩만 취소돼요';
+    span.onclick = function() { scRemoveWord(idx, k); };
+    target.appendChild(span);
+  });
+}
 
-  const span = document.createElement('span');
-  span.className = 'word-chip';
-  span.style.background = '#fdf2f8';
-  span.innerText = word;
-  span.onclick = function() {
-    target.removeChild(span);
-    btn.classList.remove('used');
-    scrambleState[idx] = scrambleState[idx].filter(item => item.btn !== btn);
-    if (scrambleState[idx].length === 0 && ph) ph.style.display = 'inline';
-  };
-  target.appendChild(span);
+function scRemoveWord(idx, k) {
+  const items = scrambleState[idx] || [];
+  const item = items[k];
+  if (!item) return;
+  items.splice(k, 1);
+  if (item.btn) item.btn.classList.remove('used');
+  scRenderSlot(idx);
+  const fb = document.getElementById('scFeedback_' + idx);
+  if (fb) fb.innerText = '';
+}
+
+function pickWord(btn, idx) {
+  if (!scrambleState[idx]) scrambleState[idx] = [];
+  const items = scrambleState[idx];
+  const pos = items.findIndex(item => item.btn === btn);
+  /* 이미 답안에 들어간 칩을 다시 누르면 → 그 칩만 취소 */
+  if (pos >= 0) { scRemoveWord(idx, pos); return; }
+  items.push({ word: btn.getAttribute('data-word'), btn: btn });
+  btn.classList.add('used');
+  scRenderSlot(idx);
 }
 
 function resetScramble(idx) {
+  (scrambleState[idx] || []).forEach(item => { if (item.btn) item.btn.classList.remove('used'); });
   scrambleState[idx] = [];
-  const target = document.getElementById('scTarget_' + idx);
-  target.innerHTML = `<span style="color:#94a3b8; font-size:13px;" id="scPlaceholder_${idx}">단어 칩을 순서대로 터치하세요...</span>`;
+  scRenderSlot(idx);
   const src = document.getElementById('scSource_' + idx);
-  const btns = src.querySelectorAll('.word-chip');
-  btns.forEach(b => b.classList.remove('used'));
+  if (src) src.querySelectorAll('.word-chip').forEach(b => b.classList.remove('used'));
   const fb = document.getElementById('scFeedback_' + idx);
   if (fb) fb.innerText = '';
 }
@@ -4122,10 +4147,96 @@ function checkScramble(idx) {
   if (current === sc.words.join(' ')) {
     playCorrectSound();
     fb.innerHTML = '<span style="color:#10b981;">🎉 완벽합니다! 100점 만점 서술형 완성!</span>';
+    /* v144: 어순배열을 문장마다 실제로 다 맞히면 오늘 스페셜 숙제 완료로 기록 */
+    try { hwMarkScrambleOk(idx); } catch (e) {}
   } else {
     playWrongSound();
     fb.innerHTML = `<span style="color:#ef4444;">❌ 아쉬워요! 다시 해보거나 정답을 확인하세요.<br>👉 정답: <b>${sc.full}</b></span>`;
   }
+}
+
+/* ============================================================================
+   v144: 🎯 스페셜 숙제 '실제 완료' 기록
+   - index.html 홈의 👑 스페셜 숙제 카드는 오직 이 기록(topedu_special_hw_done)만 읽는다.
+   - 키는 index.html과 똑같이 '반|이름|YYYY-MM-DD', 값은 { done:true, by, score, total, at }.
+   - 기록되는 순간: ① 모의고사 10문항을 모두 풀고 오답 0 (by:'exam')
+                     ② 어순배열 문장을 전부 정답 확인 (by:'scramble')
+   ============================================================================ */
+const TOPEDU_HW_DONE_KEY = 'topedu_special_hw_done';
+
+function hwDateKey(d) {
+  d = d || new Date();
+  return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+}
+function hwDayStoreKey(suffix) {
+  return 'topedu_hw_' + suffix + '_' + (curStudent || '') + '_p' + curPassage + '_' + hwDateKey();
+}
+function hwReadSet(suffix) {
+  try { const v = JSON.parse(localStorage.getItem(hwDayStoreKey(suffix)) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+}
+function hwAddToSet(suffix, idx) {
+  try {
+    const a = hwReadSet(suffix);
+    if (a.indexOf(idx) < 0) { a.push(idx); localStorage.setItem(hwDayStoreKey(suffix), JSON.stringify(a)); }
+    return a;
+  } catch (e) { return []; }
+}
+function hwTimeText(iso) {
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    const h = d.getHours(), m = ('0' + d.getMinutes()).slice(-2);
+    return (h < 12 ? '오전 ' : '오후 ') + (h % 12 === 0 ? 12 : h % 12) + ':' + m;
+  } catch (e) { return ''; }
+}
+function recordSpecialHwDone(by, score, total) {
+  try {
+    if (!curStudent || !curBan) return false;
+    let all = {};
+    try { all = JSON.parse(localStorage.getItem(TOPEDU_HW_DONE_KEY) || '{}') || {}; } catch (e) { all = {}; }
+    const today = hwDateKey(), k = curBan + '|' + curStudent + '|' + today;
+    /* 용량이 쌓이지 않게 오늘 날짜 키만 남긴다 (index.html과 같은 규칙) */
+    Object.keys(all).forEach(key => { if (key.slice(-10) !== today) delete all[key]; });
+    const prev = all[k] || null;
+    const rec = {
+      done: true,
+      by: by,
+      score: Number(score) || 0,
+      total: Number(total) || 0,
+      at: new Date().toISOString(),
+      passage: curPassage
+    };
+    if (prev && prev.done) {
+      /* 이미 오늘 완료했으면 더 좋은 결과만 갱신하고 첫 완료 시각은 지킨다 */
+      rec.at = prev.at || rec.at;
+      if ((Number(prev.score) || 0) > rec.score) { rec.score = prev.score; rec.total = prev.total; rec.by = prev.by; }
+    }
+    all[k] = rec;
+    localStorage.setItem(TOPEDU_HW_DONE_KEY, JSON.stringify(all));
+    if (!prev || !prev.done) {
+      try { showToast('🎉 오늘 스페셜 숙제 완료! 홈 화면에 초록색 완료 카드로 표시돼요'); } catch (e) {}
+    }
+    return true;
+  } catch (e) { return false; }
+}
+function hwMarkExamAnswered(qIdx) {
+  try {
+    const p = getP(curPassage);
+    if (!p || !Array.isArray(p.exams) || !p.exams.length) return;
+    const answered = hwAddToSet('exam_ans', qIdx);
+    const wrongList = getWrongList(curPassage);
+    if (answered.length >= p.exams.length && wrongList.length === 0) {
+      recordSpecialHwDone('exam', p.exams.length, p.exams.length);
+    }
+  } catch (e) {}
+}
+function hwMarkScrambleOk(idx) {
+  try {
+    const list = SCRAMBLES[curPassage] || [];
+    if (!list.length) return;
+    const okSet = hwAddToSet('sc_ok', idx);
+    if (okSet.length >= list.length) recordSpecialHwDone('scramble', okSet.length, list.length);
+  } catch (e) {}
 }
 
 // 3. Exam Mode (10 Questions with Retry & Deep Analysis)
@@ -4324,6 +4435,8 @@ function submitExamAns(qIdx, cIdx) {
   saveWrongList(curPassage, wrongList);
   updateHeaderSummary();
   expBox.classList.add('show');
+  /* v144: 10문항을 다 풀고 오답이 0이면 오늘 스페셜 숙제를 '실제 완료'로 기록 */
+  try { hwMarkExamAnswered(qIdx); } catch (e) {}
   return;
 }
 function retryQuestion(qIdx) {

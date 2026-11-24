@@ -6590,64 +6590,81 @@ function setSpecialHw(ban, data) {
   } catch(e) {}
 }
 
-/* ===== v143: 스페셜 숙제 완료 체크 (학생 · 반 · 날짜별, 그 폰에만 저장) ===== */
+/* ===== v144: 스페셜 숙제 완료 체크 (학생 · 반 · 날짜별, 그 폰에만 저장)
+   원장님 지시: '하지도 않고 완료 버튼만 누르는 일'은 없어야 한다.
+   → 손으로 누르는 완료 버튼은 삭제. 완료는 오직 reading.html 이 실제 학습을 마쳤을 때
+     기록하는 topedu_special_hw_done 만 읽는다. (키: 반|이름|YYYY-MM-DD) ===== */
 var SHW_DONE_KEY = 'topedu_special_hw_done';
 function shwKey(ban, name){ return (ban || '') + '|' + (name || '') + '|' + tdKey(); }
-function isSpecialHwDone(ban, name){
+/* 완료 기록 객체(없으면 null) — { done:true, by:'exam'|'scramble', score, total, at } */
+function specialHwRecord(ban, name){
   try {
     var a = store(SHW_DONE_KEY) || {};
-    return !!a[shwKey(ban, name)];
-  } catch (e) { return false; }
+    var r = a[shwKey(ban, name)];
+    if (!r) return null;
+    if (r.done === false) return null;
+    return (typeof r === 'object') ? r : { done: true };
+  } catch (e) { return null; }
 }
-function toggleSpecialHwDone(ban, name){
+function isSpecialHwDone(ban, name){ return !!specialHwRecord(ban, name); }
+function shwTimeText(iso){
   try {
-    var me = (S.home && S.home.me) || {};
-    if (!ban) ban = me.ban || (S.cred && S.cred.ban) || '';
-    if (!name) name = me.name || (S.cred && S.cred.name) || '';
-    if (!ban || !name) return;
-    var a = store(SHW_DONE_KEY) || {}, k = shwKey(ban, name), on = !a[k], today = tdKey(), kk;
-    /* 용량이 쌓이지 않게 오늘 날짜 키만 남긴다 */
-    for (kk in a) { if (kk.indexOf('|' + today) !== kk.length - 11) delete a[kk]; }
-    if (on) a[k] = 1; else delete a[k];
-    store(SHW_DONE_KEY, a);
-    if (on) {
-      try { playCorrectSound(); } catch (e) {}
-      try { sbToast('🎉 오늘 스페셜 숙제 완료! 멋져요'); } catch (e) {}
-    } else {
-      try { sbToast('완료 표시를 취소했어요. 다시 화이팅!'); } catch (e) {}
-    }
-    /* 카드만 그 자리에서 다시 그린다(스크롤 위치 유지) */
-    var el = document.getElementById('specialHwCard');
-    if (el && el.parentNode) {
-      var tmp = document.createElement('div');
-      tmp.innerHTML = drawSpecialHwCard(ban, name);
-      if (tmp.firstChild) el.parentNode.replaceChild(tmp.firstChild, el);
-      else el.parentNode.removeChild(el);
-    } else { try { showHome(); } catch (e) {} }
-  } catch (e) {}
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    var h = d.getHours(), m = ('0' + d.getMinutes()).slice(-2);
+    return (h < 12 ? '오전 ' : '오후 ') + (h % 12 === 0 ? 12 : h % 12) + ':' + m;
+  } catch (e) { return ''; }
 }
 
 function drawSpecialHwCard(ban, name) {
   var hw = getSpecialHw(ban);
   if (!hw) return '';
-  var done = isSpecialHwDone(ban, name);
+  var rec = specialHwRecord(ban, name);
+  var done = !!rec;
   var cardBg = done ? 'border:2px solid #16a34a;background:linear-gradient(135deg, #f0fdf4, #dcfce7)' : 'border:2px solid #0d9488;background:linear-gradient(135deg, #f0fdfa, #f8fafc)';
   var badge = '<span style="font-size:12.5px;font-weight:700;color:' + (done ? '#15803d' : '#0d9488') + ';background:white;border:1.5px solid ' + (done ? '#16a34a' : '#14b8a6') + ';padding:3px 10px;border-radius:999px">👑 조수민 원장님의 오늘 스페셜 숙제</span>';
   if (done) badge += '<span style="font-size:11.5px;font-weight:800;color:white;background:#16a34a;padding:3px 9px;border-radius:999px;margin-left:6px;white-space:nowrap">✅ 완료됨</span>';
-  var btnDone = done
-    ? '<button type="button" onclick="toggleSpecialHwDone()" style="flex:1 1 100%;order:1;background:#16a34a;color:white;font-weight:800;padding:10px;font-size:12.5px;line-height:1.3;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(22,163,74,0.3);cursor:pointer;-webkit-tap-highlight-color:transparent;">✅ 오늘 스페셜 숙제 완료! (취소하려면 탭)</button>'
-    : '<button type="button" onclick="toggleSpecialHwDone()" style="flex:1 1 0;min-width:0;order:1;background:white;color:#047857;border:1.8px solid #16a34a;font-weight:800;padding:10px;font-size:13px;line-height:1.3;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;">✅ 스페셜 숙제 완료</button>';
-  var btnGo = '<button type="button" style="flex:1 1 ' + (done ? '100%' : '0') + ';min-width:0;order:2;font-family:Maplestory,Pretendard,sans-serif;background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;font-weight:700;padding:10px;font-size:13px;line-height:1.3;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(13,148,136,0.3);cursor:pointer;" onclick="openReadingApp()">🚀 지금 바로 숙제하러 가기 →</button>';
-  return '<div class="card special-hw-card" id="specialHwCard" style="' + cardBg + ';border-radius:18px;padding:16px;margin:10px 0 14px;box-shadow:0 4px 16px rgba(13,148,136,' + (done ? '0.10' : '0.2') + ')">' +
+  /* 완료 증거(무엇을 몇 개, 언제) — 선생님·학부모도 바로 알아볼 수 있게 */
+  var proof = '';
+  if (done) {
+    var bits = [];
+    if (rec.by === 'exam' && rec.total) bits.push('모의고사 ' + (Number(rec.total) || 0) + '문항 ' + (Number(rec.score) || 0) + '/' + (Number(rec.total) || 0) + ' 올정답');
+    else if (rec.by === 'scramble' && rec.total) bits.push('어순배열 ' + (Number(rec.total) || 0) + '문장 전부 정답');
+    var tt = shwTimeText(rec.at);
+    if (tt) bits.push(tt + ' 완료');
+    if (bits.length) proof = '<div style="font-size:12px;color:#15803d;font-weight:700;margin:0 0 10px">🔎 ' + esc(bits.join(' · ')) + '</div>';
+  }
+  var btnGo = '<button type="button" style="flex:1 1 100%;min-width:0;font-family:Maplestory,Pretendard,sans-serif;background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;font-weight:700;padding:11px;font-size:13.5px;line-height:1.3;border:none;border-radius:12px;box-shadow:0 3px 10px rgba(13,148,136,0.3);cursor:pointer;" onclick="openReadingApp()">🚀 ' + (done ? '오늘 숙제 복습하러 가기' : '지금 바로 숙제하러 가기') + ' →</button>';
+  var lockNote = done ? ''
+    : '<div style="flex:1 1 100%;font-size:12px;font-weight:700;color:#0f766e;background:#ccfbf1;border:1px dashed #14b8a6;border-radius:10px;padding:8px 10px;line-height:1.4;text-align:center">🔒 직접 문제를 끝까지 풀면 자동으로 완료돼요<br><span style="font-weight:600;color:#0f766e;font-size:11.5px">모의고사 10문항을 다 풀고 오답 0, 또는 어순배열 전부 정답</span></div>';
+  return '<div class="card special-hw-card" id="specialHwCard" data-hwdone="' + (done ? '1' : '0') + '" style="' + cardBg + ';border-radius:18px;padding:16px;margin:10px 0 14px;box-shadow:0 4px 16px rgba(13,148,136,' + (done ? '0.10' : '0.2') + ')">' +
     '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap">' +
       '<span>' + badge + '</span>' +
       '<span style="font-size:12px;color:#888;">' + esc(hw.teacherTime || '오늘') + '</span>' +
     '</div>' +
     '<div style="font-size:16px;font-weight:700;color:#2d3748;margin:10px 0 4px;font-family:Maplestory,sans-serif">' + (done ? '🎉 ' : '') + esc(hw.title) + '</div>' +
-    '<div style="font-size:13px;color:#4a5568;line-height:1.5;margin-bottom:12px">' + esc(hw.desc) + (done ? '<br><b style="color:#15803d">오늘 몫 끝냈어요! 복습까지 하면 완벽해요 👍</b>' : '') + '</div>' +
-    '<div style="display:flex;flex-wrap:wrap;gap:8px;">' + btnDone + btnGo + '</div>' +
+    '<div style="font-size:13px;color:#4a5568;line-height:1.5;margin-bottom:10px">' + esc(hw.desc) + (done ? '<br><b style="color:#15803d">오늘 몫 끝냈어요! 복습까지 하면 완벽해요 👍</b>' : '') + '</div>' +
+    proof +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;">' + lockNote + btnGo + '</div>' +
   '</div>';
 }
+
+/* v144: reading.html 에서 숙제를 마치고 뒤로 돌아오면(브라우저 캐시 복원 포함)
+   스페셜 숙제 카드를 저장된 실제 완료 기록으로 다시 그린다 */
+function refreshSpecialHwCard(){
+  try {
+    var el = document.getElementById('specialHwCard');
+    var me = (S.home && S.home.me) || {};
+    if (!el || !el.parentNode || !me.ban) return;
+    var now = isSpecialHwDone(me.ban, me.name) ? '1' : '0';
+    if (el.getAttribute('data-hwdone') === now) return;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = drawSpecialHwCard(me.ban, me.name);
+    if (tmp.firstChild) el.parentNode.replaceChild(tmp.firstChild, el);
+  } catch (e) {}
+}
+try { window.addEventListener('pageshow', function (ev) { if (ev && ev.persisted) refreshSpecialHwCard(); }); } catch (e) {}
+try { document.addEventListener('visibilitychange', function () { if (!document.hidden) refreshSpecialHwCard(); }); } catch (e) {}
 
 /* ============ v96: 📌 반별 '오늘의 집 숙제' (수업 요일 패턴대로 단어 Day 분량 자동 계획) ============
    수민 님 확정 수업 요일:
@@ -12784,7 +12801,9 @@ function ssViewS2() {
   h += '<div class="ssx-pane"><div class="ssx-note">한 단어씩 누르면 아래 칸에 쌓여요. 다 쌓이면 자동으로 채점! 틀리면 다시 섞여요.</div></div>';
   return h;
 }
-/* 칩은 화면 전체를 다시 그리지 않고 그 자리에서 위/아래 칸으로 옮긴다(깜빡임·터치 튐 방지) */
+/* 칩은 화면 전체를 다시 그리지 않고 그 자리에서 위/아래 칸으로 옮긴다(깜빡임·터치 튐 방지)
+   v144: 칩을 옮길 때마다 onclick도 '지금 있는 칸'에 맞게 바꿔 준다.
+   (예전에는 슬롯으로 옮긴 칩의 onclick이 ssS2Tap(i,0) 그대로라 다시 눌러도 지워지지 않았다) */
 function ssS2Tap(i, fromSlot) {
   if (!SS.s2.built) SS.s2.built = [];
   var q = SS.s2.qs[SS.s2.i];
@@ -12794,12 +12813,16 @@ function ssS2Tap(i, fromSlot) {
   var btn = document.querySelector('#ssxCard .ssx-chipw[data-i="' + i + '"]');
   if (!slot || !tray || !btn) return;
   var ph = ssq('ssxPh');
-  if (fromSlot) {
-    SS.s2.built = SS.s2.built.filter(function (x) { return x !== i; });
+  var pos = SS.s2.built.indexOf(i);
+  if (pos >= 0) {
+    /* 위 칸에 있는 칩을 누름 → 그 칩만 빼서 아래 선택지로 되돌린다 */
+    SS.s2.built.splice(pos, 1);
+    btn.setAttribute('onclick', 'ssS2Tap(' + i + ',0)');
     try { tray.appendChild(btn); } catch (e) { return; }
   } else {
-    if (SS.s2.built.indexOf(i) >= 0) return;
+    /* 아래 선택지를 누름 → 위 칸 맨 뒤에 쌓는다 */
     SS.s2.built.push(i);
+    btn.setAttribute('onclick', 'ssS2Tap(' + i + ',1)');
     if (ph) { try { slot.removeChild(ph); } catch (e) {} }
     try { slot.appendChild(btn); } catch (e) { return; }
   }
