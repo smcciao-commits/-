@@ -4025,7 +4025,7 @@ function renderBlankMode(p, area) {
           <span style="color:#94a3b8; font-size:13px;" id="scPlaceholder_${idx}">단어 칩을 순서대로 터치하세요...</span>
         </div>
         <div class="scramble-source" id="scSource_${idx}">
-          ${shuffled.map((w, wIdx) => `<button class="word-chip" data-idx="${idx}" data-word="${w}" onclick="pickWord(this, ${idx})">${w}</button>`).join('')}
+          ${shuffled.map((w, wIdx) => `<button class="word-chip" data-idx="${idx}" data-word="${escAttr(w)}" onclick="pickWord(this, ${idx})">${escAttr(w)}</button>`).join('')}
         </div>
         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
           <button class="tool-btn" style="padding:4px 10px; font-size:12px;" onclick="resetScramble(${idx})">↺ 초기화</button>
@@ -4062,6 +4062,11 @@ function revealAllBlanks() {
 
 function hideAllBlanks() {
   document.querySelectorAll('.blank-word').forEach(el => el.classList.remove('revealed'));
+}
+
+// HTML escaping for data that goes into attributes/text (quotes in chips like The term "bamboo ceiling")
+function escAttr(t) {
+  return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 // Scramble Interaction Logic
