@@ -13004,7 +13004,7 @@ function ssStIsDone(o) {
   return !!(o.done === true || Number(o.st) === 99 || Number(o.stage) === 99);
 }
 /* v152: 같은 날 이미 완주 기록이 있으면 그날 나중에 온 '미완료' 상태로 절대 덮어쓰지 않는다.
-   (자가은 학생처럼 완주 17초 후 다시 시작해 done:false가 올라와 현황판 완료가 지워지던 문제) */
+   (완주 17초 뒤 다시 시작해 done:false가 올라와 현황판 '완료'가 지워지던 문제) */
 function ssStKeepDone(prev, next) {
   try { return !!(prev && ssStSameDay(prev) && ssStIsDone(prev) && !ssStIsDone(next)); } catch (e) { return false; }
 }
