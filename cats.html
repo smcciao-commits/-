@@ -1592,6 +1592,40 @@
 
   </style>
 <script src="https://www.youtube.com/iframe_api"></script>
+<script>
+/* ================= v151: 🧑‍🎒 지금 로그인한 학생 확인 =================
+   · 캐츠 훈련관(cats.html)은 v151부터 초5 이하린 외 초등부 학생(예: 풍덕초6 서호준)도 씁니다.
+   · 단어앱(index.html)이 저장한 로그인 정보를 읽어, 이하린이 아니면 포인트·출석을 그 학생 이름으로
+     따로 저장하고, 하린이 가정 전용인 '아이패드 15분 보상 암호'는 숨깁니다.
+   · 저장된 로그인이 없거나 선생님 계정이면 예전과 똑같이 이하린(초5)으로 동작합니다. */
+var EK_ME = (function () {
+  var def = { ban: '초5', name: '이하린' };
+  try {
+    var keys = ['cred', 'topedu_student', 'last_user'];
+    for (var i = 0; i < keys.length; i++) {
+      var c = null;
+      try { c = JSON.parse(localStorage.getItem(keys[i]) || 'null'); } catch (e2) { c = null; }
+      if (c && c.ban && c.name) {
+        if (String(c.ban) === '선생님') return def;
+        return { ban: String(c.ban), name: String(c.name), pw: c.pw ? String(c.pw) : '' };
+      }
+    }
+  } catch (e) {}
+  return def;
+})();
+function ekIsHarin() { return EK_ME.ban === '초5' && EK_ME.name === '이하린'; }
+function ekMeSlug() { return String(EK_ME.ban + '_' + EK_ME.name).replace(/[^0-9A-Za-z가-힣]/g, ''); }
+function ekStudentKey(harinKey, baseKey) { return ekIsHarin() ? harinKey : (String(baseKey) + '_' + ekMeSlug()); }
+function ekApplyStudentProfile() {
+  if (ekIsHarin()) return;
+  try {
+    var pass = document.querySelector('.reward-passcode-box');
+    if (pass) pass.style.display = 'none';
+  } catch (e) {}
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekApplyStudentProfile);
+else ekApplyStudentProfile();
+</script>
 </head>
 <body>
 
@@ -2996,8 +3030,8 @@ var S = {
   ttsRate: parseFloat(localStorage.getItem('topedu_cats_rate') || '0.72'),
   alarmTime: localStorage.getItem('topedu_cats_alarm_time') || '16:30',
   alarmActive: localStorage.getItem('topedu_cats_alarm_active') !== 'false',
-  streak: parseInt(localStorage.getItem('topedu_cats_streak') || '3'),
-  points: parseInt(localStorage.getItem('topedu_cats_points') || '250')
+  streak: parseInt(localStorage.getItem(ekStudentKey('topedu_cats_streak', 'edukids_streak_cats')) || '3'),
+  points: parseInt(localStorage.getItem(ekStudentKey('topedu_cats_points', 'edukids_points')) || '250')
 };
 
 /* ============ AUDIO SYNTHESIS ENGINE ============ */
@@ -7068,8 +7102,8 @@ function showCelebrationReward() {
   playChimeBell();
   S.points += 100;
   S.streak++;
-  localStorage.setItem('topedu_cats_points', S.points);
-  localStorage.setItem('topedu_cats_streak', S.streak);
+  localStorage.setItem(ekStudentKey('topedu_cats_points', 'edukids_points'), S.points);
+  localStorage.setItem(ekStudentKey('topedu_cats_streak', 'edukids_streak_cats'), S.streak);
   document.getElementById('starVal').textContent = S.points + 'P';
   document.getElementById('streakVal').textContent = S.streak + '일째';
 

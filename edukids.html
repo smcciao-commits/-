@@ -1739,6 +1739,92 @@
 
   </style>
 <script src="https://www.youtube.com/iframe_api"></script>
+<script>
+/* ================= v151: 🧑‍🎒 지금 로그인한 학생 확인 =================
+   · 에듀키즈는 원래 이하린(초5) 전용으로 만들었습니다. v151부터 풍덕초6 서호준처럼
+     다른 초등부 학생도 같은 앱을 쓸 수 있게, 단어앱(index.html)이 저장해 둔 로그인 정보를
+     먼저 읽어 '지금 학생'을 정합니다.
+   · 저장된 로그인이 없거나 선생님 계정이면 예전과 똑같이 이하린(초5)으로 동작합니다.
+   · 이하린이 아니면 하린이 개인 기록(스트릭·포인트·폰 알림·쪽지·보상 암호·플래너)은
+     그 학생 이름으로 따로 저장해서 하린이 기록을 건드리지 않습니다. */
+var EK_ME = (function () {
+  var def = { ban: '초5', name: '이하린' };
+  try {
+    var keys = ['cred', 'topedu_student', 'last_user'];
+    for (var i = 0; i < keys.length; i++) {
+      var c = null;
+      try { c = JSON.parse(localStorage.getItem(keys[i]) || 'null'); } catch (e2) { c = null; }
+      if (c && c.ban && c.name) {
+        if (String(c.ban) === '선생님') return def;   /* 원장님 점검 화면은 하린이 화면 그대로 */
+        return { ban: String(c.ban), name: String(c.name), pw: c.pw ? String(c.pw) : '' };
+      }
+    }
+  } catch (e) {}
+  return def;
+})();
+function ekIsHarin() { return EK_ME.ban === '초5' && EK_ME.name === '이하린'; }
+function ekMeSlug() { return String(EK_ME.ban + '_' + EK_ME.name).replace(/[^0-9A-Za-z가-힣]/g, ''); }
+/* 하린이 전용 저장 키는 그대로 두고, 다른 학생은 이름을 붙인 키를 씁니다 */
+function ekStudentKey(harinKey, baseKey) { return ekIsHarin() ? harinKey : (String(baseKey) + '_' + ekMeSlug()); }
+/* 화면에 보이는 '하린' 이름을 지금 학생 이름으로 바꿔 줍니다 (하린이는 원래 문장 그대로) */
+function ekText(s) {
+  s = String(s === undefined || s === null ? '' : s);
+  if (ekIsHarin() || s.indexOf('하린') < 0) return s;
+  var n = EK_ME.name;
+  return s
+    .replace(/하린이는/g, n + '은')
+    .replace(/하린이가/g, n + '이')
+    .replace(/하린이의/g, n + '의')
+    .replace(/하린이를/g, n + '을')
+    .replace(/하린이한테/g, n + '한테')
+    .replace(/하린아/g, n + '아')
+    .replace(/하린이/g, n + '이')
+    .replace(/하린/g, n);
+}
+/* 하린이 개인용 화면(하린 플래너 바로가기 · 아이패드 보상 암호)은 하린이에게만 */
+function ekApplyStudentProfile() {
+  if (ekIsHarin()) return;
+  try {
+    var links = document.querySelectorAll('[onclick*="harin.html"]');
+    for (var i = 0; i < links.length; i++) links[i].style.display = 'none';
+    var pass = document.querySelector('.reward-passcode-box');
+    if (pass) pass.style.display = 'none';
+  } catch (e) {}
+}
+function ekNameSweep(root) {
+  if (ekIsHarin()) return;
+  try {
+    var el = root || document.body;
+    if (!el) return;
+    var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    var node;
+    while ((node = w.nextNode())) {
+      var p = node.parentNode;
+      if (p && /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT|OPTION)$/.test(p.nodeName)) continue;
+      var t = node.nodeValue;
+      if (!t || t.indexOf('하린') < 0) continue;
+      var r = ekText(t);
+      if (r !== t) node.nodeValue = r;
+    }
+  } catch (e) {}
+}
+function ekInitStudentProfile() {
+  ekApplyStudentProfile();
+  if (ekIsHarin()) return;
+  ekNameSweep(document.body);
+  if (!window.MutationObserver) return;
+  var pend = false;
+  try {
+    new MutationObserver(function () {
+      if (pend) return;
+      pend = true;
+      setTimeout(function () { pend = false; ekNameSweep(document.body); }, 80);
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  } catch (e) {}
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekInitStudentProfile);
+else ekInitStudentProfile();
+</script>
 </head>
 <body>
 
@@ -3153,7 +3239,7 @@ var S = {
   alarmTime: localStorage.getItem('topedu_cats_alarm_time') || '16:30',
   alarmActive: localStorage.getItem('topedu_cats_alarm_active') !== 'false',
   streak: 0,
-  points: parseInt(localStorage.getItem('topedu_cats_points') || '250')
+  points: parseInt(localStorage.getItem(ekStudentKey('topedu_cats_points', 'edukids_points')) || '250')
 };
 
 /* ============ AUDIO SYNTHESIS ENGINE ============ */
@@ -7241,7 +7327,7 @@ function nextQuizQ() {
 function showCelebrationReward() {
   playChimeBell();
   S.points += 100;
-  localStorage.setItem('topedu_cats_points', S.points);
+  localStorage.setItem(ekStudentKey('topedu_cats_points', 'edukids_points'), S.points);
   document.getElementById('starVal').textContent = S.points + 'P';
   try {
     ekRecord('퀴즈');
@@ -7343,6 +7429,7 @@ function petMinky() {
 
 function minkySay(txt, speakVoice) {
   var el = document.getElementById('minkyDialogue');
+  txt = ekText(txt);
   if (el) el.textContent = txt;
   if (speakVoice === true) {
     speakText(txt, 'ko-KR');
@@ -7354,7 +7441,8 @@ function minkySay(txt, speakVoice) {
 /*  - 오늘 캐츠 4단계 / 단어 워밍업·쉐도잉 / 조이영어 중 1개 이상 하면     */
 /*    오늘 완료로 보고 연속 일수를 localStorage 에 쌓습니다.              */
 /* ===================================================================== */
-var EK_STREAK_KEY = 'edukids_streak_harin_v1';
+/* v151: 연속 학습(스트릭)은 학생마다 따로 — 하린이는 기존 키 그대로 이어집니다 */
+var EK_STREAK_KEY = ekStudentKey('edukids_streak_harin_v1', 'edukids_streak');
 var EK_NAG_GAP_MIN = 40;
 var EK_MAX_NAG = 3;
 var EK_TICK_TIMER = null;
@@ -7459,8 +7547,8 @@ function ekGoalDone(kind, streak) {
     minkySay(line + ' 🔥' + streak + '일 연속! 내일도 하면 ' + (streak + 1) + '일차야.');
   } catch (e) {}
   try { ekFlashToast('🔥 오늘 목표 완료! ' + streak + '일 연속'); } catch (e) {}
-  /* v124: 하린이가 오늘 목표를 끝내면 원장님 폰으로 알림 */
-  try { ekPushDirector('🎒 하린이 에듀키즈 학습 완료', '[에듀키즈] 오늘 ' + (kind || '학습') + ' 완료 · 🔥' + (streak || 0) + '일 연속', 'harin-study'); } catch (e) {}
+  /* v124: 오늘 목표를 끝내면 원장님 폰으로 알림 (v151: 학생 이름 그대로) */
+  try { ekPushDirector(ekText('🎒 하린이 에듀키즈 학습 완료'), '[에듀키즈] ' + EK_ME.name + ' · 오늘 ' + (kind || '학습') + ' 완료 · 🔥' + (streak || 0) + '일 연속', ekIsHarin() ? 'harin-study' : ('ek-study-' + ekMeSlug())); } catch (e) {}
 }
 
 function ekFlashToast(txt) {
@@ -7696,7 +7784,7 @@ function ekEnableNotif(timeStr) {
     ekSaveDB(db);
     ekRenderNotifModal();
     ekStartNagLoop();
-    ekShowNotification('🔔 하린이 매일 알림 켜짐!', '이제 매일 ' + db.notif.time + '에 알려줄게요. 오늘 10분만 하면 스트릭 유지! 🦉', 'edukids-notif-on');
+    ekShowNotification(ekText('🔔 하린이 매일 알림 켜짐!'), '이제 매일 ' + db.notif.time + '에 알려줄게요. 오늘 10분만 하면 스트릭 유지! 🦉', 'edukids-notif-on');
     return perm;
   });
 }
@@ -7724,7 +7812,7 @@ function ekNagText(level, info) {
   var s = info.streak || 0;
   if (level <= 1) {
     return {
-      title: '🦉 하린아, 오늘 10분 아직이야!',
+      title: ekText('🦉 하린아, 오늘 10분 아직이야!'),
       body: s > 0 ? ('"' + s + '일 연속"이 오늘 끊길 수 있어. 10분이면 끝나!')
                   : '지금 10분만 하면 오늘 1일차! 에듀키즈 같이 가자~'
     };
@@ -7786,7 +7874,7 @@ function ekBuildIcs(timeStr) {
   start.setHours(hh, mm, 0, 0);
   var end = new Date(start.getTime() + 10 * 60000);
   var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.[0-9]+/, '');
-  var summary = '🎒 하린이 에듀키즈 10분 영어 (🦉 스트릭 지키기)';
+  var summary = ekText('🎒 하린이 에듀키즈 10분 영어 (🦉 스트릭 지키기)');
   var desc = '에듀키즈에서 오늘의 10분 학습을 끝내면 연속 학습(스트릭)이 이어져요.\n앱: https://smcciao-commits.github.io/-/edukids.html';
   var lines = [
     'BEGIN:VCALENDAR',
@@ -7794,7 +7882,7 @@ function ekBuildIcs(timeStr) {
     'PRODID:-//TopEdu Academy//Edukids Harin Streak Reminder v84//KO',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:하린이 매일 에듀키즈 알림',
+    'X-WR-CALNAME:' + ekText('하린이 매일 에듀키즈 알림'),
     'BEGIN:VTIMEZONE',
     'TZID:Asia/Seoul',
     'BEGIN:STANDARD',
@@ -7961,7 +8049,7 @@ function ekRenderNotifModal() {
       }
       var streakNow = 0;
       try { streakNow = ekInfo().streak || 0; } catch (e) {}
-      return ekShowNotificationResult('🔔 하린이 에듀키즈 알림 테스트', '이렇게 알림이 와요! 오늘 10분만 하면 🔥' + streakNow + '일 유지!', 'edukids-test-' + Date.now()).then(function (r) {
+      return ekShowNotificationResult(ekText('🔔 하린이 에듀키즈 알림 테스트'), '이렇게 알림이 와요! 오늘 10분만 하면 🔥' + streakNow + '일 유지!', 'edukids-test-' + Date.now()).then(function (r) {
         done();
         if (r && r.ok) {
           showBox('good', '<b>📣 상단바로 테스트 알림을 보냈어요!</b><br>' +
@@ -8118,10 +8206,11 @@ function closeQrAudioModal() {
    · 서버 호출은 v123 방식 그대로 쿠키 없는 fetch(credentials:'omit') 우선 + 실패 시 JSONP 1회 폴백. */
 var EK_PUSH = {
   dbUrl: 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec',
-  ban: '초5',
-  name: '이하린',
-  stateKey: 'edukids_push_state',
-  pinKey: 'topedu_child_pin',
+  /* v151: 로그인한 학생 그대로 — 이하린이 아니면 그 학생 이름으로 저장·수신합니다 */
+  ban: EK_ME.ban,
+  name: EK_ME.name,
+  stateKey: ekStudentKey('edukids_push_state', 'edukids_push_state'),
+  pinKey: ekStudentKey('topedu_child_pin', 'topedu_child_pin'),
   wrapId: 'ekPushWrap',
   label: '에듀키즈 폰 알림',
   accent: '#7c4dff'
@@ -8335,7 +8424,7 @@ function ekPushCardHtml() {
       '</div>' + btn +
     '</div>' +
     '<div id="ekPushPinRow" style="display:none;gap:6px;margin-top:9px">' +
-      '<input id="ekPushPinInput" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="하린이 앱 4자리 비밀번호" style="flex:1;min-width:0;border:1.5px solid #ddd6fe;border-radius:10px;padding:9px 11px;font-size:13px;font-weight:700;color:#4c1d95;background:#fff">' +
+      '<input id="ekPushPinInput" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="' + ekPushEsc(ekText('하린이 앱 4자리 비밀번호')) + '" style="flex:1;min-width:0;border:1.5px solid #ddd6fe;border-radius:10px;padding:9px 11px;font-size:13px;font-weight:700;color:#4c1d95;background:#fff">' +
       '<button type="button" id="ekPushPinGo" style="background:' + EK_PUSH.accent + ';color:#fff;border:none;border-radius:10px;padding:9px 13px;font-weight:800;font-size:12.5px;white-space:nowrap">켜기</button>' +
     '</div>' +
     '<div id="ekPushPinMsg" style="display:none;margin-top:6px;font-size:11.5px;font-weight:700;color:#b91c1c;line-height:1.4"></div>' +
@@ -8365,7 +8454,7 @@ function ekPushShowPin(msg) {
 function ekPushSubmitPin() {
   var inp = document.getElementById('ekPushPinInput');
   var pin = inp ? String(inp.value || '').replace(/\D/g, '') : '';
-  if (pin.length !== 4) { ekPushShowPin('하린이 앱 비밀번호 4자리를 넣어 주세요.'); return; }
+  if (pin.length !== 4) { ekPushShowPin(ekText('하린이 앱 비밀번호 4자리를 넣어 주세요.')); return; }
   try { localStorage.setItem(EK_PUSH.pinKey, pin); } catch (e) {}
   ekPushGo(pin);
 }

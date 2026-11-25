@@ -6028,7 +6028,8 @@ function showHome(){
 
 
   html += drawLiveClassBanner(me.ban);
-  if (me.ban === '초5') {
+  /* v151: 🐱 캐츠 훈련관(cats.html)은 초등부 전체(초5 이하린 · 풍덕초6 서호준)에게 똑같이 보여 줍니다 */
+  if (me.ban === '초5' || me.ban === '풍덕초6') {
     html += '<div style="display:flex;gap:8px;margin:4px 0 12px">'+
       '<button class="btn" onclick="location.href=\'cats.html\'" style="flex:1.2;margin:0;background:linear-gradient(135deg,#7c4dff,#ec4899);color:#fff;font-weight:700">🐱 캐츠 훈련관</button>'+
       '<button class="btn dark" id="bjoin" style="flex:1;margin:0">⚔️ 대결</button>'+
@@ -10280,7 +10281,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v150';
+var TOPEDU_APP_VERSION = 'v151';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
