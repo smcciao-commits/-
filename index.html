@@ -4089,11 +4089,15 @@ function drawOwlWarnCard(name, note){
   '</div>';
 }
 
-function openReadingApp() {
+/* v158: 예비고1은 지금 진도인 빠바 13강(관계사의 이해 1) 5지문(reading.html 7~11번)으로 바로 연결.
+   mode: 2 = 빈칸·어순배열, 3 = 변형 10제 (없으면 정독 화면) */
+function openReadingApp(mode) {
   var b = (S.cred ? S.cred.ban : (S.home && S.home.me ? S.home.me.ban : ''));
   var n = (S.cred ? S.cred.name : (S.home && S.home.me ? S.home.me.name : ''));
-  var p = (b === '예비고1' ? '3' : '1');
-  location.href = 'reading.html?course=' + encodeURIComponent(b) + '&passage=' + p + '&student=' + encodeURIComponent(n) + '&ban=' + encodeURIComponent(b);
+  var c = (b === '예비고1' ? '예비고1-13' : b);
+  var p = (b === '예비고1' ? '7' : '1');
+  var m = (Number(mode) >= 1 && Number(mode) <= 5) ? '&mode=' + Number(mode) : '';
+  location.href = 'reading.html?course=' + encodeURIComponent(c) + '&passage=' + p + m + '&student=' + encodeURIComponent(n) + '&ban=' + encodeURIComponent(b);
 }
 
 /* ================= v86: ✍️ 내신 서술형(writing.html) 세션 그대로 이어서 이동 ================= */
@@ -6240,11 +6244,11 @@ function showHome(){
   var rTitle = '📖 수지중2 외부지문 독해·어법 변형 마스터';
   var rSub = 'Lesson 7 외부 1·2번 지문 정독 & 7대 킬러 변형 모의';
   if (me.ban === '예비고1') {
-    rTitle = '📘 예비고1 빠바 기초세우기 독해·변형 마스터';
-    rSub = '01강 대나무천장·타깃광고·신호등·후추나방 4개 지문 40제 모의고사';
+    rTitle = '📗 예비고1 빠바 13강 관계사 독해·변형 마스터';
+    rSub = '13강 관계사의 이해 1 · 매운 음식·캠프 편지·극지 관광·쿨레쇼프·엑서게임 5지문 50제';
   } else if (me.ban !== '수지중2') {
     rTitle = '📖 지문·어법·변형 마스터 (수지중2 / 예비고1 빠바)';
-    rSub = '외부지문 & 빠바 6대 핵심 지문 정독, 서술형 Scramble & 10제 모의';
+    rSub = '외부지문 & 빠바 01강·13강 지문 정독, 서술형 Scramble & 10제 모의';
   }
 
   _extra += '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg, #f0fdfa, #f8fafc);border:2px solid #14b8a6;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(13,148,136,0.12)" onclick="openReadingApp()">' +
@@ -7639,12 +7643,20 @@ var HP_DEFAULTS = {
     sentLabel: '동아(윤) 7·8과 본문 + 7과 외부 1·2번 어순배열', readLabel: '본문·외부지문 변형 10제 풀기' },
   '예비고1': { pattern: '화목', startDate: '2026-11-19', startDay: 1, perDay: 0, reviewEvery: 5, reviewDays: 4, testDays: 4, book: 'eowon', bbaba: 3,
     itemWord: 1, itemSent: 1, itemRead: 1,
-    sentLabel: '빠바 01강 4지문 본문 어순배열', readLabel: '빠바 01강 변형 10제 풀기' }
+    sentLabel: '빠바 13강 관계사 5지문 빈칸·어순배열', readLabel: '빠바 13강 관계사 5지문 변형 10제 풀기' }
 };
+/* v158: 예전에 저장된 예비고1 계획에 '빠바 01강' 문구가 남아 있으면 지금 진도(13강) 문구로 바꿔 보여 준다 */
+function hpFixOldLabels(k, o){
+  if (k !== '예비고1' || !o) return o;
+  ['sentLabel', 'readLabel'].forEach(function (f) {
+    if (/빠바\s*0?1강/.test(String(o[f] || ''))) o[f] = HP_DEFAULTS['예비고1'][f];
+  });
+  return o;
+}
 
 function hpAll(){
   var saved = store(HP_KEY) || {}, out = {}, k;
-  for (k in HP_DEFAULTS) out[k] = hpMerge(HP_DEFAULTS[k], saved[k]);
+  for (k in HP_DEFAULTS) out[k] = hpFixOldLabels(k, hpMerge(HP_DEFAULTS[k], saved[k]));
   for (k in saved) { if (k !== '__ts' && !out[k]) out[k] = saved[k]; }
   return out;
 }
@@ -7882,7 +7894,7 @@ function drawHomePlanCard(ban){
     h += '<div class="hp-item' + (sOn ? ' on' : '') + '">'
       + '<button type="button" class="hp-ck tap" onclick="hpToggleItem(\'sent\')" title="했으면 눌러서 체크">' + (sOn ? '✓' : '○') + '</button>'
       + '<div class="hp-itx"><b>본문·외부지문 문장 암기</b><span>' + esc(cfg.sentLabel || '본문·외부지문 어순배열로 문장 암기') + '</span></div>'
-      + '<button type="button" class="hp-go" onclick="openWritingApp()">쓰러가기 →</button>'
+      + '<button type="button" class="hp-go" onclick="' + (ban === '예비고1' ? 'openReadingApp(2)' : 'openWritingApp()') + '">쓰러가기 →</button>'
       + '</div>';
   }
   if (read) {
@@ -7890,7 +7902,7 @@ function drawHomePlanCard(ban){
     h += '<div class="hp-item' + (rOn ? ' on' : '') + '">'
       + '<button type="button" class="hp-ck tap" onclick="hpToggleItem(\'read\')" title="했으면 눌러서 체크">' + (rOn ? '✓' : '○') + '</button>'
       + '<div class="hp-itx"><b>변형·독해 문제 풀기</b><span>' + esc(cfg.readLabel || '본문·외부지문 변형 문제 풀기') + '</span></div>'
-      + '<button type="button" class="hp-go" onclick="openReadingApp()">풀러가기 →</button>'
+      + '<button type="button" class="hp-go" onclick="' + (ban === '예비고1' ? 'openReadingApp(3)' : 'openReadingApp()') + '">풀러가기 →</button>'
       + '</div>';
   }
   if (bb) {
@@ -8917,7 +8929,7 @@ function renderAdminHwManager() {
     '<div style="margin-bottom:12px">' +
       '<label style="font-weight:700;color:#2d3748;margin-bottom:6px">2. 빠른 프리셋 원클릭 자동 입력:</label>' +
       '<div style="display:flex;flex-wrap:wrap;gap:6px" id="hwPresets">' +
-        '<button type="button" class="btn-sm preset-btn" data-t="📘 [빠바 01강] 대나무천장 & 타깃광고 10제 풀기!" data-d="01강 4개 지문 정독 후 변형모의 10제 풀고 오답 클리닉 완료하기 🌟" data-l="reading.html" style="background:white;border:1.5px solid #0284c7;color:#0284c7;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer">📘 빠바 01강 10제</button>' +
+        '<button type="button" class="btn-sm preset-btn" data-t="📗 [빠바 13강] 관계사 5지문 변형 10제 풀기!" data-d="13강 관계사 문법 확인 → 5개 지문 정독 후 변형모의 10제 풀고 오답 클리닉 완료하기 🌟" data-l="reading.html" style="background:white;border:1.5px solid #15803d;color:#15803d;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer">📗 빠바 13강 10제</button>' +
         '<button type="button" class="btn-sm preset-btn" data-t="📖 [수지중2 외부지문] Lesson 7 1·2번 변형모의 10제 풀기!" data-d="외부지문 정독 후 10문제 풀고 빠른 정답 확인하기 🔥" data-l="reading.html" style="background:white;border:1.5px solid #0d9488;color:#0d9488;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer">📖 수지중2 외부 10제</button>' +
         '<button type="button" class="btn-sm preset-btn" data-t="🎯 [온라인 단어] 이번 주 단어 세트 100점 테스트 통과!" data-d="틀린 단어 오답 노트 복습하고 최종 테스트 100점 인증하기 ✨" data-l="index.html" style="background:white;border:1.5px solid #10b981;color:#10b981;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer">🎯 단어 100점 통과</button>' +
         '<button type="button" class="btn-sm preset-btn" data-t="✏️ [오답 클리닉] 문제 풀며 찾은 모르는 단어 복습!" data-d="내가 찾아본 단어장에서 10개 이상 확인하고 지우기 ✏️" data-l="reading.html" style="background:white;border:1.5px solid #8b5cf6;color:#8b5cf6;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer">✏️ 오답 단어 복습</button>' +
@@ -8925,7 +8937,7 @@ function renderAdminHwManager() {
     '</div>' +
 
     '<label style="font-weight:700;color:#2d3748;margin-bottom:6px">3. 숙제 제목:</label>' +
-    '<input id="inp_hwTitle" placeholder="예: 📘 [오늘의 스페셜 미션] 빠바 01강 10제 풀기!" style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:14px;margin-bottom:12px">' +
+    '<input id="inp_hwTitle" placeholder="예: 📗 [오늘의 스페셜 미션] 빠바 13강 관계사 10제 풀기!" style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:14px;margin-bottom:12px">' +
 
     '<label style="font-weight:700;color:#2d3748;margin-bottom:6px">4. 세부 설명 & 격려 문구:</label>' +
     '<textarea id="inp_hwDesc" rows="3" placeholder="예: 오늘 밤 10시까지 지문 정독하고 10문제 풀어보기! 오답 함정까지 꼼꼼히 확인하기 🌸" style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:14px;margin-bottom:12px"></textarea>' +
@@ -10628,7 +10640,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v157';
+var TOPEDU_APP_VERSION = 'v158';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -11423,11 +11435,11 @@ function homeTaskPanel(me) {
       }
       if (Number(cfg.itemSent)) {
         var sOn = hpTick(ban, today, 'sent');
-        h += _shRow('', '<b>본문·외부지문 문장 암기</b><span>' + esc(cfg.sentLabel || '본문 어순배열로 문장 암기') + '</span>', '쓰러가기 →', 'openWritingApp()', 'sent', sOn);
+        h += _shRow('', '<b>본문·외부지문 문장 암기</b><span>' + esc(cfg.sentLabel || '본문 어순배열로 문장 암기') + '</span>', '쓰러가기 →', (ban === '예비고1' ? 'openReadingApp(2)' : 'openWritingApp()'), 'sent', sOn);
       }
       if (Number(cfg.itemRead)) {
         var rOn = hpTick(ban, today, 'read');
-        h += _shRow('', '<b>변형·독해 문제 풀기</b><span>' + esc(cfg.readLabel || '본문·외부지문 변형 문제') + '</span>', '풀러가기 →', 'openReadingApp()', 'read', rOn);
+        h += _shRow('', '<b>변형·독해 문제 풀기</b><span>' + esc(cfg.readLabel || '본문·외부지문 변형 문제') + '</span>', '풀러가기 →', (ban === '예비고1' ? 'openReadingApp(3)' : 'openReadingApp()'), 'read', rOn);
       }
       var bbw = null;
       try { bbw = hpBbaba(cfg, today); } catch (e) {}
