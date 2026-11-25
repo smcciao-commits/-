@@ -1303,8 +1303,9 @@
 
   <!-- Course Category Filter & Passage Selector Tabs -->
   <div style="display:flex; gap:8px; margin-bottom:10px; overflow-x:auto; padding-bottom:4px;">
-    <button class="dash-chip on" id="courseFilterAll" onclick="setCourseFilter('all')">⭐ 전체 지문 (6)</button>
+    <button class="dash-chip on" id="courseFilterAll" onclick="setCourseFilter('all')">⭐ 전체 지문 (11)</button>
     <button class="dash-chip" id="courseFilterSuji" onclick="setCourseFilter('수지중2')">🏫 수지중2 외부 (2)</button>
+    <button class="dash-chip" id="courseFilterB13" onclick="setCourseFilter('예비고1-13')">📗 예비고1 빠바 13강 관계사 (5)</button>
     <button class="dash-chip" id="courseFilterBbaba" onclick="setCourseFilter('예비고1')">📘 예비고1 빠바 01강 (4)</button>
     <button class="dash-chip" id="courseFilterHalf" onclick="setCourseFilter('예비고1-하프')">🕒 예비고1 하프모고 1~3회차 (27)</button>
   </div>
@@ -1332,6 +1333,26 @@
     <div class="p-tab" id="tabP6" data-course="예비고1" onclick="switchPassage(6)">
       <span class="p-tab-badge" style="background:#e0f2fe; color:#0284c7;">예비고1 빠바 01강 (4)</span>
       <div class="p-tab-title">Darwin's Peppered Moth</div>
+    </div>
+    <div class="p-tab" id="tabP7" data-course="예비고1-13" onclick="switchPassage(7)">
+      <span class="p-tab-badge" style="background:#dcfce7; color:#15803d;">예비고1 빠바 13강 (1)</span>
+      <div class="p-tab-title">Spicy Food & Milk</div>
+    </div>
+    <div class="p-tab" id="tabP8" data-course="예비고1-13" onclick="switchPassage(8)">
+      <span class="p-tab-badge" style="background:#dcfce7; color:#15803d;">예비고1 빠바 13강 (2)</span>
+      <div class="p-tab-title">Pine Lake Camp Letter</div>
+    </div>
+    <div class="p-tab" id="tabP9" data-course="예비고1-13" onclick="switchPassage(9)">
+      <span class="p-tab-badge" style="background:#dcfce7; color:#15803d;">예비고1 빠바 13강 (3)</span>
+      <div class="p-tab-title">Polar Tourism</div>
+    </div>
+    <div class="p-tab" id="tabP10" data-course="예비고1-13" onclick="switchPassage(10)">
+      <span class="p-tab-badge" style="background:#dcfce7; color:#15803d;">예비고1 빠바 13강 (4)</span>
+      <div class="p-tab-title">The Kuleshov Effect</div>
+    </div>
+    <div class="p-tab" id="tabP11" data-course="예비고1-13" onclick="switchPassage(11)">
+      <span class="p-tab-badge" style="background:#dcfce7; color:#15803d;">예비고1 빠바 13강 (5)</span>
+      <div class="p-tab-title">Exergames for the Elderly</div>
     </div>
   </div>
 
@@ -1486,8 +1507,10 @@ let AUTH_READY = false;
 function applyStudentIdentity(me) {
   curStudent = me.name;
   curBan = me.ban;
-  curCourseFilter = (qCourse) ? decodeURIComponent(qCourse) : ((curBan === '예비고1') ? '예비고1' : ((curBan === '수지중2') ? '수지중2' : 'all'));
-  if (curCourseFilter === '예비고1' && !qPassage) curPassage = 3;
+  curCourseFilter = (qCourse) ? decodeURIComponent(qCourse) : ((curBan === '예비고1') ? '예비고1-13' : ((curBan === '수지중2') ? '수지중2' : 'all'));
+  /* v158: 예비고1은 지금 진도인 빠바 13강(관계사의 이해 1) 첫 지문부터 */
+  if (curCourseFilter === '예비고1-13' && !qPassage) curPassage = 7;
+  else if (curCourseFilter === '예비고1' && !qPassage) curPassage = 3;
   try {
     localStorage.setItem('topedu_student', JSON.stringify({ name: curStudent, ban: curBan }));
     localStorage.setItem('last_user', JSON.stringify({ name: curStudent, ban: curBan }));
@@ -1728,6 +1751,11 @@ function runReadingApp() {
   updateHeaderSummary();
   if (typeof initCourseFiltersUI === 'function') initCourseFiltersUI();
   render();
+  /* v158: 단어앱 '집에서 할 일'에서 바로 해당 연습으로 (?mode=2 빈칸·어순배열 / 3 변형 10제) */
+  try {
+    const qm = parseInt(urlParams.get('mode') || '', 10);
+    if (qm >= 1 && qm <= 5 && !HALF_PASSAGES[curPassage]) switchMode(qm);
+  } catch (e) {}
   /* v141: 앱을 새로 열면 이탈은 항상 0회 (예전 시험에서 쌓인 기록은 쓰지 않습니다) */
   if (typeof resetLeaveTracking === 'function') resetLeaveTracking();
 }
@@ -1745,8 +1773,8 @@ function saveWrongList(pId, list) {
 }
 
 // Global App State
-let curCourseFilter = (qCourse) ? decodeURIComponent(qCourse) : ((curBan === '예비고1') ? '예비고1' : ((curBan === '수지중2') ? '수지중2' : 'all'));
-let curPassage = (curCourseFilter === '예비고1') ? 3 : 1;
+let curCourseFilter = (qCourse) ? decodeURIComponent(qCourse) : ((curBan === '예비고1') ? '예비고1-13' : ((curBan === '수지중2') ? '수지중2' : 'all'));
+let curPassage = (curCourseFilter === '예비고1-13') ? 7 : ((curCourseFilter === '예비고1') ? 3 : 1);
 if (qPassage) {
   curPassage = parseInt(qPassage, 10);
 }
@@ -3519,6 +3547,1807 @@ const PASSAGES = {
       "exp": "참(T): 수명이 짧아서 자연선택이 꽤 빠르게 일어났다고 설명했습니다."
     }
   ]
+},
+  7: {
+  "id": 7,
+  "course": "예비고1-13",
+  "badge": "예비고1 빠바 13강 (1)",
+  "title": "Why Water Doesn’t Help with Spicy Food",
+  "sub": "빠른독해 바른독해 기초세우기 13강 관계사의 이해 1 [지문 ① 매운 음식과 우유]",
+  "paragraphs": [
+    {
+      "num": 1,
+      "en": "People all around the world enjoy eating spicy food. But after you’ve eaten something a little too spicy, your mouth might feel like it is on fire.",
+      "ko": "전 세계 사람들은 매운 음식 먹는 것을 즐긴다. 그러나 조금 지나치게 매운 것을 먹고 나면, 입안이 불타는 것처럼 느껴질 수 있다.",
+      "syntaxes": [
+        {
+          "title": "🧭 도입: 매운 음식 먹으면 입이 불탄다!",
+          "desc": "1~2번 문장"
+        },
+        {
+          "title": "enjoy eating  [enjoy + -ing]",
+          "desc": "enjoy는 동명사를 목적어로 (to eat 틀림)"
+        },
+        {
+          "title": "after you’ve eaten ~  [시간 부사절]",
+          "desc": "먹고 '난 뒤' 완료된 상태를 현재완료로 강조"
+        },
+        {
+          "title": "feel like it is on fire  [feel like + 절]",
+          "desc": "~인 것처럼 느껴지다 / feel like + -ing = ~하고 싶다 구별"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "en": "What is the best way to deal with this problem? Don’t just grab the nearest glass of water.",
+      "ko": "이 문제를 처리하는 가장 좋은 방법은 무엇일까? 가장 가까이 있는 물 한 잔을 그냥 집어 들지는 마라.",
+      "syntaxes": [
+        {
+          "title": "🧭 문제 제기: 가장 좋은 방법은? 물은 아니다!",
+          "desc": "3~4번 문장"
+        },
+        {
+          "title": "What is the best way ~?  [의문사]",
+          "desc": "What이 보어로 문장 맨 앞 (원래 The best way is what)"
+        },
+        {
+          "title": "the best way to deal with  [형용사적 to부정사]",
+          "desc": "way를 꾸밈 = way of dealing with"
+        },
+        {
+          "title": "Don’t just grab ~  [부정 명령문]",
+          "desc": "그냥 ~하지 마라 (just = 그냥, 단순히)"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "en": "What causes that burning feeling in your mouth is something called capsaicin. Capsaicin is oil-based, so drinking water will just spread it around your mouth.",
+      "ko": "입안에 그 타는 듯한 느낌을 일으키는 것은 캡사이신이라고 불리는 물질이다. 캡사이신은 기름 성분이어서, 물을 마시면 그것을 입안 곳곳에 퍼뜨릴 뿐이다.",
+      "syntaxes": [
+        {
+          "title": "🧭 원인: 범인은 캡사이신 = 기름 성분",
+          "desc": "5~6번 문장"
+        },
+        {
+          "title": "What causes ~ mouth is  [관계대명사 what]",
+          "desc": "what절 = '~하는 것' 주어 → 단수 동사 is"
+        },
+        {
+          "title": "something called capsaicin  [p.p. 후치수식]",
+          "desc": "something which is called의 줄임 (calling 틀림)"
+        },
+        {
+          "title": "drinking water will just spread  [동명사 주어]",
+          "desc": "물을 마시는 것 → 단수 취급"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "en": "Milk-based or acidic drinks are a much better option. Milk contains a protein called casein, which breaks down capsaicin in the same way that soap gets rid of grease. And drinks like lemonade are useful because their acid neutralizes capsaicin.",
+      "ko": "우유가 들어간 음료나 산성 음료가 훨씬 더 좋은 선택이다. 우유에는 카제인이라는 단백질이 들어 있는데, 그것은 비누가 기름때를 없애는 것과 같은 방식으로 캡사이신을 분해한다. 그리고 레모네이드 같은 음료는 그 산이 캡사이신을 중화시키기 때문에 유용하다.",
+      "syntaxes": [
+        {
+          "title": "🧭 해결 1: 우유(카제인)와 산성 음료(레모네이드)",
+          "desc": "7~9번 문장"
+        },
+        {
+          "title": "a much better option  [비교급 강조]",
+          "desc": "much / far / even / still / a lot (very 틀림)"
+        },
+        {
+          "title": ", which breaks down  [계속적 용법]",
+          "desc": "콤마 + which = 그리고 그것(카제인)은 (콤마 뒤 that 불가)"
+        },
+        {
+          "title": "in the same way that soap ~  [the same way that]",
+          "desc": "비누가 기름을 없애는 것과 같은 방식으로 (that = in which)"
+        },
+        {
+          "title": "And drinks like lemonade ~  [주어진 문장]",
+          "desc": "lemonade = acidic drinks의 예 → 우유 설명 다음, Finally 앞"
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "en": "Finally, bread or rice can be helpful by simply creating a wall of food between the capsaicin and your burning mouth.",
+      "ko": "마지막으로, 빵이나 밥은 캡사이신과 화끈거리는 입 사이에 음식의 벽을 만들어 주는 것만으로도 도움이 될 수 있다.",
+      "syntaxes": [
+        {
+          "title": "🧭 해결 2: 빵·밥 = 음식의 벽",
+          "desc": "10번 문장"
+        },
+        {
+          "title": "by simply creating ~  [by + 동명사]",
+          "desc": "단지 ~을 만들어 줌으로써 (수단)"
+        },
+        {
+          "title": "between the capsaicin and your burning mouth  [between A and B]",
+          "desc": "A와 B 사이에"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "type": "주제 추론",
+      "q": "윗글의 주제로 가장 적절한 것은?",
+      "passage": "People all around the world enjoy eating spicy food. ... Finally, bread or rice can be helpful by simply creating a wall of food between the capsaicin and your burning mouth.",
+      "choices": [
+        "the health benefits of eating spicy food every day",
+        "why water fails to cool a burning mouth and what works better",
+        "the history of capsaicin in world cooking",
+        "how milk and lemonade are made from natural ingredients",
+        "the reasons people around the world enjoy spicy food"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "매운맛의 원인 캡사이신은 기름 성분이라 물로는 퍼지기만 하고, 우유·산성 음료·빵·밥이 더 효과적이라는 내용이므로 ②가 정답입니다.",
+        "traps": "① 매운 음식의 건강 효과는 나오지 않습니다.<br>⑤ 첫 문장의 도입일 뿐 글 전체의 주제가 아닙니다.",
+        "point": "Don’t just grab the nearest glass of water.(물 X) → 원인(캡사이신) → 해결책(우유·레모네이드·빵·밥) 흐름을 한 문장으로 묶은 보기를 고릅니다."
+      }
+    },
+    {
+      "type": "제목 추론",
+      "q": "What is the best title for the passage?",
+      "passage": "What causes that burning feeling in your mouth is something called capsaicin. Capsaicin is oil-based, so drinking water will just spread it around your mouth...",
+      "choices": [
+        "Spicy Food: A Global Favorite",
+        "Soap and Milk: Surprising Cleaning Partners",
+        "Water Won’t Help: Smarter Ways to Cool a Burning Mouth",
+        "How Capsaicin Protects Chili Plants",
+        "Drink More Water for a Healthier Life"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "물은 도움이 안 되고 더 현명한 방법(우유·산성 음료·빵·밥)이 있다는 글이므로 ③이 가장 적절합니다.",
+        "traps": "② 비누는 카제인의 작용을 설명하는 비유일 뿐입니다.<br>⑤ 물을 더 마시라는 것은 글과 정반대입니다.",
+        "point": "제목은 '물 X + 더 좋은 방법 O' 두 요소를 모두 담아야 합니다."
+      }
+    },
+    {
+      "type": "빈칸 추론",
+      "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?",
+      "passage": "What causes that burning feeling in your mouth is something called capsaicin. Capsaicin is __________, so drinking water will just spread it around your mouth.",
+      "choices": [
+        "water-soluble",
+        "sugar-free",
+        "protein-rich",
+        "oil-based",
+        "quickly evaporated"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "물을 마시면 캡사이신이 씻겨 나가지 않고 '퍼지기만' 한다고 했으므로, 물과 섞이지 않는 기름 성분(oil-based)이 들어가야 합니다.",
+        "traps": "① water-soluble(물에 녹는)이면 물로 씻겨 나가므로 so 뒤 결과와 모순입니다.<br>③ 단백질(protein)은 캡사이신이 아니라 우유 속 카제인 이야기입니다.",
+        "point": "so(그래서) 앞뒤 인과: 원인(기름 성분) → 결과(물은 퍼뜨릴 뿐)."
+      }
+    },
+    {
+      "type": "지칭 추론",
+      "q": "밑줄 친 <u>it</u>이 가리키는 것으로 가장 적절한 것은?",
+      "passage": "Capsaicin is oil-based, so drinking water will just spread <u>it</u> around your mouth.",
+      "choices": [
+        "capsaicin",
+        "drinking water",
+        "the nearest glass",
+        "a protein",
+        "grease"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "물을 마시면 입안 곳곳에 퍼지는 것은 앞 절의 주어 capsaicin입니다.",
+        "traps": "② drinking water는 퍼뜨리는 주체(주어)이지 퍼지는 대상이 아닙니다.<br>④ protein(카제인)은 뒤 문장에 처음 나옵니다.",
+        "point": "대명사는 가장 가까운 앞 문장의 의미상 알맞은 명사를 찾습니다: spread it = 캡사이신을 퍼뜨리다."
+      }
+    },
+    {
+      "type": "어법 오류 (관계사)",
+      "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+      "passage": "① <u>What</u> causes that burning feeling in your mouth ② <u>are</u> something called capsaicin. Capsaicin is oil-based, so ③ <u>drinking</u> water will just spread it around your mouth. Milk contains a protein ④ <u>called</u> casein, ⑤ <u>which</u> breaks down capsaicin in the same way that soap gets rid of grease.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "관계대명사 what이 이끄는 명사절(What causes ~ mouth)이 주어이면 단수 취급하므로 are가 아니라 <b>is</b>가 맞습니다.",
+        "traps": "① 선행사가 없고 causes의 주어가 빠진 불완전한 절 → what 맞음.<br>④ '카제인이라고 불리는' 수동 의미 → called 맞음.<br>⑤ 콤마 뒤 계속적 용법 → which 맞음(that 불가).",
+        "point": "what절 주어 = 단수 동사. 13강 핵심: what = the thing which(선행사 포함)."
+      }
+    },
+    {
+      "type": "어법 양자택일 (관계사)",
+      "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?",
+      "passage": "(A) [What / That] causes that burning feeling in your mouth is something called capsaicin. ... Milk contains a protein called casein, (B) [which / that] breaks down capsaicin in the same way that soap gets rid of grease. And drinks like lemonade are useful because (C) [their / its] acid neutralizes capsaicin.",
+      "choices": [
+        "That – which – its",
+        "What – that – their",
+        "What – which – their",
+        "That – that – its",
+        "What – which – its"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "(A) 선행사 없이 '~하는 것'이 주어 → What / (B) 콤마 뒤 계속적 용법 → which / (C) 가리키는 것이 복수 drinks → their.",
+        "traps": "(B) 콤마(,) 뒤에는 that을 쓸 수 없습니다.<br>(C) its는 단수를 받으므로 drinks like lemonade와 수가 맞지 않습니다.",
+        "point": "what vs that: 앞에 선행사가 없으면 what. 계속적 용법(콤마 뒤)에는 which/who만."
+      }
+    },
+    {
+      "type": "문맥 어휘",
+      "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+      "passage": "Capsaicin is oil-based, so drinking water will just ① <u>spread</u> it around your mouth. Milk-based or acidic drinks are a much ② <u>better</u> option. Milk contains a protein called casein, which ③ <u>breaks down</u> capsaicin in the same way that soap gets rid of grease. And drinks like lemonade are ④ <u>useful</u> because their acid neutralizes capsaicin. Finally, bread or rice can be helpful by simply ⑤ <u>removing</u> a wall of food between the capsaicin and your burning mouth.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "빵이나 밥은 캡사이신과 입 사이에 음식의 벽을 '만들어(creating)' 도움이 됩니다. 벽을 '없애는(removing)' 것은 문맥과 반대입니다.",
+        "traps": "① 기름 성분이라 물은 퍼뜨릴 뿐 → spread 적절.<br>③ 비누가 기름때를 없애듯 '분해한다' → breaks down 적절.",
+        "point": "a wall of food between A and B = A와 B 사이를 막아 주는 음식의 벽 → create(만들다)."
+      }
+    },
+    {
+      "type": "글의 순서",
+      "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+      "passage": "<b>[주어진 글]</b> People all around the world enjoy eating spicy food. But after you’ve eaten something a little too spicy, your mouth might feel like it is on fire. What is the best way to deal with this problem? Don’t just grab the nearest glass of water.<br><br>(A) Milk-based or acidic drinks are a much better option. Milk contains a protein called casein, which breaks down capsaicin in the same way that soap gets rid of grease. And drinks like lemonade are useful because their acid neutralizes capsaicin.<br>(B) What causes that burning feeling in your mouth is something called capsaicin. Capsaicin is oil-based, so drinking water will just spread it around your mouth.<br>(C) Finally, bread or rice can be helpful by simply creating a wall of food between the capsaicin and your burning mouth.",
+      "choices": [
+        "(A) – (C) – (B)",
+        "(B) – (A) – (C)",
+        "(B) – (C) – (A)",
+        "(C) – (A) – (B)",
+        "(C) – (B) – (A)"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "물을 집지 말라 → (B) 이유: 캡사이신은 기름 성분 → (A) 더 나은 선택: 우유·산성 음료 → (C) Finally 빵·밥 순서입니다.",
+        "traps": "(A)가 먼저 오면 capsaicin이 무엇인지 소개되기 전에 나오게 됩니다.<br>(C)는 Finally로 시작하므로 마지막입니다.",
+        "point": "연결 고리: water(주어진 글) → capsaicin 첫 소개(B) → better option(A) → Finally(C)."
+      }
+    },
+    {
+      "type": "문장 삽입",
+      "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+      "passage": "<b>[주어진 문장]</b> Capsaicin is oil-based, so drinking water will just spread it around your mouth.<br><br>What is the best way to deal with this problem? ( ① ) Don’t just grab the nearest glass of water. ( ② ) What causes that burning feeling in your mouth is something called capsaicin. ( ③ ) Milk-based or acidic drinks are a much better option. ( ④ ) Milk contains a protein called casein, which breaks down capsaicin in the same way that soap gets rid of grease. ( ⑤ ) Finally, bread or rice can be helpful by simply creating a wall of food between the capsaicin and your burning mouth.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "주어진 문장의 Capsaicin은 '캡사이신이라는 물질'이 처음 소개된 문장 바로 뒤에 와야 하고, 물이 소용없는 이유를 말한 뒤 '더 나은 선택(better option)'으로 이어집니다. 따라서 ③입니다.",
+        "traps": "② 자리에 넣으면 capsaicin이 소개되기도 전에 나옵니다.<br>④ 자리는 우유 이야기 사이에 끼어 흐름이 끊깁니다.",
+        "point": "새 명사(capsaicin)의 첫 등장 → 그 성질 설명 → 해결책 순서."
+      }
+    },
+    {
+      "type": "내용 일치",
+      "q": "윗글의 내용과 일치하는 것은?",
+      "passage": "Milk contains a protein called casein, which breaks down capsaicin in the same way that soap gets rid of grease. And drinks like lemonade are useful because their acid neutralizes capsaicin.",
+      "choices": [
+        "캡사이신은 물에 잘 녹아서 물을 마시면 금방 사라진다.",
+        "레모네이드는 당분이 캡사이신을 덮어 매운맛을 줄여 준다.",
+        "빵이나 밥은 캡사이신을 화학적으로 중화시킨다.",
+        "우유 속 카제인은 비누가 기름때를 없애듯 캡사이신을 분해한다.",
+        "글쓴이는 매운 음식을 먹은 뒤 가장 먼저 찬물을 마시라고 권한다."
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "카제인은 비누가 기름때를 없애는 것과 같은 방식으로 캡사이신을 분해한다고 했으므로 ④가 일치합니다.",
+        "traps": "① 캡사이신은 기름 성분이라 물은 퍼뜨릴 뿐입니다.<br>② 레모네이드는 당분이 아니라 '산(acid)'이 중화합니다.<br>③ 빵·밥은 음식의 벽을 만들 뿐(물리적) 중화하지 않습니다.",
+        "point": "작용 주체를 정확히: 카제인 = 분해(break down) / 산 = 중화(neutralize) / 빵·밥 = 벽(wall)."
+      }
+    }
+  ],
+  "tf_en": [
+    {
+      "no": 1,
+      "q": "Drinking water is the best way to stop the burning feeling from spicy food.",
+      "ans": "F",
+      "exp": "거짓(F): Don’t just grab the nearest glass of water. 물은 캡사이신을 퍼뜨릴 뿐입니다."
+    },
+    {
+      "no": 2,
+      "q": "Capsaicin is the thing that causes the burning feeling in your mouth.",
+      "ans": "T",
+      "exp": "참(T): What causes that burning feeling in your mouth is something called capsaicin."
+    },
+    {
+      "no": 3,
+      "q": "Casein is a protein which can be found in milk.",
+      "ans": "T",
+      "exp": "참(T): Milk contains a protein called casein."
+    },
+    {
+      "no": 4,
+      "q": "Lemonade works because its sugar covers the capsaicin.",
+      "ans": "F",
+      "exp": "거짓(F): 레모네이드는 산(acid)이 캡사이신을 중화하기 때문에 유용합니다."
+    },
+    {
+      "no": 5,
+      "q": "Bread or rice helps by creating a wall of food between the capsaicin and your mouth.",
+      "ans": "T",
+      "exp": "참(T): 마지막 문장 내용과 같습니다."
+    }
+  ],
+  "tf_ko": [
+    {
+      "no": 1,
+      "q": "매운 음식을 먹고 입이 불타는 느낌이 드는 원인은 캡사이신이다.",
+      "ans": "T",
+      "exp": "참(T): 타는 듯한 느낌을 일으키는 것은 캡사이신이라고 했습니다."
+    },
+    {
+      "no": 2,
+      "q": "캡사이신은 물에 잘 녹는 성분이라 물로 쉽게 씻어 낼 수 있다.",
+      "ans": "F",
+      "exp": "거짓(F): 캡사이신은 기름 성분(oil-based)이라 물은 입안에 퍼뜨릴 뿐입니다."
+    },
+    {
+      "no": 3,
+      "q": "우유가 든 음료나 산성 음료는 물보다 훨씬 더 좋은 선택이다.",
+      "ans": "T",
+      "exp": "참(T): Milk-based or acidic drinks are a much better option."
+    },
+    {
+      "no": 4,
+      "q": "카제인은 비누가 기름때를 없애는 것과 같은 방식으로 캡사이신을 분해한다.",
+      "ans": "T",
+      "exp": "참(T): 8번 문장 내용과 같습니다."
+    },
+    {
+      "no": 5,
+      "q": "빵이나 밥은 캡사이신을 화학적으로 녹여서 없앤다.",
+      "ans": "F",
+      "exp": "거짓(F): 빵·밥은 캡사이신과 입 사이에 음식의 벽을 만들어 줄 뿐입니다."
+    }
+  ]
+},
+  8: {
+  "id": 8,
+  "course": "예비고1-13",
+  "badge": "예비고1 빠바 13강 (2)",
+  "title": "Pine Lake Camp Needs Your Help",
+  "sub": "빠른독해 바른독해 기초세우기 13강 관계사의 이해 1 [지문 ② 캠프 후원 요청 편지]",
+  "paragraphs": [
+    {
+      "num": 1,
+      "en": "To the Pine Lake Camp Community: As you know, we had to cancel all of our summer camp activities due to the pandemic.",
+      "ko": "파인 레이크 캠프 공동체 여러분께: 아시다시피, 저희는 팬데믹 때문에 모든 여름 캠프 활동을 취소해야 했습니다.",
+      "syntaxes": [
+        {
+          "title": "🧭 상황: 팬데믹으로 여름 캠프 전부 취소",
+          "desc": "1~2번 문장"
+        },
+        {
+          "title": "To ~ Community: / The Pine Lake Staff  [편지 형식]",
+          "desc": "받는 사람 → 내용 → 보내는 사람, 목적은 뒤쪽에서 확인"
+        },
+        {
+          "title": "had to cancel  [had to]",
+          "desc": "have to의 과거, ~할 수밖에 없었다"
+        },
+        {
+          "title": "due to the pandemic  [due to + 명사]",
+          "desc": "because of / owing to (because + 절과 구별)"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "en": "Summer is the best time of year at the lake. It is the season when the weather is the nicest and the scenery is the most beautiful.",
+      "ko": "여름은 호숫가에서 일 년 중 가장 좋은 때입니다. 여름은 날씨가 가장 좋고 경치가 가장 아름다운 계절입니다.",
+      "syntaxes": [
+        {
+          "title": "🧭 여름 = 호숫가의 가장 좋은 계절",
+          "desc": "3~4번 문장"
+        },
+        {
+          "title": "the best time of year  [최상급]",
+          "desc": "the + 최상급 + 범위(of year, at the lake)"
+        },
+        {
+          "title": "the season when the weather is the nicest  [관계부사 when]",
+          "desc": "때 선행사 + when + 완전한 절 (in which로 바꿔 쓸 수 있음)"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "en": "We know that parents have long considered Pine Lake a place where their kids could safely spend a fun-filled summer. Unfortunately, it is just not possible this year.",
+      "ko": "저희는 부모님들께서 오랫동안 파인 레이크를 자녀들이 즐거움 가득한 여름을 안전하게 보낼 수 있는 곳으로 여겨 오셨다는 것을 압니다. 안타깝게도, 올해는 그것이 그저 불가능합니다.",
+      "syntaxes": [
+        {
+          "title": "🧭 신뢰: 부모님들이 믿어 온 안전한 캠프 → 올해는 불가능",
+          "desc": "5~6번 문장"
+        },
+        {
+          "title": "considered Pine Lake a place  [consider O C]",
+          "desc": "O를 C로 여기다, C 앞 to be 생략 가능 (consider as 주의)"
+        },
+        {
+          "title": "a place where their kids could ~  [관계부사 where]",
+          "desc": "장소 선행사 + where + 완전한 절"
+        },
+        {
+          "title": "have long considered  [현재완료]",
+          "desc": "오랫동안 ~해 왔다 (계속)"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "en": "The pandemic has seriously damaged our organization financially. This is why we need your help.",
+      "ko": "팬데믹은 저희 단체에 재정적으로 심각한 피해를 입혔습니다. 이것이 저희가 여러분의 도움을 필요로 하는 이유입니다.",
+      "syntaxes": [
+        {
+          "title": "🧭 문제: 재정 타격 → 그래서 도움이 필요",
+          "desc": "7~8번 문장"
+        },
+        {
+          "title": "has seriously damaged  [현재완료]",
+          "desc": "과거에 입은 피해가 지금까지 영향"
+        },
+        {
+          "title": "This is why we need your help  [관계부사 why]",
+          "desc": "이것이 ~한 이유다 (the reason why에서 선행사 생략)"
+        },
+        {
+          "title": "This is why we need your help  [목적 판단]",
+          "desc": "편지의 목적 = 단체에 필요한 기부금 요청"
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "en": "Pine Lake has always relied on donations from friends of the camp. This year, those donations are even more important to us. If you help us, we will be able to reopen next summer bigger and better than ever. The Pine Lake Staff",
+      "ko": "파인 레이크는 늘 캠프를 아끼는 분들의 기부에 의지해 왔습니다. 올해는 그 기부가 저희에게 훨씬 더 중요합니다. 여러분께서 도와주신다면, 저희는 내년 여름에 그 어느 때보다 더 크고 더 좋게 다시 문을 열 수 있을 것입니다. 파인 레이크 직원 일동",
+      "syntaxes": [
+        {
+          "title": "🧭 요청: 기부해 주시면 → 내년에 더 크게 다시!",
+          "desc": "9~12번 문장"
+        },
+        {
+          "title": "has always relied on donations  [rely on]",
+          "desc": "depend on / count on, 현재완료 + always = 늘 ~해 왔다"
+        },
+        {
+          "title": "even more important  [비교급 강조]",
+          "desc": "much / far / even / still / a lot (very 틀림)"
+        },
+        {
+          "title": "If you help us, we will ~  [조건 부사절]",
+          "desc": "미래 뜻이어도 if절은 현재시제 (will help 틀림)"
+        },
+        {
+          "title": "will be able to reopen  [will be able to]",
+          "desc": "조동사 두 개 연속 불가 (will can 틀림)"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "type": "글의 목적",
+      "q": "윗글의 목적으로 가장 적절한 것은?",
+      "passage": "To the Pine Lake Camp Community: As you know, we had to cancel all of our summer camp activities due to the pandemic. ... If you help us, we will be able to reopen next summer bigger and better than ever.",
+      "choices": [
+        "여름 캠프 참가 신청 마감을 안내하려고",
+        "캠프를 다시 열기 위한 기부를 요청하려고",
+        "캠프 활동 취소에 따른 환불 절차를 설명하려고",
+        "새로 생긴 캠프 시설을 홍보하려고",
+        "자원봉사 지도 교사를 모집하려고"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "팬데믹으로 재정 피해를 입었고 That is why we need your help, 기부가 더욱 중요하다고 했으므로 기부 요청이 목적입니다.",
+        "traps": "① 올해 캠프는 아예 열지 못합니다.<br>③ 환불 이야기는 없습니다.",
+        "point": "편지글의 목적은 This is why we need your help / If you help us 같은 요청 문장에서 찾습니다."
+      }
+    },
+    {
+      "type": "제목 추론",
+      "q": "What is the best title for the passage?",
+      "passage": "The pandemic has seriously damaged our organization financially. This is why we need your help...",
+      "choices": [
+        "Help Pine Lake Camp Come Back Stronger Next Summer",
+        "A Thank-You Letter to Last Summer’s Campers",
+        "Summer Activities at Pine Lake Are Fully Booked",
+        "How to Stay Safe During a Pandemic Summer",
+        "The Best Lakes to Visit in Summer"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "도움(기부)을 받아 내년 여름 더 크고 좋게 다시 열겠다는 내용이므로 ①이 가장 적절합니다.",
+        "traps": "③ 올해 활동은 모두 취소되었습니다.<br>④ 팬데믹 안전 수칙은 다루지 않습니다.",
+        "point": "핵심어: help / reopen next summer bigger and better."
+      }
+    },
+    {
+      "type": "빈칸 추론 (관계부사)",
+      "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?",
+      "passage": "The pandemic has seriously damaged our organization financially. This is __________ we need your help.",
+      "choices": [
+        "where",
+        "when",
+        "which",
+        "why",
+        "what"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "앞 문장(재정 피해)이 도움이 필요한 '이유'이므로 This is why ~(이것이 ~하는 이유다)가 알맞습니다.",
+        "traps": "① where(장소), ② when(시간)은 의미가 맞지 않습니다.<br>③ which, ⑤ what 뒤에는 불완전한 절이 와야 하는데 we need your help는 완전한 절입니다.",
+        "point": "This is why + 결과 / This is because + 원인 — 13강 관계부사 why."
+      }
+    },
+    {
+      "type": "어법 오류 (관계부사)",
+      "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+      "passage": "It is the season ① <u>when</u> the weather is the nicest and the scenery is ② <u>the most beautiful</u>. We know that parents have long considered Pine Lake a place ③ <u>which</u> their kids could safely spend a fun-filled summer. Unfortunately, it is just not possible this year. The pandemic has seriously ④ <u>damaged</u> our organization financially. This is ⑤ <u>why</u> we need your help.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "선행사 a place 뒤에 '아이들이 즐거운 여름을 보낼 수 있는' 완전한 절이 오므로 관계부사 <b>where</b>(= in which)가 맞습니다.",
+        "traps": "① 선행사 the season(시간) + 완전한 절 → when 맞음.<br>⑤ This is why + 완전한 절 → 맞음.",
+        "point": "관계대명사(which) 뒤 = 불완전한 절 / 관계부사(where) 뒤 = 완전한 절."
+      }
+    },
+    {
+      "type": "어법 양자택일",
+      "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?",
+      "passage": "It is the season (A) [when / which] the weather is the nicest and the scenery is the most beautiful. We know that parents have long considered Pine Lake a place (B) [where / which] their kids could safely spend a fun-filled summer. ... This year, those donations are (C) [even / very] more important to us.",
+      "choices": [
+        "when – where – even",
+        "when – which – even",
+        "which – which – very",
+        "which – where – even",
+        "when – where – very"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "(A) 시간 선행사 + 완전한 절 → when / (B) 장소 선행사 + 완전한 절 → where / (C) 비교급(more important) 강조 → even.",
+        "traps": "(C) very는 비교급을 강조할 수 없습니다(much, even, still, far, a lot 가능).",
+        "point": "관계부사 = 전치사 + which: when = in which(시간), where = in which(장소)."
+      }
+    },
+    {
+      "type": "문맥 어휘",
+      "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+      "passage": "Summer is the ① <u>best</u> time of year at the lake. ... parents have long considered Pine Lake a place where their kids could ② <u>safely</u> spend a fun-filled summer. ③ <u>Unfortunately</u>, it is just not possible this year. The pandemic has seriously ④ <u>improved</u> our organization financially. This is why we need your help. Pine Lake has always ⑤ <u>relied on</u> donations from friends of the camp.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "팬데믹 때문에 도움이 필요하다고 했으므로 재정적으로 '피해를 입혔다(damaged)'가 알맞습니다. improved(개선했다)는 문맥과 반대입니다.",
+        "traps": "③ 올해는 불가능하다는 안타까운 소식 → Unfortunately 적절.<br>⑤ 늘 기부에 '의지해 왔다' → relied on 적절.",
+        "point": "seriously + 부정적 동사(damaged) → This is why we need your help 로 이어지는 인과 확인."
+      }
+    },
+    {
+      "type": "지칭 추론",
+      "q": "밑줄 친 <u>it</u>이 가리키는 내용으로 가장 적절한 것은?",
+      "passage": "We know that parents have long considered Pine Lake a place where their kids could safely spend a fun-filled summer. Unfortunately, <u>it</u> is just not possible this year.",
+      "choices": [
+        "호수의 경치가 가장 아름다운 것",
+        "부모님들이 기부금을 보내는 것",
+        "캠프가 재정적으로 독립하는 것",
+        "직원들이 편지를 쓰는 것",
+        "아이들이 파인 레이크에서 안전하고 즐거운 여름을 보내는 것"
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "바로 앞 문장의 '아이들이 파인 레이크에서 즐거움 가득한 여름을 안전하게 보내는 것'이 올해는 불가능하다는 뜻입니다.",
+        "traps": "① 경치는 여전히 아름답고, 불가능한 것이 아닙니다.<br>② 기부는 오히려 요청하는 내용입니다.",
+        "point": "it은 앞 문장 전체의 핵심 내용(캠프에서 여름 보내기)을 받습니다."
+      }
+    },
+    {
+      "type": "글의 순서",
+      "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+      "passage": "<b>[주어진 글]</b> To the Pine Lake Camp Community: As you know, we had to cancel all of our summer camp activities due to the pandemic.<br><br>(A) Summer is the best time of year at the lake. It is the season when the weather is the nicest and the scenery is the most beautiful. We know that parents have long considered Pine Lake a place where their kids could safely spend a fun-filled summer. Unfortunately, it is just not possible this year.<br>(B) Pine Lake has always relied on donations from friends of the camp. This year, those donations are even more important to us. If you help us, we will be able to reopen next summer bigger and better than ever.<br>(C) The pandemic has seriously damaged our organization financially. This is why we need your help.",
+      "choices": [
+        "(A) – (B) – (C)",
+        "(A) – (C) – (B)",
+        "(B) – (A) – (C)",
+        "(B) – (C) – (A)",
+        "(C) – (A) – (B)"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "캠프 취소 → (A) 여름은 최고의 계절이지만 올해는 불가능 → (C) 재정 피해, 그래서 도움 필요 → (B) 기부 요청과 내년 재개 약속 순서입니다.",
+        "traps": "(C)의 This is why we need your help 뒤에 (B)의 기부(donations) 이야기가 바로 이어져야 합니다.<br>(B)는 편지의 마무리(내년 재개)라 마지막입니다.",
+        "point": "편지 흐름: 상황 → 아쉬움 → 문제(재정) → 요청."
+      }
+    },
+    {
+      "type": "문장 삽입",
+      "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+      "passage": "<b>[주어진 문장]</b> It is the season when the weather is the nicest and the scenery is the most beautiful.<br><br>( ① ) As you know, we had to cancel all of our summer camp activities due to the pandemic. ( ② ) Summer is the best time of year at the lake. ( ③ ) We know that parents have long considered Pine Lake a place where their kids could safely spend a fun-filled summer. ( ④ ) Unfortunately, it is just not possible this year. ( ⑤ ) The pandemic has seriously damaged our organization financially.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "주어진 문장의 It은 Summer를 가리키고 the season(계절)으로 다시 설명하므로, Summer is the best time of year at the lake. 바로 뒤인 ③에 들어가야 합니다.",
+        "traps": "② 자리는 Summer가 나오기 전이라 It이 가리킬 대상이 없습니다.",
+        "point": "대명사 It ↔ 앞 문장 Summer, 관계부사 when ↔ 선행사 the season."
+      }
+    },
+    {
+      "type": "내용 불일치",
+      "q": "윗글의 내용과 일치하지 않는 것은?",
+      "passage": "Pine Lake has always relied on donations from friends of the camp. This year, those donations are even more important to us.",
+      "choices": [
+        "캠프는 팬데믹 때문에 여름 활동을 모두 취소했다.",
+        "부모들은 파인 레이크를 아이들이 안전하게 여름을 보낼 곳으로 여겨 왔다.",
+        "팬데믹은 캠프에 재정적으로 큰 피해를 주었다.",
+        "캠프는 올해 처음으로 기부금을 받기 시작했다.",
+        "도움을 받으면 내년 여름에 더 크고 좋게 다시 열 계획이다."
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "Pine Lake has always relied on donations — 캠프는 '늘' 기부에 의지해 왔으므로 올해 처음 받기 시작했다는 ④는 일치하지 않습니다.",
+        "traps": "① ③ ⑤는 각각 2·7·11번 문장과 일치합니다.",
+        "point": "always(늘) ↔ 처음으로: 빈도·시점 표현을 바꿔 오답을 만듭니다."
+      }
+    }
+  ],
+  "tf_en": [
+    {
+      "no": 1,
+      "q": "All of the summer camp activities were canceled because of the pandemic.",
+      "ans": "T",
+      "exp": "참(T): we had to cancel all of our summer camp activities due to the pandemic."
+    },
+    {
+      "no": 2,
+      "q": "The writer says winter is the season when the scenery is the most beautiful.",
+      "ans": "F",
+      "exp": "거짓(F): 경치가 가장 아름다운 계절은 여름(Summer)입니다."
+    },
+    {
+      "no": 3,
+      "q": "Parents have long thought of Pine Lake as a place where kids can spend summer safely.",
+      "ans": "T",
+      "exp": "참(T): 5번 문장과 같은 내용입니다."
+    },
+    {
+      "no": 4,
+      "q": "The camp has never needed donations before this year.",
+      "ans": "F",
+      "exp": "거짓(F): Pine Lake has always relied on donations."
+    },
+    {
+      "no": 5,
+      "q": "The camp hopes to reopen next summer bigger and better than ever.",
+      "ans": "T",
+      "exp": "참(T): 11번 문장과 같습니다."
+    }
+  ],
+  "tf_ko": [
+    {
+      "no": 1,
+      "q": "이 글은 캠프 공동체에게 보내는 편지이다.",
+      "ans": "T",
+      "exp": "참(T): To the Pine Lake Camp Community로 시작해 The Pine Lake Staff로 끝나는 편지입니다."
+    },
+    {
+      "no": 2,
+      "q": "캠프는 올해 여름 활동을 일부만 진행했다.",
+      "ans": "F",
+      "exp": "거짓(F): 모든(all) 여름 캠프 활동을 취소했습니다."
+    },
+    {
+      "no": 3,
+      "q": "팬데믹으로 캠프 단체가 재정적으로 심각한 피해를 입었다.",
+      "ans": "T",
+      "exp": "참(T): The pandemic has seriously damaged our organization financially."
+    },
+    {
+      "no": 4,
+      "q": "올해는 기부가 예년보다 덜 중요하다.",
+      "ans": "F",
+      "exp": "거짓(F): 올해 기부는 훨씬 더(even more) 중요하다고 했습니다."
+    },
+    {
+      "no": 5,
+      "q": "편지를 쓴 사람은 파인 레이크 직원들이다.",
+      "ans": "T",
+      "exp": "참(T): The Pine Lake Staff가 보낸 편지입니다."
+    }
+  ]
+},
+  9: {
+  "id": 9,
+  "course": "예비고1-13",
+  "badge": "예비고1 빠바 13강 (3)",
+  "title": "Polar Tourism: Good or Bad?",
+  "sub": "빠른독해 바른독해 기초세우기 13강 관계사의 이해 1 [지문 ③ 극지 관광의 두 얼굴]",
+  "paragraphs": [
+    {
+      "num": 1,
+      "en": "These days, the number of people traveling to the polar regions is increasing. Unfortunately, this threatens the local ecosystems.",
+      "ko": "요즘 극지방으로 여행하는 사람들의 수가 늘고 있다. 안타깝게도, 이것은 그 지역의 생태계를 위협한다.",
+      "syntaxes": [
+        {
+          "title": "🧭 현상: 극지 여행자 증가 → 생태계 위협",
+          "desc": "1~2번 문장"
+        },
+        {
+          "title": "the number of people ~ is  [the number of]",
+          "desc": "~의 수 → 단수 동사 (a number of + 복수 = 많은 → 복수 동사)"
+        },
+        {
+          "title": "people traveling to ~  [현재분사 후치수식]",
+          "desc": "people who are traveling to ~"
+        },
+        {
+          "title": "this threatens  [this]",
+          "desc": "앞 문장 전체(여행자가 늘어나는 것)를 받음"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "en": "Tourism increases the number of ships and airplanes in the area and adds to the risk of oil spills. Also, because those places where wildlife is accessible are limited, tourism mainly focuses on small areas, putting vegetation at risk.",
+      "ko": "관광은 그 지역의 배와 비행기 수를 늘리고, 기름 유출의 위험을 증가시킨다. 또한, 야생 생물에 접근할 수 있는 장소들이 한정되어 있기 때문에, 관광은 주로 좁은 지역에 집중되어 식생을 위험에 빠뜨린다.",
+      "syntaxes": [
+        {
+          "title": "🧭 부정: 기름 유출 위험 + 식생 위험",
+          "desc": "3~4번 문장"
+        },
+        {
+          "title": "Tourism increases ~ and adds to  [주어 수일치]",
+          "desc": "주어 Tourism 단수 → 두 동사 모두 -s (어법 ② add 틀림)"
+        },
+        {
+          "title": "adds to the risk  [add to]",
+          "desc": "~을 증가시키다 (add A to B = A를 B에 더하다 구별)"
+        },
+        {
+          "title": "those places where wildlife is accessible are  [관계부사 where]",
+          "desc": "주어 places(복수) → are, where 뒤 완전한 절"
+        },
+        {
+          "title": ", putting vegetation at risk  [분사구문]",
+          "desc": "결과 (그리고 식생을 위험에 빠뜨린다)"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "en": "On the positive side, polar tourism allows people to develop a close connection with rarely seen parts of the world. Plus, those who travel to these regions often end up becoming directly involved with conservation efforts.",
+      "ko": "긍정적인 측면에서 보면, 극지 관광은 사람들이 세상에서 좀처럼 볼 수 없는 지역과 가까운 유대를 맺게 해 준다. 게다가, 이 지역들을 여행하는 사람들은 흔히 결국 자연 보전 활동에 직접 참여하게 된다.",
+      "syntaxes": [
+        {
+          "title": "🧭 긍정 1·2: 자연과의 연결 + 보전 활동 참여",
+          "desc": "5~6번 문장"
+        },
+        {
+          "title": "allows people to develop  [allow O to-v]",
+          "desc": "O가 ~하게 해 주다 (make O 동사원형과 비교)"
+        },
+        {
+          "title": "rarely seen parts  [부사 + p.p.]",
+          "desc": "좀처럼 볼 수 없는 (명사 앞에서 수식)"
+        },
+        {
+          "title": "those who travel  [those who]",
+          "desc": "~하는 사람들 → 복수 동사 travel"
+        },
+        {
+          "title": "end up becoming  [end up -ing]",
+          "desc": "결국 ~하게 되다 (end up to become 틀림)"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "en": "Finally, tourism helps the local economy. In the Arctic, this added source of income has made residents much more financially independent. So, it is still debatable whether polar tourism is a good thing or a bad thing.",
+      "ko": "마지막으로, 관광은 지역 경제에 도움이 된다. 북극에서는 이렇게 더해진 수입원이 주민들을 재정적으로 훨씬 더 독립적으로 만들었다. 그래서 극지 관광이 좋은 것인지 나쁜 것인지는 여전히 논란의 여지가 있다.",
+      "syntaxes": [
+        {
+          "title": "🧭 긍정 3: 지역 경제 → 결론: 아직 논란",
+          "desc": "7~9번 문장"
+        },
+        {
+          "title": "has made residents much more financially independent  [make O C]",
+          "desc": "C 자리 형용사 (independently 틀림)"
+        },
+        {
+          "title": "much more  [비교급 강조]",
+          "desc": "much / far / even / still / a lot"
+        },
+        {
+          "title": "it is still debatable whether ~  [가주어 it]",
+          "desc": "it = 가주어, whether절 = 진주어 (~인지 아닌지)"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "type": "주제 추론",
+      "q": "윗글의 주제로 가장 적절한 것은?",
+      "passage": "These days, the number of people traveling to the polar regions is increasing. ... So, it is still debatable whether polar tourism is a good thing or a bad thing.",
+      "choices": [
+        "the rapid growth of airline routes to the Arctic",
+        "ways to prevent oil spills in the polar regions",
+        "the economic history of Arctic residents",
+        "why wildlife in the polar regions is disappearing",
+        "the negative and positive effects of polar tourism"
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "생태계 위협·기름 유출·식생 위험(부정)과 자연과의 연결·보전 참여·지역 경제(긍정)를 함께 다루고, 여전히 논란이라고 맺으므로 ⑤입니다.",
+        "traps": "② 기름 유출은 부정적 영향의 한 예일 뿐입니다.<br>③ 지역 경제는 긍정적 영향의 한 예입니다.",
+        "point": "On the positive side 앞뒤로 부정/긍정이 나뉘는 구조 → 양면을 모두 담은 보기."
+      }
+    },
+    {
+      "type": "제목 추론",
+      "q": "What is the best title for the passage?",
+      "passage": "On the positive side, polar tourism allows people to develop a close connection with rarely seen parts of the world...",
+      "choices": [
+        "Polar Tourism: Harm, Help, and an Open Question",
+        "Why Tourists Should Never Visit the Arctic",
+        "The Arctic: The World’s Richest Region",
+        "How Polar Animals Adapt to the Cold",
+        "Building More Airports in the Polar Regions"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "해로움(harm)과 이로움(help)을 모두 소개하고 결론을 열어 둔(debatable) 글이므로 ①이 적절합니다.",
+        "traps": "② 한쪽(반대) 입장만 담았습니다.<br>⑤ 비행기가 늘어나는 것은 부정적 영향으로 언급되었을 뿐입니다.",
+        "point": "결론 문장 it is still debatable whether ~ → '아직 답이 정해지지 않은 질문'."
+      }
+    },
+    {
+      "type": "빈칸 추론",
+      "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?",
+      "passage": "Finally, tourism helps the local economy. In the Arctic, this added source of income has made residents much more financially independent. So, it is still __________ whether polar tourism is a good thing or a bad thing.",
+      "choices": [
+        "debatable",
+        "obvious",
+        "certain",
+        "illegal",
+        "impossible"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "좋은 점과 나쁜 점이 모두 있으므로 좋은지 나쁜지는 '논란의 여지가 있다(debatable)'가 알맞습니다.",
+        "traps": "② obvious, ③ certain은 '분명하다'는 뜻이라 양면을 소개한 글의 결론과 맞지 않습니다.",
+        "point": "whether A or B(A인지 B인지)와 어울리는 말: debatable, uncertain, unclear."
+      }
+    },
+    {
+      "type": "어법 오류 (관계사)",
+      "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+      "passage": "These days, the number of people traveling to the polar regions ① <u>is</u> increasing. ... Tourism increases the number of ships and airplanes in the area and ② <u>adds</u> to the risk of oil spills. Also, because those places ③ <u>which</u> wildlife is accessible are limited, tourism mainly focuses on small areas, ④ <u>putting</u> vegetation at risk. ... Plus, those ⑤ <u>who</u> travel to these regions often end up becoming directly involved with conservation efforts.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "those places 뒤에 wildlife is accessible이라는 완전한 절이 오므로 관계대명사 which가 아니라 관계부사 <b>where</b>가 맞습니다.",
+        "traps": "① the number of + 복수명사 → 단수 동사 is 맞음.<br>② 주어 Tourism(단수)의 두 번째 동사 → adds 맞음.<br>⑤ those who = ~하는 사람들 → 맞음.",
+        "point": "the number of(~의 수, 단수) vs a number of(많은, 복수) / which(불완전) vs where(완전)."
+      }
+    },
+    {
+      "type": "어법 양자택일",
+      "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?",
+      "passage": "These days, the number of people traveling to the polar regions (A) [is / are] increasing. ... because those places (B) [where / which] wildlife is accessible are limited, ... Plus, those (C) [who / which] travel to these regions often end up becoming directly involved with conservation efforts.",
+      "choices": [
+        "are – where – who",
+        "is – which – who",
+        "is – where – which",
+        "is – where – who",
+        "are – which – which"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "(A) the number of ~ 는 단수 → is / (B) 뒤가 완전한 절 → where / (C) 사람(those) + 동사 travel → 주격 who.",
+        "traps": "(A) people에 끌려 are를 고르면 안 됩니다.<br>(C) those who(~하는 사람들)는 고정 표현입니다.",
+        "point": "수일치는 진짜 주어(the number)를 찾고, 관계사는 뒤 절의 완전/불완전을 봅니다."
+      }
+    },
+    {
+      "type": "문맥 어휘",
+      "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+      "passage": "Unfortunately, this ① <u>threatens</u> the local ecosystems. Tourism ② <u>increases</u> the number of ships and airplanes in the area and adds to the risk of oil spills. Also, because those places where wildlife is accessible are ③ <u>limited</u>, tourism mainly focuses on small areas, putting vegetation at risk. On the positive side, polar tourism allows people to develop a close connection with ④ <u>rarely</u> seen parts of the world. ... In the Arctic, this added source of income has made residents much more financially ⑤ <u>dependent</u>.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "관광은 지역 경제를 돕는다(helps the local economy)고 했으므로, 수입원이 늘어 주민들이 재정적으로 더 '독립적(independent)'이 되었다가 알맞습니다.",
+        "traps": "③ 갈 수 있는 곳이 한정되어(limited) 좁은 곳에 몰린다 → 적절.<br>④ 좀처럼 볼 수 없는(rarely seen) 지역 → 적절.",
+        "point": "긍정적 측면(helps the local economy) 문맥 → financially independent."
+      }
+    },
+    {
+      "type": "지칭 추론",
+      "q": "밑줄 친 <u>this</u>가 가리키는 내용으로 가장 적절한 것은?",
+      "passage": "These days, the number of people traveling to the polar regions is increasing. Unfortunately, <u>this</u> threatens the local ecosystems.",
+      "choices": [
+        "극지방의 기온이 오르는 것",
+        "극지방을 여행하는 사람들의 수가 늘어나는 것",
+        "지역 주민들의 수입이 늘어나는 것",
+        "야생 생물의 수가 줄어드는 것",
+        "보전 활동에 참여하는 사람이 늘어나는 것"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "this는 바로 앞 문장 전체, 즉 극지방 여행자 수가 늘고 있는 현상을 가리킵니다.",
+        "traps": "③ ⑤는 글 뒷부분의 긍정적 영향입니다.",
+        "point": "this/that은 앞 문장 전체 내용을 받을 수 있습니다."
+      }
+    },
+    {
+      "type": "글의 순서",
+      "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+      "passage": "<b>[주어진 글]</b> These days, the number of people traveling to the polar regions is increasing. Unfortunately, this threatens the local ecosystems.<br><br>(A) On the positive side, polar tourism allows people to develop a close connection with rarely seen parts of the world. Plus, those who travel to these regions often end up becoming directly involved with conservation efforts.<br>(B) Tourism increases the number of ships and airplanes in the area and adds to the risk of oil spills. Also, because those places where wildlife is accessible are limited, tourism mainly focuses on small areas, putting vegetation at risk.<br>(C) Finally, tourism helps the local economy. In the Arctic, this added source of income has made residents much more financially independent. So, it is still debatable whether polar tourism is a good thing or a bad thing.",
+      "choices": [
+        "(A) – (C) – (B)",
+        "(B) – (C) – (A)",
+        "(B) – (A) – (C)",
+        "(C) – (A) – (B)",
+        "(C) – (B) – (A)"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "생태계 위협 → (B) 구체적 피해(기름 유출·식생) → (A) On the positive side 긍정 1·2 → (C) Finally 긍정 3과 결론 순서입니다.",
+        "traps": "(A)는 On the positive side로 부정적 내용 뒤에 와야 합니다.<br>(C)는 Finally와 결론(So, ~ debatable)이 있어 마지막입니다.",
+        "point": "연결어 신호: Also(부정 추가) → On the positive side(전환) → Plus → Finally → So."
+      }
+    },
+    {
+      "type": "문장 삽입",
+      "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+      "passage": "<b>[주어진 문장]</b> Plus, those who travel to these regions often end up becoming directly involved with conservation efforts.<br><br>( ① ) Tourism increases the number of ships and airplanes in the area and adds to the risk of oil spills. ( ② ) Also, because those places where wildlife is accessible are limited, tourism mainly focuses on small areas, putting vegetation at risk. ( ③ ) On the positive side, polar tourism allows people to develop a close connection with rarely seen parts of the world. ( ④ ) Finally, tourism helps the local economy. ( ⑤ ) In the Arctic, this added source of income has made residents much more financially independent.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "Plus(게다가)는 긍정적 내용을 하나 더 보태는 말이므로, 첫 번째 긍정(close connection) 뒤이자 Finally 앞인 ④가 알맞습니다.",
+        "traps": "③ 자리는 아직 부정적 내용 뒤라 긍정의 '추가'가 될 수 없습니다.<br>⑤ 자리는 지역 경제 설명(Finally ~ this added source)을 끊습니다.",
+        "point": "Plus / Also / Finally 같은 나열 신호의 순서를 맞춥니다."
+      }
+    },
+    {
+      "type": "내용 일치",
+      "q": "윗글의 내용과 일치하는 것은?",
+      "passage": "Tourism increases the number of ships and airplanes in the area and adds to the risk of oil spills.",
+      "choices": [
+        "극지방을 찾는 여행자 수는 줄어들고 있다.",
+        "관광객이 늘면 그 지역의 기름 유출 위험도 커진다.",
+        "관광은 넓은 지역에 고르게 퍼져 식생 피해가 적다.",
+        "북극 주민들은 관광 때문에 재정적으로 더 의존적이 되었다.",
+        "글쓴이는 극지 관광이 확실히 좋은 것이라고 결론짓는다."
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "관광은 배와 비행기 수를 늘려 기름 유출 위험을 더한다(adds to the risk of oil spills)고 했으므로 ②가 일치합니다.",
+        "traps": "① 늘고 있습니다(increasing).<br>③ 좁은 지역에 몰려 식생을 위험에 빠뜨립니다.<br>⑤ 여전히 논란(debatable)이라고 했습니다.",
+        "point": "increase ↔ decrease, small areas ↔ 넓은 지역, independent ↔ dependent 반대말 함정 주의."
+      }
+    }
+  ],
+  "tf_en": [
+    {
+      "no": 1,
+      "q": "The number of people traveling to the polar regions is decreasing these days.",
+      "ans": "F",
+      "exp": "거짓(F): is increasing(늘고 있다)."
+    },
+    {
+      "no": 2,
+      "q": "More ships and airplanes in the area add to the risk of oil spills.",
+      "ans": "T",
+      "exp": "참(T): 3번 문장 내용입니다."
+    },
+    {
+      "no": 3,
+      "q": "Tourism mainly focuses on small areas because accessible places are limited.",
+      "ans": "T",
+      "exp": "참(T): 야생 생물에 접근할 수 있는 곳이 한정되어 좁은 지역에 몰립니다."
+    },
+    {
+      "no": 4,
+      "q": "People who travel to these regions never join conservation efforts.",
+      "ans": "F",
+      "exp": "거짓(F): 흔히 결국 보전 활동에 직접 참여하게 됩니다(end up becoming directly involved)."
+    },
+    {
+      "no": 5,
+      "q": "The writer thinks it is still debatable whether polar tourism is good or bad.",
+      "ans": "T",
+      "exp": "참(T): 마지막 문장 내용입니다."
+    }
+  ],
+  "tf_ko": [
+    {
+      "no": 1,
+      "q": "극지방 관광은 그 지역의 생태계를 위협한다.",
+      "ans": "T",
+      "exp": "참(T): this threatens the local ecosystems."
+    },
+    {
+      "no": 2,
+      "q": "관광객은 넓은 지역에 고르게 흩어져 식생에 거의 피해를 주지 않는다.",
+      "ans": "F",
+      "exp": "거짓(F): 좁은 지역에 집중되어 식생을 위험에 빠뜨립니다."
+    },
+    {
+      "no": 3,
+      "q": "극지 관광은 사람들이 좀처럼 볼 수 없는 곳과 가까운 유대를 맺게 해 준다.",
+      "ans": "T",
+      "exp": "참(T): 5번 문장 내용입니다."
+    },
+    {
+      "no": 4,
+      "q": "북극 주민들은 관광 수입 덕분에 재정적으로 훨씬 더 독립적이 되었다.",
+      "ans": "T",
+      "exp": "참(T): 8번 문장 내용입니다."
+    },
+    {
+      "no": 5,
+      "q": "글쓴이는 극지 관광을 당장 금지해야 한다고 주장한다.",
+      "ans": "F",
+      "exp": "거짓(F): 좋은지 나쁜지 여전히 논란이라고만 했습니다."
+    }
+  ]
+},
+  10: {
+  "id": 10,
+  "course": "예비고1-13",
+  "badge": "예비고1 빠바 13강 (4)",
+  "title": "The Kuleshov Effect",
+  "sub": "빠른독해 바른독해 기초세우기 13강 관계사의 이해 1 [지문 ④ 쿨레쇼프 효과]",
+  "paragraphs": [
+    {
+      "num": 1,
+      "en": "Lev Kuleshov was a Russian director who believed editing is the most important aspect of filmmaking. In 1921, he gave a presentation which demonstrated what became known as the Kuleshov effect.",
+      "ko": "레프 쿨레쇼프는 편집이 영화 제작에서 가장 중요한 측면이라고 믿었던 러시아 감독이었다. 1921년에 그는 쿨레쇼프 효과라고 알려지게 된 것을 입증하는 발표를 했다.",
+      "syntaxes": [
+        {
+          "title": "🧭 도입: 편집이 제일 중요하다고 믿은 감독",
+          "desc": "1~2번 문장"
+        },
+        {
+          "title": "a Russian director who believed ~  [주격 관계대명사]",
+          "desc": "사람 선행사 + who + 동사"
+        },
+        {
+          "title": "believed (that) editing is ~  [that 생략]",
+          "desc": "believe의 목적어 명사절, 접속사 that 생략"
+        },
+        {
+          "title": "demonstrated what became known as ~  [관계대명사 what]",
+          "desc": "what = the thing which (앞에 선행사 없음)"
+        },
+        {
+          "title": "became known as the Kuleshov effect  [be known as]",
+          "desc": "~로 알려지다 (be known for = ~로 유명하다 구별)"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "en": "He projected a series of images onto a screen: first, a famous actor, followed by a bowl of soup; next, the same actor, followed by a girl in a coffin; and finally, the actor again, followed by an attractive woman.",
+      "ko": "그는 일련의 이미지를 스크린에 비췄다. 처음에는 유명한 배우에 이어 수프 한 그릇이, 다음에는 같은 배우에 이어 관 속의 소녀가, 그리고 마지막으로 다시 그 배우에 이어 매력적인 여성이 나왔다.",
+      "syntaxes": [
+        {
+          "title": "🧭 실험: 배우 + 수프 / 관 / 여자",
+          "desc": "3번 문장"
+        },
+        {
+          "title": "a famous actor, followed by a bowl of soup  [p.p. 구문]",
+          "desc": "~이 뒤따르는 (A, followed by B = A 다음에 B)"
+        },
+        {
+          "title": "a series of images: first ~; next ~; and finally ~  [콜론·세미콜론]",
+          "desc": "콜론 뒤 예시 세 쌍, 세미콜론으로 나눔"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "en": "When asked about what they had seen, viewers said the actor looked hungry in the first series of images, sad in the second, and romantic in the third. However, all three images of the actor were identical.",
+      "ko": "자신들이 본 것에 대해 질문을 받았을 때, 관객들은 그 배우가 첫 번째 이미지들에서는 배고파 보였고, 두 번째에서는 슬퍼 보였으며, 세 번째에서는 사랑에 빠진 듯 보였다고 말했다. 그러나 배우의 세 이미지는 모두 똑같았다.",
+      "syntaxes": [
+        {
+          "title": "🧭 반응: 배고픔·슬픔·사랑 → 반전: 이미지는 똑같다!",
+          "desc": "4~5번 문장"
+        },
+        {
+          "title": "When asked about ~  [분사구문]",
+          "desc": "When they were asked about ~ (주어 + be동사 생략)"
+        },
+        {
+          "title": "what they had seen  [과거완료]",
+          "desc": "말하기(said)보다 본 것이 먼저"
+        },
+        {
+          "title": "sad in the second, and romantic in the third  [반복 생략]",
+          "desc": "looked 반복 생략, look + 형용사 = ~해 보이다"
+        },
+        {
+          "title": "However, all three images ~  [However]",
+          "desc": "접속부사 (그러나) → 글의 반전"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "en": "Kuleshov had influenced how it was interpreted through editing. He had also caused two separate locations to appear to be a single place. This showed that manipulating perception is possible through creative editing.",
+      "ko": "쿨레쇼프가 편집을 통해 그것이 해석되는 방식에 영향을 미쳤던 것이다. 그는 또한 서로 떨어진 두 장소가 하나의 장소인 것처럼 보이게 만들기도 했다. 이것은 창의적인 편집을 통해 지각을 조작하는 것이 가능하다는 것을 보여 주었다.",
+      "syntaxes": [
+        {
+          "title": "🧭 결론: 편집으로 지각을 조작할 수 있다",
+          "desc": "6~8번 문장"
+        },
+        {
+          "title": "influenced how it was interpreted  [how 명사절]",
+          "desc": "그것이 해석되는 방식 (the way how 함께 쓰지 않음)"
+        },
+        {
+          "title": "caused two separate locations to appear  [cause O to-v]",
+          "desc": "O가 ~하게 만들다 (to부정사)"
+        },
+        {
+          "title": "manipulating perception is possible  [동명사 주어]",
+          "desc": "~하는 것 → 단수 동사 is"
+        },
+        {
+          "title": "manipulating perception  [빈칸 정답]",
+          "desc": "같은 얼굴도 편집에 따라 다르게 보임 = 지각 조작"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "type": "주제 추론",
+      "q": "윗글의 주제로 가장 적절한 것은?",
+      "passage": "Lev Kuleshov was a Russian director who believed editing is the most important aspect of filmmaking. ... This showed that manipulating perception is possible through creative editing.",
+      "choices": [
+        "the life story of a famous Russian actor",
+        "why soup and coffins appeared in early films",
+        "the technical history of film projectors",
+        "how editing can change the way viewers interpret images",
+        "how actors express hunger and sadness"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "똑같은 배우 얼굴도 앞뒤에 붙인 장면(편집)에 따라 관객이 다르게 해석했다는 실험이므로 ④가 주제입니다.",
+        "traps": "① 배우의 일생이 아니라 감독의 실험입니다.<br>⑤ 배우는 표정을 바꾸지 않았습니다(identical).",
+        "point": "결론 문장: manipulating perception is possible through creative editing."
+      }
+    },
+    {
+      "type": "제목 추론",
+      "q": "What is the best title for the passage?",
+      "passage": "However, all three images of the actor were identical. Kuleshov had influenced how it was interpreted through editing.",
+      "choices": [
+        "The Most Famous Actor of 1921",
+        "How to Film Two Places at Once Cheaply",
+        "Same Face, Different Feelings: The Power of Editing",
+        "Why Viewers Prefer Romantic Movies",
+        "Russian Food in Classic Cinema"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "같은 얼굴(identical)이 편집 때문에 배고픔·슬픔·사랑으로 다르게 보였다는 내용을 담은 ③이 가장 적절합니다.",
+        "traps": "② 두 장소를 하나처럼 보이게 한 것은 부가 사례이며 '싸게'는 근거가 없습니다.",
+        "point": "핵심 대비: same(똑같은 얼굴) ↔ different(다른 해석)."
+      }
+    },
+    {
+      "type": "빈칸 추론",
+      "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?",
+      "passage": "Kuleshov had influenced how it was interpreted through editing. He had also caused two separate locations to appear to be a __________ place.",
+      "choices": [
+        "single",
+        "dangerous",
+        "foreign",
+        "crowded",
+        "hidden"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "서로 떨어진(separate) 두 장소를 편집으로 '하나의(single)' 장소처럼 보이게 했다는 뜻입니다.",
+        "traps": "편집으로 지각을 바꾼 예이므로 separate ↔ single의 대비가 핵심입니다. 나머지는 근거가 없습니다.",
+        "point": "two separate locations → a single place (둘 → 하나)."
+      }
+    },
+    {
+      "type": "어법 오류 (관계사)",
+      "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+      "passage": "Lev Kuleshov was a Russian director ① <u>who</u> believed editing is the most important aspect of filmmaking. In 1921, he gave a presentation ② <u>which</u> demonstrated ③ <u>that</u> became known as the Kuleshov effect. ... When ④ <u>asked</u> about what they had seen, viewers said the actor looked hungry in the first series of images ... He had also caused two separate locations ⑤ <u>to appear</u> to be a single place.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "demonstrated의 목적어 자리이고 뒤에 주어가 빠진 절(became known as ~)이 오며 앞에 선행사가 없으므로 <b>what</b>(~인 것)이 맞습니다.",
+        "traps": "② 선행사 a presentation + 주격 → which 맞음.<br>④ When (they were) asked → 수동 분사구문 맞음.<br>⑤ cause O to-v → to appear 맞음.",
+        "point": "선행사 없음 + 불완전한 절 = what. that은 접속사일 때 뒤에 완전한 절."
+      }
+    },
+    {
+      "type": "어법 양자택일",
+      "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?",
+      "passage": "Lev Kuleshov was a Russian director (A) [who / which] believed editing is the most important aspect of filmmaking. In 1921, he gave a presentation which demonstrated (B) [what / that] became known as the Kuleshov effect. ... Kuleshov had influenced (C) [how / what] it was interpreted through editing.",
+      "choices": [
+        "which – what – how",
+        "who – that – how",
+        "who – what – what",
+        "which – that – what",
+        "who – what – how"
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "(A) 사람 선행사(director) → who / (B) 선행사 없는 불완전한 절 → what / (C) it was interpreted는 완전한 절(수동태) → how(~하는 방식).",
+        "traps": "(C) what 뒤에는 목적어나 주어가 빠진 불완전한 절이 와야 하는데 it was interpreted는 완전합니다.",
+        "point": "how + 완전한 절 = the way + 완전한 절 (13강 관계부사 how)."
+      }
+    },
+    {
+      "type": "문맥 어휘",
+      "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+      "passage": "When asked about what they had seen, viewers said the actor looked ① <u>hungry</u> in the first series of images, ② <u>sad</u> in the second, and ③ <u>romantic</u> in the third. However, all three images of the actor were ④ <u>different</u>. Kuleshov had ⑤ <u>influenced</u> how it was interpreted through editing.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "However(그러나) 뒤에서 관객의 반응을 뒤집으므로, 배우의 세 이미지는 사실 '똑같았다(identical)'가 알맞습니다.",
+        "traps": "① 수프 → 배고파 보임, ② 관 속 소녀 → 슬퍼 보임, ③ 매력적인 여자 → 사랑에 빠진 듯 → 모두 적절.",
+        "point": "However = 반전 신호 → 관객은 달라 보였다 ↔ 실제로는 같았다."
+      }
+    },
+    {
+      "type": "지칭 추론",
+      "q": "밑줄 친 <u>it</u>이 가리키는 것으로 가장 적절한 것은?",
+      "passage": "However, all three images of the actor were identical. Kuleshov had influenced how <u>it</u> was interpreted through editing.",
+      "choices": [
+        "배우의 (똑같은) 얼굴 이미지",
+        "수프 한 그릇",
+        "관객의 질문",
+        "서로 떨어진 두 장소",
+        "1921년의 발표"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "편집으로 해석이 달라진 대상은 똑같았던 배우의 얼굴 이미지입니다.",
+        "traps": "② 수프는 배우 다음에 이어 붙인 장면일 뿐입니다.<br>④ 두 장소는 다음 문장의 다른 사례입니다.",
+        "point": "앞 문장 all three images of the actor were identical → 그 이미지가 '어떻게 해석되는지'."
+      }
+    },
+    {
+      "type": "글의 순서",
+      "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+      "passage": "<b>[주어진 글]</b> Lev Kuleshov was a Russian director who believed editing is the most important aspect of filmmaking. In 1921, he gave a presentation which demonstrated what became known as the Kuleshov effect.<br><br>(A) When asked about what they had seen, viewers said the actor looked hungry in the first series of images, sad in the second, and romantic in the third. However, all three images of the actor were identical.<br>(B) He projected a series of images onto a screen: first, a famous actor, followed by a bowl of soup; next, the same actor, followed by a girl in a coffin; and finally, the actor again, followed by an attractive woman.<br>(C) Kuleshov had influenced how it was interpreted through editing. He had also caused two separate locations to appear to be a single place. This showed that manipulating perception is possible through creative editing.",
+      "choices": [
+        "(A) – (C) – (B)",
+        "(B) – (A) – (C)",
+        "(B) – (C) – (A)",
+        "(C) – (A) – (B)",
+        "(C) – (B) – (A)"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "발표 소개 → (B) 실험 방법(이미지 순서) → (A) 관객 반응과 반전(똑같은 얼굴) → (C) 편집의 힘이라는 결론 순서입니다.",
+        "traps": "(A)의 what they had seen은 (B)에서 보여 준 장면이 먼저 나와야 이해됩니다.<br>(C)의 it은 (A)의 images of the actor를 받습니다.",
+        "point": "실험 글의 흐름: 방법 → 결과 → 해석(결론)."
+      }
+    },
+    {
+      "type": "문장 삽입",
+      "q": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+      "passage": "<b>[주어진 문장]</b> However, all three images of the actor were identical.<br><br>( ① ) He projected a series of images onto a screen: first, a famous actor, followed by a bowl of soup; next, the same actor, followed by a girl in a coffin; and finally, the actor again, followed by an attractive woman. ( ② ) When asked about what they had seen, viewers said the actor looked hungry in the first series of images, sad in the second, and romantic in the third. ( ③ ) Kuleshov had influenced how it was interpreted through editing. ( ④ ) He had also caused two separate locations to appear to be a single place. ( ⑤ ) This showed that manipulating perception is possible through creative editing.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "관객이 배우가 배고프고·슬프고·사랑에 빠진 듯 보였다고 말한 뒤 However로 '사실은 똑같았다'고 반전해야 하며, 그 뒤 it(그 이미지)의 해석 이야기로 이어지므로 ③입니다.",
+        "traps": "② 자리는 관객 반응이 나오기 전이라 However의 반전이 성립하지 않습니다.",
+        "point": "However의 앞 = 반대 내용(서로 달라 보임), 뒤 = it의 해석."
+      }
+    },
+    {
+      "type": "내용 일치",
+      "q": "윗글의 내용과 일치하는 것은?",
+      "passage": "In 1921, he gave a presentation which demonstrated what became known as the Kuleshov effect.",
+      "choices": [
+        "쿨레쇼프는 연기가 영화 제작에서 가장 중요하다고 믿었다.",
+        "관객은 세 장면 모두에서 배우가 슬퍼 보인다고 했다.",
+        "실험에 사용된 배우의 얼굴 이미지는 장면마다 달랐다.",
+        "쿨레쇼프는 두 장소를 하나로 보이게 하는 데 실패했다.",
+        "쿨레쇼프 효과는 1921년의 발표에서 소개되었다."
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "In 1921, he gave a presentation which demonstrated ~ the Kuleshov effect 이므로 ⑤가 일치합니다.",
+        "traps": "① 연기가 아니라 편집(editing)입니다.<br>② 배고픔·슬픔·사랑으로 각각 달랐습니다.<br>③ 세 이미지는 똑같았습니다(identical).",
+        "point": "editing ↔ acting, identical ↔ different 바꿔치기 함정."
+      }
+    }
+  ],
+  "tf_en": [
+    {
+      "no": 1,
+      "q": "Kuleshov believed acting is the most important part of filmmaking.",
+      "ans": "F",
+      "exp": "거짓(F): 편집(editing)이 가장 중요하다고 믿었습니다."
+    },
+    {
+      "no": 2,
+      "q": "In the experiment, the actor was followed by a bowl of soup, a girl in a coffin, and an attractive woman.",
+      "ans": "T",
+      "exp": "참(T): 3번 문장 내용입니다."
+    },
+    {
+      "no": 3,
+      "q": "Viewers said the actor looked hungry after the image of the soup.",
+      "ans": "T",
+      "exp": "참(T): hungry in the first series of images."
+    },
+    {
+      "no": 4,
+      "q": "The actor’s face was different in each of the three images.",
+      "ans": "F",
+      "exp": "거짓(F): all three images of the actor were identical."
+    },
+    {
+      "no": 5,
+      "q": "The experiment showed that creative editing can change what people perceive.",
+      "ans": "T",
+      "exp": "참(T): manipulating perception is possible through creative editing."
+    }
+  ],
+  "tf_ko": [
+    {
+      "no": 1,
+      "q": "쿨레쇼프는 러시아의 영화감독이었다.",
+      "ans": "T",
+      "exp": "참(T): a Russian director."
+    },
+    {
+      "no": 2,
+      "q": "쿨레쇼프 효과는 1931년의 발표에서 처음 소개되었다.",
+      "ans": "F",
+      "exp": "거짓(F): 1921년의 발표입니다."
+    },
+    {
+      "no": 3,
+      "q": "관객은 관 속 소녀 장면 뒤의 배우가 슬퍼 보인다고 했다.",
+      "ans": "T",
+      "exp": "참(T): sad in the second."
+    },
+    {
+      "no": 4,
+      "q": "쿨레쇼프는 서로 떨어진 두 장소를 하나의 장소처럼 보이게 만들었다.",
+      "ans": "T",
+      "exp": "참(T): 7번 문장 내용입니다."
+    },
+    {
+      "no": 5,
+      "q": "실험에서 배우는 장면마다 표정을 다르게 연기했다.",
+      "ans": "F",
+      "exp": "거짓(F): 세 이미지는 모두 똑같았습니다."
+    }
+  ]
+},
+  11: {
+  "id": 11,
+  "course": "예비고1-13",
+  "badge": "예비고1 빠바 13강 (5)",
+  "title": "Exergames for the Elderly",
+  "sub": "빠른독해 바른독해 기초세우기 13강 관계사의 이해 1 [지문 ⑤ 노인을 위한 엑서게임]",
+  "paragraphs": [
+    {
+      "num": 1,
+      "en": "The good news is that human beings are living longer than ever before. The bad news is that the elderly still face health risks that can affect them both mentally and physically. That’s why exergames were created.",
+      "ko": "좋은 소식은 인간이 그 어느 때보다 더 오래 살고 있다는 것이다. 나쁜 소식은 노인들이 여전히 정신적으로나 신체적으로 그들에게 영향을 줄 수 있는 건강 위험에 직면해 있다는 것이다. 그것이 엑서게임이 만들어진 이유이다.",
+      "syntaxes": [
+        {
+          "title": "🧭 문제: 오래 살지만 건강 위험 → 그래서 엑서게임 탄생",
+          "desc": "1~3번 문장"
+        },
+        {
+          "title": "The good news is that ~ / The bad news is that ~  [대구 구조]",
+          "desc": "같은 틀로 대조, 보어 자리 that절"
+        },
+        {
+          "title": "the elderly  [the + 형용사]",
+          "desc": "노인들 (복수 취급 → face)"
+        },
+        {
+          "title": "health risks that can affect them  [주격 관계대명사]",
+          "desc": "선행사 risks + that + 동사"
+        },
+        {
+          "title": "That’s why exergames were created  [관계부사 why]",
+          "desc": "그것이 ~한 이유다 (앞 내용 = 원인)"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "en": "They are programs that combine computer gaming with a full-body workout. Most exergames provide a moderate workout that is the equivalent of taking a walk at a fast speed.",
+      "ko": "그것들은 컴퓨터 게임과 전신 운동을 결합한 프로그램이다. 대부분의 엑서게임은 빠른 속도로 걷는 것에 맞먹는 적당한 강도의 운동을 제공한다.",
+      "syntaxes": [
+        {
+          "title": "🧭 정의 + 강도: 게임 + 전신 운동 = 빠르게 걷기 수준",
+          "desc": "4~5번 문장"
+        },
+        {
+          "title": "combine computer gaming with a full-body workout  [combine A with B]",
+          "desc": "A를 B와 결합하다"
+        },
+        {
+          "title": "the equivalent of taking a walk  [the equivalent of]",
+          "desc": "~에 맞먹는 것 (of + 동명사)"
+        },
+        {
+          "title": "a moderate workout that is ~  [주격 관계대명사]",
+          "desc": "선행사 workout(단수) → is"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "en": "Walking is considered one of the best exercises for older individuals, as it causes little damage to the knees and ankles. However, they also encourage users to make complex movements that include changes in step length, direction, and speed.",
+      "ko": "걷기는 무릎과 발목에 손상을 거의 주지 않기 때문에, 나이 든 사람들에게 가장 좋은 운동 중 하나로 여겨진다. 그러나 그것들은 또한 사용자들이 보폭, 방향, 속도의 변화를 포함하는 복잡한 동작을 하도록 장려한다.",
+      "syntaxes": [
+        {
+          "title": "🧭 걷기는 관절에 무리가 적다 / 그러나 복합 동작까지!",
+          "desc": "6~7번 문장"
+        },
+        {
+          "title": "Walking is considered one of ~  [수동태]",
+          "desc": "consider A (to be) B의 수동"
+        },
+        {
+          "title": "one of the best exercises  [one of the 최상급]",
+          "desc": "최상급 뒤 복수명사 (exercise 틀림)"
+        },
+        {
+          "title": ", as it causes little damage  [이유의 as]",
+          "desc": "~이기 때문에, little = 거의 없는"
+        },
+        {
+          "title": "encourage users to make  [encourage O to-v]",
+          "desc": "O가 ~하도록 장려하다"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "en": "Elderly individuals who use exergames for just a short time every day have experienced significant improvements in their overall health and wellbeing.",
+      "ko": "매일 아주 짧은 시간만이라도 엑서게임을 하는 노인들은 전반적인 건강과 행복에서 상당한 향상을 경험해 왔다.",
+      "syntaxes": [
+        {
+          "title": "🧭 효과: 매일 짧게 해도 건강·행복 크게 개선",
+          "desc": "8번 문장"
+        },
+        {
+          "title": "Elderly individuals who use ~  [주격 who]",
+          "desc": "주어가 길어도 핵심 individuals(복수) → have"
+        },
+        {
+          "title": "have experienced  [현재완료]",
+          "desc": "지금까지 경험해 왔다"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "type": "주제 추론",
+      "q": "윗글의 주제로 가장 적절한 것은?",
+      "passage": "That’s why exergames were created. They are programs that combine computer gaming with a full-body workout...",
+      "choices": [
+        "exergames as a way to improve the health of the elderly",
+        "the dangers of video games for older people",
+        "why walking is the best exercise for everyone",
+        "how to design computer games for children",
+        "the reasons people live longer than before"
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "노인의 건강 위험을 해결하려고 만든 엑서게임의 정의·강도·효과를 설명하는 글이므로 ①입니다.",
+        "traps": "③ 걷기는 엑서게임의 운동 강도를 비유한 대상일 뿐입니다.<br>⑤ 수명 연장은 도입부의 배경입니다.",
+        "point": "That’s why exergames were created → 이후 전부 엑서게임 설명."
+      }
+    },
+    {
+      "type": "제목 추론",
+      "q": "What is the best title for the passage?",
+      "passage": "Elderly individuals who use exergames for just a short time every day have experienced significant improvements in their overall health and wellbeing.",
+      "choices": [
+        "Why Seniors Should Avoid Screens",
+        "The History of Computer Gaming",
+        "Running Fast to Live Longer",
+        "Game On, Grandpa! Exergames Keep Seniors Healthy",
+        "Knee Injuries in Professional Athletes"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "게임을 하며 운동해 노인의 건강과 행복이 좋아진다는 내용이므로 ④가 적절합니다.",
+        "traps": "① 화면을 피하라는 것은 반대 주장입니다.<br>③ 빠르게 달리기가 아니라 빠르게 '걷기' 수준의 운동입니다.",
+        "point": "제목 = 대상(seniors) + 수단(exergames) + 효과(healthy)."
+      }
+    },
+    {
+      "type": "빈칸 추론",
+      "q": "윗글의 빈칸에 들어갈 말로 가장 적절한 것은?",
+      "passage": "That’s why exergames were created. They are programs that combine computer gaming with a __________ workout.",
+      "choices": [
+        "mental",
+        "full-body",
+        "finger-only",
+        "dangerous",
+        "purely online"
+      ],
+      "ans": 1,
+      "detail": {
+        "core": "엑서게임은 보폭·방향·속도를 바꾸는 복잡한 동작까지 하게 하는 운동이므로 '전신(full-body)' 운동과 결합한 프로그램입니다.",
+        "traps": "① mental은 게임 자체의 성격이며 운동(workout)의 성격이 아닙니다.<br>③ 손가락만 쓰는 운동은 걷기 수준의 운동과 맞지 않습니다.",
+        "point": "combine A with B: A(컴퓨터 게임)와 B(전신 운동)를 결합하다."
+      }
+    },
+    {
+      "type": "어법 오류 (관계사)",
+      "q": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+      "passage": "The bad news is that the elderly still face health risks ① <u>that</u> can affect them both mentally and physically. That’s ② <u>why</u> exergames were created. They are programs ③ <u>which</u> combine computer gaming with a full-body workout. Most exergames provide a moderate workout that ④ <u>are</u> the equivalent of taking a walk at a fast speed. ... Elderly individuals ⑤ <u>who</u> use exergames for just a short time every day have experienced significant improvements.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 3,
+      "detail": {
+        "core": "주격 관계대명사 that의 선행사는 a moderate workout(단수)이므로 관계절 동사는 <b>is</b>여야 합니다.",
+        "traps": "① 선행사 health risks + 주격 → that 맞음.<br>③ 선행사 programs(복수) + combine 맞음.<br>⑤ 사람 선행사 + 주격 → who 맞음.",
+        "point": "주격 관계대명사절의 동사는 선행사에 수를 맞춥니다."
+      }
+    },
+    {
+      "type": "어법 양자택일",
+      "q": "(A), (B), (C)의 각 네모 안에서 어법에 맞는 표현으로 가장 적절한 것은?",
+      "passage": "The bad news is that the elderly still face health risks (A) [that / what] can affect them both mentally and physically. That’s (B) [why / which] exergames were created. ... However, they also encourage users (C) [to make / making] complex movements that include changes in step length, direction, and speed.",
+      "choices": [
+        "what – why – to make",
+        "that – which – making",
+        "that – why – to make",
+        "what – which – to make",
+        "that – why – making"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "(A) 선행사 health risks가 있음 → that / (B) That’s why + 완전한 절 → why / (C) encourage O to-v → to make.",
+        "traps": "(A) what은 선행사를 포함하므로 앞에 명사가 있으면 쓸 수 없습니다.<br>(C) encourage는 목적격 보어로 to부정사를 씁니다.",
+        "point": "That’s why(그래서 ~이다) = 결과, That’s because = 원인."
+      }
+    },
+    {
+      "type": "문맥 어휘",
+      "q": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+      "passage": "The good news is that human beings are living ① <u>longer</u> than ever before. ... Most exergames provide a ② <u>moderate</u> workout that is the equivalent of taking a walk at a fast speed. ... However, they also encourage users to make ③ <u>simple</u> movements that include changes in step length, direction, and speed. Elderly individuals who use exergames for just a ④ <u>short</u> time every day have experienced ⑤ <u>significant</u> improvements in their overall health and wellbeing.",
+      "choices": [
+        "①",
+        "②",
+        "③",
+        "④",
+        "⑤"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "보폭·방향·속도의 변화를 '포함하는' 동작이므로 '복잡한(complex)' 동작이 맞습니다. simple은 문맥과 반대입니다.",
+        "traps": "② 빠르게 걷기 수준 = 적당한(moderate) 강도 → 적절.<br>④ just a short time(짧은 시간만이라도) → 적절.",
+        "point": "However(그러나) → 걷기처럼 무난한 운동 '이면서도' 복잡한 동작까지."
+      }
+    },
+    {
+      "type": "지칭 추론",
+      "q": "밑줄 친 <u>they</u>가 가리키는 것으로 가장 적절한 것은?",
+      "passage": "Most exergames provide a moderate workout that is the equivalent of taking a walk at a fast speed. ... However, <u>they</u> also encourage users to make complex movements that include changes in step length, direction, and speed.",
+      "choices": [
+        "the knees and ankles",
+        "health risks",
+        "older individuals",
+        "human beings",
+        "exergames"
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "사용자(users)에게 복잡한 동작을 하도록 장려하는 것은 엑서게임입니다.",
+        "traps": "③ older individuals는 users(사용자) 쪽이라 encourage의 주어가 될 수 없습니다.<br>① 무릎과 발목은 걷기 문장에 나온 말입니다.",
+        "point": "they encourage users → 사용자를 움직이게 하는 주체 = exergames."
+      }
+    },
+    {
+      "type": "글의 순서",
+      "q": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+      "passage": "<b>[주어진 글]</b> The good news is that human beings are living longer than ever before. The bad news is that the elderly still face health risks that can affect them both mentally and physically. That’s why exergames were created.<br><br>(A) However, they also encourage users to make complex movements that include changes in step length, direction, and speed. Elderly individuals who use exergames for just a short time every day have experienced significant improvements in their overall health and wellbeing.<br>(B) They are programs that combine computer gaming with a full-body workout.<br>(C) Most exergames provide a moderate workout that is the equivalent of taking a walk at a fast speed.",
+      "choices": [
+        "(A) – (C) – (B)",
+        "(B) – (A) – (C)",
+        "(B) – (C) – (A)",
+        "(C) – (A) – (B)",
+        "(C) – (B) – (A)"
+      ],
+      "ans": 2,
+      "detail": {
+        "core": "엑서게임 탄생 → (B) 정의 → (C) 운동 강도(빠르게 걷기 수준) → (A) However 복잡한 동작까지 + 효과 순서입니다.",
+        "traps": "(A)의 However는 (C)의 '적당한 강도(걷기 수준)'와 대조되므로 (C) 바로 뒤에 와야 합니다.",
+        "point": "정의(They are ~) → 특징 → 반전(However) → 효과."
+      }
+    },
+    {
+      "type": "글의 요지",
+      "q": "윗글의 요지로 가장 적절한 것은?",
+      "passage": "Elderly individuals who use exergames for just a short time every day have experienced significant improvements in their overall health and wellbeing.",
+      "choices": [
+        "엑서게임은 노인의 몸과 마음 건강을 돕는 효과적인 운동 방법이다.",
+        "노인은 무릎 건강을 위해 걷기 운동만 해야 한다.",
+        "컴퓨터 게임은 노인의 건강을 해친다.",
+        "수명이 늘어난 만큼 병원 시설을 늘려야 한다.",
+        "운동은 길게 할수록 효과가 크다."
+      ],
+      "ans": 0,
+      "detail": {
+        "core": "매일 짧게만 해도 전반적인 건강과 행복이 크게 좋아진다는 결론에서 요지가 드러납니다.",
+        "traps": "② 걷기만 하라는 말은 없습니다.<br>⑤ 짧은 시간만으로도(just a short time) 효과가 있다고 했습니다.",
+        "point": "마지막 문장(효과)이 요지 — overall health and wellbeing = 몸과 마음."
+      }
+    },
+    {
+      "type": "내용 일치",
+      "q": "윗글의 내용과 일치하는 것은?",
+      "passage": "However, they also encourage users to make complex movements that include changes in step length, direction, and speed.",
+      "choices": [
+        "인간의 수명은 예전보다 짧아지고 있다.",
+        "엑서게임은 대부분 매우 격렬한 고강도 운동이다.",
+        "엑서게임은 하루에 오랜 시간 해야만 효과가 있다.",
+        "엑서게임은 신체 건강에만 도움이 되고 정신 건강과는 무관하다.",
+        "엑서게임은 보폭·방향·속도가 바뀌는 복잡한 동작을 하게 한다."
+      ],
+      "ans": 4,
+      "detail": {
+        "core": "보폭·방향·속도의 변화를 포함하는 복잡한 동작을 하도록 장려한다고 했으므로 ⑤가 일치합니다.",
+        "traps": "① 그 어느 때보다 오래 살고 있습니다.<br>② 적당한(moderate) 강도입니다.<br>③ 짧은 시간만으로도 효과가 있습니다.<br>④ 전반적인 건강과 행복(wellbeing)이 좋아졌습니다.",
+        "point": "longer ↔ 짧아짐, moderate ↔ 고강도, short time ↔ 오랜 시간 함정."
+      }
+    }
+  ],
+  "tf_en": [
+    {
+      "no": 1,
+      "q": "People are living longer than ever before.",
+      "ans": "T",
+      "exp": "참(T): human beings are living longer than ever before."
+    },
+    {
+      "no": 2,
+      "q": "The elderly no longer face any health risks.",
+      "ans": "F",
+      "exp": "거짓(F): 여전히 몸과 마음에 영향을 주는 건강 위험에 직면해 있습니다."
+    },
+    {
+      "no": 3,
+      "q": "Exergames combine computer gaming with a full-body workout.",
+      "ans": "T",
+      "exp": "참(T): 4번 문장 내용입니다."
+    },
+    {
+      "no": 4,
+      "q": "Most exergames provide a very intense workout like running a marathon.",
+      "ans": "F",
+      "exp": "거짓(F): 빠르게 걷는 것에 맞먹는 적당한(moderate) 운동입니다."
+    },
+    {
+      "no": 5,
+      "q": "Using exergames for a short time every day has improved older people’s health.",
+      "ans": "T",
+      "exp": "참(T): 마지막 문장 내용입니다."
+    }
+  ],
+  "tf_ko": [
+    {
+      "no": 1,
+      "q": "엑서게임은 노인의 건강 위험 때문에 만들어졌다.",
+      "ans": "T",
+      "exp": "참(T): That’s why exergames were created."
+    },
+    {
+      "no": 2,
+      "q": "엑서게임의 운동 강도는 빠르게 걷는 것과 비슷하다.",
+      "ans": "T",
+      "exp": "참(T): the equivalent of taking a walk at a fast speed."
+    },
+    {
+      "no": 3,
+      "q": "엑서게임은 사용자가 같은 동작만 반복하게 한다.",
+      "ans": "F",
+      "exp": "거짓(F): 보폭·방향·속도가 바뀌는 복잡한 동작을 하게 합니다."
+    },
+    {
+      "no": 4,
+      "q": "엑서게임은 하루에 몇 시간씩 해야만 효과가 있다.",
+      "ans": "F",
+      "exp": "거짓(F): 매일 짧은 시간만 해도 효과가 있었습니다."
+    },
+    {
+      "no": 5,
+      "q": "엑서게임을 한 노인들은 전반적인 건강과 행복이 크게 좋아졌다.",
+      "ans": "T",
+      "exp": "참(T): significant improvements in their overall health and wellbeing."
+    }
+  ]
 }
 };
 
@@ -3700,6 +5529,182 @@ const SCRAMBLES = {
     ],
     "full": "Suddenly, a darker color was a survival advantage for peppered moths."
   }
+],
+  7: [
+  {
+    "ko": "입안에 그 타는 듯한 느낌을 일으키는 것은 캡사이신이라고 불리는 물질이다.",
+    "words": [
+      "What causes",
+      "that burning feeling",
+      "in your mouth",
+      "is something",
+      "called capsaicin."
+    ],
+    "full": "What causes that burning feeling in your mouth is something called capsaicin."
+  },
+  {
+    "ko": "우유에는 카제인이라는 단백질이 들어 있는데, 그것은 캡사이신을 분해한다.",
+    "words": [
+      "Milk contains",
+      "a protein",
+      "called casein,",
+      "which breaks down",
+      "capsaicin"
+    ],
+    "full": "Milk contains a protein called casein, which breaks down capsaicin"
+  },
+  {
+    "ko": "이 문제를 처리하는 가장 좋은 방법은 무엇일까?",
+    "words": [
+      "What is",
+      "the best way",
+      "to deal with",
+      "this problem?"
+    ],
+    "full": "What is the best way to deal with this problem?"
+  }
+],
+  8: [
+  {
+    "ko": "여름은 날씨가 가장 좋고 경치가 가장 아름다운 계절이다.",
+    "words": [
+      "It is",
+      "the season",
+      "when",
+      "the weather is the nicest",
+      "and the scenery is the most beautiful."
+    ],
+    "full": "It is the season when the weather is the nicest and the scenery is the most beautiful."
+  },
+  {
+    "ko": "우리는 부모님들이 파인 레이크를 아이들이 즐거움 가득한 여름을 안전하게 보낼 수 있는 곳으로 오랫동안 여겨 왔다는 것을 안다.",
+    "words": [
+      "We know that",
+      "parents have long considered",
+      "Pine Lake",
+      "a place",
+      "where their kids",
+      "could safely spend",
+      "a fun-filled summer."
+    ],
+    "full": "We know that parents have long considered Pine Lake a place where their kids could safely spend a fun-filled summer."
+  },
+  {
+    "ko": "이것이 저희가 여러분의 도움을 필요로 하는 이유입니다.",
+    "words": [
+      "This is",
+      "why",
+      "we need",
+      "your help."
+    ],
+    "full": "This is why we need your help."
+  }
+],
+  9: [
+  {
+    "ko": "야생 생물에 접근할 수 있는 장소들은 한정되어 있다.",
+    "words": [
+      "those places",
+      "where",
+      "wildlife",
+      "is accessible",
+      "are limited"
+    ],
+    "full": "those places where wildlife is accessible are limited"
+  },
+  {
+    "ko": "이 지역들을 여행하는 사람들은 흔히 결국 보전 활동에 직접 참여하게 된다.",
+    "words": [
+      "those who",
+      "travel to these regions",
+      "often end up becoming",
+      "directly involved",
+      "with conservation efforts."
+    ],
+    "full": "those who travel to these regions often end up becoming directly involved with conservation efforts."
+  },
+  {
+    "ko": "극지방으로 여행하는 사람들의 수가 늘고 있다.",
+    "words": [
+      "the number of",
+      "people",
+      "traveling to",
+      "the polar regions",
+      "is increasing."
+    ],
+    "full": "the number of people traveling to the polar regions is increasing."
+  }
+],
+  10: [
+  {
+    "ko": "레프 쿨레쇼프는 편집이 영화 제작에서 가장 중요한 측면이라고 믿었던 러시아 감독이었다.",
+    "words": [
+      "Lev Kuleshov",
+      "was a Russian director",
+      "who believed",
+      "editing is",
+      "the most important aspect",
+      "of filmmaking."
+    ],
+    "full": "Lev Kuleshov was a Russian director who believed editing is the most important aspect of filmmaking."
+  },
+  {
+    "ko": "그는 쿨레쇼프 효과라고 알려지게 된 것을 입증하는 발표를 했다.",
+    "words": [
+      "he gave",
+      "a presentation",
+      "which demonstrated",
+      "what became known",
+      "as the Kuleshov effect."
+    ],
+    "full": "he gave a presentation which demonstrated what became known as the Kuleshov effect."
+  },
+  {
+    "ko": "쿨레쇼프는 편집을 통해 그것이 해석되는 방식에 영향을 미쳤다.",
+    "words": [
+      "Kuleshov",
+      "had influenced",
+      "how",
+      "it was interpreted",
+      "through editing."
+    ],
+    "full": "Kuleshov had influenced how it was interpreted through editing."
+  }
+],
+  11: [
+  {
+    "ko": "노인들은 여전히 정신적·신체적으로 영향을 줄 수 있는 건강 위험에 직면해 있다.",
+    "words": [
+      "the elderly",
+      "still face",
+      "health risks",
+      "that can affect them",
+      "both mentally and physically."
+    ],
+    "full": "the elderly still face health risks that can affect them both mentally and physically."
+  },
+  {
+    "ko": "그것들은 컴퓨터 게임과 전신 운동을 결합한 프로그램이다.",
+    "words": [
+      "They are",
+      "programs",
+      "that combine",
+      "computer gaming",
+      "with a full-body workout."
+    ],
+    "full": "They are programs that combine computer gaming with a full-body workout."
+  },
+  {
+    "ko": "매일 짧은 시간만이라도 엑서게임을 하는 노인들은 상당한 향상을 경험해 왔다.",
+    "words": [
+      "Elderly individuals",
+      "who use exergames",
+      "for just a short time every day",
+      "have experienced",
+      "significant improvements."
+    ],
+    "full": "Elderly individuals who use exergames for just a short time every day have experienced significant improvements."
+  }
 ]
 };
 
@@ -3711,8 +5716,10 @@ function initCourseFiltersUI() {
   const btnSuji = document.getElementById('courseFilterSuji');
   const btnBbaba = document.getElementById('courseFilterBbaba');
   const btnHalf = document.getElementById('courseFilterHalf');
+  const btnB13 = document.getElementById('courseFilterB13');
 
-  if (btnAll) btnAll.innerHTML = '⭐ 전체 지문 (6)';
+  if (btnAll) btnAll.innerHTML = '⭐ 전체 지문 (11)';
+  if (btnB13) btnB13.innerHTML = '📗 예비고1 빠바 기초세우기 13강 관계사 (5개 지문)';
   if (btnSuji) btnSuji.innerHTML = '🏫 수지중2 7과 외부지문 (2개 지문)';
   if (btnBbaba) btnBbaba.innerHTML = '📘 예비고1 빠바 기초세우기 01강 (4개 지문)';
   if (btnHalf) btnHalf.innerHTML = '🕒 예비고1 하프모고 1~3회차 (27개 지문)';
@@ -3725,12 +5732,14 @@ function initCourseFiltersUI() {
   if (btnSuji) btnSuji.style.display = isEg1 ? 'none' : 'inline-block';
   if (btnBbaba) btnBbaba.style.display = isSJ2 ? 'none' : 'inline-block';
   if (btnHalf) btnHalf.style.display = isSJ2 ? 'none' : 'inline-block';
+  if (btnB13) btnB13.style.display = isSJ2 ? 'none' : 'inline-block';
 
   if (!explicit) {
     if (isEg1) {
-      /* v120: 예비고1은 최신 복습 지문(하프 모고 1회차)부터 열립니다. 빠바 01강은 옆 칩으로 그대로 남아 있어요. */
-      curCourseFilter = '예비고1-하프';
-      if (!HALF_PASSAGES[curPassage]) curPassage = hmFirstOfRound(1);
+      /* v158: 예비고1은 지금 진도인 빠바 13강(관계사의 이해 1) 5지문부터 열립니다.
+         하프 모고·빠바 01강은 옆 칩으로 그대로 남아 있어요. */
+      curCourseFilter = '예비고1-13';
+      if (!PASSAGES[curPassage] || PASSAGES[curPassage].course !== '예비고1-13') curPassage = 7;
     } else if (isSJ2) {
       curCourseFilter = '수지중2';
       if (!PASSAGES[curPassage] || PASSAGES[curPassage].course !== '수지중2') curPassage = 1;
@@ -3742,7 +5751,7 @@ function initCourseFiltersUI() {
 
 function setCourseFilter(cf) {
   curCourseFilter = cf;
-  const chipIds = { 'all': 'courseFilterAll', '수지중2': 'courseFilterSuji', '예비고1': 'courseFilterBbaba', '예비고1-하프': 'courseFilterHalf' };
+  const chipIds = { 'all': 'courseFilterAll', '수지중2': 'courseFilterSuji', '예비고1-13': 'courseFilterB13', '예비고1': 'courseFilterBbaba', '예비고1-하프': 'courseFilterHalf' };
   Object.keys(chipIds).forEach(function (k) {
     const el = document.getElementById(chipIds[k]);
     if (el) el.className = 'dash-chip ' + (cf === k ? 'on' : '');
@@ -3951,7 +5960,81 @@ const BLANK_KEYWORDS = {
   6: [
     "peppered moth", "evolution", "theory of natural selection", "blend in with",
     "air pollution", "survival advantage", "short lifespan", "quite quickly"
-  ]
+  ],
+  7: [
+  "enjoy eating",
+  "on fire",
+  "deal with",
+  "the nearest glass of water",
+  "What causes",
+  "capsaicin",
+  "oil-based",
+  "a much better option",
+  "called casein",
+  "which breaks down",
+  "gets rid of grease",
+  "neutralizes",
+  "a wall of food"
+],
+  8: [
+  "due to the pandemic",
+  "the best time of year",
+  "the season when",
+  "a place where",
+  "fun-filled summer",
+  "seriously damaged",
+  "This is why",
+  "relied on donations",
+  "even more important",
+  "reopen next summer",
+  "bigger and better than ever"
+],
+  9: [
+  "the number of people",
+  "threatens the local ecosystems",
+  "adds to the risk of oil spills",
+  "those places where",
+  "is accessible",
+  "putting vegetation at risk",
+  "On the positive side",
+  "rarely seen parts",
+  "those who",
+  "end up becoming",
+  "conservation efforts",
+  "financially independent",
+  "debatable"
+],
+  10: [
+  "who believed",
+  "the most important aspect",
+  "which demonstrated",
+  "what became known as",
+  "a series of images",
+  "followed by",
+  "When asked",
+  "what they had seen",
+  "identical",
+  "how it was interpreted",
+  "two separate locations",
+  "a single place",
+  "manipulating perception"
+],
+  11: [
+  "living longer than ever before",
+  "the elderly",
+  "health risks that can affect",
+  "That’s why",
+  "combine computer gaming with",
+  "full-body workout",
+  "a moderate workout",
+  "the equivalent of",
+  "little damage",
+  "encourage users to make",
+  "complex movements",
+  "who use exergames",
+  "significant improvements",
+  "wellbeing"
+]
 };
 
 function renderBlankMode(p, area) {
