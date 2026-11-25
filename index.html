@@ -6092,7 +6092,7 @@ function showHome(){
   var pG2 = $('#btn_push_guide2'); if(pG2){ pG2.onclick = function(){ alert(PUSH_ON_GUIDE); }; }
   try { pushSilentSync(me); } catch(e){}
   /* v82: 스트릭 배너 · 매일 알림 버튼 연결 */
-  var ssGoB = $('#ss_go'); if(ssGoB) ssGoB.onclick = ssEntry;
+  var ssGoB = $('#ss_go'); if(ssGoB && !ssGoB.disabled) ssGoB.onclick = ssEntry;   /* v152 */
   /* v131: 부엉이 상태에 따라 버튼이 자기주도/오늘 학습으로 */
   owlBindHero(me);
   try { owlWatch(); } catch(e){}
@@ -10281,7 +10281,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v151';
+var TOPEDU_APP_VERSION = 'v152';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -11724,6 +11724,11 @@ function mergeStreakBoard(row){
   if(!row || !row.n) return;
   var k = (row.b || '') + '|' + row.n;
   var cur = STREAK_BOARD[k];
+  /* v152: 같은 날 이미 '완료'가 남아 있으면 나중에 온 미완료 이벤트로 완료 표시를 지우지 않는다 */
+  if (cur && cur.t && cur.t === (row.t || cur.t) && cur.d && !row.d) {
+    if ((row.ts || 0) >= (cur.ts || 0)) { row.d = 1; STREAK_BOARD[k] = row; }
+    return;
+  }
   if(!cur || (row.ts || 0) >= (cur.ts || 0)) STREAK_BOARD[k] = row;
 }
 function pushStreakBoard(ban, name, done, streak){
@@ -12891,7 +12896,7 @@ function ssPub(topic, payload, retain) {
       var parts = kk.slice(3).split('/');
       var key = parts[0] + '|' + parts.slice(1).join('/');
       var all = store(SS_ST_KEY) || {};
-      all[key] = payload;
+      if (!ssStKeepDone(all[key], payload)) all[key] = payload;   /* v152: 오늘 완주 기록은 덮지 않음 */
       store(SS_ST_KEY, all);
     } else {
       store(SS_SESS_KEY + kk.slice(5), payload);
@@ -12992,12 +12997,25 @@ function ssStSameDay(o) {
     return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate();
   } catch (e) { return false; }
 }
+/* v152: 이 상태가 '자기주도 완주'를 뜻하는지 — done / st·stage 99 만 인정.
+   (d:1은 '오늘 단어학습 완료'라 자기주도 완주와 섞으면 안 된다) */
+function ssStIsDone(o) {
+  if (!o) return false;
+  return !!(o.done === true || Number(o.st) === 99 || Number(o.stage) === 99);
+}
+/* v152: 같은 날 이미 완주 기록이 있으면 그날 나중에 온 '미완료' 상태로 절대 덮어쓰지 않는다.
+   (자가은 학생처럼 완주 17초 후 다시 시작해 done:false가 올라와 현황판 완료가 지워지던 문제) */
+function ssStKeepDone(prev, next) {
+  try { return !!(prev && ssStSameDay(prev) && ssStIsDone(prev) && !ssStIsDone(next)); } catch (e) { return false; }
+}
 function ssStRemember(ban, name, o) {
   try {
     if (!ban || !name || !o) return;
     var all = store(SS_ST_KEY) || {}, k = ban + '|' + name;
+    var prev = all[k];
+    if (ssStKeepDone(prev, o)) return;              /* v152: 오늘 완주 기록 보호 */
     var nt = Number(o.at || o.ts || 0);
-    if (all[k] && Number(all[k].at || all[k].ts || 0) > nt) return;
+    if (prev && Number(prev.at || prev.ts || 0) > nt) return;
     all[k] = o;
     var keys = Object.keys(all);
     if (keys.length > 400) {
@@ -13011,6 +13029,8 @@ function ssStatusOf(ban, name) {
   var a = ssStatusAll(), k = ssStatusKey(ban, name);
   var mq = SS_NET.board[k];
   var row = (mq && a[k] && (mq.at || 0) < (a[k].at || 0)) ? a[k] : (mq || a[k] || null);
+  /* v152: 이 기기에 오늘 '완료'가 남아 있으면 더 새 '미완료' 이벤트가 있어도 완료를 보여 준다 */
+  if (row && ssStKeepDone(a[k], row)) row = a[k];
   /* v148: 어제 완주한 기록이 오늘 '완료'로 보이지 않게 오늘 것만 인정 */
   if (row && !ssStSameDay(row)) return null;
   return row;
@@ -13059,8 +13079,14 @@ function ssHomeCard(ban) {
   }
   if (exm) h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55"><b style="color:#fde68a">📚 ' + esc(exm.title || '기말 대비') + ' (~' + ssExamUntilTxt(exm) + ')</b><br>교과서 단어·영영풀이 <b style="color:#fff">' + days.length + '묶음</b> → 본문 문장 배열 → 문법·독해' + (ssOvAny(ssOvActive(ban)) ? '<br><b style="color:#fdba74">🎯 오늘은 원장님이 고른 복습이에요</b>' : '') + '<br>화면을 벗어나면 기록돼요. (전화·알림 등 첫 1회는 유예)</div>';
   else h += '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.55">단어 <b style="color:#fff">' + range + '</b> 암기·시험 → 문장 어순배열 → 문법·독해<br>보조 선생님 없이 여기서 50~60분 안에 끝내요. 화면을 실제로 벗어났을 때만 기록되고, 전화·알림 등 첫 1회는 유예돼요.</div>';
+  /* v152: 오늘 이미 완주한 학생은 버튼 자체를 잠근다 — 다시 눌러 완료 기록이 덮어쓰이지 않게 */
+  if (stoday.st === 'done') {
+    h += '<button type="button" id="ss_go" disabled aria-disabled="true" style="width:100%;margin-top:10px;border:none;border-radius:13px;padding:12px;font-size:15px;font-weight:900;font-family:inherit;background:#334155;color:#94a3b8;cursor:not-allowed;box-shadow:none">✅ 오늘 자기주도 완료 — 다시 시작 불가</button>'
+      + '<div style="margin-top:6px;font-size:11.5px;font-weight:700;color:#94a3b8;line-height:1.5">오늘 완료 기록과 선생님 화면의 [완료] 표시는 그대로 유지돼요. 내일 다시 시작할 수 있어요.</div>';
+  } else {
   h += '<button type="button" id="ss_go" style="width:100%;margin-top:10px;border:none;border-radius:13px;padding:12px;font-size:15px;font-weight:900;font-family:inherit;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;box-shadow:0 4px 12px rgba(20,184,166,.35)">'
-    + (live ? '🔴 지금 입장하기 →' : (stoday.st === 'done' ? '✅ 오늘 완료 — 다시 입장하기' : (stoday.st === 'ing' ? '▶ 이어서 끝내기 →' : '▶ 자기주도 시작하기'))) + '</button>';
+  + (live ? '🔴 지금 입장하기 →' : (stoday.st === 'ing' ? '▶ 이어서 끝내기 →' : '▶ 자기주도 시작하기')) + '</button>';
+  }
   h += '</div>';
   return h;
 }
@@ -13099,7 +13125,7 @@ function ssHomeCardRefresh() {
     tmp.innerHTML = ssHomeCard(S.home.me.ban);
     if (tmp.firstChild) card.parentNode.replaceChild(tmp.firstChild, card);
     var b = document.getElementById('ss_go');
-    if (b) b.onclick = ssEntry;
+    if (b && !b.disabled) b.onclick = ssEntry;   /* v152: 오늘 완주 잠금 버튼에는 시작 연결 안 함 */
   } catch (e) {}
 }
 function ssEntry() {
@@ -13107,6 +13133,16 @@ function ssEntry() {
   var me = S.cred || {};
   if (!me.name || !me.ban) { alert('학생으로 로그인해야 자기주도 모드를 쓸 수 있어요.'); return; }
   if (me.ban === '선생님') { alert('선생님 계정에서는 자기주도실에 들어가지 않아요. 학생 폰으로 접속해 주세요.'); return; }
+  /* v152: 오늘 이미 완주했으면 새 세션을 시작하지 않는다 — 완료 기록·현황판이 덮어쓰이던 문제 방지 */
+  var dn = null;
+  try { dn = ssTodayDoneInfo(me.ban, me.name); } catch (e) {}
+  if (dn) {
+    var when = dn.el ? ('\n\n완료 시간 ' + ssMMSS(dn.el) + (dn.leaveCnt != null ? ' · 화면 이탈 ' + dn.leaveCnt + '회' : '')) : '';
+    alert('🎉 오늘 자기주도는 이미 완료했어요!' + when
+      + '\n\n오늘 완료 기록과 선생님 화면의 [완료] 표시는 그대로 유지돼요.\n내일 다시 시작할 수 있어요.');
+    try { refreshHome(); } catch (e) {}
+    return;
+  }
   SS.session = ssSessionActive(me.ban);
   var snap = ssSnapGet();
   if (snap && !snap.done && (Date.now() - (snap.at || 0)) < 3 * 3600000) {
@@ -13217,10 +13253,31 @@ function ssSnapPct(snap){
   if (st === 2) return Math.round(34 + b * 33);
   return Math.round(67 + c * 33);
 }
+/* v152: 오늘 이미 완주했는지 — 이 폰 완료 기록·스냅샷·현황판(원장님 폰/보드)을 모두 확인.
+   완료 기록이 나중에 시작한 '미완료' 상태로 덮어쓰이던 문제를 막는 단일 판정 기준. */
+function ssTodayDoneInfo(ban, name){
+  if (!name) return null;
+  try {
+    var rec = ssDayLogToday(name);
+    if (rec && rec.done && (!rec.ban || !ban || rec.ban === ban))
+      return { done: true, el: Number(rec.el) || 0, doneAt: Number(rec.doneAt) || 0, leaveCnt: Number(rec.leaveCnt) || 0, awaySec: Number(rec.awaySec) || 0, src: 'phone' };
+  } catch (e) {}
+  try {
+    var sn = ssSnapGet();
+    if (sn && sn.name === name && sn.done && owlIsToday(sn.t0))
+      return { done: true, el: Number(sn.doneEl) || 0, doneAt: Number(sn.doneAt) || 0, leaveCnt: Number(sn.leaveCnt) || 0, awaySec: Number(sn.awaySec) || 0, src: 'snap' };
+  } catch (e) {}
+  try {
+    var row = ssStatusOf(ban, name);
+    if (row && ssStSameDay(row) && (row.done === true || Number(row.st) === 99))
+      return { done: true, el: Number(row.el) || 0, doneAt: Number(row.ts || row.at) || 0, leaveCnt: Number(row.lv) || 0, awaySec: Number(row.aw) || 0, src: 'board' };
+  } catch (e) {}
+  return null;
+}
 /* 오늘 자기주도 상태: done(완주) / ing(이어하기) / none(시작 전) */
 function ssTodayState(ban, name){
-  var rec = ssDayLogToday(name);
-  if (rec && rec.done) return { st: 'done', el: Number(rec.el) || 0, leaveCnt: Number(rec.leaveCnt) || 0, awaySec: Number(rec.awaySec) || 0, at: rec.doneAt || 0 };
+  var dn = null; try { dn = ssTodayDoneInfo(ban, name); } catch(e){}
+  if (dn) return { st: 'done', el: dn.el, leaveCnt: dn.leaveCnt, awaySec: dn.awaySec, at: dn.doneAt };
   var snap = null; try { snap = ssSnapGet(); } catch(e){}
   if (snap && snap.name === name && owlIsToday(snap.t0) && !snap.done) {
     return { st: 'ing', stage: snap.stage || 1, el: Math.max(0, (Date.now() - (snap.t0 || Date.now())) / 1000), leaveCnt: Number(snap.leaveCnt) || 0, awaySec: Number(snap.awaySec) || 0, pg: ssSnapPct(snap) };
@@ -14923,7 +14980,8 @@ function ssBoardPull(force) {
             if (!row.ts) row.ts = (d.time || 0) * 1000;
             if (row.k === 'ss97' && (row.st != null || row.pg != null)) {
               row.b = row.b || '';
-              SS_NET.board[row.b + '|' + row.n] = row;
+              var bk = row.b + '|' + row.n;
+              if (!ssStKeepDone(SS_NET.board[bk], row)) SS_NET.board[bk] = row;   /* v152 */
               try { ssStRemember(row.b, row.n, row); } catch (e) {}
             }
             try { mergeStreakBoard(row); } catch (e) {}
@@ -14955,7 +15013,7 @@ function ssTeacherSub() {
           var o = JSON.parse(m.toString());
           if (!o || !name) return;
           o.b = o.b || ban; o.n = o.n || name;
-          SS_NET.board[ban + '|' + name] = o;
+          if (!ssStKeepDone(SS_NET.board[ban + '|' + name], o)) SS_NET.board[ban + '|' + name] = o;   /* v152 */
           SS_NET.boardAt = Date.now();
           try { ssStRemember(ban, name, o); } catch (e) {}
           ssBoardRefresh();
