@@ -10640,7 +10640,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v158';
+var TOPEDU_APP_VERSION = 'v159';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -13671,7 +13671,8 @@ function ssEntry() {
     return;
   }
   SS.session = ssSessionActive(me.ban);
-  var snap = ssSnapGet();
+  var snap = ssSnapGet(me.ban, me.name);
+  if (snap && (snap.name !== me.name || (snap.ban && snap.ban !== me.ban))) snap = null;   /* v159: 다른 학생 기록은 절대 이어하지 않음 */
   if (snap && !snap.done && (Date.now() - (snap.at || 0)) < 3 * 3600000) {
     if (confirm('오늘 자기주도 기록이 남아 있어요.\n(' + (snap.stage === 99 ? '완료' : snap.stage + '단계') + ' · 경과 ' + ssMMSS((Date.now() - snap.t0) / 1000) + ')\n\n이어서 할까요?\n[취소]를 누르면 처음부터 다시 시작해요.')) {
       ssResume(snap); return;
@@ -13749,9 +13750,32 @@ function ssSaveSnap() {
     sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
     wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now(), ver: 147
   };
-  try { store(SS_SNAP_KEY, s); } catch (e) {}
+  /* v159: 이어하기 기록을 학생별(반|이름)로 따로 저장 — 한 폰을 여러 학생이 쓰면
+     다른 학생 기록(이름·반·문제)이 그대로 이어지던 문제 수정 */
+  try {
+    var all = ssSnapAll(), now = Date.now(), k;
+    for (k in all) { if (!all[k] || (now - (all[k].at || 0)) > 2 * 86400000) delete all[k]; }
+    all[ssSnapKey(SS.ban, SS.name)] = s;
+    store(SS_SNAPS_KEY, all);
+  } catch (e) {}
 }
-function ssSnapGet() { try { return store(SS_SNAP_KEY) || null; } catch (e) { return null; } }
+var SS_SNAPS_KEY = 'topedu_ss159_snaps';
+function ssSnapKey(ban, name) { return String(ban || '') + '|' + String(name || ''); }
+function ssSnapAll() { try { var a = store(SS_SNAPS_KEY); return (a && typeof a === 'object') ? a : {}; } catch (e) { return {}; } }
+/* 지금 로그인한 학생(또는 지금 자기주도 중인 학생)의 이어하기 기록만 돌려준다 */
+function ssSnapGet(ban, name) {
+  var me = S.cred || {};
+  if (!name) { name = SS.on ? SS.name : (me.name || ''); ban = SS.on ? SS.ban : (me.ban || ''); }
+  if (!name) return null;
+  var sn = ssSnapAll()[ssSnapKey(ban, name)];
+  if (sn) return sn;
+  /* v158 이전 폰에 남은 공용 기록은 같은 학생일 때만 사용 */
+  try {
+    var old = store(SS_SNAP_KEY);
+    if (old && old.name === name && (!ban || !old.ban || old.ban === ban)) return old;
+  } catch (e) {}
+  return null;
+}
 
 /* ---------- v147: 학생별·날짜별 자기주도 완료 기록 (미리보기는 저장 금지) ---------- */
 var SS_DAYLOG_KEY = 'topedu_ss_daylog';
@@ -13790,7 +13814,7 @@ function ssTodayDoneInfo(ban, name){
       return { done: true, el: Number(rec.el) || 0, doneAt: Number(rec.doneAt) || 0, leaveCnt: Number(rec.leaveCnt) || 0, awaySec: Number(rec.awaySec) || 0, src: 'phone' };
   } catch (e) {}
   try {
-    var sn = ssSnapGet();
+    var sn = ssSnapGet(ban, name);
     if (sn && sn.name === name && sn.done && owlIsToday(sn.t0))
       return { done: true, el: Number(sn.doneEl) || 0, doneAt: Number(sn.doneAt) || 0, leaveCnt: Number(sn.leaveCnt) || 0, awaySec: Number(sn.awaySec) || 0, src: 'snap' };
   } catch (e) {}
@@ -13805,7 +13829,7 @@ function ssTodayDoneInfo(ban, name){
 function ssTodayState(ban, name){
   var dn = null; try { dn = ssTodayDoneInfo(ban, name); } catch(e){}
   if (dn) return { st: 'done', el: dn.el, leaveCnt: dn.leaveCnt, awaySec: dn.awaySec, at: dn.doneAt };
-  var snap = null; try { snap = ssSnapGet(); } catch(e){}
+  var snap = null; try { snap = ssSnapGet(ban, name); } catch(e){}
   if (snap && snap.name === name && owlIsToday(snap.t0) && !snap.done) {
     return { st: 'ing', stage: snap.stage || 1, el: Math.max(0, (Date.now() - (snap.t0 || Date.now())) / 1000), leaveCnt: Number(snap.leaveCnt) || 0, awaySec: Number(snap.awaySec) || 0, pg: ssSnapPct(snap) };
   }
