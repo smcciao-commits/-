@@ -1616,15 +1616,64 @@ var EK_ME = (function () {
 function ekIsHarin() { return EK_ME.ban === '초5' && EK_ME.name === '이하린'; }
 function ekMeSlug() { return String(EK_ME.ban + '_' + EK_ME.name).replace(/[^0-9A-Za-z가-힣]/g, ''); }
 function ekStudentKey(harinKey, baseKey) { return ekIsHarin() ? harinKey : (String(baseKey) + '_' + ekMeSlug()); }
+/* 화면에 보이는 '하린' 이름을 지금 학생 이름으로 (하린이는 원래 문장 그대로) */
+function ekText(s) {
+  s = String(s === undefined || s === null ? '' : s);
+  if (ekIsHarin() || s.indexOf('하린') < 0) return s;
+  var n = EK_ME.name;
+  return s
+    .replace(/하린이는/g, n + '은')
+    .replace(/하린이가/g, n + '이')
+    .replace(/하린이의/g, n + '의')
+    .replace(/하린이를/g, n + '을')
+    .replace(/하린이한테/g, n + '한테')
+    .replace(/하린아/g, n + '아')
+    .replace(/하린이/g, n + '이')
+    .replace(/하린/g, n);
+}
+/* 하린이 가정 전용 화면(하린 플래너 바로가기 · 아이패드 보상 암호)은 하린이에게만 */
 function ekApplyStudentProfile() {
   if (ekIsHarin()) return;
   try {
+    var links = document.querySelectorAll('[onclick*="harin.html"]');
+    for (var i = 0; i < links.length; i++) links[i].style.display = 'none';
     var pass = document.querySelector('.reward-passcode-box');
     if (pass) pass.style.display = 'none';
   } catch (e) {}
 }
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekApplyStudentProfile);
-else ekApplyStudentProfile();
+function ekNameSweep(root) {
+  if (ekIsHarin()) return;
+  try {
+    var el = root || document.body;
+    if (!el) return;
+    var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    var node;
+    while ((node = w.nextNode())) {
+      var p = node.parentNode;
+      if (p && /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT|OPTION)$/.test(p.nodeName)) continue;
+      var t = node.nodeValue;
+      if (!t || t.indexOf('하린') < 0) continue;
+      var r = ekText(t);
+      if (r !== t) node.nodeValue = r;
+    }
+  } catch (e) {}
+}
+function ekInitStudentProfile() {
+  ekApplyStudentProfile();
+  if (ekIsHarin()) return;
+  ekNameSweep(document.body);
+  if (!window.MutationObserver) return;
+  var pend = false;
+  try {
+    new MutationObserver(function () {
+      if (pend) return;
+      pend = true;
+      setTimeout(function () { pend = false; ekNameSweep(document.body); }, 80);
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  } catch (e) {}
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ekInitStudentProfile);
+else ekInitStudentProfile();
 </script>
 </head>
 <body>
@@ -7201,6 +7250,7 @@ function petMinky() {
 
 function minkySay(txt, speakVoice) {
   var el = document.getElementById('minkyDialogue');
+  txt = ekText(txt);
   if (el) el.textContent = txt;
   if (speakVoice === true) {
     speakText(txt, 'ko-KR');
