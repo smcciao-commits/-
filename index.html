@@ -5424,6 +5424,22 @@ var BB_JUNGDEUNG_DAYS = [
   [49,"DAO_TAoT3ZI","능률보카 중등필수 영어단어 Day 49","Ryan Jang","6:18",0], [50,"W6EVwEtaSYM","능률보카 중등필수 영어단어 Day 50","Ryan Jang","6:24",0],
 ];
 
+/* ==== v153: 중1·중2 학교 교과서(동아 윤정미) 인강 — 주니어 능률보카 인강관을 대체 ==== */
+var BB_DONGA68 = [   /* 중1 · 동아(윤정미) 2022개정 6·7·8과 교과서 인강 6강 */
+  { n: 1, t: '6과 본문해설 (테테쌤)', v: [{ id: 'bVaJdUFWkq8', lb: '본문해설', s: '테테쌤', dur: '' }] },
+  { n: 2, t: '7과 본문해설 (테테쌤)', v: [{ id: 'YrothRiWrKE', lb: '본문해설', s: '테테쌤', dur: '' }] },
+  { n: 3, t: '8과 본문해설 (테테쌤)', v: [{ id: 'mLKJpbUok-Y', lb: '본문해설', s: '테테쌤', dur: '' }] },
+  { n: 4, t: '6과 대화문 (하이탑영어)', v: [{ id: 'UpVDmD638uQ', lb: '대화문', s: '하이탑영어', dur: '' }] },
+  { n: 5, t: '7과 단어·대화문·문법 (지현T)', v: [{ id: 'c73qNLc6bd0', lb: '단어·대화문·문법', s: '지현T', dur: '' }] },
+  { n: 6, t: '8과 대화문·문법 (지현T)', v: [{ id: 'wnw3af4au40', lb: '대화문·문법', s: '지현T', dur: '' }] }
+];
+var BB_DONGA78 = [   /* 중2 · 동아(윤정미) 2022개정 7·8과 교과서 인강 4강 */
+  { n: 1, t: '7과 본문·핵심문법 (테테쌤)', v: [{ id: 'Bjo26CN_sXc', lb: '본문·핵심문법', s: '테테쌤', dur: '' }] },
+  { n: 2, t: '8과 본문·핵심문법 Part.1 (테테쌤)', v: [{ id: 'QVi4iMnHgsw', lb: '본문·핵심문법 1', s: '테테쌤', dur: '' }] },
+  { n: 3, t: '8과 본문·핵심문법 Part.2 (테테쌤)', v: [{ id: 'VfhN_nNLT6E', lb: '본문·핵심문법 2', s: '테테쌤', dur: '' }] },
+  { n: 4, t: '7과 대화문 (서동인 영어학원)', v: [{ id: 'jbcH6AeLwCE', lb: '대화문', s: '서동인 영어학원', dur: '' }] }
+];
+
 /* ==== v95: 반별 인강관 교재 목록 ==== */
 var BB_BOOKS = [
   { key: 'bbaba', lab: '빠바 기초세우기', name: '빠바 기초세우기', cardSub: '2024 개정판 무료 유튜브 강의 16강',
@@ -5434,14 +5450,16 @@ var BB_BOOKS = [
     sub: '구판 · Day 01~60 (60일) · 슬라이드 + 강사 설명', unit: '일', mode: 'day', grade: '예비고1',
     store: 'topedu_voca_eowon_v1', accent: '#0369a1', bd: '#7dd3fc', btn: '#0284c7',
     grad: 'linear-gradient(135deg,#f0f9ff,#f8fafc)', shadow: 'rgba(2,132,199,.14)', rows: BB_EOWON_DAYS },
-  { key: 'silryeok', lab: '주니어 능률VOCA 실력', name: '주니어 능률VOCA 실력', cardSub: '구판 Day 01~60 · 단어·뜻·발음 암기',
-    sub: '구판(2018 개정) · Day 01~60 (60일) · 단어·뜻·발음 암기형', unit: '일', mode: 'day', grade: '중2',
-    store: 'topedu_voca_silryeok_v1', accent: '#5b21b6', bd: '#c4b5fd', btn: '#6d28d9',
-    grad: 'linear-gradient(135deg,#f5f3ff,#f8fafc)', shadow: 'rgba(109,40,217,.14)', rows: BB_SILRYEOK_DAYS },
-  { key: 'jungdeung', lab: '능률VOCA 중등필수', name: '능률VOCA 중등필수', cardSub: '2025 개정 핑크 · Day 01~50 · 단어·뜻·발음 암기',
-    sub: '2025 개정(핑크 표지) · Day 01~50 (50일) · 단어·뜻·발음 암기형', unit: '일', mode: 'day', grade: '중1',
-    store: 'topedu_voca_jungdeung_v1', accent: '#9d174d', bd: '#f9a8d4', btn: '#be185d',
-    grad: 'linear-gradient(135deg,#fdf2f8,#f8fafc)', shadow: 'rgba(190,24,93,.13)', rows: BB_JUNGDEUNG_DAYS }
+  { key: 'donga68', lab: '동아(윤정미) 6·7·8과 교과서 인강', name: '동아(윤정미) 6·7·8과 교과서 인강',
+    cardSub: '2022개정 · 본문해설(테테쌤) + 대화문·문법 6강',
+    sub: '2022개정 동아(윤정미) · 6·7·8과 본문해설·대화문·문법 6강', unit: '강', mode: 'lecture', grade: '중1',
+    store: 'topedu_donga68_v1', accent: '#0f766e', bd: '#5eead4', btn: '#0d9488',
+    grad: 'linear-gradient(135deg,#f0fdfa,#f8fafc)', shadow: 'rgba(13,148,136,.14)', raw: BB_DONGA68 },
+  { key: 'donga78', lab: '동아(윤정미) 7·8과 교과서 인강', name: '동아(윤정미) 7·8과 교과서 인강',
+    cardSub: '2022개정 · 본문·핵심문법(테테쌤) + 7과 대화문 4강',
+    sub: '2022개정 동아(윤정미) · 7·8과 본문·핵심문법 + 7과 대화문 4강', unit: '강', mode: 'lecture', grade: '중2',
+    store: 'topedu_donga78_v1', accent: '#5b21b6', bd: '#c4b5fd', btn: '#6d28d9',
+    grad: 'linear-gradient(135deg,#f5f3ff,#f8fafc)', shadow: 'rgba(109,40,217,.14)', raw: BB_DONGA78 }
 ];
 
 var BB_BOOK = 'bbaba';
@@ -5471,10 +5489,11 @@ function bbSees(bk, ban) {
 }
 function bbBooksFor(ban) { return BB_BOOKS.filter(function (b) { return bbSees(b, ban); }); }
 function bbMyBooks() { return bbBooksFor(bbBan()); }
-function bbBook(key) {
+function bbFindBook(key) {
   for (var i = 0; i < BB_BOOKS.length; i++) if (BB_BOOKS[i].key === key) return BB_BOOKS[i];
-  return BB_BOOKS[0];
+  return null;
 }
+function bbBook(key) { return bbFindBook(key) || BB_BOOKS[0] || null; }
 function bbCurBook() { return bbBook(BB_BOOK); }
 function bbItems(bk) {
   if (!bk._it) {
@@ -5545,7 +5564,10 @@ function bbSegLen(){
   try { if (BB_YT && BB_YT.getDuration) full = Math.floor(BB_YT.getDuration() || 0); } catch (e) {}
   if (!full) full = bbParseDur(v.dur);
   if (full > st) return full - st;
-  return bbParseDur(v.dur) || 0;
+  var pd = bbParseDur(v.dur);
+  if (pd > 0) return pd;
+  /* v153: 길이를 모르는 교과서 인강은 플레이어에서 길이를 못 읽어도 최소 5분 기준으로 확인 */
+  return (bk.mode === 'lecture') ? 300 : 0;
 }
 function bbNeedPct(len){ return (len && len <= 30) ? 0.80 : 0.85; }
 function bbNeedSec(){
@@ -7816,7 +7838,8 @@ function drawHomePlanCard(ban){
 }
 function hpOpenVideo(key, day){
   try {
-    var bk = bbBook(key);
+    var bk = bbFindBook(key);
+    if (!bk) { try { openBbaba((bbMyBooks()[0] || {}).key || 'bbaba'); } catch (e) {} return; }
     BB_BOOK = bk.key;
     BB_SEL = { ch: day, part: 0 };
     BB_LAST[bk.key] = { ch: day, part: 0 };
@@ -11279,28 +11302,35 @@ function homeTaskPanel(me) {
     var cfg = hpGet(ban);
     var w = cfg ? hpWalkCfg(cfg, today) : null;
     if (cfg && w) {
-      var bk = bbBook(cfg.book), ti = null;
+      var bk = bbFindBook(cfg.book), ti = null;   /* v153: 능률보카 인강관 제거 — 없으면 null */
       try { ti = hpTestInfo(cfg, today); } catch (e) {}
       var hasDay = (w.type === 'new' || w.type === 'review');
       var dd = 0, tt = 0, d2;
-      if (hasDay) { for (d2 = w.from; d2 <= w.to; d2++) { tt++; if (bbIsDoneIn(bk, d2)) dd++; } }
+      if (hasDay && bk) { for (d2 = w.from; d2 <= w.to; d2++) { tt++; if (bbIsDoneIn(bk, d2)) dd++; } }
       h += '<div class="sh-sec"><div class="sh-sec-h"><span class="sh-sec-t">🏠 집에서 할 일</span><span class="sh-pill">' + esc(cfg.pattern) + '반</span></div>';
       if (w.type === 'before') {
         h += '<div class="sh-planline">' + esc(hpMMDD(cfg.startDate)) + '(' + esc(hpWDof(cfg.startDate)) + ')부터 시작 — 첫날은 <b>' + esc(hpRangeTxt(w)) + '</b></div>';
       } else if (w.type === 'review') {
-        h += '<div class="sh-planline">오늘 숙제: <b>' + esc(hpRangeTxt(w)) + '</b> — 인강 + 틀린 단어 집중 암기</div>';
+        h += '<div class="sh-planline">오늘 숙제: <b>' + esc(hpRangeTxt(w)) + '</b> — ' + ((bk && bk.mode === 'day') ? '인강 + ' : '') + '틀린 단어 집중 암기</div>';
       } else if (w.type === 'class') {
         h += '<div class="sh-planline">오늘은 <b>수업일(' + esc(hpWDof(today)) + ')</b> — 새 단어는 다음 수업부터, 문장·독해는 오늘도 조금씩!</div>';
       } else {
-        h += '<div class="sh-planline">오늘 숙제: <b>' + esc(hpRangeTxt(w)) + '</b> 인강 끝까지 + 단어 암기/테스트</div>';
+        h += '<div class="sh-planline">오늘 숙제: <b>' + esc(hpRangeTxt(w)) + '</b> ' + ((bk && bk.mode === 'day') ? '인강 끝까지 + ' : '') + '단어 암기/테스트</div>';
       }
-      if (hasDay) {
+      if (hasDay && bk && bk.mode === 'day') {
         var allDay = (tt > 0 && dd >= tt);
         h += _shRow('📹', '인강 ' + esc(hpRangeTxt(w)) + ' <b>' + dd + '/' + tt + '</b>', allDay ? '✓ 시청' : '인강 →',
           "hpOpenVideo('" + bk.key + "'," + w.from + ")", '', 0);
+      }
+      if (hasDay) {
         var wn = hpWordName(cfg.book, w.from);
         if (wn) h += _shRow('📒', esc(wn) + ' 암기 → 뜻고르기 → 짝맞추기 → 테스트', '단어장 →', "hpOpenWord('" + String(wn).replace(/'/g, "\\'") + "')", '', 0);
-      } else if (w.type === 'class') {
+      }
+      /* v153: 중1·중2는 학교 교과서(동아 윤정미) 인강으로 연결 */
+      var _tbk = null;
+      try { _tbk = bbFindBook(ban === '수지중1' ? 'donga68' : (ban === '수지중2' ? 'donga78' : '')); } catch (e) {}
+      if (_tbk) h += _shRow('📺', '<b>' + esc(_tbk.name) + '</b><span>' + esc(_tbk.cardSub) + '</span>', '보기 →', "openBbaba('" + _tbk.key + "')", '', 0);
+      if (w.type === 'class' && bk && bk.mode === 'day') {
         var tmr0 = hpFmt(hpAdd(hpParse(today), 1)), tw0 = hpWalkCfg(cfg, tmr0);
         if (tw0 && tw0.type === 'new') h += _shRow('📹', '내일(' + esc(hpWDof(tmr0)) + ') <b>' + esc(hpRangeTxt(tw0)) + '</b> 단어 인강 미리 보기', '인강 →',
           "hpOpenVideo('" + bk.key + "'," + tw0.from + ")", '', 0);
