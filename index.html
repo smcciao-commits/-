@@ -10826,7 +10826,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v166';
+var TOPEDU_APP_VERSION = 'v167';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -13796,6 +13796,7 @@ function ssHomeCard(ban) {
   var live = !!(sess && sess.active);
   var stoday = { st: 'none' };
   try { stoday = ssTodayState(ban, (S.cred && S.cred.name) || ''); } catch(e){}
+  try { ssRemoteWarm(ban, (S.cred && S.cred.name) || ''); } catch (e) {}   /* v167: 다른 기기에서 푼 기록이 있으면 받아와 카드에 보여 준다 */
   var h = '<div id="ss_home_card" style="margin:10px 0 12px;padding:14px 15px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#134e4a 70%);color:#fff;box-shadow:0 6px 18px rgba(15,23,42,.28)">';
   h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
     + '<span style="font-family:Maplestory,sans-serif;font-size:16px;font-weight:700;color:#5eead4">⏱️ 자기주도 1시간 모드</span>'
@@ -13805,7 +13806,7 @@ function ssHomeCard(ban) {
   if (stoday.st === 'done') {
     h += '<div style="margin:0 0 8px;padding:9px 11px;background:#ecfdf5;border:1.5px solid #10b981;border-radius:11px;color:#065f46;font-size:12.5px;font-weight:800;line-height:1.55">✅ 오늘 자기주도 완료! (' + ssDurKo(stoday.el) + ' 만에 완료 · 이탈 ' + stoday.leaveCnt + '회 · 밖에서 ' + ssDurKo(stoday.awaySec) + ')</div>';
   } else if (stoday.st === 'ing') {
-    h += '<div style="margin:0 0 8px;padding:9px 11px;background:#fffbeb;border:1.5px solid #f59e0b;border-radius:11px;color:#92400e;font-size:12.5px;font-weight:800;line-height:1.55">⏱️ 이어하기 — ' + stoday.stage + '단계 · ' + stoday.pg + '% · 경과 ' + ssDurKo(stoday.el) + ' · 이탈 ' + stoday.leaveCnt + '회<div style="font-weight:700;color:#b45309;margin-top:2px">1·2·3단계 오답까지 다 맞춰야 오늘 완주!</div></div>';
+    h += '<div style="margin:0 0 8px;padding:9px 11px;background:#fffbeb;border:1.5px solid #f59e0b;border-radius:11px;color:#92400e;font-size:12.5px;font-weight:800;line-height:1.55">⏱️ 이어서 풀기 — ' + stoday.stage + '단계 · ' + stoday.pg + '% · 경과 ' + ssDurKo(stoday.el) + ' · 이탈 ' + stoday.leaveCnt + '회<div style="font-weight:700;color:#b45309;margin-top:2px">집에서·다른 폰에서 열어도 여기서부터 이어져요. 1·2·3단계 오답까지 다 맞춰야 완주!</div></div>';
   } else {
     h += '<div style="margin:0 0 8px;padding:9px 11px;background:rgba(255,255,255,.08);border:1.5px solid rgba(94,234,212,.45);border-radius:11px;color:#ccfbf1;font-size:12.5px;font-weight:800;line-height:1.55">🕗 아직 시작 전 — 1·2·3단계를 오답까지 다 맞춰야 오늘 완주!</div>';
   }
@@ -13818,7 +13819,7 @@ function ssHomeCard(ban) {
       + '<div style="margin-top:6px;font-size:11.5px;font-weight:700;color:#94a3b8;line-height:1.5">오늘 완료 기록과 선생님 화면의 [완료] 표시는 그대로 유지돼요. 내일 다시 시작할 수 있어요.</div>';
   } else {
   h += '<button type="button" id="ss_go" style="width:100%;margin-top:10px;border:none;border-radius:13px;padding:12px;font-size:15px;font-weight:900;font-family:inherit;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;box-shadow:0 4px 12px rgba(20,184,166,.35)">'
-  + (live ? '🔴 지금 입장하기 →' : (stoday.st === 'ing' ? '▶ 이어서 끝내기 →' : '▶ 자기주도 시작하기')) + '</button>';
+  + (live ? '🔴 지금 입장하기 →' : (stoday.st === 'ing' ? ('⏱️ 이어서 풀기 (' + stoday.pg + '% · ' + stoday.stage + '단계)') : '▶ 자기주도 시작하기')) + '</button>';
   }
   h += '</div>';
   return h;
@@ -13879,12 +13880,46 @@ function ssEntry() {
   SS.session = ssSessionActive(me.ban);
   var snap = ssSnapGet(me.ban, me.name);
   if (snap && (snap.name !== me.name || (snap.ban && snap.ban !== me.ban))) snap = null;   /* v159: 다른 학생 기록은 절대 이어하지 않음 */
-  if (snap && !snap.done && (Date.now() - (snap.at || 0)) < 3 * 3600000) {
-    if (confirm('오늘 자기주도 기록이 남아 있어요.\n(' + (snap.stage === 99 ? '완료' : snap.stage + '단계') + ' · 경과 ' + ssMMSS((Date.now() - snap.t0) / 1000) + ')\n\n이어서 할까요?\n[취소]를 누르면 처음부터 다시 시작해요.')) {
-      ssResume(snap); return;
+  if (!ssSnapIsToday(snap)) snap = null;   /* v167: 어제·완료 기록은 이어하지 않음 */
+  if (SS._entryBusy) return;               /* v167: 서버 기록 확인 중 두 번 눌림 방지 */
+  SS._entryBusy = true;
+  /* v167: 다른 기기(학원 태블릿/카톡 → 집 폰·다른 브라우저)에서 폰 기록은 서버(ntfy) 스냅샷에 있어요.
+     로컬 기록이 없거나 서버 기록이 더 앞서 있으면 서버 것을 가져와 이어하기에 씁니다. */
+  var loadEl = null;
+  var loadT = setTimeout(function () {
+    try {
+      loadEl = document.createElement('div');
+      loadEl.style.cssText = 'position:fixed;left:0;right:0;bottom:18px;z-index:100001;text-align:center;pointer-events:none';
+      loadEl.innerHTML = '<span style="display:inline-block;padding:9px 16px;border-radius:999px;background:rgba(15,23,42,.86);color:#5eead4;font-size:12.5px;font-weight:800;font-family:inherit">⏳ 오늘 이어할 기록 확인 중…</span>';
+      document.body.appendChild(loadEl);
+    } catch (e) {}
+  }, 700);
+  function ssEntryFin(remote) {
+    try { clearTimeout(loadT); } catch (e) {}
+    if (loadEl) { try { loadEl.parentNode.removeChild(loadEl); } catch (e) {} loadEl = null; }
+    SS._entryBusy = false;
+    /* v167: 다른 기기에서 오늘 이미 완주했으면 이 폰에 남은 중간 기록보다 완료가 우선 */
+    if (remote && remote.done && ssSnapDayKey(remote.at) === tdKey()) {
+      ssSnapStash(remote);
+      alert('🎉 오늘 자기주도는 이미 완료했어요!'
+        + (Number(remote.doneEl) ? ('\n\n완료 시간 ' + ssMMSS(Number(remote.doneEl))) : '')
+        + '\n\n오늘 완료 기록과 선생님 화면의 [완료] 표시는 그대로 유지돼요.\n내일 다시 시작할 수 있어요.');
+      try { refreshHome(); } catch (e) {}
+      return;
     }
+    var use = ssPickSnap(snap, remote);
+    if (use && use.done) {
+      ssSnapStash(use);
+      alert('🎉 오늘 자기주도는 이미 완료했어요!'
+        + (Number(use.doneEl) ? ('\n\n완료 시간 ' + ssMMSS(Number(use.doneEl))) : '')
+        + '\n\n오늘 완료 기록과 선생님 화면의 [완료] 표시는 그대로 유지돼요.\n내일 다시 시작할 수 있어요.');
+      try { refreshHome(); } catch (e) {}
+      return;
+    }
+    if (use) { ssSnapStash(use); ssSnapAsk(use); return; }
+    ssStart();
   }
-  ssStart();
+  ssSnapRemoteFetch(me.ban, me.name, ssEntryFin, 3000);
 }
 function ssStart() {
   var me = S.cred;
@@ -13935,11 +13970,17 @@ function ssResume(snap) {
     d.answered = false; d.retry = null;
   });
   SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: 0, wrongN: snap.s2wrong || 0, built: [] };
-  SS.s3 = { qs: ssBuildS3(SS.ban, SS.seed, snap.probCount || ssCfg(SS.ban).probCount), i: snap.s3i || 0, ok: 0, answered: false, wrong: snap.s3wrong || [], rt: null };
+  var _s3w = (snap.s3wrong && snap.s3wrong.length) ? snap.s3wrong : null;
+  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: 0, wrongN: snap.s2wrong || 0, built: [] };
+  SS.s3 = { qs: ssBuildS3(SS.ban, SS.seed, snap.probCount || ssCfg(SS.ban).probCount), i: snap.s3i || 0, ok: 0, answered: false, wrong: [], rt: null };
+  /* v167: 원격(ntfy) 스냅샷은 문제 원문 대신 번호만 담아 오므로 같은 목록에서 되살린다 */
+  SS.s3.wrong = _s3w ? _s3w
+    : (snap.s3wi || []).map(function (k) { return SS.s3.qs[k]; }).filter(Boolean);
   SS.wrongWords = snap.wrongWords || []; SS.wrongProbs = snap.wrongProbs || [];
   ssOverlayOn(true);
   ssFullscreen(); ssWake(true); ssBind(true); ssHistPush(); ssNetPub(); ssTickStart(); ssStatusPub();
   if (SS.stage === 2) { SS.scr = 's2'; } else if (SS.stage === 3) { SS.scr = 's3'; } else { SS.scr = 'hub'; }
+  try { ssSaveSnap(); } catch (e) {}   /* v167: 이어하기 시작 상태도 이 폰·서버에 다시 올려 둔다 */
   ssRender();
 }
 function ssSaveSnap() {
@@ -13954,7 +13995,9 @@ function ssSaveSnap() {
     }),
     s2i: SS.s2.i, s3i: SS.s3.i, s2wrong: SS.s2.wrongN || 0, s3wrong: SS.s3.wrong || [], scr: SS.scr, done: SS.done,
     sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
-    wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now(), ver: 147
+    /* v167: 다른 기기(ntfy)로도 보낼 수 있게 틀린 문제는 '번호'만 따로 남긴다 (문제 원문은 큼) */
+    s3wi: (SS.s3.wrong || []).map(function (q) { return SS.s3.qs.indexOf(q); }).filter(function (i) { return i >= 0; }),
+    wrongWords: SS.wrongWords, wrongProbs: SS.wrongProbs, at: Date.now(), ver: 167
   };
   /* v159: 이어하기 기록을 학생별(반|이름)로 따로 저장 — 한 폰을 여러 학생이 쓰면
      다른 학생 기록(이름·반·문제)이 그대로 이어지던 문제 수정 */
@@ -13964,6 +14007,8 @@ function ssSaveSnap() {
     all[ssSnapKey(SS.ban, SS.name)] = s;
     store(SS_SNAPS_KEY, all);
   } catch (e) {}
+  /* v167: 같은 기록을 서버(ntfy)에도 올려 두면 학원 태블릿·카톡 → 집 폰/다른 브라우저에서도 이어서 풀 수 있어요 */
+  try { ssSnapRemoteSave(s, false); } catch (e) {}
 }
 var SS_SNAPS_KEY = 'topedu_ss159_snaps';
 function ssSnapKey(ban, name) { return String(ban || '') + '|' + String(name || ''); }
@@ -13981,6 +14026,187 @@ function ssSnapGet(ban, name) {
     if (old && old.name === name && (!ban || !old.ban || old.ban === ban)) return old;
   } catch (e) {}
   return null;
+}
+
+/* ================= v167: 자기주도 이어하기 =================
+   ① 오늘 하루 종일 — 수업 끝나고 몇 시간 뒤 집에서 다시 열어도 중단한 곳부터 (3시간 제한 폐지)
+   ② 기기가 바뀌어도 — 학원 태블릿·카톡 인앱에서 풀다가 집 폰/다른 브라우저로 열어도
+      이미 앱이 쓰고 있는 ntfy.sh에 학생별·날짜별 경량 스냅샷을 올려 두고, 없거나 더 앞선 기록이면 자동으로 받아 이어준다.
+   ③ [처음부터 다시 풀기]는 두 번 확인해야만 기록이 지워진다. */
+function ssSnapDayKey(ms) { try { return tdKey(new Date(Number(ms) || 0)); } catch (e) { return ''; } }
+/* v167: '오늘(at이 오늘) 아직 못 끝낸 기록'인가 — 시간(3시간)과 무관, 어제 기록은 이어하지 않음 */
+function ssSnapIsToday(snap) { return !!(snap && !snap.done && ssSnapDayKey(snap.at) === tdKey()); }
+
+var SS_SNAP_TOPIC = 'topedu_ss_snap_';
+var SS_REMOTE = { key: '', snap: null, at: 0, tryKey: '', tryAt: 0, busy: false };
+var SS_RSNP = { last: null, at: 0, sig: '', qn: 0, timer: null };
+
+/* ntfy 토픽은 영문·숫자·-·_ 만, 64자 이내 — 반|이름|날짜 해시로 만든다 */
+function ssSnapTopic(ban, name, day) {
+  return SS_SNAP_TOPIC + (ssHashStr(String(ban || '') + '|' + String(name || '') + '|' + String(day || tdKey())) >>> 0).toString(36);
+}
+/* 원격에 보낼 경량 스냅샷 — ntfy 메시지 4KB 제한에 맞춰 문제 원문·보기·지문·퀴즈는 빼고 진행 상태만 */
+function ssSnapSlim(s) {
+  return {
+    ban: s.ban, name: s.name, t0: Number(s.t0) || 0, goal: Number(s.goal) || 60, stage: Number(s.stage) || 1,
+    leaveCnt: Number(s.leaveCnt) || 0, leaveSec: Math.round(Number(s.leaveSec) || 0), graceUsed: !!s.graceUsed,
+    seed: Number(s.seed) || 1, stats: s.stats || null,
+    awaySec: Math.round(Number(s.awaySec) || 0), awayOpen: Number(s.awayOpen) || 0,
+    doneEl: Math.round(Number(s.doneEl) || 0), doneAt: Number(s.doneAt) || 0,
+    days: (s.days || []).map(function (d) {
+      return {
+        day: d.day, name: d.name, lbl: d.lbl || '', ex: !!d.ex, def: !!d.def, status: d.status, score: d.score,
+        attempts: d.attempts, fixed: !!d.fixed, qwrong: (d.qwrong || []).slice(0, 30), qok: Number(d.qok) || 0,
+        learnAt: Number(d.learnAt) || 0, learnOk: !!d.learnOk
+      };
+    }),
+    s2i: Number(s.s2i) || 0, s3i: Number(s.s3i) || 0, s2wrong: Number(s.s2wrong) || 0, s3wi: (s.s3wi || []).slice(0, 30),
+    done: !!s.done, sentCount: Number(s.sentCount) || 0, probCount: Number(s.probCount) || 0,
+    wrongWords: (s.wrongWords || []).slice(0, 30), at: Number(s.at) || Date.now(), ver: 167, slim: 1
+  };
+}
+function ssSnapRemoteJson(s) {
+  try {
+    var o = ssSnapSlim(s), txt = JSON.stringify(o);
+    if (txt.length <= 3600) return txt;
+    /* 아직 크면 오답 단어 목록·긴 이름을 더 줄인다 */
+    o.wrongWords = [];
+    o.days = o.days.map(function (d) { d.qwrong = []; d.lbl = ''; return d; });
+    txt = JSON.stringify(o);
+    return txt.length <= 3600 ? txt : null;
+  } catch (e) { return null; }
+}
+function ssSnapRemotePost(s, keepalive) {
+  if (!s || SS.preview || !s.ban || !s.name || s.ban === '선생님') return;
+  var txt = ssSnapRemoteJson(s);
+  if (!txt) return;
+  try {
+    /* priority 1 = 알림 없이 조용히 저장 (학생 폰이 울리지 않게) */
+    fetch('https://ntfy.sh', {
+      method: 'POST', keepalive: !!keepalive, headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: ssSnapTopic(s.ban, s.name, ssSnapDayKey(s.at)), title: 'sss167', message: txt, priority: 1 })
+    }).catch(function () {});
+  } catch (e) {}
+}
+/* 저장 시점 조절 — 단계 변경·Day 완료는 즉시, 문제 풀이는 3문제마다 또는 18초마다, 나가기 직전은 keepalive 즉시 */
+function ssSnapRemoteSave(s, force) {
+  if (SS.preview || !s || !s.ban || !s.name || s.ban === '선생님') return;
+  SS_RSNP.last = s;
+  var sig = (s.done ? '99' : s.stage) + '|' + (s.days || []).map(function (d) { return (d.status || '') + ((d.qwrong && d.qwrong.length) ? 'w' + d.qwrong.length : ''); }).join(',');
+  var qn = (Number(s.s2i) || 0) + (Number(s.s3i) || 0);
+  var now = Date.now();
+  if (!force && sig === SS_RSNP.sig && (qn - SS_RSNP.qn) < 3 && (now - SS_RSNP.at) < 18000) {
+    if (!SS_RSNP.timer && SS_RSNP.at) {
+      SS_RSNP.timer = setTimeout(function () {
+        SS_RSNP.timer = null;
+        try { if (SS.on && SS_RSNP.last) ssSnapRemoteSave(SS_RSNP.last, false); } catch (e) {}
+      }, Math.max(800, 18500 - (now - SS_RSNP.at)));
+    }
+    return;
+  }
+  if (SS_RSNP.timer) { clearTimeout(SS_RSNP.timer); SS_RSNP.timer = null; }
+  SS_RSNP.sig = sig; SS_RSNP.qn = qn; SS_RSNP.at = now;
+  ssSnapRemotePost(s, !!force);
+}
+/* 오늘 올라온 원격 스냅샷 중 가장 최근 것 받기 (없으면 null) */
+function ssSnapRemoteFetch(ban, name, cb, ms) {
+  var done = false, t = null;
+  function cached() { return SS_REMOTE.key === ssSnapKey(ban, name) ? SS_REMOTE.snap : null; }
+  function fin(v) {
+    if (done) return;
+    done = true;
+    try { clearTimeout(t); } catch (e) {}
+    try { cb(v || null); } catch (e) {}
+  }
+  t = setTimeout(function () { fin(cached()); }, ms || 3000);
+  try {
+    fetch('https://ntfy.sh/' + ssSnapTopic(ban, name) + '/json?poll=1&since=24h', { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (txt) {
+        var best = null;
+        String(txt || '').split('\n').forEach(function (ln) {
+          if (!ln || ln.charAt(0) !== '{') return;
+          try {
+            var o = JSON.parse(ln);
+            if (!o || !o.message) return;
+            var s = JSON.parse(o.message);
+            if (!s || s.ban !== ban || s.name !== name) return;
+            if (ssSnapDayKey(s.at) !== tdKey()) return;
+            if (!best || (Number(s.at) || 0) >= (Number(best.at) || 0)) best = s;
+          } catch (e) {}
+        });
+        if (best) { SS_REMOTE.key = ssSnapKey(ban, name); SS_REMOTE.snap = best; SS_REMOTE.at = Date.now(); }
+        fin(best);
+      }).catch(function () { fin(cached()); });
+  } catch (e) { fin(cached()); }
+}
+/* 홈 카드용 — 하루에 한 번 정도만 조용히 확인하고, 받아오면 카드를 다시 그린다 */
+function ssRemoteWarm(ban, name) {
+  if (!ban || !name || ban === '선생님' || SS.preview || SS.on) return;
+  var key = ssSnapKey(ban, name), now = Date.now();
+  if (SS_REMOTE.busy && SS_REMOTE.tryKey === key) return;
+  if (SS_REMOTE.tryKey === key && (now - SS_REMOTE.tryAt) < 60000) return;
+  SS_REMOTE.tryKey = key; SS_REMOTE.tryAt = now; SS_REMOTE.busy = true;
+  ssSnapRemoteFetch(ban, name, function (r) {
+    SS_REMOTE.busy = false;
+    if (!r) return;
+    try { ssHomeCardRefresh(); } catch (e) {}
+  }, 5000);
+}
+function ssSnapStash(snap) {
+  try {
+    if (!snap || !snap.ban || !snap.name) return;
+    var all = ssSnapAll(), now = Date.now(), k;
+    for (k in all) { if (!all[k] || (now - (all[k].at || 0)) > 2 * 86400000) delete all[k]; }
+    all[ssSnapKey(snap.ban, snap.name)] = snap;
+    store(SS_SNAPS_KEY, all);
+  } catch (e) {}
+}
+/* 로컬 기록과 원격 기록 중 이어하기에 쓸 것 — 진행률이 더 높은 쪽(같으면 최근 것) */
+function ssPickSnap(local, remote) {
+  var l = ssSnapIsToday(local) ? local : null;
+  var r = ssSnapIsToday(remote) ? remote : null;
+  if (l && r) {
+    if (ssSnapPct(r) > ssSnapPct(l)) return r;
+    if (ssSnapPct(r) === ssSnapPct(l) && (Number(r.at) || 0) > (Number(l.at) || 0)) return r;
+    return l;
+  }
+  return l || r || null;
+}
+/* v167: 이어하기 / 처음부터 — [취소]만 눌러 기록이 날아가던 confirm 대신 두 버튼 모달 */
+function ssSnapAsk(snap) {
+  try { var o = document.getElementById('ssAsk'); if (o && o.parentNode) o.parentNode.removeChild(o); } catch (e) {}
+  var pg = ssSnapPct(snap), stg = (Number(snap.stage) === 99 ? '완료' : ((Number(snap.stage) || 1) + '단계'));
+  var el = Math.max(0, (Date.now() - (Number(snap.t0) || Date.now())) / 1000);
+  var wrap = document.createElement('div');
+  wrap.id = 'ssAsk';
+  wrap.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.62);display:flex;align-items:center;justify-content:center;padding:18px;font-family:inherit';
+  wrap.innerHTML = '<div style="width:100%;max-width:340px;background:#fff;border-radius:20px;padding:20px 18px;box-shadow:0 18px 50px rgba(0,0,0,.35)">'
+    + '<div style="font-size:17px;font-weight:900;color:#0f172a;margin-bottom:8px">⏱️ 오늘 자기주도 기록이 남아 있어요</div>'
+    + '<div style="font-size:13.5px;font-weight:800;color:#334155;line-height:1.6;background:#f1f5f9;border-radius:12px;padding:10px 12px;margin-bottom:14px">'
+    + stg + ' · 진행률 <b style="color:#0d9488">' + pg + '%</b><br>경과 ' + ssDurKo(el) + ' · 이탈 ' + (Number(snap.leaveCnt) || 0) + '회</div>'
+    + '<button type="button" id="ssAskGo" style="width:100%;border:none;border-radius:14px;padding:14px;font-size:16px;font-weight:900;font-family:inherit;color:#fff;background:linear-gradient(135deg,#14b8a6,#0d9488);box-shadow:0 4px 14px rgba(20,184,166,.4);cursor:pointer">▶ 이어서 하기</button>'
+    + '<button type="button" id="ssAskNew" style="width:100%;margin-top:8px;border:1.5px solid #e2e8f0;border-radius:14px;padding:12px;font-size:13.5px;font-weight:800;font-family:inherit;color:#64748b;background:#fff;cursor:pointer">🔄 처음부터 다시 풀기</button>'
+    + '<div style="margin-top:10px;font-size:11.5px;color:#94a3b8;font-weight:700;line-height:1.5;text-align:center">이어서 하기를 누르면 중단한 지점부터 계속해요.</div>'
+    + '</div>';
+  document.body.appendChild(wrap);
+  var go = document.getElementById('ssAskGo'), nw = document.getElementById('ssAskNew');
+  if (go) go.onclick = function () {
+    try { wrap.parentNode.removeChild(wrap); } catch (e) {}
+    ssSnapUse(snap);
+  };
+  if (nw) nw.onclick = function () {
+    /* 처음부터 = 기록 삭제 → 실수 방지를 위해 한 번 더 확인 */
+    if (!confirm('처음부터 다시 풀까요?\n\n지금까지 한 기록(진행률 ' + pg + '%)이 사라져요.\n이어서 하려면 [아니오]를 눌러 주세요.')) return;
+    try { wrap.parentNode.removeChild(wrap); } catch (e) {}
+    try { SS_RSNP.last = null; } catch (e) {}
+    ssStart();
+  };
+}
+function ssSnapUse(snap) {
+  ssSnapStash(snap);
+  try { SS_RSNP.last = null; } catch (e) {}
+  ssResume(snap);
 }
 
 /* ---------- v147: 학생별·날짜별 자기주도 완료 기록 (미리보기는 저장 금지) ---------- */
@@ -14036,7 +14262,13 @@ function ssTodayState(ban, name){
   var dn = null; try { dn = ssTodayDoneInfo(ban, name); } catch(e){}
   if (dn) return { st: 'done', el: dn.el, leaveCnt: dn.leaveCnt, awaySec: dn.awaySec, at: dn.doneAt };
   var snap = null; try { snap = ssSnapGet(ban, name); } catch(e){}
-  if (snap && snap.name === name && owlIsToday(snap.t0) && !snap.done) {
+  /* v167: 다른 기기에서 푼 오늘 기록(서버)이 더 앞서 있으면 그것으로 보여 준다 */
+  var rem = (SS_REMOTE && SS_REMOTE.key === ssSnapKey(ban, name)) ? SS_REMOTE.snap : null;
+  if (rem && rem.name === name && ssSnapDayKey(rem.at) === tdKey()) {
+    if (rem.done) return { st: 'done', el: Number(rem.doneEl) || 0, leaveCnt: Number(rem.leaveCnt) || 0, awaySec: Number(rem.awaySec) || 0, at: Number(rem.doneAt) || 0 };
+    if (ssSnapIsToday(rem) && (!ssSnapIsToday(snap) || ssSnapPct(rem) > ssSnapPct(snap))) snap = rem;
+  }
+  if (snap && snap.name === name && ssSnapIsToday(snap)) {
     return { st: 'ing', stage: snap.stage || 1, el: Math.max(0, (Date.now() - (snap.t0 || Date.now())) / 1000), leaveCnt: Number(snap.leaveCnt) || 0, awaySec: Number(snap.awaySec) || 0, pg: ssSnapPct(snap) };
   }
   return { st: 'none' };
@@ -14157,6 +14389,8 @@ function ssPageHide() {
   if (!SS.on || SS.done) return;
   ssLeaveBegin('앱을 닫음');
   try { ssSaveSnap(); } catch (e) {}
+  /* v167: 앱을 닫는 순간의 진행 상황을 서버에 즉시(keepalive) 올린다 — 집 폰에서 이어 풀 수 있게 */
+  try { if (SS_RSNP.last) ssSnapRemotePost(SS_RSNP.last, true); } catch (e) {}
 }
 function ssPageShow() {
   if (!SS.on || SS.done) return;
@@ -14166,6 +14400,8 @@ function ssLeaveBegin(why) {
   if (SS.leaveT) return;
   SS.leaveT = Date.now(); SS.awayOpen = SS.leaveT; SS.leaveWhy = why;
   try { ssSaveSnap(); } catch (e) {}
+  /* v167: 화면을 벗어나는 순간(다른 앱·홈 화면)에도 진행 상황을 서버에 즉시 올린다 */
+  try { if (SS_RSNP.last) ssSnapRemotePost(SS_RSNP.last, true); } catch (e) {}
 }
 function ssLeaveEnd() {
   if (!SS.leaveT) { SS.awayOpen = 0; return; }
