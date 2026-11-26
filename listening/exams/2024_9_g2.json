@@ -152,7 +152,7 @@
   },
   {
    "no": 9,
-   "prompt": "Short­form Video Course에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "prompt": "Short-form Video Course에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
    "points": 2,
    "choices": [
     "무료 온라인 강좌이다.",
@@ -263,9 +263,9 @@
    "choices": [
     "traditional ways to preserve foods",
     "possible origins of famous desserts",
-    "health concerns about ready­made foods",
+    "health concerns about ready-made foods",
     "controversy over the cost of popular desserts",
-    "newly­invented desserts with special ingredients"
+    "newly-invented desserts with special ingredients"
    ],
    "img": null,
    "answer": 2,
