@@ -6355,7 +6355,8 @@ function showHome(){
       '<button class="btn" id="bjoinlive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 우리 반 화상수업</button>'+
       '</div>';
   }
-  if(!h.sets.length) _extra+='<div class="card">아직 올라온 학습이 없어요.</div>';
+  var _setsHtml = '';   /* v161: 단어 목록은 수업일에도 항상 펼쳐 보이도록 따로 모은다 */
+  if(!h.sets.length) _setsHtml+='<div class="card">아직 올라온 학습이 없어요.</div>';
   var teach=me.ban==='선생님', tf=S.tf||'';
   if(teach){
     /* v107: 실제 반만 버튼으로 — '전체'는 [전체 보기]가 하므로 빼고, 예전 테스트 태그도 숨김 */
@@ -6368,16 +6369,18 @@ function showHome(){
   }
   h.sets.forEach(function(s,i){
     if(teach && tf && (s.target||'전체').split(/[,，\/]/).map(function(x){return x.trim();}).indexOf(tf)<0 && s.target!=='전체' && s.target) return;
-    _extra+='<button class="set" data-i="'+i+'"><div class="ico '+(s.type==='단어'?'w">📘':'p">📝')+'</div>'+
+    _setsHtml+='<button class="set" data-i="'+i+'"><div class="ico '+(s.type==='단어'?'w">📘':'p">📝')+'</div>'+
       '<div class="grow" style="flex:1;min-width:0"><div class="nm">'+esc(s.name)+'</div><div class="small">'+(s.type==='단어'?'단어 '+s.count+'개':'문제 '+s.count+'개')+'</div></div>'+statusChip(s)+'</button>';
   });
   /* v153: 수업일(학원 가는 날)에는 '부엉이 카드 + ⏱️ 자기주도' 딱 2개만 — 나머지는 접어 둔다 */
+  /* v161: 원장님 요청 — 수업일에도 단어 목록은 자기주도 카드 바로 아래에 항상 펼쳐 둔다 (그 밖의 도구만 접기) */
   if (_ssDay) {
     html += _ssCard;
+    html += '<div class="sub" style="margin:14px 2px 6px;font-weight:700">📘 내 단어장</div>' + _setsHtml;
     html += '<details class="home-more"><summary>📚 다른 학습 도구 · 도착 쪽지 · 알림 설정</summary><div class="home-more-in">' + _extra + '</div></details>';
   } else {
     html += _ssCard;
-    html += _extra;
+    html += _extra + _setsHtml;
   }
   html+='<button class="linkbtn" id="out">다른 사람으로 로그인</button>';
   app.innerHTML=html;
@@ -10714,7 +10717,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v160';
+var TOPEDU_APP_VERSION = 'v161';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
