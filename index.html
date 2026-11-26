@@ -2885,12 +2885,15 @@ function ch5DailyInfo(ban, name){
       if (isSetCompleteByName(ban, name, nm)) dayMarkDone(ban, name, nm, t);
     }
   } catch(e){}
+  /* v162: 진도 보호 — 이 학생이 끝낸 가장 뒤 Day 앞으로는 돌아가지 않는다 */
+  try { var _c5 = dpSeriesOf(list[0] && list[0].name); if (_c5) list = dpApplyFloor(ban, name, _c5.prefix, list.map(function (x) { var o = {}; for (var kk in x) o[kk] = x[kk]; if (!o.day) { var _d = dpSeriesOf(x.name); o.day = _d ? _d.day : 0; } return o; })); } catch (e) {}
   var items = [];
   for (i = 0; i < list.length; i++) {
     var complete = false;
     try { complete = isSetCompleteByName(ban, name, list[i].name); } catch(e){}
     items.push({ name: list[i].name, day: list[i].day, count: list[i].count, complete: complete, today: (dayDoneAt(ban, name, list[i].name) === t) });
   }
+  try { items = dpSkipPast(ban, name, items); } catch (e) {}   /* v162: 진도 보호 */
   var start = 0, found = false;
   /* v147: 오늘 이미 2 Day 이상 끝냈으면(그 뒤 더 해도) 오늘 목표는 완료로 본다 */
   var todays = [];
@@ -2945,6 +2948,61 @@ function daySeriesOf(sets, setName){
   out.sort(function(a, b){ return a.day - b.day; });
   return out.length ? out : null;
 }
+/* ============ v162: 단어 Day 진도 보호 (모든 반) ============
+   ⚠️ 피클·Claude 등 누가 앱을 고치더라도 학생 단어 진도가 Day 1로 되돌아가면 안 된다.
+   오늘의 학습(하루 2 Day)은 아래 두 기준 중 더 뒤의 Day부터 시작한다.
+     ① 반 숙제 계획의 시작 Day (선생님 화면 숙제 계획에서 저장 → 모든 학생 폰에 동기화)
+        — 그 교재(어원편·중등필수·실력)와 같은 Day 시리즈일 때만
+     ② 그 학생이 끝낸 가장 뒤의 Day (이 폰에 따로 저장: topedu_day_hw — 앱 새 버전에도 유지)
+   Day 시리즈 이름(예: '능률VOCA 어원편')별로 따로 기록한다. */
+var DP_HW_KEY = 'topedu_day_hw';
+function dpSeriesOf(setName){
+  var m = String(setName || '').match(/^(.*?)\s*Day\s+(\d+)/);
+  return m ? { prefix: String(m[1] || '').trim(), day: parseInt(m[2], 10) } : null;
+}
+function dpHwGet(ban, name, prefix){
+  try { return Number((store(DP_HW_KEY) || {})[dayMapKey(ban, name, prefix)]) || 0; } catch (e) { return 0; }
+}
+function dpHwBump(ban, name, setName){
+  var sr = dpSeriesOf(setName);
+  if (!ban || !name || !sr || !sr.day || String(setName).indexOf('(복습)') >= 0) return;
+  try {
+    var m = store(DP_HW_KEY) || {}, k = dayMapKey(ban, name, sr.prefix);
+    if ((Number(m[k]) || 0) < sr.day) { m[k] = sr.day; store(DP_HW_KEY, m); }
+  } catch (e) {}
+}
+/* 반 숙제 계획의 시작 Day — 오늘의 학습 Day 시리즈와 같은 교재일 때만 */
+function dpPlanFloor(ban, prefix){
+  try {
+    var c = hpGet(ban);
+    if (!c || !c.book || !(Number(c.startDay) > 1)) return 0;
+    var wn = hpWordName(c.book, Number(c.startDay)), sr = dpSeriesOf(wn);
+    return (sr && sr.prefix === prefix) ? Number(c.startDay) : 0;
+  } catch (e) { return 0; }
+}
+/* 끝낸 Day 중 가장 뒤 Day를 기록하고, 그 앞의 (안 끝낸) Day는 오늘 분량에서 뺀다
+   (다른 폰에서 불러온 진도·예전 진도도 여기서 함께 반영된다) */
+function dpSkipPast(ban, name, items){
+  if (!items || !items.length) return items;
+  var mx = 0, i;
+  /* 오늘 끝낸 Day는 오늘 분량에 남겨 두어야 하므로 '지난 날 끝낸 Day'만 본다 */
+  for (i = 0; i < items.length; i++) { if (items[i].complete && !items[i].today && (Number(items[i].day) || 0) > mx) mx = Number(items[i].day) || 0; }
+  if (mx > 0) { try { dpHwBump(ban, name, (items.filter(function (x) { return Number(x.day) === mx; })[0] || {}).name); } catch (e) {} }
+  if (!(mx > 1)) return items;
+  var cut = items.filter(function (x) { return (Number(x.day) || 0) >= mx || x.today; });
+  return (cut.length >= 2) ? cut : items.slice(Math.max(0, items.length - 2));
+}
+/* Day 목록(items: {day, ...})에서 진도 기준 앞의 Day를 뺀다 (남는 게 2개 미만이면 마지막 2개) */
+function dpApplyFloor(ban, name, prefix, items){
+  if (!items || !items.length || !prefix) return items;
+  var fl = Math.max(dpPlanFloor(ban, prefix), dpHwGet(ban, name, prefix));
+  if (!(fl > 1)) return items;
+  var td = tdKey();
+  var cut = items.filter(function (x) { return (Number(x.day) || 0) >= fl || dayDoneAt(ban, name, x.name) === td; });
+  if (cut.length >= 2) return cut;
+  return items.slice(Math.max(0, items.length - 2));
+}
+
 /* ============ v160: 수지중1·수지중2 기말 집중 기간 (11/26 ~ 12/13) ============
    시험(12/14) 전까지 '오늘의 학습'·'집에서 할 일' 단어 숙제는 능률보카 Day 대신
    기말 시험범위 교과서·외부지문 단어 세트만 돌린다 (하루 2세트, 매일 바뀌며 계속 반복).
@@ -3038,6 +3096,10 @@ function dailyPlan(me){
     if (!bestSeries || sr.length > bestSeries.length) bestSeries = sr;
   }
   series = bestSeries;
+  /* v162: 진도 보호 — 반 계획 시작 Day·이 학생이 끝낸 가장 뒤 Day 앞으로는 돌아가지 않는다 */
+  if (series && series.length) {
+    try { var _sr = dpSeriesOf(series[0].name); if (_sr) series = dpApplyFloor(ban, name, _sr.prefix, series); } catch (e) {}
+  }
   if (!series || series.length < 2) return null;
   var t = tdKey(), i;
   var items = series.map(function(it){
@@ -3049,6 +3111,7 @@ function dailyPlan(me){
     o.today = (dayDoneAt(ban, name, it.name) === t);
     return o;
   });
+  try { items = dpSkipPast(ban, name, items); } catch (e) {}   /* v162: 진도 보호 */
   var start = 0, found = false;
   /* v147: 오늘 이미 2 Day 이상 끝냈으면 오늘 목표는 완료로 본다 */
   var todays2 = [];
@@ -6355,7 +6418,8 @@ function showHome(){
       '<button class="btn" id="bjoinlive" style="flex:1;margin:0;background:linear-gradient(135deg,#4a154b,#7b227c);color:#fff;font-weight:700">📹 우리 반 화상수업</button>'+
       '</div>';
   }
-  if(!h.sets.length) _extra+='<div class="card">아직 올라온 학습이 없어요.</div>';
+  var _setsHtml = '';   /* v161: 단어 목록은 수업일에도 항상 펼쳐 보이도록 따로 모은다 */
+  if(!h.sets.length) _setsHtml+='<div class="card">아직 올라온 학습이 없어요.</div>';
   var teach=me.ban==='선생님', tf=S.tf||'';
   if(teach){
     /* v107: 실제 반만 버튼으로 — '전체'는 [전체 보기]가 하므로 빼고, 예전 테스트 태그도 숨김 */
@@ -6368,16 +6432,18 @@ function showHome(){
   }
   h.sets.forEach(function(s,i){
     if(teach && tf && (s.target||'전체').split(/[,，\/]/).map(function(x){return x.trim();}).indexOf(tf)<0 && s.target!=='전체' && s.target) return;
-    _extra+='<button class="set" data-i="'+i+'"><div class="ico '+(s.type==='단어'?'w">📘':'p">📝')+'</div>'+
+    _setsHtml+='<button class="set" data-i="'+i+'"><div class="ico '+(s.type==='단어'?'w">📘':'p">📝')+'</div>'+
       '<div class="grow" style="flex:1;min-width:0"><div class="nm">'+esc(s.name)+'</div><div class="small">'+(s.type==='단어'?'단어 '+s.count+'개':'문제 '+s.count+'개')+'</div></div>'+statusChip(s)+'</button>';
   });
   /* v153: 수업일(학원 가는 날)에는 '부엉이 카드 + ⏱️ 자기주도' 딱 2개만 — 나머지는 접어 둔다 */
+  /* v161: 원장님 요청 — 수업일에도 단어 목록은 자기주도 카드 바로 아래에 항상 펼쳐 둔다 (그 밖의 도구만 접기) */
   if (_ssDay) {
     html += _ssCard;
+    html += '<div class="sub" style="margin:14px 2px 6px;font-weight:700">📘 내 단어장</div>' + _setsHtml;
     html += '<details class="home-more"><summary>📚 다른 학습 도구 · 도착 쪽지 · 알림 설정</summary><div class="home-more-in">' + _extra + '</div></details>';
   } else {
     html += _ssCard;
-    html += _extra;
+    html += _extra + _setsHtml;
   }
   html+='<button class="linkbtn" id="out">다른 사람으로 로그인</button>';
   app.innerHTML=html;
@@ -7715,13 +7781,18 @@ var HP_DEFAULTS = {
   '수지중2': { pattern: '화목', startDate: '2026-11-19', startDay: 1, perDay: 0, reviewEvery: 5, reviewDays: 4, testDays: 4, book: 'silryeok', bbaba: 0,
     itemWord: 1, itemSent: 1, itemRead: 1,
     sentLabel: '동아(윤) 7·8과 본문 + 7과 외부 1·2번 어순배열', readLabel: '본문·외부지문 변형 10제 풀기' },
-  '예비고1': { pattern: '화목', startDate: '2026-11-19', startDay: 1, perDay: 0, reviewEvery: 5, reviewDays: 4, testDays: 4, book: 'eowon', bbaba: 3,
+  '예비고1': { pattern: '화목', startDate: '2026-11-26', startDay: 20, perDay: 0, reviewEvery: 5, reviewDays: 4, testDays: 4, book: 'eowon', bbaba: 3,
     itemWord: 1, itemSent: 1, itemRead: 1,
     sentLabel: '빠바 13강 관계사 5지문 빈칸·어순배열', readLabel: '빠바 13강 관계사 5지문 변형 10제 풀기' }
 };
 /* v158: 예전에 저장된 예비고1 계획에 '빠바 01강' 문구가 남아 있으면 지금 진도(13강) 문구로 바꿔 보여 준다 */
+/* v162: 예비고1 능률보카 어원편은 11/26부터 Day 20 → 차례대로 (원장님 지정).
+   예전에 저장·동기화된 계획(11/19 Day 1 시작)이 남아 있어도 Day 1로 돌아가지 않게,
+   시작일이 11/26보다 앞이면 11/26·Day 20으로 맞춘다. 원장님이 그 뒤 날짜로 새로 정하면 그대로 따른다. */
+var HP_EG1_FLOOR = { startDate: '2026-11-26', startDay: 20 };
 function hpFixOldLabels(k, o){
   if (k !== '예비고1' || !o) return o;
+  if (String(o.startDate || '') < HP_EG1_FLOOR.startDate) { o.startDate = HP_EG1_FLOOR.startDate; o.startDay = HP_EG1_FLOOR.startDay; }
   ['sentLabel', 'readLabel'].forEach(function (f) {
     if (/빠바\s*0?1강/.test(String(o[f] || ''))) o[f] = HP_DEFAULTS['예비고1'][f];
   });
@@ -10714,7 +10785,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v160';
+var TOPEDU_APP_VERSION = 'v163';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -11385,6 +11456,7 @@ function recordDailyStudy(ban,name,setName,isComplete,justCompleted){
   var markToday = false;
   if (setDone && setName && justCompleted !== false) markToday = !dayDoneAt(ban, name, setName);
   if (markToday) dayMarkDone(ban, name, setName, t);
+  if (setDone && setName) { try { dpHwBump(ban, name, setName); } catch (e) {} }   /* v162: 진도 보호 */
   /* v147: 오늘의 학습은 하루 2 Day — 두 Day를 모두 끝내야 일일 학습 완료(스트릭)로 인정 */
   var goalDone = !!isComplete;
   try {
@@ -13445,6 +13517,12 @@ function ssBuildDays(ban) {
       else if (pool.length) { for (var r = 0; r < cfg.dayCount; r++) if (pool[r]) days.push(pool[r]); }
     }
   }
+  /* v162: 예비고1은 숙제 계획 시작 Day(11/26부터 Day 20) 앞으로 돌아가지 않는다 */
+  if (ban === '예비고1' && hp && Number(hp.startDay) > 1 && cfg.dayMode !== 'manual') {
+    var _fl = Number(hp.startDay);
+    days = days.filter(function (d) { return d >= _fl; });
+    if (!days.length) for (var f = 0; f < (cfg.dayCount || 4); f++) days.push(_fl + f);
+  }
   var seen = {};
   days.forEach(function (d) {
     if (seen[d]) return;
@@ -13827,7 +13905,7 @@ function ssSaveSnap() {
     awaySec: Math.round(SS.awaySec || 0), awayOpen: SS.leaveT || 0, doneEl: Math.round(SS.doneEl || 0), doneAt: SS.doneAt || 0,
     days: SS.s1.days.map(function (d) {
       return { day: d.day, name: d.name, lbl: d.lbl, ex: d.ex, def: d.def, status: d.status, score: d.score, attempts: d.attempts,
-        fixed: !!d.fixed, qwrong: d.qwrong || [], qok: d.qok || 0, quiz: d.quiz || null };
+        fixed: !!d.fixed, qwrong: d.qwrong || [], qok: d.qok || 0, quiz: d.quiz || null, learnAt: d.learnAt || 0, learnOk: !!d.learnOk };
     }),
     s2i: SS.s2.i, s3i: SS.s3.i, s2wrong: SS.s2.wrongN || 0, s3wrong: SS.s3.wrong || [], scr: SS.scr, done: SS.done,
     sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
@@ -14513,9 +14591,39 @@ function ssViewS1Learn() {
       + '<button type="button" class="ssx-spk" onclick="ssSpeak(' + i + ')">🔊</button></div>';
   });
   h += '</div>';
-  h += '<button type="button" class="ssx-btn pri" onclick="ssS1Quiz()">✔ 외웠어요 · 시험 시작 (' + ssTestN(d) + '문항)</button>';
+  /* v163: 원장님 요청 — 암기 화면을 충분히 본 뒤에만 시험 (단어당 4초, 최소 1분 · 최대 2분).
+     이미 통과한 Day 다시 보기·선생님 미리보기는 기다리지 않음. 남은 시간은 화면을 나갔다 와도 이어짐 */
+  var left = ssLearnLeft(d);
+  h += '<button type="button" class="ssx-btn pri" id="ssLearnGo" onclick="ssS1Quiz()"' + (left > 0 ? ' disabled style="opacity:.55"' : '') + '>'
+    + (left > 0 ? ssLearnBtnTxt(left) : ('✔ 외웠어요 · 시험 시작 (' + ssTestN(d) + '문항)')) + '</button>';
   h += '<button type="button" class="ssx-btn" onclick="ssGoS1()">← Day 목록</button></div>';
+  if (left > 0) setTimeout(ssLearnTickStart, 0);
   return h;
+}
+function ssLearnNeed(d) {
+  var n = ((d && d.words) || []).length;
+  return Math.max(60, Math.min(120, n * 4));
+}
+function ssLearnLeft(d) {
+  if (!d || SS.preview || d.learnOk || d.status === 'ok') return 0;
+  if (!d.learnAt) d.learnAt = Date.now();
+  var left = Math.ceil(ssLearnNeed(d) - (Date.now() - d.learnAt) / 1000);
+  if (left <= 0) { d.learnOk = true; return 0; }
+  return left;
+}
+function ssLearnBtnTxt(left) { return '⏳ 단어를 외우는 중… ' + ssMMSS(left) + ' 뒤에 시험 시작'; }
+var SS_LEARN_T = null;
+function ssLearnTickStart() {
+  if (SS_LEARN_T) clearInterval(SS_LEARN_T);
+  SS_LEARN_T = setInterval(function () {
+    var b = ssq('ssLearnGo'), d = SS.s1.days[SS.s1.cur];
+    if (!b || SS.scr !== 's1learn' || !d) { clearInterval(SS_LEARN_T); SS_LEARN_T = null; return; }
+    var left = ssLearnLeft(d);
+    if (left > 0) { b.textContent = ssLearnBtnTxt(left); return; }
+    b.disabled = false; b.style.opacity = ''; b.textContent = '✔ 외웠어요 · 시험 시작 (' + ssTestN(d) + '문항)';
+    try { ssSaveSnap(); } catch (e) {}
+    clearInterval(SS_LEARN_T); SS_LEARN_T = null;
+  }, 1000);
 }
 function ssSpeak(i) {
   try {
@@ -14537,6 +14645,7 @@ function ssS1MakeQ(c, words, d) {
 }
 function ssS1Quiz() {
   var d = SS.s1.days[SS.s1.cur], words = d.words || [];
+  if (ssLearnLeft(d) > 0) return;   /* v163: 암기 시간 전에는 시험 시작 안 됨 */
   var n = ssTestN(d);
   var pool = shuffle(words).slice(0, n);
   d.quiz = pool.map(function (c) { return ssS1MakeQ(c, words, d); });
