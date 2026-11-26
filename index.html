@@ -9629,7 +9629,7 @@ function v169FilterBar(mode){
   return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 9px">'
     + V169_FILTERS.map(function(x){
       var on = (mode === x[0]);
-      return '<button type="button" class="v169f" data-f="' + x[0] + '" style="flex:1;min-width:104px;padding:9px 8px;border-radius:10px;font-size:12.5px;font-weight:800;border:1.5px solid ' + (on ? '#0d9488' : '#dbe3ea') + ';background:' + (on ? '#0d9488' : '#fff') + ';color:' + (on ? '#fff' : '#475569') + '">' + x[1] + '</button>';
+      return '<button type="button" class="v169f" data-f="' + x[0] + '" style="flex:1 1 0;min-width:0;padding:9px 4px;border-radius:10px;font-size:12px;font-weight:800;white-space:nowrap;border:1.5px solid ' + (on ? '#0d9488' : '#dbe3ea') + ';background:' + (on ? '#0d9488' : '#fff') + ';color:' + (on ? '#fff' : '#475569') + '">' + x[1] + '</button>';
     }).join('') + '</div>';
 }
 function v169RowChip(s, mode){
