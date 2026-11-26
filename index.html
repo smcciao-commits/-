@@ -9681,7 +9681,7 @@ function drawDay(r){
   var html = '<div class="card">' + v169FilterBar(mode)
     + '<h2>' + esc(day) + (dow >= 0 ? ' (' + V169_DOW[dow] + ')' : '') + ' · ' + title + ' — 완료 <b>' + done.length + '명</b> / 미완료 <b style="color:var(--no)">' + (mid.length + none.length) + '명</b></h2>'
     + (mid.length ? '<div class="small">⏳ 진행 중(자기주도 미완료): <b>' + names(mid) + '</b></div>' : '')
-    + (none.length ? '<div class="small">' + (mode === 'daily' ? '미완료' : '안 함') + ': ' + names(none) + '</div>' : '')
+    + (none.length ? '<div class="small">' + (mode === 'daily' ? '미완료' : (mode === 'ss' ? '미시작' : '안 함')) + ': ' + names(none) + '</div>' : '')
     + legend
     + (ordered.length ? '<button class="btn ghost" id="cpall">알림톡 문구 전체 복사</button>' : '<div class="small">이 날은 해당 학생이 없어요.</div>')
     + '</div>';
