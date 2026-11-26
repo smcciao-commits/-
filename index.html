@@ -3777,6 +3777,20 @@ function bindBack(fn){ var b=$('#back'); if(b) b.onclick=fn; }
 var timer0=0; function startClock(){ timer0=Date.now(); } function secs(){ return Math.round((Date.now()-timer0)/1000); }
 
 /* ============ 로그인 ============ */
+/* v166: 로그인 화면의 반 목록은 서버(getClasses) 응답을 기다리지 않고 화면을 그리는 즉시 채운다.
+   서버 응답이 늦거나 실패해도 반을 고를 수 있어야 학생이 로그인을 못 하는 일이 없다.
+   (목록은 실제 getClasses 응답과 같은 순서·같은 10개) */
+var TOPEDU_DEFAULT_CLASSES = ['풍덕초6','수지중1','수지중2','예비고1','홍천고1','현암고1','수지고2','죽전고2','초5','선생님'];
+function fillDefaultClasses(sel){
+  if(!sel) return 0;
+  var have={}, made=0;
+  [].slice.call(sel.options).forEach(function(o){ have[o.value]=1; });
+  TOPEDU_DEFAULT_CLASSES.forEach(function(c){
+    if(have[c]) return;
+    var o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); made++;
+  });
+  return made;
+}
 function showLogin(){
   app.innerHTML='<h1>탑에듀 영어</h1><div class="sub">처음 한 번만 입력하면 다음부터 바로 시작돼요.</div>'+
   '<div class="card"><label>반</label><select id="ban"><option value="">반을 골라주세요</option></select>'+
@@ -3784,8 +3798,27 @@ function showLogin(){
   '<label>비밀번호</label><input id="pw" type="tel" inputmode="numeric" placeholder="선생님이 알려준 번호" autocomplete="off">'+
   '<button class="btn" id="go">시작하기</button><div class="err" id="err"></div></div>'+
   '<button class="linkbtn" id="adm">선생님 화면</button>';
+  /* v166: 먼저 기본 10개 반을 바로 채워 둔다 (0초 표시) */
+  var sel0=$('#ban'); fillDefaultClasses(sel0);
   call('getClasses').then(function(r){
-    var sel=$('#ban'); (r.classes||[]).forEach(function(c){ var o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+    var sel=$('#ban'); if(!sel) return;
+    var arr=((r&&r.classes)||[]).filter(function(c){ return c && String(c).trim(); });
+    if(!arr.length) return;                 /* 빈 응답 → 기본 목록 그대로 둔다 */
+    var pick=sel.value;                     /* 사용자가 이미 고른 반은 유지 */
+    var have={}; [].slice.call(sel.options).forEach(function(o){ have[o.value]=1; });
+    arr.forEach(function(c){                /* 새로 생긴 반만 추가 */
+      if(have[c]) return;
+      var o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);
+    });
+    /* 서버에 없는 반 정리 — 응답이 충분할 때만(부분 응답으로 목록이 사라지지 않게), 고른 반은 건드리지 않는다 */
+    if(arr.length>=5){
+      var keep={}; arr.forEach(function(c){ keep[c]=1; });
+      [].slice.call(sel.options).forEach(function(o){
+        if(!o.value || o.value===pick || keep[o.value]) return;
+        if(o.parentNode) o.parentNode.removeChild(o);
+      });
+    }
+    if(pick) sel.value=pick;
   }).catch(function(e){ var er0=$('#err'); if(er0) er0.textContent=(e&&e.offline)?TOPEDU_NO_NET:errMsg(e); });
   $('#go').onclick=function(){
     var c={ban:$('#ban').value,name:$('#name').value.trim(),pw:$('#pw').value.trim()};
@@ -10793,7 +10826,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v165';
+var TOPEDU_APP_VERSION = 'v166';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
