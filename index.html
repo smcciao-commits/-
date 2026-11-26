@@ -15457,7 +15457,7 @@ function ssViewS1Low() {
     + ((d.qwrong || []).length ? '<div class="ssx-sub" style="margin-top:6px">틀린 단어: ' + d.qwrong.map(function (w) { return esc(w); }).join(', ') + '</div>' : '')
     + '</div>';
   h += '<button type="button" class="ssx-btn pri" onclick="ssS1Retest()">🔄 ' + passMin + '점 도전 재시험</button>';
-  h += '<button type="button" class="ssx-btn" onclick="ssS1Open(SS.s1.cur)">📖 단어 다시 보기</button>';
+  h += '<button type="button" class="ssx-btn" onclick="ssS1Open(SS.s1.cur)">🔁 단어 다시 보기</button>';
   h += '<button type="button" class="ssx-btn" onclick="ssGoS1()">← Day 목록</button>';
   return h;
 }
