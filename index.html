@@ -8796,7 +8796,7 @@ function showAdmin(){
   $('#aban').onchange = function(){ A.ban = this.value; if(A.tab==='set') showAdmin(); };
   $('#arun').onclick = function(){
     A.ban = $('#aban').value;
-    if(A.tab==='day'){ A.day=$('#aday').value; call('adminDayReport',A.pw,A.ban,A.day).then(drawDay).catch(function(e){alert(errMsg(e));}); }
+    if(A.tab==='day'){ A.day=$('#aday').value; v169LoadDay(A); }
     else { A.set=$('#aset').value; if(!A.set) return alert('세트를 골라주세요.'); var p=A.set.split('|'); call('adminSetReport',A.pw,A.ban,p[0],p.slice(1).join('|')).then(drawSetRep).catch(function(e){alert(errMsg(e));}); }
   };
 }
@@ -9487,18 +9487,247 @@ function copy(t,btn){
   try{ navigator.clipboard.writeText(t).then(ok,fallback); }catch(e){ fallback(); }
   function fallback(){ var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); ok(); }
 }
+/* ================= v169: 날짜별 · 알림톡 — 자기주도 수업일 완료 판정 =================
+   수민 님 지적(11/26): 수지중2 김영인·김지안처럼 단어만 풀고 자기주도를 끝내지 않은 학생이
+   '했음'으로 떠 학부모 알림톡이 완료처럼 나갔다. 자기주도 수업일(수지중1 수·금 / 수지중2·예비고1 화·목)에는
+   그날 '자기주도완주' 기록이 있어야 완료다. 완주한 학생에게는 2단계(문장배열)·3단계(문법·독해OX)
+   점수와 전체 완주(소요 시간·이탈)까지 문구에 넣어 '단어만 한 것처럼' 보이지 않게 한다. */
+var V169_SS_DAYS = { '수지중1': [3, 5], '수지중2': [2, 4], '예비고1': [2, 4] };
+var V169_DOW = ['일', '월', '화', '수', '목', '금', '토'];
+function v169DayKey(v){
+  var t = String(v || '').trim().replace(/[.\/]/g, '-');
+  var m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  return m ? (m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2)) : '';
+}
+function v169Dow(day){
+  var m = String(day || '').match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(!m) return -1;
+  try { return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])).getDay(); } catch(e){ return -1; }
+}
+function v169SsDays(ban){
+  if(V169_SS_DAYS[ban]) return V169_SS_DAYS[ban];
+  try { var w = OWL_SS_WIN[ban]; if(w && w.days && w.days.length) return w.days; } catch(e){}
+  return null;
+}
+/* 그 반의 자기주도 수업일인가 (수지중1 수·금 / 수지중2·예비고1 화·목) */
+function v169SsDayOf(ban, day){
+  var days = v169SsDays(ban), dow = v169Dow(day);
+  return !!(days && dow >= 0 && days.indexOf(dow) >= 0);
+}
+function v169Max(cur, v){
+  if(v === null || v === undefined || v === '') return cur;
+  var n = Number(v);
+  if(isNaN(n)) return cur;
+  return (cur === null || n > cur) ? n : cur;
+}
+/* 구글 시트 진도DB(이 폰이 당겨온 행)에서 그 학생·그날의 자기주도 기록 */
+function v169SheetSs(ban, name, day){
+  var out = { done: false, s2: null, s3: null };
+  (TOPEDU_DB_ROWS || []).forEach(function(r){
+    if(!r) return;
+    if(String(r.b || '') !== String(ban) || String(r.n || '') !== String(name)) return;
+    if(v169DayKey(r.d) !== day) return;
+    var m = String(r.m || '').trim();
+    if(m === '자기주도완주') out.done = true;
+    else if(m === '문장배열') out.s2 = v169Max(out.s2, r.sc);
+    else if(m === '문법·독해OX') out.s3 = v169Max(out.s3, r.sc);
+  });
+  return out;
+}
+/* ntfy 보드(학생 폰이 올린 그날 상태) — 날짜가 맞는 행만 쓴다.
+   · d:1은 '오늘 단어학습 완료'라 자기주도 완주와 섞지 않는다(완주는 done/st 99만) */
+function v169BoardSs(ban, name, day){
+  var out = { done: false, s2: null, s3: null, el: null, lv: null }, k = ban + '|' + name, rows = [];
+  try { if(typeof SS_NET !== 'undefined' && SS_NET.board && SS_NET.board[k]) rows.push(SS_NET.board[k]); } catch(e){}
+  try { if(typeof STREAK_BOARD !== 'undefined' && STREAK_BOARD && STREAK_BOARD[k]) rows.push(STREAK_BOARD[k]); } catch(e){}
+  rows.forEach(function(o){
+    if(!o) return;
+    if(o.t && v169DayKey(o.t) !== day) return;
+    var done = !!(o.done === true || Number(o.st) === 99);
+    if(!done) return;
+    out.done = true;
+    out.s2 = v169Max(out.s2, o.a2);
+    out.s3 = v169Max(out.s3, o.a3);
+    if(Number(o.el) > 0) out.el = Math.max(Number(out.el) || 0, Number(o.el));
+    if(o.lv !== null && o.lv !== undefined && o.lv !== '') out.lv = Math.max(Number(out.lv) || 0, Number(o.lv));
+  });
+  return out;
+}
+/* 서버가 만든 단어 학습 줄(그대로) — 자기주도 줄은 따로 붙인다 */
+function v169WordLines(items){
+  return (items || []).filter(function(e){ return String((e && e.set) || '').indexOf('자기주도') !== 0; }).map(function(e){
+    if(e.best && e.best.correct !== null && e.best.correct !== undefined){
+      var line = '· ' + e.set + (e.type === '단어' ? ' 테스트 ' : ' ') + e.best.correct + '/' + e.best.total;
+      if(e.best.wrong && e.type === '단어') line += ' (틀린 단어: ' + e.best.wrong + ')';
+      return line;
+    }
+    var parts = [];
+    (e.modes || []).forEach(function(m){
+      var sc = (e.scores && e.scores[m] !== undefined) ? e.scores[m] : null;
+      parts.push(sc === null ? m : (m + ' ' + sc + '점'));
+    });
+    return '· ' + e.set + ' ' + parts.join(', ') + ' 학습';
+  });
+}
+function v169SsWhenTxt(info){
+  var a = [];
+  if(info.el) a.push(Math.max(1, Math.round(Number(info.el) / 60)) + '분');
+  if(info.lv !== null && info.lv !== undefined) a.push('이탈 ' + Number(info.lv) + '회');
+  return a.length ? (' (' + a.join(' · ') + ')') : '';
+}
+/* 학생 1명 판정 + 알림톡 문구 */
+function v169DayInfo(rep, s){
+  var day = v169DayKey(rep && rep.day);
+  var items = (s && s.items) || [];
+  var isSs = v169SsDayOf(s.ban, day);
+  var sheet = isSs ? v169SheetSs(s.ban, s.name, day) : { done: false, s2: null, s3: null };
+  var board = isSs ? v169BoardSs(s.ban, s.name, day) : { done: false, s2: null, s3: null, el: null, lv: null };
+  var ssDone = !!(isSs && (sheet.done || board.done));
+  var info = { isSs: isSs, ssDone: ssDone, items: items.length,
+    s2: (sheet.s2 !== null) ? sheet.s2 : board.s2,
+    s3: (sheet.s3 !== null) ? sheet.s3 : board.s3,
+    el: board.el, lv: board.lv, state: 'none', msg: s.msg || '' };
+  if(ssDone) info.state = 'done';
+  else if(isSs && items.length) info.state = 'mid';   /* 자기주도 수업일인데 완주 기록이 없다 → 미완료 */
+  else if(items.length) info.state = 'done';          /* 자기주도 수업일이 아닌 반은 예전처럼 기록 있으면 했음 */
+  var md = Number(day.slice(5, 7)) + '/' + Number(day.slice(8, 10));
+  var given = hwcSmsGiven(s.name);
+  var nk = given + (hwcSmsHasJong(given) ? '이' : '');
+  var subj = nk + (hwcSmsHasJong(nk) ? '은' : '는');
+  if(info.state === 'mid'){
+    var what = (items.length && v169WordLines(items).length) ? '온라인 단어 학습 일부만 진행했고' : '오늘의 학습만 마쳤고';
+    info.msg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + subj + ' ' + what
+      + ', 오늘 자기주도(1·2·3단계)는 아직 완료하지 않았습니다. 가정에서도 마무리할 수 있도록 챙겨 봐 주세요. 감사합니다♡';
+  } else if(info.state === 'done' && isSs){
+    var lines = v169WordLines(items);
+    if(info.s2 !== null) lines.push('· 자기주도 2단계 문장배열 ' + info.s2 + '점');
+    if(info.s3 !== null) lines.push('· 자기주도 3단계 문법·독해OX ' + info.s3 + '점');
+    if(info.s2 !== null || info.s3 !== null) lines.push('· 자기주도 1~3단계 전체 완주 완료' + v169SsWhenTxt(info));
+    else lines.push('· 자기주도 1~3단계(단어·문장배열·문법/독해OX) 전체 완주' + v169SsWhenTxt(info));
+    info.msg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + nk + '의 영어 온라인 학습 결과입니다.\n'
+      + lines.join('\n') + '\n감사합니다♡';
+  }
+  /* v169: 집 일일학습은 자기주도와 따로 본다 — '일일완료'(하루 2 Day) 기록만 완료 */
+  var dailyWhy = '';
+  try { dailyWhy = dailyDoneOn(s.ban, s.name, day); } catch (e) {}
+  info.daily = !!dailyWhy;
+  info.dailyMsg = info.msg;
+  if(!info.daily){
+    info.dailyMsg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + subj
+      + ' 오늘 집 일일학습(단어 Day 2개)을 아직 마치지 않았습니다. 집에서 마저 할 수 있도록 챙겨 봐 주세요. 감사합니다♡';
+  }
+  return info;
+}
+function v169Chip(info){
+  if(info.state === 'done') return info.isSs ? '<span class="chip done">✅ 자기주도 완료</span>' : '<span class="chip done">했음</span>';
+  if(info.state === 'mid') return '<span class="chip mid">⏳ 진행 중 (자기주도 미완료)</span>';
+  return '<span class="chip todo">안 함</span>';
+}
+/* v169: 날짜별 · 알림톡 필터 — [📋 전체] [⏱️ 수업당일 자기주도] [📘 매일 일일학습] */
+var V169_FILTERS = [['all', '📋 전체'], ['ss', '⏱️ 수업당일 자기주도'], ['daily', '📘 매일 일일학습']];
+function v169FilterBar(mode){
+  return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 9px">'
+    + V169_FILTERS.map(function(x){
+      var on = (mode === x[0]);
+      return '<button type="button" class="v169f" data-f="' + x[0] + '" style="flex:1;min-width:104px;padding:9px 8px;border-radius:10px;font-size:12.5px;font-weight:800;border:1.5px solid ' + (on ? '#0d9488' : '#dbe3ea') + ';background:' + (on ? '#0d9488' : '#fff') + ';color:' + (on ? '#fff' : '#475569') + '">' + x[1] + '</button>';
+    }).join('') + '</div>';
+}
+function v169RowChip(s, mode){
+  if(mode === 'daily') return s._done ? '<span class="chip done">✅ 일일학습 완료</span>' : '<span class="chip todo">미완료</span>';
+  if(mode === 'ss') return s._done ? '<span class="chip done">✅ 자기주도 완료</span>' : (s.v169.items ? '<span class="chip mid">⏳ 자기주도 미완료</span>' : '<span class="chip todo">미시작</span>');
+  return v169Chip(s.v169);
+}
 function drawDay(r){
-  var did=r.students.filter(function(s){return s.did;}), not=r.students.filter(function(s){return !s.did;});
-  var html='<div class="card"><h2>'+esc(r.day)+' · 한 학생 '+did.length+'명 / 안 한 학생 <span style="color:var(--no)">'+not.length+'명</span></h2>'+
-    (not.length?'<div class="small">안 한 학생: '+not.map(function(s){return esc(s.name);}).join(', ')+'</div>':'')+
-    '<button class="btn ghost" id="cpall">알림톡 문구 전체 복사</button></div>';
-  html+=r.students.map(function(s,k){
-    return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>'+esc(s.name)+' <span class="small">'+esc(s.ban)+'</span></b>'+(s.did?'<span class="chip done">했음</span>':'<span class="chip todo">안 함</span>')+'</div>'+
-      '<div class="msg">'+esc(s.msg)+'</div><button class="btn gray" style="padding:10px;font-size:15px" data-k="'+k+'">이 문구 복사</button></div>';
+  var box = $('#aout');
+  if(!box) return;
+  if(!r || !r.students){ box.innerHTML = '<div class="card err">날짜별 기록을 받지 못했어요. [보기]를 다시 눌러 주세요.</div>'; return; }
+  var day = v169DayKey(r.day) || String(r.day || '');
+  var dow = v169Dow(day);
+  var mode = (S.admin && S.admin.dayFilter) || 'all';
+  if(mode !== 'ss' && mode !== 'daily') mode = 'all';
+  var list = r.students.map(function(s, i){
+    var info = v169DayInfo(r, s), o = {};
+    for(var k in s) o[k] = s[k];
+    o.v169 = info; o.i = i; o.did = (info.state === 'done'); o.msg = info.msg || s.msg || '';
+    return o;
+  });
+  var done = [], mid = [], none = [], title = '', legend = '';
+  if(mode === 'ss'){
+    var ssr = list.filter(function(s){ return s.v169.isSs; });
+    ssr.forEach(function(s){ s._done = (s.v169.state === 'done'); s._msg = s.v169.msg; });
+    done = ssr.filter(function(s){ return s._done; });
+    mid = ssr.filter(function(s){ return !s._done && s.v169.items; });
+    none = ssr.filter(function(s){ return !s._done && !s.v169.items; });
+    title = '⏱️ 수업당일 자기주도';
+    legend = '<div class="small" style="margin-top:6px">※ <b>자기주도 1~3단계 완주</b>(시트 <b>자기주도완주</b> · 학생 폰 완주 기록)만 완료예요. 단어만 푼 학생은 <b>진행 중(미완료)</b>으로 나옵니다.</div>'
+      + (ssr.length ? '' : '<div class="small" style="color:var(--no)">※ 이 날(' + esc(day) + (dow >= 0 ? ' ' + V169_DOW[dow] : '') + ')은 선택한 반의 자기주도 수업일이 아니에요. (수지중1 수·금 / 수지중2·예비고1 화·목)</div>');
+  } else if(mode === 'daily'){
+    list.forEach(function(s){ s._done = !!s.v169.daily; s._msg = s._done ? s.v169.msg : s.v169.dailyMsg; });
+    done = list.filter(function(s){ return s._done; });
+    none = list.filter(function(s){ return !s._done; });
+    title = '📘 매일 일일학습';
+    legend = '<div class="small" style="margin-top:6px">※ 집 일일학습은 <b>오늘의 학습(단어 Day 2개) 완주 = 일일완료</b>만 완료로 셈니다. 수업 중 단어 시험·자기주도완주는 일일학습이 아니에요.</div>';
+  } else {
+    list.forEach(function(s){ s._done = s.did; s._msg = s.v169.msg; });
+    done = list.filter(function(s){ return s._done; });
+    mid = list.filter(function(s){ return !s._done && s.v169.state === 'mid'; });
+    none = list.filter(function(s){ return !s._done && s.v169.state !== 'mid'; });
+    title = '📋 전체';
+    legend = '<div class="small" style="margin-top:6px">※ 자기주도 수업일(수지중1 수·금 / 수지중2·예비고1 화·목)은 그날 <b>자기주도 1~3단계 완주</b>까지 해야 완료예요. 단어만 푼 학생은 [진행 중]으로 나옵니다.</div>'
+      + '<div class="small">※ 시트 진도DB + 학생 폰 알림 기록을 합쳐 판정합니다(방금 저장한 기록도 [보기]를 누르면 바로 반영).</div>';
+  }
+  var ordered = mid.concat(none, done);
+  var names = function(arr){ return arr.map(function(s){ return esc(s.name); }).join(', '); };
+  var html = '<div class="card">' + v169FilterBar(mode)
+    + '<h2>' + esc(day) + (dow >= 0 ? ' (' + V169_DOW[dow] + ')' : '') + ' · ' + title + ' — 완료 <b>' + done.length + '명</b> / 미완료 <b style="color:var(--no)">' + (mid.length + none.length) + '명</b></h2>'
+    + (mid.length ? '<div class="small">⏳ 진행 중(자기주도 미완료): <b>' + names(mid) + '</b></div>' : '')
+    + (none.length ? '<div class="small">' + (mode === 'daily' ? '미완료' : '안 함') + ': ' + names(none) + '</div>' : '')
+    + legend
+    + (ordered.length ? '<button class="btn ghost" id="cpall">알림톡 문구 전체 복사</button>' : '<div class="small">이 날은 해당 학생이 없어요.</div>')
+    + '</div>';
+  /* 미완료(진행 중 → 안 함 → 완료) 순으로 보여 준다 — 보낼 학생부터 */
+  html += ordered.map(function(s, k){
+    return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>' + esc(s.name) + ' <span class="small">' + esc(s.ban) + '</span></b>' + v169RowChip(s, mode) + '</div>'
+      + '<div class="msg">' + esc(s._msg) + '</div><button class="btn gray" style="padding:10px;font-size:15px" data-k="' + k + '">이 문구 복사</button></div>';
   }).join('');
-  $('#aout').innerHTML=html;
-  [].forEach.call($('#aout').querySelectorAll('button[data-k]'),function(b){ b.onclick=function(){ copy(r.students[+b.dataset.k].msg,b); }; });
-  $('#cpall').onclick=function(){ copy(r.students.map(function(s){return '['+s.name+']\n'+s.msg;}).join('\n\n'),this); };
+  box.innerHTML = html;
+  [].forEach.call(box.querySelectorAll('.v169f'), function(b){
+    b.onclick = function(){
+      if(!S.admin) return;
+      S.admin.dayFilter = b.dataset.f;
+      if(S.admin.lastDayRep) drawDay(S.admin.lastDayRep);
+    };
+  });
+  [].forEach.call(box.querySelectorAll('button[data-k]'), function(b){
+    b.onclick = function(){ copy(ordered[+b.dataset.k]._msg, b); };
+  });
+  var all = $('#cpall');
+  if(all) all.onclick = function(){
+    copy(ordered.map(function(s){ return '[' + s.name + ']\n' + s._msg; }).join('\n\n'), this);
+  };
+}
+/* v169: 날짜별 · 알림톡 — 서버 보고서와 함께 시트 진도DB·학생 폰 알림(ntfy) 기록을 당겨와
+   최신 기록으로 다시 그린다. (시트에 방금 저장한 '자기주도완주'도 바로 반영) */
+function v169LoadDay(A){
+  A.lastDayRep = null;
+  var st = { db: 0, board: 0 };
+  function redraw(){
+    if(!A.lastDayRep || !$('#aout')) return;
+    try { drawDay(A.lastDayRep); } catch(e){}
+  }
+  function settle(k){ st[k] = 1; if(st.db && st.board) redraw(); }
+  var box = $('#aout');
+  if(box) box.innerHTML = '<div class="card" style="text-align:center;color:var(--sub)">📥 시트 진도DB · 학생 폰 알림 기록을 함께 불러오는 중이에요...</div>';
+  try { TOPEDU_DB_PULL_AT = 0; dbAdminPull(true, function(d){ settle('db'); }); } catch(e){ settle('db'); }
+  try { pullStreakBoard(true, function(){ settle('board'); }); } catch(e){ settle('board'); }
+  try { if(typeof ssBoardPull === 'function') ssBoardPull(true); } catch(e){}
+  call('adminDayReport', A.pw, A.ban, A.day).then(function(r){
+    A.lastDayRep = r;
+    try { drawDay(r); } catch(e){}
+    /* 보드(ntfy·MQTT)는 조금 늦게 도착하기도 해서 한 번 더 그린다 */
+    setTimeout(function(){ if(S.admin && S.admin.tab === 'day') redraw(); }, 2500);
+    setTimeout(function(){ if(S.admin && S.admin.tab === 'day') redraw(); }, 6000);
+  }).catch(function(e){ alert(errMsg(e)); });
 }
 /* v115: 진도DB 기반 세트별 현황 — 모드별 점수 문구(짝맞추기 95 · 뜻고르기 100) */
 function v115ScoreLine(sc){
@@ -10851,7 +11080,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v168';
+var TOPEDU_APP_VERSION = 'v169';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -13673,8 +13902,8 @@ function ssStatusObj() {
     aw: Math.round(ssAwayNow()), awl: SS.leaveT ? 1 : 0,
     done: !!SS.done,
     a1: ssPct(SS.stats.s1ok, SS.stats.s1tot),
-    a2: ssPct(SS.s2.ok, SS.s2.qs.length || 0),
-    a3: ssPct(SS.stats.s3ok, SS.stats.s3tot),
+    a2: (SS.done && SS.doneS2 != null) ? Number(SS.doneS2) : ssPct(SS.s2.ok, SS.s2.qs.length || 0),   /* v169: 완주 뒤 재시작해도 완주 점수를 그대로 */
+    a3: (SS.done && SS.doneS3 != null) ? Number(SS.doneS3) : ssPct(SS.stats.s3ok, SS.stats.s3tot),
     d: ssDayTxt(), at: Date.now(), v: 147
   };
 }
@@ -15382,6 +15611,16 @@ function ssFinish() {
   try { playFanfareSound(); } catch (e) {}
   /* v153: 자기주도 완주도 시트에 확실히 남긴다(응답 확인·재전송) — 성실왕 집계 */
   try { dbSaveReliable(SS.ban, SS.name, '자기주도 1시간', '자기주도완주', 100); } catch (e) {}
+  /* v169: 2단계(문장배열)·3단계(문법·독해OX) 결과도 시트에 남긴다 — 날짜별·알림톡에 단어만 보이던 문제 수리
+     · SS.s2.ok는 2단계를 마친 뒤 재진입·이어하기에서 0으로 돌아갈 수 있어 SS.stats.s2ok와 큰 값을 쓴다
+     · 3단계 SS.stats.s3tot는 마지막 문제를 틀리면 실제 문항 수보다 작아서 전체 문항 수와 비교해 큰 값을 쓴다 */
+  try {
+    var v169s2 = ssPct(Math.max(Number(SS.stats.s2ok) || 0, Number(SS.s2.ok) || 0), (SS.s2.qs || []).length || 0);
+    var v169s3 = ssPct(SS.stats.s3ok, Math.max(Number(SS.stats.s3tot) || 0, (SS.s3.qs || []).length || 0));
+    SS.doneS2 = v169s2; SS.doneS3 = v169s3;
+    dbSaveReliable(SS.ban, SS.name, '자기주도 2단계(문장배열)', '문장배열', v169s2);
+    dbSaveReliable(SS.ban, SS.name, '자기주도 3단계(문법·독해OX)', '문법·독해OX', v169s3);
+  } catch (e) {}
   ssSaveSnap(); ssStatusPub(true);
   try {
     ssNtfy('✅ [자기주도 완주] ' + SS.name + ' (' + SS.ban + ')',
@@ -15579,21 +15818,21 @@ function glanceState() {
   if (!S.glance.date) S.glance.date = tdKey();
   return S.glance;
 }
-/* 그 날 일일학습 완료? ① 시트 '일일완료·테스트' 행 ② 이 폰 기록 ③ 실시간 보드(오늘만) */
+/* 그 날 집 일일학습 완료? — v169: '일일완료' 행(하루 2 Day 완주)과 이 폰의 일일학습 기록만 인정한다.
+   · '자기주도완주' 행은 수업 당일 자기주도라 집 일일학습과 섞지 않는다(수민 님 11/26 지적)
+   · 테스트 행은 수업 중 단어 시험·자기주도 1단계일 수도 있어서 일일학습으로 치지 않는다 */
 function dailyDoneOn(ban, name, date) {
   var key = ban + '|' + name;
   try {
     var dm = dbStreakDayMap();
     if (dm && dm.daily && dm.daily[key] && dm.daily[key][date]) return 'sheet';      /* 시트 '일일완료' 행 = 하루 2 Day 완주 */
-    if (dm && dm.done && dm.done[key] && dm.done[key][date]) return 'sheet-old';     /* v152까지의 '테스트' 기록 */
   } catch (e) {}
   try {
     var db = getStreakDB(ban, name);
-    if (db && db.days && db.days[date] && db.days[date].done) return 'phone';
+    if (db && db.days && db.days[date] && db.days[date].done) return 'phone';        /* 이 폰의 일일학습 완료 기록 */
   } catch (e) {}
   if (date === tdKey()) {
-    try { var r = getRealStreakMap()[key]; if (r && r.d) return 'phone'; } catch (e) {}
-    try { var sb = (typeof STREAK_BOARD !== 'undefined') ? STREAK_BOARD[key] : null; if (sb && sb.d && (!sb.t || sb.t === date)) return 'live'; } catch (e) {}
+    try { var r = getRealStreakMap()[key]; if (r && r.d && (!r.t || r.t === date)) return 'phone'; } catch (e) {}
   }
   return '';
 }
@@ -15622,14 +15861,15 @@ function glanceHtml() {
     + '<span class="ver-badge">' + TOPEDU_APP_VERSION + '</span>'
     + '<button type="button" onclick="glanceRefresh()" style="margin-left:auto;background:#fff;border:1.5px solid #14b8a6;color:#0d9488;border-radius:10px;padding:7px 11px;font-size:12px;font-weight:800">🔄 새로고침 ' + TOPEDU_APP_VERSION + '</button>'
     + '</div>'
-    + '<div style="font-size:12px;color:#0f766e;line-height:1.55;margin-top:5px">' + glanceDayLabel(today) + ' · 자기주도는 <b>오늘</b>, 일일학습은 <b>날짜를 골라</b> 완료/미완료를 한눈에 봐요.</div>'
+    + '<div style="font-size:12px;color:#0f766e;line-height:1.55;margin-top:5px">' + glanceDayLabel(today) + ' · 자기주도는 <b>오늘</b>, 일일학습은 <b>날짜를 골라</b> 완료/미완료를 한눈에 봐요. <b>두 영역은 섞지 않고 따로</b> 셉니다.</div>'
     + '<div id="glanceSync" style="font-size:11px;color:#64748b;margin-top:4px">' + glanceSyncLine() + '</div>'
     + '</div>';
 
   /* ① 자기주도 완료/미완료 */
   h += '<div class="card" style="border:1.5px solid #99f6e4;border-radius:16px;padding:13px;margin-bottom:12px">'
-    + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><b style="font-size:14.5px;color:#0f766e">⏱️ 자기주도 완료 / 미완료</b>'
-    + '<span style="font-size:11px;color:#94a3b8">' + glanceDayLabel(today) + '</span></div>';
+    + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px"><b style="font-size:14.5px;color:#0f766e">⏱️ 자기주도 완료 / 미완료</b>'
+    + '<span style="font-size:11px;color:#94a3b8">' + glanceDayLabel(today) + '</span>'
+    + '<div style="font-size:11px;color:#0f766e;line-height:1.5;width:100%">완료 판정 = <b>자기주도 1~3단계 완주</b>(시트 자기주도완주 · 학생 폰 완주 기록)만. 집 일일학습은 아래 ②에서 따로 봐요.</div></div>';
   GLANCE_GROUPS.forEach(function (g) {
     var done = [], und = [];
     g.bans.forEach(function (ban) {
@@ -15704,7 +15944,7 @@ function glanceHtml() {
     + '<div class="gl-col no"><div class="gl-col-h">⬜ 미완료 ' + (all.length - doneAll.length) + '</div>'
     + (all.filter(function (x) { return !x.done; }).map(function (x) { return glanceRow(x.name, '<span class="gl-chip">미완료</span>', x.ban); }).join('') || '<div class="gl-empty">모두 완료! 🎉</div>')
     + '</div></div>';
-  h += '<div style="font-size:11px;color:#7c3aed;line-height:1.5;margin-top:8px">완료 판정 = ① 구글 시트 <b>일일완료</b> 행(하루 2 Day 완주) → ② 그 전 기록은 <b>테스트</b> 행 → ③ 이 폰의 학습 기록 → ④ 오늘은 실시간 보드까지. 시트 기록이 늦게 올라오면 [🔄 새로고침]을 한 번 더 눌러 주세요.</div>';
+  h += '<div style="font-size:11px;color:#7c3aed;line-height:1.5;margin-top:8px">완료 판정 = 구글 시트 <b>일일완료</b> 행(하루 2 Day 완주) + 이 폰의 일일학습 완료 기록. <b>자기주도완주</b>와 수업 중 단어 시험(테스트 행)은 일일학습으로 치지 않아요. 시트 기록이 늦게 올라오면 [🔄 새로고침]을 한 번 더 눌러 주세요.</div>';
   h += '</div>';
   return h;
 }
@@ -15764,18 +16004,14 @@ function ssRoster(ban) {
   return out;
 }
 function ssTdKey() { try { return tdKey(); } catch (e) { return ''; } }
-/* 오늘 완료 여부: ① 자기주도 완주 ② 오늘 학습 완료(학생 폰이 올린 실시간 기록) */
+/* 자기주도 완료 여부: ① 자기주도 완주(ntfy·MQTT 상태) ② 시트 진도DB '자기주도완주'
+   v169: 집 일일학습(d:1)을 자기주도 완료로 치지 않는다 — 두 영역은 완전히 따로 본다 */
 function ssDoneInfo(ban, name) {
   var st = ssStatusOf(ban, name);
   if (st && st.done) return { done: true, why: '자기주도 완주', st: st };
   /* v168: MQTT·ntfy가 빠져도 구글 시트 진도DB에 오늘 '자기주도완주'가 있으면 완료 */
   try { if (dbSsDoneOn(ban, name, ssTdKey())) return { done: true, why: '자기주도 완주(시트)', st: st, src: 'sheet' }; } catch (e) {}
-  var key = ban + '|' + name, row = null;
-  try { row = (typeof STREAK_BOARD !== 'undefined' && STREAK_BOARD) ? STREAK_BOARD[key] : null; } catch (e) { row = null; }
-  var today = ssTdKey();
-  if (!row) { try { row = getRealStreakMap()[key] || null; } catch (e) {} }
-  if (row && row.d && (!row.t || row.t === today)) return { done: true, why: '오늘 학습 완료', st: st, row: row };
-  return { done: false, why: (st ? '진행 중' : '미시작'), st: st, row: row };
+  return { done: false, why: (st ? '진행 중' : '미시작'), st: st, row: null };
 }
 function ssStateChip(info) {
   var st = info.st;
@@ -16242,7 +16478,7 @@ function ssBoardHtml() {
         : '<div style="font-size:10.5px;color:#f59e0b;margin-top:4px">학부모 번호 없음 — 아래 [📇 학부모 연락처]에 저장</div>')
       + '</div>';
   });
-  h += '<div style="font-size:11px;color:#0369a1;line-height:1.5;margin-top:6px">완료 판정 = ① 자기주도 완주(1·2·3단계 오답까지 모두 해결) ② 오늘 학생 폰에서 올린 학습 완료 기록. 기록이 없는 학생은 미완료로 표시돼요. 이탈 기록은 폰이 실제로 화면을 벗어났을 때(visibilitychange)만 세고, 첫 1회 5초 미만은 유예돼요. 「밖에서 머문 시간」은 유예된 짧은 이탈까지 포함한 실제 시간이에요.</div>';
+  h += '<div style="font-size:11px;color:#0369a1;line-height:1.5;margin-top:6px">완료 판정 = <b>자기주도 완주</b>(1·2·3단계 오답까지 모두 해결 — 시트 자기주도완주 · 학생 폰 완주 기록). 집 일일학습(일일완료)은 여기서 치지 않아요. 기록이 없는 학생은 미완료로 표시돼요. 이탈 기록은 폰이 실제로 화면을 벗어났을 때(visibilitychange)만 세고, 첫 1회 5초 미만은 유예돼요. 「밖에서 머문 시간」은 유예된 짧은 이탈까지 포함한 실제 시간이에요.</div>';
   return h;
 }
 var SS_BOARD_SIG = '', SS_BOARD_HOLD = 0;
