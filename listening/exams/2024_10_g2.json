@@ -1,0 +1,292 @@
+{
+ "id": "2024_10_g2",
+ "year": "2024",
+ "month": "10",
+ "grade": "고2",
+ "school": "경기",
+ "title": "2024학년도 10월 고2 전국연합학력평가 영어",
+ "duration": 1534.7,
+ "totalPoints": 37,
+ "audio": "listening/audio/2024_10_g2.mp3",
+ "starts": [
+  205.6,
+  268.2,
+  347.1,
+  417.8,
+  503.6,
+  589.4,
+  669.2,
+  751.6,
+  832.4,
+  910.0,
+  992.4,
+  1035.3,
+  1080.7,
+  1163.1,
+  1245.3,
+  1324.6,
+  1324.6
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "승강기 점검 일정을 공지하려고",
+    "승강기 대신 계단 이용을 권장하려고",
+    "교내 질서 유지 봉사자를 모집하려고",
+    "올바른 계단 이용 수칙을 설명하려고",
+    "승강기 고장 시 대처 방법을 안내하려고"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "[Chime bell rings.]\nM: Good morning, Stroudwood High School students! This is your principal, Juan Buchanan. As you know, there’s only\none elevator in our school and it’s mainly for those who carry heavy boxes or have hurt their legs. However, they\nusually wait for ages to use the elevator because it’s always packed. Wouldn’t it be nice if they could freely use\nthe elevator as they need? So, I suggest you use the stairs instead of the elevator. Not only will this help reduce\novercrowding, you can also be considerate of others. Let’s take the stairs for the students who really need to use\nthe elevator. Thank you for your cooperation."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "칫솔질을 너무 세게 하는 것은 치아를 손상시킬 수 있다.",
+    "칫솔을 사용한 후에는 세워서 보관하는 것이 위생적이다.",
+    "치아를 희고 밝게 관리하려면 식후 바로 양치질을 해야 한다.",
+    "이의 시린 증상을 완화하기 위해 차가운 음식을 피해야 한다.",
+    "구강 건강을 유지하려면 주기적으로 치과 진료를 받아야 한다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: David, your toothbrush is worn out again.\nM: Oh, I’ve used this one just for a month. I don’t know why this keeps happening, Mom.\nW: Wait. Just a month and it’s already like this? How do you brush your teeth?\nM: Uh, I usually brush hard. It feels like it cleans better that way.\nW: Dear, brushing hard can damage your teeth.\nM: Really? I thought it would make my teeth whiter and brighter.\nW: Actually, aggressive brushing can end up wearing down your teeth.\nM: Hmm. I’ve never thought about that.\nW: Well, that’s what happened to me. My teeth got sensitive because I used to brush like you.\nM: Oh, Mom. I’m sorry to hear that. I’ll change my brushing habits from now on.\nW: Keep in mind that brushing your teeth too hard can cause damage.\nM: Yes, Mom."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "월급의 일정 비율을 정기적으로 투자하는 것이 좋다.",
+    "이익을 얻기 위해 어느 정도의 위험은 감수해야 한다.",
+    "돈을 분산하여 투자하면 투자의 위험을 낮출 수 있다.",
+    "투자 결정 시 타인의 의견에 휩쓸리는 것은 위험하다.",
+    "투자할 기업을 고를 때 성장 가능성을 고려해야 한다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hello, listeners. This is Grace’s Tips to Manage Money. Some people make investments to hit a jackpot overnight\nbut end up losing money. If you don’t want this to happen, listen carefully. There’s a smart way to make\ninvestments while reducing the risk. Spread your money between different types of investments. As the old saying\ngoes, don’t put all your eggs in one basket. We cannot predict the future, but we can be prepared. It doesn’t matter\nwhether it’s types of companies or investment styles. By dividing your investments smartly, you have a lower\nchance of losing your money. I’ll be back after the commercial break. Stay tuned!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_10_g2_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: How was school, Rina?\nW: Great, Dad! Our club held a booth for Sustainability Day. Look at this picture.\nM: I love the Earth character on the banner. How cute!\nW: Actually, I designed it.\nM: That’s my daughter! There’s a bag with a striped pattern on the shelf.\nW: It’s made out of recycled plastic. We put it on display.\nM: Uh-huh. It goes well with the theme. What’s the box near the plant for?\nW: It contained upcycled goods. We used them for quiz prizes. [Pause] Guess why those two jugs are on the table.\nM: Hmm. Are they drinks for students who brought their own cup?\nW: Bingo! We didn’t want to waste disposable cups.\nM: Nice. What’s the bicycle for?\nW: When students pedaled, the star-shaped light bulb on the stand lit up. That was my favorite.\nM: Sounds like a fun day!"
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "의자 가져오기",
+    "토론 주제 정하기",
+    "문자 메시지 보내기",
+    "참가자 명단 만들기",
+    "마이크 작동 여부 확인하기"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Mr. Murphy, the School Members’ Forum is just around the corner!\nM: Time flies! Let’s check if everything’s ready. Have the students decided on the discussion topic?\nW: Yes, it’s ‘How to Make a Better School Community.’\nM: Good. You know we gathered applications from students, teachers and parents. Can you guess how many signed up?\nW: Well, maybe around 30?\nM: Actually, it’s 50. Here’s the participant list.\nW: Wow. That’s a lot more than expected. There might not be enough chairs in the auditorium. Could you bring some\nmore?\nM: Okay. I’ll do it. Oh, don’t forget to send a text message to the participants. They might have forgotten.\nW: Right. Leave it to me.\nM: Thanks. We still need to make sure the microphones are working properly.\nW: Don’t worry. I already took care of it.\nM: Nice. I think we’re ready now."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$65",
+    "$70",
+    "$75",
+    "$85",
+    "$90"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Welcome to Paul’s Pet Photo Studio.\nW: Hello. Can I get a photoshoot for my puppy?\nM: Of course. You’ve come to the right place. A photoshoot costs $60 for just your pet, and $80 for both of you.\nW: Hmm, I’ll choose the one with my puppy and me. I want to capture our happy moments.\nM: Good. We’ll provide one photo in a frame for free. If you want all the files as digital copies, it costs $10 more.\nW: I want the digital copies, as well. I’ll post them on my social media.\nM: Alright. So, that’s a pet-and-owner photoshoot with digital copies, correct?\nW: Yes. Is there any discount?\nM: If you let us use your photos on our website, you can get $5 off the total price.\nW: Okay. I’ll get the discount. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 Noopy 팝업 스토어에 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "도서관에 가야 해서",
+    "점심 약속이 있어서",
+    "남동생을 돌보아야 해서",
+    "문학 에세이를 써야 해서",
+    "학교 잡지를 편집해야 해서"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "[Cell phone rings.]\nM: Paula, what’s up?\nW: Mark, can you help me choose a topic for my literature essay? You got a good score on the last one.\nM: Sure. I’ll lend you my notes. Let’s meet at the library later.\nW: I owe you one. By the way, what are you doing now?\nM: I’m babysitting my little brother. We’re watching the Noopy animation again.\nW: Ooh, is it his favorite character? I heard there’s a Noopy pop-up store coming to town.\nM: Really? Where?\nW: It’ll be next to the restaurant we had lunch at yesterday. It’s only open for tomorrow.\nM: Oh, no. I can’t make it.\nW: Why? Your brother would love that store. He can even meet Noopy in person.\nM: Well, I have to edit the school magazine tomorrow.\nW: Oh, right. You’re the editor in chief. Good luck!"
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Make Your Own Emoji 행사에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "날짜",
+    "장소",
+    "강사",
+    "소요 시간",
+    "등록 방법"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, did you see this brochure about the event, Make Your Own Emoji?\nM: Yes. Kids can have fun drawing colorful faces and objects, right?\nW: Yeah, and once they’re done, their drawings come alive. Why don’t we take our daughter Christy to the event?\nM: Great idea. She’ll love it. When is it held?\nW: It’s on November 1st, 3 p.m. Are you free then?\nM: I’ll make time. It’ll take place at Centraville Art Center, right?\nW: Yes. It’s just down the road.\nM: Awesome. Who is the instructor?\nW: It’s Elton Kim. You know he’s a famous art specialist.\nM: Oh, there might not be many spots left. How do we register?\nW: We can scan this QR code and fill out the form. Then we’re all set.\nM: Got it. Let’s do it right now."
+  },
+  {
+   "no": 9,
+   "prompt": "2024 Silent Disco에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "시청 광장에서 열릴 것이다.",
+    "방문객들은 무선 헤드셋을 받을 것이다.",
+    "세 시간 동안 진행될 것이다.",
+    "모든 연령대가 참여할 수 있다.",
+    "티켓은 온라인으로만 구매할 수 있다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Attention, Groove and Mingle podcast listeners! Do you want to dance under the dazzling lights without worrying\nabout noise problems? Then, here’s the event for you, the 2024 Silent Disco! It’ll be held at the City Hall Square\nthis Saturday. At the gate, visitors will receive a wireless headset. Through these headsets, you can select from\nvarious music genres. K-pop, electronic, hip-hop, you name it! The event will run for 3 hours starting from 7 p.m.\nYou can even grab snacks at the food trucks. All ages can participate, so bring your kids or grandparents along.\nTickets can be purchased online or at the event. See you there!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 주문할 키보드 손목 받침대를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_10_g2_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, what are you doing on your phone?\nM: I’m shopping for a keyboard wrist rest for you. Do you want to choose together?\nW: How sweet. Let’s see. [Pause] There are five models.\nM: Yeah. We can choose from different colors. Which color do you prefer?\nW: I don’t mind, but let’s not choose the white one. It might get dirty easily.\nM: Agreed. Also, when it comes to materials, cotton might not provide good wrist support. Let’s take that off the list.\nW: Okay. Oh, they come with a free gift! Which one shall we go for?\nM: We have many stickers, so why don’t we get the mouse pad?\nW: I couldn’t agree more. Now we have two options left.\nM: Well, it’s said that higher price means better quality. Let’s pick the more expensive one.\nW: Uh-huh. Let’s order it now."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Absolutely. Vintage clothes are not my thing.",
+    "Sure. I want to check out the store this week.",
+    "I agree. My jacket really needs to get cleaned.",
+    "Same here. I prefer shopping online for clothes.",
+    "No, thanks. I’ve never heard of that school before."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hi, Wayne. How do you like my new jacket?\nM: Wow, it’s really fancy! I’ve always wanted a cool jacket like that! Where did you get it?\nW: I got it at a vintage store near our school. Would you like to know the name of the store?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "That’s a shame. You should’ve checked the weather.",
+    "That’s a nice idea. We should go hiking again soon.",
+    "I totally agree. I twisted my ankle on the way up.",
+    "Let me see. It takes one hour to climb to the top.",
+    "Chin up. You cannot be successful all the time."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Yay! We’re finally at the top of the mountain! It was a tough hike, but definitely worth it.\nW: You bet! I can feel a fresh breeze and the view is breathtaking. I can totally see why hiking is so popular.\nM: Yeah. Let’s do this more often!\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Wait. The runner at the front is falling behind.",
+    "Good for you. You can always come run with us.",
+    "Terrible. I don’t like being sweaty under the sun.",
+    "Fantastic. Please count me in for the next meetup.",
+    "Exactly. You should always push beyond your limits."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Good morning, Tash. How was your weekend?\nM: Great, thanks. I went for a run.\nW: Oh, I didn’t know you were into running.\nM: I run occasionally. But, since I run alone, I give up easily when I get tired.\nW: I see. Well, that won’t be a problem if you join a running club.\nM: How so? Please tell me more.\nW: Actually, in my running club, we encourage each other to keep going along the way.\nM: That sounds great! Where do you usually run?\nW: We run along the Hanson River, looking at the beautiful night view of the city. It feels terrific.\nM: Ooh, are you recruiting new members? You know I’m free every evening.\nW: You can join us if you want. We get together every Tuesday at 8 p.m.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Awesome. Let me see how well you play.",
+    "Okay. Thank you for coming to cheer me up.",
+    "I’m so sorry. I’ll support you wherever I am.",
+    "Never mind. You don’t need to attend the game.",
+    "Apologies. I don’t like watching basketball much."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Honey, I’m home.\nW: Hey, how was your day?\nM: Great. Our school basketball team is really putting in the effort during practice.\nW: You’re the best coach ever. I’m sure your team will win the upcoming game.\nM: Thanks, honey. But I’m worried that we might not make it into the finals. It’s such a big match.\nW: Well, don’t worry. I know your team will do a great job. And I’ll be at the stands as usual.\nM: Thank you so much. You’re always supporting me.\nW: Of course, I’m your number one fan! Did the game schedule come out?\nM: Yes, it just came out. It’s next Saturday at 10 a.m.\nW: Next Saturday? Oh, no. I have an important business meeting then.\nM: Really? I was hoping to see you in the stands.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Emily가 Mr. Garcia에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I’d like you to replace my suitcase with a new one.",
+    "Could you give me a refund for the plane ticket?",
+    "Will you see if my suitcase has been damaged?",
+    "Can I receive money for my broken suitcase?",
+    "Please help me with checking my baggage in."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Emily goes on a trip to Mexico. When she gets off the plane and picks up her suitcase, she finds it broken. She\nimmediately visits the airline’s customer service center and asks for help from a staff member named Mr. Garcia.\nAfter he checks Emily’s suitcase, he apologizes and tells her she can choose between receiving cash compensation\nor a new suitcase. Emily thinks it’s better to get a new one rather than money because she can’t use the damaged\nsuitcase during the trip. Therefore, she wants to ask Mr. Garcia to provide her with a new suitcase. In this\nsituation, what would Emily most likely say to Mr. Garcia?\n16번부터 17번까지는 두 번 들려줍니다.\n16번과 17번\n다음을 듣고, 물음에 답하시오.\nW: Hello, students. Do you think playing is just a waste of time? Actually, it’s not. Today, we’ll focus on how play\nhelps children learn different social skills. First, let’s talk about language skills. While playing, kids need to find the\nright words to say to their friends. That way, they learn to express themselves clearly. Second, kids’ self-control\nskills grow in play. When kids ride a slide and there’s a long line, they might want to cut in and be the first.\nHowever, by waiting for their turn, they learn to control themselves. Next, play builds empathy skills. During\nrole-play, children put themselves in someone else’s shoes. This helps them see the world from other people’s\npoints of view. Lastly, children improve their apology skills through play. When they play together, they often fight.\nBut in fact, it’s a chance to learn to say sorry and make up. The more children play, the more they’ll learn the\nskills they need to get along with others. Now, let’s watch a video.\n다시 한 번 듣겠습니다.\nW: Hello, students. Do you think playing is just a waste of time? Actually, it’s not. Today, we’ll focus on how play\nhelps children learn different social skills. First, let’s talk about language skills. While playing, kids need to find the\nright words to say to their friends. That way, they learn to express themselves clearly. Second, kids’ self-control\nskills grow in play. When kids ride a slide and there’s a long line, they might want to cut in and be the first.\nHowever, by waiting for their turn, they learn to control themselves. Next, play builds empathy skills. During\nrole-play, children put themselves in someone else’s shoes. This helps them see the world from other people’s\npoints of view. Lastly, children improve their apology skills through play. When they play together, they often fight.\nBut in fact, it’s a chance to learn to say sorry and make up. The more children play, the more they’ll learn the\nskills they need to get along with others. Now, let’s watch a video."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "reasons why kids these days lack important social skills",
+    "how kids can develop diverse social skills through play",
+    "developmental stages of basic social skills in children",
+    "different social skills found among various cultures",
+    "social skills needed for parents to raise their kids"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, students. Do you think playing is just a waste of time? Actually, it’s not. Today, we’ll focus on how play\nhelps children learn different social skills. First, let’s talk about language skills. While playing, kids need to find the\nright words to say to their friends. That way, they learn to express themselves clearly. Second, kids’ self-control\nskills grow in play. When kids ride a slide and there’s a long line, they might want to cut in and be the first.\nHowever, by waiting for their turn, they learn to control themselves. Next, play builds empathy skills. During\nrole-play, children put themselves in someone else’s shoes. This helps them see the world from other people’s\npoints of view. Lastly, children improve their apology skills through play. When they play together, they often fight.\nBut in fact, it’s a chance to learn to say sorry and make up. The more children play, the more they’ll learn the\nskills they need to get along with others. Now, let’s watch a video.\n다시 한 번 듣겠습니다.\nW: Hello, students. Do you think playing is just a waste of time? Actually, it’s not. Today, we’ll focus on how play\nhelps children learn different social skills. First, let’s talk about language skills. While playing, kids need to find the\nright words to say to their friends. That way, they learn to express themselves clearly. Second, kids’ self-control\nskills grow in play. When kids ride a slide and there’s a long line, they might want to cut in and be the first.\nHowever, by waiting for their turn, they learn to control themselves. Next, play builds empathy skills. During\nrole-play, children put themselves in someone else’s shoes. This helps them see the world from other people’s\npoints of view. Lastly, children improve their apology skills through play. When they play together, they often fight.\nBut in fact, it’s a chance to learn to say sorry and make up. The more children play, the more they’ll learn the\nskills they need to get along with others. Now, let’s watch a video."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 사회적 기술이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "language",
+    "self-control",
+    "responsibility",
+    "empathy",
+    "apology"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, students. Do you think playing is just a waste of time? Actually, it’s not. Today, we’ll focus on how play\nhelps children learn different social skills. First, let’s talk about language skills. While playing, kids need to find the\nright words to say to their friends. That way, they learn to express themselves clearly. Second, kids’ self-control\nskills grow in play. When kids ride a slide and there’s a long line, they might want to cut in and be the first.\nHowever, by waiting for their turn, they learn to control themselves. Next, play builds empathy skills. During\nrole-play, children put themselves in someone else’s shoes. This helps them see the world from other people’s\npoints of view. Lastly, children improve their apology skills through play. When they play together, they often fight.\nBut in fact, it’s a chance to learn to say sorry and make up. The more children play, the more they’ll learn the\nskills they need to get along with others. Now, let’s watch a video.\n다시 한 번 듣겠습니다.\nW: Hello, students. Do you think playing is just a waste of time? Actually, it’s not. Today, we’ll focus on how play\nhelps children learn different social skills. First, let’s talk about language skills. While playing, kids need to find the\nright words to say to their friends. That way, they learn to express themselves clearly. Second, kids’ self-control\nskills grow in play. When kids ride a slide and there’s a long line, they might want to cut in and be the first.\nHowever, by waiting for their turn, they learn to control themselves. Next, play builds empathy skills. During\nrole-play, children put themselves in someone else’s shoes. This helps them see the world from other people’s\npoints of view. Lastly, children improve their apology skills through play. When they play together, they often fight.\nBut in fact, it’s a chance to learn to say sorry and make up. The more children play, the more they’ll learn the\nskills they need to get along with others. Now, let’s watch a video."
+  }
+ ]
+}

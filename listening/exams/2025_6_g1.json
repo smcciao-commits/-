@@ -1,0 +1,292 @@
+{
+ "id": "2025_6_g1",
+ "year": "2025",
+ "month": "6",
+ "grade": "고1",
+ "school": "부산",
+ "title": "2025학년도 6월 고1 전국연합학력평가 영어",
+ "duration": 1431.5,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_6_g1.mp3",
+ "starts": [
+  176.0,
+  236.5,
+  316.5,
+  382.4,
+  463.6,
+  540.2,
+  613.3,
+  690.1,
+  766.4,
+  840.8,
+  915.8,
+  958.6,
+  1002.6,
+  1082.3,
+  1157.6,
+  1223.5,
+  1223.5
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학생회관 리모델링 일정을 공지하려고",
+    "새로운 학습 자료를 제공하려고",
+    "학생용 프린터 설치를 알리려고",
+    "학생회장 선출 방법을 안내하려고",
+    "프린터 고장 시 해결 방법을 설명하려고"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Good morning, everyone. I’m your student council president, Kelly\nGreen. Many students have complained that there are no printers\navailable for them to use. To solve this problem, next week we will\nset up several new printers in the student council room. Students\nwill be able to use the printers for homework, projects, or any other\nschool tasks. We hope this will help you do your work more\nefficiently and make your school life easier. Thank you."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "단어를 소리내어 말하는 것이 암기에 효과적이다.",
+    "말하기와 쓰기는 언어 학습에서 필수적인 요소이다.",
+    "뇌 기능의 효율성을 높이려면 충분한 휴식이 필요하다.",
+    "문화를 이해하면 그 나라의 언어를 더 쉽게 배울 수 있다.",
+    "언어 학습 과정에서의 실수는 장기 기억 형성에 도움이 된다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Anna, I see you’re studying Spanish.\nW: Hi, Mr. Brown. Yeah, I’ve been really into it these days.\nM: I’ve noticed. Do you feel like you’re improving a lot?\nW: Hmm... Well, remembering words is really hard. I forget them\nquickly.\nM: I see. How about saying the words out loud? It can be an effective\nway to remember them.\nW: Does it really help? I feel more comfortable just memorizing quietly.\nM: When you speak out loud, you use different parts of your brain, and\nthat helps you remember words better.\nW: But I always thought saying words out loud would make it harder to\nfocus.\nM: Not at all. Studies show that it can help you stay more focused on\nthe task.\nW: Really? Then, maybe I should give it a try."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "햇빛을 쬐는 것은 신체와 정신의 건강에 도움이 된다.",
+    "자외선 차단제를 바르는 것은 피부 노화를 예방한다.",
+    "건강을 위해 다양한 영양소를 고루 섭취해야 한다.",
+    "몸과 마음이 건강하면 삶의 만족도가 높아진다.",
+    "야외 활동 시 안전 수칙을 준수해야 한다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, listeners! This is Thomas White’s Living Well. What do you\ndo to stay healthy? Maybe you exercise regularly and eat healthy\nfood. Those are both great habits. But I have one more simple tip\nfor you. Go outside and get some sunlight! Sunlight is important for\nyour body and mind. Getting sunlight can prevent you from getting\nsick and can reduce anxiety. It’s an easy way to help you stay\nhealthy both physically and mentally. I’ll be right back with more\nafter the break."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_6_g1_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: Jenny, how was the pajama party yesterday?\nW: It was great, Dad. Here, take a look at this photo.\nM: Let’s see. Oh, I like the pajama party banner next to the clock.\nW: Yeah, it’s really eye‐catching, isn’t it?\nM: It is. And here you are standing in your striped pajamas.\nW: I absolutely love these pajamas. They look so cute.\nM: And the girl making a V‐sign with her fingers is your friend Mia,\nright?\nW: That’s right. Do you see the pillows on the bed? We had a pillow\nfight!\nM: It must’ve been so much fun. By the way, what are those three\nstars on the wall?\nW: Oh, those are stickers. They glow in the dark.\nM: I see. Sounds like you had an amazing time at the pajama party.\nW: Definitely! I’ll never forget it."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "시식용 사탕 고르기",
+    "가격표 붙이기",
+    "홍보 포스터 게시하기",
+    "스피커 점검하기",
+    "음악 재생 목록 만들기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Brian, I think we’re almost ready for our candy shop’s opening\nevent.\nM: That’s right. What do we have left to do?\nW: Well, let’s see. Is the background music playlist ready?\nM: Yes, I chose some cheerful songs and made a playlist.\nW: Great! What about the bluetooth speakers?\nM: I tested them and they’re working fine. Did you choose the sample\ncandies for customers to try?\nW: Yeah. Look! I put them in these pretty little baskets.\nM: Thanks! They look nice.\nW: And all the other candies are nicely placed around the shop.\nM: Wait, how about the price tags?\nW: Oh, we almost forgot. Could you put them on the candy boxes?\nM: Of course. I’ll do it right away."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$80",
+    "$90",
+    "$100",
+    "$110",
+    "$120"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Welcome to Lake Boat Tours. How can I help you?\nW: Hello. I’d like to buy some tickets for today.\nM: We have daytime tickets and sunset tickets. Which would you like?\nW: We’d like sunset tickets, please. How much are they?\nM: It’s $30 for adults and $20 for children. How many tickets do you\nwant?\nW: Two adult tickets and one child ticket, please.\nM: Okay. And, we offer snacks for $10 per person. Would you like\nthem?\nW: Yes. Snacks for all three of us, please.\nM: Alright. Do you need anything else?\nW: No, that’s it.\nM: So, that’s two adults and one child for the sunset tour, all with\nsnacks.\nW: Perfect. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 버스킹 공연에 참여할 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "기타 연주를 연습해야 해서",
+    "아르바이트를 해야 해서",
+    "테니스 수업을 받아야 해서",
+    "오디션을 준비해야 해서",
+    "대중 앞 공연이 긴장되어서"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hey, Alicia. I saw a video of you playing the guitar on your social\nmedia. It was great.\nW: Thanks, Oliver. Your singing videos are fantastic, too.\nM: I have an idea. There’s a busking event this Sunday. How about\nperforming together?\nW: This Sunday? I’d really love to, but I can’t.\nM: Why not? Do you feel nervous about performing in public?\nW: Not really, but I already have another plan on Sunday.\nM: Oh, do you still take tennis lessons every Sunday?\nW: Not anymore. Do you remember I had an interview for a part‐time\njob?\nM: Of course. Did you get it?\nW: Yes, so I have to start working the part‐time job this Sunday.\nM: I see. Maybe we can try for another time."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Fireworks Festival 자원봉사에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "기간",
+    "지원 가능 연령",
+    "준비물",
+    "활동 내용",
+    "신청 기한"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Jay, did you hear about the Fireworks Festival?\nM: Yeah, I heard it’s going to be amazing.\nW: I’m thinking of volunteering there. Take a look at this poster about\nit.\nM: The volunteer period is for two days, June 14th and 15th.\nW: That’s right. Would you like to join?\nM: I’d love to. But can just anyone apply to be a volunteer?\nW: Only people over 18 can apply. So, we’re both good.\nM: I see. What exactly will we do during the festival?\nW: It says we’ll check tickets, run activity booths, or take photos for\nthe festival website.\nM: Sounds interesting. And look! We have to sign up by this Friday.\nW: Really? We don’t have much time. Let’s do it right now."
+  },
+  {
+   "no": 9,
+   "prompt": "2025 Talent Show에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학교 강당에서 개최될 것이다.",
+    "모든 학생이 참가할 수 있다.",
+    "3명의 교사가 심사할 것이다.",
+    "모든 참가자는 열쇠고리를 받을 것이다.",
+    "공연 막바지에 댄스 파티가 있을 것이다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Hello, everyone! This is Ms. Westwood, your vice principal. I’m\nexcited to announce the 2025 Talent Show! It’ll take place in our\nschool auditorium on June 20th at 6 p.m. All students are welcome\nto participate and showcase their unique talent, whether it’s singing,\ndancing, or acting. Three wonderful teachers will be the judges, and\nthere will be prizes for the top performances. Every participant will\nreceive a free T‐shirt with our school symbol on it. At the end of\nthe show, we’ll have a short dance party. For more details, please\ncheck out our school website. Thank you."
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 구매할 책가방을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_6_g1_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, we need to buy Robert a backpack for school.\nM: Right, let’s search for one online.\nW: [Clicking Sound] Wow, there are so many options. What should we\nconsider first?\nM: Well, let’s start with budget.\nW: We already spent a lot on his other school supplies. I’d like to keep\nit under $70.\nM: All right. What shape should we get him, a square one?\nW: Yeah, it’s better for carrying school supplies. Then, what about the\ncolor?\nM: White ones get dirty easily, so we should go with a black one.\nW: Sounds good. And does it need to be waterproof?\nM: Definitely. It’ll be useful on rainy days.\nW: Then, this is the one. Let’s buy it."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I see. Then you should leave now to go see a doctor.",
+    "Good idea. I can put you in another group next class.",
+    "Too bad. You should have taken some medicine first.",
+    "Never mind. I hope you do better on the final exam.",
+    "Thank you. I’ll go to the nurse’s office right now."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Ms. Adams, I’m not feeling well. I have a bad headache.\nW: Oh, sorry to hear that, Jack. Have you taken some medicine?\nM: Yes, I took some an hour ago, but I don’t think I can stay in class.\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "No. I made all these cakes by myself.",
+    "Sure. I’m looking forward to my 30th birthday.",
+    "Actually, I don’t mind if you eat my carrot cake.",
+    "Not really. It’s hard to remember all the anniversaries.",
+    "Yes, I’d like a heart‐shaped cake with a message on it.━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Welcome to Emily’s Cake Shop. How can I help you today?\nM: I’d like to order a cake. It’s to celebrate my first wedding\nanniversary.\nW: Congratulations on your anniversary! Do you have a specific design\nin mind?\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I see. You’ve always preferred dogs over cats.",
+    "Okay. I’ll ask him if you can look after his cat.",
+    "Sorry. I don’t have time to take care of your cat.",
+    "No problem. I’ll take his pet to the animal hospital.",
+    "I agree. I know for sure he’s a great pet caretaker."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Dad, look at the cat over there!\nM: Oh, it’s so cute.\nW: I’ve wanted a cat for a long time. Can we get one?\nM: You know, raising a cat isn’t easy, Rebecca.\nW: I understand. But I promise I’d love it with all my heart.\nM: It’s not just about love. It’s about effort and responsibility.\nW: Trust me, Dad. I know I can handle it.\nM: Hmm... Then, how about practicing first? Uncle Tony is looking for\nsomeone to take care of his cat during his business trip.\nW: That sounds great! If I do a good job with his cat, will you let me\nget my own cat?\nM: I’ll definitely think about it if you take good care of his cat.\nW: Thanks, Dad. Please tell Uncle Tony that I want to do it.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "You’re right. That’s how I found the book.",
+    "Well, I think the food will be delivered soon.",
+    "Thanks. I guess I haven’t lost my chef skills.",
+    "Really? I didn’t know that you loved to cook.",
+    "I know. That’s the reason I quit being a chef."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Grandma, look what I found in the garage. It’s an old cookbook.\nW: Oh, I haven’t seen that for years.\nM: It says here, “Recipes for Fine Dishes.”\nW: That’s the cookbook I wrote when I was a chef before you were\nborn.\nM: Really? You were a professional chef?\nW: Yeah, I used to work in a restaurant. Look! These were my special\ndishes.\nM: Wow, they look fantastic! Did you create all the recipes in the\nbook?\nW: Yes. I really loved cooking and was good at it back then.\nM: You’re still good at cooking!\nW: Do you really think so?\nM: Of course! I’ve always thought your food tastes amazing.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Chloe가 호텔 직원에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "What’s the best tourist attraction near the hotel?",
+    "Would it be possible to change to another room?",
+    "Could you check the refrigerator in my room?",
+    "Is there any way to get some cool water?",
+    "Can you turn off the air conditioner?"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Chloe is on an overseas trip and staying at a hotel in Cairo, Egypt.\nAfter some sightseeing, she goes back to her hotel room. It’s hot\noutside, so she decides to turn on the air conditioner, but it doesn’t\nwork. She calls the hotel clerk to get it fixed. He explains that it\ncan be fixed tomorrow. It’s too hot to sleep without the air\nconditioning, and Chloe wants to know if she can stay in another\nroom. In this situation, what would Chloe most likely say to the\nhotel clerk?\n[16~17] 다음을 듣고, 물음에 답하시오.\nM: Hello, class! Last time, we learned about the national flags of\nvarious countries. Today, we’ll talk about different countries’\nnational flowers and what they symbolize. First, the Philippines’\nnational flower is jasmine. Because it means good luck, people often\ngive big necklaces made of this flower to welcome special guests.\nNext, Denmark’s flower is the daisy and it represents happiness.\nChildren express happiness by making daisy chains during their\ntraditional games. In France, the national flower is the iris.\nThroughout history, French people have thought of this flower as a\nsymbol of perfection. Lastly, the United States uses the rose as its\nnational flower. Americans consider it a symbol of love. So you can\nfind many roses in American weddings. Now, let’s watch a short\nvideo to look at these flowers up close."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "native plants of various countries",
+    "wild plants and their medical uses",
+    "endangered flowers across the world",
+    "roles of flowers in national ceremonies",
+    "national flowers with symbolic meanings"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, class! Last time, we learned about the national flags of\nvarious countries. Today, we’ll talk about different countries’\nnational flowers and what they symbolize. First, the Philippines’\nnational flower is jasmine. Because it means good luck, people often\ngive big necklaces made of this flower to welcome special guests.\nNext, Denmark’s flower is the daisy and it represents happiness.\nChildren express happiness by making daisy chains during their\ntraditional games. In France, the national flower is the iris.\nThroughout history, French people have thought of this flower as a\nsymbol of perfection. Lastly, the United States uses the rose as its\nnational flower. Americans consider it a symbol of love. So you can\nfind many roses in American weddings. Now, let’s watch a short\nvideo to look at these flowers up close."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 국가가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "Philippines",
+    "Denmark",
+    "Germany",
+    "France",
+    "United States"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, class! Last time, we learned about the national flags of\nvarious countries. Today, we’ll talk about different countries’\nnational flowers and what they symbolize. First, the Philippines’\nnational flower is jasmine. Because it means good luck, people often\ngive big necklaces made of this flower to welcome special guests.\nNext, Denmark’s flower is the daisy and it represents happiness.\nChildren express happiness by making daisy chains during their\ntraditional games. In France, the national flower is the iris.\nThroughout history, French people have thought of this flower as a\nsymbol of perfection. Lastly, the United States uses the rose as its\nnational flower. Americans consider it a symbol of love. So you can\nfind many roses in American weddings. Now, let’s watch a short\nvideo to look at these flowers up close."
+  }
+ ]
+}

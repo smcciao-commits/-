@@ -1,0 +1,292 @@
+{
+ "id": "2025_10_g1",
+ "year": "2025",
+ "month": "10",
+ "grade": "고1",
+ "school": "경기",
+ "title": "2025학년도 10월 고1 전국연합학력평가 영어",
+ "duration": 1454.6,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_10_g1.mp3",
+ "starts": [
+  125.8,
+  192.4,
+  264.8,
+  345.7,
+  424.8,
+  503.1,
+  580.9,
+  657.1,
+  742.8,
+  818.3,
+  900.3,
+  945.2,
+  988.9,
+  1066.4,
+  1150.0,
+  1227.2,
+  1227.2
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "체육 대회 자원봉사자를 모집하려고",
+    "체육 수업의 장소 변경을 공지하려고",
+    "야외 활동 시 규칙 준수를 당부하려고",
+    "폭우로 인한 체육관 사용 중단을 요청하려고",
+    "교내 공사로 인한 등교 시간 조정을 안내하려고"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "[Chime bell rings.]\nM: Attention, Stonehaven High School students. This is your P.E. teacher, Mr. Palmer. As you know, we had heavy rain\nyesterday. Due to the wet ground on our school field, it’s impossible to do sports activities outside as usual. It’s very\nslippery and dangerous. So today, we’ve decided to change the location of the P.E. class for your safety. We’ll have our\nP.E. class in the indoor gym instead of the school field. The time for the class is still the same. Please remember this\nimportant change, and be there on time. Thank you."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "면 소재의 잠옷은 수면에 도움이 된다.",
+    "숙면을 위해 방의 온도 조절이 중요하다.",
+    "호흡기 건강을 위해 환기를 자주 해야 한다.",
+    "땀을 흡수하는 소재의 운동복을 입어야 한다.",
+    "규칙적인 수면 습관은 건강한 삶을 위해 필요하다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Good morning, Mia. You look so refreshed.\nW: Hi, Mathew. Do you think so?\nM: For sure. What’s your secret?\nW: Actually, I started wearing cotton pajamas recently. I think they help me sleep.\nM: Cotton pajamas? Really?\nW: Yes. They allow air to flow easily, giving skin more room to breathe.\nM: That’s interesting. I often feel hot and sweaty at night.\nW: In that case, wearing cotton pajamas will help you sleep better.\nM: Hmm, I guess you’re right.\nW: Also, cotton absorbs sweat well. You’ll stay fresh all night.\nM: I see. It sounds like they’ll be helpful to me.\nW: Yeah. Sleeping in cotton pajamas is great for a good night’s sleep.\nM: Okay, I think I’ll give them a try."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "다양한 경험은 인생을 풍요롭게 만든다.",
+    "인생의 중요한 가치를 파악하는 것이 필요하다.",
+    "도전에 직면하는 것은 자신감 형성에 중요하다.",
+    "익숙한 환경은 자신감을 키우는 데 도움이 된다.",
+    "자신감을 최대한 발휘할 수 있는 일을 찾아야 한다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Welcome to my show, Smart Talk. I’m Arthur, your friendly show host. Today, we’ll talk about the importance of facing\nchallenges to build confidence. Sometimes, we’re too afraid to challenge ourselves and try something new. But remember,\nwhen you try something that you’re not familiar with and face difficulties, you’ll find strength you didn’t even know you\nhad. Through this process, you’ll have valuable experience to learn more about yourself. As a result, you’ll start to think\nthat you can achieve anything. So, if you face challenges, you’ll find yourself more confident than ever. Thank you for\nlistening."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_10_g1_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Mom, look at this photo of my field trip. We went to the dinosaur museum.\nW: Awesome! I like the banner that says “Dinosaur World”.\nM: This exhibit room was my favorite.\nW: Oh, look. There are two dinosaurs.\nM: Aren’t they cool? I almost felt like they would come back to life!\nW: Yeah. Can you see the dinosaur egg in the nest?\nM: Yes. It was bigger than I thought.\nW: By the way, who’s that person wearing a striped shirt?\nM: That’s my friend, Samantha. She’s a big fan of dinosaurs.\nW: She looks like she’s enjoying her time. What’s that round map on the wall?\nM: That map shows us where the dinosaurs used to live.\nW: Great. I’m sure you had a great time!"
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "화장실 청소하기",
+    "음식 재료 장보기",
+    "음식 메뉴 선정하기",
+    "보드게임 구매하기",
+    "음악 재생 목록 만들기"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Honey, I’m excited about our house warming party tomorrow!\nM: Me, too. My friends are looking forward to it.\nW: Let’s go over the plan together.\nM: Okay. For the menu, we planned steak, pasta, and salad.\nW: Right. Do you think that’s enough?\nM: I think so. I already bought all the ingredients we need.\nW: Great. What kind of games do you want to play at the party?\nM: Let’s see. [Pause] We can play some of the board games we have.\nW: That’s a good idea. Our friends love board games.\nM: So, all that’s left is the music playlist. I’ll make one now.\nW: No, you don’t need to. I already did it. [Pause] Oh, no. I forgot to clean the bathroom.\nM: No worries. I can do that right now.\nW: Thanks, honey."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 2,
+   "choices": [
+    "$12",
+    "$16",
+    "$17",
+    "$18",
+    "$21"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Welcome to Frozen Yogurt House!\nW: Hi, I’d like to get a frozen yogurt. What sizes do you have?\nM: We have a regular and a large.\nW: How much are they?\nM: A regular is $10 and a large is $15.\nW: I’ll take one regular size. It’ll be enough for me.\nM: Great. Would you like to add toppings to your yogurt? They’re $2 each.\nW: Let me see. [Pause] I’ll take three toppings. Pineapple, melon, and honey, please.\nM: Then, that’s $6 for all the toppings you chose.\nW: Okay. My house is a bit far from here. How much is an ice pack?\nM: It’s free. So, you’re getting one regular size frozen yogurt with three toppings.\nW: That’s right. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 안경을 찾으러 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "축제 준비를 해야 해서",
+    "배드민턴 연습을 해야 해서",
+    "학교 프로젝트를 끝마쳐야 해서",
+    "배드민턴 라켓을 수리해야 해서",
+    "가족과 저녁 식사를 하기로 해서"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Mom, are you free this afternoon?\nW: Yes, what’s the matter?\nM: I have to pick up my new glasses at 5 p.m. today. But I’m not sure if I can make it in time.\nW: I can pick them up. Does your school end late?\nM: No, it’s a festival day. We actually leave early.\nW: Then, is there a school project due today?\nM: No, that’s due next weekend.\nW: Why are you going to be late? I’m afraid you might be late for family dinner, too.\nM: Don’t worry. I’ll be home in time for dinner.\nW: What makes you late, then?\nM: Well, I’m going to practice badminton with Angela today.\nW: Oh, that’s why you’re bringing your racket to school.\nM: Yes, there’s a badminton tournament coming up.\nW: Alright. Enjoy your practice."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Crystal Waterfall Tour에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "소요 시간",
+    "준비물",
+    "참가비",
+    "모집 인원",
+    "환불 가능 여부"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "[Telephone rings.]\nM: Thank you for calling Best Travel Agency. How may I help you?\nW: Hello, I’m interested in the Crystal Waterfall Tour.\nM: Oh, that’s one of our most popular tour programs.\nW: Nice. I’ve heard it’s a half‐day program. Is that correct?\nM: Right. The tour will take about 4 hours.\nW: Perfect. Is there anything I should prepare for the tour?\nM: Yes. You should bring a raincoat.\nW: Okay. I saw online the tour costs $30 per person.\nM: Well, that’s for children. It’s $50 for an adult.\nW: I see. I have one more question. Can I get a refund if I cancel?\nM: You can get a full refund if you cancel at least 24 hours in advance.\nW: Thanks. I’ll talk to my friends and get back to you soon.\nM: Great. Call me anytime!"
+  },
+  {
+   "no": 9,
+   "prompt": "Book Exchange 행사에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "11월 3일에 열린다.",
+    "학교 도서관에서 개최된다.",
+    "모든 장르의 책을 받는다.",
+    "스티커를 도서관의 책과 교환해 준다.",
+    "선착순 50명에게 에코백을 준다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello. This is Gianna, the school librarian. Join us for the fun Book Exchange event on November 3rd. It’s a one­day only\nevent. It’ll be held at the school library. Here’s how it works. First, bring books you don’t read anymore to the library.\nWe accept books in all genres. Then, for each book you bring, you will receive a sticker. Lastly, we’ll exchange your\nstickers for books in the library. Please note, you can only bring up to 5 books per person. Every participant will get an\neco­bag. Don’t miss out on this fun event!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 여자가 구매할 스터디 플래너를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_10_g1_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Ashley. What are you looking at?\nW: Hi, Jeremy. I’m looking for a study planner. I need a new one.\nM: Oh, let’s see. Each planner has a special feature. Which one do you prefer?\nW: Everything looks fine, but I don’t need a study guide. I already have one.\nM: Okay. What about the cover material? I think leather would last longer.\nW: I agree. I also like the texture of leather.\nM: Good. How much do you want to spend?\nW: I want a planner cheaper than $15.\nM: Look, there’s a planner with digital access. You can just scan the QR code on the cover.\nW: Do you think it’ll be useful?\nM: Of course. You can use your planner on your digital devices.\nW: Perfect. I think I’ll go with this one."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Absolutely. I’m grateful for your help.",
+    "No. We’re out of seats at the moment.",
+    "Of course. I’ll do that for you right now.",
+    "Yes. We offer free Wi­Fi at our restaurant.",
+    "Never mind. You can leave the plate on the table."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Excuse me, I’m not used to ordering from a machine. I ordered three cheese burgers by mistake.\nW: Let me check your receipt. [Pause] Okay, what would you like to change?\nM: Actually, I’d like to order just one cheese burger. Is it possible to change my order?\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Sorry. I don’t remember calling you.",
+    "Right. We should start our own band.",
+    "Don’t worry. I’ll call a taxi with mine.",
+    "No worries. You can download the app.",
+    "Unbelievable. I can’t believe you already left."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Chris, we’re running late for band rehearsal. We have to hurry up.\nM: I know. We should’ve left earlier. How about calling a taxi through the app?\nW: That’s a great idea! [Pause] Oh no! My phone has no battery.\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Your support means a lot to me.",
+    "I don’t understand why you have to win.",
+    "Grammar cannot be taught by the AI tool.",
+    "I’m afraid the speech contest has already finished.",
+    "If you use it appropriately, it can be a helpful tool."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hi, Peter. How’s your speech contest preparation going?\nM: Hi, Emma. It’s my first time. It’s hard.\nW: Have you finished writing the script?\nM: Not yet. I’m still working on it, but I need some help with grammar.\nW: Then how about using an AI tool?\nM: An AI tool?\nW: Yes. I think it’s very useful when you use it in the right way.\nM: How can I use it wisely?\nW: You should remember it’s YOUR work, not the AI’s. You can’t rely on the AI tool too much.\nM: Can you give me an example?\nW: When I write an essay, I only use AI to get some help, like a grammar check.\nM: Oh! That sounds like exactly what I need.\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Sure. It’s hard to focus online.",
+    "Thanks. I’ll make sure to check my email.",
+    "No problem. You can help me set up the link.",
+    "I see. Let’s update your personal information.",
+    "No way. I’ll create an email account immediately."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "[Cell phone rings.]\nW: Hello, this is Amy Smith from Hubert College. Is this Ryan Johnson?\nM: Yes, this is Ryan. What can I do for you?\nW: I’m calling to confirm some changes to the upcoming new student orientation. Have you checked your email yet?\nM: No, not yet. What has changed?\nW: The orientation has been rescheduled to February 14th at 11 a.m.\nM: Got it. I’ll make sure to mark it on my calendar.\nW: Also, please note it’ll be held online instead of in person.\nM: That actually works better for me.\nW: Great! All updated information is in the email I sent you.\nM: Perfect. What about the online link for the orientation?\nW: The link will be sent to your email the day before.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Tom이 Lisa에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Is it expensive to buy a gift?",
+    "Are you going to buy a flower cake?",
+    "Can you teach me how to make a cake?",
+    "Would you bring the cake for my birthday?",
+    "Did you teach my grandmother how to bake?"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Tom is preparing for his grandmother’s birthday. He looks online for gift ideas but finds nothing special. One day at\nschool, his classmate, Lisa brings a beautiful flower cake to share. Tom is amazed by how beautiful it is and asks where\nhe can buy it. Lisa says she made the cake herself and it’s not hard to make. Tom thinks a flower cake made by him\nwould be a perfect gift for his grandmother. So, Tom wants to ask Lisa if he can learn to make a cake from her. In this\nsituation, what would Tom most likely say to Lisa?\nTom:\n16번부터 17번까지는 두 번 들려줍니다.\n16번과 17번\n다음을 듣고, 물음에 답하시오.\nW: Welcome to the Healthy Vibe Up show! Have you heard of the recent detox trend? It’s all about helping the body’s\nprocess of removing harmful stuff. So today, let’s find out how various detox juices can help support your health. First,\nbeet juice can strengthen your heart. Beet improves blood flow and lowers blood pressure. Second, celery juice can be a\ngreat option to help digestion. Celery’s high fiber assists in getting rid of extra water in your body. Next, cucumber juice\nkeeps your skin hydrated. Due to its vitamin B6 content, it flushes out toxins and makes your skin brighter. Last but not\nleast, kale juice is known as an immune booster because it’s rich in vitamin K. Kale protects cells from damage and\nkeeps your body strong. Now you’ve discovered how different detox juices can be helpful to your health. Try them and\nfeel the advantages yourself!\n다시 한 번 듣겠습니다.\nW: Welcome to the Healthy Vibe Up show! Have you heard of the recent detox trend? It’s all about helping the body’s\nprocess of removing harmful stuff. So today, let’s find out how various detox juices can help support your health. First,\nbeet juice can strengthen your heart. Beet improves blood flow and lowers blood pressure. Second, celery juice can be a\ngreat option to help digestion. Celery’s high fiber assists in getting rid of extra water in your body. Next, cucumber juice\nkeeps your skin hydrated. Due to its vitamin B6 content, it flushes out toxins and makes your skin brighter. Last but not\nleast, kale juice is known as an immune booster because it’s rich in vitamin K. Kale protects cells from damage and\nkeeps your body strong. Now you’ve discovered how different detox juices can be helpful to your health. Try them and\nfeel the advantages yourself!"
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "problems caused by consuming detox juices",
+    "the origin of detox juices made with vegetables",
+    "difficulties in making detox juices with vegetables",
+    "healthy vegetable juices to aid recovery after surgery",
+    "the positive effects of vegetable detox juices on health"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Welcome to the Healthy Vibe Up show! Have you heard of the recent detox trend? It’s all about helping the body’s\nprocess of removing harmful stuff. So today, let’s find out how various detox juices can help support your health. First,\nbeet juice can strengthen your heart. Beet improves blood flow and lowers blood pressure. Second, celery juice can be a\ngreat option to help digestion. Celery’s high fiber assists in getting rid of extra water in your body. Next, cucumber juice\nkeeps your skin hydrated. Due to its vitamin B6 content, it flushes out toxins and makes your skin brighter. Last but not\nleast, kale juice is known as an immune booster because it’s rich in vitamin K. Kale protects cells from damage and\nkeeps your body strong. Now you’ve discovered how different detox juices can be helpful to your health. Try them and\nfeel the advantages yourself!\n다시 한 번 듣겠습니다.\nW: Welcome to the Healthy Vibe Up show! Have you heard of the recent detox trend? It’s all about helping the body’s\nprocess of removing harmful stuff. So today, let’s find out how various detox juices can help support your health. First,\nbeet juice can strengthen your heart. Beet improves blood flow and lowers blood pressure. Second, celery juice can be a\ngreat option to help digestion. Celery’s high fiber assists in getting rid of extra water in your body. Next, cucumber juice\nkeeps your skin hydrated. Due to its vitamin B6 content, it flushes out toxins and makes your skin brighter. Last but not\nleast, kale juice is known as an immune booster because it’s rich in vitamin K. Kale protects cells from damage and\nkeeps your body strong. Now you’ve discovered how different detox juices can be helpful to your health. Try them and\nfeel the advantages yourself!"
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 주스가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "beet juice",
+    "celery juice",
+    "cucumber juice",
+    "carrot juice",
+    "kale juice"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Welcome to the Healthy Vibe Up show! Have you heard of the recent detox trend? It’s all about helping the body’s\nprocess of removing harmful stuff. So today, let’s find out how various detox juices can help support your health. First,\nbeet juice can strengthen your heart. Beet improves blood flow and lowers blood pressure. Second, celery juice can be a\ngreat option to help digestion. Celery’s high fiber assists in getting rid of extra water in your body. Next, cucumber juice\nkeeps your skin hydrated. Due to its vitamin B6 content, it flushes out toxins and makes your skin brighter. Last but not\nleast, kale juice is known as an immune booster because it’s rich in vitamin K. Kale protects cells from damage and\nkeeps your body strong. Now you’ve discovered how different detox juices can be helpful to your health. Try them and\nfeel the advantages yourself!\n다시 한 번 듣겠습니다.\nW: Welcome to the Healthy Vibe Up show! Have you heard of the recent detox trend? It’s all about helping the body’s\nprocess of removing harmful stuff. So today, let’s find out how various detox juices can help support your health. First,\nbeet juice can strengthen your heart. Beet improves blood flow and lowers blood pressure. Second, celery juice can be a\ngreat option to help digestion. Celery’s high fiber assists in getting rid of extra water in your body. Next, cucumber juice\nkeeps your skin hydrated. Due to its vitamin B6 content, it flushes out toxins and makes your skin brighter. Last but not\nleast, kale juice is known as an immune booster because it’s rich in vitamin K. Kale protects cells from damage and\nkeeps your body strong. Now you’ve discovered how different detox juices can be helpful to your health. Try them and\nfeel the advantages yourself!"
+  }
+ ]
+}

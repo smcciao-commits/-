@@ -1,0 +1,292 @@
+{
+ "id": "2026_3_g2",
+ "year": "2026",
+ "month": "3",
+ "grade": "고2",
+ "school": "서울",
+ "title": "2026학년도 3월 고2 전국연합학력평가 영어",
+ "duration": 1612.5,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_3_g2.mp3",
+ "starts": [
+  161.3,
+  224.6,
+  313.5,
+  389.7,
+  476.8,
+  571.6,
+  664.5,
+  762.9,
+  846.5,
+  940.3,
+  1027.5,
+  1080.5,
+  1126.6,
+  1213.3,
+  1298.0,
+  1383.6,
+  1383.6
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학교 신문 이름의 공모를 안내하려고",
+    "학교 신문에 게재할 기사를 모집하려고",
+    "학교 신문 창간 기념식 개최를 공지하려고",
+    "학교 신문 동아리의 지원 절차를 설명하려고",
+    "학교 신문 디자인 선호도 조사를 실시하려고"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, students. This is your vice principal. Our school is preparing\nto launch a school newspaper. Before we publish our first issue, we\nneed your help with an important part of the project. We are looking\nfor a great name for the newspaper that reflects our school spirit. If\nyou have a creative idea, please submit it by scanning the QR code\non the notice board by next Friday. Once all the suggestions have\nbeen collected, there will be a student vote to choose the final\nname. The name of the student who suggests the winning name will\nbe mentioned in the first issue. We look forward to your\nparticipation. Thank you."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "친구 사이라도 예의를 갖추어 행동해야 한다.",
+    "논쟁 상황에서는 잠시 침묵을 지키는 것이 좋다.",
+    "자신의 감정을 솔직하게 표현하는 것이 중요하다.",
+    "상대방의 입장에서 먼저 생각하고 이해해야 한다.",
+    "의견이 다를 때는 이성적으로 판단하려 노력해야 한다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: You don’t look happy, Jason. What’s wrong?\nM: It’s nothing serious, but I’ve been feeling a bit down because of\nthings between me and my friend, Sarah.\nW: Really? I thought you two were best friends.\nM: We are. We’re really close. The thing is, we sometimes have\ndifferent thoughts, and it’s hard for me to express how I feel.\nW: I understand, but keeping your feelings to yourself is only making\nthings worse.\nM: But I just don’t want to make things awkward.\nW: I know, but it only creates distance between you and Sarah. So, I\nthink it’s important to express your feelings honestly.\nM: Do you really think being open about my emotions is better?\nW: Yes. Hiding your feelings leads to misunderstandings. Telling her\nhow you truly feel will help solve the problem."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "선택의 기준은 개인의 필요와 처한 상황에 따라 달라진다.",
+    "결정 상황에서 처음 정한 선택이 가장 바람직한 경우가 많다.",
+    "빠르고 정확한 판단은 분석적 사고력이 뒷받침될 때 가능하다.",
+    "중요한 결정에는 주변 사람들의 조언을 구하는 것이 도움이 된다.",
+    "하나의 결론만 고집하기보다 여러 가능성을 살피는 것이 좋다."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hello, I’m doctor Robert Morgan. Today, I’m going to talk about\nhow to make a good choice. Let me give you an example. Imagine\nyou are trying to choose something in a store. You might think that\nspending more time will lead to a better decision. But research\nshows that your initial choice in the store is often the best one.\nThat’s because it reflects your true preference before being\ninfluenced by outside factors. When you think too much about every\npossible outcome and keep changing, you struggle with even simple\ndecisions and lose confidence. That’s why trusting your instinct\nabout your first choice can actually lead to a better result in the\nend."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_3_g2_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: Judy, take a look at this picture of the hotel room I booked. What\ndo you think?\nW: It looks great! Is it for our family trip?\nM: Yes. Since there will be three of us, I decided on this room.\nW: Then a room with three beds seems perfect.\nM: Exactly. And the lamp in the corner will be useful at night.\nW: Right. Also, the window seems to offer an ocean view.\nM: That was one of the main reasons I chose this room.\nW: I see. And I think the round table can be a nice place to enjoy some\nsnacks.\nM: I agree. There’s even an electric teapot on the table, so we can\nenjoy some tea, too.\nW: Great! I think you booked a really nice room.\nM: Yes, I can’t wait for our family trip."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "쓰레기봉투 가져가기",
+    "바람막이 빌려주기",
+    "샌드위치 만들기",
+    "간식 구매하기",
+    "등산로 정하기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Emily, are you ready for our hike tomorrow?\nW: Almost. Let’s go over the list of things we need to do.\nM: Okay. You wanted to choose a hiking trail. Have you picked one?\nW: Yes. I decided on Trail A. It doesn’t have many stairs.\nM: Good choice. What about lunch? Should we pack something?\nW: I’ll make some sandwiches. Don’t worry about that.\nM: Sounds great. Then I’ll take care of the snacks. I already bought\nsome yesterday.\nW: Great. Also I’ll bring trash bags to carry our trash back down.\nM: Good thinking. One more thing — it can get windy at the top of the\nmountain, so you’ll probably need a windbreaker.\nW: Really? But I don’t have one.\nM: Don’t worry. I have an extra windbreaker. I’ll lend it to you\ntomorrow.\nW: Thanks. See you tomorrow.\nM: See you then."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$33",
+    "$39",
+    "$40",
+    "$43",
+    "$46"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Welcome to Sweet Hands Baking Studio. How can I help you?\nW: Hi, I’d like to join the cupcake­making class at 4 o’clock today. Are\nthere any spots left?\nM: Sure. The class fee is $20 for an adult and $10 for a child.\nW: Okay. I’ll sign up for one adult and two children. Is there anything\nI need to bring for the class?\nM: No, all basic tools and ingredients are included. But if you pay an\nextra $3, you can buy a special decorating kit.\nW: That sounds good. Then, I’ll add two kits for my children.\nM: So, that’s one adult, two children, and two decorating kits. Do you\nhave a membership?\nW: No, but I have this coupon. Can I use it?\nM: Yes, you can get $7 off the total.\nW: Perfect. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 클라우드 서비스 구독을 취소하려는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "회사에서 접속이 불가능해서",
+    "서비스 이용 요금이 너무 비싸서",
+    "스마트폰 전용 앱을 지원하지 않아서",
+    "저장 용량에 만족하지 못해서",
+    "서버 오류가 자주 발생해서"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, CloudNest Customer Service. How may I help you?\nW: Hi, I’d like to cancel my cloud service subscription.\nM: I’m sorry to hear that. May I ask why you’d like to cancel? If it’s\nabout the cost, we actually just came out with a cheaper plan.\nW: I see. But the price isn’t the issue.\nM: Okay. Then were you dissatisfied with our storage capacity?\nW: No. Actually storage capacity hasn’t been a problem at all.\nM: How about the system performance? Did you experience any server\nerrors?\nW: Not at all. Everything runs smoothly. Actually, I really liked your\nsmartphone app. I used it a lot.\nM: It’s good to hear that. Then, can I ask why you want to cancel your\nsubscription?\nW: The thing is, my company recently changed its data security policy,\nso I can’t access your cloud service at work.\nM: Oh, I see. I’ll proceed with the cancellation for you.\nW: Thank you."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, 역사 강연에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "주제",
+    "강연자",
+    "날짜",
+    "참가비",
+    "장소"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: What are you looking at on your phone?\nM: Oh, Kate! I’m looking at an event post for an upcoming history\nlecture. Do you want to come with me?\nW: A history lecture? What’s the topic?\nM: It’s about the struggle for independence in Korea and in Ireland.\nW: Sounds interesting. I think I heard both countries have similar\nhistories. Who’s giving the lecture?\nM: Professor Matthew Stevens. He’s an expert in modern history.\nW: I’ve heard of him. When is the lecture?\nM: It’s scheduled for 3 p.m., April 5th.\nW: April 5th... I’m free that day. Where is it?\nM: It’s at the National History Museum downtown.\nW: Great. I’d love to go with you.\nM: Perfect! Let’s meet up before the lecture."
+  },
+  {
+   "no": 9,
+   "prompt": "2026 World Folk Dance Festival에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "3월 27일 금요일에 열린다.",
+    "여섯 개의 댄스팀이 무대에 오른다.",
+    "민속춤 의상을 입어 볼 수 있다.",
+    "공연 후 공연자들과 함께 사진을 찍을 수 있다.",
+    "방문객 모두에게 특별 기념품을 증정한다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, everyone! This is Chloe Anderson with the 2026 World Folk\nDance Festival Committee. We invite you to 2026 World Folk Dance\nFestival, a magical evening of music and dance. The event will be\nheld on Friday, March 27th, at 7 p.m. in Maplehurst Square. Six\namazing dance teams will take the stage, representing South Korea,\nBulgaria, Poland, India, Russia, and Peru. Each team will perform\ntheir traditional dance. You’ll also have the chance to try on folk\ndance costumes from these countries. After the performances, you\ncan take photos with the performers. Admission is free for all\nMaplehurst residents. In addition, the first 50 visitors will receive a\nspecial souvenir. Don’t miss this amazing chance!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 구매할 달리기용 조끼를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_3_g2_q10.png",
+   "answer": 2,
+   "group": null,
+   "script": "M: Clara, I want to buy a running vest, but I have no idea which to\nchoose. I need your help.\nW: Oh, I’ve got a website I always use. I’ll show you. [Typing sound]\nHere. Do you have a budget in mind?\nM: I’d like to keep it under $30.\nW: Okay. When do you usually run?\nM: I usually run at night.\nW: Then, you should get one with LED lights or reflective strips.\nM: Got it. How about the weight?\nW: The medium­weight model is more durable, while the lightweight\none is better for speed.\nM: Then I’ll go with a lightweight one.\nW: Great choice. How many bottle holders do you need?\nM: Hmm... I think just one is enough.\nW: Then, this is the best option for you.\nM: Okay. Thanks so much for your help."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "You’re too late. The train already left five minutes ago.",
+    "That’s tight. You need to hurry after you get off.",
+    "I agree. There’ll be less traffic tomorrow.",
+    "That’s my fault. I’ll leave earlier next time.",
+    "No problem. I can give you a ride to the station."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "[Telephone rings]\nM: Cathy, have you arrived at the station? I’m on my way.\nW: Yes. I’m waiting at the platform. You know our train leaves in\ntwenty minutes.\nM: I’m sorry. I’m in a taxi, but it’s taking longer than I expected\nbecause of traffic. I think I’ll be there in about ten minutes.\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Good job. I feel proud of you finishing the work.",
+    "You’ll be fine. That job doesn’t require a uniform.",
+    "Don’t worry. Just do your best and trust yourself.",
+    "You’re right. Many students are looking for part­time jobs.",
+    "It won’t matter. Some part­time jobs start in the afternoon."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Dad, tomorrow is my first day at my part­time job.\nM: Oh, so tomorrow’s the big day! How do you feel about it? You’ve\nalways wanted a part­time job.\nW: Yes, but I’m a little nervous. What if I make a mistake?\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "That’s perfect. Thank you so much for doing that.",
+    "Too bad. We could have ordered the T­shirts.",
+    "Good idea. I can help you right now.",
+    "Not really. We can just use the original design.",
+    "I agree. We’d better ask the printing shop to fix it."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: I heard you’ve been looking for me. Is it about our club’s T­shirts\nthat we ordered yesterday?\nW: Yes, the shop called and said our logo is way too complicated to\nprint quickly. We might not get them in time.\nM: No way! Is there any other way to get them faster?\nW: They suggested simplifying the design. If we do that, we can still\nget them on time.\nM: That’s a relief!\nW: But the problem is that I’m not good with the design software. What\nabout you?\nM: Well, I know a little bit about how to use the design program. So I\ncan give it a try.\nW: Great. Then could you send the updated design later today?\nM: Hmm... I have a student council meeting this afternoon. But I can\ndefinitely finish it tonight. Does that work?\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Great. Let’s use the service and enjoy the day.",
+    "Never mind. I’d rather stay in the hotel tomorrow.",
+    "Okay. We can take our luggage with us the whole day.",
+    "I’m sorry. I totally forgot to cancel our hotel reservation.",
+    "Right. We can come back here and pick up our suitcases."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Honey, what’s our plan for tomorrow?\nW: I’m thinking of visiting a local farmers’ market. I heard there’s a lot\nto see.\nM: But tomorrow is the day we move to another hotel. There’s no way\nwe can walk around with all our suitcases.\nW: You’re right. They’re too heavy to carry around all day. What should\nwe do?\nM: Oh, wait. I think I heard about a luggage delivery service. It picks\nup suitcases from one hotel and drops them off at the next one.\nW: Really? Let me look it up. [Smartphone typing sound] Oh, the\nwebsite says the service is available at our hotels. And it’s only\n$10 for up to three suitcases.\nM: That’s a good deal. It is totally worth it.\nW: I’ll go ahead and book it now.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Hailey가 Brian에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Do you mind sharing it again in the class group chat?",
+    "I didn’t get the photo. Did you send it in another chat?",
+    "The photos aren’t clear. Could you share different ones?",
+    "I’m not comfortable with the photos, so can you remove them?",
+    "How about taking pictures with all the classmates instead?"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hailey and Brian get along well as classmates and often\ncommunicate through their class group chat, which is mainly used to\nshare information about their school life. One afternoon, they\nworked together in a science project group and Brian took several\nphotos of their group during the activity. Later that day, he shared\nsome of the photos in the class group chat. He didn’t think much of\nit, since classmates often share photos in the group chat. However,\nwhen Hailey sees herself in the photos, she feels embarrassed\nbecause she didn’t know the pictures would be posted in the group\nchat. She doesn’t want her photos to stay there, so she decides to\nask Brian to delete them. In this situation, what would Hailey most\nlikely say to Brian?\nHailey:\n16번부터 17번까지는 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nW: Hello, students. Last time, we talked about the importance of eating\nhealthy food. Today, I want to talk about some foods that may look\nhealthy at first, but are not actually good for you when you check\nthe nutrition labels. First, let’s look at light salad dressing. Even\nthough it is marketed as healthy, it often contains surprisingly high\nlevels of salt and sugar. Second, let’s talk about nut bars. They\noften contain sweetened nuts or chocolate, so a small bar may have\nmore calories than you expect. This might lead to unwanted weight\ngain. Third is wheat bread. Most wheat breads are not made with\n100% whole grains, so they do not provide enough dietary fiber.\nFinally, let’s talk about veggie chips. They are usually processed\nand fried, which removes much of their original nutrition. Although\nthey may taste like vegetables, they do not offer the same health\nbenefits. You should be careful not to be fooled by foods that only\nsound healthy."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "foods that seem healthy but may be misleading",
+    "nutritional benefits of eating healthy foods",
+    "the role of packaging in food marketing",
+    "how low­calorie foods help with weight control",
+    "why people can’t trust nutrition labels completely"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. Last time, we talked about the importance of eating\nhealthy food. Today, I want to talk about some foods that may look\nhealthy at first, but are not actually good for you when you check\nthe nutrition labels. First, let’s look at light salad dressing. Even\nthough it is marketed as healthy, it often contains surprisingly high\nlevels of salt and sugar. Second, let’s talk about nut bars. They\noften contain sweetened nuts or chocolate, so a small bar may have\nmore calories than you expect. This might lead to unwanted weight\ngain. Third is wheat bread. Most wheat breads are not made with\n100% whole grains, so they do not provide enough dietary fiber.\nFinally, let’s talk about veggie chips. They are usually processed\nand fried, which removes much of their original nutrition. Although\nthey may taste like vegetables, they do not offer the same health\nbenefits. You should be careful not to be fooled by foods that only\nsound healthy."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 음식이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "light salad dressing",
+    "nut bars",
+    "wheat bread",
+    "fruit juice",
+    "veggie chips"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. Last time, we talked about the importance of eating\nhealthy food. Today, I want to talk about some foods that may look\nhealthy at first, but are not actually good for you when you check\nthe nutrition labels. First, let’s look at light salad dressing. Even\nthough it is marketed as healthy, it often contains surprisingly high\nlevels of salt and sugar. Second, let’s talk about nut bars. They\noften contain sweetened nuts or chocolate, so a small bar may have\nmore calories than you expect. This might lead to unwanted weight\ngain. Third is wheat bread. Most wheat breads are not made with\n100% whole grains, so they do not provide enough dietary fiber.\nFinally, let’s talk about veggie chips. They are usually processed\nand fried, which removes much of their original nutrition. Although\nthey may taste like vegetables, they do not offer the same health\nbenefits. You should be careful not to be fooled by foods that only\nsound healthy."
+  }
+ ]
+}

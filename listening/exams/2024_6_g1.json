@@ -1,0 +1,292 @@
+{
+ "id": "2024_6_g1",
+ "year": "2024",
+ "month": "6",
+ "grade": "고1",
+ "school": "부산",
+ "title": "2024학년도 6월 고1 전국연합학력평가 영어",
+ "duration": 1433.7,
+ "totalPoints": 37,
+ "audio": "listening/audio/2024_6_g1.mp3",
+ "starts": [
+  172.1,
+  237.8,
+  314.4,
+  393.5,
+  474.0,
+  553.8,
+  628.4,
+  696.1,
+  764.9,
+  839.4,
+  918.4,
+  963.7,
+  1005.8,
+  1083.3,
+  1155.7,
+  1226.7,
+  1226.7
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "친환경 제품 사용을 홍보하려고",
+    "음식 대접에 대한 감사를 표하려고",
+    "간식이 마련되어 있음을 안내하려고",
+    "휴식 시간이 변경되었음을 공지하려고",
+    "구내식당 메뉴에 관한 의견을 구하려고"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: [Chime bell rings.] Attention, everyone! Our CEO, Mr. Wayne, has\nprepared a snack bar to celebrate our success on last month’s\nproject. Please come down to the lobby and enjoy some delicious\nsnacks. They’ll be available until 4 p.m. You’ll be impressed by the\namazing variety, from crispy fries and hot dogs to fresh lemonade\nand coffee. It’d be great if you could bring your own personal cups\nfor the drinks. See you there."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "인공 지능에서 얻은 정보를 맹목적으로 믿어서는 안 된다.",
+    "출처를 밝히지 않고 타인의 표현을 인용해서는 안 된다.",
+    "인공 지능의 도움을 통해 과제물의 질을 높일 수 있다.",
+    "과제를 할 때 본인의 생각이 들어가는 것이 중요하다.",
+    "기술의 변화에 맞추어 작업 방식을 바꿀 필요가 있다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hi, Pamela. Did you finish your history assignment?\nW: Yes, Dad. I finished it quite easily with the help of AI.\nM: Really? Do you mean you used an artificial­intelligence website?\nW: Yeah. I typed in the questions and AI gave me the answers right\naway.\nM: Well, is it a good idea to do your homework that way?\nW: Why not? It saves a lot of time and gives me just the information I\nneed.\nM: I used to think so, too. But after trying it a couple of times, I found\nout AI sometimes uses false information as well.\nW: Really? I didn’t know that.\nM: Yeah, you shouldn’t blindly trust the answers from AI.\nW: Okay. I’ll keep that in mind next time."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "소셜 미디어는 원만한 대인관계 유지에 도움이 된다.",
+    "온라인에서는 자아가 다양한 모습으로 표출될 수 있다.",
+    "소셜 미디어는 자존감에 부정적인 영향을 줄 수 있다.",
+    "친밀한 관계일수록 상대의 언행에 쉽게 영향을 받는다.",
+    "유명인 사생활 보호의 중요성은 종종 간과된다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hello, listeners. This is Kelly Watson’s Love Yourself. Have you\never thought about your social media use? Social media lets you\nstay connected with others easily. However, it can make you\ncompare yourself with others, too. For example, a celebrity’s post\nabout going on a luxurious trip may make you jealous. Continuously\nmaking such comparisons stops you from looking at yourself the\nway you truly are. You might think, “Why can’t I have a better life?”\nand feel small about yourself. As you can see, social media can\nhave a negative effect on your self­esteem. I’ll be right back with\nsome tips for healthy social media use."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_6_g1_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "W: Honey, I love this park!\nM: Me, too. This park is so cool. But, oh, look! What’s that in the tree?\nW: It’s just a kite stuck in the tree’s branches.\nM: I guess some kids went home without their kite.\nW: By the same tree, a woman is walking her dog. They look so lovely.\nM: What about the little girl beside her?\nW: You mean the girl holding balloons in her hand?\nM: Right. She’s adorable. And look there! Did you notice a basket full\nof flowers on the picnic mat?\nW: Yes, right. It adds a touch of romance to the scene.\nM: I think so, too. Oh, there’s a fountain. Next to it, a man is playing\nthe violin.\nW: The melody is beautiful. I’m glad we came here."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "과학 캠프 지원하기",
+    "참가 실험 결정하기",
+    "체크리스트 작성하기",
+    "실험 계획서 보여주기",
+    "자기 소개 영상 촬영하기"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Alice. I applied for the science camp next week. What about\nyou?\nW: Me, too. But I didn’t know that there were so many things to do\nbefore the camp.\nM: Right. Would you like to go over my checklist together?\nW: Hmm, let’s see. Did you upload your introduction video to the\nwebsite?\nM: Yes, I tried to show my interest in science. Oh, hey, have you\npicked which experiment to work on?\nW: Yes. I decided to participate in a biology experiment.\nM: Me, too. Wasn’t it difficult to make a plan for your experiment?\nW: Actually, I haven’t even started yet because I’ve never written a\nplan for a biology experiment before.\nM: I’ll show you mine after class. Maybe you can get some ideas.\nW: Really? That’d be great. See you soon."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$50",
+    "$55",
+    "$60",
+    "$65",
+    "$70"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hi, I’m looking for a backpack for my niece. She’s going on a\ncamping trip this summer.\nM: Great. We have this blue backpack that has multiple pockets.\nW: It looks stylish and functional. How much is it?\nM: It’s $50, but we have a special discount only on backpacks today.\nEvery backpack is 10% off.\nW: That’s a great deal! I’ll take it.\nM: I’m sure your niece will love it. Do you need anything else?\nW: Yes. I like this camping hat. How much is it?\nM: It’s $10, not on sale, though.\nW: That’s okay. I’ll take it as well.\nM: Gift wrapping for them would be a total of $5. Would you like gift\nwrapping?\nW: Yes, please. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 마술쇼에 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "록 콘서트에 가야 해서",
+    "다른 학교 축제에 가야 해서",
+    "가족 중 아픈 사람이 있어서",
+    "동아리 축제를 준비해야 해서",
+    "삼촌 생일 파티에 참석해야 해서"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hi, Chris. How was your weekend?\nM: Hello, Martha. I went to a rock concert and had fun. How about\nyou?\nW: I’ve been preparing for tomorrow’s club festival.\nM: Oh, what kind of activity are you preparing for the festival?\nW: Our club members are presenting a magic show. Come and watch us\nat 4 p.m. tomorrow if you are available.\nM: I’d love to, but I can’t make it.\nW: Why? It’d be nice to have you there.\nM: I’m sorry, but I have to attend my uncle’s birthday party.\nW: Oh, I understand. I hope you have a wonderful time with your\nfamily.\nM: Thank you, I will."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Victory Marathon에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "행사 날짜",
+    "신청 방법",
+    "출발 지점",
+    "참가비",
+    "예상 참가 인원"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hey, Alex. Have you seen the announcement for the Victory\nMarathon?\nM: Not yet, but I’m curious about it. When’s the event?\nW: It’s on Saturday, July 13th.\nM: Nice. Where will the race start?\nW: It will start at William Stadium.\nM: Oh, great. How much does it cost to participate?\nW: It costs $30.\nM: That’s reasonable. How many participants are they expecting?\nW: Last year, there were around 5,000. They say they expect about\nthe same this year.\nM: I didn’t know that many people love marathons. I’m in!\nW: Great. I look forward to running with you."
+  },
+  {
+   "no": 9,
+   "prompt": "Violet Hill Mentorship에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "다음 주 금요일에 개최될 예정이다.",
+    "대학 생활에 관한 조언이 제공된다.",
+    "신청 시 질문을 미리 제출해야 한다.",
+    "신청 마감일은 다음 주 화요일이다.",
+    "전공별 참가 가능한 인원은 20명이다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Good morning, students of Violet Hill High School. This is your\nprincipal speaking. I’m delighted to announce that the annual Violet\nHill Mentorship will be held next Friday. Our school graduates who\nare now majoring in English literature, bioengineering, and theater\nand film will be giving some tips on university life. To register for\nthis event, visit our school website and submit two questions you\nwould like to ask them in advance. The deadline for registration is\nnext Tuesday, so don’t wait too long. And remember, the maximum\nnumber of participants for each major is 30 people. For more\ninformation, visit our school website."
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 구입할 무선 진공청소기를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_6_g1_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Honey, look. This website’s Summer Sale has just begun.\nW: Oh, great. Why don’t we buy a new cordless vacuum cleaner?\nM: Sure. There are five bestsellers shown here.\nW: Let’s check the battery life first.\nM: I think it should be at least two hours so that we don’t have to\ncharge it as often.\nW: I agree. But let’s not spend more than $400 on a vacuum cleaner.\nM: Fine. Oh, some of these also have a wet cleaning function.\nW: I’d love that. With that function, we can definitely save a lot of\ntime.\nM: Okay. What about the color? The white one looks better to me.\nW: Right. It’ll match the color tone of our living room.\nM: Perfect. So, let’s buy this one.\nW: Great."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Fine. Let’s talk about it over dinner.",
+    "Okay. Be more responsible next time.",
+    "Great. I already ordered some pet food.",
+    "Too bad. I hope your cat gets well soon.",
+    "Sorry. I can’t take care of your cat tonight."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Mom, I want to have a cat. Have you ever thought about us\nadopting a cat?\nW: Sweetie, having a pet requires a lot of responsibility.\nM: I’m totally ready for it. Mom, we could at least consider it.\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I can’t accept late assignments.",
+    "You did an excellent job this time.",
+    "Upload your work to our school website.",
+    "Try to do your homework by yourself.",
+    "We can finish it before the next class.━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Jake, I completely forgot about the math assignment. When’s the\ndeadline?\nM: You need to submit it by next Tuesday.\nW: Phew, I still have some time. Where should I submit it?\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Yes. I can give you the phone number of the clinic I visited.",
+    "I agree. Last evening’s badminton match was awesome.",
+    "No problem. I’ll teach you how to serve this time.",
+    "Too bad. I hope you recover from your knee injury soon.",
+    "You’re right. Maybe I should start taking badminton lessons."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Hey, Cindy. Have you been playing a lot of badminton these days?\nW: No, I’ve been experiencing some pain in my knee since a badminton\nmatch last weekend.\nM: I’m sorry to hear that. Did you go see a doctor?\nW: Yes, I visited a local clinic yesterday.\nM: I hope you feel better soon. By the way, have you ever taken a\nbadminton lesson?\nW: No, I haven’t. Why are you asking?\nM: In my experience, that kind of injury can come from bad posture. A\nlesson might reduce the risk of any further injury.\nW: Well, I thought I didn’t need those lessons.\nM: Cindy, if you want to keep playing badminton without any injuries,\nit’s important to learn from an instructor to develop the right\nposture.\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Sure. It seems like a perfect place for bears.",
+    "Great. Let’s think about the club name first.",
+    "My pleasure. I can always give you a ride.",
+    "I agree. It’s hard to give up using plastics.",
+    "No worries. I’ll get my bike repaired."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "고르시오. [3점]\nW: Mike, don’t you think climate change is kind of scary?\nM: Right. The temperature seems higher than ever.\nW: I heard it’s putting a number of animals in danger these days.\nM: Right. Maybe one day we won’t be able to see polar bears anymore.\nW: That’s not good. What can we do?\nM: Use less plastic, plant more trees. Small things matter.\nW: And maybe we can ride bikes instead of always asking for rides.\nM: Yeah. Making a Tree­Planting Day at school can also be helpful.\nW: Absolutely. Then, why don’t we make our own school club to put it\ninto action?\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Laura가 Tony에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I don’t like visiting a hospital for medical checkups.",
+    "I appreciate you taking me to the doctor today.",
+    "You’d better take a break for a few days.",
+    "You should finish your work before the deadline.",
+    "I’m afraid I can’t reduce your workload right now."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Laura and Tony are close coworkers. Laura notices that Tony has\nbeen looking unusually tired and pale recently. One day, she asks\nTony if he’s not been feeling well lately, but Tony says he’s just a\nbit tired from work. Laura knows that Tony sometimes works even\non weekends without taking a break or getting any rest. However,\nthis time, she is really worried about him and wants him to take at\nleast a couple of days off. In this situation, what would Laura most\nlikely say to Tony?\n16번부터 17번까지는 두 번 들려줍니다.\n[16~17] 다음을 듣고, 물음에 답하시오.\nM: Hello, Lincoln High School. This is David Newman, your current\nstudent representative, and I’m speaking to you today to let you\nknow about the upcoming election for next year’s student\nrepresentative. Candidates can now begin their campaigns, following\nthese instructions. First, they can share short promotional video\nclips on their social media, but the video clips must not be longer\nthan 3 minutes. Second, candidates can display posters only in\nallowed areas, and it’s important to keep the size to A3 or smaller,\nas larger posters will be removed without warning. Third, the use of\npamphlets is allowed, but they must only be distributed within the\nschool campus. Lastly, there will be an online debate broadcast on\nour school website among the candidates three days before the\nelection. It’s important to be respectful toward the other candidates\nduring the debate. Let’s make this election a success."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "relationships between media and voters",
+    "common ways of promoting school policy",
+    "guidelines for student election campaigns",
+    "requirements for becoming a candidate",
+    "useful tips for winning school debates"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, Lincoln High School. This is David Newman, your current\nstudent representative, and I’m speaking to you today to let you\nknow about the upcoming election for next year’s student\nrepresentative. Candidates can now begin their campaigns, following\nthese instructions. First, they can share short promotional video\nclips on their social media, but the video clips must not be longer\nthan 3 minutes. Second, candidates can display posters only in\nallowed areas, and it’s important to keep the size to A3 or smaller,\nas larger posters will be removed without warning. Third, the use of\npamphlets is allowed, but they must only be distributed within the\nschool campus. Lastly, there will be an online debate broadcast on\nour school website among the candidates three days before the\nelection. It’s important to be respectful toward the other candidates\nduring the debate. Let’s make this election a success."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 매체가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "social media",
+    "poster",
+    "pamphlet",
+    "school newspaper",
+    "school website"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, Lincoln High School. This is David Newman, your current\nstudent representative, and I’m speaking to you today to let you\nknow about the upcoming election for next year’s student\nrepresentative. Candidates can now begin their campaigns, following\nthese instructions. First, they can share short promotional video\nclips on their social media, but the video clips must not be longer\nthan 3 minutes. Second, candidates can display posters only in\nallowed areas, and it’s important to keep the size to A3 or smaller,\nas larger posters will be removed without warning. Third, the use of\npamphlets is allowed, but they must only be distributed within the\nschool campus. Lastly, there will be an online debate broadcast on\nour school website among the candidates three days before the\nelection. It’s important to be respectful toward the other candidates\nduring the debate. Let’s make this election a success."
+  }
+ ]
+}

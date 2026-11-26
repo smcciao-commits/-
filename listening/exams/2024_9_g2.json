@@ -1,0 +1,292 @@
+{
+ "id": "2024_9_g2",
+ "year": "2024",
+ "month": "9",
+ "grade": "고2",
+ "school": "인천",
+ "title": "2024학년도 9월 고2 전국연합학력평가 영어",
+ "duration": 1472.9,
+ "totalPoints": 37,
+ "audio": "listening/audio/2024_9_g2.mp3",
+ "starts": [
+  190.8,
+  241.3,
+  310.8,
+  384.5,
+  465.9,
+  547.3,
+  620.4,
+  700.8,
+  776.3,
+  851.0,
+  921.3,
+  971.1,
+  1018.9,
+  1093.6,
+  1175.8,
+  1242.7,
+  1242.7
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "미술 대회 작품을 공모하려고",
+    "직원 채용 일정을 안내하려고",
+    "전시회 취소에 대해 항의하려고",
+    "어린이 미술관 건립을 제안하려고",
+    "미술관 무료 입장 행사를 홍보하려고"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, community members. I’m Lena Smith, the leader of the Public\nRelations Team at the San Diego Art Museum. I’m excited to\nannounce that our art museum will offer a free admissions event\nduring next week. Our museum has been loved by the community for\n50 years, so we’re excited to give back to our loyal supporters and\nwelcome new visitors. This event is a great chance for you to\nexplore our extensive collections of famous artworks free of charge.\nDon’t miss out on this incredible opportunity and spread the word to\nyour family and friends."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "식물을 실내에 두면 호흡기 건강에 해로울 수 있다.",
+    "지나치게 높은 온도는 실내 식물에 악영향을 미친다.",
+    "식물에게 말하는 것은 식물이 자라는 데 도움이 된다.",
+    "상대방의 목소리를 통해 건강 상태를 파악할 수 있다.",
+    "적절한 인사말은 대화를 자연스럽게 시작하는 데 필요하다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hey, who are you talking to?\nM: Hi, Jenny. I’m just talking to my plant.\nW: Seriously? I’ve never heard of doing that.\nM: You know what’s interesting? Speaking to your plants can actually\nhelp them grow better.\nW: No way! How so?\nM: When we talk, we breathe out carbon dioxide, and plants love it. It’s\nessential for their growth.\nW: That makes sense.\nM: And guess what? The vibrations from our voices when we talk can\npromote plant growth too.\nW: That’s pretty cool!\nM: Yeah. We can help our plants grow better by talking to them.\nW: I see. I might just say ‘hi’ to my plants and see how they like it."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "과일과 채소는 색깔에 따라 효능이 다르다.",
+    "규칙적인 식사는 혈당 수치 조절에 도움이 된다.",
+    "식사 직후의 과일 섭취는 소화 문제를 유발할 수 있다.",
+    "일상생활의 스트레스는 소화 불량을 악화시킬 수 있다.",
+    "음식물 섭취만으로 하루 권장 비타민양을 채울 수 있다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Welcome back to our channel, Wellness Wisdom! Are you in the\nhabit of eating fruit after your meals? Then this video is a\nmust­watch for you. Fruit is packed with essential nutrients such as\nvitamins and minerals, but eating them immediately after a meal\nmight lead to digestive issues. Fruit usually digests faster than other\ntypes of foods. So, when you have fruit right after a meal, the fruit\nmay not digest fast because other foods stay in the stomach. This\nincreases the pressure on the digestive system and may result in a\nstomachache and discomfort. Remember, choosing fruit as dessert\nmay get your digestive system in trouble. Stay healthy, stay\ninformed."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_9_g2_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello, Cindy. What are you looking at on your phone?\nW: Hi, Tom. This is my own space in the metaverse.\nM: Wow, it’s amazing. Oh, there’s a heart­shaped door in your house.\nThat’s unique.\nW: Yes. I can enter my home through the door like a real house.\nM: Fantastic! Is it possible to ride the bicycle next to the tree?\nW: Of course. We can do everything in virtual reality.\nM: Awesome. I love the two dogs looking at each other.\nW: Yeah, they make my place so lovely.\nM: I agree. I also like that striped­patterned mat on the ground.\nW: Thanks.\nM: Oh, there’s a girl sitting on the bench. She looks a lot like you.\nW: Yes, she’s my avatar in the metaverse.\nM: That’s so cool. I also want to design my own space like yours."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "운동 장비 대여하기",
+    "축구공 개수 확인하기",
+    "스포츠 클럽 방문하기",
+    "경기 규칙 유인물 만들기",
+    "자원봉사자들에게 전화하기"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Hey, Sarah, the school’s sports day is just a week away. Let’s go\nover our plan for the event.\nW: Definitely, Alex. We’re doing relays, a tug­of­war, and soccer, right?\nM: Yes. I’ll manage the equipment, including whistles and the ropes.\nW: Thanks. Can you also check our stock for soccer balls?\nM: Sure. I’ll look into it. And, Sarah, I think we need some volunteers\nto assist with the event as staff.\nW: I already recruited some from the school’s sports clubs.\nM: Perfect. I think we should make sure they know the basic rules of\nthe games.\nW: I agree. Let’s have a meeting with the volunteers tomorrow. I’ll give\nthem a phone call about the meeting.\nM: Good idea. Then, I’ll make the handout for the games’ rules.\nW: Deal. Let’s make this sports day a success!"
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$24",
+    "$28",
+    "$30",
+    "$38",
+    "$40"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Welcome to Mobile Phone Oasis. How may I help you?\nM: Hi, I’d like to get a new phone case.\nW: Okay. What’s your phone model?\nM: It’s a Quantum Plus. Do you have any recommendations?\nW: For your model, we have this silicone case and this leather wallet\ncase. The silicone one is 20 dollars and the leather one is 30\ndollars.\nM: Hmm, I’ll go with the silicone case.\nW: Great choice. Is there anything else you need?\nM: I’d like to change the protective film on my phone.\nW: Certainly. I’d recommend this clear film. It’s slim and durable.\nM: Fantastic. How much is it?\nW: It’s originally 10 dollars, but it’s 20 percent off now.\nM: That’s cool. I’ll take it as well. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 대회에 출품할 사진을 촬영하지 못한 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "카메라가 고장나서",
+    "몸 상태가 좋지 않아서",
+    "촬영하기에 날씨가 나빠서",
+    "과학 캠프와 일정이 겹쳐서",
+    "적합한 촬영 장소를 찾지 못해서"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Hi, Clara. Everybody says that the science camp was a success.\nW: Yes. I’m glad the science camp ended well.\nM: Me too. By the way, did you take a picture to submit for the\nlandscape photography competition? It’s due today.\nW: Unfortunately, I couldn’t take a picture.\nM: Oh, no! I thought the weather was perfect to take a picture last\nweek.\nW: Yeah. The weather was really nice.\nM: Then what was the problem? Was your camera broken again?\nW: No, there was nothing wrong with my camera.\nM: Did you not feel well enough to go out?\nW: No, I was fine.\nM: Then why couldn’t you take a picture?\nW: Actually, I searched for some places with beautiful scenery, but I\ncouldn’t find the right place to take a picture of.\nM: Sorry to hear that. I hope you’ll have a better chance next time."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Poetry Magic에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "출연자",
+    "일시",
+    "장소",
+    "기념품",
+    "등록 방법"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hi, Alysa. What are you looking at?\nW: I’m looking at a website for a poetry reading event.\nM: Sounds interesting. Tell me more about it.\nW: It’s called “Poetry Magic.” Many poets will be on stage for a reading.\nThe famous poet, Sarah Mitchell, will be there too.\nM: That’s awesome! When will it be?\nW: It’ll be held at 7 p.m. on September 14th.\nM: Oh, that’s next Saturday. I’m available then. Where’s it taking place?\nW: At the Bohemian Arts Center downtown. It’s the best place for\nraising the love of poetry.\nM: So how can I sign up?\nW: You can just click the link here and fill this form out.\nM: Good, that’s easy. I’ll be there to enjoy the beautiful poetry."
+  },
+  {
+   "no": 9,
+   "prompt": "Short­form Video Course에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "무료 온라인 강좌이다.",
+    "세 단계로 이루어져 있다.",
+    "웹사이트에서 등록할 수 있다.",
+    "언제든지 반복해서 수강할 수 있다.",
+    "모든 참가자의 작품에 대해 피드백을 제공한다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, listeners. Have you ever thought about boosting your business\nwith short­form videos? Then how about joining our Short­form Video\nCourse? It’s a free online course that is open to everyone interested\nin using social media for their business. The course is made up of\nthree stages that will teach you the art of planning, shooting, and\nediting videos like a professional. Please visit our website at\nwww.shortformclass.com to sign up. The best part of this course is\nthat you can take it at any time, over and over again. And guess\nwhat? We’ll randomly pick some of the participants and give feedback\non their work. Don’t miss this chance to level up your business!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 주문할 백색 소음 기계를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_9_g2_q10.png",
+   "answer": 3,
+   "group": null,
+   "script": "M: Honey, what are you doing now?\nW: I’m looking for a white noise machine. The machine plays white\nnoise to help people relax and fall asleep quickly.\nM: That’s what we need. Shall we choose one together?\nW: Okay, how much of the budget can we use?\nM: 40 dollars or less would be appropriate. How many tracks should the\nwhite noise machine play?\nW: I think we’d better choose a model with more than 10 white noise\ntracks. How about color?\nM: I want to put it next to our bed, so I think white would look better\nthan black.\nW: I agree. Look at this model. It has an alarm function.\nM: Great. It’ll be useful for us.\nW: Let’s order this model."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Yeah. Our delivery has just arrived.",
+    "Alright. Let’s sign up for the membership.",
+    "Oh, no. I forgot to renew our membership.",
+    "Great. The shopping mall is close to our home.",
+    "Okay. I’ll consider reducing my online shopping."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Honey, you know we often buy from the Best & Cost Online Shopping\nMall, so how about getting a membership to it?\nM: Sounds good, but there is a five­dollar membership fee every month.\nIs it worth it?\nW: Absolutely. The membership comes with free delivery and discounts.\nWe could actually save more money than the membership fee we\npay.\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Sure. I’ll bring my tumbler next time.",
+    "I’m afraid not. We’re out of paper cups.",
+    "No worries. I already prepared the drinks.",
+    "Sorry. The cafe doesn’t offer any discount.",
+    "Why not? Let’s get a refund for the tumbler."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Cathy, this cafe offers a discount when a customer brings their own\ntumbler for drinks. So, I brought mine.\nW: Oh, that’s a great idea. It’ll help reduce the use of paper and plastic\ncups.\nM: Yeah, it’s a small step but can make a big difference. Would you like\nto join in as well?\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Good choice. This shirt looks great on you!",
+    "Okay. We’d better go buy your shirt right away.",
+    "Really? I didn’t know the rehearsal was canceled.",
+    "Well, why not wear a white shirt for the show?",
+    "Oh, I’m sorry that I missed your performance."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Dad, can you go shopping with me now?\nM: Sure, I can. But why, Allie?\nW: I need to buy a white shirt today.\nM: What do you need it for?\nW: It’s for the dance performance at the school festival next Friday.\nM: I see. But, wouldn’t it be more convenient to order it online?\nW: Actually, I ordered a white shirt online a few days ago, but it hasn’t\nbeen delivered yet.\nM: Sometimes that happens. There’s still over a week left until the\nfestival day, though.\nW: Right, but all of us decided to wear white shirts, even for rehearsals.\nM: When do you start your rehearsals?\nW: The first rehearsal is tomorrow. I’d like to be perfectly prepared for\nit.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I agree that we should walk our dogs often.",
+    "I’m glad that my dog loved staying at the pet hotel.",
+    "I’d really appreciate it if you could take care of him.",
+    "It’s better to pack only necessary things for traveling.",
+    "I recommend you bring your dog to the animal hospital."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Hey, Jessica. How’s the preparation for your business trip to\nSingapore going?\nW: It’s going well. All the important documents are ready, and I’m\npacking things for the trip.\nM: Glad to hear that.\nW: Yeah, but I have a problem.\nM: Oh, what is it?\nW: You remember Tory, my five­month­old puppy? I need to find\nsomeone to look after him while I’m away.\nM: Why don’t you leave him at your parents’ house?\nW: My mother is allergic to pet fur, so I don’t think they can take care\nof him.\nM: Ah, got it. Have you considered a pet hotel?\nW: Yes, I have. But I’m not sure about leaving Tory in those places at\nsuch a young age.\nM: Hmm, fair point. You know what? I could give a hand if you’re okay\nwith it. Coco, my dog, will welcome a new friend.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, David가 Emily에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Can you look for different music for the last scene?",
+    "I think we need to practice more for the musical.",
+    "Please check the schedule for the final stage.",
+    "Would you mind if I change some scenes?",
+    "I want you to play the main character."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "고르시오. [3점]\nM: David and Emily are members of the school musical club. The club\nhas been preparing their creative musical performance for a month.\nThis time, David takes a role as the stage director, and Emily as the\nsound director. Today, David and Emily are checking the music that\nwill be used for the performance. After listening to the music, David\nthinks that the background music for the last scene is not suitable.\nSo, David wants to ask Emily to find other music that goes better\nwith the scene. In this situation, what would David most likely say\nto Emily?\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nW: Hello, students. Nowadays, some desserts are very popular and\nwell­known worldwide. Today, we’ll learn about where and when\nthose desserts might have originated. First, scones are said to have\ncome from Scotland in the early 1500s. Some historians assume that\nit was named after the Stone of Scone, on which the kings of\nScotland sat while being crowned. Secondly, gelato is thought to\nhave been invented in Italy in the 16th century. Historians aren’t\nsure who invented it, but it’s generally believed that an Italian\narchitect, Bernardo Buontalenti, created a form of the modern­day\ngelato. Thirdly, the first marshmallows are said to have been\nproduced in Egypt around 2000 BC. Marshmallows were offered only\nto the ancient Egyptian gods and pharaohs as a candy or dessert.\nLastly, cinnamon rolls might have originated in Sweden in the 17th\ncentury. It’s believed that cinnamon spice started arriving in Sweden\nthrough trade routes and was later used in rolls and desserts. Now,\nI’d like you to search for more details of these desserts.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "traditional ways to preserve foods",
+    "possible origins of famous desserts",
+    "health concerns about ready­made foods",
+    "controversy over the cost of popular desserts",
+    "newly­invented desserts with special ingredients"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. Nowadays, some desserts are very popular and\nwell­known worldwide. Today, we’ll learn about where and when\nthose desserts might have originated. First, scones are said to have\ncome from Scotland in the early 1500s. Some historians assume that\nit was named after the Stone of Scone, on which the kings of\nScotland sat while being crowned. Secondly, gelato is thought to\nhave been invented in Italy in the 16th century. Historians aren’t\nsure who invented it, but it’s generally believed that an Italian\narchitect, Bernardo Buontalenti, created a form of the modern­day\ngelato. Thirdly, the first marshmallows are said to have been\nproduced in Egypt around 2000 BC. Marshmallows were offered only\nto the ancient Egyptian gods and pharaohs as a candy or dessert.\nLastly, cinnamon rolls might have originated in Sweden in the 17th\ncentury. It’s believed that cinnamon spice started arriving in Sweden\nthrough trade routes and was later used in rolls and desserts. Now,\nI’d like you to search for more details of these desserts.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 나라가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "Scotland",
+    "Italy",
+    "Egypt",
+    "France",
+    "Sweden"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. Nowadays, some desserts are very popular and\nwell­known worldwide. Today, we’ll learn about where and when\nthose desserts might have originated. First, scones are said to have\ncome from Scotland in the early 1500s. Some historians assume that\nit was named after the Stone of Scone, on which the kings of\nScotland sat while being crowned. Secondly, gelato is thought to\nhave been invented in Italy in the 16th century. Historians aren’t\nsure who invented it, but it’s generally believed that an Italian\narchitect, Bernardo Buontalenti, created a form of the modern­day\ngelato. Thirdly, the first marshmallows are said to have been\nproduced in Egypt around 2000 BC. Marshmallows were offered only\nto the ancient Egyptian gods and pharaohs as a candy or dessert.\nLastly, cinnamon rolls might have originated in Sweden in the 17th\ncentury. It’s believed that cinnamon spice started arriving in Sweden\nthrough trade routes and was later used in rolls and desserts. Now,\nI’d like you to search for more details of these desserts.\n다시 한 번 듣겠습니다."
+  }
+ ]
+}

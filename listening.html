@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<!-- listening.html v174 (2026-11-26): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d9488">
+<title>탑에듀 · 모의고사 영어듣기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --bg:#f1f7f6; --card:#ffffff; --line:#d7e7e4; --text:#1f2d2b; --sub:#6b8280;
+    --teal:#0d9488; --teal-d:#0f766e; --teal-l:#e6fffa; --amber:#f59e0b;
+    --ok:#10b981; --no:#ef4444; --shadow:0 4px 16px rgba(13,148,136,.10);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',system-ui,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.55;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding-bottom:90px}
+  /* ===== 헤더 ===== */
+  header{
+    position:sticky;top:0;z-index:60;background:#fff;border-bottom:2px solid var(--line);
+    padding:10px 14px;
+  }
+  .hrow{display:flex;align-items:center;gap:8px}
+  .hrow h1{font-size:16px;font-weight:800;color:var(--teal-d);letter-spacing:-.3px;flex:1;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vbadge{font-size:10.5px;font-weight:800;color:#0f766e;background:var(--teal-l);
+    border:1px solid #99f6e4;border-radius:999px;padding:2px 7px}
+  .hd-btn{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:5px 9px;
+    font-size:12.5px;font-weight:700;color:var(--teal-d);cursor:pointer}
+  .hd-btn:active{background:var(--teal-l)}
+  /* ===== 목록 ===== */
+  .sec{padding:14px}
+  .tabs{display:flex;gap:6px;margin-bottom:10px}
+  .tab{flex:1;text-align:center;padding:9px 0;border-radius:12px;background:#fff;
+    border:1.5px solid var(--line);font-size:13.5px;font-weight:700;color:var(--sub);cursor:pointer}
+  .tab.on{background:var(--teal);border-color:var(--teal);color:#fff;box-shadow:var(--shadow)}
+  .chips{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+  .chip{padding:6px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--line);
+    font-size:12.5px;font-weight:700;color:var(--sub);cursor:pointer}
+  .chip.on{background:#ccfbf1;border-color:#5eead4;color:var(--teal-d)}
+  .sum{display:flex;justify-content:space-between;align-items:center;background:#fff;
+    border:1.5px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:12.5px;color:var(--sub)}
+  .sum b{color:var(--teal-d);font-size:14px}
+  .exam{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);
+    border-radius:14px;padding:12px 13px;margin-bottom:9px;box-shadow:0 2px 8px rgba(13,148,136,.05);cursor:pointer}
+  .exam:active{background:var(--teal-l)}
+  .exam .em{flex:1;min-width:0}
+  .exam .t1{font-size:14px;font-weight:800;letter-spacing:-.2px}
+  .exam .t2{font-size:11.5px;color:var(--sub);margin-top:2px}
+  .gpill{font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;background:#e0f2fe;color:#0369a1;flex:0 0 auto}
+  .gpill.g2{background:#ede9fe;color:#6d28d9}
+  .badge{font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;flex:0 0 auto}
+  .badge.done{background:#dcfce7;color:#15803d}
+  .badge.best{background:#fef3c7;color:#b45309}
+  .empty{background:#fff;border:1.5px dashed var(--line);border-radius:14px;padding:24px;text-align:center;color:var(--sub);font-size:13px}
+  /* ===== 플레이어 ===== */
+  .player{position:sticky;top:52px;z-index:55;background:#fff;border-bottom:2px solid var(--line);
+    padding:9px 12px 11px;box-shadow:0 4px 12px rgba(13,148,136,.07)}
+  .prow{display:flex;align-items:center;gap:8px}
+  .pplay{width:42px;height:42px;border-radius:50%;border:none;background:var(--teal);color:#fff;
+    font-size:17px;cursor:pointer;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+  .pplay:active{background:var(--teal-d)}
+  .pinfo{flex:1;min-width:0}
+  .ptime{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);
+    font-variant-numeric:tabular-nums;margin-bottom:3px}
+  .pbar{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:#e2efed;border-radius:999px;outline:none}
+  .pbar::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+    background:var(--teal);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .pspd{display:flex;gap:4px;margin-top:8px}
+  .pspd button{flex:1;padding:6px 0;font-size:12px;font-weight:800;border-radius:9px;
+    border:1.5px solid var(--line);background:#fff;color:var(--sub);cursor:pointer}
+  .pspd button.on{background:#ccfbf1;border-color:#5eead4;color:var(--teal-d)}
+  .pmini{display:flex;gap:6px;margin-top:7px}
+  .pmini button{flex:1;padding:6px 0;font-size:11.5px;font-weight:700;border-radius:9px;
+    border:1.5px solid var(--line);background:#f8fafc;color:var(--sub);cursor:pointer}
+  /* ===== 문항 ===== */
+  .qcard{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:13px 14px;margin-bottom:11px;scroll-margin-top:170px}
+  .qhead{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+  .qno{width:26px;height:26px;border-radius:8px;background:var(--teal);color:#fff;font-size:12.5px;
+    font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .qno.ok{background:var(--ok)} .qno.no{background:var(--no)}
+  .qpt{font-size:10.5px;font-weight:800;color:#b45309;background:#fef3c7;border-radius:999px;padding:2px 7px}
+  .qprompt{font-size:13.5px;font-weight:700;line-height:1.5;letter-spacing:-.2px}
+  .qgroup{font-size:11.5px;color:var(--sub);background:#f1f5f9;border-radius:8px;padding:5px 8px;margin-bottom:8px}
+  .qimg{width:100%;border:1px solid var(--line);border-radius:10px;margin:8px 0 4px;display:block;background:#fff}
+  .ch{display:flex;gap:8px;align-items:flex-start;padding:9px 10px;border:1.5px solid var(--line);
+    border-radius:11px;margin-top:6px;font-size:12.8px;cursor:pointer;background:#fff;line-height:1.45}
+  .ch:active{background:#f0fdfa}
+  .ch .cn{font-weight:800;color:var(--teal);flex:0 0 auto}
+  .ch.sel{border-color:var(--teal);background:var(--teal-l)}
+  .ch.sel .cn{color:var(--teal-d)}
+  .ch.correct{border-color:var(--ok);background:#ecfdf5}
+  .ch.correct .cn{color:var(--ok)}
+  .ch.wrong{border-color:var(--no);background:#fef2f2}
+  .ch.wrong .cn{color:var(--no)}
+  .ch.pick5{justify-content:center;padding:10px 0;font-size:15px;font-weight:800}
+  .submitbar{position:fixed;left:0;right:0;bottom:0;z-index:70;background:#fff;
+    border-top:2px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    display:flex;align-items:center;gap:10px;max-width:560px;margin:0 auto}
+  .submitbar .cnt{flex:1;font-size:12.5px;color:var(--sub)}
+  .btn{border:none;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:800;
+    background:var(--teal);color:#fff;cursor:pointer;box-shadow:var(--shadow)}
+  .btn:active{background:var(--teal-d)}
+  .btn.ghost{background:#fff;color:var(--teal-d);border:1.5px solid var(--teal);box-shadow:none}
+  .btn.gray{background:#fff;color:var(--sub);border:1.5px solid var(--line);box-shadow:none}
+  .btn:disabled{opacity:.45}
+  /* ===== 결과 ===== */
+  .score{background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff;border-radius:18px;
+    padding:18px;text-align:center;margin-bottom:14px;box-shadow:0 8px 22px rgba(13,148,136,.25)}
+  .score .big{font-size:38px;font-weight:900;line-height:1.1;letter-spacing:-1px}
+  .score .sm{font-size:12.5px;opacity:.9;margin-top:4px}
+  .score .row3{display:flex;margin-top:14px;background:rgba(255,255,255,.15);border-radius:12px;overflow:hidden}
+  .score .row3 div{flex:1;padding:8px 4px;font-size:11px}
+  .score .row3 b{display:block;font-size:15px;font-weight:800;margin-bottom:1px}
+  .rev{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:9px}
+  .revhead{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+  .revhead .t{flex:1;font-size:12.8px;font-weight:700;line-height:1.4}
+  .acts{display:flex;gap:6px;margin-top:9px}
+  .acts button{flex:1;padding:8px 0;font-size:12px;font-weight:800;border-radius:10px;
+    border:1.5px solid var(--line);background:#f8fafc;color:var(--teal-d);cursor:pointer}
+  .acts button.on{background:#ccfbf1;border-color:#5eead4}
+  .script{margin-top:9px;background:#f8fafc;border:1px dashed var(--line);border-radius:10px;
+    padding:10px 11px;font-size:12.3px;line-height:1.65;color:#334155;white-space:pre-wrap;
+    max-height:420px;overflow:auto}
+  .ansline{font-size:12px;color:var(--sub);margin-top:6px}
+  .ansline b.ok{color:var(--ok)} .ansline b.no{color:var(--no)}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:88px;background:rgba(15,23,42,.92);
+    color:#fff;font-size:12.5px;font-weight:700;padding:9px 15px;border-radius:999px;z-index:200;
+    opacity:0;transition:opacity .22s;pointer-events:none;max-width:88vw;text-align:center}
+  .toast.on{opacity:1}
+  .note{font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.6}
+  .loading{text-align:center;padding:40px 0;color:var(--sub);font-size:13px}
+  .lock{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:22px;text-align:center;margin:20px 14px}
+  .lock h2{font-size:16px;color:var(--teal-d);margin-bottom:8px}
+  .lock p{font-size:12.8px;color:var(--sub);line-height:1.7}
+  .lock a{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:12px;background:var(--teal);
+    color:#fff;font-weight:800;font-size:13.5px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="hrow">
+      <button class="hd-btn" id="btnHome">← 홈</button>
+      <h1>🎧 모의고사 영어듣기</h1>
+      <span class="vbadge">v174</span>
+    </div>
+  </header>
+  <div id="app"><div class="loading">불러오는 중…</div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= 설정 ================= */
+var TOPEDU_APP_VERSION = 'v174';
+var DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
+var LS_BEST = 'topedu_listening_v1';     /* { examId: {best, at, tries, last} } */
+var LS_SESS = 'topedu_listening_user_v1';
+var CIRC = ['①','②','③','④','⑤'];
+var IDX = null;          /* index.json */
+var CUR = null;          /* 현재 회차 상세 */
+var ST = { grade:'전체', year:'전체', answers:{}, submitted:false, reviewOnlyWrong:false, sel:null };
+var AUD = null, AQ = null;  /* audio element, 현재 회차 id */
+
+/* ================= 유틸 ================= */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+  return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+function toast(msg){ var t=$('toast'); if(!t) return; t.textContent=msg; t.classList.add('on');
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('on'); }, 1900); }
+function mmss(sec){ sec=Math.max(0,Math.floor(sec||0)); var m=Math.floor(sec/60), s=sec%60;
+  return m+':'+(s<10?'0':'')+s; }
+function lsGet(k,d){ try{ var v=JSON.parse(localStorage.getItem(k)); return v==null?d:v; }catch(e){ return d; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+/* ================= 사용자 ================= */
+function qs(k){ try{ return new URLSearchParams(location.search).get(k)||''; }catch(e){ return ''; } }
+function getMe(){
+  var ban = qs('ban'), name = qs('name');
+  var s = lsGet(LS_SESS, null);
+  if(!ban && s) { ban = s.ban; name = s.name; }
+  if(!ban) { var c = lsGet('cred', null); if(c){ ban = c.ban; name = c.name; } }
+  return { ban: ban||'', name: name||'' };
+}
+function getPw(){
+  try{ var c = lsGet('cred', null); if(c && c.pw) return String(c.pw); }catch(e){}
+  return '';
+}
+var ME = getMe();
+
+/* ================= 목록 화면 ================= */
+function loadIndex(){
+  return fetch('listening/index.json', {cache:'no-store'}).then(function(r){
+    if(!r.ok) throw new Error('index '+r.status);
+    return r.json();
+  }).then(function(j){ IDX = j; return j; });
+}
+function bestMap(){ return lsGet(LS_BEST, {}); }
+
+function renderList(){
+  var best = bestMap();
+  var h = '';
+  var cntDone = 0;
+  (IDX.exams||[]).forEach(function(e){ if(best[e.id]) cntDone++; });
+  h += '<div class="sec">';
+  h += '<div class="tabrow tabs">';
+  ['전체','고1','고2'].forEach(function(g){
+    h += '<div class="tab'+(ST.grade===g?' on':'')+'" data-grade="'+g+'">'+g+'</div>';
+  });
+  h += '</div>';
+  h += '<div class="chips">';
+  ['전체','2026','2025','2024'].forEach(function(y){
+    h += '<div class="chip'+(ST.year===y?' on':'')+'" data-year="'+y+'">'+(y==='전체'?'전체 연도':y+'학년도')+'</div>';
+  });
+  h += '</div>';
+  h += '<div class="sum"><span>총 <b>'+(IDX.count||0)+'</b>회 탑재 · 완료 <b>'+cntDone+'</b>회</span><span>'+(ME.ban?esc(ME.ban):'')+'</span></div>';
+  var list = (IDX.exams||[]).filter(function(e){
+    if(ST.grade!=='전체' && e.grade!==ST.grade) return false;
+    if(ST.year!=='전체' && e.year!==ST.year) return false;
+    return true;
+  });
+  if(!list.length){
+    h += '<div class="empty">조건에 맞는 회차가 없어요.</div>';
+  }
+  list.forEach(function(e){
+    var b = best[e.id];
+    h += '<div class="exam" data-id="'+e.id+'">';
+    h += '<span class="gpill'+(e.grade==='고2'?' g2':'')+'">'+e.grade+'</span>';
+    h += '<div class="em"><div class="t1">'+e.year+'년 '+e.month+'월'+(e.school?' · '+e.school:'')+' 학평</div>';
+    h += '<div class="t2">17문항 / 37점 · '+mmss(e.duration)+' 분량'+(b?(' · 최근 '+b.last+'점'):'')+'</div></div>';
+    if(b && b.best>=80) h += '<span class="badge done">완료 '+b.best+'</span>';
+    else if(b) h += '<span class="badge best">'+b.best+'점</span>';
+    else h += '<span style="color:#cbd5e1;font-size:18px">›</span>';
+    h += '</div>';
+  });
+  h += '<div class="note">2024·2025·2026학년도 3·6·9·10월 전국연합학력평가 영어 듣기(1~17번)입니다. 문제·정답·대본은 EBSi 공개 기출 자료를 그대로 담았어요.</div>';
+  h += '</div>';
+  $('app').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-grade]'), function(el){
+    el.onclick = function(){ ST.grade = el.getAttribute('data-grade'); renderList(); };
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-year]'), function(el){
+    el.onclick = function(){ ST.year = el.getAttribute('data-year'); renderList(); };
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.exam'), function(el){
+    el.onclick = function(){ openExam(el.getAttribute('data-id')); };
+  });
+  window.scrollTo(0,0);
+}
+
+/* ================= 회차 열기 ================= */
+function openExam(id){
+  var e = (IDX.exams||[]).filter(function(x){ return x.id===id; })[0];
+  if(!e) { toast('회차 정보를 찾을 수 없어요.'); return; }
+  $('app').innerHTML = '<div class="loading">'+esc(e.year)+'년 '+esc(e.month)+'월 '+esc(e.grade)+' 문제를 불러오는 중…</div>';
+  fetch('listening/exams/'+id+'.json', {cache:'no-store'}).then(function(r){
+    if(!r.ok) throw new Error('exam '+r.status);
+    return r.json();
+  }).then(function(j){
+    CUR = j;
+    ST.answers = {}; ST.submitted = false; ST.reviewOnlyWrong = false; ST.sel = null;
+    renderExam();
+  }).catch(function(err){
+    $('app').innerHTML = '<div class="sec"><div class="empty">문제를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 열어 주세요.<br><span style="font-size:11px;color:#94a3b8">'+esc(err.message)+'</span></div></div>';
+  });
+}
+
+function renderExam(){
+  var e = CUR, best = bestMap()[e.id];
+  var h = '';
+  h += '<div class="sec" style="padding-bottom:4px">';
+  h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">';
+  h += '<button class="hd-btn" id="btnList">← 목록</button>';
+  h += '<div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:800;letter-spacing:-.3px">'+e.year+'년 '+e.month+'월 '+e.grade+' 학평 영어듣기</div>';
+  h += '<div style="font-size:11.5px;color:var(--sub)">1~17번 · 37점 · '+(best?('내 최고 '+best.best+'점'):'첫 도전')+'</div></div></div>';
+  h += '</div>';
+  /* 플레이어 */
+  h += '<div class="player" id="player">';
+  h += '<div class="prow"><button class="pplay" id="btnPlay">▶</button>';
+  h += '<div class="pinfo"><div class="ptime"><span id="tCur">0:00</span><span id="tDur">'+mmss(e.duration)+'</span></div>';
+  h += '<input type="range" class="pbar" id="pbar" min="0" max="'+(e.duration||1)+'" step="1" value="0"></div></div>';
+  h += '<div class="pspd">';
+  ['0.8','1.0','1.2'].forEach(function(r,i){
+    h += '<button data-rate="'+r+'" class="'+(r==='1.0'?'on':'')+'">'+r+'x</button>';
+  });
+  h += '</div><div class="pmini"><button id="btnSkipIntro">⏭ 안내방송 건너뛰고 1번부터</button></div>';
+  h += '</div>';
+  /* 문항 */
+  h += '<div class="sec" style="padding-top:14px">';
+  var groupShown = {};
+  e.questions.forEach(function(q){
+    if(q.group && !groupShown[q.group]){ groupShown[q.group]=1; h += '<div class="qgroup">'+esc(q.group)+'</div>'; }
+    h += '<div class="qcard" id="q'+q.no+'" data-no="'+q.no+'">';
+    h += '<div class="qhead"><span class="qno" id="qn'+q.no+'">'+q.no+'</span>';
+    if(q.points===3) h += '<span class="qpt">3점</span>';
+    h += '<span style="font-size:11px;color:var(--sub);margin-left:auto" id="qstate'+q.no+'"></span></div>';
+    h += '<div class="qprompt">'+esc(q.prompt)+'</div>';
+    if(q.img) h += '<img class="qimg" id="img'+q.no+'" loading="lazy" src="'+esc(q.img)+'" alt="'+q.no+'번 자료">';
+    if(q.choices && q.choices.length===5){
+      q.choices.forEach(function(c,i){
+        h += '<div class="ch" data-no="'+q.no+'" data-pick="'+(i+1)+'"><span class="cn">'+CIRC[i]+'</span><span>'+esc(c)+'</span></div>';
+      });
+    } else {
+      h += '<div style="display:flex;gap:6px;margin-top:6px">';
+      for(var k=1;k<=5;k++){
+        h += '<div class="ch pick5" data-no="'+q.no+'" data-pick="'+k+'" style="flex:1"><span class="cn">'+CIRC[k-1]+'</span></div>';
+      }
+      h += '</div>';
+    }
+    h += '</div>';
+  });
+  h += '</div>';
+  /* 제출 바 */
+  h += '<div class="submitbar"><div class="cnt" id="cnt">0 / 17 응답</div>';
+  h += '<button class="btn" id="btnSubmit">채점하기</button></div>';
+  $('app').innerHTML = h;
+
+  $('btnList').onclick = function(){ teardown(); renderList(); };
+  Array.prototype.forEach.call(document.querySelectorAll('.ch[data-pick]'), function(el){
+    el.onclick = function(){
+      if(ST.submitted) return;
+      var no = el.getAttribute('data-no'), pick = Number(el.getAttribute('data-pick'));
+      ST.answers[no] = pick;
+      document.querySelectorAll('.ch[data-no="'+no+'"]').forEach(function(x){ x.classList.remove('sel'); });
+      if(el.querySelector('.cn') && el.textContent.trim().length<=2){
+        /* ①~⑤ 전용 칸은 같은 번호 전체를 칠한다 */
+      }
+      el.classList.add('sel');
+      updateCount();
+    };
+  });
+  $('btnSubmit').onclick = submit;
+  $('btnPlay').onclick = togglePlay;
+  $('btnSkipIntro').onclick = function(){
+    if(!AUD) return;
+    AUD.currentTime = (CUR.starts && CUR.starts[0]) ? CUR.starts[0] : 0;
+    AUD.play().catch(function(){});
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('.pspd button'), function(b){
+    b.onclick = function(){
+      var r = Number(b.getAttribute('data-rate'));
+      Array.prototype.forEach.call(document.querySelectorAll('.pspd button'), function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      if(AUD) AUD.playbackRate = r;
+      ST.rate = r;
+    };
+  });
+  mountAudio();
+  updateCount();
+  window.scrollTo(0,0);
+}
+
+function mountAudio(){
+  if(AUD){ try{ AUD.pause(); }catch(e){} AUD = null; }
+  AUD = new Audio();
+  AUD.preload = 'metadata';
+  AUD.src = CUR.audio;
+  AUD.playbackRate = ST.rate || 1.0;
+  AUD.addEventListener('timeupdate', onTimeUpdate);
+  AUD.addEventListener('loadedmetadata', onTimeUpdate);
+  AUD.addEventListener('ended', function(){ var b=$('btnPlay'); if(b) b.textContent='▶'; });
+  var bar = $('pbar');
+  if(bar){
+    bar.max = CUR.duration || 1;
+    bar.addEventListener('input', function(){
+      if(AUD) AUD.currentTime = Number(bar.value);
+      var tc = $('tCur'); if(tc) tc.textContent = mmss(bar.value);
+    });
+  }
+}
+function onTimeUpdate(){
+  if(!AUD) return;
+  var c = AUD.currentTime || 0;
+  var tc = $('tCur'); if(tc) tc.textContent = mmss(c);
+  var bar = $('pbar'); if(bar && !bar._drag) bar.value = c;
+  var d = $('tDur'); if(d && AUD.duration && isFinite(AUD.duration)) d.textContent = mmss(AUD.duration);
+}
+function togglePlay(){
+  if(!AUD) return;
+  if(AUD.paused){ AUD.play().then(function(){ $('btnPlay').textContent='❚❚'; }).catch(function(){ toast('재생을 시작할 수 없어요. 다시 눌러 주세요.'); }); }
+  else { AUD.pause(); $('btnPlay').textContent='▶'; }
+}
+function updateCount(){
+  var n = 0; for(var i=1;i<=17;i++) if(ST.answers[i]) n++;
+  var c = $('cnt'); if(c) c.textContent = n + ' / 17 응답';
+  var b = $('btnSubmit'); if(b) b.disabled = false;
+}
+function teardown(){ if(AUD){ try{ AUD.pause(); }catch(e){} AUD = null; } }
+
+/* ================= 채점 ================= */
+function submit(){
+  var n=0; for(var i=1;i<=17;i++) if(ST.answers[i]) n++;
+  if(n<17 && !confirm('아직 '+(17-n)+'문항이 비어 있어요. 그대로 채점할까요?')) return;
+  ST.submitted = true;
+  if(AUD){ try{ AUD.pause(); }catch(e){} }
+  renderResult(true);
+}
+
+function scoreOf(){
+  var pts=0, total=0, right=0;
+  CUR.questions.forEach(function(q){
+    total += q.points||2;
+    if(ST.answers[q.no] === q.answer){ pts += (q.points||2); right++; }
+  });
+  var pct = total ? Math.round(pts/total*100) : 0;
+  return { pts:pts, total:total, right:right, pct:pct };
+}
+
+function renderResult(fresh){
+  var s = scoreOf();
+  var e = CUR;
+  var save = lsGet(LS_BEST, {});
+  var prev = save[e.id];
+  if(!prev || s.pct > prev.best) save[e.id] = { best: Math.max(s.pct, prev?prev.best:0), at: Date.now(), tries:(prev?prev.tries:0)+1, last:s.pct };
+  else { save[e.id] = { best: prev.best, at: Date.now(), tries:(prev?prev.tries:0)+1, last:s.pct }; }
+  lsSet(LS_BEST, save);
+  if(fresh) saveToSheet(s.pct);
+
+  var h = '';
+  h += '<div class="sec">';
+  h += '<div class="score"><div class="big">'+s.pct+'점</div>';
+  h += '<div class="sm">'+e.year+'년 '+e.month+'월 '+e.grade+' 학평 듣기</div>';
+  h += '<div class="row3"><div><b>'+s.right+'/17</b>정답 문항</div><div><b>'+s.pts+'/'+s.total+'</b>듣기 배점</div><div><b>'+s.pct+'</b>100점 환산</div></div></div>';
+  h += '<div style="display:flex;gap:8px;margin-bottom:12px">';
+  h += '<button class="btn ghost" style="flex:1" id="btnAgain">🔄 다시 풀기</button>';
+  h += '<button class="btn gray" style="flex:1" id="btnBackList">📚 목록으로</button>';
+  h += '</div>';
+  var wrong = e.questions.filter(function(q){ return ST.answers[q.no] !== q.answer; });
+  h += '<div class="sum"><span>틀린 문항 <b>'+wrong.length+'</b>개'+(wrong.length?(' · '+wrong.map(function(q){return q.no;}).join(', ')+'번'):'')+'</span>';
+  h += '<span class="chip'+(ST.reviewOnlyWrong?' on':'')+'" id="chipWrong" style="margin:0">틀린 것만</span></div>';
+  h += '</div>';
+
+  e.questions.forEach(function(q){
+    var mine = ST.answers[q.no]||0, ok = (mine===q.answer);
+    if(ST.reviewOnlyWrong && ok) return;
+    h += '<div class="sec" style="padding-top:0;padding-bottom:0"><div class="rev" id="rev'+q.no+'">';
+    h += '<div class="revhead"><span class="qno '+(ok?'ok':'no')+'">'+q.no+'</span>';
+    if(q.points===3) h += '<span class="qpt">3점</span>';
+    h += '<span class="t">'+esc(q.prompt)+'</span></div>';
+    if(q.img) h += '<img class="qimg" loading="lazy" src="'+esc(q.img)+'" alt="'+q.no+'번 자료">';
+    if(q.choices && q.choices.length===5){
+      q.choices.forEach(function(c,i){
+        var cls = 'ch';
+        if(i+1===q.answer) cls += ' correct';
+        else if(i+1===mine) cls += ' wrong';
+        h += '<div class="'+cls+'"><span class="cn">'+CIRC[i]+'</span><span>'+esc(c)+'</span></div>';
+      });
+    }
+    h += '<div class="ansline">내 답 <b class="'+(ok?'ok':'no')+'">'+(mine?CIRC[mine-1]:'미응답')+'</b> · 정답 <b class="ok">'+CIRC[q.answer-1]+'</b></div>';
+    h += '<div class="acts"><button data-jump="'+q.no+'">🎧 다시 듣기</button>';
+    h += '<button data-script="'+q.no+'">📄 대본 보기</button></div>';
+    h += '<div class="script" id="scr'+q.no+'" style="display:none">'+esc(q.script||'(대본 없음)')+'</div>';
+    h += '</div></div>';
+  });
+  h += '<div class="sec"><div class="note">🎧 다시 듣기를 누르면 그 문항이 시작되는 지점부터 재생돼요. 대본은 정답 확인용이니, 먼저 다시 들어 보고 읽어 보세요.</div></div>';
+  $('app').innerHTML = h;
+  window.scrollTo(0,0);
+
+  $('btnAgain').onclick = function(){ ST.answers={}; ST.submitted=false; ST.reviewOnlyWrong=false; renderExam(); };
+  $('btnBackList').onclick = function(){ teardown(); renderList(); };
+  $('chipWrong').onclick = function(){ ST.reviewOnlyWrong = !ST.reviewOnlyWrong; renderResult(false); };
+  Array.prototype.forEach.call(document.querySelectorAll('[data-script]'), function(b){
+    b.onclick = function(){
+      var no = b.getAttribute('data-script');
+      var box = $('scr'+no);
+      if(!box) return;
+      var on = box.style.display === 'none';
+      box.style.display = on ? 'block' : 'none';
+      b.classList.toggle('on', on);
+      b.textContent = on ? '📄 대본 닫기' : '📄 대본 보기';
+    };
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-jump]'), function(b){
+    b.onclick = function(){
+      var no = Number(b.getAttribute('data-jump'));
+      var st = (CUR.starts && CUR.starts[no-1]) || 0;
+      if(!AUD) mountAudio();
+      if(!AUD) return;
+      AUD.currentTime = st;
+      AUD.play().then(function(){
+        $('btnPlay') && ($('btnPlay').textContent='❚❚');
+        toast(no+'번 시작 지점('+mmss(st)+')부터 재생');
+      }).catch(function(){ toast('재생할 수 없어요.'); });
+      window.scrollTo(0,0);
+    };
+  });
+}
+
+/* ================= 구글 시트 저장 (진도DB) ================= */
+function sheetSetName(){
+  var e = CUR;
+  return '듣기_'+e.year+'_'+e.month+'_'+e.grade;
+}
+function saveToSheet(pct){
+  if(!CUR) return;
+  if(ME.ban === '선생님') return;          /* 원장님 미리보기는 기록하지 않음 */
+  if(!ME.ban || !ME.name){ return; }
+  var pw = getPw();
+  if(!pw || !DB_URL) return;
+  var body = JSON.stringify({ action:'save', ban:ME.ban, name:ME.name, pw:pw,
+    setName: sheetSetName(), mode: '듣기', score: pct });
+  try{
+    fetch(DB_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: body })
+      .then(function(r){ return r.text(); })
+      .then(function(t){ try{ var j=JSON.parse(t); if(!(j && (j.ok===true||j.result==='ok'||j.success===true))) console.warn('진도DB 저장 응답', t); }catch(e){} })
+      .catch(function(){ queueSave(body); });
+  }catch(e){ queueSave(body); }
+}
+function queueSave(body){
+  try{
+    var q = lsGet('topedu_listening_queue', []);
+    q.push({ body: body, at: Date.now() });
+    lsSet('topedu_listening_queue', q.slice(-20));
+  }catch(e){}
+}
+function flushQueue(){
+  var q = lsGet('topedu_listening_queue', []);
+  if(!q.length) return;
+  var rest = [];
+  var i = 0;
+  (function next(){
+    if(i >= q.length){ lsSet('topedu_listening_queue', rest); return; }
+    fetch(DB_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: q[i].body })
+      .then(function(r){ return r.text(); })
+      .then(function(){ i++; next(); })
+      .catch(function(){ rest.push(q[i]); i++; next(); });
+  })();
+}
+
+/* ================= 시작 ================= */
+function boot(){
+  if(ME.ban && ME.ban !== '예비고1' && ME.ban !== '선생님'){
+    $('app').innerHTML = '<div class="lock"><h2>🎧 예비고1 전용</h2><p>모의고사 영어듣기는 <b>예비고1</b> 반과 선생님 화면에서 열 수 있어요.<br>현재 반: '+esc(ME.ban)+'</p><a href="index.html">탑에듀 영어 앱으로 돌아가기</a></div>';
+    return;
+  }
+  loadIndex().then(function(){
+    renderList();
+    flushQueue();
+  }).catch(function(){
+    $('app').innerHTML = '<div class="sec"><div class="empty">목록을 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</div></div>';
+  });
+}
+$('btnHome').onclick = function(){ location.href = 'index.html'; };
+document.addEventListener('visibilitychange', function(){ if(!document.hidden) flushQueue(); });
+window.addEventListener('beforeunload', teardown);
+boot();
+</script>
+</body>
+</html>

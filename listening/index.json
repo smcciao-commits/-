@@ -1,0 +1,391 @@
+{
+ "v": "v171",
+ "updated": "2026-11-26",
+ "count": 24,
+ "exams": [
+  {
+   "id": "2026_10_g1",
+   "year": "2026",
+   "month": "10",
+   "grade": "고1",
+   "school": "경기",
+   "title": "2026학년도 10월 고1 전국연합학력평가 영어",
+   "duration": 1441.6,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_10_g1.mp3",
+   "imgs": [
+    "listening/img/2026_10_g1_q4.png",
+    "listening/img/2026_10_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2026_10_g2",
+   "year": "2026",
+   "month": "10",
+   "grade": "고2",
+   "school": "경기",
+   "title": "2026학년도 10월 고2 전국연합학력평가 영어",
+   "duration": 1504.4,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_10_g2.mp3",
+   "imgs": [
+    "listening/img/2026_10_g2_q4.png",
+    "listening/img/2026_10_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2026_9_g1",
+   "year": "2026",
+   "month": "9",
+   "grade": "고1",
+   "school": "인천",
+   "title": "2026학년도 9월 고1 전국연합학력평가 영어",
+   "duration": 1557.0,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_9_g1.mp3",
+   "imgs": [
+    "listening/img/2026_9_g1_q4.png",
+    "listening/img/2026_9_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2026_9_g2",
+   "year": "2026",
+   "month": "9",
+   "grade": "고2",
+   "school": "인천",
+   "title": "2026학년도 9월 고2 전국연합학력평가 영어",
+   "duration": 1560.4,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_9_g2.mp3",
+   "imgs": [
+    "listening/img/2026_9_g2_q4.png",
+    "listening/img/2026_9_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2026_6_g1",
+   "year": "2026",
+   "month": "6",
+   "grade": "고1",
+   "school": "부산",
+   "title": "2026학년도 6월 고1 전국연합학력평가 영어",
+   "duration": 1490.9,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_6_g1.mp3",
+   "imgs": [
+    "listening/img/2026_6_g1_q4.png",
+    "listening/img/2026_6_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2026_6_g2",
+   "year": "2026",
+   "month": "6",
+   "grade": "고2",
+   "school": "부산",
+   "title": "2026학년도 6월 고2 전국연합학력평가 영어",
+   "duration": 1517.0,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_6_g2.mp3",
+   "imgs": [
+    "listening/img/2026_6_g2_q4.png",
+    "listening/img/2026_6_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2026_3_g1",
+   "year": "2026",
+   "month": "3",
+   "grade": "고1",
+   "school": "서울",
+   "title": "2026학년도 3월 고1 전국연합학력평가 영어",
+   "duration": 1549.1,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_3_g1.mp3",
+   "imgs": [
+    "listening/img/2026_3_g1_q4.png",
+    "listening/img/2026_3_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2026_3_g2",
+   "year": "2026",
+   "month": "3",
+   "grade": "고2",
+   "school": "서울",
+   "title": "2026학년도 3월 고2 전국연합학력평가 영어",
+   "duration": 1612.5,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2026_3_g2.mp3",
+   "imgs": [
+    "listening/img/2026_3_g2_q4.png",
+    "listening/img/2026_3_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2025_10_g1",
+   "year": "2025",
+   "month": "10",
+   "grade": "고1",
+   "school": "경기",
+   "title": "2025학년도 10월 고1 전국연합학력평가 영어",
+   "duration": 1454.6,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_10_g1.mp3",
+   "imgs": [
+    "listening/img/2025_10_g1_q4.png",
+    "listening/img/2025_10_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2025_10_g2",
+   "year": "2025",
+   "month": "10",
+   "grade": "고2",
+   "school": "경기",
+   "title": "2025학년도 10월 고2 전국연합학력평가 영어",
+   "duration": 1520.5,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_10_g2.mp3",
+   "imgs": [
+    "listening/img/2025_10_g2_q4.png",
+    "listening/img/2025_10_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2025_9_g1",
+   "year": "2025",
+   "month": "9",
+   "grade": "고1",
+   "school": "인천",
+   "title": "2025학년도 9월 고1 전국연합학력평가 영어",
+   "duration": 1419.7,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_9_g1.mp3",
+   "imgs": [
+    "listening/img/2025_9_g1_q4.png",
+    "listening/img/2025_9_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2025_9_g2",
+   "year": "2025",
+   "month": "9",
+   "grade": "고2",
+   "school": "인천",
+   "title": "2025학년도 9월 고2 전국연합학력평가 영어",
+   "duration": 1477.2,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_9_g2.mp3",
+   "imgs": [
+    "listening/img/2025_9_g2_q4.png",
+    "listening/img/2025_9_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2025_6_g1",
+   "year": "2025",
+   "month": "6",
+   "grade": "고1",
+   "school": "부산",
+   "title": "2025학년도 6월 고1 전국연합학력평가 영어",
+   "duration": 1431.5,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_6_g1.mp3",
+   "imgs": [
+    "listening/img/2025_6_g1_q4.png",
+    "listening/img/2025_6_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2025_6_g2",
+   "year": "2025",
+   "month": "6",
+   "grade": "고2",
+   "school": "부산",
+   "title": "2025학년도 6월 고2 전국연합학력평가 영어",
+   "duration": 1486.9,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_6_g2.mp3",
+   "imgs": [
+    "listening/img/2025_6_g2_q4.png",
+    "listening/img/2025_6_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2025_3_g1",
+   "year": "2025",
+   "month": "3",
+   "grade": "고1",
+   "school": "서울",
+   "title": "2025학년도 3월 고1 전국연합학력평가 영어",
+   "duration": 1413.5,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_3_g1.mp3",
+   "imgs": [
+    "listening/img/2025_3_g1_q4.png",
+    "listening/img/2025_3_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2025_3_g2",
+   "year": "2025",
+   "month": "3",
+   "grade": "고2",
+   "school": "서울",
+   "title": "2025학년도 3월 고2 전국연합학력평가 영어",
+   "duration": 1571.7,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2025_3_g2.mp3",
+   "imgs": [
+    "listening/img/2025_3_g2_q4.png",
+    "listening/img/2025_3_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2024_10_g1",
+   "year": "2024",
+   "month": "10",
+   "grade": "고1",
+   "school": "경기",
+   "title": "2024학년도 10월 고1 전국연합학력평가 영어",
+   "duration": 1541.2,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_10_g1.mp3",
+   "imgs": [
+    "listening/img/2024_10_g1_q4.png",
+    "listening/img/2024_10_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2024_10_g2",
+   "year": "2024",
+   "month": "10",
+   "grade": "고2",
+   "school": "경기",
+   "title": "2024학년도 10월 고2 전국연합학력평가 영어",
+   "duration": 1534.7,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_10_g2.mp3",
+   "imgs": [
+    "listening/img/2024_10_g2_q4.png",
+    "listening/img/2024_10_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2024_9_g1",
+   "year": "2024",
+   "month": "9",
+   "grade": "고1",
+   "school": "인천",
+   "title": "2024학년도 9월 고1 전국연합학력평가 영어",
+   "duration": 1515.2,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_9_g1.mp3",
+   "imgs": [
+    "listening/img/2024_9_g1_q4.png",
+    "listening/img/2024_9_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2024_9_g2",
+   "year": "2024",
+   "month": "9",
+   "grade": "고2",
+   "school": "인천",
+   "title": "2024학년도 9월 고2 전국연합학력평가 영어",
+   "duration": 1472.9,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_9_g2.mp3",
+   "imgs": [
+    "listening/img/2024_9_g2_q4.png",
+    "listening/img/2024_9_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2024_6_g1",
+   "year": "2024",
+   "month": "6",
+   "grade": "고1",
+   "school": "부산",
+   "title": "2024학년도 6월 고1 전국연합학력평가 영어",
+   "duration": 1433.7,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_6_g1.mp3",
+   "imgs": [
+    "listening/img/2024_6_g1_q4.png",
+    "listening/img/2024_6_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2024_6_g2",
+   "year": "2024",
+   "month": "6",
+   "grade": "고2",
+   "school": "부산",
+   "title": "2024학년도 6월 고2 전국연합학력평가 영어",
+   "duration": 1492.8,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_6_g2.mp3",
+   "imgs": [
+    "listening/img/2024_6_g2_q4.png",
+    "listening/img/2024_6_g2_q10.png"
+   ]
+  },
+  {
+   "id": "2024_3_g1",
+   "year": "2024",
+   "month": "3",
+   "grade": "고1",
+   "school": "서울",
+   "title": "2024학년도 3월 고1 전국연합학력평가 영어",
+   "duration": 1407.1,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_3_g1.mp3",
+   "imgs": [
+    "listening/img/2024_3_g1_q4.png",
+    "listening/img/2024_3_g1_q10.png"
+   ]
+  },
+  {
+   "id": "2024_3_g2",
+   "year": "2024",
+   "month": "3",
+   "grade": "고2",
+   "school": "서울",
+   "title": "2024학년도 3월 고2 전국연합학력평가 영어",
+   "duration": 1539.5,
+   "totalPoints": 37,
+   "qCount": 17,
+   "audio": "listening/audio/2024_3_g2.mp3",
+   "imgs": [
+    "listening/img/2024_3_g2_q4.png",
+    "listening/img/2024_3_g2_q10.png"
+   ]
+  }
+ ]
+}

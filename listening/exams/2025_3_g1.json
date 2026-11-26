@@ -1,0 +1,292 @@
+{
+ "id": "2025_3_g1",
+ "year": "2025",
+ "month": "3",
+ "grade": "고1",
+ "school": "서울",
+ "title": "2025학년도 3월 고1 전국연합학력평가 영어",
+ "duration": 1413.5,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_3_g1.mp3",
+ "starts": [
+  169.2,
+  220.7,
+  302.1,
+  369.3,
+  452.7,
+  528.5,
+  603.4,
+  682.7,
+  764.4,
+  836.4,
+  913.2,
+  952.6,
+  994.8,
+  1071.8,
+  1147.2,
+  1216.2,
+  1216.2
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학교 운동장 공사 계획을 안내하려고",
+    "교내 드론 대회 개최 소식을 알리려고",
+    "학교 홍보용 드론 촬영 일정을 공지하려고",
+    "학교 드론 동아리 공연의 관람을 권하려고",
+    "교내 드론 공연의 관람 안전 수칙을 강조하려고"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Good morning, students. This is your vice principal Richard\nSimpson. As you know, our school drone club was awarded first\nprize at the Drone Show Contest. Actually, I asked the drone club to\nperform the show again for you. And they said, “Yes.” So I would\nrecommend you watch the performance at the school field\ntomorrow. Please come and see the club’s drone performance, and\nshow your support. Thank you."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학급 뮤지컬은 다양한 음악을 활용해야 한다.",
+    "학급 뮤지컬은 학생이 공연하기 쉬워야 한다.",
+    "학급 뮤지컬은 인기 있는 소재를 다루어야 한다.",
+    "학급 뮤지컬은 의미 있는 교훈을 전달해야 한다.",
+    "학급 뮤지컬은 학생 모두가 역할을 맡아야 한다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Ryan, did you enjoy the musical “Tigers” yesterday?\nM: Yes, I loved it. I can’t believe we got tickets for such a popular\nshow.\nW: Yes, we were lucky. By the way, it reminded me of the class\nmusical that we have to prepare for the next month’s school\nfestival.\nM: You read my mind! I think we should look for a musical with a\nvariety of music.\nW: Well, there might be something even more important than that.\nM: Should we give the audience a meaningful lesson?\nW: Not necessarily. Do you remember what we did last year?\nM: Yes. We focused on preparing a musical that was easy to perform.\nW: Right. But not everyone participated. I think everyone should have a\nrole for the class musical.\nM: That’s a good point."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "건강을 지키기 위해서 규칙적인 운동이 필수적이다.",
+    "바쁜 일상에서 휴식을 취하는 것은 건강에 중요하다.",
+    "집중력을 높이는 것은 업무 수행 능력을 향상시킨다.",
+    "운동 부족을 보완하려면 적절한 식이 요법이 필요하다.",
+    "다양한 인간관계가 스트레스를 줄이는 데 도움이 된다."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Welcome to the Healing Tip Podcast. I’m Dr. Smith. In our busy\nlives, what do you think is just as important as exercising or eating\nwell for your health? It’s rest. Rest plays a crucial role in\nmaintaining your overall well‐being. It allows your body to heal and\nrecharge, while also helping your mind relax and improving focus.\nThat’s why I want to emphasize how important rest is for your\nhealth. Taking time to rest can prevent stress and boost your\noverall wellness. So, don’t skip those breaks!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_3_g1_q4.png",
+   "answer": 3,
+   "group": null,
+   "script": "W: Hi, Jayden, you know what? I visited the Dream Gallery with my\nmom yesterday.\nM: Oh, I’ve always wanted to visit there. Did you take any pictures?\nW: Sure. Look at this.\nM: Is the person wearing a striped­dress your mom?\nW: Yes, it is. She really loved the painting on the left side of the wall.\nM: Oh, the painting of flowers? That’s nice. I also like the other\npainting.\nW: You mean the painting of umbrellas in the round frame?\nM: Yes, it caught my eye. I can see a person sitting on the right side\nof the picture. Who’s the person?\nW: The man wearing glasses, right? He’s the manager of the gallery.\nM: I see. What’s the arrow sign on the right wall?\nW: It shows the direction to the next area.\nM: Oh, the gallery must be huge!"
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "숲지도 다운로드 하기",
+    "산책 장소 찾아보기",
+    "숲 입장권 구매하기",
+    "식당 메뉴 찾아보기",
+    "식당 예약하기"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Honey, the flowers are really beautiful these days. Why don’t we\ntake a walk this weekend?\nM: Wow, that sounds great. Do you have any particular place in mind?\nW: Yes, I’d like to visit the Grand Forest. I’ve already downloaded the\nmap of the forest.\nM: That’s nice. Do we have to buy entrance tickets?\nW: Yes. We can buy tickets online. I’ll buy two tickets in the afternoon.\nM: Great. Let’s have a nice lunch there, too. There’s a restaurant called\nTreehouse Pasta in the Grand Forest.\nW: Nice. Do we have to make a reservation?\nM: Yes. I’ll make the reservation right away.\nW: Then, I’ll look up the menu of the restaurant.\nM: Thanks."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$13",
+    "$20",
+    "$23",
+    "$30",
+    "$33"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hello. How can I help you today?\nW: Hi. I’m here to buy some decorations for my sister’s shoes.\nM: Great. We have those over here. They are five dollars each.\nW: She would love the decorations with this frog character, so I’ll take\ntwo of them.\nM: Wonderful. Do you need anything else?\nW: Oh, I’ve just noticed this cute bracelet for her. How much is it?\nM: It’s ten dollars.\nW: I’ll buy it. And I’d like them gift­wrapped, please.\nM: We charge for gift­wrapping. It costs three dollars. Would that be\nokay with you?\nW: Yes, that’s fine.\nM: Then, I’ll gift­wrap two decorations and one bracelet together in one\nbox.\nW: Okay. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 휴대 전화를 수리받지 못한 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "수리점의 위치를 찾지 못해서",
+    "예약 없이 수리점을 방문해서",
+    "수학 시험을 준비하느라 바빠서",
+    "수리점에서 오래 기다려야 해서",
+    "버스에서 휴대 전화를 잃어버려서"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hi, Brian. Why didn’t you answer my text message yesterday? I\nwanted to ask about the math exam.\nM: Hi, Sarah. I’m really sorry. I broke my cell phone yesterday, so I\ncouldn’t read it.\nW: Oh, no! What happened to it?\nM: Well, I dropped it while getting off the bus. And now, it doesn’t\nwork at all.\nW: Why didn’t you get it fixed?\nM: I wanted to, but I couldn’t.\nW: Was it because you couldn’t find a repair shop? There’s one right by\nthe bus stop near our school.\nM: I went there to get it fixed, but I couldn’t.\nW: Oh, did you have to wait too long?\nM: No, I didn’t. Actually, I didn’t know I had to make a reservation in\nadvance. So I just went back home.\nW: Ah! That’s too bad!"
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Future Generation Talk Show에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "개최 장소",
+    "강연자",
+    "강연 주제",
+    "시작 시간",
+    "온라인 시청 가능 여부"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "[Cell phone rings.]\nM: Hi, Kelly. What’s up?\nW: Hey, Robert. Do you have time on Friday?\nM: Sure.\nW: Have you heard about the Future Generation Talk Show?\nM: Oh, you mean the talk show that will be held at Southern\nUniversity?\nW: Yes, that’s right. Professor Peter Johnson is coming to talk.\nM: The famous Peter Johnson? What’s the topic of the talk show?\nW: It’s about the low birth rate issue and how it’s affecting the future.\nM: Sounds interesting. Can I watch the talk show online?\nW: No. There’s no live streaming service. But if you go there, you can\nask questions directly to Professor Johnson.\nM: Great. I can go in person. Can we go together?\nW: Sure! I’ll text you the details of the talk show right now."
+  },
+  {
+   "no": 9,
+   "prompt": "Science Day 행사에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "이번 주 토요일에 진행된다.",
+    "학생들이 직접 로봇을 작동해 볼 수 있다.",
+    "선생님들이 오전에 실험 부스를 운영한다.",
+    "QR 코드를 스캔하여 참가 신청을 할 수 있다.",
+    "참가자들에게 점심을 제공한다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hello, students! This is your science teacher Jane Brown. I have\nsome good news. This Saturday we’re having Science Day at our\nschool. In the morning, coding experts will teach you how to make\na computer program. You can also operate some robots by yourself\nin the school hall. In the afternoon, your science teachers will run\nsome experimental booths for you. It’s a good chance to experiment\nwith what you’ve learned from the textbooks. You can sign up for\nScience Day by scanning the QR codes on the school board. For the\nparticipants, lunch will be provided. Come and enjoy Science Day!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 여자가 수강할 운동 수업을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_3_g1_q10.png",
+   "answer": 2,
+   "group": null,
+   "script": "M: Sweetie, what are you doing?\nW: I’m looking at the schedule for exercise classes. Would you like to\nhelp me choose?\nM: Sure. What’s your budget for it?\nW: Well, I don’t want to spend more than forty dollars.\nM: Okay. Then, forget about this one. What about class time?\nW: As you know, I have things to do in the afternoon.\nM: In that case, let’s cross this one out. Now you have dancing and\ntennis left.\nW: I heard the tennis class is held outside. I don’t like outdoor sports.\nM: Okay. Then, we have only two exercise classes left. Which level is\ngood for you?\nW: Since I’ve already taken the beginner’s class, I’ll take the other one\nthis time."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I’ll ask the teacher if I can change my topic.",
+    "I record myself talking and watch it later.",
+    "I’m looking forward to your presentation.",
+    "I need more time to finish my slides.",
+    "I haven’t decided what to wear."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hi, Daniel. Are you ready for your presentation tomorrow?\nM: Hi, Tina. Not really. I’ve finished my slides, but I haven’t practiced\nmy speech yet.\nW: How do you usually practice it?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Thanks. But I’m not hungry now.",
+    "I agree. Printing it out is such a waste.",
+    "Of course not. I’ll help you at any time.",
+    "Great idea! It’ll catch the students’ attention.",
+    "No worries. I like the menu of our school cafeteria."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Ashley, do you remember the digital poster we made to upload on\nsocial media?\nW: Yes, of course. It was about food waste, right?\nM: Exactly. Let’s print it out and put it on the wall in our school\ncafeteria.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Right. I’ll try to go to bed earlier and get more sleep.",
+    "I’m sorry. I didn’t know you had a hard time sleeping.",
+    "Absolutely! I believe you’ll do better next time.",
+    "Sure. I’ll do my best to stay awake longer.",
+    "I see. I’ll try to come back home in time."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Chris, you’ve been looking so tired these days.\nM: Yeah, Mom. I’m studying for my first high school exam. I really\nwant to do well.\nW: I understand, but I’m worried about you. Have you had any trouble\nmanaging your time?\nM: Well, I don’t have enough of it. I’ve been staying up late studying\nthese days.\nW: Staying up late won’t help you much, Chris.\nM: But I have so much to do, Mom.\nW: I see your point, but staying up too late might actually hurt your\nchances of doing well.\nM: Maybe you’re right, but I thought studying would be more helpful to\nme than sleeping.\nW: Not if you’re too tired. If you don’t sleep enough, it’ll hurt your\nfocus and memory.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Reading books can also be a good hobby.",
+    "You had to practice a lot to win the game.",
+    "How about going out with me this Saturday?",
+    "Just bring your racket and some comfortable clothes.",
+    "If you don’t have a hobby, you can get more stressed."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hi, Cindy! What are you doing this weekend?\nW: I’m going to play badminton with my friends.\nM: You play badminton quite often.\nW: It’s my new hobby. It helps me reduce stress.\nM: How nice! I’ve been looking for something to reduce stress.\nW: Well, you don’t have to think too hard. Just think of something that\nmakes you happy.\nM: Hmm.... But nothing comes to mind right away.\nW: Then, why don’t you come and play badminton with me this\nSaturday? You’ll like it, too, I think.\nM: Really? Is it okay if I join you?\nW: Of course, it is! We meet at the sports center every Saturday\nmorning.\nM: Thanks a lot! Do I need to prepare anything?\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Kevin이 Ms. Tyler에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Isn’t it fortunate that the rain stopped yesterday?",
+    "Could you teach us about the stars today?",
+    "Is it okay if we change the camp site?",
+    "Can we reschedule the camp for another day?",
+    "How can we gather more volunteers for the camp?"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Kevin is the president of the Starlight Club in the school. For\nweeks, the club has been preparing the star­viewing camp­night at\nthe school yard with the club teacher, Ms. Tyler. They expected\nthat the sky would be clear on camp­night. But today, there’s a\nsudden change in the weather forecast, and it says it’s going to rain\nduring camp­night. It means the camp cannot go on as planned.\nKevin wants to ask Ms. Tyler if they can change the camp date to\nanother day. In this situation, what would Kevin most likely say to\nMs. Tyler?\nKevin:\n16번부터 17번은 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nW: Hello! Everyone. I’m Jasmine, a travel photographer, and I’m\nexcited to share some wonderful places to take photos around the\nworld. The first place is Times Square in New York. It is full of\nenergy, with its tall buildings and busy sidewalks. Next, Rome\namazed me with its famous historical places, like the Colosseum. It\nmade me feel like traveling back in time! And when you visit\nLondon, you shouldn’t miss Buckingham Palace. It’s a perfect place\nfor once­in­a­lifetime photos. Lastly, in Sydney, the Opera House\nwas great for taking beautiful sunset photos. Traveling with a\ncamera is such a joy, and I can’t wait to share more travel places\nwith you. Now let’s take a look at the photos of these places."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "useful tips for safe world travel",
+    "necessary items for city travelers",
+    "famous historical cities in the world",
+    "importance of learning photo techniques",
+    "attractive photo spots around the world"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello! Everyone. I’m Jasmine, a travel photographer, and I’m\nexcited to share some wonderful places to take photos around the\nworld. The first place is Times Square in New York. It is full of\nenergy, with its tall buildings and busy sidewalks. Next, Rome\namazed me with its famous historical places, like the Colosseum. It\nmade me feel like traveling back in time! And when you visit\nLondon, you shouldn’t miss Buckingham Palace. It’s a perfect place\nfor once­in­a­lifetime photos. Lastly, in Sydney, the Opera House\nwas great for taking beautiful sunset photos. Traveling with a\ncamera is such a joy, and I can’t wait to share more travel places\nwith you. Now let’s take a look at the photos of these places."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 도시가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "New York",
+    "Rome",
+    "Paris",
+    "London",
+    "Sydney"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello! Everyone. I’m Jasmine, a travel photographer, and I’m\nexcited to share some wonderful places to take photos around the\nworld. The first place is Times Square in New York. It is full of\nenergy, with its tall buildings and busy sidewalks. Next, Rome\namazed me with its famous historical places, like the Colosseum. It\nmade me feel like traveling back in time! And when you visit\nLondon, you shouldn’t miss Buckingham Palace. It’s a perfect place\nfor once­in­a­lifetime photos. Lastly, in Sydney, the Opera House\nwas great for taking beautiful sunset photos. Traveling with a\ncamera is such a joy, and I can’t wait to share more travel places\nwith you. Now let’s take a look at the photos of these places."
+  }
+ ]
+}

@@ -1,0 +1,292 @@
+{
+ "id": "2026_9_g2",
+ "year": "2026",
+ "month": "9",
+ "grade": "고2",
+ "school": "인천",
+ "title": "2026학년도 9월 고2 전국연합학력평가 영어",
+ "duration": 1560.4,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_9_g2.mp3",
+ "starts": [
+  179.1,
+  237.0,
+  311.7,
+  380.4,
+  471.7,
+  553.7,
+  638.9,
+  720.8,
+  803.9,
+  889.2,
+  977.7,
+  1020.8,
+  1066.3,
+  1137.6,
+  1222.6,
+  1303.9,
+  1303.9
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학교 안전 도우미 모집을 홍보하려고",
+    "학교의 새로운 출입문 사용을 안내하려고",
+    "등교 시 진행되는 캠페인 참여를 독려하려고",
+    "학교 시설 개방 시간의 변경을 공지하려고",
+    "교내 안전 표지판의 설치를 요청하려고"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Good afternoon, students. This is your vice principal, Ms. Emily\nJohnson. I’d like to let you know about an important update to our\nschool entrances. Starting next Monday, the current main entrance\nwill be permanently closed as part of a safety improvement project.\nInstead, a new entrance on the south side of the school will be\nopened as the main entrance. All students should enter and exit the\nschool through this new entrance. Signs will be posted to guide you,\nand staff members will be there to assist during busy times. Please\nremember to use the new entrance for your safety and convenience.\nThank you for your cooperation."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "개인적 경험을 바탕으로 만든 음악은 공감을 얻는다.",
+    "좋은 곡을 만들기 위해서는 전문적 기술이 요구된다.",
+    "인공 지능이 추천한 음악을 들으면 기분 전환이 된다.",
+    "인공 지능이 자신만의 음악을 만드는 데 도움이 된다.",
+    "인공 지능을 활용한 창작 시 저작권법 준수가 필수적이다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Alice, did you listen to the song I sent you?\nW: Yeah, I did. I was surprised to learn that you made the song\nyourself.\nM: Actually, AI helped me make it.\nW: I thought songs made by AI sound the same. Doesn’t it just copy\nother original songs?\nM: No. AI can actually help you create personalized music.\nW: You mean you can create your own songs with AI?\nM: Exactly. All you have to do is put in the styles of melodies or\nmoods you want.\nW: Oh, then AI would make me a song that reflects my preferences. So\nit’s a kind of assistant.\nM: Yes. Using AI helps you make your own music.\nW: Sounds great. I’ll try it later."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "걷는 습관은 두뇌를 자극하여 집중력을 향상한다.",
+    "장거리 이동 시 대중교통을 이용하면 에너지가 절약된다.",
+    "출퇴근 시 이어폰을 사용하면 주변 상황을 인지하기 어렵다.",
+    "출근 전에 하루 업무 계획을 세우는 것은 일의 효율성을 높인다.",
+    "대중교통 이용 시 아무것도 하지 않는 것은 두뇌 휴식에 도움이 된다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, everyone! It’s Amy from Bright Morning Radio. While on the\nbus or subway, what do you do? Most of you check emails, read\nbooks, or listen to language lessons. However, do you think it’s\nreally good for you? Simply doing nothing while on public\ntransportation can be very helpful for your brain. According to some\nresearch, it allows your brain a rare chance to rest and truly\nrecharge. In our busy lives, that might be the only time during the\nday when we can pause and clear our mind. So, next time you’re on\npublic transportation, give your brain a break. Try doing nothing, so\nyou can refresh your mind and save your energy."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_9_g2_q4.png",
+   "answer": 3,
+   "group": null,
+   "script": "W: Hi, Richard. I heard your dad retired last week. Did you do\nsomething special for him?\nM: I did. We recently had a family gathering at a small hall we rented.\nI took a picture of the place.\nW: Let me see. Oh, you put a “Congratulations!” banner on the wall.\nM: Yeah, we hung it high so everyone could see it.\nW: There is a screen in the corner. What was it for?\nM: We played a video of his memories on it. Dad loved it.\nW: That sounds really nice. And I see two flower pots near the screen.\nM: Right. That type of flower is my dad’s favorite.\nW: And what’s that stripe­patterned box on the table?\nM: It was a gift for Dad. We all prepared it together.\nW: Cool. And there’s a microphone stand next to the table.\nM: Yeah, we used it when we shared a few words about him.\nW: Everything looks so warm and meaningful. I’m sure your dad was\ntruly touched."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "포스터 부착하기",
+    "초대장 발송하기",
+    "장소 사용 허락받기",
+    "음향 장비 점검하기",
+    "의자 설치 확인하기"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Abbey, our mini orchestra concert is next week. I’m so excited!\nW: So am I! But I’m worried we might have missed something\nimportant.\nM: Don’t worry. Let’s go through the checklist together. First of all,\nyou got permission to use the school assembly hall, right?\nW: Yes, I did. And did you send the invitations out to parents?\nM: I sent them all last week. What about the posters?\nW: The first graders put them on the bulletin board this morning.\nM: Great! Oh, I think I forgot to check the sound system.\nW: No worries. Our teacher and I already checked it. It’s working\nperfectly.\nM: Looks like we’re almost ready then.\nW: Oh, one more thing! We need to check if the chairs for the\naudience are set up properly.\nM: Sure, I’ll check and let you know."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 2,
+   "choices": [
+    "$55",
+    "$63",
+    "$70",
+    "$81",
+    "$90"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Welcome to Forest Botanical Garden.\nW: Hello, I’d like to purchase admission tickets for my family.\nM: Sure. Tickets are $20 for adults and $15 for children. How many\ntickets would you like?\nW: I’ll take two adults and two children tickets.\nM: Great. There’s also a guided tour available for an extra $5 per\nperson. You can learn about the various plants in our garden.\nW: No, thanks. We don’t need it. Do you have a local residents\ndiscount? I think I saw it on your website.\nM: Of course, 10% is discounted from the total for locals. Do you live\nin the area?\nW: Yes, we do. I brought our identification cards. Here they are.\nM: Okay, thank you. So, that’s two adults and two children tickets, plus\na 10% discount.\nW: Yes, that’s right. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 직업 체험 프로그램에 참가할 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "토론 대회에 참가해야 해서",
+    "채용 면접에 참여해야 해서",
+    "인턴십 준비를 해야 해서",
+    "봉사활동을 가야 해서",
+    "독서 모임이 있어서"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Jake, have you heard about the career experience program at the\nlocal biotech company next Thursday?\nM: Yeah. It’s the one where participants can see what professionals do\nat a local company, right?\nW: Exactly! I think it could help you prepare for your internship. Do\nyou want to take part in the program with me?\nM: I’d love to, but I can’t make it that day.\nW: Oh, do you have a volunteer activity scheduled?\nM: No, that’s this weekend.\nW: Then is it because of your book club meeting?\nM: I moved that to another day. Actually, I’m going to the finals in the\ndebate contest next Thursday.\nW: You told me you lost the earlier round.\nM: Yeah, but I heard that the winner copied material from the Internet,\nso I advanced instead.\nW: I see. Good luck in the competition, then."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Astro Space Camp에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "장소",
+    "날짜",
+    "활동 내용",
+    "신청 방법",
+    "등록비"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Hi, Mike. What are you looking at?\nM: I’m reading a pamphlet about the Astro Space Camp. It’s a camp for\nstudents who are interested in rockets.\nW: That sounds cool. Where does it take place?\nM: It’s going to be held at the Astro Science Center.\nW: Oh, that’s not far from school. When is the camp?\nM: It’s on October 17th. Would you like to join?\nW: Sure! What kind of activities will we do there?\nM: There’ll be a lecture on rocket theory by a science communicator.\nAnd students will build model rockets in teams.\nW: That sounds fun.\nM: All materials necessary to make the rockets will be handed out.\nAnd the best part is, the event is free!\nW: So there’s no registration fee? That’s nice.\nM: Let’s take advantage of this opportunity."
+  },
+  {
+   "no": 9,
+   "prompt": "2026 Beeswax Lip Balm Event에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "2일 동안 진행된다.",
+    "다큐멘터리가 상영된다.",
+    "꿀로 만든 간식이 제공된다.",
+    "참가비는 무료이다.",
+    "참가 인원은 100명으로 제한된다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello, listeners! Are you looking for a meaningful way to learn\nabout the environment and create something useful? I’m excited to\ninvite you to the 2026 Beeswax Lip Balm Event! It’ll last two days,\nfrom September 2nd to the 3rd at 10 a.m. at City Plaza. During the\nevent, we’ll show you a short 10­minute documentary about climate\nchange and bees’ ecosystem. After that, we’ll guide you in making\nyour very own beeswax lip balm. In addition, snacks made with\nhoney will be provided to all participants. There’s a 10 dollar\nparticipation fee, and all profits will be donated to environmental\norganizations. The event is limited to 100 participants, so you’d\nbetter hurry and sign up. Don’t miss out!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 구입할 여행 어댑터를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_9_g2_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "W: Jim, have you finished getting ready for your trip?\nM: Almost, Mom. My travel adapter is broken, so I need to buy a new\none. Could you help me choose?\nW: Sure. What are your options?\nM: There are five models I’m looking at. But I think anything over fifty\ndollars is too expensive.\nW: I agree. And maximum charging output matters, too. Don’t you like\nto charge your laptop quickly?\nM: Yes. So I think it should be higher than 40 watts at least.\nW: Right. How about the number of USB ports?\nM: I need at least four ports because I often charge multiple devices at\nthe same time.\nW: Then, you’re down to two models. Any preference on the color?\nM: The last one I used was white, so I’ll go with a different color this\ntime.\nW: Your choice is clear, then.\nM: Great. I’ll buy this one. Thanks for your help, Mom."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Not really. I don’t need to submit it.",
+    "No. I’m afraid I can’t fix your laptop.",
+    "Sure. You can stop by and pick it up anytime.",
+    "Never mind. Our science project is going well.",
+    "No, thanks. I already finished my project yesterday."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hi, Ben. Is it okay if I borrow your laptop today? I need to finish\nmy science project.\nM: What happened to your laptop? Is it not working?\nW: Yeah, it won’t turn on. Can I come over to your place and get your\nlaptop?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Do you think so? I’ll sign up for it.",
+    "I don’t agree. The contest was very rewarding.",
+    "Don’t worry. The contest will be held as scheduled.",
+    "Excellent. I’ll find someone else for the contest.",
+    "Actually, I’ve never done calligraphy before."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hey, Jenny. Our school is having a calligraphy contest. Why don’t\nyou join it?\nW: I’d really love to, but I don’t think I’m good enough. It’s only been a\nfew months since I started learning calligraphy.\nM: Your handwriting is amazing. I’m sure you’d do great.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "That sounds great. I’ll give it a try.",
+    "Right. The video was a huge success!",
+    "I agree. People won’t care about my video.",
+    "Sure. I’ll join the local culture guide program.",
+    "That’s true. I don’t have time to post it online."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "고르시오. [3점]\nW: Hi, Alex. You look worried. What’s on your mind?\nM: Hi, Grace. I’m worried because there aren’t enough staff for my\nprogram.\nW: You mean the local culture guide program you’re running at the\ncommunity center?\nM: Yeah. I need more guides who can introduce local history and\nculture directly to visitors.\nW: I think you should try something to recruit more guides.\nM: I know. But I’m not sure what I should do.\nW: How about making a promotional video and posting it online?\nM: Do you think it’ll work?\nW: Sure. I’ve seen many programs use promotional videos, and they\nwere quite successful. I think you can make one, too.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Fortunately, I’m sure you’ll get accepted.",
+    "Too bad. You can get another chance next time.",
+    "Just in case, don’t forget to check your schedule.",
+    "Okay. I’ll include those activities in my application.",
+    "Of course. I’ve seen the activities on the notice board."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Olivia, did you see the notice board over there?\nW: No, what’s on it?\nM: There’s a notice about the student ambassador program. Why don’t\nwe apply to it?\nW: Hmm, what do the student ambassadors do?\nM: I heard that they give campus tours and help out at major events.\nW: That sounds interesting! But do you think I’d be good at it?\nM: You’re so active and good at helping others. That would be very\nhelpful for the ambassador activities.\nW: Oh, really? I’ll try it then. By the way, do we each need to submit\nan application form?\nM: Yes, we do. It’s important to highlight the school activities you’ve\ntaken part in.\nW: Then, what should I include?\nM: You achieved a lot in the broadcasting club and debate club. Why\ndon’t you mention that?\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Daniel이 Jane에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "The app could really benefit from better visuals.",
+    "The schedule is tight, but deadlines are important too.",
+    "Most users probably won’t notice a small error like this.",
+    "Let’s deal with complaints later if people report problems.",
+    "I think we should put off the launch and fix the error first."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Daniel and Jane are part of a small team developing a new study\napp. Jane is the developer and plans to launch the app next week.\nDaniel, who tests the app, finds a serious problem in user settings.\nJane wants to release the app as scheduled, believing the problem\ncan be fixed later through an update. However, Daniel thinks that if\nusers experience an error right after downloading the app, they may\nleave negative reviews and stop using it. He believes this could\nharm the app’s success in the long run. He thinks fixing the\nproblem is more important than meeting the original deadline. So,\nDaniel wants to suggest to Jane that they delay the launch to fix\nthe issue. In this situation, what would Daniel most likely say to\nJane?\n16번부터 17번까지는 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nM: Hello, everyone. Welcome to Today’s Insight. Many foods commonly\neaten today were not consumed in the past because they were\nregarded as inedible. Here are four foods that were believed to be not\nappropriate for human consumption. First, tomatoes belonged to the\nsame plant family as some poisonous plants. In addition, tomatoes\nwere believed to cause illness when they were served on metal\nplates. Second, carrots were not consumed in everyday meals in the\npast because of their strange colors like purple or white. Instead, they\nwere mainly used for animal feed. People became familiar with the\norange carrots of today only after selective farming. Next, corn also\ncaused worries in some European regions. People became sick when\nthey ate corn prepared without traditional Native­American cooking\nmethods. That made people believe that corn itself was unhealthy.\nFinally, eggplants were once thought to be highly poisonous. Their\nflowers and leaves could be harmful if eaten in large amounts. Today,\nthese foods are cooked properly and eaten safely. Tomorrow, we’ll\nsee where delicious desserts come from.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "different causes of food poisoning",
+    "farming techniques for improving food quality",
+    "food cultures that spread across various regions",
+    "traditional cooking methods that keep us healthy",
+    "foods once considered not proper for humans to eat"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, everyone. Welcome to Today’s Insight. Many foods commonly\neaten today were not consumed in the past because they were\nregarded as inedible. Here are four foods that were believed to be not\nappropriate for human consumption. First, tomatoes belonged to the\nsame plant family as some poisonous plants. In addition, tomatoes\nwere believed to cause illness when they were served on metal\nplates. Second, carrots were not consumed in everyday meals in the\npast because of their strange colors like purple or white. Instead, they\nwere mainly used for animal feed. People became familiar with the\norange carrots of today only after selective farming. Next, corn also\ncaused worries in some European regions. People became sick when\nthey ate corn prepared without traditional Native­American cooking\nmethods. That made people believe that corn itself was unhealthy.\nFinally, eggplants were once thought to be highly poisonous. Their\nflowers and leaves could be harmful if eaten in large amounts. Today,\nthese foods are cooked properly and eaten safely. Tomorrow, we’ll\nsee where delicious desserts come from.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 식품이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "tomatoes",
+    "carrots",
+    "corn",
+    "eggplants",
+    "potatoes"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, everyone. Welcome to Today’s Insight. Many foods commonly\neaten today were not consumed in the past because they were\nregarded as inedible. Here are four foods that were believed to be not\nappropriate for human consumption. First, tomatoes belonged to the\nsame plant family as some poisonous plants. In addition, tomatoes\nwere believed to cause illness when they were served on metal\nplates. Second, carrots were not consumed in everyday meals in the\npast because of their strange colors like purple or white. Instead, they\nwere mainly used for animal feed. People became familiar with the\norange carrots of today only after selective farming. Next, corn also\ncaused worries in some European regions. People became sick when\nthey ate corn prepared without traditional Native­American cooking\nmethods. That made people believe that corn itself was unhealthy.\nFinally, eggplants were once thought to be highly poisonous. Their\nflowers and leaves could be harmful if eaten in large amounts. Today,\nthese foods are cooked properly and eaten safely. Tomorrow, we’ll\nsee where delicious desserts come from.\n다시 한 번 듣겠습니다."
+  }
+ ]
+}

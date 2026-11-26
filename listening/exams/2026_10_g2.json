@@ -1,0 +1,292 @@
+{
+ "id": "2026_10_g2",
+ "year": "2026",
+ "month": "10",
+ "grade": "고2",
+ "school": "경기",
+ "title": "2026학년도 10월 고2 전국연합학력평가 영어",
+ "duration": 1504.4,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_10_g2.mp3",
+ "starts": [
+  150.1,
+  214.3,
+  302.8,
+  383.9,
+  472.9,
+  555.7,
+  648.6,
+  732.8,
+  819.1,
+  893.0,
+  968.4,
+  1010.0,
+  1053.0,
+  1134.5,
+  1216.2,
+  1295.5,
+  1295.5
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "교내 게시판의 위치 변경을 알리려고",
+    "동아리 포스터의 크기와 형식을 안내하려고",
+    "동아리 포스터의 게시 기한 변경을 공지하려고",
+    "오래된 게시물 정리에 필요한 봉사자를 모집하려고",
+    "동아리 포스터를 지정된 게시판에 부착할 것을 요청하려고"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "[Chime bell rings.]\nW: Good morning, students. This is Ms. Brown, the vice principal. For the upcoming school club festival, I know many clubs\nare busy planning various club activities and making posters. I’d like to remind you of an important rule for posting.\nPlease put up club posters on the designated bulletin boards. Recently, some posters have been put on classroom doors,\nwindows, and hallway walls. This makes the school look messy, and important notices can be harder to find. Before\nputting up a club poster, please make sure you are using the bulletin boards that we prepared. Again, club posters should\nbe placed on the designated bulletin boards. Thank you for keeping our school clean and organized."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "여행지에서의 돌발 상황에 대비하여 여행자 보험에 가입해야 한다.",
+    "여행 계획을 세울 때 활동 사이에 시간적 여유를 두어야 한다.",
+    "여행지에서는 가능한 한 많은 활동을 체험해 보아야 한다.",
+    "여행 전에 여행지에 대한 충분한 정보 검색을 해야 한다.",
+    "여행 짐은 꼭 필요한 물건 위주로 간편하게 싸야 한다."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Dad, can you check my travel schedule? Since this is my first trip abroad, I want to prepare everything well.\nM: Sure. [Pause] Hmm, you have lots of activities for each day.\nW: I want to experience as many things as I can.\nM: But you should leave some time between activities when planning your trip.\nW: Really? I thought doing many things would make the trip more meaningful.\nM: I understand, but there could be some unexpected situations such as a transportation delay. So you need time to deal\nwith those.\nW: Oh, I didn’t consider that.\nM: Also, having more time allows you to fully enjoy each activity without feeling rushed.\nW: That makes sense. I won’t need to constantly check the clock to stay on schedule.\nM: Right. So you need to schedule some time between activities.\nW: I see. I should adjust my plan. Thanks, Dad."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "운동을 처음 시작할 때는 올바른 자세를 배우는 것이 중요하다.",
+    "운동 강도는 자신의 체력에 맞게 조절하는 것이 바람직하다.",
+    "일정한 동작의 반복은 운동 습관 형성에 도움이 된다.",
+    "운동 후 충분한 휴식은 피로 회복에 효과적이다.",
+    "운동 전 몸풀기는 부상 예방에 필수적이다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, listeners. This is Coach Daniel from Daily Fitness. When learning a new exercise, people often focus too much on\nspeed or repetitions. However, the most important thing at the beginning is learning proper form. If you practice the\nincorrect form of a movement, your body may get used to moving that way. Then, even after you learn the correct\nform, it can take time to change that habit. Incorrect form can also put unnecessary stress on your body and increase\nthe risk of injury. For these reasons, beginners should focus on correct form before trying to move faster or do more\nrepetitions. Learning proper form early helps you exercise more safely and effectively."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_10_g2_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Lisa. How was your weekend?\nW: It was great. I visited my grandparents in the countryside. Look at this picture.\nM: Their yard looks so beautiful. I see a bench in front of the house.\nW: That’s where my grandparents like to sit and talk.\nM: That sounds relaxing. The swing hanging from the tree looks special.\nW: It is. My grandfather made it for me when I was little.\nM: That’s so sweet. Is that your grandmother watering the flowers?\nW: Yes. She takes care of them everyday. Oh, do you remember the striped tablecloth on the table?\nM: Definitely. Didn’t we pick it out at the local market?\nW: That’s right. I gave it to my grandmother, and she likes using it.\nM: I’m glad she likes it. There are two chickens in the yard, too.\nW: Yes. My grandparents raise them to get fresh eggs.\nM: Sounds like you had a peaceful weekend."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "마이크 점검하기",
+    "여분의 의자 준비하기",
+    "사인회용 탁자 배치하기",
+    "좌석마다 질문 카드 놓기",
+    "스크린에 노트북 연결하기"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Ethan, the travel writer’s book talk starts soon. Let’s check everything before people arrive.\nM: Sure. We have enough chairs for everyone who signed up, and I even prepared a few extra chairs.\nW: Great. I also set up a table for the book signing at the front of the event area.\nM: That’s a good spot. People can take pictures with the writer there, too.\nW: Right. Did you check the microphone?\nM: Yes. I tested it, and there’s no problem with the sound.\nW: What about the question cards for the Q&A time?\nM: They’re ready. I placed one on each seat so people can write down their questions.\nW: Then we’re done.\nM: Wait, didn’t the writer say she wanted to show some photos?\nW: Oh, you’re right. I’ll connect the laptop to the screen now.\nM: Thanks. After that, everything will be ready."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$36",
+    "$40",
+    "$45",
+    "$50",
+    "$55"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Welcome to the Korean Traditional Souvenir Shop. How may I help you?\nM: Hi, I’m looking for gifts to send to my friends abroad. They’re interested in Korean culture.\nW: Then how about these spoon and chopstick sets? We have wooden and stainless steel sets.\nM: How much is each set?\nW: The wooden set is $15, and the stainless steel one is $20.\nM: I like the stainless steel set. I’ll take two, please.\nW: Sure. Anything else?\nM: My friends also like reading. Do you have any bookmarks?\nW: Yes. These are made of traditional Korean paper and are popular as souvenirs. They’re $5 each.\nM: They look nice. I’ll take two, please.\nW: Okay. So, two stainless steel spoon and chopstick sets and two bookmarks, correct?\nM: That’s right. I also have a discount coupon. Can I use it?\nW: Sure. You’ll get 10% off the total.\nM: Great. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 Forest Trail Run에 참여할 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "수영 강습이 있어서",
+    "발목을 심하게 다쳐서",
+    "행사 장소가 너무 멀어서",
+    "다른 달리기 대회와 일정이 겹쳐서",
+    "팀 프로젝트를 위한 온라인 회의가 있어서"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Emily, how was the running event last weekend?\nW: It was great. I twisted my ankle a little, but it’s fine now.\nM: That’s a relief. You seem to be enjoying running these days.\nW: Yes. I’m already looking for another event to join.\nM: Then you might like this. There’s the Forest Trail Run in Maple Woods next Saturday.\nW: Maple Woods? That’s not far from my house. What time does it start?\nM: At 10 a.m. It begins at the entrance of Maple Woods.\nW: Oh, I can’t make it then.\nM: Is it because of your swimming lessons? I thought you have them on Saturday mornings.\nW: Not anymore. They’re during the evenings on the weekdays now.\nM: Then do you have something else at that time?\nW: Yes. I have an online meeting for my team project. I can’t miss it.\nM: I see. Maybe next time."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Desert Night Sky Tour에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "활동 내용",
+    "소요 시간",
+    "준비물",
+    "예약 방법",
+    "투어 비용"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, look! I found a tour we could take during our trip next month.\nM: A Desert Night Sky Tour? That sounds interesting. What can we do on the tour?\nW: We can see bright stars through the telescopes and take pictures with the beautiful night sky in the desert.\nM: That sounds fantastic. But how long is the tour?\nW: About 4 hours. It starts at 6 p.m.\nM: Then we can eat dinner earlier before the tour starts. Is there anything we need to bring?\nW: Just a warm jacket. Telescopes and blankets are provided by the tour company.\nM: Good. I heard it does get pretty cold at night in the desert.\nW: Right. Oh, look. The tour costs $50 per person.\nM: That’s reasonable. It also says warm tea and light snacks are included in the cost.\nW: That makes it even better.\nM: Then let’s book it now."
+  },
+  {
+   "no": 9,
+   "prompt": "Ugly Fruit and Vegetable Market에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "River Farm Square에서 열린다.",
+    "모양이 특이하거나 작은 흠이 있는 과일과 야채를 판매한다.",
+    "방문객은 입구에서 무료 음료를 받을 수 있다.",
+    "지역 식당 요리사들이 간단한 요리를 만드는 법을 보여 준다.",
+    "판매 수익금의 일부는 환경 보호 활동에 사용된다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, listeners. This is Hannah from Green Valley Radio. Here’s a weekend event worth checking out. The Ugly Fruit\nand Vegetable Market will be held at River Farm Square on November 14th. This market sells fruits and vegetables with\nunusual shapes or small marks, but they’re still fresh to eat. Visitors can get free drinks at the entrance. The drink is\nmade from the ugly carrots and apples. Also, chefs from local restaurants will show how to make simple dishes with the\nproduce on site. You can even buy the fruits and vegetables at a lower price than usual. Part of the sales will be used\nto support the local children center. So join us for this wonderful event!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 주문할 샤워 커튼을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_10_g2_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Amy. I’m looking for a shower curtain for my new house. Could you help me choose one?\nW: Sure. What’s your budget?\nM: I don’t want to spend more than $25. I already spent too much on moving.\nW: That makes sense. Which pattern do you prefer?\nM: I don’t want a floral one. It wouldn’t match my bathroom.\nW: Okay. Next is the length of the curtain.\nM: Since my shower isn’t very tall, I don’t need the extra­long one.\nW: All right. Now you’re down to two options. One is machine­washable, and the other is not.\nM: Which one would you choose?\nW: I’d choose the machine­washable one. It’s easy to maintain at home and you don’t have to replace it often.\nM: Good point. I’ll order that one."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I can come by around 6 p.m. on Friday.",
+    "I’m supposed to buy a new suit today.",
+    "I’ll wear another suit this weekend.",
+    "I dropped it off here last Friday.",
+    "I don’t need the suit anymore."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Hello. Welcome to Skyblue Cleaners. How can I help you today?\nM: Hi. I’d like to have this suit cleaned. I need it this weekend.\nW: Sure. It’ll be ready by Friday afternoon. When would you like to pick it up?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I see. More color would make it stand out.",
+    "Oh, I missed that. I’ll change it right away.",
+    "That’s okay. We can reschedule the meeting.",
+    "No worries. I already checked the meeting room.",
+    "I’m sorry, but I can’t attend the meeting tomorrow."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Angela, I looked over the sales report you prepared for tomorrow’s team meeting. It needs a small correction.\nW: Oh, I see. What should I fix?\nM: The year on the chart should be changed to this year, not last year.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Okay. I’ll pack those shoes right now.",
+    "Don’t worry. I’ll wash them afterward.",
+    "Sorry. I’ll clean the court after the lesson.",
+    "You’re right. I should bring another racket.",
+    "That’s fine. The lesson will be held outside."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "[Cell phone rings.]\nW: Hello,　David. What’s up?\nM: Hi, Jenny. Do you have a minute? I have a question about my first badminton class next week.\nW: Sure. I’m glad you signed up. What do you need to know?\nM: Well, I bought a new racket, but I’m not sure about the shoes. Can I just wear my everyday shoes?\nW: Hmm, you shouldn’t wear outdoor shoes on the indoor court.\nM: Really? Is that going to be a problem?\nW: Yes. Outdoor shoes can bring dirt or dust onto the court, which could make the court slippery.\nM: Oh, that could be dangerous during practice.\nW: You’re right. Don’t you have a pair of indoor shoes?\nM: Yes. I have the one I only use at the fitness center.\nW: Then you should bring those.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Alright. I’ll take pictures of your family for free next time.",
+    "No thanks. My family already decided not to take pictures.",
+    "Really? Then I should call to make a reservation before it ends.",
+    "No problem. I’ll pick up your printed photo from the studio now.",
+    "My mistake! I should’ve taken my family photo at another studio."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hey, Kelly. Look at this photo on my phone! It just arrived from the studio.\nW: Wow, it looks amazing! Is this your family photo?\nM: Yes. We took it at the new photo studio downtown to celebrate my parents’ 40th anniversary.\nW: You all look happy. I’ve been thinking about taking a family photo, too.\nM: Oh, really? Then you should consider going to that place. They provide matching clothes and items for free.\nW: Wow, that’s so wonderful.\nM: Yeah. Since they recently opened, they’re offering a 30% discount right now. I can give you the contact information if\nyou’re interested.\nW: Thanks. I’ll talk about this with my family.\nM: Definitely. Oh! And I heard that the discount event goes until the end of this month.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Anna가 Ryan에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "We could ask the community center to extend the donation period.",
+    "How about donating the usable items to the community center?",
+    "We should sell the usable items before moving day.",
+    "Why don’t we buy a few more moving boxes first?",
+    "Let’s take the useful things to the new apartment."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Anna and Ryan are a married couple who are moving to a new apartment next month. While packing, they set aside\nseveral boxes of household items they haven’t used for years. Ryan wants to throw them away to reduce the number of\nboxes before moving day. However, Anna notices that many of the items are still clean and usable. She remembers that\nthe community center is collecting household items this weekend for local families who need them. Anna thinks donating\nthose items would be better than throwing them away. So, Anna wants to suggest to Ryan that they take the items in\ngood condition to the community center. In this situation, what would Anna most likely say to Ryan?\n16번부터 17번까지는 두 번 들려줍니다.\n16번과 17번\n다음을 듣고, 물음에 답하시오.\nW: Hello, students. It’s good to see you again. Last time, we looked at traditional houses in different countries. Today, I’d\nlike to introduce structures that have remarkable records. First, the Great Wall of China is the longest defensive\nstructure in the world. It stretches for thousands of kilometers across mountains and deserts. Second, the Eiffel Tower\nin Paris is the most visited monument in the world that people pay to enter. Many people buy a ticket to go up and\nenjoy the city view from the tower. Next, Sagrada Familia in Barcelona is famous for having the longest construction\nperiod. Construction began in 1882 and continued for more than a century. Lastly, Angkor Wat in Cambodia is the largest\nreligious structure in the world. Visitors often need several hours to look around it. These structures were built for\ndifferent purposes, but each stands out for its own impressive record. Now, let’s watch a short video about these\nstructures.\n다시 한 번 듣겠습니다.\nW: Hello, students. It’s good to see you again. Last time, we looked at traditional houses in different countries. Today, I’d\nlike to introduce structures that have remarkable records. First, the Great Wall of China is the longest defensive\nstructure in the world. It stretches for thousands of kilometers across mountains and deserts. Second, the Eiffel Tower\nin Paris is the most visited monument in the world that people pay to enter. Many people buy a ticket to go up and\nenjoy the city view from the tower. Next, Sagrada Familia in Barcelona is famous for having the longest construction\nperiod. Construction began in 1882 and continued for more than a century. Lastly, Angkor Wat in Cambodia is the largest\nreligious structure in the world. Visitors often need several hours to look around it. These structures were built for\ndifferent purposes, but each stands out for its own impressive record. Now, let’s watch a short video about these\nstructures."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "structures known for holding amazing records",
+    "difficulties in preserving historic buildings",
+    "materials used to build famous structures",
+    "architectures representing traditional beauty",
+    "world­famous landmarks with unusual shapes"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, students. It’s good to see you again. Last time, we looked at traditional houses in different countries. Today, I’d\nlike to introduce structures that have remarkable records. First, the Great Wall of China is the longest defensive\nstructure in the world. It stretches for thousands of kilometers across mountains and deserts. Second, the Eiffel Tower\nin Paris is the most visited monument in the world that people pay to enter. Many people buy a ticket to go up and\nenjoy the city view from the tower. Next, Sagrada Familia in Barcelona is famous for having the longest construction\nperiod. Construction began in 1882 and continued for more than a century. Lastly, Angkor Wat in Cambodia is the largest\nreligious structure in the world. Visitors often need several hours to look around it. These structures were built for\ndifferent purposes, but each stands out for its own impressive record. Now, let’s watch a short video about these\nstructures.\n다시 한 번 듣겠습니다.\nW: Hello, students. It’s good to see you again. Last time, we looked at traditional houses in different countries. Today, I’d\nlike to introduce structures that have remarkable records. First, the Great Wall of China is the longest defensive\nstructure in the world. It stretches for thousands of kilometers across mountains and deserts. Second, the Eiffel Tower\nin Paris is the most visited monument in the world that people pay to enter. Many people buy a ticket to go up and\nenjoy the city view from the tower. Next, Sagrada Familia in Barcelona is famous for having the longest construction\nperiod. Construction began in 1882 and continued for more than a century. Lastly, Angkor Wat in Cambodia is the largest\nreligious structure in the world. Visitors often need several hours to look around it. These structures were built for\ndifferent purposes, but each stands out for its own impressive record. Now, let’s watch a short video about these\nstructures."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 구조물이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "the Great Wall",
+    "the Eiffel Tower",
+    "Sagrada Familia",
+    "the Colosseum",
+    "Angkor Wat"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, students. It’s good to see you again. Last time, we looked at traditional houses in different countries. Today, I’d\nlike to introduce structures that have remarkable records. First, the Great Wall of China is the longest defensive\nstructure in the world. It stretches for thousands of kilometers across mountains and deserts. Second, the Eiffel Tower\nin Paris is the most visited monument in the world that people pay to enter. Many people buy a ticket to go up and\nenjoy the city view from the tower. Next, Sagrada Familia in Barcelona is famous for having the longest construction\nperiod. Construction began in 1882 and continued for more than a century. Lastly, Angkor Wat in Cambodia is the largest\nreligious structure in the world. Visitors often need several hours to look around it. These structures were built for\ndifferent purposes, but each stands out for its own impressive record. Now, let’s watch a short video about these\nstructures.\n다시 한 번 듣겠습니다.\nW: Hello, students. It’s good to see you again. Last time, we looked at traditional houses in different countries. Today, I’d\nlike to introduce structures that have remarkable records. First, the Great Wall of China is the longest defensive\nstructure in the world. It stretches for thousands of kilometers across mountains and deserts. Second, the Eiffel Tower\nin Paris is the most visited monument in the world that people pay to enter. Many people buy a ticket to go up and\nenjoy the city view from the tower. Next, Sagrada Familia in Barcelona is famous for having the longest construction\nperiod. Construction began in 1882 and continued for more than a century. Lastly, Angkor Wat in Cambodia is the largest\nreligious structure in the world. Visitors often need several hours to look around it. These structures were built for\ndifferent purposes, but each stands out for its own impressive record. Now, let’s watch a short video about these\nstructures."
+  }
+ ]
+}

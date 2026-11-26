@@ -1,0 +1,292 @@
+{
+ "id": "2026_9_g1",
+ "year": "2026",
+ "month": "9",
+ "grade": "고1",
+ "school": "인천",
+ "title": "2026학년도 9월 고1 전국연합학력평가 영어",
+ "duration": 1557.0,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_9_g1.mp3",
+ "starts": [
+  179.1,
+  240.3,
+  315.9,
+  386.2,
+  471.8,
+  553.7,
+  640.5,
+  742.8,
+  838.4,
+  919.9,
+  1015.1,
+  1059.6,
+  1098.9,
+  1181.7,
+  1270.5,
+  1345.4,
+  1345.4
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학생의 AI 사용 실태를 조사하려고",
+    "정보 활용 능력 시험을 안내하려고",
+    "AI 탐지 시스템의 도입을 공지하려고",
+    "과제 제출 방식에 대한 의견을 구하려고",
+    "AI를 활용한 학습 방법의 장점을 설명하려고"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Good morning, students. This is your principal. I’d like to share an\nimportant announcement with you today. Recently, we have noticed\nthat many students use AI too much for their assignments. While AI\ncan be helpful, assignments should still reflect each student’s own\nthinking and effort. Students should use AI responsibly and not copy\nanswers directly from it. For this reason, starting next month, we’ll\nintroduce an AI­detection system to limit the overuse of AI. This\nsystem will ensure that you don’t rely on AI alone but instead use\nit responsibly as a learning tool. Thank you for listening."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "갈등은 미루지 않고 빨리 해결할수록 좋다.",
+    "사과할 때는 핑계 없이 진심을 담아야 한다.",
+    "말보다 행동으로 보여주는 사과가 더 중요하다.",
+    "갈등을 조정하려면 중립적인 입장을 유지해야 한다.",
+    "감정을 드러내지 않는 사과가 더 효과적일 수 있다."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hey, Jake. Did you apologize to your sister today?\nM: Yeah, Mom. I told her I was sorry.\nW: And did she accept it?\nM: No, she just walked away.\nW: What exactly did you say?\nM: I said, “I’m sorry, but I only yelled because you kept bothering me.”\nW: Jake, that’s not a real apology.\nM: Why not? I said I was sorry.\nW: When you apologize, you shouldn’t make excuses. If you want her\nto accept your apology, say sorry without defending yourself, and\nactually mean it.\nM: Then, do you think I should apologize one more time?\nW: Yes. Sincerely say you’re sorry, without any excuses.\nM: Okay. I’ll try again."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "모둠 수업은 학생의 수업 참여도를 높인다.",
+    "다양한 글을 통해 학생의 배경지식을 넓혀야 한다.",
+    "글을 따라 써보게 하는 것은 글의 구조 습득에 도움이 된다.",
+    "친숙한 예를 들어 새로운 개념을 더 쉽게 가르칠 수 있다.",
+    "글을 쓰기 전에 많은 아이디어를 떠올리게 하는 것이 좋다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello, teachers! Welcome back to Great Teachers Tips! When you\nteach a new concept, do your students look confused? Here’s a\nsimple tip: use something familiar as an example. When you connect\nan idea to something students already know, you can help students\nunderstand the idea more easily. For example, when you introduce\nparagraph structure as a new concept, compare it to a hamburger:\nthe top bun is the topic sentence, the meat and vegetables are the\ndetails, and the bottom bun is the closing sentence. Try this tip for\neffective teaching."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_9_g1_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "W: Hi, Jun! Come on in. [Pause] I finished making my hobby room.\nM: Nice! I’ve been curious about how you set it up.\nW: I put a yoga mat on the floor. How do you like the striped pattern?\nM: I love it. Placing the piano under the window is a great idea.\nW: I can’t wait to play it in the warm natural light. Do you see that\ncanvas next to the armchair? I painted it!\nM: Amazing. You’ve always liked painting.\nW: Right. And look, I added a round light on the wall for reading in the\narmchair.\nM: Good idea. The two speakers on the bookshelf are perfect for soft\nmusic.\nW: Exactly. Playing quiet music is great while doing yoga.\nM: Absolutely. This room is ideal for enjoying your hobbies."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "간식 구매하기",
+    "보드 게임 준비하기",
+    "의자와 책 배치하기",
+    "행사 일정 포스터 게시하기",
+    "학생 자원봉사자 모집하기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Mia, we are almost ready for next week’s Digital­Free Learning Day.\nI’m so excited that students will do some activities without digital\ndevices.\nW: Right. Let’s check what we’ve prepared so far. [Pause] I bought\nsome snacks for the students.\nM: Okay. I put up the event schedule posters in each hallway.\nW: How about the indoor activities in the quiet reading area?\nM: Those are ready. I set up chairs and books.\nW: Good. I’ve gathered student volunteers to help run the activities.\nAnd how is the outdoor mini Olympics going?\nM: It’s all set! But if it rains, students won’t be able to participate in it.\nW: Then I’ll prepare board games as a backup by tomorrow.\nM: Perfect."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$20",
+    "$23",
+    "$30",
+    "$33",
+    "$38"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Good afternoon! Welcome to Danny Brothers’ Cookie Shop. How can\nI help you today?\nM: Hi, I’m looking for a cookie gift set. Could you tell me about your\noptions?\nW: Sure. We have Set A with mini cookies for $20, and Set B with\njumbo cookies for $35.\nM: Hmm, I think I’ll take Set B.\nW: Great. Would you like gift wrapping?\nM: Is it free?\nW: No, the price of the wrapping is $3. But it comes with a special\nbox and a ribbon.\nM: Alright, I’ll add it.\nW: So, that’s one Set B with gift wrapping, right?\nM: Yes. Oh, I have a Sweet Day coupon.\nW: Perfect! That gives you $5 off the price when your total is over $30.\nM: Awesome! Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 Robotics Experience Expo에 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "수학 동아리 모임이 있어서",
+    "과학 프로젝트를 끝내야 해서",
+    "사촌의 피아노 콘서트에 가야 해서",
+    "부모님 대신 동생을 돌봐야 해서",
+    "친구와 로봇을 만들어야 해서"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "[Cell phone rings.]\nM: Hey, Emma. It’s Mark. Are you going to the Robotics Experience\nExpo this Saturday?\nW: I really want to, but I can’t make it this time.\nM: Really? Is it because you have to finish your science project?\nW: No, I submitted it yesterday.\nM: Then do you have your math club meeting? I remember you usually\nmeet on Saturdays.\nW: Not this week. The meeting was moved to next Tuesday.\nM: Hmm.... Then do you need to look after your younger brother for\nyour parents?\nW: No. My parents will be home this weekend.\nM: So why can’t you go? You were so excited about building robots.\nW: Actually, I promised my cousin I’d go to his piano concert. He’s\nbeen practicing for months, so I really want to be there.\nM: Oh, that’s sweet. I think you should go then. I hope he does well!\nW: Thanks. I’ll join the expo next time."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Island Medical Volunteer Program에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "활동 기간",
+    "활동 장소",
+    "지원 방법",
+    "참가 비용",
+    "참가 인원수"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hey, Ryan. What are you reading on our department notice board?\nM: It’s about the Island Medical Volunteer Program during this coming\nwinter break.\nW: Sounds special. What kind of program is it?\nM: It’s a volunteer program where doctors and medical students like us\nvisit a small island to provide free check­ups for the residents.\nW: Wow, that seems very meaningful. How long does it last?\nM: For a week, from January 4th to 10th.\nW: Where exactly is it held?\nM: On Silver­Star Island, two hours by boat from the mainland. Why\ndon’t we join?\nW: Let’s do it. How can we apply for the program?\nM: We first have to apply online.\nW: I see. How much does it cost to participate?\nM: Nothing, it’s free. Also, meals and housing are provided.\nW: Sounds like a good opportunity."
+  },
+  {
+   "no": 9,
+   "prompt": "SkySymphony에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "리조트 본관 로비에서 진행된다.",
+    "LED 스크린과 스피커를 이용한다.",
+    "조명 1,000개가 음악에 맞춰 움직인다.",
+    "오전 10시부터 30분 간격으로 시작한다.",
+    "테마는 계절에 따라 달라진다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Are you looking for an exciting show? Come and experience the\nSkySymphony at Aurora Sky Resort. It takes place in the lobby of\nthe main building. The show uses LED screens and speakers,\nturning the lobby into a true theater of lights and sounds. The\nhighlight of the show is that 1,000 lights hanging from the high\nceiling move up and down with music. Each show starts every hour\nfrom 10 a.m. to midnight. It lasts about five minutes. The theme of\nthe show changes by season, so you can discover something new\neach time you visit. Bring your family and friends and enjoy your\nday with a truly memorable moment!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 주문할 스마트 사진 액자를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_9_g1_q10.png",
+   "answer": 3,
+   "group": null,
+   "script": "M: Hey, Olivia. Could you help me with shopping?\nW: Sure, Adam. What are you looking for?\nM: I’m choosing a smart photo frame. I want to display a lot of photos\non my desk. Can you help me choose one?\nW: Sure. What do you need to consider first?\nM: Well, I don’t want to spend more than $100.\nW: Got it. What about storage capacity?\nM: I need at least 32GB of storage capacity. I have many family\nphotos to upload.\nW: Okay. Do you have any preference for the screen size?\nM: A 16­inch screen seems too big for my desk.\nW: In that case, only two options are left. How about buying the one\nwith the sleep mode? It saves power when not in use.\nM: Sounds good! I’ll take the one with the sleep mode. I’ll order it\nright now."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Check if your alarm is working properly.",
+    "You should tell the teacher why you were late.",
+    "It’s better to fix the alarm rather than buy a new one.",
+    "Put your alarm far from your bed to make you get up.",
+    "You should bring an extra alarm in case one is broken."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Mathew, these days I’m late quite often because I keep turning off\nmy alarm and falling back to sleep.\nM: Yeah, I’ve noticed you’ve been late for class.\nW: I need to fix this. What do you think would actually help me?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I see. Let’s visit the eye clinic after school tomorrow.",
+    "That’s okay. I had my eyes checked six months ago.",
+    "Oh no. Don’t rub your eyes even if they hurt again.",
+    "I’m sorry. I shouldn’t have broken your glasses.",
+    "Don’t worry. Those glasses look good on you."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Mom, I can’t see the board clearly at school these days.\nW: Really? I guess your eyesight has gotten worse.\nM: Maybe. I think I need to have an eye checkup.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "No way. The price is the most important factor for me.",
+    "Well, choose locally grown fruits with low food mileage.",
+    "Sure. You can save money when you buy local food.",
+    "Don’t worry about the food mileage if the food is fresh.",
+    "Then, you should put food mileage on the products’ labels."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Eric, why are you reading the labels so carefully?\nM: I’m checking the food mileage.\nW: Food mileage? I’ve never heard of that.\nM: It’s a number that shows how far food travels before it reaches us.\nW: Oh, okay. Why is it important?\nM: If food comes from far away, it uses more fuel.\nW: Then, that means more pollution, which is bad for the environment.\nM: Exactly. That’s why I check the food mileage on the labels.\nW: I see. I’d love to join you in helping the environment.\nM: Great! Follow my example. I usually buy food produced nearby.\nW: Could you be more specific about it?\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I’m sorry. I didn’t know you dropped your phone.",
+    "Yeah. I sold my old phone last month on the site.",
+    "I agree. I think fixing the phone is not that expensive.",
+    "Amazing! I really appreciate you buying me a new one.",
+    "Great! I should check that site and see what’s available."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Jessie, you look worried. What’s wrong?\nW: Well, I think I should get a new phone.\nM: A new phone? Didn’t you just get one recently?\nW: Yeah.... But I dropped it last week, and the screen is broken badly.\nM: Oh no. Is it still usable?\nW: Not really. It freezes a lot, and fixing it would cost too much.\nM: Then, it would be better to get a new one.\nW: But I feel bad because my parents just spent so much money on\nmy phone.\nM: Hmm.... Why don’t you think about a used phone?\nW: I haven’t thought about that. I heard there’s a website where people\nbuy and sell used phones.\nM: That could be worth trying before buying a brand­new one. You\nmight even find something you like there.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Henry가 Jenny에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Will you tell the teacher to delay the book talk?",
+    "Please lend me the book you bought at the event.",
+    "Let’s skip the book talk and watch a movie instead.",
+    "Could you ask the author my question for me at the book talk?",
+    "What’s your opinion about the main character’s final decision?"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Henry and Jenny are classmates who love reading, and soon a\nfamous writer will give a book talk at their school for his most\nrecent novel. Henry has been looking forward to the event. He\nreally wants to ask the author a question about the main character’s\nfinal decision. However, because he has a family trip on the same\nday, he cannot attend the book talk. He heard Jenny is going to the\nbook talk. So, Henry wants to tell Jenny to ask his question since\nhe won’t be there. In this situation, what would Henry most likely\nsay to Jenny?\n16번부터 17번까지는 두 번 들려줍니다.\n[16~17] 다음을 듣고, 물음에 답하시오.\nW: Hello, Fresh Living subscribers. Every year, tons of food are thrown\naway just because we didn’t store it the right way. Today, I’d like\nto talk about how we can lower food waste by storing food in the\nproper way. First, don’t put onions in the refrigerator because they\nsoften easily. Store them in a cool, dry place with good airflow.\nNext, keep cabbage in the refrigerator’s vegetable drawer. It lasts\nlonger when you don’t remove the outer leaves which protect the\ninner part from drying out. And what about bread? If you want to\nkeep it fresher for longer, store it in the freezer. Finally,\nmushrooms go bad fast since they take in water easily. Keeping\nthem in a paper bag makes them stay dry and fresh for a longer\ntime. With these simple tips, we can keep our food fresh and less\nfood goes into the trash. Have a good day.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "ways to properly store food to reduce food waste",
+    "importance of food choices in maintaining health",
+    "recipes you can make with everyday food",
+    "effects of climate change on the food we eat",
+    "reasons fresh foods are better than processed ones"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, Fresh Living subscribers. Every year, tons of food are thrown\naway just because we didn’t store it the right way. Today, I’d like\nto talk about how we can lower food waste by storing food in the\nproper way. First, don’t put onions in the refrigerator because they\nsoften easily. Store them in a cool, dry place with good airflow.\nNext, keep cabbage in the refrigerator’s vegetable drawer. It lasts\nlonger when you don’t remove the outer leaves which protect the\ninner part from drying out. And what about bread? If you want to\nkeep it fresher for longer, store it in the freezer. Finally,\nmushrooms go bad fast since they take in water easily. Keeping\nthem in a paper bag makes them stay dry and fresh for a longer\ntime. With these simple tips, we can keep our food fresh and less\nfood goes into the trash. Have a good day.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 음식물이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "onions",
+    "cabbage",
+    "apples",
+    "bread",
+    "mushrooms"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, Fresh Living subscribers. Every year, tons of food are thrown\naway just because we didn’t store it the right way. Today, I’d like\nto talk about how we can lower food waste by storing food in the\nproper way. First, don’t put onions in the refrigerator because they\nsoften easily. Store them in a cool, dry place with good airflow.\nNext, keep cabbage in the refrigerator’s vegetable drawer. It lasts\nlonger when you don’t remove the outer leaves which protect the\ninner part from drying out. And what about bread? If you want to\nkeep it fresher for longer, store it in the freezer. Finally,\nmushrooms go bad fast since they take in water easily. Keeping\nthem in a paper bag makes them stay dry and fresh for a longer\ntime. With these simple tips, we can keep our food fresh and less\nfood goes into the trash. Have a good day.\n다시 한 번 듣겠습니다."
+  }
+ ]
+}

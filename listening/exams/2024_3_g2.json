@@ -1,0 +1,292 @@
+{
+ "id": "2024_3_g2",
+ "year": "2024",
+ "month": "3",
+ "grade": "고2",
+ "school": "서울",
+ "title": "2024학년도 3월 고2 전국연합학력평가 영어",
+ "duration": 1539.5,
+ "totalPoints": 37,
+ "audio": "listening/audio/2024_3_g2.mp3",
+ "starts": [
+  197.9,
+  257.9,
+  340.1,
+  409.7,
+  489.1,
+  569.4,
+  650.2,
+  729.8,
+  817.2,
+  897.0,
+  977.8,
+  1022.9,
+  1072.0,
+  1148.1,
+  1238.3,
+  1316.2,
+  1316.2
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "꽃 사진 촬영 동아리 회원을 모집하려고",
+    "꽃 사진 촬영 시 유의 사항을 당부하려고",
+    "꽃 사진 촬영 행사가 취소됨을 공지하려고",
+    "꽃 사진 촬영에 적합한 장비를 소개하려고",
+    "꽃 사진을 촬영하기에 좋은 장소를 안내하려고"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Good morning, students. This is your vice principal, Mr. Gunning. I\nhave an announcement regarding our ‘Spring Flower Photo Day’\nevent this afternoon. As you know, we planned to take pictures of\nbeautiful spring flowers as we walk around our neighborhood. I\nregret to inform you that the event is canceled due to heavy rain. I\nunderstand you’ve been looking forward to it, but unfortunately it\nappears we won’t be able to get the best photos today. We will\nreschedule the event for a sunny day in the near future. Please\nunderstand that this decision was made to ensure that the event will\nbe a success."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "플래시 카드를 퀴즈에 활용하면 단어를 즐겁게 익힐 수 있다.",
+    "퀴즈를 내는 활동을 통해 학습자의 약점을 파악할 수 있다.",
+    "단어 학습에 가장 효과적인 방법은 개인마다 차이가 있다.",
+    "그림과 글이 함께 포함된 플래시 카드는 학습에 효과적이다.",
+    "플래시 카드를 활용한 단어 학습 프로그램 개발이 필요하다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Liam, what’s that bunch of paper in your hand?\nM: It’s a deck of flashcards for memorizing new words, but it doesn’t\nwork well for me.\nW: Really? Why not? I think flashcards are helpful for learning\nvocabulary.\nM: I thought so, too. But looking at the word on one side of the card\nand the meaning on the back is too boring.\nW: Hmm, how about using them in a more interesting way?\nM: A more interesting way to use flashcards? What do you mean?\nW: Ask a friend to read the meaning on the back, and you shout out the\nword as the answer.\nM: Oh, you mean like asking and answering questions in a quiz?\nW: That’s right. By using flashcards for quizzes, you can learn new\nwords while having fun.\nM: I like your idea a lot. I’ll give it a try!"
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "깔끔한 방을 유지하기 위해 필요 없는 물건을 없애야 한다.",
+    "쓰레기를 버릴 때는 환경에 미칠 악영향을 고려해야 한다.",
+    "공간의 기능과 종류에 따라 효과적인 정리 방법이 다르다.",
+    "사용하지 않는 물건은 보관하기보다 기부하는 것이 낫다.",
+    "상자를 이용하면 물건을 효과적으로 보관할 수 있다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, everyone. I’m Charlie Goodman, your speaker today. I’ll be\ndiscussing the most effective way to maintain an organized room.\nLet’s start by reflecting on the items in your room. Do you really\nuse everything every day? Probably not. The most important thing\nto do to keep a clean room is to get rid of things you no longer\nneed. Don’t keep your room filled with items untouched for more\nthan six months. If you haven’t used an item in six months, it likely\nmeans you won’t use it again! If you remove unnecessary items,\nyou can keep your room nice and neat."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_3_g2_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "W: I’ve just finished setting up my booth to sell used items. How does\nit look?\nM: Wow! Everything looks nice, especially the banner hanging under\nthe roof. People can see it well.\nW: I think so, too. I also hope people like this striped dress in the\ncorner.\nM: I bet they will. What about the wooden box here? Is it a used one,\ntoo?\nW: Yes. To make it look better, I put some flowers in it.\nM: They really catch the eye. Also, the shoes on the table look almost\nnew.\nW: I haven’t worn them much because they are a bit small for me. So\nI’ve decided to sell them. The guitar beside the table is almost new,\ntoo.\nM: Oh, I like it the most. I hope you can sell everything you prepared!"
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 남자에게 부탁한 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "설문 결과 정리하기",
+    "원인 조사하기",
+    "그래프 제작하기",
+    "사진 고르기",
+    "데이터 전송하기"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: We’re almost done with our report on climate change. Why don’t we\ncheck it together to see if everything is okay?\nM: That’s a good idea. Are you sure we included every graph we made?\nW: Yes, they are all there in the report. They clearly show the causes\nof climate change that we’ve researched.\nM: Good to hear that. How about the pictures? We’ve chosen the five\nbest pictures.\nW: They look very convincing. What do you think about the part\ndiscussing\nthe\nstudents’\nawareness?\nMany\nof\nour\nfriends\nparticipated in our survey.\nM: The survey results show that many students know how serious it is.\nHow about the action plans?\nW: We have two action plans here, but I think we need more. Could\nyou send me the data from our research?\nM: Sure. I’ll send the data this afternoon."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$25",
+    "$29",
+    "$31",
+    "$34",
+    "$36"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Honey, how about getting a pizza from Toby’s Place for dinner?\nM: Sounds great! Let’s try the new delivery app that I downloaded\nrecently. [Pause] Hmm... How about a potato pizza?\nW: I like that idea. How much is one large potato pizza?\nM: It’s $25. Oh, we have to order a minimum of $30 for delivery.\nW: Then we can add some drinks. How much is a cola?\nM: One small can is $2, and a large one is $3.\nW: Then let’s order two large cans.\nM: Great, one large potato pizza and two large cans of cola. Now we\ncan place the order.\nW: Is there a delivery fee?\nM: Normally we have to pay $5, but it’s free now because of the app\npromotion. So I’ll pay using the app.\nW: Thank you. I’m starving. I hope it gets here quickly."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 공연 동영상 파일을 보내줄 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "동영상을 촬영하지 않아서",
+    "부원들의 동의를 구해야 해서",
+    "동영상 파일을 갖고 있지 않아서",
+    "공연을 성공적으로 마치지 못해서",
+    "학교 홍보 영상에 나오고 싶지 않아서"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hi, Kathy. How was your drama club’s performance last week?\nW: It was a huge success. Everyone liked it.\nM: Good to hear that. Then, can I include your performance video in\nour school promotion video? Did anyone record it?\nW: Yes, Mark recorded it.\nM: Great! Could you send me the video file then?\nW: Sorry, I can’t send it to you now.\nM: Why not? Is it because you don’t have the video file?\nW: No, that’s not it. Mark sent me the file yesterday.\nM: Then, you don’t want to be on the promotion video?\nW: I’m okay with it. The problem is, without the club members’\napproval, I cannot send the file to anyone outside the club.\nM: Oh, I see. Can you ask your club members about it?\nW: Sure. Once they say it’s fine, I’ll let you know."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, 학급 캠핑에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "참여 학생 수",
+    "날짜",
+    "대여 물품",
+    "비용",
+    "도착 시간"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "[Telephone rings.]\nW: Green Forest camping site. How can I help you?\nM: Hi, this is Daniel Baker, a teacher from Simon High School. I’m\norganizing a class camping trip for 25 students. Do you have a\ncamping site available?\nW: Certainly, when do you plan on camping?\nM: From April 13 to 14.\nW: Let me see. [Typing] We have spots available for your students on\nthat day. Do you want to reserve them now?\nM: Yes, please. Do you provide a tent rental service as well?\nW: Absolutely. We offer tents that are big enough for six people. We\nalso have sleeping bags for rent.\nM: Sounds good. I’ll rent five tents and 25 sleeping bags.\nW: Alright, the total cost would be $90. You can pay it in advance or\nonsite.\nM: I’ll pay onsite. Thanks, and see you then."
+  },
+  {
+   "no": 9,
+   "prompt": "2024 AI Expo에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "5월 27일과 28일에 진행된다.",
+    "올해의 주제는 학교에서의 AI 활용이다.",
+    "50개가 넘는 국가에서 채택된 AI 기술을 경험할 수 있다.",
+    "AI가 그려 주는 초상화를 받을 수 있다.",
+    "웹사이트에서 20% 할인된 가격에 입장권을 구입할 수 있다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, listeners! Let’s dive into the world of Artificial Intelligence at\nthe 2024 AI Expo. It will be held on May 27 and 28 at the city\nconvention center. This year’s theme is the use of AI in schools.\nFrom language learning to physical training, AI is widely used in\nschools. For just $20, you can experience new AI technologies that\nhave been adopted in more than 50 countries. Come and see the\nfuture of AI! And here’s the best part. You can get a special\nportrait drawn by AI used in art classes. If you purchase the\nadmission ticket on our website, you will get a 10% discount. Don’t\nmiss this chance to have an unforgettable AI experience!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 구매할 사진첩을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_3_g2_q10.png",
+   "answer": 1,
+   "group": null,
+   "script": "W: Dad, I found a website that provides a service to make photo\nalbums. How about creating one with the photos from our winter\nholiday?\nM: Great! Let me see. [Pause] Oh, it says all we need to do is choose\na few options and upload our photos.\nW: Right. First, let’s choose the cover material.\nM: Umm... Leather might be too heavy.\nW: You’re right. Let’s choose either paper or fabric.\nM: Okay. For the number of pages, is 40 too many?\nW: Yes. Let’s just go for 20 or 30 pages. What color would be good for\nthe cover?\nM: I want it to reflect our winter holiday. How about white?\nW: Perfect. That leaves us with two options.\nM: Then, let’s choose the cheaper one.\nW: Sounds great. I’ll choose the best pictures and upload them."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Fishing on the boat was the best for me.",
+    "My grandparents visited us last weekend.",
+    "I am so glad that you had a great time.",
+    "It took too long to get to the island.",
+    "Some activities were canceled."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: How was your weekend? Did you do anything special?\nM: Yes, my older brother and I visited my grandparents who live on a\nsmall island. We had a great time doing lots of outdoor activities\ntogether.\nW: That sounds lovely! What activity did you like the most there?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Good idea. I’ll go to the bookstore tomorrow.",
+    "I’m sorry, but I haven’t finished reading that book.",
+    "That’s okay. I’ve already returned the book to the library.",
+    "Not at all. I would be able to go to her birthday party.",
+    "Thank you. I’ve always wanted to write a book myself."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hey, Jessica. Have you bought a birthday present for Olivia yet?\nHer birthday is coming up soon.\nW: Oh, not yet. I’m struggling to think of something good for her. What\ndo you think she’ll like?\nM: I heard her favorite writer published a new book recently. How\nabout buying the book as her birthday present?\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Don’t worry. You can pay with a credit card.",
+    "I see. Then this one is a perfect choice for him.",
+    "It’ll be fine. Your husband can drop by and pick it up.",
+    "Really? You’d better apply sunscreen before going out.",
+    "Exactly. A product with strong sun protection is better."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hello, welcome to Glow Cosmetics Shop. How can I help you?\nW: Hi, I’m looking for sunscreen.\nM: Certainly. Is it for you, or someone else?\nW: It’s for my husband. He asked me to buy one for him.\nM: Okay, does your husband spend much time outdoors, playing sports,\nor working outside?\nW: No, not really. He works in an office and usually stays at home\nafter work.\nM: In that case, he might not need one with strong sun protection. A\nmild one is probably best for him.\nW: Okay. I’ll go with that.\nM: We have two types of sunscreen, spray and cream type. Which one\nwould he prefer?\nW: I’m not sure but I guess he is used to cream type.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Right. It’s better to hide weaknesses whenever possible.",
+    "Good luck. Show them who you are, and you’ll make it.",
+    "Of course. You can handle your homework effectively.",
+    "I agree. You can make your schedule using a planner.",
+    "Be careful! A weakness keeps you from growing up."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Ms. Williams! Do you have a minute?\nW: Sure. What is it?\nM: I have to write an essay to get a scholarship, but I don’t know what\nto write about.\nW: Maybe you can start by expressing your passion for learning and\nschool life.\nM: I already wrote about that, but it doesn’t seem good enough.\nW: Umm... How about mentioning a weakness you’ve worked on?\nM: Weakness? Wouldn’t that be a bad idea for an essay?\nW: Not necessarily. If you describe how you’ve been trying to deal\nwith it, your story will show your potential.\nM: Well, I used to put my work off until the last minute. But by using\na planner, I make my schedule on an hourly basis. Now I no longer\nhave any trouble finishing my work on time.\nW: That’s perfect! That will be a great story to include in your essay\nfor the scholarship.\nM: Thank you for your help! That actually makes me feel a lot more\nconfident.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Lucy가 James에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Why don’t we start a campaign to ban the use of plastic?",
+    "How about making posters with me about recycling?",
+    "Will you prepare for the student council meeting?",
+    "I want your opinion on the school art festival.",
+    "Let me tell you how to recycle properly."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Lucy is the head of her school’s student council. She is concerned\nabout the lack of proper recycling practices among students. She\nnotices that many students are not aware of the problem. To\naddress this issue, she decides to create posters to emphasize the\nimportance of recycling. However, she lacks confidence in her\ndrawing skills. Lucy wants to seek help from her friend James, as\nhe is talented in art and passionate about the environment. Lucy\nthinks collaborating with him will result in effective poster designs.\nSo, she wants to suggest to James that they work together on the\nrecycling posters. In this situation, what would Lucy most likely say\nto James?\nLucy:\n16번부터 17번은 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nM: Hello, students. Today, I’d like to talk about four great inventions in\nhistory. Throughout history, humans have invented things that have\ntransformed how we live. One of the most important inventions is\nthe wheel. This simple yet powerful invention revolutionized\ntransportation. The wheel made it possible to travel far and wide,\ntrade goods, and explore new lands. Another important invention is\nthe printing press, which enabled books to be printed much faster.\nThis change affected how knowledge and education spread. Next is\nthe light bulb. It lengthened our days, allowing for nighttime\nactivities and opened the door to many other modern technologies.\nThe last invention I’d like to mention is the telephone. With the\ntelephone, people could speak to each other instantly regardless of\ndistance. As a result of this transformation, people are connected as\nnever before, in business and social life. These are just a few\nexamples of the many inventions that have changed the course of\nhuman history."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "historical events that inspired inventions",
+    "how inventions are unexpectedly created",
+    "hidden stories behind scientific inventions",
+    "unique inventions based on cultural identities",
+    "inventions that affected human life and history"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, students. Today, I’d like to talk about four great inventions in\nhistory. Throughout history, humans have invented things that have\ntransformed how we live. One of the most important inventions is\nthe wheel. This simple yet powerful invention revolutionized\ntransportation. The wheel made it possible to travel far and wide,\ntrade goods, and explore new lands. Another important invention is\nthe printing press, which enabled books to be printed much faster.\nThis change affected how knowledge and education spread. Next is\nthe light bulb. It lengthened our days, allowing for nighttime\nactivities and opened the door to many other modern technologies.\nThe last invention I’d like to mention is the telephone. With the\ntelephone, people could speak to each other instantly regardless of\ndistance. As a result of this transformation, people are connected as\nnever before, in business and social life. These are just a few\nexamples of the many inventions that have changed the course of\nhuman history."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 발명품이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "wheel",
+    "printing press",
+    "steam engine",
+    "light bulb",
+    "telephone"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, students. Today, I’d like to talk about four great inventions in\nhistory. Throughout history, humans have invented things that have\ntransformed how we live. One of the most important inventions is\nthe wheel. This simple yet powerful invention revolutionized\ntransportation. The wheel made it possible to travel far and wide,\ntrade goods, and explore new lands. Another important invention is\nthe printing press, which enabled books to be printed much faster.\nThis change affected how knowledge and education spread. Next is\nthe light bulb. It lengthened our days, allowing for nighttime\nactivities and opened the door to many other modern technologies.\nThe last invention I’d like to mention is the telephone. With the\ntelephone, people could speak to each other instantly regardless of\ndistance. As a result of this transformation, people are connected as\nnever before, in business and social life. These are just a few\nexamples of the many inventions that have changed the course of\nhuman history."
+  }
+ ]
+}

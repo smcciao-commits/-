@@ -1,0 +1,292 @@
+{
+ "id": "2025_3_g2",
+ "year": "2025",
+ "month": "3",
+ "grade": "고2",
+ "school": "서울",
+ "title": "2025학년도 3월 고2 전국연합학력평가 영어",
+ "duration": 1571.7,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_3_g2.mp3",
+ "starts": [
+  160.9,
+  216.4,
+  306.3,
+  372.0,
+  450.0,
+  539.2,
+  613.6,
+  699.2,
+  782.7,
+  867.6,
+  959.3,
+  1000.8,
+  1043.2,
+  1126.5,
+  1203.0,
+  1283.7,
+  1283.7
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "자판기 추가 설치가 완료되었음을 알리려고",
+    "자판기 설치 장소가 변경된 이유를 설명하려고",
+    "자판기 설치에 관한 의견 수렴 결과를 공유하려고",
+    "자판기 고장으로 인해 사용이 제한됨을 공지하려고",
+    "자판기 판매 희망 품목에 관한 설문 참여를 요청하려고"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Good morning, students. This is the head of the student council and\nI have an important announcement today. Recently, our school has\ninstalled vending machines in the dormitory. But many students have\ncomplained that the items in the vending machines do not fully meet\ntheir tastes. To address this, we are conducting an online survey to\ngather your suggestions on what products you’d like to see in the\nvending machines. The survey link will be sent to you in a text\nmessage after this announcement. Please take a few minutes to\nanswer the survey by this Friday. Your opinion is important, and\nwe’re looking forward to receiving your ideas. Thank you!"
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "벽지의 색을 정할 때 공간의 크기를 고려하는 것이 중요하다.",
+    "어두운 색상의 벽지는 집중력 향상에 도움을 줄 수 있다.",
+    "천장과 벽의 색을 일치시키면 공간이 넓어 보인다.",
+    "조명의 색상으로 방의 분위기를 바꿀 수 있다.",
+    "가구의 배치에 따라 방의 공간감이 달라진다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Mr. Johnson, we’re almost done with the major decisions about the\ninterior design of your house. Now you just need to choose the\ncolor for your living room wall paper.\nM: That’s right. I’ve seen the color samples you’ve sent, but I can’t\ndecide which one to choose. Do you have any advice?\nW: Well, there’s one important thing you need to consider when you\nchoose a wall color.\nM: One important thing? What is it?\nW: If you go with light colors, they will make the space look larger and\nmore open.\nM: Interesting. So, dark colors make a space appear smaller?\nW: Exactly. This is because light colors reflect natural light and make a\nspace appear larger to the eyes.\nM: Hmm... Since my living room is a bit small, I’ll go with white.\nW: That’s a great choice! It’s always important to consider the size of\nthe space when choosing a wall paper color. A light color like white\nwill definitely create a sense of openness in your living room.\nM: Thank you for helping me."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "노인에게 디지털 기술 활용 교육을 제공해야 한다.",
+    "노인을 위한 맞춤형 디지털 기기를 개발해야 한다.",
+    "노인을 위한 대면 서비스를 계속 운영해야 한다.",
+    "노인을 대상으로 하는 금융 범죄를 예방해야 한다.",
+    "노인이 디지털 기술에 적응하지 못하는 이유를 이해해야 한다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, everyone. Today, I am going to talk about how we can\nsupport senior citizens in the digital age. You may have heard that\nmany seniors are struggling with digital technologies in their daily\nlives, such as ordering food at kiosks or using mobile banking apps.\nBecause they are not familiar with these digital services, seniors\nmay find it difficult to keep up with all the changes in today’s\nworld. That’s why we need to provide them with digital education.\nBy teaching seniors how to utilize digital skills, we can help them\nnavigate modern life smoothly and they won’t feel left behind."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_3_g2_q4.png",
+   "answer": 3,
+   "group": null,
+   "script": "W: I’ve just finished setting up the band rehearsal room. How does it\nlook?\nM: Wow! I like that banner on the wall. It’s really eye­catching.\nW: I agree. What do you think about the position of the drum set below\nthe banner?\nM: It looks good. In that position, the drummer can lead our band\neasily.\nW: That’s what I intended.\nM: I also see you’ve set up three microphones. That should be perfect\nwhen many singers want to sing together.\nW: Exactly. And check out this triangle­shaped guitar. Isn’t it cool?\nM: It sure is! I’ve never seen a guitar like that before. It really stands\nout.\nW: I think so, too. And I placed the keyboard next to the guitar so that\nour band members can communicate easily.\nM: That’s smart. This setup is perfect for our band."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "짝 명단 만들기",
+    "열쇠고리 포장하기",
+    "기념품 주문하기",
+    "인사말 가르치기",
+    "전통 공예 재료 준비하기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Ms. Anderson, are we all set for the culture exchange program with\nthe French students?\nW: It’s going well, Mr. Grant. Do you want to go over what we’ve done\nso far?\nM: Sure. I’ve been teaching our students some basic French greetings,\nand they’ve been practicing their welcome speech.\nW: That sounds nice. Your efforts will definitely help the exchange\nstudents feel welcome. I’ve prepared all the traditional craft\nmaterials for them.\nM: It would be great if the students could work in pairs for the\ntraditional crafts session.\nW: Exactly. I’ve already made a list of pairs. I paired one student from\nour school with a student from France.\nM: Good. And I’ve ordered keyrings to use as souvenirs. They should\narrive this afternoon.\nW: Let me know if you need any help.\nM: Actually, there is one thing. Could you wrap the keyrings when they\narrive? I think I won’t have time for that.\nW: Of course, I’d be happy to help you with that."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 2,
+   "choices": [
+    "$18",
+    "$27",
+    "$30",
+    "$36",
+    "$40"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Welcome to Gardener’s! How can I help you?\nM: Hi! I’d like to add some new flowers to my garden.\nW: That’s wonderful! What flowers do you have in mind?\nM: I like lilies. How much are they?\nW: They’re $4 each.\nM: I’ll take five lilies. Can you recommend any other flowers? I was\nthinking of mixing a few different types.\nW: In that case, how about pairing them with some tulips?\nM: Oh, that sounds great. How much are the tulips?\nW: They’re half the price of lilies — just $2 each.\nM: Great. I’ll take five tulips, then.\nW: Five lilies and five tulips, right? When you buy 10 flowers or more,\nwe offer a 10% discount.\nM: Thank you. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 학급 사진 대회에 참가하지 못한 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "사진을 실수로 삭제해서",
+    "야외에서 촬영된 사진이 없어서",
+    "사진 제출 마감 날짜를 착각해서",
+    "사진의 크기가 조건에 맞지 않아서",
+    "학급 친구들이 사진 찍는 것을 싫어해서"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hey, Betty. Did you get the result of the class photo contest?\nW: Unfortunately, my class couldn’t even take part in the contest.\nM: No way! What happened? Your classmates love taking photos.\nW: Yeah, we often take pictures together.\nM: Then you could have submitted one of your existing photos. Was\nthere any unexpected problem like the size requirement of the\nphoto?\nW: No, the size met the requirements. And we were okay with the fact\nthat we should submit a photo taken outdoors.\nM: Hmm... Then what was the problem? You didn’t accidentally delete\nthe photo for the contest, did you?\nW: No. The truth is I thought the deadline was 17th but it was 12th.\nM: Oh, no. I’m sorry to hear that. But don’t beat yourself up about it\ntoo much. Everyone makes mistakes sometimes.\nW: Thanks. But I still feel so bad about it."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, 2025 Aquathlon에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "경기 종목",
+    "경기 날짜",
+    "등록 방법",
+    "참가비",
+    "경기 장소"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Have you heard about the 2025 Aquathlon?\nW: No, I haven’t. What is it?\nM: It’s a competition that combines swimming and running. It’s coming\nup soon.\nW: That sounds great! I’ve competed in several swimming events, but\nnever anything like this. Are you going to participate?\nM: Absolutely. I’ve been training for both swimming and running.\nW: When is the event?\nM: It’s on May 24th.\nW: I’d like to join, too. Have you completed the registration process?\nM: Not yet. I heard we need to register online by filling out a form.\nLet’s sign up together.\nW: Sounds good. How about training together before the event?\nM: Great idea. The competition will be held at Blue River. Why don’t\nwe find a similar place to practice?\nW: I know the best place. Let’s get started this weekend!"
+  },
+  {
+   "no": 9,
+   "prompt": "Sunnyville Pet Fair에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "토요일에 개최된다.",
+    "반려동물 행동 전문가의 개 훈련 프로그램이 있다.",
+    "반려동물 의상 경연이 열린다.",
+    "수제 장난감을 판매하는 부스가 있다.",
+    "행사 당일에 현장에서 입장권을 판매한다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, listeners. I’m Hannah Carter from the Sunnyville Pet Fair\norganizing committee. I’m excited to announce that this year’s pet\nfair will take place on Saturday, April 19th, at the Sunnyville\nCommunity Park. During the event, there will be a dog training\nprogram by Mike Harris, a well­known pet behavior expert. We will\nalso host a pet costume contest, where pets can show off their best\noutfits and compete for prizes. Additionally, there will be booths\nselling healthy snacks and handmade toys for your pets. Tickets\ncost $5 per person, and all the profits will be donated to local\nanimal shelters. Please note that tickets are available online only, so\nbe sure to book in advance. If you’re a pet lover, don’t miss out on\nthis exciting event!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 구매할 가방 장식을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_3_g2_q10.png",
+   "answer": 2,
+   "group": null,
+   "script": "M: Wow! Where did you buy this cute bunny bag charm on your bag? I\nwant to get one, too.\nW: Oh, I bought this on a shopping app. I’ll show you. [Tapping Sound]\nDo you want to pick one together?\nM: Sure! My bag is small, so I want to pick something that matches it.\nW: No problem. As you can see, there are three size options here. I\ndon’t think the large size would suit your bag.\nM: You’re right. A small or medium size would be great.\nW: Next, you have to choose the color of the bunny. What’s your\nfavorite color?\nM: Well, I’m okay with anything except green.\nW: I get it. How about the material?\nM: Between fabric and plastic, I’ll go with plastic. It won’t get wet\neasily.\nW: Excellent choice! Then, we have two options left. What’s your\nbudget?\nM: I’d like to keep it under $15. So I’ll take this one.\nW: Perfect! It’ll look great on your bag."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Thanks. I’ve always wanted to see their live performance.",
+    "You’re right. The concert is going to be canceled anyway.",
+    "Sorry. I can’t make it to the live chat with the band.",
+    "Oh, no. You shouldn’t have missed this special opportunity.",
+    "Wonderful! I look forward to seeing you play in the festival."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Olivia, did you hear the news about the music festival this weekend?\nW: No, I didn’t. Is there anything special about it?\nM: Actually, I heard your favorite band will be playing music live at the\nfestival on Sunday. I thought you might like it.\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "You have to be careful not to lose your locker key.",
+    "You can borrow an extra copy from our school library.",
+    "You shouldn’t have sold your book to a second­hand bookstore.",
+    "You are allowed to take notes in your science textbook.",
+    "You could have chosen another topic for the project."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: I can’t find my science textbook anywhere! I really need it now for\nmy science project.\nM: That sounds frustrating. Maybe you left it in your desk drawer or in\nyour school locker.\nW: I already checked both places, but I couldn’t find it. What should I\ndo?\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Yes. I’ll copy motivational quotes in my planner.",
+    "Of course. Reminders have already been sent to me.",
+    "I guess so. Using apps can be distracting sometimes.",
+    "Exactly! You need to submit your report on your own.",
+    "Absolutely! This app will help you solve your problem."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Jenny, I’m having trouble sticking to my study plans these days.\nHow do you handle it?\nW: For me, things have improved a lot since I started using a\nscheduling app.\nM: Really? I’d love to hear more.\nW: It’s called “Study Detector,” and it has several useful features that\nhelp me stay on track.\nM: What features does it have?\nW: First of all, it tracks how much time I study each day, week, and\nmonth, and then provides me with a report of my progress.\nM: That’s amazing!\nW: It is! It also sends me reminders that help me stay focused on my\nschedule.\nM: That sounds great! Are there any other features?\nW: Yes. It even sends me famous quotes that motivate me to study.\nM: Oh, I think I really need to try that app. Do you think it will help\nme too?\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Cheer up! You can win the competition next time.",
+    "I agree. Focusing on contemporary art is important.",
+    "Not really. I’ve never found any helpful drawing classes.",
+    "Good for you! You might have a more meaningful experience.",
+    "Never mind. I can start fresh on a new social media platform."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: I’ve been feeling down lately about my art.\nM: Really? What’s wrong?\nW: I keep posting my drawings online, but only a few people view my\nblog to look at them. It’s so disappointing.\nM: I understand how you feel, but isn’t it great to create something\nmeaningful for yourself?\nW: Of course it is. But I’d like to share my art with other people and\nhear from them about my work.\nM: Then how about finding another way to connect with people and\nshare your work?\nW: Another way? Like what?\nM: You can join an art community or local art club and discuss your\nwork with others at offline meetings.\nW: That’s a good idea. I’ve never thought about connecting with people\nin person. I think I’ll look into it.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Anthony가 Emma에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I’m not sure. I won’t be a responsible leader like you.",
+    "I don’t think I can help you. I’ve already joined another team.",
+    "I’m afraid I can’t. But I’ll recommend a close friend instead.",
+    "My pleasure! I’m honored to be able to join the team again.",
+    "That’s right. I had to quit the badminton team due to injury."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Emma is the captain of her school badminton team. Her team is\nplanning to participate in the upcoming tournament, but one of the\nteam members recently got injured. Emma feels a strong\nresponsibility to find a replacement as the team leader. Then she\nthinks of Anthony, who used to be a badminton team member. So\nshe asks Anthony to join the team once again. However, Anthony is\nvery busy preparing for an important presentation next week. He\nthinks he cannot accept Emma’s request and thinks of another way\nto help her. He decides to recommend one of his close friends\ninstead. His friend is not only good at badminton, but has always\nwanted to join the badminton team. In this situation, what would\nAnthony most likely say to Emma?\nAnthony:\n16번부터 17번은 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nW: Hello, students. Have any of you visited a museum recently? If so,\nyou may have noticed some remarkable changes taking place.\nToday, I’d like to share some insights about the changes happening\nin museums. Now, traditional museums are being transformed by\nmodern technologies. The first technology I want to introduce is\nvirtual reality. Museums around the world are adopting virtual\nreality to change how visitors interact with historical objects. For\ninstance, visitors can now explore ancient buildings as if they were\nreal. Another technology being used in museums is 3D animation.\nThis brings historical scenes to life, showing how people lived in\nthe past. Animated displays allow visitors to experience historical\nevents in a more engaging way. Also, laser projection creates\ndynamic effects on gallery walls. Using this technology, museums\ncan highlight specific artworks and create fascinating environments\nthat enhance the viewing experience. Finally, 3D printing has\nopened up new possibilities for museums. This technology makes it\npossible to display accurate copies of delicate or rare items that\ncannot be exposed to the public. These technological innovations are\nmaking museum collections more accessible, interactive, and\nengaging than ever before."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "etiquette for using digital devices in museums",
+    "modern technologies transforming museum experiences",
+    "problems caused by rapid technological changes in museums",
+    "obstacles in integrating technologies in museum exhibitions",
+    "architectural technologies used in building museums"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. Have any of you visited a museum recently? If so,\nyou may have noticed some remarkable changes taking place.\nToday, I’d like to share some insights about the changes happening\nin museums. Now, traditional museums are being transformed by\nmodern technologies. The first technology I want to introduce is\nvirtual reality. Museums around the world are adopting virtual\nreality to change how visitors interact with historical objects. For\ninstance, visitors can now explore ancient buildings as if they were\nreal. Another technology being used in museums is 3D animation.\nThis brings historical scenes to life, showing how people lived in\nthe past. Animated displays allow visitors to experience historical\nevents in a more engaging way. Also, laser projection creates\ndynamic effects on gallery walls. Using this technology, museums\ncan highlight specific artworks and create fascinating environments\nthat enhance the viewing experience. Finally, 3D printing has\nopened up new possibilities for museums. This technology makes it\npossible to display accurate copies of delicate or rare items that\ncannot be exposed to the public. These technological innovations are\nmaking museum collections more accessible, interactive, and\nengaging than ever before."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 기술이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "virtual reality",
+    "motion tracking",
+    "3D animation",
+    "laser projection",
+    "3D printing"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. Have any of you visited a museum recently? If so,\nyou may have noticed some remarkable changes taking place.\nToday, I’d like to share some insights about the changes happening\nin museums. Now, traditional museums are being transformed by\nmodern technologies. The first technology I want to introduce is\nvirtual reality. Museums around the world are adopting virtual\nreality to change how visitors interact with historical objects. For\ninstance, visitors can now explore ancient buildings as if they were\nreal. Another technology being used in museums is 3D animation.\nThis brings historical scenes to life, showing how people lived in\nthe past. Animated displays allow visitors to experience historical\nevents in a more engaging way. Also, laser projection creates\ndynamic effects on gallery walls. Using this technology, museums\ncan highlight specific artworks and create fascinating environments\nthat enhance the viewing experience. Finally, 3D printing has\nopened up new possibilities for museums. This technology makes it\npossible to display accurate copies of delicate or rare items that\ncannot be exposed to the public. These technological innovations are\nmaking museum collections more accessible, interactive, and\nengaging than ever before."
+  }
+ ]
+}

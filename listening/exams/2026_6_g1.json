@@ -1,0 +1,292 @@
+{
+ "id": "2026_6_g1",
+ "year": "2026",
+ "month": "6",
+ "grade": "고1",
+ "school": "부산",
+ "title": "2026학년도 6월 고1 전국연합학력평가 영어",
+ "duration": 1490.9,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_6_g1.mp3",
+ "starts": [
+  166.6,
+  225.5,
+  304.9,
+  386.0,
+  468.9,
+  549.8,
+  634.9,
+  717.7,
+  798.2,
+  871.7,
+  948.0,
+  993.2,
+  1036.3,
+  1132.1,
+  1210.8,
+  1280.1,
+  1280.1
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "우정 사진 공모전 참가 방법을 안내하려고",
+    "교내 사진 전시회 일정 변경을 알리려고",
+    "우정 사진 공모전 수상자를 공지하려고",
+    "교내 사진 전시회 관람을 권유하려고",
+    "교내 행사에 재능 기부를 요청하려고"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Good morning, everyone! This is your student council president,\nKevin Davis. Starting today, our school is holding an exciting photo\nexhibition about friendship. The photos show the creativity of many\ntalented students. They are on display in the hallway next to the\nteachers’ office on the second floor. Please come and see the warm\nstories behind each photo. The exhibition only runs until this Friday,\nso don’t miss it this week!"
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "일의 결과보다는 과정에 의미를 두어야 한다.",
+    "힘들더라도 계획된 일을 미루지 않아야 한다.",
+    "충분한 휴식을 통해 스트레스를 해소해야 한다.",
+    "과제를 수행할 때 친구와 협력하는 것이 중요하다.",
+    "미리 계획을 세우는 것이 시간 관리에 도움이 된다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hey, Tommy, you look very tired. Are you okay?\nM: Mom, I’m so stressed because I need to finish three projects by\nnext Tuesday.\nW: That must be hard.\nM: Yeah, it’s difficult for me to do many things in a short time.\nW: Why don’t you make plans in advance? That will be helpful for you\nto manage your time.\nM: Will it really work?\nW: Absolutely. When you make plans in advance, you can finish your\nwork in time.\nM: But I think planning things is annoying.\nW: I know how you feel. But by doing so, you will be able to make the\nsituation better.\nM: Okay. I’ll give it a try this time.\nW: I’m sure making plans in advance will help on your time\nmanagement!\nM: Thanks, mom. You’re the best!"
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "정원 가꾸기를 통해 문제 해결 능력을 향상시킬 수 있다.",
+    "정원 가꾸기는 스트레스 해소와 정서 안정에 효과적이다.",
+    "식물을 건강하게 키우려면 책임감과 인내심이 필요하다.",
+    "각 식물의 특성을 아는 것은 정원 관리에 도움이 된다.",
+    "병충해를 예방하려면 정확한 원인 파악이 중요하다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, listeners! I’m your host, Justin Reed. Welcome to the World\nof Gardening. Do you think gardening is just about growing plants?\nIn fact, it is not. An interesting point about gardening is that it\nhelps you develop your problem­solving skills. When it comes to\ngrowing plants, you will face various challenges such as bugs,\nweeds, or plant diseases. To deal with any of these problems, you\nneed to identify their causes first. And then you apply the\nappropriate solutions. In the end, you can save your plants. That’s\nhow you can improve your problem­solving skills through gardening.\nSo, why not give it a try? Get your hands dirty and enjoy the\njourney!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_6_g1_q4.png",
+   "answer": 3,
+   "group": null,
+   "script": "W: Hey, Harry. I found an old photo in the drawer.\nM: Let me take a look. Umm.... Who’s the little girl in the sand?\nW: It’s me. I was making a sandcastle.\nM: It looks beautiful. I can see a boy blowing bubbles, too. Who’s he?\nW: That’s my brother.\nM: It seems like he’s having fun. Oh, there are two bikes near the tree.\nW: Yeah, we had left them there after riding around.\nM: And there’s a dog nearby, too.\nW: That’s my dog. He was playing with the ball.\nM: He’s cute. By the way, who’s that woman wearing a hat with the\nheart pattern?\nW: She’s my mom.\nM: It looks like you had a great time together!"
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "스크린 설치하기",
+    "의자 추가로 가져오기",
+    "마이크 점검하기",
+    "문자 메시지 보내기",
+    "공지 사항 게시하기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Ms. Lee, we’re almost done preparing for the “Meet the Mentor”\nevent for our students.\nW: Yeah. Now let’s go over everything once more. Did you send a text\nmessage to remind the mentor?\nM: Yes. She replied that she would definitely come.\nW: Great. Did you set up the screen in the auditorium?\nM: Yes, I did it yesterday.\nW: Perfect. Have you checked the microphone?\nM: I’ve tested it, and it works well.\nW: Nice. What else do we have to check?\nM: Have you posted the notice online?\nW: Yeah, I’ve already done it. By the way, how many students signed\nup?\nM: Forty­two. So, we’ll need more chairs.\nW: Then, I’ll bring a few more right away."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$100",
+    "$104",
+    "$110",
+    "$114",
+    "$120"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Welcome to All­Year Surf Zone. What can I help you with?\nM: Hello. My son and I would like to try indoor surfing.\nW: Have you ever surfed before?\nM: No, this is our first time.\nW: No problem. You guys can take a lesson for beginners. It’s fifty\ndollars per person, including surfboards.\nM: Sounds good. By the way, can we rent some surfwear?\nW: Sure. Ten dollars for adults and free for kids under eight.\nM: Perfect. My son is seven. I’d like one for each of us.\nW: Got it. We also offer a snack for four dollars per person. Would you\nlike that?\nM: No, thanks.\nW: Okay. Two people for the beginner’s lesson, one adult surfwear, and\none free kid surfwear, right?\nM: That’s correct. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 역사 현장 학습에 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "지역 축제를 위한 자원봉사를 해야 해서",
+    "K­pop 댄스 수업에 참여해야 해서",
+    "등록 기간 내에 신청하지 못해서",
+    "할머니 생신 파티에 가야 해서",
+    "과학 수업 과제를 끝내야 해서"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Stacy, why don’t we go on the history field trip together?\nW: Is it the one for this Saturday?\nM: That’s right. Registration ends soon, so we should hurry.\nW: I’d love to, but I can’t.\nM: Oh, I remember you said you’re going to your grandma’s birthday\nparty this Saturday.\nW: No. That’s actually next Saturday.\nM: Then, do you have to finish the assignment for our science class?\nW: Oh, I already did it yesterday!\nM: So, what’s stopping you from joining?\nW: Actually, I’ll be at the community center that day.\nM: Are you taking part in the K­pop dance class there?\nW: No. I need to do volunteer work for our local festival on that day.\nM: Oh, that’ll be a good experience.\nW: Yeah. Sorry for not going with you this time."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Premier Art Class에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "수업 내용",
+    "수업 기간",
+    "수업료",
+    "준비물",
+    "모집 제한 인원"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Emily, have you seen the poster about the Premier Art Class?\nW: No, I haven’t. What is it about?\nM: Well, it’s a class focusing on professional sketching techniques.\nW: Sounds interesting! Are you going to take the class?\nM: Yes, I’ve just signed up for it.\nW: Really? Then, when will the class be held?\nM: It will be held from July 20th to July 24th at the culture center.\nW: How much is the class fee?\nM: It’s a hundred dollars.\nW: Wow, it’s quite expensive.\nM: Right, but the instructor gives everyone one­on­one help. That’s\nwhy it is limited to only 5 students.\nW: That’s exactly what I　need. I’ll sign up then.\nM: Great. See you in class!"
+  },
+  {
+   "no": 9,
+   "prompt": "Silverwood Farmers’ Day에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "시청 앞 광장에서 열린다.",
+    "오전 9시부터 오후 5시까지 운영된다.",
+    "판매 품목에 고기와 채소가 포함된다.",
+    "인근 공영 주차장을 이용할 수 있다.",
+    "할인 쿠폰은 현장에서만 받을 수 있다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, everyone. This is Sarah Brown from the Silverwood City\nHall. Are you looking for fresh food items? Then, the Silverwood\nFarmers’ Day is the right choice. This one­day event will be held on\nJune 27th at the square in front of the City Hall. It runs from 9 a.m.\nto 5 p.m. Items for sale include meat, vegetables, and more. The\npublic parking lot nearby is available. For further details, visit the\nCity Hall website. You can also download a discount coupon on the\nwebsite. Don’t miss this special event!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 참가할 하프 마라톤을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_6_g1_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, have you searched for a half marathon for us?\nM: Yeah, I’ve just found a list here. Come and take a look.\nW: Let me see.... [Pause] August is too hot for running.\nM: Right. What about the entry fee?\nW: I want to keep the cost under $80 per person.\nM: I agree. Then, this one is out.\nW: How about the shuttle services? I think it’ll be better if they are\navailable.\nM: Yeah, that would be more convenient for us to get to the place. We\nhave two options left, then.\nW: So, which gift do you like for participating, socks or a T­shirt?\nM: I’d prefer socks.\nW: Then, this one is perfect for us!"
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I ordered a medium but got a large.",
+    "Well, this jacket is missing a button.",
+    "Sorry, but this item is not refundable.",
+    "I’d like to exchange it to a black one.",
+    "I want to pay for it with my credit card."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Welcome to Trendy Store. How can I help you?\nM: Hi, I bought a jacket for my son yesterday, but he doesn’t like this\ncolor. Here’s the receipt.\nW: Alright. Would you want it in another color or get a refund for it?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Oh, that is a problem for me.",
+    "Peanut cookies are my favorite.",
+    "I want to join the cooking class, too.",
+    "Instead, I made cookies with different shapes.",
+    "Why don’t you add some peanut butter next time?━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Amy, I baked these cookies in my cooking class. Would you like to\ntry one?\nW: They look tasty, but I’m allergic to peanuts. Are they safe for me?\nM: Actually, I put some peanut butter in them.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Then, we’ll offer a free meal during the flight.",
+    "Oh, I’m glad to have a seat next to them.",
+    "Sorry, but those seats are already taken.",
+    "Well, the airport is too far from here.",
+    "Okay, those seats are fine with me."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "[Telephone rings.]\nW: Hello, this is Good Travel Airlines. How may I help you?\nM: I have a flight reservation, but is it possible to make some changes?\nW: Certainly. Could I have your name and reservation number, please?\nM: My name is Mark Rogers, and my reservation number is GA702.\nW: Thank you. Let me check your reservation. One moment, please.\n[Typing sound] Is this the flight to New York on July 21st at 3 p.m.?\nM: Yes, that’s correct.\nW: Okay. So what changes would you like to make?\nM: I’d like to book two more seats.\nW: Sure. We still have a few left.\nM: Are there any seats available next to mine?\nW: I’m sorry. The seats directly behind yours are the only ones\navailable.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "That’s why I feel AI videos are fun to watch.",
+    "Your video will get a lot of likes from others.",
+    "I will organize the background music alone.",
+    "It is easy for me to make AI videos.",
+    "I think the waves look a bit strange."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Hey, you look really focused. What are you watching?\nW: I’m watching a very interesting video clip. It shows a man and a\ndolphin swimming together in the sea.\nM: That’s very eye­catching.\nW: It is, but I’m not sure whether it’s real or AI­generated.\nM: It seems real. But if you watch AI videos more closely, something\nmay look unnatural or move in awkward ways.\nW: Really? I didn’t know that.\nM: So, why don’t you try to find anything that looks unnatural in that\nvideo?\nW: Okay, let me try. [Pause] Oh, I found one here! Come and take a\nlook.\nM: What’s that?\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Mina가 Lucy에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "How about going to the beach some other day?",
+    "Let’s go back home before it starts to rain.",
+    "We can hike in the mountains on that day.",
+    "Did you cancel everything and stay home?",
+    "I already packed my things last night. [16～17] 다음을 듣고, 물음에 답하시오."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Mina and Lucy have been planning a trip to the beach during the\nsummer vacation. They are excited to enjoy the cool water and\nrelax together. A couple of days before their trip, Mina checks the\nweather forecast and discovers that heavy rain is expected on the\nvery day they plan to go. She gets worried because traveling in\nsuch weather could be dangerous. Wanting to avoid any risks, Mina\ndecides to suggest changing their plan to another day. In this\nsituation, what would Mina most likely say to Lucy?\n[16~17] 다음을 듣고, 물음에 답하시오.\nW: Hello, everyone. I’m Eve Miller, a nutritionist at the Core Health\nInstitute. Your brain can get tired easily due to stress and\noverwork. So, here are some foods to energize your brain. First,\navocado has healthy fats for the brain. By eating avocado, you can\nstay more focused throughout the day. Next, broccoli includes\nbrain­healthy nutrients such as vitamin K. Eating it everyday\nenhances communication among brain cells. Eggs are also a good\nsource of high­quality protein, which supplies the energy to boost\nyour concentration. Lastly, there is one other food helpful for your\nbrain. Blueberries are absolutely wonderful for your memory.\nHaving blueberries regularly can help prevent you from forgetting\nsomething important. Now, I’ll show you a video with some simple\nand easy recipes using these foods!"
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "tips for getting better sleep",
+    "foods to energize the brain",
+    "helpful foods to lose weight",
+    "easy recipes with video guides",
+    "traditional dishes in many countries"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hello, everyone. I’m Eve Miller, a nutritionist at the Core Health\nInstitute. Your brain can get tired easily due to stress and\noverwork. So, here are some foods to energize your brain. First,\navocado has healthy fats for the brain. By eating avocado, you can\nstay more focused throughout the day. Next, broccoli includes\nbrain­healthy nutrients such as vitamin K. Eating it everyday\nenhances communication among brain cells. Eggs are also a good\nsource of high­quality protein, which supplies the energy to boost\nyour concentration. Lastly, there is one other food helpful for your\nbrain. Blueberries are absolutely wonderful for your memory.\nHaving blueberries regularly can help prevent you from forgetting\nsomething important. Now, I’ll show you a video with some simple\nand easy recipes using these foods!"
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 음식이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "avocado",
+    "broccoli",
+    "almonds",
+    "eggs",
+    "blueberries"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hello, everyone. I’m Eve Miller, a nutritionist at the Core Health\nInstitute. Your brain can get tired easily due to stress and\noverwork. So, here are some foods to energize your brain. First,\navocado has healthy fats for the brain. By eating avocado, you can\nstay more focused throughout the day. Next, broccoli includes\nbrain­healthy nutrients such as vitamin K. Eating it everyday\nenhances communication among brain cells. Eggs are also a good\nsource of high­quality protein, which supplies the energy to boost\nyour concentration. Lastly, there is one other food helpful for your\nbrain. Blueberries are absolutely wonderful for your memory.\nHaving blueberries regularly can help prevent you from forgetting\nsomething important. Now, I’ll show you a video with some simple\nand easy recipes using these foods!"
+  }
+ ]
+}

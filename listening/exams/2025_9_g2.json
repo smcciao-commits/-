@@ -1,0 +1,292 @@
+{
+ "id": "2025_9_g2",
+ "year": "2025",
+ "month": "9",
+ "grade": "고2",
+ "school": "인천",
+ "title": "2025학년도 9월 고2 전국연합학력평가 영어",
+ "duration": 1477.2,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_9_g2.mp3",
+ "starts": [
+  151.8,
+  204.7,
+  286.5,
+  362.5,
+  442.4,
+  519.5,
+  601.6,
+  676.0,
+  755.1,
+  840.0,
+  924.4,
+  970.8,
+  1013.3,
+  1085.4,
+  1162.0,
+  1232.8,
+  1232.8
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "걷기 프로그램 시간 변경을 안내하려고",
+    "방과 후 프로그램 신청을 독려하려고",
+    "산책로 출입 금지 시간을 공지하려고",
+    "점심 식사 시간 준수를 당부하려고",
+    "새로 개설한 동아리를 홍보하려고"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Good afternoon, students. This is your principal, Ms. Johnson. I’d\nlike to announce that there has been a change of schedule for our\nweekly walking program, Step Together. It was originally supposed\nto take place every Monday after school, starting next week.\nHowever, it seems that many students are busy with club activities\nafter school. Therefore, in order to allow more students to\nparticipate, it’ll now be held at 1 p.m. during lunchtime. We hope\nthis change gives you the opportunity to enjoy meaningful moments\nwith your friends. We look forward to seeing you there!"
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "냉장고 문을 자주 여닫으면 전기가 낭비된다.",
+    "과도한 육류 섭취는 영양 불균형의 원인이 된다.",
+    "한 번 해동한 음식은 다시 냉동하지 않는 것이 좋다.",
+    "음식을 밀폐해서 보관하면 세균 증식을 억제할 수 있다.",
+    "오랫동안 냉동 보관한 음식을 먹는 것은 해로울 수 있다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Honey, how about having beef for dinner tonight? We have some in\nthe freezer.\nM: Great idea, but that beef has been in the freezer for so long. We’d\nbetter not eat it.\nW: Well, it’s been frozen this whole time, so it should be fine.\nM: Not really. Eating food that’s been kept frozen for a long time can\nbe harmful.\nW: Really? I thought it would be alright.\nM: Well, while freezing can slow bacteria growth in food, it cannot\ncompletely stop them from growing.\nW: Hmm, that makes sense.\nM: Besides, if we open the freezer often, the temperature inside doesn’t\nstay constant.\nW: Oh. That might also encourage bacteria growth.\nM: Correct! That’s why it can be harmful to eat food that’s been stored\nfrozen for a long time.\nW: I see. Let’s go grocery shopping for some beef then."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "무선 이어폰의 장시간 사용은 청력에 부정적인 영향을 미친다.",
+    "무선 이어폰은 주변 소음을 차단하여 집중력을 높일 수 있다.",
+    "보행 중 무선 이어폰 사용은 심각한 사고를 유발할 수 있다.",
+    "자전거를 탈 때 보행자를 배려하는 습관이 필요하다.",
+    "운동을 하면서 음악을 들으면 운동 효과가 커진다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hello, listeners. This is Life Advice for All. Nowadays, many people\nare using wireless earphones, especially while walking, because\nthey’re convenient to use. However, this could cause serious\naccidents. If you are only paying attention to music or other media\nin your wireless earphones, you might not hear your surrounding\nsounds. This can prevent you from recognizing and reacting to\ndangerous situations. For example, you may not notice when cars\nare coming towards you or when bicycles are passing by. For your\nown safety, please think twice about using wireless earphones when\nyou’re walking. I’ll be back with some more useful advice next time."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_9_g2_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: Honey, I just finished setting up the rooftop garden party for\ntomorrow. Have a look!\nW: That’s fantastic!\nM: I’m glad you like it. I put the party banner above the door. What do\nyou think?\nW: Perfect. And the striped sun umbrella is between the chairs.\nM: I hope it’ll give us enough shade.\nW: Me too. Where did you get the lamp on the table?\nM: I picked it up at the mall the other day. Its light creates a warm\natmosphere at night.\nW: Lovely. I also like the two flowerpots next to the wall.\nM: Those are gifts from my friends.\nW: That’s so kind of them. The round rug on the floor looks cozy and\ncomfortable.\nM: Yes, it’s for the kids. They can sit and play on it.\nW: Great. Let’s make the party unforgettable."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "이메일 보내기",
+    "선물 구매하기",
+    "팸플릿 인쇄하기",
+    "행사 장소 정하기",
+    "배경 음악 고르기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hey, Emily. The school art gallery event is only two weeks away.\nIs everything on track?\nW: Hi, Jake. I think so. Let’s go over the to­do list.\nM: Good idea. Did we decide on the location?\nW: Yes, we’re using the art room. It’ll be turned into the gallery.\nM: Awesome. How about the invitation emails?\nW: I sent them out last week. Most guests already said that they’ll\ncome.\nM: Great! And the event pamphlets are being printed. They’ll be ready\nin a few days.\nW: Wonderful. Have you chosen the background music?\nM: Yeah, we’ll go with classical music.\nW: That’s perfect. I think that would match the mood.\nM: We still need to buy gifts for the guests.\nW: That’s on me. I’ll take care of it.\nM: Thanks. I appreciate it."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$108",
+    "$120",
+    "$135",
+    "$150",
+    "$162"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Welcome to the Pet Hotel! How may I help you?\nM: Hi! I’m thinking of leaving my dog here for a couple of days. I’ll be\nout of town for a business trip.\nW: Alright! Exactly how long will your dog be staying here?\nM: Three nights. How much does it usually cost?\nW: It’s $40 per night. But if your dog is large, you’ll be charged an\nadditional $10 per night.\nM: Luckily, my dog is a small Maltese.\nW: Then, you don’t have to pay the extra fee. Will you need our\npick­up service? It costs $30.\nM: Yes, please. That’d be nice.\nW: Okay. Is it your first time here? If that’s the case, you can get a\n10% discount off the total price.\nM: That’s great! Yes, it’s my first time here.\nW: Alright. How would you like to pay?\nM: Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 특강에 참석할 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "발표 자료를 만들어야 해서",
+    "배구 경기에 참가해야 해서",
+    "물리학 과제를 해야 해서",
+    "아르바이트가 있어서",
+    "무릎을 다쳐서"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Sarah, have you heard about the special lecture at the community\ncenter this Saturday?\nW: Yeah, Brian. It’s a lecture on how to design effective presentation\nmaterials, right?\nM: Exactly! It’ll help you create impressive presentations. Do you want\nto sign up for it with me?\nW: I’d love to, but I can’t attend.\nM: Oh. Is it because you have a part­time job on weekends?\nW: No. I don’t work on weekends anymore.\nM: Hmm. Then, do you have to work on your physics assignment?\nW: I already finished it. Actually, I’m participating in a volleyball\nmatch.\nM: Really? You told me that you wouldn’t play this time, didn’t you?\nW: I’m filling in for Judy. She injured her knee last week.\nM: I see. Good luck!"
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Historical Costume Parade에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "장소",
+    "목적",
+    "날짜",
+    "참가 비용",
+    "등록 방법"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Ryan, have you heard about the Historical Costume Parade?\nM: No, I haven’t. Do people wear historical costumes at the parade?\nW: That’s right. It’s a good chance to experience wearing costumes\nfrom different eras.\nM: Sounds interesting. Where will it take place?\nW: It’ll be held at Central City Park.\nM: Okay. What’s this event for?\nW: Its main purpose is to celebrate the city’s cultural heritage, and to\ninform people about its history.\nM: That’s a great idea. When is it?\nW: October 11th. I saw an advertisement for it yesterday, and I signed\nup to be a costumed participant.\nM: Awesome. Can I sign up for it, too?\nW: Yeah. You have to fill out the registration form on the city’s official\nwebsite.\nM: Perfect. I’ll do that right away."
+  },
+  {
+   "no": 9,
+   "prompt": "2025 Brain Competition에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "고등학생을 대상으로 한다.",
+    "3시간 동안 진행된다.",
+    "두 번째 라운드에서 구술시험을 본다.",
+    "전자기기를 사용할 수 있다.",
+    "우승자는 상금을 받는다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello, students! The 2025 Brain Competition is coming up! This is\nan annual neuroscience competition for high school students. It’ll be\nheld on Saturday, September 13th, at the City Neuroscience Center.\nIt’ll last for three hours, beginning at 10 a.m. and ending at 1 p.m.\nThe competition will consist of two rounds. For the first round,\ncontestants will take a written exam, and the top nine contestants\nwill advance to the next round. For the second round, the remaining\nstudents will take an oral exam in front of three judges. Please\nremember that the usage of electronic devices is not permitted\nduring the competition. The winner will get a $500 cash prize and a\nchance to compete in the national competition. Join us for this\nexciting challenge!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 주문할 스마트 어항을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_9_g2_q10.png",
+   "answer": 3,
+   "group": null,
+   "script": "M: Honey, what are you looking at on your phone?\nW: I’m looking at smart fish tanks. If we had one, it’d be easier to\ntake care of our fish. Why don’t we get one of these?\nM: Sounds wonderful! Do you have a price in mind?\nW: I’d like to spend less than $200.\nM: Okay. What about the tank volume?\nW: I think 13L is too small.\nM: Right. Let’s buy a bigger one.\nW: Yeah. Now let’s pick one function. We can choose either the smart\nheating system or the automatic feeder.\nM: Which do you want?\nW: I’d like the automatic feeder because that’s a really convenient\nfunction.\nM: I agree. Then, there are two options left. Which frame color do you\nprefer?\nW: Black doesn’t go well with our living room, so I’d prefer a different\ncolor.\nM: Alright. In that case, let’s order this model."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Sure. We can bake them together at my place.",
+    "Good. Share these cookies with your friends.",
+    "Sorry. I haven’t prepared presents for you.",
+    "Okay. I won’t burn my cookies next time.",
+    "No. She’ll be too busy to help you."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Peter, I want to prepare something special for my mom’s birthday,\nbut I’m not sure what to do. Do you have any ideas?\nM: How about baking cookies? I’ve got a great recipe that your mom\nwill definitely love.\nW: That sounds perfect! She loves having cookies with coffee. Can you\nshow me how to make them?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "You’re right. The construction is now complete.",
+    "I see. I’ll take the subway tomorrow instead.",
+    "No way. I’ve just missed the bus to school.",
+    "No problem. I can drive you to work.",
+    "Of course. I’ll come home early."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Cassie, I think you’ll have to find another way to get to school\ntomorrow instead of taking the bus.\nW: Why, Dad? The bus is the fastest way to school.\nM: I know. But the road on your bus route will be under construction\ntomorrow, so traffic will be heavy.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Okay. I’ll let you know if I find any.",
+    "Right. I have to finish my experiment.",
+    "No thanks. I already used some earlier.",
+    "Not really. I don’t need any special effects.",
+    "Never mind. I’ll take care of it after your show."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "고르시오. [3점]\nW: Hi, Matt. Have you finished your science club experiment?\nM: Yeah, I just wrapped it up. How’s your magic club’s show coming\nalong?\nW: It’s going well. But I still have one thing left to do.\nM: What do you have to do?\nW: I need to set up the stage in the hall, but I’ve run into a problem.\nM: What’s wrong?\nW: I need some dry ice for my performance, but I don’t have any.\nM: Why do you need dry ice?\nW: I need it to create special effects. It’s really important.\nM: Actually, our science club used dry ice yesterday. There might be\nsome left in the storage room.\nW: Really? Could you go and check? It’d be great if I could use some.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Sorry. I don’t have any large sizes left.",
+    "Great. Let’s register for the tournament.",
+    "Thank you. I hope I can change the size.",
+    "Excellent. I’d like to buy that uniform, too.",
+    "Don’t worry. I’m sure you’ll win the matches."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "고르시오. [3점]\nW: Hi, Chris. Are you on your way to practice for the badminton\ntournament?\nM: Yeah, I am. How’s your training for the matches going?\nW: It’s going well. By the way, have you ordered our team uniforms\nyet?\nM: Of course, I have. The uniforms will have each of our names on\nthem.\nW: Oh, does that mean it’s not possible to change sizes anymore?\nM: I’m not sure, but you cannot change it once they’ve printed your\nname on it. Do you want a different size?\nW: Yes. I asked for a medium, but I want a large instead.\nM: Why? A medium would fit you well.\nW: Well, I think a bigger uniform would be more comfortable while\nplaying in the matches.\nM: Then, I’ll check whether they’ve already printed your name on your\nuniform.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Jack이 Emma에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I wonder how I could decorate my booth.",
+    "Please donate your items for the flea market.",
+    "You should always be kind to your customers.",
+    "Who will participate in the charity event with us?",
+    "Can you tell me what items sell well at flea markets?"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Jack and Emma are close friends. Emma invites Jack to join her at\na local charity flea market this upcoming weekend. While Emma has\nparticipated in flea markets several times before, Jack is new to\nthis kind of event. He’s looking forward to it, and excitedly\nsearches for items to sell. But he wonders what kinds of things\nattract more customers at flea markets. He thinks Emma can help\nhim choose the right items to sell. So, Jack wants to ask Emma\nabout what kinds of items would be popular at flea markets. In this\nsituation, what would Jack most likely say to Emma?\n16번부터 17번까지는 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nW: Hello, students. As you know, animals build many different\nstructures in the natural world. Today, we’ll talk about the different\nfunctions that these structures have. First, an important function of\nanimal­built structures is to provide protection from predators. For\nexample, beavers build dams to create ponds where they can\nconstruct their homes. These structures provide a shelter from\npredators. Next, animal structures can also play a role in\ntransportation. Some species of ants use their own bodies to create\nbridges. These bridges provide a path over obstacles and allow\nthem to search for food at an increased speed. In addition, animal\nstructures can serve as traps. This can be observed in web­building\nspiders, who weave elaborate webs of sticky spider silk that\ncapture prey. Finally, animal structures can serve as a means of\nattracting mates. During mating season, some species of birds\ncollect small branches, leaves, and colorful objects to create\nstructures that attract the attention of females. Now, let’s watch a\nshort video about these incredible animal structures.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "animals that can cause damage to buildings",
+    "various functions of structures built by animals",
+    "construction skills that humans can learn from animals",
+    "effective ways for animals to escape from danger",
+    "creative hunting strategies of different animals"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. As you know, animals build many different\nstructures in the natural world. Today, we’ll talk about the different\nfunctions that these structures have. First, an important function of\nanimal­built structures is to provide protection from predators. For\nexample, beavers build dams to create ponds where they can\nconstruct their homes. These structures provide a shelter from\npredators. Next, animal structures can also play a role in\ntransportation. Some species of ants use their own bodies to create\nbridges. These bridges provide a path over obstacles and allow\nthem to search for food at an increased speed. In addition, animal\nstructures can serve as traps. This can be observed in web­building\nspiders, who weave elaborate webs of sticky spider silk that\ncapture prey. Finally, animal structures can serve as a means of\nattracting mates. During mating season, some species of birds\ncollect small branches, leaves, and colorful objects to create\nstructures that attract the attention of females. Now, let’s watch a\nshort video about these incredible animal structures.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 동물이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "beavers",
+    "ants",
+    "spiders",
+    "bees",
+    "birds"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students. As you know, animals build many different\nstructures in the natural world. Today, we’ll talk about the different\nfunctions that these structures have. First, an important function of\nanimal­built structures is to provide protection from predators. For\nexample, beavers build dams to create ponds where they can\nconstruct their homes. These structures provide a shelter from\npredators. Next, animal structures can also play a role in\ntransportation. Some species of ants use their own bodies to create\nbridges. These bridges provide a path over obstacles and allow\nthem to search for food at an increased speed. In addition, animal\nstructures can serve as traps. This can be observed in web­building\nspiders, who weave elaborate webs of sticky spider silk that\ncapture prey. Finally, animal structures can serve as a means of\nattracting mates. During mating season, some species of birds\ncollect small branches, leaves, and colorful objects to create\nstructures that attract the attention of females. Now, let’s watch a\nshort video about these incredible animal structures.\n다시 한 번 듣겠습니다."
+  }
+ ]
+}

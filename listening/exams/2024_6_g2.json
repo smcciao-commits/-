@@ -1,0 +1,292 @@
+{
+ "id": "2024_6_g2",
+ "year": "2024",
+ "month": "6",
+ "grade": "고2",
+ "school": "부산",
+ "title": "2024학년도 6월 고2 전국연합학력평가 영어",
+ "duration": 1492.8,
+ "totalPoints": 37,
+ "audio": "listening/audio/2024_6_g2.mp3",
+ "starts": [
+  186.7,
+  243.2,
+  316.8,
+  387.3,
+  471.4,
+  537.8,
+  613.5,
+  696.3,
+  780.4,
+  858.0,
+  949.3,
+  998.6,
+  1044.7,
+  1119.7,
+  1206.6,
+  1294.2,
+  1294.2
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "휴식의 중요성을 강조하려고",
+    "직업 상담 전문가를 모집하려고",
+    "스트레스 받는 이유를 설명하려고",
+    "회사의 상담 프로그램을 홍보하려고",
+    "상담 프로그램의 일정 변경을 공지하려고"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Good morning, employees of ABC Company. I’m Tina White, a\nsenior manager. I’ve noticed that many of you have been\nexperiencing difficulties at work and are under a lot of stress these\ndays. Your well­being is important to us. Therefore, the company is\noffering a counseling program during lunchtime every day starting\nnext week. Special counselors have been invited to help you deal\nwith your stress. I’m confident that our counseling program will help\nyou feel happier at work. If you are interested in this program,\nplease register for a session. I’m sure it’ll be worth your time."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "운동을 마친 후 스트레칭을 하는 것이 필요하다.",
+    "천천히 걷는 것은 근육통 완화에 도움이 된다.",
+    "과도한 스트레칭은 부상을 유발할 수 있다.",
+    "자신의 몸에 맞는 식단을 구성하는 것이 중요하다.",
+    "몸과 마음의 건강을 위해 규칙적인 운동을 해야 한다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Jane, are you feeling okay?\nW: Well, I exercised at the gym and my muscles are hurting a bit now,\nDad.\nM: Did you stretch after exercising?\nW: No. I only stretched before.\nM: Oh. You should definitely stretch after you finish exercising.\nW: Really? I thought stretching after working out would put more\npressure on my muscles.\nM: That’s not true. Stretching afterward helps to loosen your tight\nmuscles and reduce injuries.\nW: That makes sense. Are there any other benefits?\nM: Absolutely. It allows both your body and mind to slow down and\nhelps you feel relaxed.\nW: All right. I’ll give it a try. Thanks for your tip, Dad."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "감정 일기 쓰기는 자신의 감정을 이해하는 데 도움이 된다.",
+    "자신의 감정을 절제하며 의견을 전달하는 것이 필요하다.",
+    "타인과의 유대감은 감정 일기의 공유를 통해 증진된다.",
+    "일기 쓰기는 규칙적인 생활 습관 형성에 효과적이다.",
+    "가족과의 대화로 부정적인 감정을 해소할 수 있다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Good afternoon, listeners! Do you have a hard time figuring out\nyour emotions? Have you suddenly gotten really angry but didn’t\nknow exactly what made you feel that way? If so, keeping an\nemotion diary can be a powerful tool for understanding your\nfeelings. In an emotion diary, you write down in detail how you feel\nin each situation. This will give you an opportunity to understand\nwhy you’re feeling a certain way. Writing an emotion diary won’t be\neasy at first, but you’ll soon get used to it. After the break, I’ll tell\nyou how to keep an emotion diary effectively. Stay tuned!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_6_g2_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: Hi, Julia. You were amazing in the play yesterday.\nW: Thanks, Mason! Here’s a picture from the dressing room after the\nplay. Do you want to take a look?\nM: Sure. [Pause] I see you’re holding the flowers I gave you.\nW: They’re so beautiful. Thanks again.\nM: My pleasure. What are those two boxes on the floor?\nW: I stored some items for the play in them. I needed many items\nbecause I played both a prisoner and the queen.\nM: You wore that striped T­shirt on the hanger as a prisoner, right?\nW: Yes. Do you remember that crown on the table?\nM: I remember! You wore that as the queen. Wasn’t it difficult to\nchange your costume during the play?\nW: Not really. But it was hard to see my entire outfit in that\nstar­shaped mirror on the wall.\nM: I understand. Anyway, you did a great job."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "저녁 식사 요리하기",
+    "여분 접시 확인하기",
+    "와인 준비하기",
+    "케이크 사러 가기",
+    "공항에 마중 나가기"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, Mr. and Mrs. Brown are visiting today! What time are they\nsupposed to come?\nM: At seven o’clock. We haven’t seen them for a long time. I’m so\nexcited.\nW: Me too. Let’s check if everything is ready.\nM:　I’m done cooking tonight’s dinner.\nW: Thanks for doing that. By the way, do we have extra plates?\nM: Yes, I already checked. There are plenty. Should we prepare some\nwine?\nW: No, they told me they’re bringing some. Did we get something for\ndessert?\nM: Oh, I forgot. I’ll go buy a cake.\nW: Then I’ll go to the airport to pick them up.\nM: Perfect. Thank you."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$14",
+    "$19",
+    "$24",
+    "$28",
+    "$33"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Welcome to the World History Museum. How may I help you?\nW: Hi, I’d like to purchase three admission tickets. What’s the fee for\nan adult?\nM: An adult ticket is $10.\nW: What about for seniors?\nM: If you look at the price board, people over 65 years of age are\ncharged $8.\nW: Okay, then I’ll buy one senior ticket, and two adult tickets.\nM: May I see an identification card for the senior?\nW: Yeah, just a moment. Here it is.\nM:　Thank you. And today is National Museum Day, so you can get 50%\noff the total price.\nW: Wow, that’s amazing!\nM: If you need audio guides, they’re $5 each.\nW: No, thanks. Only the tickets, please. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 송별회에 참석할 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "동생을 돌봐야 해서",
+    "클럽 활동에 가야 해서",
+    "마라톤에 참가해야 해서",
+    "병원 진료를 받아야 해서",
+    "교수님과 면담을 해야 해서"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hey, Tim. I didn’t see you in Professor Jackson’s class yesterday.\nM: Hi, Kayla. I had a little stomachache. Did I miss anything important?\nW: As you know, Professor Jackson is retiring next week, so the\nstudents have decided to throw him a farewell party.\nM: Sounds great. When is it?\nW: It’s this Saturday at 12 p.m. in Diamond Hall.\nM: Umm... This Saturday? I can’t go then.\nW: Why not? Ah, you must have your club activity.\nM: It’s not that. I don’t have my club activity that day.\nW: Then what is it? Do you need to take care of your brother again?\nM: No. Actually, I have to participate in the marathon that day.\nW: Marathon? Oh, right. I know how hard you’ve been training for it.\nGood luck!\nM: Thanks. Please congratulate the professor for me."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Noodle Cooking Contest에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "참가 대상",
+    "대회 날짜",
+    "대회 장소",
+    "우승 상금",
+    "지원 방법"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Honey, I picked up a flyer about the Noodle Cooking Contest.\nM: What is it about?\nW: It’s a competition to cook the most creative dish using noodles.\nM: Sounds interesting. Who can participate?\nW: Any city resident can participate. Why don’t you give it a try?\nM: Let me take a look at the flyer. I should check the date first.\nW: Here. It’s on the 20th of June. Are you free then?\nM: Luckily, I don’t have any plans that day. Maybe I can apply for the\ncontest.\nW: You should! The winner will receive $500.\nM: Great! It says I have to send a recipe by e­mail to apply for the\ncontest. Any suggestions?\nW: Well, do you remember the cold noodle salad you made for my\nbirthday? It was so good. You should use that recipe.\nM: That’s a great idea. I’ll do it."
+  },
+  {
+   "no": 9,
+   "prompt": "Library Plus에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "도서관 자원봉사자들이 책을 집으로 배송한다.",
+    "도서관 회원은 무료로 이용할 수 있다.",
+    "한 번에 최대 5권의 책을 빌릴 수 있다.",
+    "전화로 대출 기간을 연장할 수 있다.",
+    "직접 도서관에 방문하여 책을 반납해야 한다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Hello, I’m Tony Jones, a librarian at Greenfield Library. We’re\nthrilled to tell you about a brand­new service called Library Plus.\nOur library volunteers will deliver books straight to your home. Our\nbook delivery service is here to provide more people with the\nopportunity to read. All library members can use this service free of\ncharge. In order to get started, use the library’s mobile application\non your phone. You can borrow a maximum of five books at a time.\nBooks may be borrowed for two weeks, but you can extend the\nborrowing period simply by giving us a call. You don’t even need to\ncome to the library to return your books. We’ll pick up the books at\nyour place. For more information, visit our website. Thank you."
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 구매할 반지를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_6_g2_q10.png",
+   "answer": 1,
+   "group": null,
+   "script": "W: Hey Adam, Mom’s birthday is coming up. Why don’t we buy a gold\nring for her present?\nM: Good idea. I heard that jewelry online is cheaper than in stores. So\nlet’s buy one online.\nW: Okay. Let me see... Rings are pretty expensive. What’s our budget?\nM: We spent a lot for Mother’s Day last month, so I don’t think we can\nspend more than $400 on her present this time.\nW: You’re right. Let’s decide on a color now. We have three\noptions: white, yellow, and rose.\nM: Mom already has several yellow gold rings. We shouldn’t choose\nyellow.\nW: Good point. Both the white and rose ones look better anyway.\nM: That’s true. What about a stone for the ring?\nW: How about a ruby? It would go well with Mom’s red earrings.\nM: I agree. Oh, this one provides a gift­wrapping service.\nW: We don’t need that. I’d rather wrap it myself.\nM: Okay, then let’s order this one."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Sorry. We can’t finish our art class project today.",
+    "Oh, it’s such a shame that you missed the chance.",
+    "I don’t think so. The tickets are not that expensive.",
+    "Yeah, just let me make sure it’s okay with my mom first.",
+    "Why not? My mom and I don’t have any plans on Sunday."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Katie, we have to go to the Modern Art Center sometime this\nmonth for our art class project. How about this Sunday?\nW: I have plans with my mom that day. Let’s go another day.\nM: But they have a special artist lecture only this Sunday. Would you\nconsider changing your plans?\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Good idea. You can cook instead of me.",
+    "My fault! I should have paid for the dinner.",
+    "Unfortunately, the restaurant is closed tonight.",
+    "Okay, then I guess we should cancel our plans.",
+    "Right. I’ll check if there’s any public parking nearby.━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Jake, are we going to drive to the restaurant for the dinner meeting\nwith our client?\nM: Yes. It would be best to go by car. The problem is the place doesn’t\nhave a parking lot.\nW: I’m sure we can find a place for the car around the restaurant.\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Right. Let’s ask him if he can help us with the interview.",
+    "I agree. That’s why I want to go to the event to see him.",
+    "Wow, I can see that you’ve read so many of his books.",
+    "Yeah, I’m glad that your new book got published.",
+    "No. Negative reviews could help my career."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Hey Linda, what are you reading?\nW: I’m reading Troy Morgan’s new book. It’s really interesting.\nM: You seem to really love his books.\nW: I do! Can you take me to his book signing event next week, Dad?\nM: Sure, but didn’t he already sign a book for you?\nW: Yes, but getting a book signed isn’t my main purpose for going to\nthe event.\nM: Then why do you want to go?\nW: It’s because of his recent interview. He said he lost confidence in\nhis writing.\nM: Why? What happened?\nW: He read some negative reviews about his last work.\nM: Oh, really? It sounds like he needs to meet some fans like you to\nboost his confidence.\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Don’t worry. He’ll get his driver’s license soon.",
+    "Really? I didn’t know you were interested in my car.",
+    "Oh, no. Then I should take my car to the repair shop.",
+    "No problem. We can schedule a time with my brother.",
+    "Never mind. I’m going to buy a different one tomorrow."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hi, Sandra. You look excited.\nW: Yeah, I just got my driver’s license.\nM: Congratulations! Are you planning to buy a car?\nW: Actually, I’ve been browsing cars online. But they’re more\nexpensive than I expected.\nM: Then, what about a used car? My brother happens to be selling his\ncar.\nW: I was considering buying a used car, too. Can I see some pictures\nof his car?\nM: Let me check... Here you go. He’s had it for about three years.\nW: Wow, it looks as shiny as new. Also, it’s in my favorite color and\ndesign.\nM: I’m glad you like it. You’ll be even more satisfied when you see it\nin person.\nW: I hope so! Do you know how much he’s selling it for?\nM: He wants $10,000 for it.\nW: That’s within my budget. But I’d need to test­drive it first.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Bill이 Susan에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I think you need to find the right time to relax.",
+    "Getting good grades is not the most important thing.",
+    "There must be many benefits to studying at the library.",
+    "Why don’t you make a study plan to prepare for exams?",
+    "How about changing where you study to regain your focus?"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Bill and Susan are second­grade high school students and friends.\nThey are preparing for their final exams at the library after school.\nIt used to be easy for Susan to focus on studying. However, these\ndays she’s noticing that she gets distracted easily at the library and\ndoesn’t know why she cannot maintain her attention. So, she\ndecides to get some advice from Bill, who gets high scores in\nschool. When Bill hears her problem, he’s suddenly reminded of his\nown experience of losing focus. He recalls that he changed his\nstudy location and that really helped him get back his concentration.\nTherefore, he wants to suggest that Susan try studying in a\ndifferent place to find her focus again. In this situation, what would\nBill most likely say to Susan?\n16번부터 17번까지는 두 번 들려줍니다.\n[16~17] 다음을 듣고, 물음에 답하시오.\nM: Good evening, viewers. Last time, I introduced some paintings by\nwell­known Western artists. Today, I’d like to talk about objects\nthat have symbolic meanings in Western art. Let’s begin with\nmirrors. The reflection seen in mirrors can reveal a hidden truth or\nexpose a lie. As you might imagine, a broken mirror generally\nrepresents bad luck. Second, candles. They can symbolize the\npassing of time or show a timeline. This is seen in how much of the\ncandles have burned. Third, let’s talk about books. Books often\nrepresent a higher educational status. They’re also a symbol of\nlearning or of giving knowledge. Lastly, flowers can be a symbol of\nlife. Blooming flowers are used to show power and growth. In a\nmoment, I’ll present some paintings with these symbols."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "various drawing styles used by artists",
+    "objects used as symbols in Western art",
+    "impact of religious objects on Western culture",
+    "changes in painting tools through history",
+    "how to paint objects in a realistic way"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Good evening, viewers. Last time, I introduced some paintings by\nwell­known Western artists. Today, I’d like to talk about objects\nthat have symbolic meanings in Western art. Let’s begin with\nmirrors. The reflection seen in mirrors can reveal a hidden truth or\nexpose a lie. As you might imagine, a broken mirror generally\nrepresents bad luck. Second, candles. They can symbolize the\npassing of time or show a timeline. This is seen in how much of the\ncandles have burned. Third, let’s talk about books. Books often\nrepresent a higher educational status. They’re also a symbol of\nlearning or of giving knowledge. Lastly, flowers can be a symbol of\nlife. Blooming flowers are used to show power and growth. In a\nmoment, I’ll present some paintings with these symbols."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 사물이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "mirrors",
+    "candles",
+    "shells",
+    "books",
+    "flowers"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Good evening, viewers. Last time, I introduced some paintings by\nwell­known Western artists. Today, I’d like to talk about objects\nthat have symbolic meanings in Western art. Let’s begin with\nmirrors. The reflection seen in mirrors can reveal a hidden truth or\nexpose a lie. As you might imagine, a broken mirror generally\nrepresents bad luck. Second, candles. They can symbolize the\npassing of time or show a timeline. This is seen in how much of the\ncandles have burned. Third, let’s talk about books. Books often\nrepresent a higher educational status. They’re also a symbol of\nlearning or of giving knowledge. Lastly, flowers can be a symbol of\nlife. Blooming flowers are used to show power and growth. In a\nmoment, I’ll present some paintings with these symbols."
+  }
+ ]
+}

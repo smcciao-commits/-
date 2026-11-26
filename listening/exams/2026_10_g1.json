@@ -1,0 +1,292 @@
+{
+ "id": "2026_10_g1",
+ "year": "2026",
+ "month": "10",
+ "grade": "고1",
+ "school": "경기",
+ "title": "2026학년도 10월 고1 전국연합학력평가 영어",
+ "duration": 1441.6,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_10_g1.mp3",
+ "starts": [
+  146.2,
+  200.3,
+  278.5,
+  348.0,
+  428.7,
+  501.5,
+  575.3,
+  649.4,
+  731.4,
+  816.6,
+  895.4,
+  937.6,
+  988.8,
+  1064.4,
+  1148.8,
+  1227.4,
+  1227.4
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "콘서트 관람 예절을 설명하려고",
+    "자선 콘서트 공연자를 모집하려고",
+    "요양원 봉사 일정 변경을 공지하려고",
+    "학교 음악실 공사 계획을 안내하려고",
+    "요양원에 보낼 물품 기부를 독려하려고"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hello, students. This is your music teacher, Ms. Stewart. Next month, selected students from our school will be visiting\nthe local nursing home for a charity concert. So we’re looking for students who can perform at the concert. A variety of\nperformers, such as singers, dancers, or bands are welcome to apply. This is a great opportunity to use your artistic\ntalents for a good cause. If you’re interested, please stop by the music room and sign your name on the list by next\nFriday. Don’t miss the chance to perform at the charity concert. Thank you."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "과일은 종류에 따라 다르게 보관되어야 한다.",
+    "다양한 과일을 먹는 것이 건강에 도움이 된다.",
+    "과일의 표면 상태로 신선도를 구분할 수 있다.",
+    "냉장고를 자주 여닫으면 식재료가 변질될 수 있다.",
+    "계절에 따라 냉장 온도를 다르게 설정하는 것이 좋다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Dad, look at this banana.\nM: Oh, my. It has turned brown.\nW: Yes, I put it in the refrigerator yesterday to keep it fresh, and now it looks like this.\nM: Bananas don’t need to be kept there.\nW: Really? Isn’t it always better to store fruit in the refrigerator?\nM: Not necessarily. Fruits should be stored differently depending on their type.\nW: I didn’t know that. I wonder why that is.\nM: Tropical fruits like bananas get damaged by cold air, while strawberries should stay in the refrigerator so they won’t get\ntoo soft.\nW: I see! I need to learn how to store each fruit properly from now on.\nM: Right. Make sure to store each type of fruit differently.\nW: Okay. I’ll bear that in mind."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "자녀가 스스로 실패를 극복하도록 인내하며 기다리는 것이 좋다.",
+    "자녀의 인내심을 기르는 데 뜨개질을 시키는 것이 도움이 된다.",
+    "어려운 과업은 단계별로 나누어 수행하는 것이 효과적이다.",
+    "자녀를 지도할 때 부모의 일관성 있는 태도가 중요하다.",
+    "갈등 발생 시 지속적으로 대화하려는 자세가 필요하다."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hello, viewers, and welcome to The Parent Bridge. Are you worried about your kids’ lack of patience? I’m happy to\nshare a surprising activity that can help your child, knitting! Having your child knit can help develop their patience. This\nis because every knitted item, like a scarf or a sweater, is made slowly with constant effort. Also, kids need to work\npatiently step by step to finish one piece because there’s no quick way to finish it. Therefore, if you want to help your\nchild build patience, encourage them to start knitting. Thanks for watching, and don’t forget to subscribe."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_10_g1_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Hi, Stacy. How was your weekend?\nW: Hi, Liam. I went to the children’s library with my son.\nM: I heard it was recently renovated. How is it?\nW: It’s wonderful. Here’s the picture I took.\nM: The heart­shaped light above the bookshelf creates a bright atmosphere.\nW: I agree. Kids love it.\nM: I like the teddy bear in the corner.\nW: Yeah, it goes well with the library. Do you see the rug with the striped pattern on the floor?\nM: Yes, I guess children can read books on it. And there are three chairs at the table.\nW: Right. I sat there with my son.\nM: It looks like a perfect place to read.\nW: Look at the “BOOKS　ARE MAGIC!” sign on the wall. It makes reading look fun.\nM: I should visit there next time."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "카메라 챙기기",
+    "간식 구매하기",
+    "모자 가져가기",
+    "돗자리 준비하기",
+    "일기 예보 확인하기"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Angela, are you ready for our hiking trip tomorrow?\nW: Yes, I can’t wait. Let’s check if we’re prepared.\nM: Okay. I packed my camera to take pictures. I hope the weather will be nice.\nW: Don’t worry. I checked the weather forecast this morning.\nM: Oh, what did it say?\nW: It said it’s going to be sunny all day.\nM: Nice. Then I need to bring a hat.\nW: Good idea. What should we do about snacks?\nM: I bought some chocolate bars and chips yesterday.\nW: Great. Then I’ll prepare a picnic mat. We can rest and eat.\nM: Good. I think everything is ready for our hiking trip.\nW: Yes. I’m really looking forward to the trip."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 2,
+   "choices": [
+    "$25",
+    "$30",
+    "$35",
+    "$40",
+    "$50"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Welcome to the World Musical Instrument Museum. How can I help you?\nM: Hi. I’d like to buy admission tickets.\nW: Sure, admission tickets are $15 per adult and $5 per child.\nM: I’ll take one adult ticket and one child ticket.\nW: Okay, so that’s two tickets total.\nM: Right. And I heard that there’s a mini drum making program.\nW: Yes, you can make your own drum and play together.\nM: Sounds interesting. How much is it?\nW: It’s $10 per person.\nM: I’ll take two tickets for the program, too.\nW: Okay. So, admission tickets for one adult and one child, and two for the program, right?\nM: Perfect. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 컬링 연습을 할 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "팔꿈치 통증이 있어서",
+    "수학 프로젝트를 해야 해서",
+    "사촌과 미술 전시회를 보러 가야 해서",
+    "조카의 첫 생일 파티에 참석해야 해서",
+    "동물 보호소에서 자원봉사를 해야 해서"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hey, Christine. How’s your elbow pain?\nW: Now, I feel completely fine, Rick. I’m ready for the curling league.\nM: Good to hear. Then, do you want to practice curling with me this Sunday?\nW: Sorry, but I can’t make it this Sunday.\nM: Is it because of your volunteer work at the animal shelter?\nW: No, I’m not volunteering this week.\nM: Then, are you still working on the math project you mentioned before?\nW: No, I’ve already finished.\nM: Oh, I remember you said your nephew’s first birthday is coming up soon.\nW: That’s next Saturday. Actually, I’m going to go see an art exhibition with my cousin.\nM: Ah, I see. Let’s practice next time.\nW: Thanks for understanding."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, 스테인드글라스 수업에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "장소",
+    "시간",
+    "준비물",
+    "등록비",
+    "모집 정원"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Rachel, come check out this post.\nW: What’s this, Blake? [Pause] Oh, a stained glass class. Looks fun.\nM: It’s a one­day class in the art studio of the community center.\nW: Really? It’s near my house. When will it be held?\nM: The class will be held from 9:30 a.m. to 1 p.m. next Saturday.\nW: Great. I’m free on that day. Do you want to take the class together?\nM: Sure. We can make beautiful stained glass mirrors.\nW: Awesome. And the registration fee is $20 per person. That’s a good price.\nM: I agree. And the post says only 10 people can register.\nW: Yes, and look. They’re accepting on­site registration at the community center now.\nM: We’d better hurry. Let’s go sign up immediately."
+  },
+  {
+   "no": 9,
+   "prompt": "Upcycling Fashion Show에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "오후 다섯 시에 시작할 것이다.",
+    "학교 강당에서 열릴 것이다.",
+    "학생 모델들과 사진을 찍을 기회가 있을 것이다.",
+    "모든 방문객은 기념품으로 양말을 받을 것이다.",
+    "좌석은 선착순으로 제공될 것이다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "[Chime bell rings.]\nM: Hello, everyone! I’m Mr. Jackson, the teacher in charge of the Eco­Club. We’re excited to invite you to our Upcycling\nFashion Show. This event aims to show how old clothes can be turned into stylish ones. The show will start at 5 p.m.\non October 16th. And it’ll be held in the school auditorium. You can see the unique clothes designed by the Eco­Club’s\nstudents. After the show, there’ll be an opportunity to take photos with our student models. Best of all, every visitor\nwill receive a reusable bag as a souvenir. Due to limited seating in the auditorium, seats will be offered on a first­come,\nfirst­served basis. Come and see the beauty of upcycling!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 주문할 스카프를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_10_g1_q10.png",
+   "answer": 1,
+   "group": null,
+   "script": "W: Kevin, what are you shopping for on your phone?\nM: I’m looking at these scarves. Kate, can you help me choose one?\nW: Sure. [Pause] Hmm, these five all look good. How much do you want to spend?\nM: I don’t want to spend more than $80. I think a scarf over that price is too expensive.\nW: Okay. What about the material? They come in different materials.\nM: Well, I don’t like silk because it’s hard to take care of.\nW: Right. Do you have any color preference?\nM: My old scarf was black, so I don’t want another black one.\nW: I see. That leaves two options. Which one do you prefer?\nM: I prefer one that is machine­washable just for convenience. I’ll order this one. Thanks for your help."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "The meeting rooms are fully booked.",
+    "It’ll be finished in about ten minutes.",
+    "I should’ve sent a card to you earlier.",
+    "The meeting location has just been changed.",
+    "My contact information is on this name card."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Mr. Taylor, our meeting starts in 30 minutes. Are we almost set?\nM: Yes, Ms. Wilson. The only thing left is to put the name cards on the table. I’ll do it now.\nW: Good. When will that be done?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Okay. I’ll go look for them right now.",
+    "Why not? I can teach you how to swim.",
+    "Good. Let’s buy these swimming goggles.",
+    "Sure. I can set up the drying stand once I’m home.",
+    "You’re right. I missed my lesson because I worked late."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "[Cell phone rings.]\nM: Hi, honey. What’s up? I’m on my way home from work.\nW: Honey, do you know where Jake’s goggles are? He needs them for his swimming lesson soon, but I can’t find them.\nM: Oh, check the drying stand in the veranda. I put them there after we went swimming last weekend.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I appreciate you made the tacos for me.",
+    "Yes. It’s been about a year since I went there.",
+    "Good to know. I have to visit there this Saturday, then.",
+    "Sorry. There are no available tables in this restaurant.",
+    "I’m afraid I wasn’t able to have dinner with you yesterday."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hi, Scott.\nM: Hi, Lisa. Where are you heading?\nW: I’m going to Pedro’s Taco Table for dinner.\nM: Isn’t that the Mexican restaurant that opened last month?\nW: Yes. It’s a great restaurant.\nM: Have you been there before?\nW: Yeah, I’ve already been there a few times.\nM: Really? Are their tacos good?\nW: Absolutely. The tacos are amazing. You’ll definitely love them!\nM: Nice. How are the prices?\nW: They’re very reasonable. You can enjoy all sorts of tacos for less than 10 dollars each.\nM: Great. I should go there with my friend this Saturday or Sunday.\nW: Oh, it’d be better to go on Saturday since the restaurant closes on Sundays.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Definitely. I’m so touched by that story.",
+    "Of course. I want to sign up for your class.",
+    "No worries. You can return my history book later.",
+    "Good idea. Let’s go to the history camp next time.",
+    "Right. That way, it’ll be much easier to study history."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Can I come in, Ms. Jones?\nW: Sure. What brings you here, Harry?\nM: I came to ask for some advice on studying history. History feels so difficult.\nW: Oh, what seems to be the problem?\nM: There’s too much information to memorize.\nW: Can you tell me how you usually study history?\nM: I usually spend lots of time memorizing all the dates, names, and facts from the textbook.\nW: Memorizing facts is important, but it can be very tiring. Have you ever tried thinking of history as a big story?\nM: No. What do you mean?\nW: Instead of just memorizing facts, focus on “who did what and why” and make a historical story.\nM: Ah­ha. You mean connecting the events into a story can help me understand history better.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Chloe가 Daniel에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Let’s try the food at the local restaurants.",
+    "How about buying our travel tickets in advance?",
+    "We should change our trip schedule to next week.",
+    "You need to finish your project before the deadline.",
+    "Why don’t we take out a few places from our plan?"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Chloe and Daniel are a married couple. Recently, Chloe was very busy with an important project at work. After\nsuccessfully finishing the project, she’s going to go on a trip with Daniel. As Daniel wants to have an exciting trip, he\nplans a schedule filled with famous restaurants and popular places to visit. However, when Daniel shows his plan to\nChloe, she feels that she needs a relaxing trip because she was so tired from preparing for the project. So, Chloe wants\nto suggest to Daniel that they remove a few spots to visit from their travel plan. In this situation, what would Chloe\nmost likely say to Daniel?\n16번부터 17번까지는 두 번 들려줍니다.\n16번과 17번\n다음을 듣고, 물음에 답하시오.\nW: Hello, students. More and more people are raising pets these days. Today, we’ll learn about the laws concerning pets\nacross the world. First, in Switzerland, social animals can’t live alone. If you keep guinea pigs, they need a companion of\ntheir own kind by law because the country treats loneliness in pets as a welfare issue. Second, in Japan, owners are\nlegally required to have their cats microchipped. This helps to track missing cats and prevent them from being lost for\ngood. Next, in Spain, it’s now illegal to leave dogs tied up without watching them in public spaces. So leaving dogs tied\nup alone outside a store can result in fines. Lastly, in Germany, for pet birds, such as parrots, owners cannot keep their\nbirds locked in a small cage all the time. The law states that birds must be given the opportunity for ‘free flight’ inside\nthe home for enough time every day. Now, let’s watch some related videos.\n다시 한 번 듣겠습니다.\nW: Hello, students. More and more people are raising pets these days. Today, we’ll learn about the laws concerning pets\nacross the world. First, in Switzerland, social animals can’t live alone. If you keep guinea pigs, they need a companion of\ntheir own kind by law because the country treats loneliness in pets as a welfare issue. Second, in Japan, owners are\nlegally required to have their cats microchipped. This helps to track missing cats and prevent them from being lost for\ngood. Next, in Spain, it’s now illegal to leave dogs tied up without watching them in public spaces. So leaving dogs tied\nup alone outside a store can result in fines. Lastly, in Germany, for pet birds, such as parrots, owners cannot keep their\nbirds locked in a small cage all the time. The law states that birds must be given the opportunity for ‘free flight’ inside\nthe home for enough time every day. Now, let’s watch some related videos."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "effects of raising pets on developing social skills",
+    "laws related to pets in different countries",
+    "most popular types of pets in the world",
+    "rapid growth of the pet care industry",
+    "global standards for pet training"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, students. More and more people are raising pets these days. Today, we’ll learn about the laws concerning pets\nacross the world. First, in Switzerland, social animals can’t live alone. If you keep guinea pigs, they need a companion of\ntheir own kind by law because the country treats loneliness in pets as a welfare issue. Second, in Japan, owners are\nlegally required to have their cats microchipped. This helps to track missing cats and prevent them from being lost for\ngood. Next, in Spain, it’s now illegal to leave dogs tied up without watching them in public spaces. So leaving dogs tied\nup alone outside a store can result in fines. Lastly, in Germany, for pet birds, such as parrots, owners cannot keep their\nbirds locked in a small cage all the time. The law states that birds must be given the opportunity for ‘free flight’ inside\nthe home for enough time every day. Now, let’s watch some related videos.\n다시 한 번 듣겠습니다.\nW: Hello, students. More and more people are raising pets these days. Today, we’ll learn about the laws concerning pets\nacross the world. First, in Switzerland, social animals can’t live alone. If you keep guinea pigs, they need a companion of\ntheir own kind by law because the country treats loneliness in pets as a welfare issue. Second, in Japan, owners are\nlegally required to have their cats microchipped. This helps to track missing cats and prevent them from being lost for\ngood. Next, in Spain, it’s now illegal to leave dogs tied up without watching them in public spaces. So leaving dogs tied\nup alone outside a store can result in fines. Lastly, in Germany, for pet birds, such as parrots, owners cannot keep their\nbirds locked in a small cage all the time. The law states that birds must be given the opportunity for ‘free flight’ inside\nthe home for enough time every day. Now, let’s watch some related videos."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 동물이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "guinea pigs",
+    "cats",
+    "hamsters",
+    "dogs",
+    "parrots"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, students. More and more people are raising pets these days. Today, we’ll learn about the laws concerning pets\nacross the world. First, in Switzerland, social animals can’t live alone. If you keep guinea pigs, they need a companion of\ntheir own kind by law because the country treats loneliness in pets as a welfare issue. Second, in Japan, owners are\nlegally required to have their cats microchipped. This helps to track missing cats and prevent them from being lost for\ngood. Next, in Spain, it’s now illegal to leave dogs tied up without watching them in public spaces. So leaving dogs tied\nup alone outside a store can result in fines. Lastly, in Germany, for pet birds, such as parrots, owners cannot keep their\nbirds locked in a small cage all the time. The law states that birds must be given the opportunity for ‘free flight’ inside\nthe home for enough time every day. Now, let’s watch some related videos.\n다시 한 번 듣겠습니다.\nW: Hello, students. More and more people are raising pets these days. Today, we’ll learn about the laws concerning pets\nacross the world. First, in Switzerland, social animals can’t live alone. If you keep guinea pigs, they need a companion of\ntheir own kind by law because the country treats loneliness in pets as a welfare issue. Second, in Japan, owners are\nlegally required to have their cats microchipped. This helps to track missing cats and prevent them from being lost for\ngood. Next, in Spain, it’s now illegal to leave dogs tied up without watching them in public spaces. So leaving dogs tied\nup alone outside a store can result in fines. Lastly, in Germany, for pet birds, such as parrots, owners cannot keep their\nbirds locked in a small cage all the time. The law states that birds must be given the opportunity for ‘free flight’ inside\nthe home for enough time every day. Now, let’s watch some related videos."
+  }
+ ]
+}

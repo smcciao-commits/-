@@ -1,0 +1,292 @@
+{
+ "id": "2024_3_g1",
+ "year": "2024",
+ "month": "3",
+ "grade": "고1",
+ "school": "서울",
+ "title": "2024학년도 3월 고1 전국연합학력평가 영어",
+ "duration": 1407.1,
+ "totalPoints": 37,
+ "audio": "listening/audio/2024_3_g1.mp3",
+ "starts": [
+  186.3,
+  244.0,
+  310.0,
+  375.9,
+  453.1,
+  521.2,
+  599.0,
+  679.0,
+  764.3,
+  837.4,
+  908.3,
+  946.4,
+  985.7,
+  1058.8,
+  1134.2,
+  1206.8,
+  1206.8
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학교 체육관 공사 일정을 알리려고",
+    "학교 수업 시간표 조정을 안내하려고",
+    "학교 통학 시 대중교통 이용을 권장하려고",
+    "학교 방과 후 수업 신청 방식을 설명하려고",
+    "학교 셔틀버스 운행 시간 변경을 공지하려고"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Good afternoon, students! This is your vice principal, Jack Eliot.\nDue to the heavy rain last night, there’s some damage on the road\nand the road condition is not good. So we decided to make some\nrearrangements to the school shuttle bus schedule. From tomorrow,\nkeep in mind that the bus schedule will be delayed by 15 minutes.\nWe want to make sure all of you are safe. This bus schedule change\nwill continue for one week. We appreciate your understanding and\ncooperation. Thank you for your attention!"
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "전기 자전거 이용 전에 배터리 상태를 점검하여야 한다.",
+    "전기 자전거 운행에 관한 규정이 더 엄격해야 한다.",
+    "전기 자전거의 속도 규정에 대한 논의가 필요하다.",
+    "전기 자전거 구입 시 가격을 고려해야 한다.",
+    "전기 자전거 이용 시 헬멧을 착용해야 한다."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Brian, I heard that you are thinking of buying an electric bicycle.\nM: Yes, that’s right.\nW: That’s good. But be careful when you ride it.\nM: Yeah, I know what you mean. On my way here I saw a man riding\nan electric bicycle without wearing a helmet.\nW: Some riders don’t even follow basic traffic rules.\nM: What do you mean by that?\nW: These days many people ride electric bicycles on sidewalks.\nM: Yes, it’s so dangerous.\nW: Right. There should be stricter rules about riding electric bicycles.\nM: I totally agree with you."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학업 목표를 분명히 설정하는 것이 필요하다.",
+    "친구와의 협력은 학교생활의 중요한 덕목이다.",
+    "과제 제출 마감 기한을 확인하고 준수해야 한다.",
+    "적절한 휴식은 성공적인 과업 수행의 핵심 요소이다.",
+    "할 일의 목록을 활용하는 것이 시간 관리에 유용하다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hello, this is your student counselor, Susan Smith. You might be\nworried about your new school life as a freshman. You have a lot of\nthings to do in the beginning of the year. Today, I’m going to give\nyou a tip about time management. Make a to­do list! Write down\nthe tasks you have to do on a list and check off what you finish,\none by one. By doing this, you won’t miss the things you need to\ndo. Using a to­do list will help you manage your time efficiently.\nGood luck to you and don’t forget to start today."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_3_g1_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: Hi, Amy. I heard that you’ve joined the English Newspaper Club.\nW: Yes, Tom. I went to the club room yesterday and took a picture of\nit. Look.\nM: Wow, the place looks nice. I like the lockers on the left.\nW: Yes, they’re good. We also have a star­shaped mirror on the wall.\nM: It looks cool. What’s that on the bookshelf?\nW: Oh, that’s the trophy my club won for ‘Club of the Year’.\nM: You must be very proud of it. There’s also a computer on the right\nside of the room.\nW: Yeah, we use the computer when we need it.\nM: Great. I can see a newspaper on the table.\nW: Yes, it was published last December."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "따뜻한 옷 챙기기",
+    "체스 세트 가져가기",
+    "읽을 책 고르기",
+    "간편식 구매하기",
+    "침낭 준비하기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Mike, I think we’ve got most of the camping supplies ready now.\nM: Yeah, the tent, sleeping bags, and cooking tools are all set.\nW: Perfect. I bought some easy­to­cook meals and snacks for us.\nM: Great. What about some warm clothes? It might get cold at night.\nW: I’ve packed some warm jackets for us, too. Anything else we need\nto consider?\nM: We need something fun for the camping night. I already packed\nsome books to read.\nW: How about playing board games?\nM: Nice. I have a chess set at home.\nW: Cool, can you bring it?\nM: Of course! I’ll take it with me."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$15",
+    "$20",
+    "$27",
+    "$30",
+    "$33"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hello, what can I help you with today?\nW: Hi! I want to buy some fruit and vegetables. What’s fresh today?\nM: We just got some apples in.\nW: How much are they?\nM: They are ten dollars for one bag.\nW: Fantastic! I’ll take two bags of apples.\nM: Okay, what else do you need?\nW: I’d like to buy some carrots, too.\nM: The carrots are five dollars for one bag. How many do you need?\nW: I need two bags of carrots.\nM: Okay, you need two bags of apples and two bags of carrots.\nW: Right. And I have a coupon. I can get a discount with this, right?\nM: Yes. You can get a ten percent discount off the total price.\nW: Good. Here’s the coupon and my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 체육 대회 연습을 할 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "시험공부를 해야 해서",
+    "동아리 면접이 있어서",
+    "축구화를 가져오지 않아서",
+    "다리가 완전히 회복되지 않아서",
+    "가족 식사 모임에 참석해야 해서"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hey, Jake! How was your math test yesterday?\nM: Better than I expected.\nW: That’s great. Let’s go and practice for Sports Day.\nM: I’m so sorry but I can’t make it.\nW: Come on, Jake! Sports Day is just around the corner.\nM: I know. That’s why I brought my soccer shoes.\nW: Then, why can’t you practice today? Do you have a club interview?\nM: No, I already had the interview last week.\nW: Then, does your leg still hurt?\nM: Not really, it’s okay, now. Actually, I have to attend a family dinner\ngathering tonight for my mother’s birthday.\nW: Oh, that’s important! Family always comes first. Are you available\ntomorrow, then?\nM: Sure. Let’s make up for the missed practice."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Science Open Lab Program에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "지원 가능 학년",
+    "실험 재료 구입 필요성",
+    "지원서 제출 기한",
+    "참가 인원수",
+    "시상 여부"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Hey, Chris. Have you heard about the Science Open Lab Program?\nM: Yes, I heard about it. But I don’t know what it is exactly.\nW: In that program, we can design any science experiment we want.\nM: That sounds pretty cool. Do you want to join the program?\nW: Sure, it’s only for freshmen like us. Let’s join it together.\nM: Great! Do we need to buy some materials for experiments?\nW: No, they’ll prepare everything for us. We just need to send the\napplication form online.\nM: When is the deadline for applying?\nW: It’s tomorrow. We need to hurry.\nM: Oh, I see. Is there any special prize?\nW: Yes. I heard they’re giving out prizes for the most creative projects.\nM: Perfect! I’m so excited."
+  },
+  {
+   "no": 9,
+   "prompt": "Triwood High School Volunteer Program에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "노인을 도와주는 봉사 활동이다.",
+    "봉사자는 대면으로 활동한다.",
+    "스마트폰 사용 방법 교육을 한다.",
+    "봉사자는 매주 토요일에 세 시간씩 참여한다.",
+    "지원자는 이메일로 참가 신청서를 보내야 한다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Hello, students! Are you looking for a chance to help others? Then,\nI recommend you to join Triwood High School Volunteer Program to\nhelp senior citizens. You’re supposed to help the senior citizens\nface­to­face. You teach them how to use their smartphones for\nthings such as sending text messages or taking pictures. You will\nalso teach seniors how to use various apps. The program will\nrequire volunteers to participate for two hours every Saturday. If\nyou are interested in joining our program, please send us an\napplication form through email."
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 여자가 주문할 휴대용 선풍기를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_3_g1_q10.png",
+   "answer": 3,
+   "group": null,
+   "script": "M: Sophie, what are you looking for?\nW: I’m trying to choose one of these portable fans as a gift for my\nfriend Cathy.\nM: Oh, let me help you. How many speed options do you think she\nwould want?\nW: She would like it if the fan has more than two options.\nM: Okay, then, what color do you have in mind?\nW: Cathy’s old one was white. I want to choose a different color.\nM: Good idea. Do you want an LED display to show the remaining\nbattery power?\nW: Hmm, I don’t think she will need it.\nM: You’re left with two options. Which one do you prefer?\nW: Well, I’ll take the cheaper one."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I can help you find it.",
+    "I already bought a new one.",
+    "I had it before biology class.",
+    "You should report it to the police.",
+    "It was a birthday gift from my dad."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: What’s wrong, Jane? You look so upset.\nW: I lost my purse! I have been searching for it for an hour, but I can’t\nfind it.\nM: When did you last have it?\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Thank you. Everything looks delicious.",
+    "Yes. I have an appointment this Saturday.",
+    "You’re welcome. I made it with my dad’s recipe.",
+    "Sounds good. What time did you make a reservation?",
+    "That’s too bad. Why don’t we try another restaurant?"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Honey, what do you have in mind for lunch this Saturday?\nM: I was thinking we should try the new Italian restaurant.\nW: Hmm... I heard that it’s hard to make a reservation there these\ndays.\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "No problem. You can find other projects at the organization.",
+    "Sure. Let’s choose one from your old children’s books.",
+    "Congratulations. You finally made your first audiobook.",
+    "I hope so. You’re going to be a wonderful writer.",
+    "Exactly. Kids grow faster than you think."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Mom! I’ve started to record audiobooks for kids.\nW: That’s great! How did you get involved in that?\nM: My teacher told me that a local organization is looking for students\nto record audiobooks.\nW: Fantastic! Are you having fun with it?\nM: Well, actually, I’m struggling with my voice acting.\nW: Oh? Is that so?\nM: Yes, it’s a bit challenging to get the right tone for kids.\nW: I’m sure you’ll get better with practice soon.\nM: Thanks. I’m trying my best.\nW: That’s wonderful. Anything I can help you with?\nM: Can you recommend a good book for my audiobook recording?\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Well, let’s do the presentation together.",
+    "Cheer up! I know you did your best.",
+    "Yes, I got a good grade on science.",
+    "Wow! it was a really nice presentation.",
+    "Right. I have already finished the project."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Hi, Fred. What should we do for our history project?\nM: Actually, I was thinking about it. Why don’t we divide the roles for\nthe project?\nW: Okay. Good idea. We have the research part, the visual material\npart, and the presentation part.\nM: Hmm, is there any part you want to take on?\nW: Well, I would like to do the research. I’ve been collecting news\narticles about history.\nM: Excellent. You are good at gathering necessary information.\nW: Thanks. Can you handle the visual material?\nM: Okay. I’ll take care of it. I have done it before.\nW: All right. Then, the only part left is the presentation.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Robert가 Michelle에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "When can I use the library?",
+    "Where can I find the library?",
+    "How can I join the reading club?",
+    "Why do you want to go to the library?",
+    "What time does the lost and found open?"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Robert and Michelle are attending their high school orientation.\nAfter short greetings, the teacher begins to explain student clubs,\nschool activities, and school facilities. Robert is focusing very\ncarefully on the explanation. However, while writing down important\nthings about the school library, Robert drops his pen. Trying to find\nhis pen, Robert misses important information about the opening\nhours of the library, so now, Robert wants to ask Michelle when the\nlibrary is open. In this situation, what would Robert most likely say\nto Michelle?\nRobert:\n16번부터 17번은 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nM: Hello, listeners. Thank you for tuning in to our Happy Radio Show.\nAre you taking good care of your health in the early spring? Today,\nI want to recommend some foods that can reduce the symptoms of\na cough. Ginger is a popular home remedy for coughs. A cup of hot\nginger tea can be helpful for reducing your cough. Lemon is a rich\nsource of vitamin C. Lemon tea can help you relieve your cough.\nSurprisingly, pineapple is another excellent food to help relieve a\ncough. When you are suffering from a cough, eating bananas also\nhelps to get rid of the symptoms more easily. These foods are rich\nin vitamins and they are recommended for people suffering from a\ncough. I hope you have a healthy week."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "useful foods to relieve coughs",
+    "importance of proper food recipes",
+    "various causes of cough symptoms",
+    "traditional home remedies for fever",
+    "connection between weather and cough"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, listeners. Thank you for tuning in to our Happy Radio Show.\nAre you taking good care of your health in the early spring? Today,\nI want to recommend some foods that can reduce the symptoms of\na cough. Ginger is a popular home remedy for coughs. A cup of hot\nginger tea can be helpful for reducing your cough. Lemon is a rich\nsource of vitamin C. Lemon tea can help you relieve your cough.\nSurprisingly, pineapple is another excellent food to help relieve a\ncough. When you are suffering from a cough, eating bananas also\nhelps to get rid of the symptoms more easily. These foods are rich\nin vitamins and they are recommended for people suffering from a\ncough. I hope you have a healthy week."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 음식 재료가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "ginger",
+    "lemon",
+    "pineapple",
+    "honey",
+    "banana"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, listeners. Thank you for tuning in to our Happy Radio Show.\nAre you taking good care of your health in the early spring? Today,\nI want to recommend some foods that can reduce the symptoms of\na cough. Ginger is a popular home remedy for coughs. A cup of hot\nginger tea can be helpful for reducing your cough. Lemon is a rich\nsource of vitamin C. Lemon tea can help you relieve your cough.\nSurprisingly, pineapple is another excellent food to help relieve a\ncough. When you are suffering from a cough, eating bananas also\nhelps to get rid of the symptoms more easily. These foods are rich\nin vitamins and they are recommended for people suffering from a\ncough. I hope you have a healthy week."
+  }
+ ]
+}

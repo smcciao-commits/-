@@ -1,0 +1,292 @@
+{
+ "id": "2024_9_g1",
+ "year": "2024",
+ "month": "9",
+ "grade": "고1",
+ "school": "인천",
+ "title": "2024학년도 9월 고1 전국연합학력평가 영어",
+ "duration": 1515.2,
+ "totalPoints": 37,
+ "audio": "listening/audio/2024_9_g1.mp3",
+ "starts": [
+  166.6,
+  224.5,
+  306.4,
+  383.7,
+  475.1,
+  560.8,
+  643.8,
+  730.7,
+  818.9,
+  899.8,
+  987.3,
+  1024.7,
+  1066.0,
+  1150.4,
+  1220.0,
+  1289.5,
+  1289.5
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "축제 기간 연장을 요청하려고",
+    "신설된 지하철 노선을 홍보하려고",
+    "축제 당일의 지하철 연장 운행을 안내하려고",
+    "축제 방문객에게 안전 수칙 준수를 당부하려고",
+    "축제 기간 중 도심 교통 통제 구간을 공지하려고"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hello! I’m Olivia Parker from Pineview City Subway. I have an\nannouncement for this Saturday’s fireworks festival. Many people\nare expected to visit and enjoy the festival late into the night. For\nsmooth transportation and visitor safety, we’re extending the\noperational hours of the subway on the day of the festival. The\nsubway will run for an extra two hours after the regular last train\nfrom the festival area stations. For a comfortable and safe journey\nfrom the event, we encourage you to take advantage of our\nextended subway services. We hope you enjoy this fantastic festival\nwith convenience. Thank you!"
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "불규칙한 수면 습관은 청소년의 뇌 발달을 방해한다.",
+    "스마트폰의 화면 밝기를 조절하여 눈을 보호해야 한다.",
+    "취침 전 스마트폰 사용을 줄여야 수면의 질이 높아진다.",
+    "집중력 향상을 위해 디지털 기기 사용을 최소화해야 한다.",
+    "일정한 시간에 취침하는 것이 생체 리듬 유지에 도움을 준다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hi, Emma. What’s up? You look tired.\nW: Hey, David. I always feel tired. Even though I sleep many hours, I\nguess I don’t get any good sleep.\nM: That’s too bad. Is there anything you do before you go to bed?\nW: I usually read webtoons on my smartphone for a few hours.\nM: Ah, that’s the problem. Having too much screen time right before\nbed is not good.\nW: Really? But I’m so used to spending time on my phone at night!\nM: Long exposure to the screen light can make your brain stay awake.\nW: I never knew using smartphones had a negative impact on sleep.\nM: Reducing your smartphone use before going to bed will increase the\nquality of your sleep.\nW: Okay, I can give it a try."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 남자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "과도한 컴퓨터 사용은 스트레스 지수를 증가시킨다.",
+    "컴퓨터 관련 취미 활동은 IT 활용 능력을 향상시킨다.",
+    "직업을 선택할 때 자신의 흥미와 적성을 고려해야 한다.",
+    "다양한 악기 연주를 배우는 것은 인생을 풍요롭게 만든다.",
+    "직업과 관련 없는 취미 활동이 스트레스 감소에 도움이 된다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Hello, listeners! Welcome to your Daily Tips. Today, I’ll tell you a\nhelpful way to relieve your stress. Recent research shows that\nhaving hobbies completely unrelated to your job can significantly\nreduce stress. For example, if you work in IT, consider exploring\nactivities that are far from the digital field. Playing the guitar might\nbe a good option rather than playing computer games. Let’s enjoy\nhobbies that are different from our work! That’ll be the best way\nto get a refreshing break. Remember, a well­chosen hobby can be a\npowerful tool for stress relief. Tune in tomorrow for more helpful\ndaily tips!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_9_g1_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Amy. Here is the new recording studio for our band. How do\nyou like it?\nW: Wow, these two speakers are impressive!\nM: Yes, they are. The sound quality is excellent.\nW: Also, the long desk between the speakers looks great.\nM: Yeah. And on the desk, there is a microphone. We can use it to\ngive recording directions.\nW: Nice. Oh, this chair looks comfortable. It could be helpful for long\nrecordings.\nM: Agreed. And the rug under the chair gives the room a cozy feeling,\ndoesn’t it?\nW: Yes, and I like the flower patterns on the rug.\nM: I like it, too. How about the poster on the wall?\nW: It’s cool. This studio feels like where music truly comes alive!\nM: I’m glad you like this place.\nW: Absolutely. I can’t wait to start recording here."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 여자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "선물 준비하기",
+    "온라인 초대장 보내기",
+    "음식 주문하기",
+    "초대 손님 명단 확인하기",
+    "전시 부스 설치하기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Tony, I’m so excited for our Go­Green event!\nM: Me too. The event is almost here. Why don’t we go over our\npreparations together?\nW: Okay. I think the exhibition booths are very important for our\nevent. How are they going?\nM: Almost ready. I’m working on the booth setup this afternoon. What\nabout the welcome gifts?\nW: I’ve already prepared some eco­friendly bags.\nM: Perfect! What’s next?\nW: We need to confirm the list of guests for the ceremony.\nM: I double­checked the list. But I haven’t sent the online invitation\ncards, yet.\nW: No problem. I’ll deal with it right away. How about the food and\ndrinks?\nM: I’ve scheduled food and drink services and I’ll serve the guests with\nreusable dishes.\nW: Nice! I’m confident our event will be a great success."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$63",
+    "$70",
+    "$81",
+    "$86",
+    "$90"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Welcome to the Riverside Camping store. How can I help you?\nM: I’m looking for a camping table for my family. Can you recommend\none?\nW: Sure. How about this one? It’s light and easy to fold, so it’s our\nbest­selling product.\nM: It looks good. How much is it?\nW: It comes in two sizes. The small one is 30 dollars and the large\none is 50 dollars.\nM: I’ll buy the large one. Are there folding chairs, too?\nW: Yep. These folding chairs might go well with the table. They’re 10\ndollars each.\nM: Sounds good. I’ll buy four of those chairs.\nW: Okay. That’s one large camping table and four chairs.\nM: That’s right. Can I use this discount coupon now?\nW: Of course. You can get a 10% discount on the total price.\nM: Perfect. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 이번 주말에 등산을 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "아르바이트를 해야 해서",
+    "학교 시험공부를 해야 해서",
+    "폭우로 인해 등산로가 폐쇄되어서",
+    "경연을 위한 춤 연습을 해야 해서",
+    "주문한 등산 장비가 도착하지 않아서"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Lately, the weather has been lovely. This is a perfect time for\nclimbing.\nM: Indeed. Oh, would you like to go mountain climbing together?\nW: Sounds awesome. I have all the climbing equipment.\nM: Great. How about this upcoming weekend? I’ll find a nice mountain\nfor us.\nW: Hold on, this weekend? I don’t think I can make it then.\nM: Really? All school tests are finally done, so I thought this weekend\nwould be good for us.\nW: Sorry, but I have something important to do this weekend.\nM: Do you have a part­time job?\nW: No. Actually, I need to practice dancing for the entire weekend.\nM: Ah, for the dance competition you mentioned before?\nW: Yes. Surprisingly, I made it through the first round, and it’s the\nfinals next Monday.\nM: That’s fantastic! I wish you the best of luck."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Lakestate Apartment Yoga Program에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "대상 연령",
+    "운영 요일",
+    "모집 인원",
+    "등록 방법",
+    "등록 준비물"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Grandpa, take a look at this. It’s a Lakestate Apartment Yoga\nProgram poster.\nM: Wow, a new program for the residents. I’ve always wanted to join a\nyoga program.\nW: I know, and this one is only for those aged 60 and above.\nM: That’s perfect for me. [Pause] Oh, it says it’s held at 8 a.m. every\nTuesday and Friday.\nW: It’ll be a good time for you. You’re an early bird.\nM: Yes, I am. How do I register?\nW: You just need to fill out an application form at the apartment\nfitness center.\nM: Okay, I think I’ll go right now.\nW: Good. But don’t forget to take your ID card with you.\nM: Oh, do I need that for the registration?\nW: Yes. It says that on the poster. Would you like me to go with you?\nM: That would be lovely."
+  },
+  {
+   "no": 9,
+   "prompt": "Global Food Market에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학교 주차장에서 열린다.",
+    "이틀간 진행된다.",
+    "8개 국가의 음식을 즐길 수 있다.",
+    "음식마다 가격이 다르다.",
+    "채식주의자를 위한 메뉴가 있다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Good morning! This is Allison from the student council. I’m happy\nto announce the Global Food Market right here at Westhill High\nSchool. Get ready for a delicious journey around the world in the\nschool parking lot. Our Global Food Market will take place for two\ndays, on September 25th and 26th. You can enjoy food from eight\ndifferent countries, including Mexico and France. And there’s no\nneed to worry about prices. Every single dish is only five dollars.\nWait! You don’t eat meat? No problem! We also have menus for\nvegetarians. So, join us at the Global Food Market. It’s not just\nabout food, but a celebration of culture and diversity. Don’t miss\nthis chance to taste the world!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 주문할 디지털 텀블러를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2024_9_g1_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, what are you looking at?\nM: I’m looking at digital tumblers. They show the temperature on an\nLED screen. Would you like to help me choose one?\nW: Sure, let me see. [Pause] The price differs by model.\nM: Hmm, I don’t want to pay more than 60 dollars.\nW: That sounds reasonable. Look, there are various sizes to choose\nfrom.\nM: Less than 400ml would be too small for me.\nW: Alright. Oh, there’s a new function. Do you need the water intake\ndisplay? It’ll show you how much water you drink in a day.\nM: That sounds smart. I’d love to have it. Then, I have just two\noptions left.\nW: What color do you like? You have too many black items and they’re\nboring.\nM: Okay. I’ll go with the one that’s not black. Then, I’ll order this one.\nW: Great idea!"
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "If it’s too dry inside, you can easily get a cold.",
+    "When you cough, you should cover your mouth.",
+    "You need to wash your hands not to get a cold.",
+    "It’s really important to keep yourself warm.",
+    "Drinking water can make your skin soft."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: I easily catch a cold these days.\nM: That’s too bad. It’s a good idea to keep some moisture in your\nroom.\nW: Oh, how does that relate to a cold?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Awesome. The new bookshelf looks good in your room.",
+    "Right. Then, shall we sell them at a used bookstore?",
+    "I see. Can you borrow them from the library?",
+    "Okay. I’ll buy you books in a good condition.",
+    "I’m sorry. I haven’t finished the book yet."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Mom, the bookshelf in my room is full of books. There’s no space\nfor new ones.\nW: Well, how about throwing away the books you don’t read anymore?\nM: But some of them are in too good condition to throw away.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I’ll clarify each group member’s specific role.",
+    "I’ll collect more data for our group research.",
+    "I should challenge myself for the competition.",
+    "I need to change the topic of our group project.",
+    "I’ll let you know how to analyze data effectively."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Hey, Peter. How’s your group project going?\nM: Hello, Ms. Adams. It’s my first time as a leader, so it’s quite\nchallenging.\nW: I thought your group was working well together.\nM: Yes. We’re all motivated and working hard, but progress is slow.\nW: Well, what are you all working on at this moment?\nM: Everyone is focusing on gathering data as much as possible.\nW: Hmm, did you assign individual tasks to each member?\nM: Oh, we haven’t discussed it yet. We’re not exactly sure who does\nwhat.\nW: That’s crucial. Otherwise, it can lead to overlapping tasks in a group\nproject.\nM: That makes sense. That’s why our progress is not that fast.\nW: Then, as the leader, what do you think you should do now?\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Trust me. When we eat makes a big difference.",
+    "Okay. I’ll check my meals to get in better shape.",
+    "Thank you for your tip. But I don’t think I can do it.",
+    "Of course. I’ll make sure to follow your workout routine.",
+    "Sure. That’s why I didn’t succeed at keeping a balanced diet."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hey, Emily! You’re looking great these days.\nW: Thanks, Isaac. I’ve been trying hard to get in better shape.\nM: Good for you! I’m trying to get fit, too. But it’s tough.\nW: Haven’t you been working out a lot lately?\nM: Yeah, but I don’t see a big difference. What’s your secret?\nW: Well, I started being careful about when I eat.\nM: You mean like not eating right before bed?\nW: Kind of. I noticed I was eating a lot at night. So now I don’t eat\nafter 7 p.m.\nM: Hmm... I don’t know if that’s enough to get me in better shape.\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Julia가 Sophie에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Could you help me assemble my desk?",
+    "Can you share where you bought your desk?",
+    "How about choosing a new computer together?",
+    "Why don’t you repair the furniture by yourself?",
+    "Do you have any ideas for decorating my room?"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Julia is a college student, living in the dormitory. Recently, she\nordered a new computer desk. Upon receiving the desk, she realized\nthat the desk was a DIY product. It means she needs to put the\npieces together to build the desk. However, it was complicated to\nassemble it by herself. Julia knows that Sophie, her best friend, is\ngood at assembling DIY furniture and enjoys it. So, Julia wants to\nask Sophie to help her with the desk. In this situation, what would\nJulia most likely say to Sophie?\n16번부터 17번까지는 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nW: Hello, Family­Life subscribers! These days, many people are looking\nfor clothes made from natural materials for their family. Today, I’d\nlike to introduce some tips for how to properly wash natural\nmaterial clothes. First, for cotton, like 100% cotton t­shirts, you\nshould hand­wash in cool water to avoid shrinking or wrinkling.\nSecond, silk should be washed separately and quickly to keep its\nshape and color. Also, when you dry silk clothes such as blouses,\navoid direct sunlight and dry them in the shade. Third, linen is a\nsensitive material to wash. For example, to wash linen jackets, use\nvinegar instead of fabric softener. Lastly, for wool, the best way is\nto wash as little as possible. If you have to wash wool sweaters,\nuse special wool washing soap. Apply these tips so you can keep\nand enjoy natural clothes for a longer time!\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "material trends in the fashion industry",
+    "benefits of making clothes from nature",
+    "tips to purchase natural material clothes",
+    "development of clothes washing methods",
+    "proper ways to wash natural material clothes"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, Family­Life subscribers! These days, many people are looking\nfor clothes made from natural materials for their family. Today, I’d\nlike to introduce some tips for how to properly wash natural\nmaterial clothes. First, for cotton, like 100% cotton t­shirts, you\nshould hand­wash in cool water to avoid shrinking or wrinkling.\nSecond, silk should be washed separately and quickly to keep its\nshape and color. Also, when you dry silk clothes such as blouses,\navoid direct sunlight and dry them in the shade. Third, linen is a\nsensitive material to wash. For example, to wash linen jackets, use\nvinegar instead of fabric softener. Lastly, for wool, the best way is\nto wash as little as possible. If you have to wash wool sweaters,\nuse special wool washing soap. Apply these tips so you can keep\nand enjoy natural clothes for a longer time!\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 소재가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "cotton",
+    "silk",
+    "leather",
+    "linen",
+    "wool"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, Family­Life subscribers! These days, many people are looking\nfor clothes made from natural materials for their family. Today, I’d\nlike to introduce some tips for how to properly wash natural\nmaterial clothes. First, for cotton, like 100% cotton t­shirts, you\nshould hand­wash in cool water to avoid shrinking or wrinkling.\nSecond, silk should be washed separately and quickly to keep its\nshape and color. Also, when you dry silk clothes such as blouses,\navoid direct sunlight and dry them in the shade. Third, linen is a\nsensitive material to wash. For example, to wash linen jackets, use\nvinegar instead of fabric softener. Lastly, for wool, the best way is\nto wash as little as possible. If you have to wash wool sweaters,\nuse special wool washing soap. Apply these tips so you can keep\nand enjoy natural clothes for a longer time!\n다시 한 번 듣겠습니다."
+  }
+ ]
+}

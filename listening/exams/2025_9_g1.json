@@ -1,0 +1,292 @@
+{
+ "id": "2025_9_g1",
+ "year": "2025",
+ "month": "9",
+ "grade": "고1",
+ "school": "인천",
+ "title": "2025학년도 9월 고1 전국연합학력평가 영어",
+ "duration": 1419.7,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_9_g1.mp3",
+ "starts": [
+  157.8,
+  211.6,
+  284.9,
+  340.3,
+  424.0,
+  510.1,
+  592.8,
+  675.1,
+  749.5,
+  830.7,
+  910.3,
+  958.5,
+  1003.0,
+  1076.3,
+  1165.2,
+  1228.4,
+  1228.4
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "학부모 간담회 참석을 독려하려고",
+    "학부모 상담 기간 연기를 안내하려고",
+    "교직원 회의 시간 변경에 대한 협조를 요청하려고",
+    "학부모 간담회를 위한 교직원 주차 장소 변경을 알리려고",
+    "지역 주민 행사를 위한 주말 교내 주차 허용을 공지하려고"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Hello, this is Karen Smith, the principal of Sunnyfield High School.\nI would like to inform all staff about an important plan for next\nweek’s Parent­Teacher Meeting. Due to limited parking on campus,\nall teachers and staff should park at the nearby community center\non Wednesday. It is only a five­minute walk from the school. This\nplan will ensure that parents attending the meeting have easy\naccess to parking. Your cooperation will greatly assist in making\nthis event a smooth and successful experience. Thank you in\nadvance for your cooperation with the parking arrangements."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "환경을 위해 친환경 가방을 가능한 오래 사용해야 한다.",
+    "가방 구입 시 디자인과 실용성을 동시에 고려해야 한다.",
+    "윤리적인 소비를 위해 친환경 제품을 선택해야 한다.",
+    "환경을 위해 일회용 봉투의 사용을 줄여야 한다.",
+    "쇼핑할 때 할인 혜택을 잘 활용해야 한다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Lisa. What are you looking at?\nW: I’m planning to buy this eco­bag. Isn’t it cute?\nM: It is, but don’t you already have several eco­bags?\nW: Yes, I do. But this one is limited edition!\nM: Well, instead of buying more bags, wouldn’t it be better to use the\nones you already have?\nW: I\nknow\nwhat\nyou\nmean.\nBut\nI\nthought\neco­bags\nwere\nenvironmentally­friendly.\nM: That’s true, but the point is even eco­bags need to be reused as\nlong as possible.\nW: Oh, that makes sense.\nM: If you use one eco­bag for a long time, it will be much better for\nthe environment.\nW: Okay. I’ll try to use the bags I already have."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "이해가 선행되어야 학습 효과가 극대화된다.",
+    "학생을 가르칠 때 큰 소리로 말해 집중시켜야 한다.",
+    "발표 시 핵심어를 반복하여 말하는 것이 효과적이다.",
+    "수업에서 이해한 내용을 빠른 시간 내에 복습해야 한다.",
+    "배운 내용을 소리내어 설명하는 것이 기억에 도움이 된다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Hi, everyone! Welcome back to Smart Study Tips. Has your mind\never gone blank during a test, even though you studied very hard?\nHere’s a simple but effective tip. Explaining what you’ve learned\nout loud can help you remember better. Just pretend you’re a\nteacher and explain what you’ve learned in your own words. You\ncan even talk to yourself in front of a mirror. Try it. You’ll be\nsurprised how well it works!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_9_g1_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: Hey, Lucy! Look at this recycling poster. What do you notice first?\nW: The title at the top really stands out. It says “RECYCLE FOR A\nBETTER FUTURE.”\nM: Right! And below it, there’s the big recycling symbol with three\narrows forming a triangle.\nW: That makes it clear that this is about recycling. On the top arrow,\nthere are plastic bottles.\nM: Yeah, there are! Oh, look! Below the trees, there is paper, which\nstudents often waste.\nW: Right. And beside one of the bottom arrows, there are three cans.\nCans are an important item to recycle.\nM: Exactly. Look at this. There’s an Earth holding a flower. That’s a\nfun way to remind us that we can make a difference.\nW: I agree! This poster does a great job of promoting recycling."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "바닥 보호용 천 가져오기",
+    "문자 메시지 보내기",
+    "벽화 디자인 선택하기",
+    "간식 구입하기",
+    "페인트와 붓 주문하기"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Ryan, I’m excited to paint designs on the walls of the community\ncenter tomorrow!\nM: Me too, Emily. It’s going to brighten up the neighborhood.\nW: Are we all set? Let’s go over the preparations.\nM: Okay. I’ve selected designs to put on each wall. What about the\npaint and brushes?\nW: I ordered them yesterday and they will be delivered this evening.\nM: Good. What else do we need to do?\nW: Oh! I guess we also need sheets to protect the ground from paint.\nM: I’ve already picked them up from the art center. Did you buy\nsnacks for the volunteers?\nW: Yes, I did. One last thing. Do we need to remind all volunteers to\nbring extra clothes? Their clothes might get dirty.\nM: I think we do. I’ll send a text message to them right away.\nW: Perfect. The residents will love the finished walls!"
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$25",
+    "$35",
+    "$40",
+    "$45",
+    "$50"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello! Welcome to Central Park Bike Rentals. How can I help you\ntoday?\nW: Hi, we’d like to rent some bikes.\nM: How many bikes would you like to rent today?\nW: We’ll need one adult bike and one child bike.\nM: Sure! Adult bikes are 15 dollars per hour, and children’s bikes are\n10 dollars per hour. How long will you be renting them for?\nW: We’ll need them for two hours.\nM: Got it. So, that’s one adult bike for two hours and one child bike\nfor two hours.\nW: That’s right. We want to rent helmets too.\nM: Bike rentals include helmets for safety. You should wear them while\nriding the bikes in the park.\nW: Okay, can I use this “GO Green” coupon today?\nM: Sure, you can get a 10% discount on the total price.\nW: Great! Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 학교 영화제에 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "가족 여행을 가야 해서",
+    "결혼식에 참석해야 해서",
+    "축제 행사를 진행해야 해서",
+    "학교 과제를 제출해야 해서",
+    "아르바이트 면접을 봐야 해서"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Hey, Alex. Are you coming to the School Film Festival this\nSaturday?\nM: I wish I could, but I have to miss it this time.\nW: Oh, no, why? I thought you were really looking forward to it.\nM: I was! But something came up, so I can’t make it.\nW: That’s too bad. You don’t have your part­time job this weekend,\nright?\nM: No, I’ve got the weekend off.\nW: Hmm, then maybe you’re busy with some schoolwork?\nM: No, I already finished my big assignments this week.\nW: So, why can’t you come?\nM: I’m going to my cousin’s wedding and the place is really far. It’ll\ntake almost the whole day to get there and back.\nW: Oh, sorry to hear that. But family events like that are important.\nM: Yeah, they are. I’ll definitely check out the next school film\nfestival."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Topas Beachcombing에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "날짜",
+    "등록 방법",
+    "준비물",
+    "참가 인원",
+    "참가비"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Emma, what are you reading?\nW: Hi. I’m reading a post about the Topas Beachcombing activity.\nM: What is that? I’ve never heard of it.\nW: It’s an activity where you go along the beach and collect garbage\nand make something useful or creative with it.\nM: Great! When is it?\nW: This Saturday, the 25th of September, at 10 a.m. on Sunset Beach.\nM: Oh, it’s near my house. How can I join the activity?\nW: You can sign up on their website.\nM: Do I need to bring anything?\nW: Yes, we’ll need gloves and a bag for the garbage.\nM: No problem. Is there a participation fee?\nW: No, it’s free.\nM: Perfect! It sounds meaningful and fun."
+  },
+  {
+   "no": 9,
+   "prompt": "Time Travel VR Experience에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "VR을 통해 한국 석기 시대를 경험한다.",
+    "9월 한 달간 진행된다.",
+    "어린이를 위한 VR 체험 구역이 있다.",
+    "전문가 가이드를 현장에서 신청할 수 있다.",
+    "입장료는 무료이다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello, everyone! I’m excited to tell you about the Time Travel VR\nExperience happening at the Natural History Museum. This event\nwill let you experience the Stone Age of Korea in an amazing way\nusing virtual reality. It will run for the whole month of September\n2025 in the Asian Gallery on the second floor. With a VR headset,\nyou’ll travel back in time to see how people lived in the Stone Age\nof Korea and learn about their daily life. For children, there will\nalso be a fun and interactive VR section. Expert guides will be\navailable only for those who made a reservation in advance online.\nThere is no entrance fee and you can enjoy all the activities free of\ncharge."
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 주문할 스마트 배낭을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_9_g1_q10.png",
+   "answer": 2,
+   "group": null,
+   "script": "W: Hey, John. What are you looking at?\nM: You know I’m planning to travel abroad, so I’m checking out smart\nbackpacks. Want to help me pick one?\nW: Sure, let me see. [Pause] The prices are different.\nM: Yeah, but I don’t want to spend more than 100 dollars.\nW: Got it. Let’s check the size.\nM: I usually carry a laptop, so it should be at least 15 inches.\nW: There’s also an option with a safety feature. Do you need that?\nM: Definitely. It will help keep my belongings safe while traveling.\nThat narrows it down to just two models.\nW: Now, how about a charging port? I think an external port would be\nmore convenient.\nM: Sounds great. I’ll pick the one with an external port. I’ll order it\nright now."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Yes, the repairman is on the way with a spare tire.",
+    "Of course, I filled up the tank at the gas station.",
+    "No, I can’t find the entrance to the building.",
+    "Don’t worry. You can use my tire.",
+    "I did. I got here just in time."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "[Cell phone rings.]\nM: Hey, Daisy. It’s Jacob. Are you almost here? I’m waiting on the\nstreet near my house.\nW: Sorry, Jacob. I had a problem with my car tire. Can you wait a bit\nmore?\nM: Sure. Did you call someone to fix it?\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "That effect in the theater makes your experience special.",
+    "I prefer to follow the fixed time schedule at work.",
+    "Right, the theater has set up comfortable chairs.",
+    "Really? I haven’t watched movies with friends at home.",
+    "Exactly! At home you can watch movies whenever you want."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Danny, do you prefer watching movies at home or going to the\ntheater?\nM: I sometimes go to the theater with friends, but I watch most\nmovies at home.\nW: So do I. Home is more comfortable because I don’t need to follow\nthe theater’s schedule.\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Sure. I’ll recommend a list of courses you might like.",
+    "Okay. Choose a course you think you’ll score well in.",
+    "Cheer up! You’ll make up with Henry soon.",
+    "Well, the time to choose courses is over.",
+    "No worries. I think you did your best!"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Hello, Ms. Taylor.\nW: Hi, Luke. What brings you in my office?\nM: I’m not sure about which courses to pick for next year. I’m thinking\nof taking the same courses as my friend, Henry.\nW: I understand why you feel that way. However, it’s not a good idea\nto just follow your friend without considering what’s best for you.\nM: But, I don’t even know where to begin. Can you give me some\nguidance?\nW: What do you enjoy doing?\nM: Umm. I guess I like creating video clips.\nW: That is the starting point. You can choose courses related to that.\nM: Ah! I see. Could you help me find courses that fit me?\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Good decision. I’m sure you’ll do a good job.",
+    "Yes. Let’s remove the kitchen table for more space.",
+    "I don’t think so. I could never do something like that.",
+    "Exactly. You’d rather work harder to earn more money.",
+    "No way. You should stick to your usual spending habits."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Kevin, what are you writing about?\nM: Hi, Eva. I’m writing about the money­saving challenge I completed.\nW: The money­saving challenge? What’s that?\nM: It’s a challenge where you try to reduce your spending and do not\nbuy unnecessary things for a set time. I did it for a month.\nW: Really? Wasn’t it so hard?\nM: Not that much. I spent money on things I really needed.\nW: Why did you decide to do that?\nM: At first, it was just to save money. But it also made me realize\nthat I have wasted money on too many extra things.\nW: Oh, I see. So it’s about cutting out unnecessary spending?\nM: Exactly. And I found free ways to have fun. For example, cooking\nmore at home, instead of eating out!\nW: That sounds difficult but rewarding. I’ll do the same!\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Liam이 Sophia에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Can I borrow your mini oven to practice baking cookies?",
+    "Are you using the recipe for cookies that I gave you?",
+    "Do you want to learn how to bake cookies together?",
+    "Where will you buy a mini oven to use at home?",
+    "How do you make your cookies taste so good?"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Liam and Sophia are college students and friends. Liam recently\nlearned how to bake cookies in a cooking class and wants to\npractice the recipe at home. However, he doesn’t have a mini oven,\nand he cannot afford to buy one right now. He remembers that\nSophia has a mini oven at home and often brings freshly baked\ncookies to class. So, he wants to ask her if she can lend him her\nmini oven. In this situation, what would Liam most likely say to\nSophia?\n16번부터 17번까지는 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nW: Hello, nature lovers! If you’re planning to observe wild animals on\nyour next countryside walk, here are must­have items to make your\nexperience enjoyable. First, bring a notebook to record interesting\nobservations about the animals you spot, such as their behavior or\nappearance. Second, don’t forget to carry a camera. It’s a great way\nto capture special moments and share them with others later. Next,\na raincoat will keep you dry and comfortable in case of unexpected\nrain, allowing you to stay focused on your adventure. Lastly, bring\na map to help you navigate unfamiliar areas and avoid getting lost.\nPreparing these necessities will ensure that you have a safe and\nenjoyable experience while exploring the natural surroundings of\nwild animals.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "tips for using outdoor items for camping",
+    "essential items for observing wild animals",
+    "practical items made from natural surroundings",
+    "costs of upgrading tools for wildlife observation",
+    "tools that were inspired by wild animals’ behaviors"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, nature lovers! If you’re planning to observe wild animals on\nyour next countryside walk, here are must­have items to make your\nexperience enjoyable. First, bring a notebook to record interesting\nobservations about the animals you spot, such as their behavior or\nappearance. Second, don’t forget to carry a camera. It’s a great way\nto capture special moments and share them with others later. Next,\na raincoat will keep you dry and comfortable in case of unexpected\nrain, allowing you to stay focused on your adventure. Lastly, bring\na map to help you navigate unfamiliar areas and avoid getting lost.\nPreparing these necessities will ensure that you have a safe and\nenjoyable experience while exploring the natural surroundings of\nwild animals.\n다시 한 번 듣겠습니다."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 물건이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "a notebook",
+    "a camera",
+    "a raincoat",
+    "a flashlight",
+    "a map"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, nature lovers! If you’re planning to observe wild animals on\nyour next countryside walk, here are must­have items to make your\nexperience enjoyable. First, bring a notebook to record interesting\nobservations about the animals you spot, such as their behavior or\nappearance. Second, don’t forget to carry a camera. It’s a great way\nto capture special moments and share them with others later. Next,\na raincoat will keep you dry and comfortable in case of unexpected\nrain, allowing you to stay focused on your adventure. Lastly, bring\na map to help you navigate unfamiliar areas and avoid getting lost.\nPreparing these necessities will ensure that you have a safe and\nenjoyable experience while exploring the natural surroundings of\nwild animals.\n다시 한 번 듣겠습니다."
+  }
+ ]
+}

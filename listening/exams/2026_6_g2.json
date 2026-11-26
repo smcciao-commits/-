@@ -1,0 +1,292 @@
+{
+ "id": "2026_6_g2",
+ "year": "2026",
+ "month": "6",
+ "grade": "고2",
+ "school": "부산",
+ "title": "2026학년도 6월 고2 전국연합학력평가 영어",
+ "duration": 1517.0,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_6_g2.mp3",
+ "starts": [
+  174.6,
+  242.0,
+  328.7,
+  404.9,
+  486.6,
+  564.0,
+  648.0,
+  722.4,
+  803.4,
+  894.2,
+  973.0,
+  1010.6,
+  1057.7,
+  1145.5,
+  1221.1,
+  1305.9,
+  1305.9
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "보건실 이용 방법을 설명하려고",
+    "학교 급식 도우미를 모집하려고",
+    "급식 만족도 조사 참여를 독려하려고",
+    "학교 웹사이트 주소 변경을 알려주려고",
+    "학교 구내식당 운영 중단 계획을 공지하려고"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Good afternoon, students of Robinson High School. This is your\nprincipal. I have an important announcement for all of you. Due to\nmajor construction, we are planning to close the school cafeteria.\nThis construction is necessary because the cafeteria requires\nsignificant upgrades to meet safety standards and make enough\nspace for our growing student population. You won’t be able to use\nthe cafeteria for a month, starting this Saturday. We understand this\nclosure will impact your lunchtime routine. So we’ve made careful\nplans to minimize your inconvenience. Please check our school\nwebsite for updates and more details about the closure. Thank you\nfor your understanding."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "꾸준한 복습은 좋은 학습 습관 형성에 필수적이다.",
+    "친구와 함께 공부하는 것은 학습 동기를 높여 준다.",
+    "스스로 문제를 만들어 보는 것은 학습에 도움이 된다.",
+    "약간의 소음 속에서의 학습은 집중력을 길러줄 수 있다.",
+    "다양한 문제를 푸는 것은 문제 해결력 향상에 효과적이다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Sarah, you look frustrated. What’s wrong?\nW: Mr. Johnson, I studied a lot for the history test. I read the textbook\nmany times, but I still got a low score.\nM: I see. Have you tried making your own questions while studying?\nW: No, I haven’t. Does it help?\nM: Oh, yes. Making questions yourself really helps learning.\nW: I thought it would be better to read more about the parts that I\ndon’t know well.\nM: Actually, creating questions helps you find what you don’t\nunderstand yet. That way, you can check what you don’t know.\nW: I didn’t think about that.\nM: Plus, by doing so, you think carefully about what you read. It helps\nyou learn the content better.\nW: That really makes sense.\nM: That’s why it’s helpful to make questions for yourself.\nW: Okay. I’ll try that next time."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "컴퓨터 화면을 오래 볼 때는 규칙적인 눈의 휴식이 필요하다.",
+    "컴퓨터 사용 후 가벼운 스트레칭은 자세 교정에 도움을 준다.",
+    "눈의 건조 증상을 막으려면 실내 습도를 조절하는 것이 좋다.",
+    "컴퓨터 화면과 눈의 거리를 적절히 유지하는 것이 중요하다.",
+    "숙면을 위해 취침 전 전자기기 사용을 자제해야 한다."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Good evening, listeners! I’m Danielle from Daily Health Tips. Do\nyou spend long hours sitting in front of a computer at work? Today,\nI’m going to talk about why it’s necessary to give your eyes regular\nrests from the computer screen. Looking at a screen for too long\ncan cause dry eyes, unclear vision, and headaches. These symptoms\nmake it hard to concentrate and be productive. Giving your eyes\nregular rests allows them to relax and recover. This then reduces\nany vision problems or physical discomfort and improves work\nefficiency. Next time you find yourself looking at a computer screen\nfor a long time, remember to take a rest for your eyes!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_6_g2_q4.png",
+   "answer": 3,
+   "group": null,
+   "script": "M: Ms. Williams, I heard you’re decorating the new staff wellness\nroom. How’s it going?\nW: It’s almost done, Mr. Thompson. Here’s a picture.\nM: Let me see. [Pause] Wow! There’s an exercise bike in the room.\nW: Right. I thought using this exercise bike would help improve our\nhealth.\nM: What’s that stripe­patterned mat on the floor?\nW: Oh, that’s for people who want to stretch or do yoga. Do you see\nthe round mirror on the wall?\nM: Yes. We can use it to check our posture.\nW: Exactly! What do you think about these two massage chairs?\nM: They look so comfortable.\nW: They are. People can use them to relax after a long day.\nM: Great. I also love the flower vase on the table.\nW: I thought seasonal flowers would lift everyone’s mood.\nM: I can’t wait to use the room!"
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "의자 배치하기",
+    "포스터 부착하기",
+    "강당 청소하기",
+    "마이크 교체하기",
+    "유인물 출력하기"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Mr. Kim, the freshman orientation is tomorrow morning. It’s almost\nhere.\nM: Yes. I hope everything goes well. Let’s go over what we prepared\none last time.\nW: Okay. I finished arranging the chairs for the new students.\nM: Great. I’ve already put up the welcome posters in the auditorium.\nW: Perfect. Did you print the handouts?\nM: Yes, I did. I printed them this morning.\nW: Then most things seem ready.\nM: Actually, when I tested the microphone in the auditorium, it didn’t\nwork properly.\nW: That could be a serious problem during the orientation.\nM: Don’t worry. I’ll replace it. We have another microphone.\nW: Thanks. I’ll make sure the auditorium is clean while you do that."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 남자가 지불할 금액을 고르시오.",
+   "points": 2,
+   "choices": [
+    "$36",
+    "$45",
+    "$50",
+    "$54",
+    "$60"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Welcome to Jenny’s Flowers. How can I help you?\nM: Hi. I’d like to buy something special for my wife’s birthday. Can you\nrecommend anything?\nW: How about these baskets of fresh flowers? We have two sizes.\nM: They look lovely. How much are they?\nW: The small one is $30, and the large one is $50.\nM: Hmm, I think the bigger one looks better. I’ll take one large basket.\nW: Great choice. You can add these teddy bears to the basket as well.\nThey only cost $5 each.\nM: They’re cute. I’d like to add two of them.\nW: Okay. So, that’s one large flower basket with two teddy bears,\nright?\nM: Yes. And can I use this coupon for a discount?\nW: Sure. You can get 10% off the total price.\nM: That’s great. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 여자가 Sun Beach Cleanup Event에 가지 않은 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "감기에 걸려서",
+    "조별 발표가 있어서",
+    "동아리 면접을 봐야 해서",
+    "밀린 과제를 끝내야 해서",
+    "삼촌과 점심 식사가 있어서"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Julia, you didn’t show up at the Sun Beach Cleanup Event last\nSaturday.\nW: Yeah, I felt bad about missing it.\nM: I thought maybe you weren’t feeling well. I heard you had a cold\nlast week.\nW: I did, but I was fine on Saturday.\nM: Then did you have a meeting for your group project?\nW: No, that was actually on Friday, and we finished everything.\nM: Oh, I remember! You mentioned you had a club interview. Did that\nrun late?\nW: It was postponed, so that wasn’t the reason, either.\nM: Then what kept you from coming?\nW: My uncle visited that day. I had lunch with him because it had been\na long time since I’d seen him.\nM: Ah, that explains why you couldn’t make it."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Stonefield Drawing Picnic에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "장소",
+    "날짜",
+    "준비물",
+    "참가비",
+    "기념품"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hey, Dave! What are you doing?\nM: Hi, Emma. My art club is hosting the Stonefield Drawing Picnic, so\nI’m putting up posters.\nW: Drawing Picnic? Sounds interesting. Let me take a look.\nM: It’s at Stonefield Park. We’ll gather there, have a picnic, and draw\ntogether. You should come.\nW: Oh, Stonefield Park is close to my house! And I see it’s on October\n22nd.\nM: Yeah, that’s right. Are you free that day?\nW: I don’t have any plans yet. But it says there’s a participation fee.\nM: Yes, it’s just $5. And everyone will receive a souvenir just for\njoining.\nW: A souvenir? What is it?\nM: An art supply set for drawing. We’ll have so much fun. I promise!\nW: Sounds great. I’ll definitely come."
+  },
+  {
+   "no": 9,
+   "prompt": "2026 Future Innovation Expo에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "10월 3일부터 5일까지 개최된다.",
+    "올해의 주제는 미래 교통수단이다.",
+    "첫날 오전 11시에 강연이 진행된다.",
+    "자율주행차를 타볼 수 있다.",
+    "티켓은 현장에서 구매할 수 있다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Hello, I’m Mike, manager of the Westbridge Convention Hall. We are\nexcited to announce that we are hosting the 2026 Future Innovation\nExpo. It’ll be held from October 3rd to 5th. This year’s theme is\nfuture transportation. For just $20, you can check out the latest and\ngreatest vehicle technology from top global brands. At 11 a.m. on\nthe first day, Dr. Jihun Lee will deliver a lecture about green\nmobility. It’ll be a great chance to see the future of eco­friendly\nvehicles. And here’s the real highlight. You can take a ride in a\nself­driving car. Because Expo tickets are limited, you’d better get\nyours early. Tickets are available online only. For more information,\nplease visit our website. Thank you."
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 남자가 주문할 컴퓨터 마우스를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_6_g2_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Mia, I’m looking online at some of the best­selling computer mouse\nmodels. Could you help me choose one?\nW: Sure. Let’s look at them together. What’s your budget?\nM: I’d like to stay under $40.\nW: Okay, then anything above that is out. Now, which color do you\nprefer?\nM: Anything but white. It gets dirty easily. And I’m not sure about the\nconnection type.\nW: Most people find wireless more convenient.\nM: Then I’ll go with wireless. It looks like we have two options left.\nW: I’d recommend the one with a silent click. Loud clicking can be\ndistracting.\nM: I agree. A silent click is better.\nW: In that case, there’s only one model that meets your needs.\nM: Great. I’ll order that one."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I usually buy my skateboards online.",
+    "Skateboards are too expensive these days.",
+    "You should’ve gotten some tips before buying it.",
+    "You can borrow my new board if you like it so much.",
+    "I couldn’t ride it anymore because it broke completely."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Hey, Linda. Is that your new skateboard? It looks awesome!\nW: Thanks, Glen. I recently bought it. I had to replace my old board.\nM: What happened to your old one?\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I agree. It might be a good way to motivate me to run.",
+    "Great idea. That’s the best running route I’ve taken.",
+    "Right. You should definitely try running a marathon.",
+    "I’m sorry. I’ve already finished running for today.",
+    "Don’t worry. I’ll keep you motivated every day.━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "고르시오. [3점]\nW: Hi, Charlie. Last time you told me that you started running every\nmorning. How’s that going?\nM: Well, I tried for a few weeks, but I found it hard to stay motivated\non my own.\nW: That’s the exact reason I joined a local running club. I think you\nwould benefit from it as well.\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Great idea! Then I can try it first without buying anything.",
+    "My pleasure. I don’t need my old camping gear anymore.",
+    "You’re right. Thanks to you, I enjoyed this camping trip a lot.",
+    "Too bad. If I were you, I would find a better campsite.",
+    "I don’t think so. You should’ve booked it in advance."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "고르시오. [3점]\nW: Hey, Max. You go camping often, right?\nM: What’s up, Jamie? Yeah, I camp every weekend with my family.\nWhy do you ask?\nW: I’ve been thinking about trying it. It looks fun.\nM: That’s wonderful!\nW: Yes, but I feel overwhelmed because there’s so much camping\nequipment to buy.\nM: I understand. I thought I needed so much at first, too. But you don’t\nneed everything to get started.\nW: Really?\nM: Yes. You can start by buying only a few important items and see\nhow it goes. You can buy the rest later if you really need it.\nW: That sounds doable. But still, camping equipment is expensive. What\nif I buy some things and find out camping isn’t for me?\nM: Well, if you’re not sure, why don’t you go camping with someone\nwho already has equipment?\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Sorry. You should’ve prepared the handouts earlier.",
+    "Great. Then I won’t have to worry about printing.",
+    "No thanks. I’ve already checked the data.",
+    "That’s odd. My printer is working fine today.",
+    "Good for you. The presentation turned out great."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Jason, I heard you’re in charge of giving the presentation at\ntomorrow’s meeting.\nM: Yeah, that’s right. I’ve been working on it all week.\nW: How are things going with it?\nM: Pretty well. I’ve finished all the presentation slides.\nW: That’s good. Did you check the data and charts?\nM: Yes, I went over all the numbers this morning to make sure they\nwere correct.\nW: Sounds like you’re almost ready, then.\nM: I thought so, but there’s one thing I’m worried about.\nW: Oh, really? Is there something wrong?\nM: The printer in my office suddenly stopped working, so I can’t print\nthe presentation handouts at the moment.\nW: I can do it for you in my office, if you want.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Ethan이 Chloe에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Let me send you last year’s film through email.",
+    "Let’s have students email their videos directly to us.",
+    "How about using an online platform to edit the videos?",
+    "You should make a shared folder before collecting the videos.",
+    "Why don’t we share our ideas with council members online?"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "고르시오. [3점]\nW: Ethan and Chloe are members of the student council. As part of the\nupcoming graduation ceremony, they want to make a special film.\nLast year, they made a film consisting of short videos taken by\nstudents, and it was really popular. So, they decided to use the\nsame idea. To collect the videos, Chloe proposes creating a shared\nfolder online like last year so everyone can upload freely. However,\nEthan remembers that they had problems last year because some\npeople used the videos without permission. He’d like to avoid that.\nSo, Ethan wants to suggest to Chloe that they use their emails to\ncollect students’ videos. In this situation, what would Ethan most\nlikely say to Chloe?\n[16~17] 다음을 듣고, 물음에 답하시오.\nM: Good morning, students. Last week, we briefly learned about the\neffect of colors on people’s mood. Today, we’re going to look at the\nways they influence athletes’ performance in sports. First, red can\nraise an athlete’s energy and push them to act more boldly during\nplay. It often increases physical effort, which may help in fast or\naggressive sports. Second, to help athletes stay calm under pressure\nin close games, blue is useful. It also supports clear thinking, which\ncan lead to better choices in games. Third, green gives a sense of\nbalance and encourages a steady pace. This color can reduce stress\nas well, which helps athletes stay relaxed during long events.\nFinally, power and strong presence are linked to black. It may help\nathletes feel more confident when they compete. Now, let’s see\nsome examples from around the world showing how sports teams\nuse them to benefit their athletes."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "how colors affect the performance of athletes",
+    "various colors used in sports brand marketing",
+    "role of colors in sports team logo design",
+    "why sports fans prefer certain team colors",
+    "historical roots of color usage in team uniforms"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Good morning, students. Last week, we briefly learned about the\neffect of colors on people’s mood. Today, we’re going to look at the\nways they influence athletes’ performance in sports. First, red can\nraise an athlete’s energy and push them to act more boldly during\nplay. It often increases physical effort, which may help in fast or\naggressive sports. Second, to help athletes stay calm under pressure\nin close games, blue is useful. It also supports clear thinking, which\ncan lead to better choices in games. Third, green gives a sense of\nbalance and encourages a steady pace. This color can reduce stress\nas well, which helps athletes stay relaxed during long events.\nFinally, power and strong presence are linked to black. It may help\nathletes feel more confident when they compete. Now, let’s see\nsome examples from around the world showing how sports teams\nuse them to benefit their athletes."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 색깔이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "red",
+    "blue",
+    "purple",
+    "green",
+    "black"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Good morning, students. Last week, we briefly learned about the\neffect of colors on people’s mood. Today, we’re going to look at the\nways they influence athletes’ performance in sports. First, red can\nraise an athlete’s energy and push them to act more boldly during\nplay. It often increases physical effort, which may help in fast or\naggressive sports. Second, to help athletes stay calm under pressure\nin close games, blue is useful. It also supports clear thinking, which\ncan lead to better choices in games. Third, green gives a sense of\nbalance and encourages a steady pace. This color can reduce stress\nas well, which helps athletes stay relaxed during long events.\nFinally, power and strong presence are linked to black. It may help\nathletes feel more confident when they compete. Now, let’s see\nsome examples from around the world showing how sports teams\nuse them to benefit their athletes."
+  }
+ ]
+}

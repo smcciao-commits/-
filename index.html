@@ -4341,6 +4341,36 @@ function openWritingApp(asTeacher){
   location.href = 'writing.html' + (n ? ('?ban=' + encodeURIComponent(b) + '&name=' + encodeURIComponent(n)) : '');
 }
 
+/* ================= v171: 🎧 모의고사 영어듣기 (listening.html) =================
+   · 2024·2025·2026학년도 고1·고2 전국연합학력평가 3·6·9·10월 24회분의
+     영어 듣기(1~17번) mp3·문제·정답·대본을 앱 안에서 그대로 풀 수 있어요.
+   · 예비고1 반과 선생님(조수민 9259) 미리보기에만 보여 줍니다. */
+function lsListeningBest() {
+  try { return JSON.parse(localStorage.getItem('topedu_listening_v1') || '{}') || {}; } catch (e) { return {}; }
+}
+function drawListeningCard(me) {
+  if (!me || (me.ban !== '예비고1' && me.ban !== '선생님')) return '';
+  var best = lsListeningBest(), done = 0, total = 24, hi = 0;
+  Object.keys(best).forEach(function (k) {
+    done++;
+    var b = Number(best[k] && best[k].best) || 0;
+    if (b > hi) hi = b;
+  });
+  return '<div style="margin:8px 0 12px;padding:12px 14px;background:linear-gradient(135deg,#e6fffa,#f0fdfa);border:2px solid #14b8a6;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 3px 10px rgba(13,148,136,0.14)" onclick="openListeningApp()">' +
+    '<div><div style="font-family:Maplestory,sans-serif;font-weight:700;font-size:14.5px;color:#0f766e">🎧 모의고사 영어듣기 (고1·고2 3년치)</div>' +
+    '<div style="font-size:12px;color:#5b7b78;margin-top:2px">2024·2025·2026학년도 3·6·9·10월 학평 · ' + total + '회 탑재' +
+    (done ? (' · 완료 ' + done + '회' + (hi ? (' · 최고 ' + hi + '점') : '')) : ' · 아직 안 들었어요') + '</div></div>' +
+    '<button style="background:#0d9488;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">들으러가기 →</button></div>';
+}
+function openListeningApp() {
+  var b = (S.cred ? S.cred.ban : (S.home && S.home.me ? S.home.me.ban : ''));
+  var n = (S.cred ? S.cred.name : (S.home && S.home.me ? S.home.me.name : ''));
+  try {
+    if (n) localStorage.setItem('topedu_listening_user_v1', JSON.stringify({ ban: b, name: n }));
+  } catch (e) {}
+  location.href = 'listening.html' + (n ? ('?ban=' + encodeURIComponent(b) + '&name=' + encodeURIComponent(n)) : '');
+}
+
 /* ================= v99: ✅ 숙제 1초 체크 (4항목 · 앱 단어 자동 연동) =================
    · 학생 칸마다 단어·독해·영작·내신숙제 4개 항목을 ○ → △ → ✕ → (빈칸) 순서로 한 번씩 터치해 기록
    · 📝 반별 숙제 메모 / 항목 설정(추가·이름변경·삭제)
@@ -6490,7 +6520,9 @@ function showHome(){
     '<button style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:12.5px;cursor:pointer">쓰러가기 →</button></div>';
   }
   /* v95: 📺 반별 유튜브 인강관 — 예비고1(빠바+능률VOCA 어원편)·중2(주니어 실력)·중1(중등필수), 원장님은 4종 전부 */
+
   _extra += bbHomeCards(me.ban);
+  try { _extra += drawListeningCard(me); } catch(e){}
   _extra += drawLiveClassBanner(me.ban);
   /* v151: 🐱 캐츠 훈련관(cats.html)은 초등부 전체에게 똑같이 보여 줍니다 */
   if (me.ban === '초5' || me.ban === '풍덕초6') {
@@ -11165,7 +11197,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v173';
+var TOPEDU_APP_VERSION = 'v174';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };

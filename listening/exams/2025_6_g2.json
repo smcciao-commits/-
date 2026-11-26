@@ -1,0 +1,292 @@
+{
+ "id": "2025_6_g2",
+ "year": "2025",
+ "month": "6",
+ "grade": "고2",
+ "school": "부산",
+ "title": "2025학년도 6월 고2 전국연합학력평가 영어",
+ "duration": 1486.9,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_6_g2.mp3",
+ "starts": [
+  186.0,
+  244.0,
+  309.2,
+  388.7,
+  466.4,
+  542.4,
+  629.5,
+  710.8,
+  784.9,
+  862.2,
+  940.2,
+  985.9,
+  1033.8,
+  1106.7,
+  1178.7,
+  1256.1,
+  1256.1
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "보건실 이용에 대해 안내하려고",
+    "구급약 사용 방법을 설명하려고",
+    "보건실 환경 개선을 건의하려고",
+    "학생 식당 위치를 알려주려고",
+    "학사 일정 변경을 공지하려고"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Good morning, students! This is your school nurse, Emma Lee.\nWhat do you think of high school life so far? Since this is your first\nsemester, I’m going to give you some guidelines for visiting our\nschool clinic. First, the clinic is located on the third floor next to\nthe school cafeteria. And it’s open Monday through Friday, from 9\na.m. to 4 p.m. I’ll be there to help you with anything you need like\nmedicine or some treatment. Lastly, when you are in the clinic,\nplease be careful not to disturb the other students. I hope you have\na safe and healthy school life. Thank you."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "물건을 충동적으로 구매하지 않아야 한다.",
+    "지출을 기록하는 것은 금전 관리에 도움이 된다.",
+    "부모로부터 경제적으로 독립하는 것이 필요하다.",
+    "현명한 소비는 자기 만족감을 향상시킬 수 있다.",
+    "기억력 향상을 위해 메모하는 습관을 길러야 한다."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hey, sweetie. Why are you so quiet?\nW: Dad, I feel bad today.\nM: What’s the matter?\nW: I can’t buy the running shoes I want.\nM: How come? You just got paid from your part‐time job!\nW: Yeah, but I spent it all. I feel like I never have enough money.\nM: Have you tried writing down where you spend your money?\nW: No, I haven’t. Do you think writing it down is helpful?\nM: Totally. Once you see where your money goes, you’ll be more\ncareful with it.\nW: Oh, that’s a good point, Dad.\nM: It’s crucial to keep a record of your spending. That’ll help you\nmanage your money wisely.\nW: Okay, I’ll remember that."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "질문은 의사소통을 원활하게 만들어 준다.",
+    "어려운 과업일수록 더 꾸준한 연습이 필요하다.",
+    "지나친 조언은 오히려 대화를 단절시킬 수 있다.",
+    "성공하기 위해서 원만한 인간관계가 필수적이다.",
+    "좋은 관계 형성을 위해 경청하는 태도가 중요하다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: Good evening, everyone! This is Christina Turner, and you’re tuning\nin to Christina’s Radio Show. Tonight, one of our listeners asked\nhow to keep relationships strong and healthy. Actually, many people\nwant to know the answer. The most important way to build good\nrelationships is to show that you’re listening. As you know,\ncommunication works two ways. It’s not just about speaking, but\nalso about paying attention to what others are saying. You have to\ntry to understand and show that you really care. It can be\nchallenging at first. But the more carefully you listen, the better\nyour relationships will be. Now, let’s hear a few stories and tips\nfrom our listeners."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_6_g2_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello, Jane. How was your weekend?\nW: Hi, Walter. It was nice. My family watched a movie together\noutdoors. Here’s the photo.\nM: Wow! That looks fantastic. Did you set up the screen in the center\nby yourself?\nW: No, my kids helped me out. It took some time, but we got it done.\nM: The lights above the screen are perfect. They really set the mood.\nW: You’re right about that.\nM: I’m sure your kids liked the lights.\nW: They did. I also put some popcorn on the table for their snacks.\nM: That’s very sweet. Oh, you used the heart‐shaped picnic mat I gave\nyou!\nW: It was so useful. Thanks.\nM: Is that your dog sitting next to the picnic mat?\nW: Yeah, he loved being outdoors, too. We had so much fun together."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "상품 준비하기",
+    "무대 장식하기",
+    "참가 신청서 받기",
+    "심사 위원 선정하기",
+    "스피커 점검하기"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Katie, are we almost done with the preparations for our school’s\ndance competition?\nW: I guess so, Justin. But I’m still worried things might not go well.\nM: Let’s do a final check together, then. Do you have the list of\nperforming teams?\nW: Yes, I have it right here.\nM: I see. And who’s going to judge the performance?\nW: Well, I’ve asked some teachers for their help. And I’ve prepared\nprizes for the top three teams.\nM: Good! And I put up the stage decorations with my friends.\nW: I already had a look. And they’re great!\nM: How about the audio? Are the speakers working properly?\nW: Oh no! I’ve been so busy that I completely forgot to check the\nspeakers.\nM: No worries. Let me take care of it.\nW: Thank you."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$70",
+    "$72",
+    "$90",
+    "$94",
+    "$100"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hello! Welcome to Tom’s Party Supplies. How can I help you?\nW: Hi. I want to get something for my grandma’s birthday party.\nM: You’ve come to the right place. What do you have in mind?\nW: I’m looking for some balloons and gift bags.\nM: I see. This set of birthday balloons is very popular, and it’s only\n$20 per set.\nW: Excellent. I’ll take two sets. Can you show me some gift bags?\nM: Certainly. These are our gift bags. We can also make special ones\nfor you, if you’d like.\nW: Awesome. Is it possible to put my grandma’s picture on this bag?\nM: Sure. That would be $2 for each bag with a picture.\nW: Great. Then, I’ll take 30.\nM: So two sets of balloons and 30 special gift bags, right?\nW: Yes. I have this discount coupon. Can I use it now?\nM: Of course. That’ll give you 10% off the total.\nW: Good. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 시상식에 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "대학 입학 면접이 있어서",
+    "아르바이트를 해야 해서",
+    "여동생 병문안을 가야 해서",
+    "도서관 자원봉사를 해야 해서",
+    "공연 리허설과 일정이 겹쳐서"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Hi, Patrick! Can we talk for a second?\nM: Sure, what about?\nW: I just got a call from our community center. They said that we won\nfirst place in the creative writing contest!\nM: What? That’s amazing! I can’t believe it!\nW: So they asked us to go to the award ceremony. It’ll be at the\ncommunity center next Friday at 5 p.m.\nM: Oh, I’m afraid I can’t go.\nW: Really? Are you doing your part‐time job that day?\nM: No, I only work on weekends.\nW: Then, is it because you have to volunteer at the library?\nM: No, it’s not that either.\nW: I see. I remember you said you had to go see your sister at the\nhospital.\nM: No, I went to see her last week. It’s actually because I have a\nuniversity entrance interview that day.\nW: Oh, I totally understand. I’ll attend the ceremony for both of us."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Darlington Park Festival에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "운영 프로그램",
+    "날짜",
+    "입장료",
+    "주차 요금",
+    "신청 방법"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hey, Sandie! I saw a poster for Darlington Park Festival. Have you\nheard about it?\nW: No, I haven’t, Jonathan. Why don’t you tell me about it?\nM: Well, there will be programs like face painting, kite flying, and band\nperformances.\nW: Sounds amazing! When is it?\nM: This Saturday, June 28th. Do you want to go?\nW: I’d love to! Do you know if there’s an admission fee?\nM: It’s free for everyone. We just need to sign up for it.\nW: Great. I wonder how we do that.\nM: We can just scan the QR code on the poster and register our names.\nW: Awesome. Then, where should we meet? I’ve never been there.\nM: Don’t worry. I can give you a ride from your place.\nW: That’s so sweet of you! See you then."
+  },
+  {
+   "no": 9,
+   "prompt": "Bake a Cake Competition에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "8월 31일에 개최된다.",
+    "기본 재료는 제공된다.",
+    "조리법을 대회 당일 제출해야 한다.",
+    "세 명의 심사 위원이 케이크를 시식할 것이다.",
+    "웹사이트에서 참가 신청을 할 수 있다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Hello, cake lovers! Today I’m excited to announce our Bake a Cake\nCompetition. This once‐a‐year event takes place on August 31st and\nis open to everyone in our city. You’ll bake a cake and decorate it\nto show off your baking skills and creativity. We’ll provide the basic\ningredients like flour and butter. And you’re allowed to bring\nanything you might need. For judging, you should submit your recipe\nto our official email two weeks before the competition day. To\nevaluate your cake, three judges will have a taste of it. Then, they’ll\ndecide the winner based on both the recipe and the final work. You\ncan sign up for this event on our official website. Don’t miss out on\nthis great opportunity!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 두 사람이 주문할 여행용 가방을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_6_g2_q10.png",
+   "answer": 2,
+   "group": null,
+   "script": "W: Honey, what are you doing?\nM: I’m looking at a website to buy a travel bag for our summer trip to\nVietnam.\nW: Let me see. What size do you think we need?\nM: I don’t think we should buy a 28‐inch bag.\nW: Right! An oversized bag will be uncomfortable to handle.\nM: Exactly. And I don’t want to spend more than $140 on a travel bag.\nW: I agree. We’ll need a lot of money when traveling. What about the\nchoice of materials?\nM: Oh, there are only two kinds available! Which one do you prefer?\nW: I think the plastic one will be better. Fabrics can get dirty easily.\nM: You’re right. Also, I think we need a lock.\nW: Yes, it’s a good idea to have a lock for security.\nM: Then let’s order this one."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Absolutely. You can donate them next time instead.",
+    "Don’t worry. I’m going to the supermarket right now.",
+    "Never mind. We’ve already got things we need to use.",
+    "Sure. Let’s first pick out some items in good condition.",
+    "Sorry. I didn’t have enough money to buy toys for kids."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Mom, our school is having a flea market for charity this weekend.\nSo I’m thinking of donating my old stuff.\nW: Oh, that sounds like a great idea! It’ll really help others.\nM: Yes, but I’m not sure what to give. Could you help me with\nselecting the things for donation?\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "In that case, you can check other libraries for the book.",
+    "Unfortunately, you have to pay a fine if you return it late.",
+    "I don’t think so. I haven’t really heard of that author.",
+    "Exactly. You should return the book by the due date.",
+    "Sure, I guess you should probably order three more.━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Excuse me. I’m looking for the novel Tiny Beautiful Things by Kate\nDavidson. Do you have a copy of it?\nM: Let me just check in our library system. [Typing sound] I’m sorry,\nthey’re all checked out.\nW: Oh, that’s too bad. I really need to read it for my homework as soon\nas possible.\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "No worries. I often keep myself updated with them.",
+    "I’m afraid not. You need more experience in fashion.",
+    "Of course. You already have what it takes for the job.",
+    "You’re right. I have more responsibilities at the magazine.",
+    "Sorry to hear that. You’ll get another chance in the future."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "고르시오. [3점]\nM: Honey, do you have a minute?\nW: Sure. What’s on your mind?\nM: I’m thinking about applying for a position at Metro Magazine.\nW: Sounds exciting! What position is it?\nM: It’s for the fashion editor. You know I’ve always been interested in\nfashion.\nW: Of course. I think you’ll do a great job.\nM: Well, I’m just worried if I’m suitable for the position.\nW: What for? You have enough experience as an editor and you’re the\nbest one I know. Believe in yourself!\nM: But it’s been a long time since I had that job.\nW: I see. But you’ve always kept up with the latest fashion trends.\nM: Yes, I have. Do you think I’m ready for it?\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Right. All you need is a yoga mat and a towel.",
+    "Okay. I’ll give it a try to see if it’s right for me.",
+    "Sorry. Registration is already closed at this time.",
+    "Great. My yoga class is very popular around here.",
+    "Too bad. You should have worked out much harder."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hey, Anna. You seem to be in a hurry. Where are you going?\nW: Hi, Kevin. I’m heading to my yoga class now.\nM: Oh, are you doing yoga this late in the evening?\nW: Yes. I always feel more relaxed after a yoga class.\nM: Really? I thought it would make you more tired.\nW: Not at all. During the class, I do a lot of stretching. That reduces\nthe stress from the day.\nM: You mean you become less stressed out after doing yoga?\nW: Exactly. My body feels much lighter and I even fall asleep more\neasily.\nM: That sounds interesting. I need something to relieve my stress.\nW: If you want, you could come to the yoga class with me tomorrow.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Ben이 Amy에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "How about putting our ideas together for the project?",
+    "Let me tell you how to reduce food waste at school.",
+    "Why don’t we do a campaign about recycling?",
+    "You need to get the teacher’s permission right away.",
+    "I think we should share his ideas with our classmates."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Ben and Amy are in the same environmental club in high school.\nThey are doing an environmental campaign project and discussing\nideas together. Ben sees that students sometimes throw away trash\nwithout recycling. So he wants to encourage them to recycle all the\ntime. Meanwhile, Amy feels that asking students to reduce food\nwaste is also a good idea because she notices a lot of leftovers in\nthe school cafeteria. Ben thinks that both ideas will certainly help\nstudents to think more about the environment. So he wants to\nsuggest that they include both ideas in their project. In this\nsituation, what would Ben most likely say to Amy?\n[16~17] 다음을 듣고, 물음에 답하시오.\nW: Hello, students! In our last lesson, we learned how animals use their\nsenses to find food. Today, we’ll talk about ways some animals\ndefend themselves from enemies. First, one of the most well­known\nof these animals is the skunk. Skunks spray a bad­smelling liquid to\nkeep enemies away. Skunk spray does not cause any lasting\ndamage, though its smell is hard to remove. Second, chameleons\nchange the color of their skin to match their surroundings, making\nthem hard to spot. That’s one clever way to hide from their\nenemies! Next, we have frogs. By making themselves look bigger,\nthey appear more threatening. Another animal that uses its body for\nsurvival is the lizard. Interestingly, lizards can cut off their own tails\nto escape. But don’t worry — the tail eventually grows back! So far,\nwe’ve looked at animals’ defense strategies. In our next lesson,\nwe’ll cover plants that have similar ways to protect themselves."
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "strategies animals use to protect themselves",
+    "benefits of the unique appearances of animals",
+    "importance of saving endangered wild animals",
+    "difficulties that animals face when finding food",
+    "skills that animals develop to defend their young"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students! In our last lesson, we learned how animals use their\nsenses to find food. Today, we’ll talk about ways some animals\ndefend themselves from enemies. First, one of the most well­known\nof these animals is the skunk. Skunks spray a bad­smelling liquid to\nkeep enemies away. Skunk spray does not cause any lasting\ndamage, though its smell is hard to remove. Second, chameleons\nchange the color of their skin to match their surroundings, making\nthem hard to spot. That’s one clever way to hide from their\nenemies! Next, we have frogs. By making themselves look bigger,\nthey appear more threatening. Another animal that uses its body for\nsurvival is the lizard. Interestingly, lizards can cut off their own tails\nto escape. But don’t worry — the tail eventually grows back! So far,\nwe’ve looked at animals’ defense strategies. In our next lesson,\nwe’ll cover plants that have similar ways to protect themselves."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 동물이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "skunk",
+    "chameleon",
+    "frog",
+    "lizard",
+    "zebra"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": "[16~17] 다음을 듣고, 물음에 답하시오.",
+   "script": "W: Hello, students! In our last lesson, we learned how animals use their\nsenses to find food. Today, we’ll talk about ways some animals\ndefend themselves from enemies. First, one of the most well­known\nof these animals is the skunk. Skunks spray a bad­smelling liquid to\nkeep enemies away. Skunk spray does not cause any lasting\ndamage, though its smell is hard to remove. Second, chameleons\nchange the color of their skin to match their surroundings, making\nthem hard to spot. That’s one clever way to hide from their\nenemies! Next, we have frogs. By making themselves look bigger,\nthey appear more threatening. Another animal that uses its body for\nsurvival is the lizard. Interestingly, lizards can cut off their own tails\nto escape. But don’t worry — the tail eventually grows back! So far,\nwe’ve looked at animals’ defense strategies. In our next lesson,\nwe’ll cover plants that have similar ways to protect themselves."
+  }
+ ]
+}

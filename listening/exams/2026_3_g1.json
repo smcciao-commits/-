@@ -1,0 +1,292 @@
+{
+ "id": "2026_3_g1",
+ "year": "2026",
+ "month": "3",
+ "grade": "고1",
+ "school": "서울",
+ "title": "2026학년도 3월 고1 전국연합학력평가 영어",
+ "duration": 1549.1,
+ "totalPoints": 37,
+ "audio": "listening/audio/2026_3_g1.mp3",
+ "starts": [
+  168.3,
+  222.8,
+  302.6,
+  378.3,
+  473.5,
+  561.5,
+  657.8,
+  738.3,
+  822.2,
+  911.8,
+  1011.3,
+  1054.9,
+  1105.3,
+  1187.2,
+  1277.2,
+  1362.8,
+  1362.8
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 남자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "축제 공연 일정 변경을 안내하려고",
+    "밴드의 신입 부원 모집을 공지하려고",
+    "밴드의 경연 대회 우승 소식을 알리려고",
+    "축제에서 밴드가 연주할 곡을 추천받으려고",
+    "축제에서 지켜야 할 안전 수칙을 설명하려고"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Good afternoon. I’m James, the leader of our school band, Rockstars.\nFor the school festival next month, all of our band members are\npracticing hard to put on a fantastic show. However, we want to\nhave a concert that everyone can enjoy. So, we’re asking you to\nrecommend some specific songs you want to hear us play. If you\nhave any songs in mind, please write them down on a piece of\npaper. Then, drop it into the request box in front of the music room\nby this Friday. We will select a few songs and perform them. Thank\nyou for your participation."
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 여자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "높은 강도의 운동을 한 뒤에는 휴식을 취해야 한다.",
+    "근육통을 방지하려면 영양을 고르게 섭취해야 한다.",
+    "근육 발달을 위해서는 규칙적으로 운동을 해야 한다.",
+    "근육통을 줄이기 위해 운동 후 스트레칭을 해야 한다.",
+    "운동 종류에 따른 적절한 스트레칭 방식을 익혀야 한다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Leo, is something wrong with your legs?\nM: Yes. I have a little pain in them. Maybe I exercised too much\nyesterday.\nW: Oh, did you stretch after exercising?\nM: No. I was tired, so I just rested afterwards.\nW: You shouldn’t skip stretching right after a workout.\nM: Is it that important?\nW: Yes. Without stretching, your muscles stay tight, and they hurt.\nM: Oh, I didn’t know that.\nW: Try spending just a few minutes stretching next time. It helps your\nmuscles recover faster.\nM: That sounds helpful.\nW: Yeah. Stretching after exercise can really reduce pain.\nM: Okay. I’ll make sure to do it from now on."
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "새로운 환경에서는 언행을 신중하게 하는 것이 바람직하다.",
+    "침착한 태도는 상대에게 긍정적인 인상을 주어 호감을 높인다.",
+    "친구 관계는 서로를 배려하는 과정 속에서 자연스럽게 형성된다.",
+    "먼저 인사를 건네는 것은 새로운 관계를 형성하는 데 도움이 된다.",
+    "원만한 인간관계를 위해서는 상대의 인사에 적절히 반응해야 한다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Hello, viewers! Thanks for tuning in to my video channel,\nAll4HighSchool. When I first started high school, I hardly talked to\nanyone and kept waiting for others to speak first. But I soon learned\nsomething important: be the one who says hello first! A simple “Hi”\nin the hallway can sometimes turn into a short, friendly chat. It can\nmake things easier around new people. Saying “Good morning” to\nfriends first can help build good relationships with them. So as you\nbegin this new school life, remember: a small greeting can be the\nspark that builds new connections."
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_3_g1_q4.png",
+   "answer": 5,
+   "group": null,
+   "script": "M: Hi, Emma. What are you looking at?\nW: Hi. My friend took a picture of me on Sports Day. Look at this.\nM: Oh, I see the Blue Team banner between two poles. Were you on\nthe Blue Team?\nW: Yes. Our team did great this year.\nM: Is that your cap, the one on the chair?\nW: No, it’s not mine. I think someone left it there.\nM: I see. You said you were volunteering after the games, right?\nW: Yes. When this picture was taken, I was picking up a can that was\non the ground.\nM: That’s nice. I like the striped shirt you were wearing.\nW: Thanks. All the volunteers wore the same striped shirts.\nM: Oh, I also see three soccer balls beside the pole.\nW: Yes. Those were the balls used for the soccer game. I also had to\npick them up.\nM: Wow, that sounds like a busy day. Thanks for sharing the picture\nwith me!"
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "녹화 시작하기",
+    "마이크 점검하기",
+    "자료 업로드하기",
+    "온라인 링크 공유하기",
+    "카메라 앵글 점검하기"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Hey, Jack, are you ready for the online group discussion?\nM: Yes. But, I’m a little worried since it’s my first time hosting an\nonline discussion!\nW: Really? Then, I can help you double check things before you start.\nM: Thanks.\nW: Did you share the online link in the group chat?\nM: Yes, I did. I also uploaded the materials to the shared folder.\nW: Nice. Have you checked the camera angle?\nM: Yes, it’s all set.\nW: You’re doing pretty good so far. [Pause] Oh, don’t forget to check\nthe microphone.\nM: Don’t worry. I’ve already tested it. It works well.\nW: Perfect. Okay, everything seems ready. You can start now.\nM: Wait, I haven’t started the recording yet. I’ll start the recording\nsoon. Thank you for your help.\nW: My pleasure. Good luck!"
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$25",
+    "$30",
+    "$45",
+    "$50",
+    "$55"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: How may I help you?\nW: Hi. I’m looking for some pajamas.\nM: How about these? They’re our new cotton pajamas for spring.\nW: Let me see. Oh, I like the pattern. They look comfortable. How\nmuch are they?\nM: They are 20 dollars.\nW: Oh, sounds good. What sizes do you have?\nM: We have three sizes, small, medium, and large.\nW: I’d like two pairs of pajamas, both medium size, please. One for me\nand one for my mom.\nM: That’s sweet! Your mother will love them. Do you also want these\nsocks to go with them? They are 5 dollars for each pair.\nW: Yes, I’ll take two pairs.\nM: Perfect. So, you need two pairs of pajamas and two pairs of socks.\nIs that correct?\nW: Yes, that’s right. Can I use this coupon?\nM: Sure. You can get 10 percent off of the total price.\nW: Okay. Here’s my credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 도서관에서 책을 빌리지 못한 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "도서관에 늦게 도착해서",
+    "다른 학생이 이미 대출해서",
+    "학생증을 가져가지 않아서",
+    "제때 반납하지 않은 책이 있어서",
+    "도서관 네트워크 시스템에 문제가 있어서"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "[Cellphone rings.]\nW: Hi, Jake. I was wondering if you made it to the library on time\nyesterday.\nM: Yes, I did. But I couldn’t borrow the history book for my\nassignment.\nW: Really? Why not? Did someone else check it out already?\nM: No, it was still on the shelf.\nW: Did you forget your student card then?\nM: No, I had it with me.\nW: What happened? Do you have any late books you haven’t returned\nyet?\nM: No. I always return books before the due date.\nW: Then why couldn’t you borrow the history book?\nM: There was a problem with the library network system, so no one\ncould check out any books.\nW: Oh, I see. That must’ve been frustrating."
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Race Against Hunger 행사에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "목적",
+    "기간",
+    "상품",
+    "참가비",
+    "신청 방법"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "W: Hi, Kyle. Have you heard of the Race Against Hunger event?\nM: Race Against Hunger? What’s that? What is it for?\nW: It’s for promoting the importance of food for the next generation.\nM: Sounds interesting. When will it take place?\nW: It’ll be held from April 11th to April 29th.\nM: Okay. What do participants do in the event?\nW: They record their running or walking distance, and share it on their\nsocial media.\nM: I see. Is there any prize for the participants?\nW: Yeah. If they meet the requirements, they’ll get a water bottle.\nM: Wow, that’s good. I’d like to join the event. How can I sign up for\nit?\nW: You can scan this QR code and fill out the application form online.\nM: Great. Thanks."
+  },
+  {
+   "no": 9,
+   "prompt": "AI Coding Afterschool Program에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "1학년 학생을 대상으로 한다.",
+    "3시간 동안 진행된다.",
+    "AI 코딩 실습을 포함한다.",
+    "참가 학생은 자신의 컴퓨터를 가져와야 한다.",
+    "프로그램을 완료한 학생은 선물을 받는다."
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Hello, students! This is Mike, your computer teacher. The AI\nCoding Afterschool Program is coming up soon. This afterschool\nprogram is for first graders who want to learn basic AI coding\nskills. It will be held on Friday, May 8th, at the school computer\nlab. It will last for three hours, starting at 4 p.m. and ending at 7\np.m. The program is composed of two parts. The first part\nintroduces basic AI concepts, and the second one includes AI coding\npractices. Computers will be provided, so students do not need to\nbring their own computers. Students who complete the program will\nreceive a small gift. We hope many of you will join us."
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 여자가 예약할 수업을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2026_3_g1_q10.png",
+   "answer": 2,
+   "group": null,
+   "script": "M: Jessie, I heard your sister’s birthday is next week. Do you have any\nplans?\nW: Yeah, we’re thinking about taking a one­day class together. I’ve\nbeen looking at a few options.\nM: Maybe I can help you choose. What kind of classes are you\ninterested in?\nW: Umm... I want to try baking, so I’m trying to choose between Cake\nBaking and Cookie Baking.\nM: Then let’s narrow it down. What level are you looking for?\nW: Since it’ll be our first class together, I’ll leave out the advanced\nlevel.\nM: Okay. You probably don’t want a big class, right?\nW: Yes. I’d prefer a small group ― fewer than eight people.\nM: Got it. Then you have two options left. How about the price?\nW: It’s her birthday, so I’ll choose the more expensive one.\nM: Then this class looks perfect for you.\nW: Yeah, I think she’ll really enjoy it. I’ll book it right away!"
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I’m sorry. I already bought a bike.",
+    "Sure. Let’s go to the park together.",
+    "You’re right. It’s not so hard to fix.",
+    "That’s too bad. Try to fix it, though.",
+    "No thanks. I heard it’ll rain tomorrow."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Dad, look! I finally fixed your bicycle!\nM: Really? I’m so proud of you. Now I don’t need to take it to a repair\nshop.\nW: It wasn’t easy. But I did it. Can we go for a ride this afternoon?\nM:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Don’t worry. Let’s meet and go over the rules together.",
+    "That’s nice. I think I understand the rules much better now.",
+    "Actually, yes. That’s the main reason I won the competition.",
+    "You’re welcome. I’ll ask our teammates to meet after school.",
+    "I agree with you. I also think the new rules are easy to follow."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "[Cellphone rings.]\nM: Olivia, have you checked the rules for the team debate competition?\nW: Yes. I’ve checked the new rules, but some parts were a bit\nconfusing to me.\nM: To me as well. I’m afraid that I’ll make mistakes and we won’t win\nthe competition.\nW:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "Okay. I hope she understands our situation.",
+    "Well done. He will be ready to start the project today.",
+    "Don’t worry. We finished the project last week already.",
+    "Right. Let’s email her about the rescheduled project date.",
+    "Great. It’ll be easy to run the project with just the two of us."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Hey, Jason. Have you heard from Nick today?\nM: Yeah. He texted me this morning. He has the flu and won’t be able\nto come.\nW: Oh, no. We’re supposed to start the book mentoring project today.\nM: Right. Should we go ahead with just the two of us?\nW: Hmm... It’ll be hard to run the project properly without him.\nM: I think so, too. And Ms. Jefferson told us to make sure every\nmember participates in the gathering.\nW: Then what should we do?\nM: Maybe we should ask Ms. Jefferson if we can start the project next\nweek instead.\nW: Okay. It’s better to start when everyone is ready.\nM: Great. Should we email Ms. Jefferson or visit her in person?\nW: Let’s visit her office at lunch.\nM:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Many visitors usually ask about the animals’ backgrounds.",
+    "The event starts at 10 a.m., so please come by then.",
+    "Some animals get nervous when many people gather.",
+    "Please take photos of the visitors with the animals.",
+    "I’m planning to finish uploading the photos tonight."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hannah, are you volunteering at the animal protection center this\nyear?\nW: Yes, and the animal adoption event is next weekend.\nM: Oh, right. Are you running the greeting booth again?\nW: Yes, I’ll welcome visitors and inform them about the center.\nM: That sounds great. Do you expect a lot of people to come?\nW: I hope so. More visitors mean more chances for the animals to be\nadopted.\nM: That’s right. By the way, have you finished setting things up for the\nevent?\nW: Pretty much done for now. But I need good photos to upload on\nsocial media after the event.\nM: Actually, I recently bought a new camera. I can take photos during\nthe event.\nW: Really? That would be really helpful.\nM: What time should I be at the center on the day of the event?\nW:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Emily가 Lucas에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I’m so sorry to hear that your bag is missing.",
+    "I appreciate your help in getting my bag back.",
+    "I’m afraid that I can’t help you find your bag.",
+    "Thank you for helping me buy a new bag.",
+    "I’m so glad you finally found your bag."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Emily lost her bag during a field trip to the museum last week. She\nsearched everywhere but couldn’t find it, so she eventually gave up.\nToday at lunch, she mentioned to her classmate, Lucas, that she had\nlost her bag. To her surprise, Lucas kindly told her that he had\nfound a bag near the museum entrance and turned it in to the\nlost­and­found. When Emily went there with Lucas, she discovered\nthat it was her bag. Everything was still inside, her cards and\nmoney were all there. Emily felt extremely relieved and grateful for\nLucas’s kindness. Now Emily wants to thank Lucas for his help. In\nthis situation, what would Emily most likely say to Lucas?\nEmily:\n16번부터 17번까지는 두 번 들려줍니다.\n[16 ~ 17] 다음을 듣고, 물음에 답하시오.\nM: Hello, listeners. Welcome to the Morning Fitness Guide. Do you\nwant to exercise more effectively in the morning? Eating food\nbefore exercise can raise your energy level. So today, I’d like to\nshare some foods that are good to eat before a workout. First,\nbananas are a popular choice because they provide quick energy and\nhelp you feel less tired. Next, yogurt is light on the stomach and\ngives your body some protein. Eggs are also a good option because\nthey keep you full for longer and improve your strength. Finally, a\nsmall amount of nuts can help maintain your energy throughout\nexercise. Trying these foods before exercise can lead to better\nresults. I hope these tips help you exercise effectively in the\nmorning."
+  },
+  {
+   "no": 16,
+   "prompt": "남자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "meal patterns across different times of the day",
+    "various methods for preparing a quick breakfast",
+    "effective diet strategies aimed at health recovery",
+    "food choices recommended before morning exercise",
+    "practical tips for storing food items for busy people"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, listeners. Welcome to the Morning Fitness Guide. Do you\nwant to exercise more effectively in the morning? Eating food\nbefore exercise can raise your energy level. So today, I’d like to\nshare some foods that are good to eat before a workout. First,\nbananas are a popular choice because they provide quick energy and\nhelp you feel less tired. Next, yogurt is light on the stomach and\ngives your body some protein. Eggs are also a good option because\nthey keep you full for longer and improve your strength. Finally, a\nsmall amount of nuts can help maintain your energy throughout\nexercise. Trying these foods before exercise can lead to better\nresults. I hope these tips help you exercise effectively in the\nmorning."
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 음식이 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "banana",
+    "yogurt",
+    "honey",
+    "egg",
+    "nut"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "M: Hello, listeners. Welcome to the Morning Fitness Guide. Do you\nwant to exercise more effectively in the morning? Eating food\nbefore exercise can raise your energy level. So today, I’d like to\nshare some foods that are good to eat before a workout. First,\nbananas are a popular choice because they provide quick energy and\nhelp you feel less tired. Next, yogurt is light on the stomach and\ngives your body some protein. Eggs are also a good option because\nthey keep you full for longer and improve your strength. Finally, a\nsmall amount of nuts can help maintain your energy throughout\nexercise. Trying these foods before exercise can lead to better\nresults. I hope these tips help you exercise effectively in the\nmorning."
+  }
+ ]
+}

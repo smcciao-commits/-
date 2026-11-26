@@ -1,0 +1,292 @@
+{
+ "id": "2025_10_g2",
+ "year": "2025",
+ "month": "10",
+ "grade": "고2",
+ "school": "경기",
+ "title": "2025학년도 10월 고2 전국연합학력평가 영어",
+ "duration": 1520.5,
+ "totalPoints": 37,
+ "audio": "listening/audio/2025_10_g2.mp3",
+ "starts": [
+  129.3,
+  189.8,
+  265.7,
+  342.6,
+  427.1,
+  511.0,
+  601.9,
+  689.3,
+  781.7,
+  870.6,
+  958.2,
+  998.3,
+  1037.8,
+  1128.6,
+  1219.1,
+  1299.3,
+  1299.3
+ ],
+ "questions": [
+  {
+   "no": 1,
+   "prompt": "다음을 듣고, 여자가 하는 말의 목적으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "과도한 스마트폰 사용의 부작용을 경고하려고",
+    "온라인 수업에 필요한 스마트폰 앱들을 추천하려고",
+    "사이버 공간에서의 언어 예절의 중요성을 강조하려고",
+    "새로 출시된 디지털 학습 도구의 장단점을 소개하려고",
+    "올바른 스마트폰 사용에 관한 표어 공모 대회를 안내하려고"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "[Chime bell rings.]\nW: Hello, everyone. This is Sophia, your student council president. As you all know, the misuse of smartphones at school\nhas become a problem. To address this issue together, the student council is holding a slogan contest on proper\nsmartphone use. This is a great chance to share your ideas on how we can use phones more appropriately at school.\nYour slogan can be a short phrase or sentence, and remember to keep it clear and meaningful. The deadline is next\nFriday so submit your work by then. Winners will receive a prize, and their slogans will be posted around the school.\nDon’t miss this opportunity!"
+  },
+  {
+   "no": 2,
+   "prompt": "대화를 듣고, 남자의 의견으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "텀블러는 사용하고 난 후 바로 씻어야 한다.",
+    "인체에 안전한 소재의 텀블러를 구매해야 한다.",
+    "텀블러는 완전히 마를 때까지 뚜껑을 열어 두어야 한다.",
+    "텀블러는 음료 종류에 따라 세척 방법을 달리해야 한다.",
+    "환경 보호를 위해 일회용 컵 대신 텀블러를 사용해야 한다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "M: Grace, did you just wash your tumbler and close the lid right away?\nW: Yeah, I always do that. Is there something wrong?\nM: Hmm, that’s not a good idea. You really shouldn’t close the lid before the tumbler is completely dry.\nW: Really? I didn’t know that was a problem.\nM: If there’s moisture left inside the tumbler, harmful bacteria can grow.\nW: Oh no, that sounds pretty serious.\nM: Yeah, and it can also trap bad smells inside the tumbler over time.\nW: Oh, that explains the weird smell I noticed before.\nM: Exactly. So always leave your tumbler open until it’s fully dry.\nW: Got it. I’ll make sure to dry it properly from now on. Thanks!"
+  },
+  {
+   "no": 3,
+   "prompt": "다음을 듣고, 여자가 하는 말의 요지로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "실수를 줄이기 위해 꾸준한 연습이 필요하다.",
+    "여러 사람과 함께 일하면 더 나은 결과를 낼 수 있다.",
+    "과업에 시간제한을 두면 집중력과 효율을 높일 수 있다.",
+    "집중력을 높이기 위해 먼저 주변을 정돈하는 것이 좋다.",
+    "업무의 우선순위 목록을 작성하는 것은 시간 관리에 효과적이다."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hello, listeners! Welcome to One Minute Life Tips. Today, I’d like to share one simple but powerful tip for your\nproductive life. Setting specific time limits improves your focus and makes you more efficient. When you know exactly\nhow much time you have, you’re less likely to get distracted. Also, you get things done faster and make fewer mistakes.\nOne study found that students who set time limits achieved better results in less time than those who didn’t. Setting\ntime limits is a simple step, but it helps you stay focused and stop wasting time. Give it a try and see if there’s a\ndifference. Tune in tomorrow for more life tips!"
+  },
+  {
+   "no": 4,
+   "prompt": "대화를 듣고, 그림에서 대화의 내용과 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_10_g2_q4.png",
+   "answer": 4,
+   "group": null,
+   "script": "M: Wow, Emma! This room looks amazing. Did you decorate all of this for your sister’s baby shower?\nW: Yeah, I did! I wanted to create a warm and special feeling.\nM: I love the “It’s Twins!” banner on the wall.\nW: Thank you. I designed it myself.\nM: Great. The star­shaped decorations hanging from the ceiling are pretty, too.\nW: Aren’t they? I also thought they look really lovely.\nM: Oh, I noticed you prepared two cakes on the table.\nW: Yes, that’s because of the twins. Do you see the striped rug on the floor?\nM: Definitely! I’m glad you bought the one I recommended to you.\nW: I thought it would make the space more cheerful.\nM: Oh, I guess those boxes under the clock are gifts for your sister.\nW: Yes, they are. I hope she likes everything."
+  },
+  {
+   "no": 5,
+   "prompt": "대화를 듣고, 남자가 할 일로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "상품 준비하기",
+    "현수막 출력하기",
+    "쓰레기봉투 챙기기",
+    "음악 재생 목록 만들기",
+    "보건실에서 구급함 가져오기"
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "W: John, our class picnic is coming up this Friday! Let’s go over the preparations together.\nM: Good idea, Kelly. I finally finished making a playlist for the picnic. It has fast and energetic songs.\nW: Great. That’ll really help make the picnic more fun.\nM: What about the banner? Ms. Clark said we should bring that.\nW: Don’t worry. I already printed it and put it in my bag.\nM: Perfect. We’re all set with the banner. Oh, did you prepare the game prizes?\nW: Yes. I bought some snacks and gifts yesterday.\nM: Awesome! I bet everyone is looking forward to them.\nW: Yeah. I also packed some trash bags so we can clean up after. Oh, wait. Should we bring a first­aid kit, too?\nM: Of course. I’ll get one from the school nurse’s office.\nW: Thanks."
+  },
+  {
+   "no": 6,
+   "prompt": "대화를 듣고, 여자가 지불할 금액을 고르시오.",
+   "points": 3,
+   "choices": [
+    "$35",
+    "$36",
+    "$40",
+    "$45",
+    "$54"
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Welcome to the Arcus Art Museum Shop. How can I help you?\nW: Hi. I’m looking for a gift for my parents. Can you recommend anything?\nM: How about these umbrellas? They’re practical and have beautiful designs.\nW: They look nice. How much are they?\nM: The regular umbrella is $10 and the folding one is $15.\nW: Folding umbrellas would be more convenient. I’ll take two of them.\nM: Great choice. Anything else?\nW: Hmm, do you have any key chains? I love collecting them.\nM: Yes. We have key chains with the artists’ paintings on them. These are $5 each.\nW: I’ll take two with the puppies playing.\nM: Okay. So, two folding umbrellas and two key chains, right?\nW: Yes.\nM: If you have today’s museum admission ticket, you’ll get 10% off the total.\nW: Perfect. Here’s my admission ticket and credit card."
+  },
+  {
+   "no": 7,
+   "prompt": "대화를 듣고, 남자가 플로깅 행사에 갈 수 없는 이유를 고르시오.",
+   "points": 2,
+   "choices": [
+    "코딩 수업이 있어서",
+    "환경 캠페인 활동을 해야 해서",
+    "여동생의 피아노 독주회에 가야 해서",
+    "업사이클링 축제에 참여해야 해서",
+    "가족여행 날짜와 겹쳐서"
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "W: Hey, David! How was the upcycling festival yesterday?\nM: Hi, Rachel. It was pretty cool. They had lots of upcycled items.\nW: You’ve been really into environmental issues lately. I heard there’s a plogging event this Saturday. Do you want to go?\nM: I’d love to join, but I’m afraid I can’t.\nW: Do you still go to coding class on Saturdays?\nM: I used to, but the course ended last weekend.\nW: Oh, right. Then are you going to the family trip you mentioned?\nM: No, that’s next weekend. I’m looking forward to it.\nW: I see. So why can’t you come?\nM: My little sister’s piano recital is on the same day, and I promised to go.\nW: Oh, that’s special!\nM: Yeah. She’s been practicing for months, so I really want to support her.\nW: Have a great time. I’ll tell you how the plogging event goes!"
+  },
+  {
+   "no": 8,
+   "prompt": "대화를 듣고, Helene Sunrise Festival에 관해 언급되지 않은 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "시작 일시",
+    "장소",
+    "작년 방문객 수",
+    "주차장",
+    "활동 내용"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": null,
+   "script": "M: Honey, have you heard about the Helene Sunrise Festival? I found out about it online. How about going there together?\nW: Sounds good. It’s about celebrating New Year’s, right?\nM: Correct. It says the festival starts on December 31st from 6 p.m.\nW: It’s three weeks away. Where is it held?\nM: At the Helene Sunrise Square.\nW: Hmm, that’s two hours by car.\nM: Normally yes, but it says 7,000 people visited the festival last year.\nW: Really? I didn’t know that it was so famous. Then we need to depart much earlier than usual.\nM: I totally agree.\nW: What kind of activities can we do at the festival?\nM: There will be a fireworks show, a countdown concert, and a sunrise­watching event.\nW: Oh, that sounds fun. I can’t wait to go.\nM: Me, too. Let’s enjoy the end of the year!"
+  },
+  {
+   "no": 9,
+   "prompt": "Space Food Tasting Event에 관한 다음 내용을 듣고, 일치하지 않는 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "국립 우주 박물관에서 열린다.",
+    "우주 비행사가 실제로 먹는 음식을 맛볼 기회가 있다.",
+    "우주 식품이 만들어지는 과정에 대한 짧은 영상이 있다.",
+    "오전 10시부터 오후 1시까지 진행된다.",
+    "달 모양의 엽서가 참가자에게 기념품으로 주어진다."
+   ],
+   "img": null,
+   "answer": 5,
+   "group": null,
+   "script": "M: Hello, Science Daily listeners! Have you ever wondered what astronauts eat in space? Then don’t miss the upcoming\nSpace Food Tasting Event this Saturday. The event will be held at the National Space Museum. At the event, you’ll have\na chance to taste real astronaut meals, like freeze­dried strawberries, and meals in pouches. There will be also a short\nfilm about how space food is made and packed. After that, you’ll design your own space meal using a touchscreen.\nSounds exciting, right? The entire event will run from 10 a.m. to 1 p.m., and tickets must be booked online. Plus, a\nspaceship­shaped postcard will be given to each participant as a souvenir. So come and experience astronaut meals!"
+  },
+  {
+   "no": 10,
+   "prompt": "다음 표를 보면서 대화를 듣고, 여자가 주문할 책상 램프를 고르시오.",
+   "points": 2,
+   "choices": [],
+   "img": "listening/img/2025_10_g2_q10.png",
+   "answer": 4,
+   "group": null,
+   "script": "W: Honey, could you help me choose a new desk lamp? The one on my desk doesn’t turn on.\nM: Sure! Have you already searched some online?\nW: Yes. I narrowed them down to these five models.\nM: Okay, good. [Pause] I think a lamp with just 2 brightness levels is not enough.\nW: I agree.\nM: What about the power source?\nW: Hmm, using batteries is inconvenient because I always have to change them.\nM: That makes sense. Oh, look! Some lamps have a timer that turns them off automatically.\nW: Oh, I need that. You know I often forget to turn off the light.\nM: That’s right. Now you have two options left.\nW: Hmm, I think anything over $50 is too expensive.\nM: Then this one seems like the best choice.\nW: Thanks, honey. I’ll order it now."
+  },
+  {
+   "no": 11,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "I’m sorry. Maybe we should just cancel the event.",
+    "Good idea. I’ll remind them to bring their costumes.",
+    "Okay. Let me ask them what time the festival ends.",
+    "Don’t worry. Your previous costume looked amazing.",
+    "Really? They’ve already designed the new costumes."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "M: Hey, Claire. We’re supposed to bring our costumes for the school festival tomorrow, right?\nW: Yeah, but some students might not remember.\nM: How about sending a message in the group chat about it?\nW:"
+  },
+  {
+   "no": 12,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "You’re right. Let’s bring another one now.",
+    "Thanks. I can turn in my artwork on time.",
+    "Good. You found your missing sketchbook.",
+    "Never mind. I’ve already finished my art project.",
+    "Sorry. I couldn’t prepare the materials for the class."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "W: Liam, we’ve finished setting up the students’ art projects on the table.\nM: Actually, I just heard there are a few more in the art room.\nW: Really? Then we might need another table to display those.\nM:"
+  },
+  {
+   "no": 13,
+   "prompt": "대화를 듣고, 남자의 마지막 말에 대한 여자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 2,
+   "choices": [
+    "No problem. I can introduce a new coach to you.",
+    "That’s true. I’m also taking the same course as you.",
+    "Nice. I’ll check the website and sign up for next month.",
+    "Terrific! I’m glad you won 1st prize in the competition.",
+    "Sure. I recommend group lessons rather than private ones."
+   ],
+   "img": null,
+   "answer": 3,
+   "group": null,
+   "script": "[Cell phone rings.]\nM: Hello, Anna.\nW: Hi, Daniel. I was wondering if you are going to the library tomorrow after school.\nM: Oh, I’m afraid I can’t. I have swimming lessons tomorrow.\nW: Did you start swimming recently?\nM: Yeah. I started taking swimming lessons two weeks ago and I feel healthier already.\nW: That’s great. Where do you take the lessons?\nM: At the Community Sports Center. It’s just a 10­minute walk from school.\nW: Nice. Is it a group class?\nM: Yeah, there are eight of us in the class. The coach teaches really well and he gives each of us useful tips.\nW: Sounds like a good class. Do you think I could also register in that class?\nM: I wish you could, but our class is full already.\nW: Oh, no. I should have asked you earlier.\nM: Don’t worry. They’re starting a new session next month.\nW:"
+  },
+  {
+   "no": 14,
+   "prompt": "대화를 듣고, 여자의 마지막 말에 대한 남자의 응답으로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "Great. Don’t forget to order drinks with the food.",
+    "Awesome. I’ll try that the next time I order food.",
+    "Actually, I brought my own food from home today.",
+    "Right. Using a thicker container keeps food hot longer.",
+    "Too late. You should have returned the container earlier."
+   ],
+   "img": null,
+   "answer": 2,
+   "group": null,
+   "script": "W: Kevin, our delivery just arrived. Let’s eat!\nM: Okay! [Pause] Oh, these food containers look different.\nW: Yeah, this restaurant uses reusable containers instead of disposable ones.\nM: That’s interesting. Then do they take the containers back?\nW: Yes. If you order from certain restaurants, a delivery person comes back to pick up the empty containers later.\nM: Hmm, I see.\nW: But the customers should wash the containers before leaving them outside.\nM: Oh, then we can reduce the waste. I’ve always felt bad about all the plastic waste from delivery.\nW: Me, too. In my experience, the containers are pretty nice. And I even got a small discount.\nM: Sounds great. How did you find out about this restaurant?\nW: There’s an app called GreenEats. It lists all the restaurants that use reusable containers.\nM:"
+  },
+  {
+   "no": 15,
+   "prompt": "다음 상황 설명을 듣고, Ethan이 Olivia에게 할 말로 가장 적절한 것을 고르시오.",
+   "points": 3,
+   "choices": [
+    "I’m sorry that I ruined your book by accident.",
+    "My apologies for forgetting to lend you my book.",
+    "I feel terrible that I couldn’t help you with the assignment.",
+    "I apologize for just taking your book without asking.",
+    "I didn’t mean to spill the drink on your clothes."
+   ],
+   "img": null,
+   "answer": 1,
+   "group": null,
+   "script": "M: Ethan needs to read an assigned book for his English class, but he finds that all the copies were checked out already\nfrom the school library. When he tells his friend Olivia, she kindly lends him her own book. Ethan is grateful and\npromises to return it in good condition. A few days later, Ethan is reading the book at a cafe. As he reaches for his\nphone, he accidentally knocks over his drink, and it spills on the book. He wipes the book quickly, but some pages are\nstained and wrinkled. He feels terrible about it. So, Ethan wants to apologize to Olivia for damaging her book. In this\nsituation, what would Ethan most likely say to Olivia?\n16번부터 17번까지는 두 번 들려줍니다.\n16번과 17번\n다음을 듣고, 물음에 답하시오.\nW: Hello, everyone. You’re listening to The Food Story Show, and I’m your host, Elena Wilson. Last week, we explored\nsome of the world’s most interesting traditional dishes. Today, I’m going to introduce some natural ingredients people\nused to keep food fresh before the invention of refrigerators. The first is black pepper. In India and Europe, it was used\nto slow down the meat from going bad and to cover unpleasant smells. Next, cinnamon, which comes from tree bark,\nwas also widely used for preserving food. Since this ingredient contains oils that kill germs, people added it to stews\nand baked food to help them last longer. Then we have mustard seeds. You’ve probably seen them in pickled food.\nThanks to their food­preserving effects, vegetables stayed fresh for months. And finally, there were dried chili peppers.\nThey not only slowed bacterial growth but also added a bright color and a spicy flavor. Pretty amazing, right? We’ll be\nback after the commercials!\n다시 한 번 듣겠습니다.\nW: Hello, everyone. You’re listening to The Food Story Show, and I’m your host, Elena Wilson. Last week, we explored\nsome of the world’s most interesting traditional dishes. Today, I’m going to introduce some natural ingredients people\nused to keep food fresh before the invention of refrigerators. The first is black pepper. In India and Europe, it was used\nto slow down the meat from going bad and to cover unpleasant smells. Next, cinnamon, which comes from tree bark,\nwas also widely used for preserving food. Since this ingredient contains oils that kill germs, people added it to stews\nand baked food to help them last longer. Then we have mustard seeds. You’ve probably seen them in pickled food.\nThanks to their food­preserving effects, vegetables stayed fresh for months. And finally, there were dried chili peppers.\nThey not only slowed bacterial growth but also added a bright color and a spicy flavor. Pretty amazing, right? We’ll be\nback after the commercials!"
+  },
+  {
+   "no": 16,
+   "prompt": "여자가 하는 말의 주제로 가장 적절한 것은?",
+   "points": 2,
+   "choices": [
+    "ingredients used to preserve food before refrigerators",
+    "ways to store raw meat using natural ingredients",
+    "unique traditional dishes from different cultures",
+    "how different crops are grown and harvested",
+    "why cooking styles vary from place to place"
+   ],
+   "img": null,
+   "answer": 1,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, everyone. You’re listening to The Food Story Show, and I’m your host, Elena Wilson. Last week, we explored\nsome of the world’s most interesting traditional dishes. Today, I’m going to introduce some natural ingredients people\nused to keep food fresh before the invention of refrigerators. The first is black pepper. In India and Europe, it was used\nto slow down the meat from going bad and to cover unpleasant smells. Next, cinnamon, which comes from tree bark,\nwas also widely used for preserving food. Since this ingredient contains oils that kill germs, people added it to stews\nand baked food to help them last longer. Then we have mustard seeds. You’ve probably seen them in pickled food.\nThanks to their food­preserving effects, vegetables stayed fresh for months. And finally, there were dried chili peppers.\nThey not only slowed bacterial growth but also added a bright color and a spicy flavor. Pretty amazing, right? We’ll be\nback after the commercials!\n다시 한 번 듣겠습니다.\nW: Hello, everyone. You’re listening to The Food Story Show, and I’m your host, Elena Wilson. Last week, we explored\nsome of the world’s most interesting traditional dishes. Today, I’m going to introduce some natural ingredients people\nused to keep food fresh before the invention of refrigerators. The first is black pepper. In India and Europe, it was used\nto slow down the meat from going bad and to cover unpleasant smells. Next, cinnamon, which comes from tree bark,\nwas also widely used for preserving food. Since this ingredient contains oils that kill germs, people added it to stews\nand baked food to help them last longer. Then we have mustard seeds. You’ve probably seen them in pickled food.\nThanks to their food­preserving effects, vegetables stayed fresh for months. And finally, there were dried chili peppers.\nThey not only slowed bacterial growth but also added a bright color and a spicy flavor. Pretty amazing, right? We’ll be\nback after the commercials!"
+  },
+  {
+   "no": 17,
+   "prompt": "언급된 식재료가 아닌 것은?",
+   "points": 2,
+   "choices": [
+    "black pepper",
+    "cinnamon",
+    "mustard seeds",
+    "saffron",
+    "dried chili peppers"
+   ],
+   "img": null,
+   "answer": 4,
+   "group": "[16 ~ 17] 다음을 듣고, 물음에 답하시오.",
+   "script": "다음을 듣고, 물음에 답하시오.\nW: Hello, everyone. You’re listening to The Food Story Show, and I’m your host, Elena Wilson. Last week, we explored\nsome of the world’s most interesting traditional dishes. Today, I’m going to introduce some natural ingredients people\nused to keep food fresh before the invention of refrigerators. The first is black pepper. In India and Europe, it was used\nto slow down the meat from going bad and to cover unpleasant smells. Next, cinnamon, which comes from tree bark,\nwas also widely used for preserving food. Since this ingredient contains oils that kill germs, people added it to stews\nand baked food to help them last longer. Then we have mustard seeds. You’ve probably seen them in pickled food.\nThanks to their food­preserving effects, vegetables stayed fresh for months. And finally, there were dried chili peppers.\nThey not only slowed bacterial growth but also added a bright color and a spicy flavor. Pretty amazing, right? We’ll be\nback after the commercials!\n다시 한 번 듣겠습니다.\nW: Hello, everyone. You’re listening to The Food Story Show, and I’m your host, Elena Wilson. Last week, we explored\nsome of the world’s most interesting traditional dishes. Today, I’m going to introduce some natural ingredients people\nused to keep food fresh before the invention of refrigerators. The first is black pepper. In India and Europe, it was used\nto slow down the meat from going bad and to cover unpleasant smells. Next, cinnamon, which comes from tree bark,\nwas also widely used for preserving food. Since this ingredient contains oils that kill germs, people added it to stews\nand baked food to help them last longer. Then we have mustard seeds. You’ve probably seen them in pickled food.\nThanks to their food­preserving effects, vegetables stayed fresh for months. And finally, there were dried chili peppers.\nThey not only slowed bacterial growth but also added a bright color and a spicy flavor. Pretty amazing, right? We’ll be\nback after the commercials!"
+  }
+ ]
+}
