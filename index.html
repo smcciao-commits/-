@@ -10785,7 +10785,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v162';
+var TOPEDU_APP_VERSION = 'v163';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -13905,7 +13905,7 @@ function ssSaveSnap() {
     awaySec: Math.round(SS.awaySec || 0), awayOpen: SS.leaveT || 0, doneEl: Math.round(SS.doneEl || 0), doneAt: SS.doneAt || 0,
     days: SS.s1.days.map(function (d) {
       return { day: d.day, name: d.name, lbl: d.lbl, ex: d.ex, def: d.def, status: d.status, score: d.score, attempts: d.attempts,
-        fixed: !!d.fixed, qwrong: d.qwrong || [], qok: d.qok || 0, quiz: d.quiz || null };
+        fixed: !!d.fixed, qwrong: d.qwrong || [], qok: d.qok || 0, quiz: d.quiz || null, learnAt: d.learnAt || 0, learnOk: !!d.learnOk };
     }),
     s2i: SS.s2.i, s3i: SS.s3.i, s2wrong: SS.s2.wrongN || 0, s3wrong: SS.s3.wrong || [], scr: SS.scr, done: SS.done,
     sentCount: SS.s2.qs.length, probCount: SS.s3.qs.length,
@@ -14591,9 +14591,39 @@ function ssViewS1Learn() {
       + '<button type="button" class="ssx-spk" onclick="ssSpeak(' + i + ')">🔊</button></div>';
   });
   h += '</div>';
-  h += '<button type="button" class="ssx-btn pri" onclick="ssS1Quiz()">✔ 외웠어요 · 시험 시작 (' + ssTestN(d) + '문항)</button>';
+  /* v163: 원장님 요청 — 암기 화면을 충분히 본 뒤에만 시험 (단어당 4초, 최소 1분 · 최대 2분).
+     이미 통과한 Day 다시 보기·선생님 미리보기는 기다리지 않음. 남은 시간은 화면을 나갔다 와도 이어짐 */
+  var left = ssLearnLeft(d);
+  h += '<button type="button" class="ssx-btn pri" id="ssLearnGo" onclick="ssS1Quiz()"' + (left > 0 ? ' disabled style="opacity:.55"' : '') + '>'
+    + (left > 0 ? ssLearnBtnTxt(left) : ('✔ 외웠어요 · 시험 시작 (' + ssTestN(d) + '문항)')) + '</button>';
   h += '<button type="button" class="ssx-btn" onclick="ssGoS1()">← Day 목록</button></div>';
+  if (left > 0) setTimeout(ssLearnTickStart, 0);
   return h;
+}
+function ssLearnNeed(d) {
+  var n = ((d && d.words) || []).length;
+  return Math.max(60, Math.min(120, n * 4));
+}
+function ssLearnLeft(d) {
+  if (!d || SS.preview || d.learnOk || d.status === 'ok') return 0;
+  if (!d.learnAt) d.learnAt = Date.now();
+  var left = Math.ceil(ssLearnNeed(d) - (Date.now() - d.learnAt) / 1000);
+  if (left <= 0) { d.learnOk = true; return 0; }
+  return left;
+}
+function ssLearnBtnTxt(left) { return '⏳ 단어를 외우는 중… ' + ssMMSS(left) + ' 뒤에 시험 시작'; }
+var SS_LEARN_T = null;
+function ssLearnTickStart() {
+  if (SS_LEARN_T) clearInterval(SS_LEARN_T);
+  SS_LEARN_T = setInterval(function () {
+    var b = ssq('ssLearnGo'), d = SS.s1.days[SS.s1.cur];
+    if (!b || SS.scr !== 's1learn' || !d) { clearInterval(SS_LEARN_T); SS_LEARN_T = null; return; }
+    var left = ssLearnLeft(d);
+    if (left > 0) { b.textContent = ssLearnBtnTxt(left); return; }
+    b.disabled = false; b.style.opacity = ''; b.textContent = '✔ 외웠어요 · 시험 시작 (' + ssTestN(d) + '문항)';
+    try { ssSaveSnap(); } catch (e) {}
+    clearInterval(SS_LEARN_T); SS_LEARN_T = null;
+  }, 1000);
 }
 function ssSpeak(i) {
   try {
@@ -14615,6 +14645,7 @@ function ssS1MakeQ(c, words, d) {
 }
 function ssS1Quiz() {
   var d = SS.s1.days[SS.s1.cur], words = d.words || [];
+  if (ssLearnLeft(d) > 0) return;   /* v163: 암기 시간 전에는 시험 시작 안 됨 */
   var n = ssTestN(d);
   var pool = shuffle(words).slice(0, n);
   d.quiz = pool.map(function (c) { return ssS1MakeQ(c, words, d); });
