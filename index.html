@@ -10785,7 +10785,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v163';
+var TOPEDU_APP_VERSION = 'v164';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -13520,8 +13520,10 @@ function ssBuildDays(ban) {
   /* v162: 예비고1은 숙제 계획 시작 Day(11/26부터 Day 20) 앞으로 돌아가지 않는다 */
   if (ban === '예비고1' && hp && Number(hp.startDay) > 1 && cfg.dayMode !== 'manual') {
     var _fl = Number(hp.startDay);
+    var _n = cfg.dayCount || 4;
     days = days.filter(function (d) { return d >= _fl; });
-    if (!days.length) for (var f = 0; f < (cfg.dayCount || 4); f++) days.push(_fl + f);
+    /* v164: 걸러내고 Day가 4개보다 적으면(예: Day 20 하나만) 시작 Day부터 4개로 채운다 */
+    if (days.length < _n) { days = []; for (var f = 0; f < _n; f++) days.push(_fl + f); }
   }
   var seen = {};
   days.forEach(function (d) {
