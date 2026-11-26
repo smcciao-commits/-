@@ -902,6 +902,14 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .hwc-overlay { position: fixed; inset: 0; z-index: 9600; display: none; background: rgba(15,23,42,0.58); padding: 14px; overflow: auto; }
 .hwc-overlay.on { display: flex; align-items: flex-start; justify-content: center; }
 .hwc-card { display: flex; flex-direction: column; width: 100%; max-width: 620px; margin: 0 auto; max-height: calc(100vh - 28px); background: #fff; border-radius: 20px; box-shadow: 0 20px 50px rgba(15,23,42,0.38); overflow: hidden; }
+/* v175: 📩 학부모 리포트를 펼치면 카드 전체가 스크롤돼 마지막 학생까지 잘리지 않는다.
+   (예전엔 카드 overflow:hidden + 고정 높이 때문에 미리보기 아래쪽이 화면 밖에서 잘려 보이지 않았다) */
+.hwc-card.pv-open { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.hwc-card.pv-open .hwc-head { position: sticky; top: 0; z-index: 5; border-radius: 0; }
+.hwc-card.pv-open .hwc-list { flex: 0 0 auto; min-height: 0; overflow: visible; }
+.hwc-card.pv-open .hwc-prev,
+.hwc-card.pv-open .hwc-prev.many,
+.hwc-card.pv-open .hwc-prev.rep { max-height: none; overflow: visible; }
 .hwc-head { display: flex; align-items: center; gap: 10px; padding: 13px 16px; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; flex: 0 0 auto; }
 .hwc-top { flex: 0 0 auto; padding: 11px 13px 9px; border-bottom: 1px solid #e2e8f0; background: #fbfefe; }
 .hwc-daterow { display: flex; gap: 7px; align-items: center; }
@@ -959,7 +967,7 @@ body.board .wrap { max-width: 1280px; padding: 20px 28px; }
 .hwc-cell.on-x { border-color: #dc2626; background: #fee2e2; box-shadow: 0 2px 8px rgba(220,38,38,0.16); }
 .hwc-cell.on-x .hwc-cl, .hwc-cell.on-x .hwc-cs { color: #b91c1c; }
 .hwc-empty { padding: 22px 10px; text-align: center; font-size: 12.5px; color: #94a3b8; }
-.hwc-foot { flex: 0 0 auto; padding: 9px 12px 12px; border-top: 1px solid #e2e8f0; background: #fbfefe; }
+.hwc-foot { flex: 0 0 auto; padding: 9px 12px calc(14px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid #e2e8f0; background: #fbfefe; }
 .hwc-frow { display: flex; gap: 7px; }
 .hwc-frow + .hwc-frow { margin-top: 7px; }
 .hwc-frow .hwc-sub, .hwc-frow .hwc-big { flex: 1 1 0; }
@@ -4733,7 +4741,7 @@ function hwcAutoFillWord(){
   });
   hwcRefreshCounts();
   hwcRefreshBulk();
-  var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+  var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on'); try { hwcPvOpen(false); } catch(e){}
   hwcToast(n ? ('📱 앱 완료 ' + n + '명 → 단어앱 ⭕ 채웠어요') : '앱에서 완료한 학생이 없어요');
 }
 
@@ -4755,6 +4763,7 @@ function closeHwCheck(){
   if(!ov) return;
   ov.classList.remove('on');
   ov.setAttribute('aria-hidden', 'true');
+  try { hwcPvOpen(false); } catch(e){}
   try { document.body.style.overflow = ''; } catch(e){}
 }
 
@@ -4870,6 +4879,7 @@ function hwcPanelHTML(date, items){
 function renderHwCheck(){
   var el = document.getElementById('hwModal');
   if(!el) return;
+  try { el.classList.remove('pv-open'); } catch(e){}   /* v175: 다시 그릴 때는 스크롤 모드 해제 */
   var date = HWC_DATE || hwcToday();
   var day = hwcDayRaw(date);
   var list = hwcStudents().filter(function(s){ return HWC_FILTER === '전체' || hwcGroup(s.ban) === HWC_FILTER; });
@@ -4959,8 +4969,8 @@ function renderHwCheck(){
 
   /* ---- 이벤트 ---- */
   var bc = document.getElementById('hwClose'); if(bc) bc.onclick = closeHwCheck;
-  var bd0 = document.getElementById('hwDate'); if(bd0) bd0.onchange = function(){ HWC_DATE = this.value || hwcToday(); renderHwCheck(); try { hwsSyncDay(HWC_DATE); } catch(e){} };
-  var bt = document.getElementById('hwToday'); if(bt) bt.onclick = function(){ HWC_DATE = hwcToday(); renderHwCheck(); try { hwsSyncDay(HWC_DATE); } catch(e){} };
+  var bd0 = document.getElementById('hwDate'); if(bd0) bd0.onchange = function(){ HWC_DATE = this.value || hwcToday(); renderHwCheck(); try { hwsSyncDay(HWC_DATE); } catch(e){} try { v175RepLoad(HWC_DATE); } catch(e){} };
+  var bt = document.getElementById('hwToday'); if(bt) bt.onclick = function(){ HWC_DATE = hwcToday(); renderHwCheck(); try { hwsSyncDay(HWC_DATE); } catch(e){} try { v175RepLoad(HWC_DATE); } catch(e){} };
   var bsy = document.getElementById('hwSync'); if(bsy) bsy.onclick = function(){ try { hwsFlush(); } catch(e){} };
   try { hwsPaint(); } catch(e){}
   [].forEach.call(el.querySelectorAll('.hwc-chip'), function(chip){
@@ -4975,7 +4985,7 @@ function renderHwCheck(){
         hwcSaveCell(HWC_DATE || hwcToday(), row.dataset.ban, row.dataset.name, btn.dataset.item, next);
         hwcRefreshCounts();
         hwcRefreshBulk();
-        var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+        var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on'); try { hwcPvOpen(false); } catch(e){}
         try { if(navigator.vibrate) navigator.vibrate(8); } catch(e){}
         if(typeof playCorrectSound === 'function' && next === 'o'){ try { playCorrectSound(); } catch(e){} }
       };
@@ -5011,7 +5021,7 @@ function renderHwCheck(){
       });
       hwcRefreshCounts();
       hwcRefreshBulk();
-      var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+      var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on'); try { hwcPvOpen(false); } catch(e){}
       hwcToast(allO ? (it + ' 숙제 ' + n + '명 해제했어요') : (it + ' ' + n + '명 ○ 처리했어요'));
     };
   });
@@ -5086,7 +5096,7 @@ function renderHwCheck(){
     });
     hwcRefreshCounts();
     hwcRefreshBulk();
-    var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+    var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on'); try { hwcPvOpen(false); } catch(e){}
     hwcToast(full ? ('보이는 학생 ' + rows.length + '명 · 모든 항목 해제했어요') : ('보이는 학생 ' + rows.length + '명 · 모든 항목 ⭕ 처리했어요'));
   };
   var bclr = document.getElementById('hwAllClear');
@@ -5106,7 +5116,7 @@ function renderHwCheck(){
     });
     hwcRefreshCounts();
     hwcRefreshBulk();
-    var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+    var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on'); try { hwcPvOpen(false); } catch(e){}
     hwcToast(n ? ('보이는 학생 ' + n + '명 · 모든 숙제 기록을 해제했어요') : '해제할 기록이 없어요');
   };
   var bcp = document.getElementById('hwCopy');
@@ -5122,6 +5132,7 @@ function renderHwCheck(){
   var bsa = document.getElementById('hwSmsAll');
   if(bsa) bsa.onclick = function(){ hwcSmsAllShow(); };
   hwcRefreshBulk();
+  try { hwcPvRestore(date); } catch(e){}
 }
 function hwcPaintCell(btn, v){
   v = (v === undefined || v === null) ? '' : String(v);
@@ -5158,7 +5169,7 @@ function hwcAskScore(row, btn){
   hwcPaintCell(btn, ans);
   hwcSaveCell(HWC_DATE || hwcToday(), row.dataset.ban, row.dataset.name, btn.dataset.item, ans);
   hwcRefreshCounts();
-  var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on');
+  var pv = document.getElementById('hwPrev'); if(pv) pv.classList.remove('on'); try { hwcPvOpen(false); } catch(e){}
 }
 
 /* ---------- 요약 문자 만들기 ---------- */
@@ -5226,13 +5237,33 @@ function hwcSmsHasJong(word){
 }
 /* 예) 11/21 받침 있으면 ○○이의, 없으면 ○○의 */
 function hwcSmsText(ban, name, date){
-  if(hwcClassCfg(ban)) return hwcReportText(ban, name, date);   /* v119: 반별 리포트 */
   var d = String(date || HWC_DATE || hwcToday());
+  /* v175: 📅 날짜별·알림톡과 같은 문구 — 그날 온라인·자기주도 결과 + 숙제 체크를 한 번에 */
+  try { var m = v175ParentMsg(ban, name, d); if(m) return m; } catch(e){}
+  if(hwcClassCfg(ban)) return hwcReportText(ban, name, d);   /* v119: 반별 리포트 */
   var mm = parseInt(d.slice(5, 7), 10), dd = parseInt(d.slice(8, 10), 10);
   if(!mm || !dd){ var t = hwcToday(); mm = parseInt(t.slice(5, 7), 10); dd = parseInt(t.slice(8, 10), 10); }
   var given = hwcSmsGiven(name);
   var nick = given + (hwcSmsHasJong(given) ? '이' : '');
   return '안녕하세요.탑에듀학원입니다^^ ' + mm + '/' + dd + ' ' + nick + '의 숙제 확인했습니다. 감사합니다♡';
+}
+/* v175: 📩 리포트를 펼치면 카드 전체를 스크롤 모드로 — 마지막 학생까지 잘리지 않게.
+   화면을 다시 그려도(시트·앱 기록 갱신) 열어 둔 리포트는 이어서 보여 준다. */
+var HWC_PV = null, HWC_PV_BUSY = false;
+function hwcPvOpen(on){
+  var c = document.getElementById('hwModal');
+  if(on){ if(c) c.classList.add('pv-open'); return; }
+  if(c) c.classList.remove('pv-open');
+  HWC_PV = null;
+}
+function hwcPvRestore(date){
+  if(!HWC_PV || HWC_PV_BUSY || HWC_PV.date !== String(date || '')) return;
+  HWC_PV_BUSY = true;
+  try {
+    if(HWC_PV.kind === 'one') hwcReportPreview(HWC_PV.ban, HWC_PV.name, null);
+    else hwcSmsAllShow();
+  } catch(e){}
+  HWC_PV_BUSY = false;
 }
 /* ---------- v119: 반별 학부모 리포트 (수지중1·수지중2·예비고1) ---------- */
 function hwcMark(v){ return v === 'o' ? 'O' : (v === 'x' ? 'X' : (v === 't' ? '△(일부)' : '')); }
@@ -5271,17 +5302,32 @@ function hwcSmsAutoSend(ban, name, txt){
 function hwcReportPreview(ban, name, btn){
   var date = HWC_DATE || hwcToday();
   var pv = document.getElementById('hwPrev');
-  var r = hwcReportLines(ban, name, date), txt = hwcReportText(ban, name, date);
-  if(!pv){ hwcCopy(txt, null, null); return; }
+  if(!pv){ hwcCopy(hwcSmsText(ban, name, date), null, null); return; }
+  /* v175: 온라인·자기주도 기록을 먼저 당겨온 뒤 문구를 만든다 */
+  if(!v175RepFresh(date)){
+    hwcPvOpen(true);
+    pv.classList.remove('many'); pv.classList.add('rep');
+    pv.innerHTML = '<b>📩 ' + esc(name) + ' 학부모 리포트 준비 중…</b>'
+      + '<div class="hwc-prev-txt">온라인·자기주도 학습 기록을 함께 불러오고 있어요. 잠시만요…</div>';
+    pv.classList.add('on');
+    v175RepLoad(date, function(){ try { hwcReportPreview(ban, name, btn); } catch(e){} });
+    return;
+  }
+  var txt = hwcSmsText(ban, name, date);
+  var hw = [];
+  try { hw = v175HwLines(ban, name, date); } catch(e){ hw = []; }
+  var lr = v175RepStudent(ban, name, date);
+  HWC_PV = { kind: 'one', ban: ban, name: name, date: date };
+  hwcPvOpen(true);
   pv.classList.remove('many'); pv.classList.add('rep');
   var warn = '';
-  if(!r.lines.length) warn = '아직 체크한 항목이 없어요. 칸을 먼저 눌러 주세요.';
-  else if(r.missing.length) warn = '체크 안 한 항목은 문자에서 빠져요: ' + r.missing.join(', ');
+  if(!hw.length) warn = '아직 체크한 항목이 없어요. 칸을 먼저 눌러 주세요.';
+  else if(!lr) warn = '오늘 온라인·자기주도 학습 기록을 못 불러와 숙제 결과만 담았어요.';
   pv.innerHTML = '<b>📩 ' + esc(name) + ' 학부모 리포트 미리보기 (' + esc(ban) + ')</b>'
     + '<div class="hwc-prev-txt">' + esc(txt) + '</div>'
     + (warn ? '<div class="hwc-rep-warn">⚠️ ' + esc(warn) + '</div>' : '')
     + '<div class="hwc-rep-acts">'
-    + '<button type="button" class="hwc-rep-act" id="hwRepCopy"' + (r.lines.length ? '' : ' disabled') + '>📋 복사 · 에듀스탭 열기</button>'
+    + '<button type="button" class="hwc-rep-act" id="hwRepCopy"' + (hw.length ? '' : ' disabled') + '>📋 복사 · 에듀스탭 열기</button>'
     + '<button type="button" class="hwc-rep-act" id="hwRepAuto" disabled title="자동 발송은 아직 꺼져 있어요">🚀 자동 발송 (준비 중)</button>'
     + '</div>';
   pv.classList.add('on');
@@ -5332,13 +5378,23 @@ function hwcSmsSend(ban, name, btn){
 function hwcSmsAllShow(){
   var el = document.getElementById('hwList'), pv = document.getElementById('hwPrev');
   if(!el || !pv) return;
+  var date = HWC_DATE || hwcToday();
+  /* v175: 온라인·자기주도 학습 기록을 먼저 당겨온 뒤 문구를 만든다 */
+  if(!v175RepFresh(date)){
+    hwcPvOpen(true);
+    pv.className = 'hwc-prev on many rep';
+    pv.innerHTML = '<b>📩 학부모 리포트 준비 중…</b><div class="hwc-prev-txt">그날 온라인·자기주도 학습 기록을 함께 불러오고 있어요. 잠시만요…</div>';
+    v175RepLoad(date, function(){ try { hwcSmsAllShow(); } catch(e){} });
+    return;
+  }
   /* v119: 수지중1·수지중2·예비고1 은 하나라도 체크한 학생 리포트, 다른 반은 지금처럼 모두 ⭕ 학생 */
-  var date = HWC_DATE || hwcToday(), rows = [], all = [], anyRep = false;
+  var rows = [], all = [], anyRep = false, noRep = [];
   [].forEach.call(el.querySelectorAll('.hwc-row'), function(r){
     var rec = hwcRowRec(r), ban = r.dataset.ban, name = r.dataset.name;
     var isRep = !!hwcClassCfg(ban);
     if(isRep ? !hwcRecAny(ban, rec) : !hwcRecAllO(ban, rec)) return;
     if(isRep) anyRep = true;
+    if(!v175RepStudent(ban, name, date)) noRep.push(name);
     var txt = hwcSmsText(ban, name, date);
     all.push(txt);
     rows.push('<div class="hwc-prev-line"><span class="hwc-prev-txt">' + esc(txt) + '</span>'
@@ -5346,16 +5402,20 @@ function hwcSmsAllShow(){
   });
   if(!rows.length){
     pv.classList.remove('on'); pv.classList.remove('many'); pv.classList.remove('rep');
+    hwcPvOpen(false);
     hwcToast('지금 보이는 학생 중 보낼 문자가 없어요 (칸을 먼저 체크해 주세요)');
     return;
   }
   HWC_SMS_BULK = all.join(anyRep ? '\n\n────────────\n\n' : '\n');
+  HWC_PV = { kind: 'all', date: date };
   pv.innerHTML = '<b>📩 ' + rows.length + '명 학부모 문자 미리보기 — 학생마다 [복사]</b>' + rows.join('')
+    + (noRep.length ? '<div class="hwc-rep-warn">⚠️ ' + esc(noRep.join(', ')) + ' — 그날 온라인·자기주도 기록을 못 불러와 숙제 결과만 담았어요.</div>' : '')
     + '<div class="hwc-prev-all"><button type="button" class="hwc-prev-cp" data-bulk="1">전체 복사</button>'
     + '<button type="button" class="hwc-prev-cp" disabled style="opacity:.5;cursor:not-allowed" title="자동 발송은 아직 꺼져 있어요">🚀 전체 자동 발송 (준비 중)</button>'
     + '<span>' + rows.length + '명</span></div>';
   pv.classList.add('on'); pv.classList.add('many');
   if(anyRep) pv.classList.add('rep'); else pv.classList.remove('rep');
+  hwcPvOpen(true);
   [].forEach.call(pv.querySelectorAll('.hwc-prev-cp'), function(b){
     if(b.disabled) return;
     b.onclick = function(){
@@ -5575,6 +5635,8 @@ function hwsOpen() {
   hwsQ();
   HWS.status = HWS.q.length ? 'pending' : 'connecting';
   hwsPaint();
+  /* v175: 그날 온라인·자기주도 기록도 미리 당겨 둔다(📩 리포트 문구에 함께 담기게) */
+  try { v175RepLoad(HWC_DATE || hwcToday()); } catch (e) {}
   if (HWS.q.length) hwsSoon();
   hwsSyncDay(HWC_DATE).then(function () { try { hwsMigrate(); } catch (e) {} });
 }
@@ -9686,6 +9748,109 @@ function v170WordLow(items){
   });
   return out;
 }
+/* ================= v175: ✅ 숙제체크 ⇄ 📅 알림톡 한 문구 =================
+   수민 님 요청(11/27): ✅ 숙제 1초 체크에 적은 숙제 완료/미완료와
+   📅 날짜별·알림톡의 그날 온라인·자기주도 결과를 학부모 알림톡 한 문구로 합친다.
+   · 자료: 시트 '숙제체크'(hwsSyncDay 로 이 폰에 합쳐 둔 기록) + 이 폰 기록(hwcDayRaw)
+   · 두 화면(📅 날짜별·알림톡 / ✅ 숙제 1초 체크 📩 리포트)이 같은 문구를 씁니다. */
+function v175HwRec(ban, name, day){
+  try { return (hwcDayRaw(day) || {})[ban + '|' + name] || {}; } catch(e){ return {}; }
+}
+/* 그날 숙제체크 기록 → 알림톡에 넣을 줄. 체크를 안 한 칸(빈칸)은 넣지 않는다. */
+function v175HwLines(ban, name, day){
+  var rec = v175HwRec(ban, name, day), done = [], part = [], miss = [], score = [];
+  try {
+    hwcItemDefs(ban).forEach(function(d){
+      var v = rec[d.name];
+      if(v === undefined || v === null || String(v).trim() === '') return;
+      v = String(v).trim();
+      var nm = d.short || d.label || d.name;
+      if(d.max){ score.push(nm + ' ' + v + '/' + d.max + '점'); return; }
+      if(v === 'o') done.push(nm);
+      else if(v === 't') part.push(nm);
+      else if(v === 'x') miss.push(nm);
+    });
+  } catch(e){}
+  var out = [];
+  if(done.length) out.push('· [숙제 완료] ' + done.join(', '));
+  if(part.length) out.push('· [숙제 일부] ' + part.join(', '));
+  if(miss.length) out.push('· [숙제 미완료] ' + miss.join(', '));
+  if(score.length) out.push('· [숙제 점수] ' + score.join(', '));
+  return out;
+}
+function v175Md(day){ var d = String(day || ''); return Number(d.slice(5, 7)) + '/' + Number(d.slice(8, 10)); }
+/* 온라인 학습 기록이 없거나 못 불러온 학생 — 숙제 결과만으로 만드는 문구.
+   onlineKnown=true 일 때만 '온라인 학습은 아직 하지 않았습니다'를 넣어요(모르면 말하지 않음). */
+function v175HwOnlyMsg(day, name, hwLines, onlineKnown){
+  var given = hwcSmsGiven(name);
+  var nk = given + (hwcSmsHasJong(given) ? '이' : '');
+  return '안녕하세요.탑에듀학원입니다^^ ' + v175Md(day) + ' ' + nk + '의 영어 학습 결과입니다.\n'
+    + hwLines.join('\n') + '\n'
+    + (onlineKnown ? '· 온라인 학습은 아직 하지 않았습니다.\n' : '')
+    + '감사합니다♡';
+}
+/* 학습 결과 문구 + 숙제 줄 합치기 — '감사합니다♡' 앞에 붙이고, 첫 줄은 '영어 학습 결과'로 */
+function v175MergeHw(base, hwLines){
+  var txt = String(base || '');
+  if(!hwLines || !hwLines.length) return txt;
+  txt = txt.replace('영어 온라인 학습 결과입니다', '영어 학습 결과입니다');
+  var block = hwLines.join('\n'), tail = '감사합니다♡';
+  var i = txt.lastIndexOf(tail);
+  if(i < 0) return (txt ? txt.replace(/\s+$/, '') + '\n' : '') + block;
+  return txt.slice(0, i).replace(/\s+$/, '') + '\n' + block + '\n' + tail;
+}
+/* ✅ 숙제 1초 체크 화면이 그날 학습 기록(adminDayReport)을 당겨와 두는 곳 — 날짜별 알림톡과 같은 판정·같은 문구 */
+var V175_REP = {};   /* 날짜 → { at, ok, map:{'반|이름': student}, busy, wait:[] } */
+function v175RepStudent(ban, name, day){
+  var c = V175_REP[String(day || '')];
+  if(!c || !c.map) return null;
+  return c.map[ban + '|' + name] || null;
+}
+function v175RepFresh(day){
+  var c = V175_REP[String(day || '')];
+  if(!c || !c.at) return false;
+  return (Date.now() - c.at) < (c.ok ? 90000 : 8000);
+}
+function v175RepLoad(day, cb){
+  day = String(day || '');
+  if(v175RepFresh(day)){ if(cb){ try { cb(!!V175_REP[day].ok); } catch(e){} } return; }
+  var old = V175_REP[day];
+  if(old && old.busy){ if(cb) (old.wait = old.wait || []).push(cb); return; }
+  var c = V175_REP[day] = { at: 0, ok: false, map: {}, busy: true, wait: cb ? [cb] : [] };
+  var settled = false, timer = 0;
+  function done(ok){
+    if(settled) return;
+    settled = true;
+    try { clearTimeout(timer); } catch(e){}
+    c.busy = false; c.at = Date.now(); c.ok = !!ok;
+    var w = c.wait || []; c.wait = [];
+    w.forEach(function(f){ try { f(c.ok); } catch(e){} });
+  }
+  /* 서버 응답이 아주 느릴 때 리포트가 '준비 중'에서 멈추지 않게 */
+  try { timer = setTimeout(function(){ done(false); }, 12000); } catch(e){}
+  var pw = '';
+  try { pw = store('apw') || ''; } catch(e){}
+  if(!pw){ done(false); return; }
+  try {
+    call('adminDayReport', pw, '', day).then(function(r){
+      var map = {}, n = 0;
+      ((r && r.students) || []).forEach(function(s){ if(s && s.ban && s.name){ map[s.ban + '|' + s.name] = s; n++; } });
+      c.map = map;
+      done(n > 0);
+    }).catch(function(){ done(false); });
+  } catch(e){ done(false); }
+}
+/* 두 화면이 함께 쓰는 학부모 문자 — 그날 온라인·자기주도 + 숙제 체크를 한 문구로 */
+function v175ParentMsg(ban, name, day){
+  day = String(day || '');
+  var s = v175RepStudent(ban, name, day), hw = [];
+  try { hw = v175HwLines(ban, name, day); } catch(e){ hw = []; }
+  if(s){
+    try { var t = v169DayInfo({ day: day }, s).msg; if(t) return t; } catch(e){}
+  }
+  if(hw.length) return v175HwOnlyMsg(day, name, hw, false);
+  return '';
+}
 function v169DayInfo(rep, s){
   var day = v169DayKey(rep && rep.day);
   var items = (s && s.items) || [];
@@ -9732,12 +9897,25 @@ function v169DayInfo(rep, s){
     info.dailyMsg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + subj
       + ' 오늘 집 일일학습(단어 Day 2개)을 아직 마치지 않았습니다. 집에서 마저 할 수 있도록 챙겨 봐 주세요. 감사합니다♡';
   }
+  /* v175: ✅ 숙제 1초 체크(시트+이 폰) 기록도 같은 알림톡 문구에 담는다.
+     숙제 기록이 아예 없는 학생은 기존 문구 그대로(빈 숙제 안내 없음). */
+  info.hwLines = [];
+  try { info.hwLines = v175HwLines(s.ban, s.name, day); } catch(e){ info.hwLines = []; }
+  info.hw = info.hwLines.length > 0;
+  if(info.hw){
+    if(info.state === 'none' || !info.msg) info.msg = v175HwOnlyMsg(day, s.name, info.hwLines, true);
+    else info.msg = v175MergeHw(info.msg, info.hwLines);
+    if(info.daily) info.dailyMsg = info.msg;
+    else info.dailyMsg = v175MergeHw(info.dailyMsg, info.hwLines);
+  }
   return info;
 }
 function v169Chip(info){
   if(info.state === 'done') return info.isSs ? '<span class="chip done">✅ 자기주도 완료</span>' : '<span class="chip done">했음</span>';
   if(info.state === 'mid') return '<span class="chip mid">⏳ 진행 중 (자기주도 미완료)</span>';
   if(info.state === 'low') return '<span class="chip mid">⚠️ 재시험 필요 (' + info.lowScore + '점·' + wordPassMin() + '점 미만)</span>';
+  /* v175: 온라인 학습은 안 했어도 숙제 체크 기록이 있으면 '미학습'이 아니라 '숙제만 확인' */
+  if(info.hw) return '<span class="chip todo">📝 숙제만 확인</span>';
   return '<span class="chip todo">안 함</span>';
 }
 /* v169: 날짜별 · 알림톡 필터 — [📋 전체] [⏱️ 수업당일 자기주도] [📘 매일 일일학습] */
@@ -9751,7 +9929,7 @@ function v169FilterBar(mode){
 }
 function v169RowChip(s, mode){
   if(mode === 'daily') return s._done ? '<span class="chip done">✅ 일일학습 완료</span>' : '<span class="chip todo">미완료</span>';
-  if(mode === 'ss') return s._done ? '<span class="chip done">✅ 자기주도 완료</span>' : (s.v169.items ? '<span class="chip mid">⏳ 자기주도 미완료</span>' : '<span class="chip todo">미시작</span>');
+  if(mode === 'ss') return s._done ? '<span class="chip done">✅ 자기주도 완료</span>' : (s.v169.items ? '<span class="chip mid">⏳ 자기주도 미완료</span>' : (s.v169.hw ? '<span class="chip todo">📝 숙제만 확인</span>' : '<span class="chip todo">미시작</span>'));
   return v169Chip(s.v169);
 }
 function drawDay(r){
@@ -9797,12 +9975,17 @@ function drawDay(r){
   }
   var ordered = mid.concat(low, none, done);
   var names = function(arr){ return arr.map(function(s){ return esc(s.name); }).join(', '); };
+  /* v175: 숙제 체크 기록만 있고 온라인 학습은 안 한 학생은 [안 함]과 따로 보여 준다 */
+  var hwOnly = (mode === 'daily') ? [] : none.filter(function(s){ return !!(s.v169 && s.v169.hw); });
+  var noneRest = (mode === 'daily') ? none : none.filter(function(s){ return !(s.v169 && s.v169.hw); });
   var html = '<div class="card">' + v169FilterBar(mode)
     + '<h2>' + esc(day) + (dow >= 0 ? ' (' + V169_DOW[dow] + ')' : '') + ' · ' + title + ' — 완료 <b>' + done.length + '명</b> / 미완료 <b style="color:var(--no)">' + (mid.length + low.length + none.length) + '명</b></h2>'
     + (mid.length ? '<div class="small">⏳ 진행 중(자기주도 미완료): <b>' + names(mid) + '</b></div>' : '')
     + (low.length ? '<div class="small">⚠️ 재시험 필요(' + wordPassMin() + '점 미만): <b>' + names(low) + '</b></div>' : '')
-    + (none.length ? '<div class="small">' + (mode === 'daily' ? '미완료' : (mode === 'ss' ? '미시작' : '안 함')) + ': ' + names(none) + '</div>' : '')
+    + (noneRest.length ? '<div class="small">' + (mode === 'daily' ? '미완료' : (mode === 'ss' ? '미시작' : '안 함')) + ': ' + names(noneRest) + '</div>' : '')
+    + (hwOnly.length ? '<div class="small">📝 숙제만 확인(온라인 미학습): <b>' + names(hwOnly) + '</b></div>' : '')
     + legend
+    + '<div class="small">※ ✅ 숙제 1초 체크에 적은 <b>숙제 완료·미완료</b>도 같은 문구에 함께 담깁니다.</div>'
     + (ordered.length ? '<button class="btn ghost" id="cpall">알림톡 문구 전체 복사</button>' : '<div class="small">이 날은 해당 학생이 없어요.</div>')
     + '</div>';
   /* 미완료(진행 중 → 안 함 → 완료) 순으로 보여 준다 — 보낼 학생부터 */
@@ -9841,6 +10024,12 @@ function v169LoadDay(A){
   try { TOPEDU_DB_PULL_AT = 0; dbAdminPull(true, function(d){ settle('db'); }); } catch(e){ settle('db'); }
   try { pullStreakBoard(true, function(){ settle('board'); }); } catch(e){ settle('board'); }
   try { if(typeof ssBoardPull === 'function') ssBoardPull(true); } catch(e){}
+  /* v175: 그날 ✅ 숙제 1초 체크 시트 기록도 이 폰에 합쳐 둔 뒤 문구를 만든다(로컬 기록과 시트 기록 모두 반영) */
+  try {
+    if(typeof hwsSyncDay === 'function'){
+      hwsSyncDay(v169DayKey(A.day) || A.day).then(function(){ redraw(); }).catch(function(){});
+    }
+  } catch(e){}
   call('adminDayReport', A.pw, A.ban, A.day).then(function(r){
     A.lastDayRep = r;
     try { drawDay(r); } catch(e){}
@@ -11200,7 +11389,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v174';
+var TOPEDU_APP_VERSION = 'v175';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
