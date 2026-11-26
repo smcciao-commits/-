@@ -11390,7 +11390,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v178';
+var TOPEDU_APP_VERSION = 'v179';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -15427,9 +15427,9 @@ function ssGoS0() { if (!SS.s0) return; SS.stage = 1; SS.scr = 's0'; ssSaveSnap(
 function ssViewS0() {
   var s0 = SS.s0;
   var h = '<div class="ssx-pane"><div class="ssx-h1">🎧 듣기평가 · 17문항</div>'
-    + '<div class="ssx-sub">' + esc(ssS0Title(s0.id)) + ' · 약 25분. ▶ 재생을 누르고 들으면서 17문항을 모두 고른 뒤 <b>채점하기</b>를 누르세요. 채점해야 1단계 단어가 열려요.</div>';
+    + '<div class="ssx-sub">' + esc(ssS0Title(s0.id)) + ' · 약 25분. ▶ 재생을 누르고 들으면서 17문항을 모두 고른 뒤 <b>채점하기</b>를 누르세요. 문항마다 <b>그 부분 음성을 들어야</b> 보기를 고를 수 있어요.<br><b>2개까지 틀리면 통과</b> → 1단계 단어가 열려요. 3개 이상 틀리면 틀린 문항을 다시 듣고 고쳐야 해요.</div>';
   if (s0.done) {
-    h += '<div class="ssx-sub" style="margin-top:6px">✅ 채점 완료 · <b>' + (s0.right == null ? '' : s0.right + '/17 · ') + s0.pct + '점</b> — 아래에서 틀린 문항을 다시 듣고 대본을 확인해 보세요.</div>'
+    h += '<div class="ssx-sub" style="margin-top:6px">✅ 통과 · <b>' + (s0.right == null ? '' : s0.right + '/17 · ') + s0.pct + '점</b> — 아래에서 틀린 문항을 다시 듣고 대본을 확인해 보세요.</div>'
       + '<button type="button" class="ssx-btn pri" style="margin-top:8px" onclick="ssGoS1()">듣기 끝! 1단계 단어로 →</button>';
   }
   h += '</div>';
@@ -15457,7 +15457,7 @@ function ssListenClear() {
 window.addEventListener('message', function (ev) {
   var d = ev.data;
   if (!d || d.type !== 'ss-listen' || ev.origin !== location.origin) return;
-  if (!SS.on || !SS.s0 || d.id !== SS.s0.id) return;
+  if (!SS.on || !SS.s0 || d.id !== SS.s0.id || !d.pass) return;   /* v179: 2개까지 틀려야 통과 */
   SS.s0.done = true;
   SS.s0.pct = Math.max(Number(SS.s0.pct) || 0, Number(d.pct) || 0);
   SS.s0.right = Math.max(Number(SS.s0.right) || 0, Number(d.right) || 0);
@@ -15467,7 +15467,7 @@ window.addEventListener('message', function (ev) {
 
 /* ---------- 1단계 ---------- */
 function ssGoS1() {
-  if (!SS.preview && !ssS0Open()) { alert('🎧 듣기평가 17문항을 먼저 끝내 주세요.\n(채점하기를 누르면 1단계 단어가 열려요)'); return; }
+  if (!SS.preview && !ssS0Open()) { alert('🎧 듣기평가 17문항을 먼저 통과해 주세요.\n(2개까지 틀리면 통과 → 1단계 단어가 열려요)'); return; }
   SS.stage = 1; SS.scr = 's1'; ssSaveSnap(); ssStatusPub(); ssRender(); }
 function ssViewS1() {
   var days = SS.s1.days, cfg = ssCfg(SS.ban);

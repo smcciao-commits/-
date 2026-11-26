@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- listening.html v178 (2026-11-26): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
+<!-- listening.html v179 (2026-11-26): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -141,9 +141,12 @@
   .lock{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:22px;text-align:center;margin:20px 14px}
   .lock h2{font-size:16px;color:var(--teal-d);margin-bottom:8px}
   .lock p{font-size:12.8px;color:var(--sub);line-height:1.7}
-  /* v178: 자기주도 화면 안(iframe) 모드 */
+  /* v179: 자기주도 화면 안(iframe) 모드 */
   .ssm header,.ssm #btnList,.ssm #btnBackList{display:none!important}
   .ssm .player{top:0}
+  .ssm #btnAgain{display:none!important}
+  .ch.lk{opacity:.38}
+  .qlisten{border:1.5px solid #5eead4;background:#f0fdfa;color:#0f766e;border-radius:8px;font-size:11px;font-weight:800;padding:2px 7px;margin-left:4px;cursor:pointer}
   .lock a{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:12px;background:var(--teal);
     color:#fff;font-weight:800;font-size:13.5px;text-decoration:none}
 </style>
@@ -154,7 +157,7 @@
     <div class="hrow">
       <button class="hd-btn" id="btnHome">← 홈</button>
       <h1>🎧 모의고사 영어듣기</h1>
-      <span class="vbadge">v178</span>
+      <span class="vbadge">v179</span>
     </div>
   </header>
   <div id="app"><div class="loading">불러오는 중…</div></div>
@@ -163,7 +166,7 @@
 
 <script>
 /* ================= 설정 ================= */
-var TOPEDU_APP_VERSION = 'v178';
+var TOPEDU_APP_VERSION = 'v179';
 var DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
 var LS_BEST = 'topedu_listening_v1';     /* { examId: {best, at, tries, last} } */
 var LS_SESS = 'topedu_listening_user_v1';
@@ -198,7 +201,50 @@ function getPw(){
   return '';
 }
 var ME = getMe();
-var SSM = qs('ss') === '1';   /* v178: 자기주도 0단계로 열림 — 지정 회차만, 17문항 다 골라야 채점, 채점하면 부모 창에 알림 */
+var SSM = qs('ss') === '1';
+/* v179: 찍기 방지 + 통과 기준 (자기주도 모드만)
+   · 그 문항 음성을 처음부터 절반 이상 이어서 들어야 보기가 열린다(막대를 끌어 건너뛰면 안 열림). 선생님 미리보기는 잠금 없음
+   · 17문항 중 2개까지 틀리면 통과 → 부모 창에 알림. 3개 이상이면 정답·대본은 숨기고, 틀린 문항만 다시 듣고 고쳐서 재채점 */
+var PASS_WRONG = 2;
+var HEARD = {}, RUN_FROM = 0, LAST_T = 0;
+function segOf(no){
+  var s = CUR.starts || [], a = s[no-1] || 0, b = CUR.duration || a;
+  for(var k = no; k < s.length; k++){ if(s[k] > a + 1){ b = s[k]; break; } }
+  return [a, b];
+}
+function heardOk(no){ return !SSM || ME.ban === '선생님' || !!HEARD[no]; }
+function heardKey(){ return 'topedu_ls_ss_' + CUR.id + '|' + ME.name; }
+function heardSave(){ if(SSM) lsSet(heardKey(), { day: new Date().toDateString(), heard: HEARD, answers: ST.answers }); }
+function heardLoad(){
+  HEARD = {};
+  if(!SSM) return;
+  var o = lsGet(heardKey(), null);
+  if(o && o.day === new Date().toDateString()){ HEARD = o.heard || {}; ST.answers = o.answers || {}; }
+}
+function heardCheck(t){
+  if(!SSM || !CUR) return;
+  if(Math.abs(t - LAST_T) > 3) RUN_FROM = t;   /* 막대 끌기·건너뛰기 = 이어 듣기가 끊김 */
+  LAST_T = t;
+  var ch = false;
+  for(var no = 1; no <= 17; no++){
+    if(HEARD[no]) continue;
+    var sg = segOf(no);
+    if(RUN_FROM <= sg[0] + 2 && t >= sg[0] + (sg[1] - sg[0]) * 0.5){ HEARD[no] = 1; ch = true; lockPaint(no); }
+  }
+  if(ch) heardSave();
+}
+function lockPaint(no){
+  var ok = heardOk(no), st = $('qstate'+no);
+  Array.prototype.forEach.call(document.querySelectorAll('.ch[data-no="'+no+'"]'), function(x){ x.classList.toggle('lk', !ok); });
+  if(st && SSM) st.innerHTML = ok ? '' : '🔒 듣고 나서 선택 <button class="qlisten" data-from="'+no+'">▶ '+no+'번 듣기</button>';
+}
+document.addEventListener('click', function(ev){
+  var b = ev.target && ev.target.closest ? ev.target.closest('.qlisten') : null;
+  if(!b || !AUD) return;
+  AUD.currentTime = segOf(Number(b.getAttribute('data-from')))[0];
+  AUD.play().then(function(){ var p = $('btnPlay'); if(p) p.textContent = '❚❚'; }).catch(function(){});
+  window.scrollTo(0, 0);
+});   /* v179: 자기주도 0단계로 열림 — 지정 회차만, 17문항 다 골라야 채점, 채점하면 부모 창에 알림 */
 
 /* ================= 목록 화면 ================= */
 function loadIndex(){
@@ -271,6 +317,7 @@ function openExam(id){
   }).then(function(j){
     CUR = j;
     ST.answers = {}; ST.submitted = false; ST.reviewOnlyWrong = false; ST.sel = null;
+    heardLoad();
     renderExam();
   }).catch(function(err){
     $('app').innerHTML = '<div class="sec"><div class="empty">문제를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 열어 주세요.<br><span style="font-size:11px;color:#94a3b8">'+esc(err.message)+'</span></div></div>';
@@ -332,7 +379,9 @@ function renderExam(){
     el.onclick = function(){
       if(ST.submitted) return;
       var no = el.getAttribute('data-no'), pick = Number(el.getAttribute('data-pick'));
+      if(!heardOk(Number(no))){ toast('🎧 '+no+'번 음성을 듣고 나서 고를 수 있어요'); return; }
       ST.answers[no] = pick;
+      heardSave();
       document.querySelectorAll('.ch[data-no="'+no+'"]').forEach(function(x){ x.classList.remove('sel'); });
       if(el.querySelector('.cn') && el.textContent.trim().length<=2){
         /* ①~⑤ 전용 칸은 같은 번호 전체를 칠한다 */
@@ -358,6 +407,12 @@ function renderExam(){
     };
   });
   mountAudio();
+  RUN_FROM = 0; LAST_T = 0;
+  for(var no=1;no<=17;no++){
+    lockPaint(no);
+    var pk = ST.answers[no];
+    if(pk){ var el = document.querySelector('.ch[data-no="'+no+'"][data-pick="'+pk+'"]'); if(el) el.classList.add('sel'); }
+  }
   updateCount();
   window.scrollTo(0,0);
 }
@@ -384,6 +439,7 @@ function onTimeUpdate(){
   if(!AUD) return;
   var c = AUD.currentTime || 0;
   var tc = $('tCur'); if(tc) tc.textContent = mmss(c);
+  heardCheck(c);
   var bar = $('pbar'); if(bar && !bar._drag) bar.value = c;
   var d = $('tDur'); if(d && AUD.duration && isFinite(AUD.duration)) d.textContent = mmss(AUD.duration);
 }
@@ -428,7 +484,9 @@ function renderResult(fresh){
   else { save[e.id] = { best: prev.best, at: Date.now(), tries:(prev?prev.tries:0)+1, last:s.pct }; }
   lsSet(LS_BEST, save);
   if(fresh) saveToSheet(s.pct);
-  if(fresh && SSM){ try{ parent.postMessage({ type:'ss-listen', id:e.id, pct:s.pct, right:s.right }, location.origin); }catch(x){} }
+  var wrongN = e.questions.length - s.right, pass = wrongN <= PASS_WRONG;
+  if(fresh && SSM && pass){ try{ parent.postMessage({ type:'ss-listen', id:e.id, pct:s.pct, right:s.right, pass:true }, location.origin); }catch(x){} }
+  if(SSM && !pass){ renderFail(s, wrongN); return; }
 
   var h = '';
   h += '<div class="sec">';
@@ -498,6 +556,26 @@ function renderResult(fresh){
       window.scrollTo(0,0);
     };
   });
+}
+
+/* v179: 자기주도 — 3개 이상 틀림: 정답·대본 없이 틀린 번호만, 틀린 문항만 다시 듣고 고쳐서 재채점 */
+function renderFail(s, wrongN){
+  var wq = CUR.questions.filter(function(q){ return ST.answers[q.no] !== q.answer; });
+  var h = '<div class="sec">';
+  h += '<div class="score" style="background:linear-gradient(135deg,#b45309,#f59e0b)"><div class="big">'+s.right+' / 17</div>';
+  h += '<div class="sm">'+wrongN+'개 틀렸어요 · 2개까지 틀려야 통과</div></div>';
+  h += '<div class="lock" style="margin:0 0 12px"><h2>🔁 아직 통과가 아니에요</h2><p>틀린 문항: <b>'+wq.map(function(q){ return q.no; }).join(', ')+'번</b><br>';
+  h += '틀린 문항은 <b>그 부분을 다시 들어야</b> 고를 수 있어요.<br>맞힌 문항은 그대로 두고, 틀린 문항만 고쳐서 다시 채점하세요.<br><span style="font-size:11.5px">정답과 대본은 통과한 뒤에 보여 줘요.</span></p></div>';
+  h += '<button class="btn" style="width:100%" id="btnFix">🎧 틀린 문항 다시 듣고 고치기</button></div>';
+  $('app').innerHTML = h;
+  window.scrollTo(0,0);
+  $('btnFix').onclick = function(){
+    wq.forEach(function(q){ delete ST.answers[q.no]; delete HEARD[q.no]; });
+    heardSave();
+    ST.submitted = false;
+    renderExam();
+    var c = $('q'+wq[0].no); if(c) c.scrollIntoView();
+  };
 }
 
 /* ================= 구글 시트 저장 (진도DB) ================= */
