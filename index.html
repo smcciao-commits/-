@@ -11165,7 +11165,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v172';
+var TOPEDU_APP_VERSION = 'v173';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -15134,7 +15134,7 @@ function ssViewHub() {
   h += '<div class="ssx-stage ' + (s1 ? '' : 'on') + '">'
     + '<div class="num">1</div>'
     + '<div class="tx"><b>' + (days.length && days[0].lbl ? '기말 단어·영영풀이 ' + days.length + '묶음 암기 + 시험' : '단어 Day ' + days.length + '일치 암기 + 앱 단어 시험') + '</b>'
-    + '<span>' + (days.length ? (days[0].lbl ? esc(days.map(function (x) { return x.lbl; }).join(', ')) : (esc(ssBookLabel(days[0].name)) + ' · Day ' + ssDayTxt().replace('Day ', ''))) : '') + ' · 시험 ' + (Number(cfg.testCount) || 10) + '문항 · 약 ' + Math.round(SS.goal * 0.42) + '분</span></div>'
+    + '<span>' + (days.length ? (days[0].lbl ? esc(days.map(function (x) { return x.lbl; }).join(', ')) : (esc(ssBookLabel(days[0].name)) + ' · Day ' + ssDayTxt().replace('Day ', ''))) : '') + ' · 시험 ' + ssTestN({}) + '문항 · 약 ' + Math.round(SS.goal * 0.42) + '분</span></div>'
     + (s1 ? '<span class="ssx-chip ok">완료</span>' : '<span class="ssx-chip pri">' + doneDays + '/' + days.length + '</span>')
     + '<button type="button" class="ssx-btn sm pri" onclick="ssGoS1()">' + (doneDays ? '이어서' : '시작') + '</button>'
     + '</div>';
@@ -15166,7 +15166,7 @@ function ssGoS1() { SS.stage = 1; SS.scr = 's1'; ssSaveSnap(); ssStatusPub(); ss
 function ssViewS1() {
   var days = SS.s1.days, cfg = ssCfg(SS.ban);
   var h = '<div class="ssx-pane"><div class="ssx-h1">1단계 · 단어 암기 + 시험</div>'
-    + '<div class="ssx-sub">' + (days.length && days[0].lbl ? '기말 범위 묶음을' : 'Day를') + ' 하나씩 [암기 → 시험]. 시험은 <b>' + wordPassMin() + '점 이상</b>이라야 통과예요. ' + wordPassMin() + '점 미만이면 단어를 다시 보고 재시험을 불게 되고, 통과한 뒤에도 <b>틀린 단어는 오답 재시험으로 모두 맞출 때까지</b> 반복해요. 둘 다 돼야 다음 Day·2단계로 넘어가요.</div></div>';
+    + '<div class="ssx-sub">' + (days.length && days[0].lbl ? '기말 범위 묶음을' : 'Day를') + ' 하나씩 [암기 → 시험]. 시험은 <b>' + wordPassMin() + '점 이상</b>이라야 통과예요. ' + wordPassMin() + '점 미만이면 단어를 다시 보고 재시험을 보게 되고, 통과한 뒤에도 <b>틀린 단어는 오답 재시험으로 모두 맞출 때까지</b> 반복해요. 둘 다 돼야 다음 Day·2단계로 넘어가요.</div></div>';
   days.forEach(function (d, i) {
     var pend = (d.qwrong || []).length, okDay = d.status === 'ok' && !pend;
     /* v170: 80점 미만으로 끝난 Day 는 '재시험 필요'로 보여 준다 */
