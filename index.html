@@ -6695,6 +6695,10 @@ function finish(mode,label,correct,total,wrong,extra){
       html = topBar(W.set.name)+'<div class="card" style="text-align:center"><div class="sub">'+label+'</div>'+
         (extra||'<div class="big">'+r.score+'점</div><div>'+total+'개 중 <b>'+correct+'개</b> 맞았어요'+(r.score===100?' 🎉':'')+'</div>')+'</div>';
     }
+    /* v170: 80점 미만 — 결과 바로 아래에 재시험 버튼을 크게 둔다(스크롤 없이 보이게) */
+    if (isTest && !passNow) {
+      html += '<button class="btn" id="retest" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-weight:900;font-size:16px;padding:16px;margin:2px 0 12px;box-shadow:0 4px 14px rgba(245,158,11,.35)">🔄 다시 시험 보기 (' + passMin + '점 이상)</button>';
+    }
     /* v82: 오늘 학습 기록 직후 스트릭 카드 */
     try {
       var si = getStreakInfo(S.cred.ban, S.cred.name);
@@ -6721,12 +6725,13 @@ function finish(mode,label,correct,total,wrong,extra){
       '<button class="btn" id="again">틀린 단어만 다시 하기</button></div>';
     }
     if (isTest && !passNow) {
-      html+='<button class="btn" id="retest" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-weight:900;font-size:16px;padding:15px;box-shadow:0 4px 14px rgba(245,158,11,.35)">🔄 다시 시험 보기 (' + passMin + '점 이상)</button>';
+      html+='<button class="btn ghost" id="retest2" style="font-weight:800;color:#b45309;border-color:#fcd34d">🔄 다시 시험 보기 (' + passMin + '점 이상)</button>';
     }
     html+='<button class="btn ghost" id="menu">학습 메뉴로</button>';
     app.innerHTML=html;
     bindBack(showWordMenu); $('#menu').onclick=showWordMenu;
     var rtb=$('#retest'); if(rtb) rtb.onclick=function(){ runTest(W.words); };
+    var rtb2=$('#retest2'); if(rtb2) rtb2.onclick=function(){ runTest(W.words); };
     var ndg=$('#next_day_go'); if(ndg) ndg.onclick=function(){ openDailyQuest(S.cred); };
     var ag=$('#again'); if(ag) ag.onclick=function(){ var ws=W.words.filter(function(o){return wrong.indexOf(o.w)>=0;}); runWrongReview(ws,'choice'); };
   }).catch(function(e){ alert('저장이 안 됐어요. 인터넷을 확인하고 다시 해 주세요.\n'+errMsg(e)); showWordMenu(); });
