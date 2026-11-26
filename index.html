@@ -15160,7 +15160,7 @@ function ssViewS1() {
   days.forEach(function (d, i) {
     var pend = (d.qwrong || []).length, okDay = d.status === 'ok' && !pend;
     /* v170: 80점 미만으로 끝난 Day 는 '재시험 필요'로 보여 준다 */
-    var low = (!okDay && !pend && d.lastScore !== null && d.lastScore !== undefined && Number(d.lastScore) < wordPassMin());
+    var low = (!okDay && d.lastScore !== null && d.lastScore !== undefined && Number(d.lastScore) < wordPassMin());
     var chip = okDay ? '<span class="ssx-chip ok">통과 ' + (d.score == null ? '' : d.score + '점') + '</span>'
       : (low ? '<span class="ssx-chip warn">재시험 ' + Number(d.lastScore) + '점</span>'
         : (pend ? '<span class="ssx-chip warn">오답 ' + pend + '개</span>' : '<span class="ssx-chip">대기</span>'));
