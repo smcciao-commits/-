@@ -15162,10 +15162,10 @@ function ssViewS1() {
     /* v170: 80점 미만으로 끝난 Day 는 '재시험 필요'로 보여 준다 */
     var low = (!okDay && !pend && d.lastScore !== null && d.lastScore !== undefined && Number(d.lastScore) < wordPassMin());
     var chip = okDay ? '<span class="ssx-chip ok">통과 ' + (d.score == null ? '' : d.score + '점') + '</span>'
-      : (pend ? '<span class="ssx-chip warn">오답 ' + pend + '개</span>'
-        : (low ? '<span class="ssx-chip warn">재시험 ' + Number(d.lastScore) + '점</span>' : '<span class="ssx-chip">대기</span>'));
-    var btnLbl = okDay ? '다시' : (pend ? '🔁 오답 다시' : (low ? '🔄 재시험' : '암기·시험'));
-    var btnFn = pend ? ('ssS1RetryGo(' + i + ')') : (low ? ('ssS1RetestDay(' + i + ')') : ('ssS1Open(' + i + ')'));
+      : (low ? '<span class="ssx-chip warn">재시험 ' + Number(d.lastScore) + '점</span>'
+        : (pend ? '<span class="ssx-chip warn">오답 ' + pend + '개</span>' : '<span class="ssx-chip">대기</span>'));
+    var btnLbl = okDay ? '다시' : (low ? '🔄 재시험' : (pend ? '🔁 오답 다시' : '암기·시험'));
+    var btnFn = low ? ('ssS1RetestDay(' + i + ')') : (pend ? ('ssS1RetryGo(' + i + ')') : ('ssS1Open(' + i + ')'));
     h += '<div class="ssx-day ' + (okDay ? 'ok' : (pend || low ? 'retry' : '')) + '">'
       + '<span class="dnum">' + (d.lbl ? (d.def ? '영영' : '단어') : 'Day ' + bbPad(d.day)) + '</span>'
       + '<div class="dname">' + esc(d.lbl || ssBookLabel(d.name)) + '<br><span style="color:#94a3b8;font-size:11px">' + (d.words ? d.words.length + '단어' : '단어 불러오기') + '</span></div>'
