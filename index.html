@@ -2730,7 +2730,7 @@ function dbTodayMap(){
 var TOPEDU_DB_DAYMAP = null, TOPEDU_DB_DAYMAP_AT = 0;
 function dbStreakDayMap(){
   if(TOPEDU_DB_DAYMAP && TOPEDU_DB_DAYMAP_AT === TOPEDU_DB_AT) return TOPEDU_DB_DAYMAP;
-  var done = {}, any = {}, daily = {};   /* v153: daily = '일일완료' 행(하루 2 Day 완주)만 따로 */
+  var done = {}, any = {}, daily = {}, ssDone = {};   /* v153: daily = '일일완료' 행(하루 2 Day 완주)만 따로 · v168: ssDone = '자기주도완주' 행만 따로 */
   (TOPEDU_DB_ROWS || []).forEach(function(r){
     if(!r || !r.b || !r.n || !r.d) return;
     var t = String(r.d).trim().replace(/[.\/]/g, '-'), m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
@@ -2740,10 +2740,35 @@ function dbStreakDayMap(){
     var _mm = String(r.m || '').trim();
     if(_mm === '테스트' || _mm === '일일완료' || _mm === '자기주도완주') (done[k] || (done[k] = {}))[day] = 1;
     if(_mm === '일일완료') (daily[k] || (daily[k] = {}))[day] = 1;
+    if(_mm === '자기주도완주') (ssDone[k] || (ssDone[k] = {}))[day] = 1;   /* v168 */
   });
-  TOPEDU_DB_DAYMAP = { done: done, any: any, daily: daily };
+  TOPEDU_DB_DAYMAP = { done: done, any: any, daily: daily, ssDone: ssDone };
   TOPEDU_DB_DAYMAP_AT = TOPEDU_DB_AT;
   return TOPEDU_DB_DAYMAP;
+}
+/* v168: 구글 시트 진도DB의 '자기주도완주' 행으로 그날 완주 여부를 본다.
+   (학원 동시 접속으로 ntfy 상태가 빠진 학생도 시트 기록만 있으면 완주로 인정) */
+function dbSsDoneOn(ban, name, dateKey){
+  if(!ban || !name) return false;
+  var day = String(dateKey || dbDay() || '').trim().replace(/[.\/]/g, '-');
+  var m = day.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(!m) return false;
+  day = m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2);
+  var k = ban + '|' + name;
+  try {
+    var dm = dbStreakDayMap();
+    if(dm && dm.ssDone) return !!(dm.ssDone[k] && dm.ssDone[k][day]);
+  } catch(e){}
+  /* 날짜 맵을 아직 못 만들었을 때만 원본 행을 직접 훑는다 */
+  try {
+    return (TOPEDU_DB_ROWS || []).some(function(r){
+      if(!r || String(r.b||'') !== String(ban) || String(r.n||'') !== String(name)) return false;
+      if(String(r.m || '').trim() !== '자기주도완주') return false;
+      var t = String(r.d || '').trim().replace(/[.\/]/g, '-'), mm = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if(!mm) return false;
+      return (mm[1] + '-' + ('0' + mm[2]).slice(-2) + '-' + ('0' + mm[3]).slice(-2)) === day;
+    });
+  } catch(e){ return false; }
 }
 function dbStreakOf(ban, name){
   var m = null;
@@ -10826,7 +10851,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v167';
+var TOPEDU_APP_VERSION = 'v168';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -15743,6 +15768,8 @@ function ssTdKey() { try { return tdKey(); } catch (e) { return ''; } }
 function ssDoneInfo(ban, name) {
   var st = ssStatusOf(ban, name);
   if (st && st.done) return { done: true, why: '자기주도 완주', st: st };
+  /* v168: MQTT·ntfy가 빠져도 구글 시트 진도DB에 오늘 '자기주도완주'가 있으면 완료 */
+  try { if (dbSsDoneOn(ban, name, ssTdKey())) return { done: true, why: '자기주도 완주(시트)', st: st, src: 'sheet' }; } catch (e) {}
   var key = ban + '|' + name, row = null;
   try { row = (typeof STREAK_BOARD !== 'undefined' && STREAK_BOARD) ? STREAK_BOARD[key] : null; } catch (e) { row = null; }
   var today = ssTdKey();
@@ -15753,7 +15780,7 @@ function ssDoneInfo(ban, name) {
 function ssStateChip(info) {
   var st = info.st;
   if (st && st.done) return '<span class="ssx-chip ok">자기주도 완주</span>';
-  if (info.done) return '<span class="ssx-chip ok">오늘 학습 완료</span>';
+  if (info.done) return '<span class="ssx-chip ok">' + (info.src === 'sheet' ? '자기주도 완주' : '오늘 학습 완료') + '</span>';
   if (!st) return '<span class="ssx-chip">미시작</span>';
   var lab = (st.st === 1 ? '1단계' : (st.st === 2 ? '2단계' : '3단계'));
   return '<span class="ssx-chip ' + (st.st >= 2 ? 'pri' : '') + '">' + lab + ' ' + (st.pg || 0) + '%</span>';
