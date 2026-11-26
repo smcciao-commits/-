@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- listening.html v174 (2026-11-26): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
+<!-- listening.html v178 (2026-11-26): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -141,6 +141,9 @@
   .lock{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:22px;text-align:center;margin:20px 14px}
   .lock h2{font-size:16px;color:var(--teal-d);margin-bottom:8px}
   .lock p{font-size:12.8px;color:var(--sub);line-height:1.7}
+  /* v178: 자기주도 화면 안(iframe) 모드 */
+  .ssm header,.ssm #btnList,.ssm #btnBackList{display:none!important}
+  .ssm .player{top:0}
   .lock a{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:12px;background:var(--teal);
     color:#fff;font-weight:800;font-size:13.5px;text-decoration:none}
 </style>
@@ -151,7 +154,7 @@
     <div class="hrow">
       <button class="hd-btn" id="btnHome">← 홈</button>
       <h1>🎧 모의고사 영어듣기</h1>
-      <span class="vbadge">v174</span>
+      <span class="vbadge">v178</span>
     </div>
   </header>
   <div id="app"><div class="loading">불러오는 중…</div></div>
@@ -160,7 +163,7 @@
 
 <script>
 /* ================= 설정 ================= */
-var TOPEDU_APP_VERSION = 'v174';
+var TOPEDU_APP_VERSION = 'v178';
 var DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
 var LS_BEST = 'topedu_listening_v1';     /* { examId: {best, at, tries, last} } */
 var LS_SESS = 'topedu_listening_user_v1';
@@ -195,6 +198,7 @@ function getPw(){
   return '';
 }
 var ME = getMe();
+var SSM = qs('ss') === '1';   /* v178: 자기주도 0단계로 열림 — 지정 회차만, 17문항 다 골라야 채점, 채점하면 부모 창에 알림 */
 
 /* ================= 목록 화면 ================= */
 function loadIndex(){
@@ -398,6 +402,7 @@ function teardown(){ if(AUD){ try{ AUD.pause(); }catch(e){} AUD = null; } }
 /* ================= 채점 ================= */
 function submit(){
   var n=0; for(var i=1;i<=17;i++) if(ST.answers[i]) n++;
+  if(SSM && n<17){ toast('17문항을 모두 골라야 채점할 수 있어요 ('+n+'/17)'); return; }
   if(n<17 && !confirm('아직 '+(17-n)+'문항이 비어 있어요. 그대로 채점할까요?')) return;
   ST.submitted = true;
   if(AUD){ try{ AUD.pause(); }catch(e){} }
@@ -423,6 +428,7 @@ function renderResult(fresh){
   else { save[e.id] = { best: prev.best, at: Date.now(), tries:(prev?prev.tries:0)+1, last:s.pct }; }
   lsSet(LS_BEST, save);
   if(fresh) saveToSheet(s.pct);
+  if(fresh && SSM){ try{ parent.postMessage({ type:'ss-listen', id:e.id, pct:s.pct, right:s.right }, location.origin); }catch(x){} }
 
   var h = '';
   h += '<div class="sec">';
@@ -537,6 +543,13 @@ function flushQueue(){
 
 /* ================= 시작 ================= */
 function boot(){
+  if(SSM){
+    document.body.classList.add('ssm');
+    loadIndex().then(function(){ openExam(qs('exam')); flushQueue(); }).catch(function(){
+      $('app').innerHTML = '<div class="sec"><div class="empty">듣기 문제를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</div></div>';
+    });
+    return;
+  }
   if(ME.ban && ME.ban !== '예비고1' && ME.ban !== '선생님'){
     $('app').innerHTML = '<div class="lock"><h2>🎧 예비고1 전용</h2><p>모의고사 영어듣기는 <b>예비고1</b> 반과 선생님 화면에서 열 수 있어요.<br>현재 반: '+esc(ME.ban)+'</p><a href="index.html">탑에듀 영어 앱으로 돌아가기</a></div>';
     return;
