@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- listening.html v179 (2026-11-26): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
+<!-- listening.html v181 (2026-11-27): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -145,6 +145,7 @@
   .ssm header,.ssm #btnList,.ssm #btnBackList{display:none!important}
   .ssm .player{top:0}
   .ssm #btnAgain{display:none!important}
+  .hwm #btnList,.hwm #btnBackList,.hwm #btnAgain{display:none!important}   /* v181: 월·수 듣기 숙제 */
   .ch.lk{opacity:.38}
   .qlisten{border:1.5px solid #5eead4;background:#f0fdfa;color:#0f766e;border-radius:8px;font-size:11px;font-weight:800;padding:2px 7px;margin-left:4px;cursor:pointer}
   .lock a{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:12px;background:var(--teal);
@@ -157,7 +158,7 @@
     <div class="hrow">
       <button class="hd-btn" id="btnHome">← 홈</button>
       <h1>🎧 모의고사 영어듣기</h1>
-      <span class="vbadge">v180</span>
+      <span class="vbadge">v181</span>
     </div>
   </header>
   <div id="app"><div class="loading">불러오는 중…</div></div>
@@ -166,7 +167,7 @@
 
 <script>
 /* ================= 설정 ================= */
-var TOPEDU_APP_VERSION = 'v180';
+var TOPEDU_APP_VERSION = 'v181';
 var DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
 var LS_BEST = 'topedu_listening_v1';     /* { examId: {best, at, tries, last} } */
 var LS_SESS = 'topedu_listening_user_v1';
@@ -202,27 +203,29 @@ function getPw(){
 }
 var ME = getMe();
 var SSM = qs('ss') === '1';
+var HWM = qs('hw') === '1';   /* v181: 월·수 듣기 숙제 — 앱 홈 🏠 집에서 할 일에서 그 회차로 바로 열림 */
+var GATE = SSM || HWM;        /* 찍기 방지·통과 기준이 걸리는 모드 */
 /* v179: 찍기 방지 + 통과 기준 (자기주도 모드만)
    · 그 문항 음성을 처음부터 절반 이상 이어서 들어야 보기가 열린다(막대를 끌어 건너뛰면 안 열림). 선생님 미리보기는 잠금 없음
-   · 17문항 중 2개까지 틀리면 통과 → 부모 창에 알림. 3개 이상이면 정답·대본은 숨기고, 틀린 문항만 다시 듣고 고쳐서 재채점 */
-var PASS_WRONG = 2;
+   · v181: 17문항 중 3개까지 틀리면 통과(원장님 90점 기준). 4개 이상이면 정답·대본은 숨기고, 틀린 문항만 다시 듣고 고쳐서 재채점 */
+var PASS_WRONG = 3;
 var HEARD = {}, RUN_FROM = 0, LAST_T = 0;
 function segOf(no){
   var s = CUR.starts || [], a = s[no-1] || 0, b = CUR.duration || a;
   for(var k = no; k < s.length; k++){ if(s[k] > a + 1){ b = s[k]; break; } }
   return [a, b];
 }
-function heardOk(no){ return !SSM || ME.ban === '선생님' || !!HEARD[no]; }
+function heardOk(no){ return !GATE || ME.ban === '선생님' || !!HEARD[no]; }
 function heardKey(){ return 'topedu_ls_ss_' + CUR.id + '|' + ME.name; }
-function heardSave(){ if(SSM) lsSet(heardKey(), { day: new Date().toDateString(), heard: HEARD, answers: ST.answers }); }
+function heardSave(){ if(GATE) lsSet(heardKey(), { day: new Date().toDateString(), heard: HEARD, answers: ST.answers }); }
 function heardLoad(){
   HEARD = {};
-  if(!SSM) return;
+  if(!GATE) return;
   var o = lsGet(heardKey(), null);
   if(o && o.day === new Date().toDateString()){ HEARD = o.heard || {}; ST.answers = o.answers || {}; }
 }
 function heardCheck(t){
-  if(!SSM || !CUR) return;
+  if(!GATE || !CUR) return;
   if(Math.abs(t - LAST_T) > 3) RUN_FROM = t;   /* 막대 끌기·건너뛰기 = 이어 듣기가 끊김 */
   LAST_T = t;
   var ch = false;
@@ -236,7 +239,7 @@ function heardCheck(t){
 function lockPaint(no){
   var ok = heardOk(no), st = $('qstate'+no);
   Array.prototype.forEach.call(document.querySelectorAll('.ch[data-no="'+no+'"]'), function(x){ x.classList.toggle('lk', !ok); });
-  if(st && SSM) st.innerHTML = ok ? '' : '🔒 듣고 나서 선택 <button class="qlisten" data-from="'+no+'">▶ '+no+'번 듣기</button>';
+  if(st && GATE) st.innerHTML = ok ? '' : '🔒 듣고 나서 선택 <button class="qlisten" data-from="'+no+'">▶ '+no+'번 듣기</button>';
 }
 document.addEventListener('click', function(ev){
   var b = ev.target && ev.target.closest ? ev.target.closest('.qlisten') : null;
@@ -458,7 +461,7 @@ function teardown(){ if(AUD){ try{ AUD.pause(); }catch(e){} AUD = null; } }
 /* ================= 채점 ================= */
 function submit(){
   var n=0; for(var i=1;i<=17;i++) if(ST.answers[i]) n++;
-  if(SSM && n<17){ toast('17문항을 모두 골라야 채점할 수 있어요 ('+n+'/17)'); return; }
+  if(GATE && n<17){ toast('17문항을 모두 골라야 채점할 수 있어요 ('+n+'/17)'); return; }
   if(n<17 && !confirm('아직 '+(17-n)+'문항이 비어 있어요. 그대로 채점할까요?')) return;
   ST.submitted = true;
   if(AUD){ try{ AUD.pause(); }catch(e){} }
@@ -483,10 +486,11 @@ function renderResult(fresh){
   if(!prev || s.pct > prev.best) save[e.id] = { best: Math.max(s.pct, prev?prev.best:0), at: Date.now(), tries:(prev?prev.tries:0)+1, last:s.pct };
   else { save[e.id] = { best: prev.best, at: Date.now(), tries:(prev?prev.tries:0)+1, last:s.pct }; }
   lsSet(LS_BEST, save);
-  if(fresh) saveToSheet(s.pct);
   var wrongN = e.questions.length - s.right, pass = wrongN <= PASS_WRONG;
+  if(fresh && (!HWM || pass)) saveToSheet(s.pct);   /* v181: 숙제는 통과한 기록만 시트에 */
   if(fresh && SSM && pass){ try{ parent.postMessage({ type:'ss-listen', id:e.id, pct:s.pct, right:s.right, pass:true }, location.origin); }catch(x){} }
-  if(SSM && !pass){ renderFail(s, wrongN); return; }
+  if(fresh && HWM && pass && ME.ban !== '선생님'){ var hw = lsGet('topedu_ls_hw_v1', {}); hw[e.id+'|'+ME.name] = { pct:s.pct, right:s.right, at:Date.now() }; lsSet('topedu_ls_hw_v1', hw); }
+  if(GATE && !pass){ renderFail(s, wrongN); return; }
 
   var h = '';
   h += '<div class="sec">';
@@ -563,7 +567,7 @@ function renderFail(s, wrongN){
   var wq = CUR.questions.filter(function(q){ return ST.answers[q.no] !== q.answer; });
   var h = '<div class="sec">';
   h += '<div class="score" style="background:linear-gradient(135deg,#b45309,#f59e0b)"><div class="big">'+s.right+' / 17</div>';
-  h += '<div class="sm">'+wrongN+'개 틀렸어요 · 2개까지 틀려야 통과</div></div>';
+  h += '<div class="sm">'+wrongN+'개 틀렸어요 · '+PASS_WRONG+'개까지 틀려도 통과</div></div>';
   h += '<div class="lock" style="margin:0 0 12px"><h2>🔁 아직 통과가 아니에요</h2><p>틀린 문항: <b>'+wq.map(function(q){ return q.no; }).join(', ')+'번</b><br>';
   h += '틀린 문항은 <b>그 부분을 다시 들어야</b> 고를 수 있어요.<br>맞힌 문항은 그대로 두고, 틀린 문항만 고쳐서 다시 채점하세요.<br><span style="font-size:11.5px">정답과 대본은 통과한 뒤에 보여 줘요.</span></p></div>';
   h += '<button class="btn" style="width:100%" id="btnFix">🎧 틀린 문항 다시 듣고 고치기</button></div>';
@@ -622,8 +626,8 @@ function flushQueue(){
 
 /* ================= 시작 ================= */
 function boot(){
-  if(SSM){
-    document.body.classList.add('ssm');
+  if(GATE){
+    document.body.classList.add(SSM ? 'ssm' : 'hwm');
     loadIndex().then(function(){ openExam(qs('exam')); flushQueue(); }).catch(function(){
       $('app').innerHTML = '<div class="sec"><div class="empty">듣기 문제를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</div></div>';
     });
