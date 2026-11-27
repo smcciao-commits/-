@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- listening.html v185 (2026-11-27): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
+<!-- listening.html v186 (2026-11-27): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -159,7 +159,7 @@
     <div class="hrow">
       <button class="hd-btn" id="btnHome">← 홈</button>
       <h1>🎧 모의고사 영어듣기</h1>
-      <span class="vbadge">v185</span>
+      <span class="vbadge">v186</span>
     </div>
   </header>
   <div id="app"><div class="loading">불러오는 중…</div></div>
@@ -168,7 +168,7 @@
 
 <script>
 /* ================= 설정 ================= */
-var TOPEDU_APP_VERSION = 'v185';
+var TOPEDU_APP_VERSION = 'v186';
 var DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
 var LS_BEST = 'topedu_listening_v1';     /* { examId: {best, at, tries, last} } */
 var LS_SESS = 'topedu_listening_user_v1';
@@ -617,7 +617,7 @@ function saveToSheet(pct, right){
   if(SSM) return;                          /* v180: 자기주도 듣기는 통과할 때 앱이 '듣기평가' 행으로 확실히 저장(미통과 시도는 안 남김) */
   if(!ME.ban || !ME.name){ return; }
   var pw = getPw();
-  if(!pw || !DB_URL){ return; }
+  if(!pw || !DB_URL){ try{ toast('⚠️ 다시 로그인해야 시트에 저장돼요 — 선생님께 알려 주세요'); }catch(e){} return; }
   var body = JSON.stringify({ action:'save', ban:ME.ban, name:ME.name, pw:pw,
     setName: GATE ? sheetSetName(right) : sheetSetNameFree(), mode: GATE ? '듣기평가' : '듣기', score: pct });
   try{
@@ -635,9 +635,26 @@ function queueSave(body){
     if(!body) return;
     var q = lsGet('topedu_listening_queue', []);
     for(var i = 0; i < q.length; i++){ if(q[i] && q[i].body === body) return; }   /* v183: 같은 저장 두 번 쌓지 않기 */
-    q.push({ body: body, at: Date.now() });
+    q.push({ body: body, at: Date.now(), on: lsDay() });   /* v186: 완료한 날짜 */
     lsSet('topedu_listening_queue', q.slice(-20));
+    try{ scheduleQueueFlush(); }catch(e){}
   }catch(e){}
+}
+function lsDay(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+/* v186: 저장 실패가 남아 있으면 30초마다 다시 보낸다(앱을 켜 둔 채로도) */
+var LSQ_TIMER = 0;
+function scheduleQueueFlush(){
+  if(LSQ_TIMER) return;
+  try{ LSQ_TIMER = setInterval(function(){ try{ flushQueue(); }catch(e){} }, 30000); }catch(e){}
+}
+function queueBodyOf(it){
+  /* v186: 자정을 넘겨 재전송되면 원래 완료 날짜를 함께 보낸다 */
+  try{
+    if(!it || !it.body || !it.on || it.on === lsDay()) return it && it.body;
+    var o = JSON.parse(it.body);
+    if(o && typeof o === 'object' && !o.d) o.d = it.on;
+    return JSON.stringify(o);
+  }catch(e){ return it && it.body; }
 }
 function flushQueue(){
   var q = lsGet('topedu_listening_queue', []);
@@ -648,7 +665,7 @@ function flushQueue(){
     if(i >= q.length){ lsSet('topedu_listening_queue', rest); return; }
     var it = q[i];
     if(!it || !it.body){ i++; next(); return; }
-    fetch(DB_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: it.body })
+    fetch(DB_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: queueBodyOf(it) })
       .then(function(r){ return r.text(); })
       /* v183: 응답 본문이 실제 성공(ok:true)일 때만 대기열에서 지운다 */
       .then(function(t){ if(!saveRespOk(t)) rest.push(it); i++; next(); })
@@ -660,7 +677,7 @@ function flushQueue(){
 function boot(){
   if(GATE){
     document.body.classList.add(SSM ? 'ssm' : 'hwm');
-    loadIndex().then(function(){ openExam(qs('exam')); flushQueue(); }).catch(function(){
+    loadIndex().then(function(){ openExam(qs('exam')); flushQueue(); try{ scheduleQueueFlush(); }catch(e){} }).catch(function(){
       $('app').innerHTML = '<div class="sec"><div class="empty">듣기 문제를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</div></div>';
     });
     return;
@@ -672,6 +689,7 @@ function boot(){
   loadIndex().then(function(){
     renderList();
     flushQueue();
+    try{ scheduleQueueFlush(); }catch(e){}
   }).catch(function(){
     $('app').innerHTML = '<div class="sec"><div class="empty">목록을 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</div></div>';
   });

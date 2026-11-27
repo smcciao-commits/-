@@ -2486,11 +2486,90 @@ function saveQueuePush(entry) {
 }
 function saveQueueDrop(id) { saveQueueSet(saveQueueAll().filter(function (x) { return !x || x.id !== id; })); }
 function saveQueuePending() { return saveQueueAll().filter(function (e) { return e && e.ban && e.name; }).length; }
+/* ================= v186: 서버가 '거절'한 학습 기록 보관 =================
+   수민 님 요구(11/27): 완료한 기록이 학생 앱·선생님 앱·시트·랭킹에서 하나도 빠지면 안 된다.
+   · 지금까지 서버가 ok:false(비밀번호 불일치·반/이름 변경 등)로 거절한 기록은 아무 표시 없이 버려져
+     '학생 폰은 완료인데 시트·선생님 화면·성실왕 집계에는 없는' 상태가 될 수 있었다.
+     (예: 시트에서 비밀번호를 바꾸거나 12/26 고2→고3 반이동 후 그 폰의 옛 반·비번으로 저장할 때)
+   · → 이 폰에 보관하고, 학생 홈에 경고를 띄우며, 주기적으로(그리고 [다시 보내기]로) 다시 보낸다. */
+var SAVE_REJ_KEY = 'topedu_save_rejected_v186';
+function saveRejectAll() { try { var a = JSON.parse(localStorage.getItem(SAVE_REJ_KEY) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function saveRejectSet(a) { try { localStorage.setItem(SAVE_REJ_KEY, JSON.stringify((a || []).slice(-60))); } catch (e) {} }
+function saveRejectKey(x) { return [x && x.ban, x && x.name, x && x.s, x && x.m, (x && x.on) || ''].join('|'); }
+function saveRejectPush(entry) {
+  if (!entry) return;
+  var a = saveRejectAll(), key = saveRejectKey(entry), found = false;
+  for (var i = 0; i < a.length; i++) {
+    if (!a[i] || saveRejectKey(a[i]) !== key) continue;
+    a[i].tries = (Number(a[i].tries) || 0) + 1;
+    a[i].at = Date.now();
+    a[i].next = Date.now() + 300000;
+    found = true;
+  }
+  if (!found) a.push({ ban: entry.ban, name: entry.name, s: entry.s, m: entry.m, sc: entry.sc, on: entry.on || dbDay(), at: Date.now(), tries: 1, next: Date.now() + 300000 });
+  saveRejectSet(a);
+  try { renderSaveWarn(); } catch (e) {}
+}
+function saveRejectDrop(ban, name, s, m) {
+  saveRejectSet(saveRejectAll().filter(function (x) { return !x || !(x.ban === ban && x.name === name && x.s === s && x.m === m); }));
+}
+function saveRejectPending(ban, name) {
+  return saveRejectAll().filter(function (x) { return x && x.ban && x.name && (!ban || (x.ban === ban && x.name === name)); }).length;
+}
+/* 거절된 기록 다시 보내기 — 성공하면 목록에서 지운다 */
+function saveRejectFlush(force) {
+  var a = saveRejectAll(), now = Date.now(), did = false;
+  a.forEach(function (e) {
+    if (!e || !e.ban || !e.name) return;
+    if (!force && (Number(e.next) || 0) > now) return;
+    if (!dbCredPw(e.ban, e.name)) return;      /* 그 학생 로그인 정보가 이 폰에 없으면 그대로 둔다 */
+    did = true;
+    dbSaveTry({ ban: e.ban, name: e.name, s: e.s, m: e.m, sc: e.sc, on: e.on, n: Number(e.tries) || 1 }, function (ok) {
+      if (ok) { saveRejectDrop(e.ban, e.name, e.s, e.m); try { renderSaveWarn(); } catch (x) {} return; }
+      var cur = saveRejectAll();
+      for (var i = 0; i < cur.length; i++) {
+        if (!cur[i] || cur[i].ban !== e.ban || cur[i].name !== e.name || cur[i].s !== e.s || cur[i].m !== e.m) continue;
+        cur[i].tries = (Number(cur[i].tries) || 0) + 1;
+        cur[i].next = Date.now() + Math.min(1800000, 300000 * (Number(cur[i].tries) || 1));
+      }
+      saveRejectSet(cur);
+      try { renderSaveWarn(); } catch (x) {}
+    });
+  });
+  return did;
+}
+function saveWarnHtml(ban, name) {
+  var n = 0;
+  try { n = saveRejectPending(ban, name); } catch (e) { n = 0; }
+  if (!n) return '';
+  return '<div style="margin:10px 0 12px;padding:12px 13px;background:#fff7ed;border:1.5px solid #fdba74;border-radius:14px;font-size:12.5px;line-height:1.55;color:#9a3412">'
+    + '⚠️ <b>선생님 시트에 저장되지 않은 학습 기록 ' + n + '건</b>이 있어요.<br>'
+    + '비밀번호나 반이 바뀌었을 때 생기니, 선생님께 <b>비밀번호·반 확인</b>을 부탁해 주세요. (기록은 이 폰에 남아 있어요)'
+    + '<div style="margin-top:8px"><button type="button" onclick="saveRejectRetryAll()" style="background:#ea580c;color:#fff;border:0;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:800">🔄 다시 보내기</button></div></div>';
+}
+function renderSaveWarn() {
+  var box = document.getElementById('saveWarnBox');
+  if (!box) return;
+  var me = (S.home && S.home.me) || S.cred || {};
+  box.innerHTML = saveWarnHtml(me.ban, me.name);
+}
+function saveRejectRetryAll() {
+  try { saveRejectFlush(true); } catch (e) {}
+  try { ssToast('🔄 선생님 시트로 다시 보내는 중…'); } catch (e) {}
+  setTimeout(function () { try { renderSaveWarn(); } catch (e) {} }, 2500);
+}
+/* 학생 홈용 — 거절된 기록이 있을 때만 그린다 */
+function drawSaveWarnCard(me) {
+  if (!me || !me.ban || me.ban === '선생님') return '';
+  var h = '';
+  try { h = saveWarnHtml(me.ban, me.name); } catch (e) { h = ''; }
+  return h ? ('<div id="saveWarnBox">' + h + '</div>') : '';
+}
 function dbSaveTry(entry, cb) {
   var pw = '';
   try { pw = dbCredPw(entry.ban, entry.name); } catch (e) {}
   if (!pw || !TOPEDU_DB_URL) { try { cb(false, false); } catch (e) {} return; }
-  var body = JSON.stringify({ action: 'save', ban: entry.ban, name: entry.name, pw: pw, setName: entry.s, mode: entry.m, score: entry.sc });
+  var body = JSON.stringify({ action: 'save', ban: entry.ban, name: entry.name, pw: pw, setName: entry.s, mode: entry.m, score: entry.sc, d: ((entry.on && entry.on !== dbDay()) ? entry.on : undefined) });
   var ctl = ('AbortController' in window) ? new AbortController() : null;
   var to = setTimeout(function () { try { if (ctl) ctl.abort(); } catch (e) {} }, 9000);
   try {
@@ -2526,14 +2605,15 @@ function saveDedupHit(ban, name, setName, mode) {
 function dbSaveReliable(ban, name, setName, mode, score, cb) {
   var entry = {
     id: 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-    at: Date.now(), n: 0, next: 0, ban: ban, name: name, s: setName, m: mode, sc: Number(score) || 0
+    at: Date.now(), n: 0, next: 0, ban: ban, name: name, s: setName, m: mode, sc: Number(score) || 0,
+    on: dbDay()   /* v186: 완료한 날짜 — 자정을 넘겨 재전송돼도 어느 날 기록인지 서버에 알린다 */
   };
   function done(ok) { try { if (cb) cb(!!ok); } catch (e) {} }
   if (!ban || !name || !setName || !mode || !TOPEDU_DB_URL) { done(false); return null; }
   if (saveDedupHit(ban, name, setName, mode)) { done(true); return null; }
   dbSaveTry(entry, function (ok, bad) {
     if (ok) { done(true); return; }
-    if (bad) { done(false); return; }
+    if (bad) { saveRejectPush(entry); done(false); return; }   /* v186: 거절된 기록도 버리지 않는다 */
     entry.n = 1; entry.next = Date.now() + 5000;
     saveQueuePush(entry); done(false);
   });
@@ -2548,7 +2628,12 @@ function saveQueueFlush() {
     did = true;
     dbSaveTry(e, function (ok, bad) {
       var cur = saveQueueAll();
-      if (ok || bad) { saveQueueSet(cur.filter(function (x) { return !x || x.id !== e.id; })); }
+      if (ok || bad) {
+        saveQueueSet(cur.filter(function (x) { return !x || x.id !== e.id; }));
+        /* v186: 이 저장이 성공했으면 같은 기록의 '거절' 항목은 해결된 것으로 본다 */
+        if (ok) { try { saveRejectDrop(e.ban, e.name, e.s, e.m); } catch (x) {} }
+        if (bad) { try { saveRejectPush(e); } catch (x) {} }
+      }
       else {
         e.n = (Number(e.n) || 0) + 1;
         var wait = Math.min(300000, 5000 * Math.pow(2, Math.min(6, e.n)));
@@ -2562,7 +2647,7 @@ function saveQueueFlush() {
 }
 function startSaveQueueTimer() {
   if (SAVE_Q_TIMER) return;
-  try { SAVE_Q_TIMER = setInterval(function () { try { saveQueueFlush(); } catch (e) {} }, 20000); } catch (e) {}
+  try { SAVE_Q_TIMER = setInterval(function () { try { saveQueueFlush(); } catch (e) {} try { saveRejectFlush(); } catch (e) {} }, 20000); } catch (e) {}
 }
 try { window.addEventListener('online', function () { try { saveQueueFlush(); } catch (e) {} }); } catch (e) {}
 try {
@@ -2755,9 +2840,16 @@ function dbStreakDayMap(){
     var t = String(r.d).trim().replace(/[.\/]/g, '-'), m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
     if(!m) return;
     var k = r.b + '|' + r.n, day = m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2);
-    (any[k] || (any[k] = {}))[day] = 1;
     var _mm = String(r.m || '').trim();
-    if(_mm === '테스트' || _mm === '일일완료' || _mm === '자기주도완주') (done[k] || (done[k] = {}))[day] = 1;
+    /* v186: 단어시험('테스트') 80점 미만은 '학습한 날'로 세지 않는다.
+       (전에는 70점 재시험만 본 날도 선생님 스트릭·연속일이 +1 되어 학생 앱 스트릭과 어긋났다) */
+    var _pass = true;
+    if (_mm === '테스트') {
+      var _scv = String(r.sc === null || r.sc === undefined ? '' : r.sc).trim();
+      _pass = (_scv !== '' && !isNaN(Number(_scv)) && Number(_scv) >= wordPassMin());
+    }
+    if (_pass) (any[k] || (any[k] = {}))[day] = 1;
+    if(_pass && (_mm === '테스트' || _mm === '일일완료' || _mm === '자기주도완주')) (done[k] || (done[k] = {}))[day] = 1;
     if(_mm === '일일완료') (daily[k] || (daily[k] = {}))[day] = 1;
     if(_mm === '자기주도완주') (ssDone[k] || (ssDone[k] = {}))[day] = 1;   /* v168 */
   });
@@ -6636,6 +6728,8 @@ function showHome(){
   var todo=h.sets.filter(function(s){ if (s.type==='문제') return s.progress.test===null||s.progress.test===undefined; return !getWordSetCompletion(s).isComplete; }).length;
   var html='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><h1>'+esc(me.name)+' 안녕! 👋</h1><div style="display:flex;align-items:center;gap:6px;flex:0 0 auto;"><span class="ver-badge" title="앱 버전 (누르면 새로고침)">'+TOPEDU_APP_VERSION+'</span><button id="btn_app_refresh" onclick="forceAppRefresh(event)" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1.5px solid #14b8a6;padding:6px 10px;border-radius:12px;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">🔄 새로고침</button></div></div><div class="sub">'+esc(me.ban)+' · '+(todo?'아직 안 끝낸 학습 <b style="color:var(--no)">'+todo+'개</b>':'모두 끝냈어요! 🎉')+'</div>';
   var meInfo = getStreakInfo(me.ban, me.name);
+  /* v186: 시트 저장이 거절된 기록이 있으면 홈 맨 위에 경고 */
+  try { html += drawSaveWarnCard(me); } catch(e){}
   /* v153: 🦉 부엉이 카드 한 장 = 오늘의 학습 + 집에서 할 일 + 원장님 스페셜 숙제
      (따로 떠 있던 📌 오늘의 집 숙제 / 🔥 오늘의 학습 / 👑 오늘 스페셜 숙제 카드는 없앴다) */
   html += drawStreakHero(me);
@@ -11690,7 +11784,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v185';
+var TOPEDU_APP_VERSION = 'v186';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -16793,6 +16887,10 @@ function glanceSyncLine() {
   try {
     var q = saveQueueAll();
     if (q.length) t += ' · 📮 저장 대기 ' + q.length + '건';
+  } catch (e) {}
+  try {
+    var rj = saveRejectPending();
+    if (rj) t += ' · ⚠️ 저장 거절 ' + rj + '건';
   } catch (e) {}
   return t;
 }
