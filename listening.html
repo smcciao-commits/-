@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- listening.html v181 (2026-11-27): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
+<!-- listening.html v182 (2026-11-27): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -147,6 +147,7 @@
   .ssm #btnAgain{display:none!important}
   .hwm #btnList,.hwm #btnBackList,.hwm #btnAgain{display:none!important}   /* v181: 월·수 듣기 숙제 */
   .ch.lk{opacity:.38}
+  .passline{margin-top:8px;padding:8px 11px;border-radius:10px;background:#fff7ed;border:1.5px solid #fb923c;color:#9a3412;font-size:12.5px;font-weight:800;line-height:1.5}
   .qlisten{border:1.5px solid #5eead4;background:#f0fdfa;color:#0f766e;border-radius:8px;font-size:11px;font-weight:800;padding:2px 7px;margin-left:4px;cursor:pointer}
   .lock a{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:12px;background:var(--teal);
     color:#fff;font-weight:800;font-size:13.5px;text-decoration:none}
@@ -158,7 +159,7 @@
     <div class="hrow">
       <button class="hd-btn" id="btnHome">← 홈</button>
       <h1>🎧 모의고사 영어듣기</h1>
-      <span class="vbadge">v181</span>
+      <span class="vbadge">v182</span>
     </div>
   </header>
   <div id="app"><div class="loading">불러오는 중…</div></div>
@@ -167,7 +168,7 @@
 
 <script>
 /* ================= 설정 ================= */
-var TOPEDU_APP_VERSION = 'v181';
+var TOPEDU_APP_VERSION = 'v182';
 var DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
 var LS_BEST = 'topedu_listening_v1';     /* { examId: {best, at, tries, last} } */
 var LS_SESS = 'topedu_listening_user_v1';
@@ -209,6 +210,7 @@ var GATE = SSM || HWM;        /* 찍기 방지·통과 기준이 걸리는 모�
    · 그 문항 음성을 처음부터 절반 이상 이어서 들어야 보기가 열린다(막대를 끌어 건너뛰면 안 열림). 선생님 미리보기는 잠금 없음
    · v181: 17문항 중 3개까지 틀리면 통과(원장님 90점 기준). 4개 이상이면 정답·대본은 숨기고, 틀린 문항만 다시 듣고 고쳐서 재채점 */
 var PASS_WRONG = 3;
+var PASS_TXT = '통과 기준 90점 · 17문항 중 3개까지 틀려도 통과';   /* v182: 원장님 표현 그대로 화면에 */
 var HEARD = {}, RUN_FROM = 0, LAST_T = 0;
 function segOf(no){
   var s = CUR.starts || [], a = s[no-1] || 0, b = CUR.duration || a;
@@ -335,6 +337,7 @@ function renderExam(){
   h += '<button class="hd-btn" id="btnList">← 목록</button>';
   h += '<div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:800;letter-spacing:-.3px">'+e.year+'년 '+e.month+'월 '+e.grade+' 학평 영어듣기</div>';
   h += '<div style="font-size:11.5px;color:var(--sub)">1~17번 · 37점 · '+(best?('내 최고 '+best.best+'점'):'첫 도전')+'</div></div></div>';
+  if(GATE) h += '<div class="passline">🎯 '+PASS_TXT+'<br><span style="font-weight:600">4개부터는 정답 없이 틀린 문항만 다시 듣고 고쳐야 해요 · 음성을 들어야 보기를 고를 수 있어요</span></div>';
   h += '</div>';
   /* 플레이어 */
   h += '<div class="player" id="player">';
@@ -494,9 +497,10 @@ function renderResult(fresh){
 
   var h = '';
   h += '<div class="sec">';
-  h += '<div class="score"><div class="big">'+s.pct+'점</div>';
+  h += '<div class="score"><div class="big">'+(GATE ? ('✅ 통과 · '+s.right+' / 17') : (s.pct+'점'))+'</div>';
+  if(GATE) h += '<div class="sm">'+PASS_TXT+' · '+wrongN+'개 틀림</div>';
   h += '<div class="sm">'+e.year+'년 '+e.month+'월 '+e.grade+' 학평 듣기</div>';
-  h += '<div class="row3"><div><b>'+s.right+'/17</b>정답 문항</div><div><b>'+s.pts+'/'+s.total+'</b>듣기 배점</div><div><b>'+s.pct+'</b>100점 환산</div></div></div>';
+  h += '<div class="row3"><div><b>'+s.right+'/17</b>정답 문항</div><div><b>'+s.pts+'/'+s.total+'</b>듣기 배점</div>'+(GATE ? '' : '<div><b>'+s.pct+'</b>100점 환산</div>')+'</div></div>';
   h += '<div style="display:flex;gap:8px;margin-bottom:12px">';
   h += '<button class="btn ghost" style="flex:1" id="btnAgain">🔄 다시 풀기</button>';
   h += '<button class="btn gray" style="flex:1" id="btnBackList">📚 목록으로</button>';
@@ -567,7 +571,7 @@ function renderFail(s, wrongN){
   var wq = CUR.questions.filter(function(q){ return ST.answers[q.no] !== q.answer; });
   var h = '<div class="sec">';
   h += '<div class="score" style="background:linear-gradient(135deg,#b45309,#f59e0b)"><div class="big">'+s.right+' / 17</div>';
-  h += '<div class="sm">'+wrongN+'개 틀렸어요 · '+PASS_WRONG+'개까지 틀려도 통과</div></div>';
+  h += '<div class="sm">'+wrongN+'개 틀렸어요 · '+PASS_TXT+'</div></div>';
   h += '<div class="lock" style="margin:0 0 12px"><h2>🔁 아직 통과가 아니에요</h2><p>틀린 문항: <b>'+wq.map(function(q){ return q.no; }).join(', ')+'번</b><br>';
   h += '틀린 문항은 <b>그 부분을 다시 들어야</b> 고를 수 있어요.<br>맞힌 문항은 그대로 두고, 틀린 문항만 고쳐서 다시 채점하세요.<br><span style="font-size:11.5px">정답과 대본은 통과한 뒤에 보여 줘요.</span></p></div>';
   h += '<button class="btn" style="width:100%" id="btnFix">🎧 틀린 문항 다시 듣고 고치기</button></div>';

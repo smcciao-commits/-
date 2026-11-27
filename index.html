@@ -11423,7 +11423,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v181';
+var TOPEDU_APP_VERSION = 'v182';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -12246,7 +12246,7 @@ function homeTaskPanel(me) {
       try { hl = hwListenToday(ban, today); } catch (e) {}
       if (hl) {
         var hlD = hwListenDone(hl.id, name);
-        h += _shRow(hlD ? '✅' : '🎧', '<b>듣기평가 · ' + esc(ssS0Title(hl.id)) + '</b><span>' + (hlD ? ('통과 · 17문항 중 ' + hlD.right + '개 정답 · ' + hlD.pct + '점') : '월·수 1회분 17문항 · 3개까지 틀리면 통과') + '</span>',
+        h += _shRow(hlD ? '✅' : '🎧', '<b>듣기평가 · ' + esc(ssS0Title(hl.id)) + '</b><span>' + (hlD ? ('통과 · 17문항 중 ' + hlD.right + '개 정답') : '월·수 1회분 17문항 · 통과 기준 90점(3개 오답까지)') + '</span>',
           hlD ? '다시 보기' : '풀러가기 →', "openListeningHw('" + hl.id + "')", '', 0);
       }
       h += '<div class="sh-note2">○ 를 누르면 체크돼요 · ' + esc(cfg.pattern) + '반 요일 계획표</div>';
