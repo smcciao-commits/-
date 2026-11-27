@@ -5497,6 +5497,11 @@ function hwsQ() {
   return HWS.q;
 }
 function hwsQSave() { try { localStorage.setItem(HWS_OUT_KEY, JSON.stringify(HWS.q)); } catch (e) {} }
+/* v184: 지금 큐에 남아 있는 작업의 지문(키 + 버전) — 전송이 끝난 뒤 큐가 실제로 바뀌었는지
+   (전송 중에 새 작업이 들어왔는지) 판단해 '자동 이어서 전송'할 때와 무한 반복을 막는 데 쓴다. */
+function hwsQSig() {
+  try { return HWS.q.map(function (o) { return hwsOpKey(o) + '#' + (o && o._sq); }).sort().join(';'); } catch (e) { return ''; }
+}
 function hwsPaint() {
   var el = document.getElementById('hwSync');
   if (!el) return;
@@ -5525,8 +5530,8 @@ function hwsWire(o) {
   return ['s', o.date, o.ban, o.name, o.on ? 1 : 0, o.ts || '', o.keep ? 1 : 0];
 }
 function hwsFlush() {
-  if (HWS.busy) return;
-  if (!HWS.q.length) { HWS.status = 'saved'; hwsPaint(); return; }
+  if (HWS.busy) { HWS.want = true; return; }   /* v184: 전송 중에 들어온 요청은 끝난 뒤 자동으로 한 번 더 */
+  if (!HWS.q.length) { HWS.want = false; HWS.status = 'saved'; hwsPaint(); return; }
   var pw = store('apw') || '';
   if (!pw) { HWS.status = 'fail'; hwsPaint(); return; }
   /* v119: 단어시험 점수(숫자 값)는 따로 묶어 맨 뒤에 보내요.
@@ -5536,15 +5541,24 @@ function hwsFlush() {
   for (i = 0; i < normal.length; i += 25) chunks.push(normal.slice(i, i + 25));
   for (i = 0; i < scores.length; i += 25) chunks.push(scores.slice(i, i + 25));
   HWS.busy = true;
+  HWS.want = false;
   HWS.scoreFail = false;
+  var sig0 = hwsQSig();
   var idx = 0;
   function done(ok) {
     HWS.busy = false;
+    var want = HWS.want; HWS.want = false;
     HWS.status = ok ? (HWS.q.length ? 'pending' : 'saved') : 'fail';
     hwsPaint();
     clearTimeout(HWS.retry);
-    if (!ok) HWS.retry = setTimeout(hwsFlush, 20000);
-    else if (HWS.scoreFail) HWS.retry = setTimeout(hwsFlush, 60000);
+    if (!ok) { HWS.retry = setTimeout(hwsFlush, 20000); return; }
+    if (HWS.scoreFail) { HWS.retry = setTimeout(hwsFlush, 60000); return; }
+    if (!HWS.q.length) return;
+    /* v184(①): 전송 중에 같은 칸을 다시 바꿔 새 작업(다른 _sq)이 큐에 남았으면
+       '저장 대기 N건'으로 멈추지 말고 이어서 자동 전송한다.
+       무한 반복 방지: 보낸 것이 하나도 안 빠져 큐가 그대로면(같은 지문) 바로 돌리지 않고 20초 뒤로 미룬다. */
+    if (want || hwsQSig() !== sig0) { HWS.retry = setTimeout(hwsFlush, 350); return; }
+    HWS.retry = setTimeout(hwsFlush, 20000);
   }
   function step() {
     if (idx >= chunks.length) { done(true); return; }
@@ -9852,13 +9866,14 @@ function hwListenSheetPass(ban, name, day){
   day = v169DayKey(day || tdKey());
   var due = null;
   try { due = hwListenToday(ban, day); } catch(e){ due = null; }
+  if(!due || !due.id) return null;   /* v184: 듣기 숙제가 없는 날(화·목·휴일)은 통과로 세지 않는다 */
   var out = null;
   (TOPEDU_DB_ROWS || []).forEach(function(r){
     if(!r) return;
     if(String(r.b||'') !== String(ban||'') || String(r.n||'') !== String(name||'')) return;
     if(v169DayKey(r.d) !== day) return;
     if(String(r.m||'').trim() !== '듣기평가') return;
-    if(due && due.id && String(r.s||'').indexOf(due.id) < 0) return;   /* 그날 배정된 회차만 */
+    if(due && due.id && !lsSetMatches(r.s, due.id)) return;   /* v184: 그날 배정된 회차만 — '2026_3_고1' ↔ '2026_3_g1' 통일 */
     var pct = (r.sc === '' || r.sc === null || r.sc === undefined) ? null : Number(r.sc);
     if(pct !== null && isNaN(pct)) pct = null;
     var mr = String(r.s||'').match(/\((\d+)\/17\)/);
@@ -9881,6 +9896,7 @@ function hwListenLine(got){
 function v169ListenHwLine(ban, name, day){
   var got = null, due = null;
   try { due = hwListenToday(ban, day); } catch(e){ due = null; }
+  if(!due) return '';                      /* v184: 배정된 날(월·수)에만 줄을 만든다 */
   try { got = hwListenSheetPass(ban, name, day); } catch(e){ got = null; }
   if(got) return '· 🎧 듣기평가 숙제 ' + hwListenLine(got) + ' 통과';
   if(due) return '· 🎧 듣기평가 숙제(17문항)는 아직 통과하지 않았습니다';
@@ -11574,7 +11590,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v183';
+var TOPEDU_APP_VERSION = 'v184';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -12559,7 +12575,12 @@ function owlPlanAllDone(ban) {
     if (sent) { need++; if (hpTick(ban, today, 'sent')) got++; }
     if (read) { need++; if (hpTick(ban, today, 'read')) got++; }
     var hl = hwListenToday(ban, today);
-    if (hl) { need++; var me = (S.home && S.home.me) || {}; if (hwListenDone(hl.id, me.name || '')) got++; }
+    if (hl) {
+      need++;
+      var me = (S.home && S.home.me) || {}, hnm = me.name || '', hOk = !!hwListenDone(hl.id, hnm);
+      if (!hOk) { try { hOk = !!hwListenSheetPass(ban, hnm, today); } catch (e) {} }   /* v184: 다른 기기에서 풀었어도 시트 '듣기평가' 행으로 확인 */
+      if (hOk) got++;
+    }
     return need > 0 && got >= need;
   } catch (e) { return false; }
 }
@@ -15626,6 +15647,23 @@ function hwListenToday(ban, ds) {
   var n = 0;
   for (var x = from; x <= d; x = hpAdd(x, 1)) if (HW_LISTEN_DAYS.indexOf(x.getDay()) >= 0) n++;
   return { id: ids[(n - 1) % ids.length], no: n };
+}
+/* v184: 듣기 회차 표기 통일 — listening.html 이 진도DB에 저장하는 이름은 사람이 읽는
+   '듣기평가_2026_3_고1 (14/17)', 앱의 회차 ID는 exam id '2026_3_g1'이라 그대로 비교하면
+   서로 다른 회차로 보여 숙제 통과가 배지·문구에 안 떴다(⑦).
+   저장 이름 형식은 선생님 화면에 보이는 그대로 두고, 비교할 때만 둘 다 '2026_3_g1' 꼴로
+   정규화한다(예전 '자기주도 듣기평가 2026년 3월 고1 전국연합 듣기 (14/17)' 기록도 같이 맞는다). */
+function lsIdCanon(s) {
+  var m = String(s || '').match(/(\d{4})\D{0,4}(\d{1,2})\D{0,4}(고1|고2|g1|g2)/i);
+  if (!m) return '';
+  return m[1] + '_' + Number(m[2]) + '_' + (/1$/.test(m[3]) ? 'g1' : 'g2');
+}
+function lsSetMatches(setName, id) {
+  var s = String(setName || '');
+  if (!id) return true;
+  if (s.indexOf(id) >= 0) return true;          /* 이미 같은 표기 */
+  var a = lsIdCanon(s), b = lsIdCanon(id);      /* '고1'/'g1' 섞여 있어도 같은 회차 */
+  return !!a && a === b;
 }
 function hwListenDone(id, name) {
   try { return (JSON.parse(localStorage.getItem('topedu_ls_hw_v1') || '{}') || {})[id + '|' + name] || null; } catch (e) { return null; }
