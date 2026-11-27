@@ -6311,6 +6311,10 @@ function hwMarkExamAnswered(qIdx) {
     if (answered.length >= p.exams.length && wrongList.length === 0) {
       recordSpecialHwDone('exam', p.exams.length, p.exams.length);
     }
+    /* v185: 변형 모의고사 문항을 전부 풀면 집에서 할 일 '변형·독해 문제' 자동 완료 */
+    if (answered.length >= p.exams.length) {
+      try { hpAutoMark('read', { by: 'reading-exam', score: Math.max(0, p.exams.length - wrongList.length), total: p.exams.length }); } catch (e) {}
+    }
   } catch (e) {}
 }
 function hwMarkScrambleOk(idx) {
@@ -6318,7 +6322,41 @@ function hwMarkScrambleOk(idx) {
     const list = SCRAMBLES[curPassage] || [];
     if (!list.length) return;
     const okSet = hwAddToSet('sc_ok', idx);
-    if (okSet.length >= list.length) recordSpecialHwDone('scramble', okSet.length, list.length);
+    if (okSet.length >= list.length) {
+      recordSpecialHwDone('scramble', okSet.length, list.length);
+      /* v185: 어순배열 문장을 전부 맞히면 집에서 할 일 '문장 암기' 자동 완료 */
+      try { hpAutoMark('sent', { by: 'reading-scramble', score: okSet.length, total: list.length }); } catch (e) {}
+    }
+  } catch (e) {}
+}
+
+/* ============ v185: 🏠 집에서 할 일 자동 완료 기록 ============
+   index.html 홈의 🏠 집에서 할 일 [문장 암기]·[변형·독해 문제] 줄이 이 기록을 읽어 ✓ 로 표시한다.
+   · sent : 어순배열(2단계) 문장을 전부 맞혔을 때
+   · read : 변형 모의고사 문항을 전부 풀었을 때(점수는 함께 남김)
+   · 키: 날짜|반|이름, 값: { sent/read: { by, score, total, passages:{지문번호:1}, at } } — 지문마다 따로 모은다. */
+const HP_AUTO_KEY = 'topedu_hp_auto_v185';
+function hpAutoMark(kind, info) {
+  try {
+    if (!curStudent || !curBan || curBan === '선생님') return;
+    const ds = hwDateKey();
+    let a = {};
+    try { a = JSON.parse(localStorage.getItem(HP_AUTO_KEY) || '{}') || {}; } catch (e) { a = {}; }
+    Object.keys(a).forEach(k => { if (String(k).slice(0, 10) !== ds) delete a[k]; });
+    const kk = ds + '|' + curBan + '|' + curStudent;
+    const m = a[kk] || {}, cur = m[kind] || null;
+    const rec = {
+      by: (info && info.by) || 'reading',
+      score: Number((info && info.score) || 0),
+      total: Number((info && info.total) || 0),
+      at: new Date().toISOString(),
+      passages: Object.assign({}, (cur && cur.passages) || {})
+    };
+    rec.passages[String(curPassage)] = 1;
+    if (cur && (Number(cur.score) || 0) > rec.score) { rec.score = cur.score; rec.total = cur.total; rec.by = cur.by; rec.at = cur.at || rec.at; }
+    m[kind] = rec;
+    a[kk] = m;
+    localStorage.setItem(HP_AUTO_KEY, JSON.stringify(a));
   } catch (e) {}
 }
 

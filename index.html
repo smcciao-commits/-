@@ -8084,7 +8084,23 @@ function refreshSpecialHwCard(){
     if (tmp.firstChild) el.parentNode.replaceChild(tmp.firstChild, el);
   } catch (e) {}
 }
-try { window.addEventListener('pageshow', function (ev) { if (ev && ev.persisted) refreshSpecialHwCard(); }); } catch (e) {}
+/* v185: 글쓰기·읽기 앱을 풀고 되돌아왔을 때(bFCache 복원) 집에서 할 일 ✓ 를 다시 그린다 */
+var HP_AUTO_SIG = '';
+function hpAutoSig(ban, name){
+  try {
+    var sh = specialHwRecord(ban, name) || null;
+    return JSON.stringify([hpAutoMap(ban, name, hpToday()), sh ? (sh.by + '|' + sh.at) : '', hpLegacyWritingToday(ban, name)]);
+  } catch (e) { return ''; }
+}
+function refreshPlanTicks(){
+  try {
+    var me = (S.home && S.home.me) || {};
+    if (!me.ban || me.ban === '선생님' || !document.getElementById('streak_hero')) return;
+    if (hpAutoSig(me.ban, me.name) === HP_AUTO_SIG) return;
+    showHome();
+  } catch (e) {}
+}
+try { window.addEventListener('pageshow', function (ev) { if (ev && ev.persisted) { refreshSpecialHwCard(); refreshPlanTicks(); } }); } catch (e) {}
 try { document.addEventListener('visibilitychange', function () { if (!document.hidden) refreshSpecialHwCard(); }); } catch (e) {}
 
 /* ============ v96: 📌 반별 '오늘의 집 숙제' (수업 요일 패턴대로 단어 Day 분량 자동 계획) ============
@@ -8266,11 +8282,95 @@ function hpTickSet(ban, date, k, on){
   try { store(HP_TICK_KEY, a); } catch (e) {}
 }
 function hpTick(ban, date, k){ return !!hpTickGet(ban, date)[k]; }
+
+/* ============ v185: 🏠 집에서 할 일 '문장 암기 · 변형·독해' 자동 완료 ============
+   배정연(예비고1) 학생 제보: writing.html·reading.html 에서 다 풀고 다시 들어와도 ○ 로 남아 있었다.
+   → 두 앱이 실제로 끝냈을 때 남기는 기록을 읽어 ✓ 로 보여 준다(topedu_hp_auto_v185).
+     · writing.html : 한 모드의 모든 문항을 다 풀고 정답률 80% 이상   → 'sent'
+     · reading.html : 어순배열 문장을 전부 맞힘(빈칸·어순배열 2단계) → 'sent'
+                      변형 모의고사 문항을 전부 품(변형 10제)        → 'read'
+   · 손으로 누르는 체크(hpTick)는 그대로 살아 있고, 둘 중 하나면 완료로 본다.
+   · 키: '날짜|반|이름' (같은 폰을 여러 학생이 써도 섞이지 않게). 값을 읽기만 한다. */
+var HP_AUTO_KEY = 'topedu_hp_auto_v185';
+function hpAutoMap(ban, name, date){
+  try {
+    var a = store(HP_AUTO_KEY) || {};
+    var m = a[String(date || hpToday()) + '|' + String(ban || '') + '|' + String(name || '')];
+    return (m && typeof m === 'object') ? m : {};
+  } catch (e) { return {}; }
+}
+/* 그 영역의 자동 완료 기록 — 없으면 null */
+function hpAutoNote(ban, name, date, kind){
+  var m = hpAutoMap(ban, name, date)[kind];
+  return (m && typeof m === 'object') ? m : null;
+}
+/* 자동 기록에서 오늘 끝낸 지문 수 (예비고1 = 13강 5지문) */
+function hpAutoPassages(ban, name, date, kind){
+  var n = hpAutoNote(ban, name, date, kind), c = 0, ps = (n && n.passages) || {};
+  Object.keys(ps).forEach(function (k) { if (ps[k]) c++; });
+  return c;
+}
+/* 완료 = 손 체크(hpTick) 또는 앱이 남긴 실제 완료 기록 */
+function hpAreaDone(ban, name, date, kind){
+  return hpTick(ban, date, kind) || !!hpAutoNote(ban, name, date, kind) || hpLegacyDone(ban, name, date, kind);
+}
+/* v185: v184까지 이미 앱을 끝낸 학생도 업데이트 직후 오늘 바로 ✓ 가 보이게 — 예전 기록도 함께 본다.
+   · reading.html 이 남기던 topedu_special_hw_done(오늘: by 'scramble' = 문장 암기, by 'exam' = 변형·독해)
+   · writing.html 의 topedu_writing_records_v1(오늘 전 문항 완료 + 정답률 80% 이상 = 문장 암기) */
+function hpLegacyWritingToday(ban, name){
+  try {
+    var rec = (store('topedu_writing_records_v1') || {})[String(ban || '') + '|' + String(name || '')];
+    if (!rec || typeof rec !== 'object') return false;
+    var t = tdKey().split('-'), mmdd = t[1] + '-' + t[2], hit = false;
+    Object.keys(rec).forEach(function (sid) {
+      var modes = rec[sid] || {};
+      Object.keys(modes).forEach(function (mo) {
+        var m = modes[mo] || {};
+        if (m.done && String(m.at || '').slice(0, 5) === mmdd && Number(m.best) >= 80) hit = true;
+      });
+    });
+    return hit;
+  } catch (e) { return false; }
+}
+function hpLegacyDone(ban, name, date, kind){
+  if (!ban || !name) return false;
+  if (String(date || hpToday()) !== hpToday()) return false;   /* 오늘 것만 */
+  try {
+    var sh = specialHwRecord(ban, name);
+    if (sh) {
+      if (kind === 'sent' && sh.by === 'scramble') return true;
+      if (kind === 'read' && sh.by === 'exam') return true;
+    }
+  } catch (e) {}
+  if (kind === 'sent') return hpLegacyWritingToday(ban, name);
+  return false;
+}
+/* 오늘 단어 숙제 범위(Day from~to)가 모두 끝났는지 — 세트 완료(테스트 80점 이상) 또는 오늘 끝낸 기록 */
+function hpWordRangeDone(ban, name, book, from, to){
+  if (!book || !from) return false;
+  var t = tdKey(), any = false, d, nm;
+  for (d = Number(from); d <= Number(to || from); d++) {
+    nm = hpWordName(book, d);
+    if (!nm) continue;
+    any = true;
+    var ok = false;
+    try { ok = isSetCompleteByName(ban, name, nm); } catch (e) {}
+    if (!ok) { try { ok = (dayDoneAt(ban, name, nm) === t); } catch (e) {} }
+    if (!ok) return false;
+  }
+  return any;
+}
 function hpToggleItem(k){
   try {
     var me = (S.home && S.home.me) || {};
     var ban = me.ban || (S.cred && S.cred.ban) || '';
     if (!ban) return;
+    var nm = me.name || (S.cred && S.cred.name) || '';
+    /* v185: 앱에서 실제로 끝낸 기록이 있으면 풀 수 없게(완료 유지) */
+    if (!!hpAutoNote(ban, nm, hpToday(), k) || hpLegacyDone(ban, nm, hpToday(), k)) {
+      try { ssToast('앱에서 끝낸 기록이 있어 완료로 표시돼요'); } catch (e) {}
+      return;
+    }
     var on = !hpTick(ban, hpToday(), k);
     hpTickSet(ban, hpToday(), k, on);
     if (on) { try { playCorrectSound(); } catch (e) {} }
@@ -11590,7 +11690,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v184';
+var TOPEDU_APP_VERSION = 'v185';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -12369,8 +12469,10 @@ function homeTaskPanel(me) {
       if (hasDay && bk) { for (d2 = w.from; d2 <= w.to; d2++) { tt++; if (bbIsDoneIn(bk, d2)) dd++; } }
       h += '<div class="sh-sec"><div class="sh-sec-h"><span class="sh-sec-t">🏠 집에서 할 일</span><span class="sh-pill">' + esc(cfg.pattern) + '반</span></div>';
       if (exw) {
+        var exDone = false;   /* v185: 오늘 배정 세트를 테스트까지 모두 끝냈는지 */
+        try { exDone = !!exwDailyPlan(ban, name, exw).done; } catch (e) {}
         h += '<div class="sh-planline">🔥 <b>기말고사 집중</b> (~' + esc(hpMMDD(exw.until)) + ') — 능률보카는 시험 끝나고 다시! 지금은 시험범위만 완벽 암기</div>';
-        h += _shRow('📒', '<b>오늘 단어: ' + esc(exw.today.map(exwShortName).join(' + ')) + '</b><span>암기 → 뜻고르기 → 짝맞추기 → 테스트 (매일 바뀌며 전 범위 반복)</span>', '단어장 →', 'openDailyQuest()', '', 0);
+        h += _shRow(exDone ? '✅' : '📒', '<b>오늘 단어: ' + esc(exw.today.map(exwShortName).join(' + ')) + '</b><span>' + (exDone ? '오늘 배정 세트 테스트까지 끝냈어요 🎉' : '암기 → 뜻고르기 → 짝맞추기 → 테스트 (매일 바뀌며 전 범위 반복)') + '</span>', exDone ? '✓ 완료' : '단어장 →', 'openDailyQuest()', '', 0);
       } else if (w.type === 'before') {
         h += '<div class="sh-planline">' + esc(hpMMDD(cfg.startDate)) + '(' + esc(hpWDof(cfg.startDate)) + ')부터 시작 — 첫날은 <b>' + esc(hpRangeTxt(w)) + '</b></div>';
       } else if (w.type === 'review') {
@@ -12387,7 +12489,11 @@ function homeTaskPanel(me) {
       }
       if (hasDay) {
         var wn = hpWordName(cfg.book, w.from);
-        if (wn) h += _shRow('📒', esc(wn) + ' 암기 → 뜻고르기 → 짝맞추기 → 테스트', '단어장 →', "hpOpenWord('" + String(wn).replace(/'/g, "\\'") + "')", '', 0);
+        if (wn) {
+          var wDone = false;   /* v185: 그 날 범위 단어가 세트 완료(테스트 80점 이상)면 ✓ 완료 */
+          try { wDone = hpWordRangeDone(ban, name, cfg.book, w.from, w.to); } catch (e) {}
+          h += _shRow(wDone ? '✅' : '📒', esc(wn) + ' 암기 → 뜻고르기 → 짝맞추기 → 테스트', wDone ? '✓ 완료' : '단어장 →', "hpOpenWord('" + String(wn).replace(/'/g, "\\'") + "')", '', 0);
+        }
       }
       /* v153: 중1·중2는 학교 교과서(동아 윤정미) 인강으로 연결 */
       var _tbk = null;
@@ -12399,12 +12505,17 @@ function homeTaskPanel(me) {
           "hpOpenVideo('" + bk.key + "'," + tw0.from + ")", '', 0);
       }
       if (Number(cfg.itemSent)) {
-        var sOn = hpTick(ban, today, 'sent');
-        h += _shRow('', '<b>본문·외부지문 문장 암기</b><span>' + esc(cfg.sentLabel || '본문 어순배열로 문장 암기') + '</span>', '쓰러가기 →', (ban === '예비고1' ? 'openReadingApp(2)' : 'openWritingApp()'), 'sent', sOn);
+        /* v185: 손 체크 + writing.html·reading.html 실제 완료 기록 */
+        var sOn = false; try { sOn = hpAreaDone(ban, name, today, 'sent'); } catch (e) {}
+        var sEx = '';
+        try { var sp1 = hpAutoPassages(ban, name, today, 'sent'); if (sp1 > 0 && !hpTick(ban, today, 'sent')) sEx = ' · 오늘 ' + sp1 + '지문 끝냄'; } catch (e) {}
+        h += _shRow('', '<b>본문·외부지문 문장 암기</b><span>' + esc(cfg.sentLabel || '본문 어순배열로 문장 암기') + sEx + '</span>', '쓰러가기 →', (ban === '예비고1' ? 'openReadingApp(2)' : 'openWritingApp()'), 'sent', sOn);
       }
       if (Number(cfg.itemRead)) {
-        var rOn = hpTick(ban, today, 'read');
-        h += _shRow('', '<b>변형·독해 문제 풀기</b><span>' + esc(cfg.readLabel || '본문·외부지문 변형 문제') + '</span>', '풀러가기 →', (ban === '예비고1' ? 'openReadingApp(3)' : 'openReadingApp()'), 'read', rOn);
+        var rOn = false; try { rOn = hpAreaDone(ban, name, today, 'read'); } catch (e) {}
+        var rEx = '';
+        try { var rp1 = hpAutoPassages(ban, name, today, 'read'); if (rp1 > 0 && !hpTick(ban, today, 'read')) rEx = ' · 오늘 ' + rp1 + '지문 끝냄'; } catch (e) {}
+        h += _shRow('', '<b>변형·독해 문제 풀기</b><span>' + esc(cfg.readLabel || '본문·외부지문 변형 문제') + rEx + '</span>', '풀러가기 →', (ban === '예비고1' ? 'openReadingApp(3)' : 'openReadingApp()'), 'read', rOn);
       }
       var bbw = null;
       try { bbw = hpBbaba(cfg, today); } catch (e) {}
@@ -12512,6 +12623,7 @@ function drawStreakHero(me){
   /* v153: 부엉이 카드 한 장 = 오늘의 학습 + 집 숙제 + 스페셜 숙제 (중복 카드 제거) */
   var taskPanel = '';
   try { taskPanel = homeTaskPanel(me); } catch (e) { taskPanel = ''; }
+  try { HP_AUTO_SIG = hpAutoSig(me.ban, me.name); } catch (e) {}   /* v185: 지금 그린 자동 완료 상태 */
   return '<div class="streak-hero has-tasks ' + cls + '" id="streak_hero" data-owl="' + owl + '">' +
     '<div class="sh-char owl-box' + owlMorphClass(owl) + '" onclick="owlPoke(this)" title="부엉이를 눌러 보세요">' + owlSvg(owl) + '</div>' +
     '<div class="sh-main">' +
@@ -12566,18 +12678,19 @@ function owlPlanAllDone(ban) {
     var today = hpToday(), w = hpWalkCfg(cfg, today); if (!w) return false;
     var word = Number(cfg.itemWord) ? 1 : 0, sent = Number(cfg.itemSent) ? 1 : 0, read = Number(cfg.itemRead) ? 1 : 0;
     if (!word && !sent && !read) word = 1;
+    var me = (S.home && S.home.me) || {}, hnm = me.name || '';   /* v185: 자동 완료 기록을 학생 이름으로 찾는다 */
     var need = 0, got = 0;
     if (word && (w.type === 'new' || w.type === 'review')) {
       var bk = bbBook(cfg.book), tt = 0, dd = 0;
       for (var d = w.from; d <= w.to; d++) { tt++; if (bbIsDoneIn(bk, d)) dd++; }
       need++; if (tt && dd >= tt) got++;
     }
-    if (sent) { need++; if (hpTick(ban, today, 'sent')) got++; }
-    if (read) { need++; if (hpTick(ban, today, 'read')) got++; }
+    if (sent) { need++; if (hpAreaDone(ban, hnm, today, 'sent')) got++; }
+    if (read) { need++; if (hpAreaDone(ban, hnm, today, 'read')) got++; }
     var hl = hwListenToday(ban, today);
     if (hl) {
       need++;
-      var me = (S.home && S.home.me) || {}, hnm = me.name || '', hOk = !!hwListenDone(hl.id, hnm);
+      var hOk = !!hwListenDone(hl.id, hnm);
       if (!hOk) { try { hOk = !!hwListenSheetPass(ban, hnm, today); } catch (e) {} }   /* v184: 다른 기기에서 풀었어도 시트 '듣기평가' 행으로 확인 */
       if (hOk) got++;
     }

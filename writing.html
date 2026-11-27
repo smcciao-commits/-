@@ -472,6 +472,27 @@ function saveRec(setId,mode,score,wrong,total,fullTotal){
   s[mode]=m;u[setId]=s;all[userKey()]=u;store(RK,all);
 }
 
+/* ============ v185: 집에서 할 일 '문장 암기' 자동 완료 ============
+   index.html 홈의 🏠 집에서 할 일 [본문·외부지문 문장 암기] 줄은 이 기록을 읽어 ✓ 로 보여 준다.
+   · 한 모드의 모든 문항을 다 풀고 정답률 80% 이상일 때만 남긴다(찍고 나가기 방지).
+   · 키: 날짜|반|이름, 값: { sent:{ by, score, total, setId, at } } — 더 높은 점수만 갱신. */
+var HP_AUTO_KEY = 'topedu_hp_auto_v185';
+function hpAutoMark(kind, info){
+  try {
+    if (!S.me || S.me.teacher || !S.me.ban || !S.me.name || S.me.ban === '선생님') return;
+    var d = new Date(), ds = d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
+    var a = store(HP_AUTO_KEY) || {};
+    Object.keys(a).forEach(function (k) { if (String(k).slice(0, 10) !== ds) delete a[k]; });
+    var kk = ds + '|' + S.me.ban + '|' + S.me.name;
+    var m = a[kk] || {}, cur = m[kind] || null;
+    if (cur && (Number(cur.score) || 0) >= (Number(info && info.score) || 0)) return;
+    m[kind] = { by: (info && info.by) || 'writing', score: Number(info && info.score) || 0,
+      total: Number(info && info.total) || 0, setId: (info && info.setId) || '', at: new Date().toISOString() };
+    a[kk] = m;
+    store(HP_AUTO_KEY, a);
+  } catch (e) {}
+}
+
 function showHome(){
   if(!S.me){showLogin();return;}
   if(S.me.teacher){showTeacher();return;}
@@ -701,6 +722,8 @@ function showResult(){
   var score=total?Math.round(correct/total*100):0;
   var wrong=p.answers.filter(function(a){return !a.ok;}).map(function(a){return a.id;});
   saveRec(p.setId,p.mode,score,wrong,total,set.items.length);
+  /* v185: 전 문항을 다 풀고 80% 이상이면 집에서 할 일 '문장 암기' 자동 완료(정답률 80% = 앱 통과 기준) */
+  try { if (total > 0 && total === set.items.length && score >= 80) hpAutoMark('sent', { by: 'writing-' + p.mode, score: score, total: total, setId: p.setId }); } catch (e) {}
   var items=p.answers.map(function(a){
     var it=findItem(set,a.id);
     return {id:a.id,ok:a.ok,mine:a.mine,it:it};
