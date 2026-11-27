@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- listening.html v182 (2026-11-27): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
+<!-- listening.html v183 (2026-11-27): 🎧 예비고1 모의고사 영어듣기 — 2024·2025·2026 고1·고2 전국연합학력평가 3·6·9·10월 24회 -->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -159,7 +159,7 @@
     <div class="hrow">
       <button class="hd-btn" id="btnHome">← 홈</button>
       <h1>🎧 모의고사 영어듣기</h1>
-      <span class="vbadge">v182</span>
+      <span class="vbadge">v183</span>
     </div>
   </header>
   <div id="app"><div class="loading">불러오는 중…</div></div>
@@ -168,7 +168,7 @@
 
 <script>
 /* ================= 설정 ================= */
-var TOPEDU_APP_VERSION = 'v182';
+var TOPEDU_APP_VERSION = 'v183';
 var DB_URL = 'https://script.google.com/macros/s/AKfycbyg2I4a1-fyP7cj1lrM68sPK1B-Kma5SHCVNAJ9DPGmnOmaQHo4qp_6g6SFETiMTZn9/exec';
 var LS_BEST = 'topedu_listening_v1';     /* { examId: {best, at, tries, last} } */
 var LS_SESS = 'topedu_listening_user_v1';
@@ -490,7 +490,7 @@ function renderResult(fresh){
   else { save[e.id] = { best: prev.best, at: Date.now(), tries:(prev?prev.tries:0)+1, last:s.pct }; }
   lsSet(LS_BEST, save);
   var wrongN = e.questions.length - s.right, pass = wrongN <= PASS_WRONG;
-  if(fresh && (!HWM || pass)) saveToSheet(s.pct);   /* v181: 숙제는 통과한 기록만 시트에 */
+  if(fresh && (!HWM || pass)) saveToSheet(s.pct, s.right);   /* v181: 숙제는 통과한 기록만 시트에 */
   if(fresh && SSM && pass){ try{ parent.postMessage({ type:'ss-listen', id:e.id, pct:s.pct, right:s.right, pass:true }, location.origin); }catch(x){} }
   if(fresh && HWM && pass && ME.ban !== '선생님'){ var hw = lsGet('topedu_ls_hw_v1', {}); hw[e.id+'|'+ME.name] = { pct:s.pct, right:s.right, at:Date.now() }; lsSet('topedu_ls_hw_v1', hw); }
   if(GATE && !pass){ renderFail(s, wrongN); return; }
@@ -586,30 +586,48 @@ function renderFail(s, wrongN){
   };
 }
 
-/* ================= 구글 시트 저장 (진도DB) ================= */
-function sheetSetName(){
+/* ================= 구글 시트 저장 (진도DB) =================
+   v183: 저장 형식을 선생님 화면(📅 날짜별·알림톡, 한눈에 보기)과 맞춘다.
+   · mode '듣기' → '듣기평가' (선생님 화면이 읽는 이름)
+   · 세트 이름 뒤 (정답수/17) → 선생님 화면이 정답 수를 뽑아 쓰는 형식 */
+function sheetSetName(right){
+  var e = CUR;
+  return '듣기평가_' + e.year + '_' + e.month + '_' + e.grade
+    + (right === undefined || right === null ? '' : ' (' + right + '/17)');
+}
+/* 자유 연습(목록에서 그냥 풀기)은 '듣기' — 숙제·자기주도 통과만 선생님 화면이 읽는 '듣기평가' */
+function sheetSetNameFree(){
   var e = CUR;
   return '듣기_'+e.year+'_'+e.month+'_'+e.grade;
 }
-function saveToSheet(pct){
+/* v183: 서버 응답이 실제 성공(ok:true)인지 */
+function saveRespOk(t){
+  try{ var j = JSON.parse(t); return !!(j && (j.ok === true || j.result === 'ok' || j.success === true)); }catch(e){ return false; }
+}
+function saveToSheet(pct, right){
   if(!CUR) return;
   if(ME.ban === '선생님') return;          /* 원장님 미리보기는 기록하지 않음 */
   if(SSM) return;                          /* v180: 자기주도 듣기는 통과할 때 앱이 '듣기평가' 행으로 확실히 저장(미통과 시도는 안 남김) */
   if(!ME.ban || !ME.name){ return; }
   var pw = getPw();
-  if(!pw || !DB_URL) return;
+  if(!pw || !DB_URL){ return; }
   var body = JSON.stringify({ action:'save', ban:ME.ban, name:ME.name, pw:pw,
-    setName: sheetSetName(), mode: '듣기', score: pct });
+    setName: GATE ? sheetSetName(right) : sheetSetNameFree(), mode: GATE ? '듣기평가' : '듣기', score: pct });
   try{
     fetch(DB_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: body })
       .then(function(r){ return r.text(); })
-      .then(function(t){ try{ var j=JSON.parse(t); if(!(j && (j.ok===true||j.result==='ok'||j.success===true))) console.warn('진도DB 저장 응답', t); }catch(e){} })
+      .then(function(t){
+        /* v183: 서버가 실패(ok:false)·응답이 JSON이 아니면 대기열에 넣어 다시 보낸다 */
+        if(!saveRespOk(t)){ console.warn('진도DB 저장 응답', t); queueSave(body); }
+      })
       .catch(function(){ queueSave(body); });
   }catch(e){ queueSave(body); }
 }
 function queueSave(body){
   try{
+    if(!body) return;
     var q = lsGet('topedu_listening_queue', []);
+    for(var i = 0; i < q.length; i++){ if(q[i] && q[i].body === body) return; }   /* v183: 같은 저장 두 번 쌓지 않기 */
     q.push({ body: body, at: Date.now() });
     lsSet('topedu_listening_queue', q.slice(-20));
   }catch(e){}
@@ -621,10 +639,13 @@ function flushQueue(){
   var i = 0;
   (function next(){
     if(i >= q.length){ lsSet('topedu_listening_queue', rest); return; }
-    fetch(DB_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: q[i].body })
+    var it = q[i];
+    if(!it || !it.body){ i++; next(); return; }
+    fetch(DB_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: it.body })
       .then(function(r){ return r.text(); })
-      .then(function(){ i++; next(); })
-      .catch(function(){ rest.push(q[i]); i++; next(); });
+      /* v183: 응답 본문이 실제 성공(ok:true)일 때만 대기열에서 지운다 */
+      .then(function(t){ if(!saveRespOk(t)) rest.push(it); i++; next(); })
+      .catch(function(){ rest.push(it); i++; next(); });
   })();
 }
 

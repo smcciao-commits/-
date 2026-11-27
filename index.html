@@ -2732,7 +2732,14 @@ function dbTodayMap(){
     var k = r.b + '|' + r.n;
     var o = out[k] || (out[k] = { modes:0, done:0, score:null, last:'' });
     o.modes++;
-    if(r.m === '테스트' || r.m === '일일완료' || r.m === '자기주도완주'){ var sc = Number(r.sc)||0; o.score = (o.score===null) ? sc : Math.max(o.score, sc); o.done = 1; }
+    var _m = String(r.m || '').trim();
+    if(_m === '테스트' || _m === '일일완료' || _m === '자기주도완주'){
+      var sc = Number(r.sc)||0;
+      o.score = (o.score===null) ? sc : Math.max(o.score, sc);
+      /* v183: 단어시험('테스트')은 80점(TOPEDU_WORD_PASS_SCORE) 이상 통과한 것만 완료.
+         80점 미만만 있으면 재시험 대상이라 숙제 화면에서도 완료로 세지 않는다. */
+      if(_m !== '테스트' || sc >= wordPassMin()) o.done = 1;
+    }
     if(String(r.u||'') > o.last) o.last = String(r.u||'');
   });
   return out;
@@ -4597,7 +4604,7 @@ function hwcAppBuild(){
   var out = {}, today = hwcToday();
   function put(ban, name, o){
     if(!ban || !name || ban === '선생님') return;
-    if(o.t && o.t !== today && !o.live) return;     /* 오늘 기록만 배지로 (지난 날짜는 버려요) */
+    if(o.t && o.t !== today) return;   /* v183: 실시간(live) 수신도 오늘 날짜(tdKey)만 배지로 — 어제 완료가 오늘로 섞이지 않게 */
     var k = hwcAppKey(ban, name), cur = out[k];
     if(cur && (cur.at || 0) > (o.at || 0)){
       cur.done = cur.done || o.done; cur.ing = cur.ing || o.ing;
@@ -4729,6 +4736,12 @@ function hwcAutoFillWord(){
   var listEl = document.getElementById('hwList');
   if(!listEl) return;
   var date = HWC_DATE || hwcToday(), n = 0;
+  /* v183: 화면 날짜가 오늘이 아니면 자동 채우기를 막는다 —
+     HWC_APP(오늘 완료)을 과거 날짜 숙제로 저장해 버리는 일을 막기 위해서. */
+  if(date !== hwcToday()){
+    hwcToast('📱 자동 채우기는 오늘(' + hwcToday().slice(5).replace('-', '/') + ') 숙제 화면에서만 돼요 — 날짜를 오늘로 맞춰 주세요');
+    return;
+  }
   [].forEach.call(listEl.querySelectorAll('.hwc-row'), function(row){
     var word = hwcAppItemFor(row.dataset.ban);   /* v119: 반별 '탑에듀 단어앱' 항목 */
     var rec = HWC_APP[hwcAppKey(row.dataset.ban, row.dataset.name)];
@@ -5473,7 +5486,16 @@ function hwsOpKey(o) {
   if (o.op === 'm') return 'm|' + o.date + '|' + (o.group || '전체');
   return 's|' + o.date + '|' + o.ban + '|' + o.name;
 }
-function hwsQ() { try { var a = JSON.parse(localStorage.getItem(HWS_OUT_KEY) || '[]'); HWS.q = Array.isArray(a) ? a : []; } catch (e) { HWS.q = []; } return HWS.q; }
+var HWS_SEQ = 0;
+/* v183: 작업마다 고유 버전(_sq)을 붙인다 — 전송 중에 같은 칸을 다시 바꿨을 때
+   '이미 보낸 작업'과 '새로 들어온 작업'을 구분하려고. */
+function hwsNewSq() { HWS_SEQ = (HWS_SEQ + 1) % 1000000; return Date.now().toString(36) + '-' + HWS_SEQ; }
+function hwsQ() {
+  try { var a = JSON.parse(localStorage.getItem(HWS_OUT_KEY) || '[]'); HWS.q = Array.isArray(a) ? a : []; } catch (e) { HWS.q = []; }
+  /* 예전 버전이 남긴 작업에는 버전이 없으니 여기서 붙여 둔다 */
+  HWS.q.forEach(function (o) { if (o && !o._sq) o._sq = hwsNewSq(); });
+  return HWS.q;
+}
 function hwsQSave() { try { localStorage.setItem(HWS_OUT_KEY, JSON.stringify(HWS.q)); } catch (e) {} }
 function hwsPaint() {
   var el = document.getElementById('hwSync');
@@ -5489,6 +5511,7 @@ function hwsPaint() {
 }
 function hwsAdd(o) {
   var k = hwsOpKey(o), hit = -1;
+  if (!o._sq) o._sq = hwsNewSq();   /* v183: 이 작업만의 버전 — 같은 칸을 다시 바꾸면 새 버전이 된다 */
   for (var i = 0; i < HWS.q.length; i++) { if (hwsOpKey(HWS.q[i]) === k) { hit = i; break; } }
   if (hit >= 0) HWS.q[hit] = o; else HWS.q.push(o);
   if (!o.keep) hwsTsSet(k, o.ts);
@@ -5532,9 +5555,11 @@ function hwsFlush() {
         if (scoreOnly) { HWS.scoreFail = true; step(); return; }
         done(false); return;
       }
-      var keys = {};
-      batch.forEach(function (o) { keys[hwsOpKey(o)] = 1; });
-      HWS.q = HWS.q.filter(function (o) { return !keys[hwsOpKey(o)]; });
+      /* v183: 보낸 그 버전(_sq)만 목록에서 뺀다. 전송 중에 같은 칸을 다시 바꿔
+         새 작업(다른 _sq)이 들어와 있으면 그 작업은 남겨 두고 다음 전송으로 보낸다. */
+      var sentSq = {};
+      batch.forEach(function (o) { sentSq[hwsOpKey(o)] = o._sq; });
+      HWS.q = HWS.q.filter(function (o) { var k = hwsOpKey(o); return !(k in sentSq) || o._sq !== sentSq[k]; });
       hwsQSave(); hwsPaint(); step();
     }).catch(function () {
       if (scoreOnly) { HWS.scoreFail = true; step(); return; }
@@ -5543,30 +5568,99 @@ function hwsFlush() {
   }
   step();
 }
+/* v183: 서버(hwLoad)는 해제된 칸을 check 에 아예 담아 주지 않는다(실서버 응답 확인).
+   그래서 (1) 빈 값이 오면 해제로 처리하고 (2) 이 기기에 있던 값인데 서버 응답에 없으면
+   '다른 기기에서 해제한 것'으로 보고 지운다. 아직 못 보낸 작업이 있는 칸은 건드리지 않는다. */
+var HWS_PRUNE_DAYS = 45;
+function hwsDayDiff(date) {
+  var m = String(date || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return 9999;
+  var t = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])).getTime();
+  var n0 = new Date(); var n = new Date(n0.getFullYear(), n0.getMonth(), n0.getDate()).getTime();
+  return Math.abs(Math.round((n - t) / 86400000));
+}
+/* 서버 sent 는 [반|이름] 목록 또는 {반|이름: 0/1} 두 가지 모양을 다 받는다 */
+function hwsSentMap(d) {
+  var out = {}, s = d && d.sent;
+  if (Array.isArray(s)) s.forEach(function (bn) { if (bn) out[String(bn)] = 1; });
+  else if (s && typeof s === 'object') Object.keys(s).forEach(function (bn) { out[bn] = (s[bn] && Number(s[bn]) !== 0) ? 1 : 0; });
+  return out;
+}
+function hwsPruneAbsent(d) {
+  var date = d && d.date, at = String((d && d.at) || '');
+  if (!date || !d.check || typeof d.check !== 'object') return false;
+  if (!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(at)) return false;
+  if (hwsDayDiff(date) > HWS_PRUNE_DAYS) return false;
+  var changed = false, qk = {};
+  HWS.q.forEach(function (o) { qk[hwsOpKey(o)] = 1; });
+  function fresh(k) { var lts = hwsTsGet(k); return (lts && !qk[k] && lts < at) ? lts : ''; }
+  var all = hwcAll(), day = all[date];
+  if (day && typeof day === 'object') {
+    Object.keys(day).forEach(function (bn) {
+      var rec = day[bn]; if (!rec || typeof rec !== 'object') return;
+      Object.keys(rec).forEach(function (it) {
+        if (!fresh('c|' + date + '|' + bn + '|' + it)) return;
+        if ((d.check[bn] || {})[it] !== undefined) return;   /* 서버에 아직 값이 있음 */
+        delete rec[it]; changed = true;
+      });
+      if (!Object.keys(rec).length) delete day[bn];
+    });
+    if (Object.keys(day).length) all[date] = day; else delete all[date];
+    store(HWC_KEY2, all);
+  }
+  var memoAll = hwcMemoAll(), dm = memoAll[date];
+  if (dm && typeof dm === 'object') {
+    Object.keys(dm).forEach(function (g) {
+      if (!fresh('m|' + date + '|' + g)) return;
+      if ((d.memo || {})[g] !== undefined) return;
+      delete dm[g]; changed = true;
+    });
+    if (Object.keys(dm).length) memoAll[date] = dm; else delete memoAll[date];
+    store(HWC_MEMO_KEY, memoAll);
+  }
+  var smsAll = hwcSmsAll(), ds = smsAll[date];
+  if (ds && typeof ds === 'object') {
+    var sentMap = hwsSentMap(d);
+    Object.keys(ds).forEach(function (bn) {
+      if (!fresh('s|' + date + '|' + bn)) return;
+      if (sentMap[bn]) return;                                /* 서버에 보냄 표시가 있음 */
+      delete ds[bn]; changed = true;
+    });
+    if (Object.keys(ds).length) smsAll[date] = ds; else delete smsAll[date];
+    store(HWC_SMS_KEY, smsAll);
+  }
+  return changed;
+}
 function hwsMerge(d) {
   if (!d || !d.date) return false;
   var date = d.date, changed = false;
+  var chk = d.check || {}, tsChk = d.tsCheck || {};
 
   var all = hwcAll(), day = all[date] || {};
   if (!day || typeof day !== 'object') day = {};
-  Object.keys(d.check || {}).forEach(function (bn) {
-    var rec = d.check[bn] || {};
+  Object.keys(chk).forEach(function (bn) {
+    var rec = chk[bn] || {};
     Object.keys(rec).forEach(function (it) {
-      var v = rec[it]; if (v === '' || v === null || v === undefined) return;
+      var v = rec[it];
+      if (v === null || v === undefined) return;
       v = String(v);   /* v119: 단어시험 점수가 숫자로 와도 글자로 맞춰요 */
-      var sts = (d.tsCheck || {})[bn + '|' + it] || '', k = 'c|' + date + '|' + bn + '|' + it, lts = hwsTsGet(k);
+      var sts = tsChk[bn + '|' + it] || '', k = 'c|' + date + '|' + bn + '|' + it, lts = hwsTsGet(k);
       if (!sts || (lts && lts >= sts)) return;
       var cur = day[bn]; if (!cur || typeof cur !== 'object') cur = {};
-      if (cur[it] !== v) { cur[it] = v; day[bn] = cur; changed = true; }
+      if (!v) {                        /* v183: 서버가 해제('')를 보내면 그 칸을 지운다 */
+        if (cur[it] !== undefined) { delete cur[it]; changed = true; }
+        if (Object.keys(cur).length) day[bn] = cur; else delete day[bn];
+      } else if (cur[it] !== v) { cur[it] = v; day[bn] = cur; changed = true; }
       hwsTsSet(k, sts);
     });
   });
-  if (Object.keys(day).length) all[date] = day;
+  if (Object.keys(day).length) all[date] = day; else delete all[date];
   store(HWC_KEY2, all);
 
   var memoAll = hwcMemoAll(), dm = memoAll[date] || {};
   Object.keys(d.memo || {}).forEach(function (g) {
-    var txt = d.memo[g] || '', sts = (d.tsMemo || {})[g] || '', k = 'm|' + date + '|' + g, lts = hwsTsGet(k);
+    var txt = (d.memo[g] === null || d.memo[g] === undefined) ? '' : String(d.memo[g]);
+    var sts = (d.tsMemo || {})[g] || '', k = 'm|' + date + '|' + g, lts = hwsTsGet(k);
     if (!sts || (lts && lts >= sts)) return;
     if (txt) dm[g] = txt; else delete dm[g];
     hwsTsSet(k, sts); changed = true;
@@ -5574,15 +5668,17 @@ function hwsMerge(d) {
   if (Object.keys(dm).length) memoAll[date] = dm; else delete memoAll[date];
   store(HWC_MEMO_KEY, memoAll);
 
-  var smsAll = hwcSmsAll(), ds = smsAll[date] || {};
-  (d.sent || []).forEach(function (bn) {
+  var smsAll = hwcSmsAll(), ds = smsAll[date] || {}, sentMap = hwsSentMap(d);
+  Object.keys(sentMap).forEach(function (bn) {
     var sts = (d.tsSent || {})[bn] || '', k = 's|' + date + '|' + bn, lts = hwsTsGet(k);
     if (!sts || (lts && lts >= sts)) return;
-    ds[bn] = 1; hwsTsSet(k, sts); changed = true;
+    if (sentMap[bn]) ds[bn] = 1; else delete ds[bn];   /* v183: 해제(0)도 반영 */
+    hwsTsSet(k, sts); changed = true;
   });
   if (Object.keys(ds).length) smsAll[date] = ds; else delete smsAll[date];
   store(HWC_SMS_KEY, smsAll);
 
+  if (hwsPruneAbsent(d)) changed = true;   /* v183: 다른 기기에서 해제한 칸 반영 */
   return changed;
 }
 function hwsSyncDay(date) {
@@ -9750,6 +9846,54 @@ function ssListenLine(ban, name){
   if(o.pass) return v180ListenTxt(o.pct, o.right) + ' 통과';
   return o.started ? '듣기평가 아직 통과 못 함' : '';
 }
+/* v183: 예비고1 듣기 숙제(월·수) 통과 여부 — 그날 시트 '듣기평가' 행에서 읽는다.
+   듣기평가가 자기주도(화·목)에서 빠져 월·수 숙제가 되면서 날짜별·알림톡 문구에서 빠져 있었다. */
+function hwListenSheetPass(ban, name, day){
+  day = v169DayKey(day || tdKey());
+  var due = null;
+  try { due = hwListenToday(ban, day); } catch(e){ due = null; }
+  var out = null;
+  (TOPEDU_DB_ROWS || []).forEach(function(r){
+    if(!r) return;
+    if(String(r.b||'') !== String(ban||'') || String(r.n||'') !== String(name||'')) return;
+    if(v169DayKey(r.d) !== day) return;
+    if(String(r.m||'').trim() !== '듣기평가') return;
+    if(due && due.id && String(r.s||'').indexOf(due.id) < 0) return;   /* 그날 배정된 회차만 */
+    var pct = (r.sc === '' || r.sc === null || r.sc === undefined) ? null : Number(r.sc);
+    if(pct !== null && isNaN(pct)) pct = null;
+    var mr = String(r.s||'').match(/\((\d+)\/17\)/);
+    var right = mr ? Number(mr[1]) : null;
+    if(!out) out = { pct: pct, right: right };
+    else {
+      if(pct !== null && (out.pct === null || pct > out.pct)) out.pct = pct;
+      if(right !== null && (out.right === null || right > out.right)) out.right = right;
+    }
+  });
+  return out;
+}
+function hwListenLine(got){
+  if(!got) return '';
+  var t = '';
+  if(got.pct !== null && got.pct !== undefined) t += got.pct + '점';
+  if(got.right !== null && got.right !== undefined) t += (t ? '(' : '') + '17문항 중 ' + got.right + '개 정답' + (t ? ')' : '');
+  return t;
+}
+function v169ListenHwLine(ban, name, day){
+  var got = null, due = null;
+  try { due = hwListenToday(ban, day); } catch(e){ due = null; }
+  try { got = hwListenSheetPass(ban, name, day); } catch(e){ got = null; }
+  if(got) return '· 🎧 듣기평가 숙제 ' + hwListenLine(got) + ' 통과';
+  if(due) return '· 🎧 듣기평가 숙제(17문항)는 아직 통과하지 않았습니다';
+  return '';
+}
+/* 문구의 '감사합니다♡' 앞에 줄 하나 붙이기 */
+function v183AddLine(txt, line){
+  txt = String(txt || '');
+  if(!line) return txt;
+  var tail = '감사합니다♡', i = txt.lastIndexOf(tail);
+  if(i < 0) return (txt ? txt.replace(/\s+$/, '') + '\n' : '') + line;
+  return txt.slice(0, i).replace(/\s+$/, '') + '\n' + line + '\n' + tail;
+}
 function v169SsWhenTxt(info){
   var a = [];
   if(info.el) a.push(Math.max(1, Math.round(Number(info.el) / 60)) + '분');
@@ -9921,6 +10065,13 @@ function v169DayInfo(rep, s){
     else lines.push('· 자기주도 1~3단계(단어·문장배열·문법/독해OX) 전체 완주' + v169SsWhenTxt(info));
     info.msg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + nk + '의 영어 온라인 학습 결과입니다.\n'
       + lines.join('\n') + '\n감사합니다♡';
+  }
+  /* v183: 예비고1 듣기 숙제(월·수)도 그날 결과에 넣는다 — 자기주도 요일(화·목)과 달라 빠져 있던 줄 */
+  info.listenLine = '';
+  try { if(info.state !== 'none' || items.length) info.listenLine = v169ListenHwLine(s.ban, s.name, day); } catch(e){ info.listenLine = ''; }
+  if(info.listenLine && String(info.msg || '').indexOf('듣기평가') < 0){
+    if(!info.msg) info.msg = '안녕하세요.탑에듀학원입니다^^ ' + md + ' ' + nk + '의 영어 학습 결과입니다.\n' + info.listenLine + '\n감사합니다♡';
+    else info.msg = v183AddLine(info.msg, info.listenLine);
   }
   /* v169: 집 일일학습은 자기주도와 따로 본다 — '일일완료'(하루 2 Day) 기록만 완료 */
   var dailyWhy = '';
@@ -11423,7 +11574,7 @@ function pEnd(v){
 }
 
 /* ================= v85: 🖨️ 단어 인쇄 — 클래스카드식 세부 설정 ================= */
-var TOPEDU_APP_VERSION = 'v182';
+var TOPEDU_APP_VERSION = 'v183';
 
 /* 글씨 크기(pt) · 행간(=쓰기 칸 여유 mm) */
 var PRT_FS = { xs: 9.5, sm: 11, md: 12.5, lg: 14, xl: 16.5 };
@@ -12246,7 +12397,11 @@ function homeTaskPanel(me) {
       try { hl = hwListenToday(ban, today); } catch (e) {}
       if (hl) {
         var hlD = hwListenDone(hl.id, name);
-        h += _shRow(hlD ? '✅' : '🎧', '<b>듣기평가 · ' + esc(ssS0Title(hl.id)) + '</b><span>' + (hlD ? ('통과 · 17문항 중 ' + hlD.right + '개 정답') : '월·수 1회분 17문항 · 통과 기준 90점(3개 오답까지)') + '</span>',
+        /* v183: 이 폰에 없어도 시트 '듣기평가' 행이 있으면 통과로 보여 준다 */
+        if(!hlD){ try { var _hlsp = hwListenSheetPass(ban, name, today); if(_hlsp) hlD = _hlsp; } catch(e){} }
+        var hlTxt = hlD ? ('통과' + (hlD.right !== null && hlD.right !== undefined ? ' · 17문항 중 ' + hlD.right + '개 정답' : (hlD.pct !== null && hlD.pct !== undefined ? ' · ' + hlD.pct + '점' : '')))
+          : '월·수 1회분 17문항 · 통과 기준 90점(3개 오답까지)';
+        h += _shRow(hlD ? '✅' : '🎧', '<b>듣기평가 · ' + esc(ssS0Title(hl.id)) + '</b><span>' + hlTxt + '</span>',
           hlD ? '다시 보기' : '풀러가기 →', "openListeningHw('" + hl.id + "')", '', 0);
       }
       h += '<div class="sh-note2">○ 를 누르면 체크돼요 · ' + esc(cfg.pattern) + '반 요일 계획표</div>';
@@ -14588,13 +14743,17 @@ function ssResume(snap) {
     if (d.status === 'part' || (d.qwrong && d.qwrong.length)) { d.status = 'todo'; d.fixed = false; }
     d.answered = false; d.retry = null;
   });
-  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: 0, wrongN: snap.s2wrong || 0, built: [] };
+  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: Math.max(0, Number(snap.stats && snap.stats.s2ok) || 0), wrongN: snap.s2wrong || 0, built: [] };
   var _s3w = (snap.s3wrong && snap.s3wrong.length) ? snap.s3wrong : null;
-  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: 0, wrongN: snap.s2wrong || 0, built: [] };
-  SS.s3 = { qs: ssBuildS3(SS.ban, SS.seed, snap.probCount || ssCfg(SS.ban).probCount), i: snap.s3i || 0, ok: 0, answered: false, wrong: [], rt: null };
+  SS.s2 = { qs: ssBuildS2(SS.ban, SS.seed, snap.sentCount || ssCfg(SS.ban).sentCount), i: snap.s2i || 0, tries: 0, ok: Math.max(0, Number(snap.stats && snap.stats.s2ok) || 0), wrongN: snap.s2wrong || 0, built: [] };
+  SS.s3 = { qs: ssBuildS3(SS.ban, SS.seed, snap.probCount || ssCfg(SS.ban).probCount), i: snap.s3i || 0, ok: Math.max(0, Number(snap.stats && snap.stats.s3ok) || 0), answered: false, wrong: [], rt: null };
   /* v167: 원격(ntfy) 스냅샷은 문제 원문 대신 번호만 담아 오므로 같은 목록에서 되살린다 */
   SS.s3.wrong = _s3w ? _s3w
     : (snap.s3wi || []).map(function (k) { return SS.s3.qs[k]; }).filter(Boolean);
+  /* v183: 이어하기 복구된 정답 수로 SS.s2.ok·s3.ok를 살린다(0으로 덮어 2단계 점수가 줄던 문제) */
+  SS.stats = SS.stats || { s1ok: 0, s1tot: 0, s2ok: 0, s3ok: 0, s3tot: 0 };
+  SS.stats.s2ok = Math.max(Number(SS.stats.s2ok) || 0, Number(SS.s2.ok) || 0);
+  SS.stats.s3ok = Math.max(Number(SS.stats.s3ok) || 0, Number(SS.s3.ok) || 0);
   SS.wrongWords = snap.wrongWords || []; SS.wrongProbs = snap.wrongProbs || [];
   ssOverlayOn(true);
   ssFullscreen(); ssWake(true); ssBind(true); ssHistPush(); ssNetPub(); ssTickStart(); ssStatusPub();
@@ -15964,7 +16123,7 @@ function ssS2Tap(i, fromSlot) {
     try { playCorrectSound(); } catch (e) {}
     if (fb) { fb.style.display = 'block'; fb.className = 'ssx-fb ok'; fb.innerHTML = '정답! 🎉 <b>' + esc(q.en) + '</b>'; }
     SS.s2.tries = 0; SS.s2.i++;
-    SS.stats.s2ok = SS.s2.ok;
+    SS.stats.s2ok = Math.max(Number(SS.stats.s2ok) || 0, SS.s2.ok);   /* v183: 이어 풀어도 누적 정답이 줄지 않게 */
     ssSaveSnap(); ssStatusPub();
     setTimeout(function () { SS.s2.built = []; ssRender(); }, 950);
   } else {
